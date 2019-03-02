@@ -2,7 +2,7 @@
 library(dplyr)
 library(d3plus)
 
-dta4 <- tibble(
+dta <- tibble(
   parent = c(rep("Group 1", 3), rep("Group 2", 2)),
   id = c("alpha", "beta", "gamma", "delta", "eta"),
   value = c(29, 10, 2, 29, 25),
@@ -11,8 +11,8 @@ dta4 <- tibble(
 )
 
 d3plus() %>%
-  d3p_type("treemap") %>%
-  d3p_data(data = dta4, size = "value") %>%
+  d3p_type("tree_map") %>%
+  d3p_data(data = dta, size = "value") %>%
   d3p_id(c("parent", "id")) %>% 
   d3p_color("parent") %>% 
   d3p_labels(align = "left", valign = "top") %>% 

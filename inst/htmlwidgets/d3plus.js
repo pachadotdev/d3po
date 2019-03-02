@@ -4,87 +4,105 @@ HTMLWidgets.widget({
 
   type: 'output',
 
-  factory: function(el, width, height) {
+  initialize: function(el, width, height) {
+    return {};
+  },
 
-    // TODO: define shared variables for this instance
+  resize: function(el, width, height) {
+    var chart = $("#" + el.id).d3plus();
+    chart.resize(true);
+  },
 
-    return {
+  renderValue: function(el, x, instance) {
+    document.getElementById(el.id).innerHTML = "";
 
-      renderValue: function(x) {
+    var data = HTMLWidgets.dataframeToD3(x.data) || false;
 
-        document.getElementById(el.id).innerHTML = "";
+    console.log(x);
+    console.log(data);
 
-        var data = HTMLWidgets.dataframeToD3(x.data) || false;
-        //var groupBy = x.groupBy || false;
-        //var sum = x.sum || false;
-        //var legendConfig = x.legendConfig || false;
-        //var tooltipConfig = x.tooltipConfig || false;
-        
-        console.log(x);
-        console.log(data);
-        
-        window.x = x;
-        window.el = el;
+    window.x = x;
+    window.el = el;
 
-        var chart = new d3plus.viz();
+    var chart = new d3plus.viz();
 
-        switch (x.type){
-            case "treemap":
-                chart.type("tree_map");
-                break;
-            case "geomap":
-                chart = new d3plus.Geomap();
-                break;
-            case "line":
-                chart = new d3plus.LinePlot();
-                break;
-            case "point":
-                chart = new d3plus.Plot();
-                break;
-            case "bar":
-                chart = new d3plus.BarChart();
-                break;
-            case "area":
-                chart = new d3plus.AreaPlot();
-                break;
-            default:
-                chart = null;
-        }
-        
-        if(data)            { chart.data(data);                     }
-        if(x.id)       { chart.id(x.id);             }
-        if(x.size)           { chart.size(x.size);                     }
-        
-        // treemap arguments
-        if(x.legend)  { chart.legend(x.legend);   }
-        if(x.icon)  { chart.icon(x.icon);   }
-        if(x.color)  { chart.color(x.color);   }
-        if(x.depth)  { chart.depth(x.depth);   }
-        
-        if(x.tooltipConfig) { chart.tooltipConfig(x.tooltipConfig); }
-        if(x.shapeConfig)   { chart.shapeConfig(x.shapeConfig);     }
-        if(x.labels) { chart.labels(x.labels); }
-        
-        // bar/line arguments
-        if(x.xaxis)   { chart.x(x.xaxis);     }
-        if(x.yaxis)   { chart.y(x.yaxis);     }
-        
-        // geomap arguments
-        if(x.topojsonId)    { chart.topojsonId(x.topojsonId);       }
-        if(x.topojson)      { chart.topojson(x.topojson);           }
-                  
-        chart.container("#" + el.id);
+    switch (x.type) {
+      case "tree_map":
+        chart.type("tree_map");
+        break;
+      case "geo_map":
+        chart.type("geo_map");
+        break;
+      case "line":
+        chart.type("line");
+        break;
+      case "scatter":
+        chart.type("scatter");
+        break;
+      case "bar":
+        chart.type("bar");
+        break;
+      case "stacked":
+        chart.type("stacked");
+        break;
+      default:
+        chart = null;
+    }
 
-        setTimeout(function() { chart.draw(); }, 10);
-      
-      },
+    if (data) {
+      chart.data(data);
+    }
+    if (x.id) {
+      chart.id(x.id);
+    }
+    if (x.size) {
+      chart.size(x.size);
+    }
 
-      resize: function(width, height) {
+    // treemap arguments
+    if (x.legend) {
+      chart.legend(x.legend);
+    }
+    if (x.icon) {
+      chart.icon(x.icon);
+    }
+    if (x.color) {
+      chart.color(x.color);
+    }
+    if (x.depth) {
+      chart.depth(x.depth);
+    }
 
-        // TODO: code to re-render the widget with a new size
+    if (x.tooltipConfig) {
+      chart.tooltipConfig(x.tooltipConfig);
+    }
+    if (x.shapeConfig) {
+      chart.shapeConfig(x.shapeConfig);
+    }
+    if (x.labels) {
+      chart.labels(x.labels);
+    }
 
-      }
+    // bar/line arguments
+    if (x.xaxis) {
+      chart.x(x.xaxis);
+    }
+    if (x.yaxis) {
+      chart.y(x.yaxis);
+    }
 
-    };
+    // geomap arguments
+    if (x.topojsonId) {
+      chart.topojsonId(x.topojsonId);
+    }
+    if (x.topojson) {
+      chart.topojson(x.topojson);
+    }
+
+    chart.container("#" + el.id);
+
+    setTimeout(function() {
+      chart.draw();
+    }, 10);
   }
 });

@@ -44,6 +44,13 @@ d3p_legend <- function(d3p, ...) {
 }
 
 #' @export
+d3p_axis <- function(d3p, x = NULL, y = NULL) {
+  d3p$x[["xaxis"]] <- x
+  d3p$x[["yaxis"]] <- y
+  d3p
+}
+
+#' @export
 d3p_depth <- function(d3p, depth = 0) {
   d3p$x[["depth"]] <- depth
   d3p

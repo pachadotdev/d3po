@@ -45,6 +45,9 @@ HTMLWidgets.widget({
       case "stacked":
         chart.type("stacked");
         break;
+      case "pie":
+        chart.type("pie");
+        break;
       default:
         chart = null;
     }
@@ -76,14 +79,11 @@ HTMLWidgets.widget({
     if (x.tooltipConfig) {
       chart.tooltipConfig(x.tooltipConfig);
     }
-    if (x.shapeConfig) {
-      chart.shapeConfig(x.shapeConfig);
-    }
     if (x.labels) {
       chart.labels(x.labels);
     }
 
-    // bar/line arguments
+    // bar/line chart
     if (x.xaxis) {
       chart.x(x.xaxis);
     }

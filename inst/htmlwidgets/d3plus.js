@@ -8,11 +8,6 @@ HTMLWidgets.widget({
     return {};
   },
 
-  resize: function(el, width, height) {
-    var chart = $("#" + el.id).d3plus();
-    chart.resize(true);
-  },
-
   renderValue: function(el, x, instance) {
     document.getElementById(el.id).innerHTML = "";
 
@@ -102,6 +97,7 @@ HTMLWidgets.widget({
     chart.container("#" + el.id);
 
     setTimeout(function() {
+      chart.resize(true);
       chart.draw();
     }, 10);
   }

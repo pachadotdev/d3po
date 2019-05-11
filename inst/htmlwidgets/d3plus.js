@@ -7,6 +7,16 @@ HTMLWidgets.widget({
   initialize: function(el, width, height) {
     return {};
   },
+  
+  resize: function(el, width, height, instance) {
+    /*
+    var chart = $("#" +el.id).d3plus();
+    var w = chart.renderTo.clientWidth || width;
+    var h = chart.renderTo.clientHeight || height;
+    chart.width(w);
+    chart.height(h);
+    */
+  }, 
 
   renderValue: function(el, x, instance) {
     document.getElementById(el.id).innerHTML = "";

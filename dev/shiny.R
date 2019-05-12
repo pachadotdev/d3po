@@ -1,4 +1,5 @@
 library(shiny)
+library(dplyr)
 library(d3plus)
 
 ui <- fluidPage(

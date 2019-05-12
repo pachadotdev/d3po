@@ -12,7 +12,9 @@ HTMLWidgets.widget({
     document.getElementById(el.id).innerHTML = "";
 
     var data = HTMLWidgets.dataframeToD3(x.data) || false;
-
+    var edges = HTMLWidgets.dataframeToD3(x.edges) || false;
+    var nodes = HTMLWidgets.dataframeToD3(x.nodes) || false;
+    
     console.log(x);
     console.log(data);
 
@@ -42,6 +44,9 @@ HTMLWidgets.widget({
         break;
       case "pie":
         chart.type("pie");
+        break;
+      case "network":
+        chart.type("network");
         break;
       default:
         chart = null;
@@ -86,6 +91,14 @@ HTMLWidgets.widget({
       chart.y(x.yaxis);
     }
 
+    // network arguments
+    if (edges) {
+      chart.edges(edges);
+    }
+    if (nodes) {
+      chart.nodes(nodes);
+    }
+    
     // geomap arguments
     if (x.topojsonId) {
       chart.topojsonId(x.topojsonId);

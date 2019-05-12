@@ -100,11 +100,11 @@ HTMLWidgets.widget({
     }
     
     // geomap arguments
-    if (x.topojsonId) {
-      chart.topojsonId(x.topojsonId);
+    if (x.coords) {
+      chart.coords(x.coords);
     }
-    if (x.topojson) {
-      chart.topojson(x.topojson);
+    if (x.text) {
+      chart.text(x.text);
     }
 
     chart.container("#" + el.id);

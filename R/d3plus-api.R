@@ -5,19 +5,25 @@ d3p_type <- function(d3p, type = NULL) {
 }
 
 #' @export
-d3p_data <- function(d3p, data, size = NULL, nodes = NULL, edges = NULL, topojson = NULL) {
+d3p_data <- function(d3p, data, size = NULL, nodes = NULL, edges = NULL, coords = NULL) {
   stopifnot(is.data.frame(data))
   d3p$x[["data"]] <- data
   d3p$x[["size"]] <- size
   d3p$x[["edges"]] <- edges
   d3p$x[["nodes"]] <- nodes
-  d3p$x[["topojson"]] <- topojson
+  d3p$x[["coords"]] <- coords
   d3p
 }
 
 #' @export
 d3p_id <- function(d3p, vars = NULL) {
   d3p$x[["id"]] <- vars
+  d3p
+}
+
+#' @export
+d3p_text <- function(d3p, vars = NULL) {
+  d3p$x[["text"]] <- vars
   d3p
 }
 

@@ -12,7 +12,9 @@ ui <- fluidPage(
     ),
     
     mainPanel(
-      d3plusOutput("treemap")
+      div(
+        d3plusOutput("treemap")
+      )
     )
   )
 )

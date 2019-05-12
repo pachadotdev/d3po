@@ -51,8 +51,8 @@ HTMLWidgets.widget({
       case "radar":
         chart.type("radar");
         break;
-      case "sankey":
-        chart.type("sankey");
+      case "box":
+        chart.type("box");
         break;
       default:
         chart = null;

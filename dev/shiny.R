@@ -28,14 +28,14 @@ server <- function(input, output) {
   
   output$treemap <- renderD3plus({
     d3plus() %>%
-    d3p_type("tree_map") %>%
-    d3p_data(data = dta, size = "value") %>%
-    d3p_id(c("parent", "id")) %>% 
-    d3p_color("parent") %>% 
-    d3p_labels(align = "left", valign = "top") %>% 
-    d3p_icon(style = "knockout", value = "icon") %>% 
-    d3p_legend(size = 30) %>% 
-    d3p_depth(1)
+      d3p_type("tree_map") %>%
+      d3p_data(data = dta, size = "value") %>%
+      d3p_id(c("parent", "id")) %>% 
+      d3p_color("parent") %>% 
+      d3p_labels(align = "left", valign = "top") %>% 
+      d3p_icon(style = "knockout", value = "icon") %>% 
+      d3p_legend(size = 30) %>% 
+      d3p_depth(1)
   })
 }
 

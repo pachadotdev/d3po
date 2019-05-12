@@ -1,4 +1,3 @@
-# working treemap for now
 library(dplyr)
 library(d3plus)
 
@@ -13,7 +12,7 @@ d3plus() %>%
   d3p_data(
     data = dta,
     coords = "http://d3plus.org/topojson/countries.json",
+    text = "name"
   ) %>%
-  d3p_id("country") %>% 
-  d3p_text("name") %>% 
+  d3p_id("country") %>%
   d3p_color("value")

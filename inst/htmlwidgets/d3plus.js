@@ -48,6 +48,12 @@ HTMLWidgets.widget({
       case "network":
         chart.type("network");
         break;
+      case "radar":
+        chart.type("radar");
+        break;
+      case "sankey":
+        chart.type("sankey");
+        break;
       default:
         chart = null;
     }

@@ -1,10 +1,9 @@
-# working network for now
 library(dplyr)
 library(d3plus)
 
 data <- tibble(
   name = c("alpha", "beta", "gamma"),
-  val = c(10,20,30)
+  val = c(10, 20, 30)
 )
 
 edges <- tibble(
@@ -14,8 +13,8 @@ edges <- tibble(
 
 nodes <- tibble(
   name = c("alpha", "beta", "gamma"),
-  x = c(10,12,17),
-  y = c(4,24,14)
+  x = c(10, 12, 17),
+  y = c(4, 24, 14)
 )
 
 d3plus() %>%

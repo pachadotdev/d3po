@@ -62,6 +62,9 @@ HTMLWidgets.widget({
       case "bubbles":
         chart.type("bubbles");
         break;
+      case "rings":
+        chart.type("rings");
+        break;
       default:
         chart = null;
     }
@@ -119,6 +122,11 @@ HTMLWidgets.widget({
     }
     if (x.text) {
       chart.text(x.text);
+    }
+    
+    // rings arguments
+    if (x.focus) {
+      chart.focus(x.focus);
     }
 
     chart.container("#" + el.id);

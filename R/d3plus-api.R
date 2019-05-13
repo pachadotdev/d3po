@@ -5,9 +5,9 @@ d3p_type <- function(d3p, type = NULL) {
 }
 
 #' @export
-d3p_data <- function(d3p, data, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
+d3p_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
   stopifnot(
-    is.data.frame(data)
+    is.null(data) | is.data.frame(data)
     #is.data.frame(nodes),
     #is.data.frame(edges)
   )
@@ -22,14 +22,14 @@ d3p_data <- function(d3p, data, size = NULL, nodes = NULL, edges = NULL, coords 
 }
 
 #' @export
-d3p_id <- function(d3p, vars = NULL) {
-  d3p$x[["id"]] <- vars
+d3p_id <- function(d3p, id = NULL) {
+  d3p$x[["id"]] <- id
   d3p
 }
 
 #' @export
-d3p_color <- function(d3p, vars = NULL) {
-  d3p$x[["color"]] <- vars
+d3p_color <- function(d3p, color = NULL) {
+  d3p$x[["color"]] <- color
   d3p
 }
 
@@ -61,5 +61,11 @@ d3p_axis <- function(d3p, x = NULL, y = NULL) {
 #' @export
 d3p_depth <- function(d3p, depth = 0) {
   d3p$x[["depth"]] <- depth
+  d3p
+}
+
+#' @export
+d3p_focus <- function(d3p, focus = NULL) {
+  d3p$x[["focus"]] <- focus
   d3p
 }

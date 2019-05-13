@@ -6,7 +6,12 @@ d3p_type <- function(d3p, type = NULL) {
 
 #' @export
 d3p_data <- function(d3p, data, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
-  stopifnot(is.data.frame(data))
+  stopifnot(
+    is.data.frame(data)
+    #is.data.frame(nodes),
+    #is.data.frame(edges)
+  )
+  
   d3p$x[["data"]] <- data
   d3p$x[["size"]] <- size
   d3p$x[["edges"]] <- edges

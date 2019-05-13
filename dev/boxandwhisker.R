@@ -1,4 +1,3 @@
-# WIP
 library(dplyr)
 library(d3plus)
 

@@ -17,6 +17,8 @@ HTMLWidgets.widget({
     
     console.log(x);
     console.log(data);
+    console.log(edges);
+    console.log(nodes);
 
     window.x = x;
     window.el = el;
@@ -53,6 +55,9 @@ HTMLWidgets.widget({
         break;
       case "box":
         chart.type("box");
+        break;
+      case "scatter":
+        chart.type("scatter");
         break;
       default:
         chart = null;

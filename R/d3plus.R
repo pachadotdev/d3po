@@ -20,7 +20,7 @@
 #' d3plus() %>% d3p_data(dta) %>% d3p_type("hbar")
 #' d3plus() %>% d3p_data(dta) %>% d3p_type("area")
 #' @export
-d3plus <- function(data, width = "100%", height = "400px", elementId = NULL) {
+d3plus <- function(data, width = "100%", height = "100%", elementId = NULL) {
   x <- list()
 
   # create widget
@@ -51,7 +51,7 @@ d3plus <- function(data, width = "100%", height = "400px", elementId = NULL) {
 #' @name d3plus-shiny
 #'
 #' @export
-d3plusOutput <- function(outputId, width = "100%", height = "400px") {
+d3plusOutput <- function(outputId, width = "100%", height = "100") {
   htmlwidgets::shinyWidgetOutput(outputId, "d3plus", width, height, package = "d3plus")
 }
 

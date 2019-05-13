@@ -1,7 +1,4 @@
-library(dplyr)
-library(d3plus)
-
-dta <- tibble(
+pie_data <- tibble(
   parent = c(rep("Group 1", 3), rep("Group 2", 2)),
   id = c("alpha", "beta", "gamma", "delta", "eta"),
   value = c(29, 10, 2, 29, 25),
@@ -13,5 +10,18 @@ dta <- tibble(
 
 d3plus() %>%
   d3p_type("pie") %>%
-  d3p_data(data = dta, size = "value") %>%
-  d3p_id("id")
+  d3p_data(data = pie_data, size = "value") %>%
+  d3p_id("id") %>% 
+  d3p_title(
+    list(
+      value = "Titles and Footers Example",
+      sub = "Subtitles are smaller than titles.",
+      total = TRUE
+    )
+  ) %>% 
+  d3p_footer(
+    list(
+      link = "http://www.google.com",
+      value = "Click here to search Google"
+    )
+  )

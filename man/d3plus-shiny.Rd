@@ -6,7 +6,7 @@
 \alias{renderD3plus}
 \title{Shiny bindings for 'D3Plus'}
 \usage{
-d3plusOutput(outputId, width = "100\%", height = "400px")
+d3plusOutput(outputId, width = "100\%", height = "100")
 
 renderD3plus(expr, env = parent.frame(), quoted = FALSE)
 }

@@ -59,6 +59,9 @@ HTMLWidgets.widget({
       case "scatter":
         chart.type("scatter");
         break;
+      case "bubbles":
+        chart.type("bubbles");
+        break;
       default:
         chart = null;
     }

@@ -132,6 +132,14 @@ HTMLWidgets.widget({
       chart.focus(x.focus);
     }
 
+    // title, subtitle and footer
+    if (x.title) {
+      chart.title(x.title);
+    }
+    if (x.footer) {
+      chart.footer(x.footer);
+    }
+    
     chart.container("#" + el.id);
 
     setTimeout(function() {

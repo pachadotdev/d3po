@@ -20,7 +20,7 @@
 #' d3plus() %>% d3p_data(dta) %>% d3p_type("hbar")
 #' d3plus() %>% d3p_data(dta) %>% d3p_type("area")
 #' @export
-d3plus <- function(data, width = "100%", height = "100%", elementId = NULL) {
+d3plus <- function(data, width = "100%", height = "400px", elementId = NULL) {
   x <- list()
 
   # create widget

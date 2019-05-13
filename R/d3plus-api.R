@@ -69,3 +69,15 @@ d3p_focus <- function(d3p, focus = NULL) {
   d3p$x[["focus"]] <- focus
   d3p
 }
+
+#' @export
+d3p_title <- function(d3p, title = NULL) {
+  d3p$x[["title"]] <- title
+  d3p
+}
+
+#' @export
+d3p_footer <- function(d3p, footer = NULL) {
+  d3p$x[["footer"]] <- footer
+  d3p
+}

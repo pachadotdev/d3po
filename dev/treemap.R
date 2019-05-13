@@ -19,4 +19,17 @@ d3plus() %>%
   d3p_labels(align = "left", valign = "top") %>%
   d3p_icon(style = "knockout", value = "icon") %>%
   d3p_legend(size = 30) %>%
-  d3p_depth(1)
+  d3p_depth(1) %>% 
+  d3p_title(
+    list(
+      value = "Titles and Footers Example",
+      sub = "Subtitles are smaller than titles.",
+      total = TRUE
+    )
+  ) %>% 
+  d3p_footer(
+    list(
+      link = "http://www.google.com",
+      value = "Click here to search Google"
+    )
+  )

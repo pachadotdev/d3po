@@ -65,6 +65,9 @@ HTMLWidgets.widget({
       case "rings":
         chart.type("rings");
         break;
+      case "sankey":
+        chart.type("sankey");
+        break;
       default:
         chart = null;
     }

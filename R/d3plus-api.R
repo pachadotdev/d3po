@@ -7,16 +7,16 @@ d3p_type <- function(d3p, type = NULL) {
 #' @export
 d3p_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
   stopifnot(
-    is.null(data) | is.data.frame(data)
-    #is.data.frame(nodes),
-    #is.data.frame(edges)
+    is.null(data) | is.data.frame(data),
+    is.null(nodes) | is.data.frame(nodes),
+    is.null(edges) | is.data.frame(edges)
   )
   
+  d3p$x[["coords"]] <- coords
   d3p$x[["data"]] <- data
-  d3p$x[["size"]] <- size
   d3p$x[["edges"]] <- edges
   d3p$x[["nodes"]] <- nodes
-  d3p$x[["coords"]] <- coords
+  d3p$x[["size"]] <- size
   d3p$x[["text"]] <- text
   d3p
 }

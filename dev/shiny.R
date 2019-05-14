@@ -17,7 +17,7 @@ ui <- fluidPage(
            <li>Bubbles</li>
            <li>Geomap</li>
            <li>Line</li>
-           <li>Network</li>
+           <li>Network (WIP)</li>
            <li>Pie</li>
            <li>Radar</li>
            <li>Rings</li>
@@ -110,19 +110,19 @@ server <- function(input, output) {
   )
   
   network_data <- tibble(
-    name = c("alpha", "beta", "gamma"),
-    val = c(10, 20, 30)
+    name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
+    val = c(10, 20, 30, 30, 20, 10)
   )
   
   network_edges <- tibble(
-    source = c("alpha", "alpha"),
-    target = c("beta", "gamma")
+    source = c("alpha", "alpha", "theta", "theta", "epsilon"),
+    target = c("beta", "gamma", "zeta", "epsilon", "alpha")
   )
   
   network_nodes <- tibble(
-    name = c("alpha", "beta", "gamma"),
-    x = c(10, 12, 17),
-    y = c(4, 24, 14)
+    name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
+    x = c(1,2,1,3,2.5,2),
+    y = c(1,1,2,2,1.5,2)
   )
   
   pie_data <- tibble(
@@ -163,9 +163,9 @@ server <- function(input, output) {
   )
   
   stacked_data <- tibble(
-    id = c(rep("alpha", 3), rep("beta", 2)),
-    ab1 = letters[1:5],
-    ab2 = c(1, 2, 5, -1, -2)
+    id = c(rep("alpha", 3), rep("beta", 3)),
+    ab1 = c(4,5,6,4,5,6),
+    ab2 = c(7,25,13,17,8,13)
   )
   
   treemap_data <- tibble(
@@ -205,7 +205,7 @@ server <- function(input, output) {
     d3plus() %>%
       d3p_type("box") %>%
       d3p_data(data = box_data) %>%
-      d3p_id(c("name")) %>% 
+      d3p_id("name") %>% 
       d3p_axis(x = "year", y = "value") %>% 
       d3p_title(
         list(
@@ -291,12 +291,12 @@ server <- function(input, output) {
   output$network <- renderD3plus({
     d3plus() %>%
       d3p_type("network") %>%
-      d3p_data(data = network_data, size = "val", network_nodes = nodes, edges = network_edges) %>%
+      d3p_data(data = network_data, size = "val", nodes = network_nodes, edges = network_edges) %>%
       d3p_id("name") %>% 
       d3p_title(
         list(
-          value = "This is a title",
-          sub = "This is a subtitle",
+          value = "Titles and Footers Example",
+          sub = "Subtitles are smaller than titles.",
           total = TRUE
         )
       ) %>% 

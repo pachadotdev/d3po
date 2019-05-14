@@ -1,22 +1,27 @@
+# WIP
+
+library(dplyr)
+library(d3plus)
+
 network_data <- tibble(
-  name = c("alpha", "beta", "gamma"),
-  val = c(10, 20, 30)
+  name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
+  val = c(10, 20, 30, 30, 20, 10)
 )
 
 network_edges <- tibble(
-  source = c("alpha", "alpha"),
-  target = c("beta", "gamma")
+  source = c("alpha", "alpha", "theta", "theta", "epsilon"),
+  target = c("beta", "gamma", "zeta", "epsilon", "alpha")
 )
 
 network_nodes <- tibble(
-  name = c("alpha", "beta", "gamma"),
-  x = c(10, 12, 17),
-  y = c(4, 24, 14)
+  name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
+  x = c(1,2,1,3,2.5,2),
+  y = c(1,1,2,2,1.5,2)
 )
 
 d3plus() %>%
   d3p_type("network") %>%
-  d3p_data(data = network_data, size = "val", network_nodes = nodes, edges = network_edges) %>%
+  d3p_data(data = network_data, size = "val", nodes = network_nodes, edges = network_edges) %>%
   d3p_id("name") %>% 
   d3p_title(
     list(
@@ -27,8 +32,7 @@ d3plus() %>%
   ) %>% 
   d3p_footer(
     list(
-      link = "http://www.google.com",
-      value = "Click here to search Google"
+      link = "https://www.duckduckgo.com",
+      value = "Click here to search DuckDuckGo"
     )
   )
-

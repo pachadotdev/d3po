@@ -1,5 +1,7 @@
 # WIP
-# still cannot mimic http://d3plus.org/examples/basic/a523b45768c2ca464363/
+
+library(dplyr)
+library(d3plus)
 
 sankey_edges <- tibble(
   strength = c(2,1,1,3),
@@ -20,13 +22,13 @@ d3plus() %>%
   d3p_focus(list(tooltip = FALSE, value = "gamma")) %>% 
   d3p_title(
     list(
-      value = "Titles and Footers Example",
-      sub = "Subtitles are smaller than titles."
+      value = "This is a title",
+      sub = "This is a subtitle"
     )
   ) %>% 
   d3p_footer(
     list(
-      link = "http://www.google.com",
-      value = "Click here to search Google"
+      link = "https://www.duckduckgo.com",
+      value = "Click here to search DuckDuckGo"
     )
   )

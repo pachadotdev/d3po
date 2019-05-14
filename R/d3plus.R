@@ -51,7 +51,7 @@ d3plus <- function(data, width = "100%", height = "100%", elementId = NULL) {
 #' @name d3plus-shiny
 #'
 #' @export
-d3plusOutput <- function(outputId, width = "100%", height = "100") {
+d3plusOutput <- function(outputId, width = "100%", height = "100%") {
   htmlwidgets::shinyWidgetOutput(outputId, "d3plus", width, height, package = "d3plus")
 }
 

@@ -26,8 +26,14 @@ HTMLWidgets.widget({
     var chart = new d3plus.viz();
 
     switch (x.type) {
-      case "tree_map":
-        chart.type("tree_map");
+      case "bar":
+        chart.type("bar");
+        break;
+      case "box":
+        chart.type("box");
+        break;
+      case "bubbles":
+        chart.type("bubbles");
         break;
       case "geo_map":
         chart.type("geo_map");
@@ -35,38 +41,29 @@ HTMLWidgets.widget({
       case "line":
         chart.type("line");
         break;
-      case "scatter":
-        chart.type("scatter");
-        break;
-      case "bar":
-        chart.type("bar");
-        break;
-      case "stacked":
-        chart.type("stacked");
+      case "network":
+        chart.type("network");
         break;
       case "pie":
         chart.type("pie");
         break;
-      case "network":
-        chart.type("network");
-        break;
       case "radar":
         chart.type("radar");
-        break;
-      case "box":
-        chart.type("box");
-        break;
-      case "scatter":
-        chart.type("scatter");
-        break;
-      case "bubbles":
-        chart.type("bubbles");
         break;
       case "rings":
         chart.type("rings");
         break;
       case "sankey":
         chart.type("sankey");
+        break;
+      case "scatter":
+        chart.type("scatter");
+        break;
+      case "stacked":
+        chart.type("stacked");
+        break;
+      case "tree_map":
+        chart.type("tree_map");
         break;
       default:
         chart = null;
@@ -82,25 +79,12 @@ HTMLWidgets.widget({
       chart.size(x.size);
     }
 
-    // treemap arguments
+    // treemap specific arguments
     if (x.legend) {
       chart.legend(x.legend);
     }
     if (x.icon) {
       chart.icon(x.icon);
-    }
-    if (x.color) {
-      chart.color(x.color);
-    }
-    if (x.depth) {
-      chart.depth(x.depth);
-    }
-
-    if (x.tooltipConfig) {
-      chart.tooltipConfig(x.tooltipConfig);
-    }
-    if (x.labels) {
-      chart.labels(x.labels);
     }
 
     // bar/line chart
@@ -138,6 +122,19 @@ HTMLWidgets.widget({
     }
     if (x.footer) {
       chart.footer(x.footer);
+    }
+    
+    if (x.color) {
+      chart.color(x.color);
+    }
+    if (x.depth) {
+      chart.depth(x.depth);
+    }
+    if (x.tooltipConfig) {
+      chart.tooltipConfig(x.tooltipConfig);
+    }
+    if (x.labels) {
+      chart.labels(x.labels);
     }
     
     chart.container("#" + el.id);

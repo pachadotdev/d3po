@@ -7,7 +7,7 @@
 \title{An `htmlwidget` interface to the
 d3plus javascript chart library}
 \usage{
-d3plus(data, width = "100\%", height = "100\%", elementId = NULL)
+d3plus(data, width = "0", height = "0", elementId = NULL)
 }
 \arguments{
 \item{data}{D3Plus need explicit specified data objects formatted as JSON, and this parameter passed it from R.}

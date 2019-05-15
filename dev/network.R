@@ -22,14 +22,14 @@ network_nodes <- tibble(
 d3plus() %>%
   d3p_type("network") %>%
   d3p_data(data = network_data, size = "val", nodes = network_nodes, edges = network_edges) %>%
-  d3p_id("name") %>% 
+  d3p_id("name") %>%
   d3p_title(
     list(
       value = "Titles and Footers Example",
       sub = "Subtitles are smaller than titles.",
       total = TRUE
     )
-  ) %>% 
+  ) %>%
   d3p_footer(
     list(
       link = "https://www.duckduckgo.com",

@@ -71,6 +71,12 @@ d3p_focus <- function(d3p, focus = NULL) {
 }
 
 #' @export
+d3p_font <- function(d3p, ...) {
+  d3p$x$font <- list(...)
+  d3p
+}
+
+#' @export
 d3p_title <- function(d3p, title = NULL) {
   d3p$x[["title"]] <- title
   d3p

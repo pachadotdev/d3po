@@ -7,7 +7,7 @@ HTMLWidgets.widget({
   initialize: function(el, width, height) {
     return {};
   },
-
+  
   renderValue: function(el, x, instance) {
     document.getElementById(el.id).innerHTML = "";
 
@@ -25,6 +25,8 @@ HTMLWidgets.widget({
 
     var chart = new d3plus.viz();
 
+    // visualization method
+    
     switch (x.type) {
       case "bar":
         chart.type("bar");
@@ -69,11 +71,12 @@ HTMLWidgets.widget({
         chart = null;
     }
 
+    // common arguments
     if (data) {
       chart.data(data);
     }
     if (x.id) {
-      chart.id(x.id);
+      chart.id(x.id); // id means "group by" in D3plus 1
     }
     if (x.size) {
       chart.size(x.size);
@@ -124,17 +127,21 @@ HTMLWidgets.widget({
       chart.footer(x.footer);
     }
     
+    // aesthetic parameters
     if (x.color) {
       chart.color(x.color);
     }
     if (x.depth) {
       chart.depth(x.depth);
     }
-    if (x.tooltipConfig) {
-      chart.tooltipConfig(x.tooltipConfig);
+    if (x.font) {
+      chart.font(x.font);
     }
     if (x.labels) {
       chart.labels(x.labels);
+    }
+    if (x.tooltipConfig) {
+      chart.tooltipConfig(x.tooltipConfig);
     }
     
     chart.container("#" + el.id);
@@ -143,6 +150,7 @@ HTMLWidgets.widget({
       chart.resize(true);
       chart.draw();
     }, 10);
+    
   }
   
 });

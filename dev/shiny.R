@@ -17,7 +17,7 @@ ui <- fluidPage(
            <li>Bubbles</li>
            <li>Geomap</li>
            <li>Line</li>
-           <li>Network (WIP)</li>
+           <li>Network</li>
            <li>Pie</li>
            <li>Radar</li>
            <li>Rings</li>
@@ -138,12 +138,19 @@ server <- function(input, output) {
   radar_data <- tibble(
     name = c(rep("alpha", 3), rep("beta", 3)),
     skill = rep(c("power", "courage", "wisdom"), 2),
-    value = c(4, 8, 2, 5, 4, 6)
+    value = c(4, 8, 2, 5, 4, 6),
+    color = c(rep("firebrick", 3), rep("cornflowerblue", 3))
   )
   
   rings_edges <- tibble(
     source = c(rep("alpha", 2), rep("beta", 2), "zeta", "theta", "eta"),
     target = c("beta", "gamma", "delta", "epsilon", rep("gamma", 3))
+  )
+  
+  sankey_data <- tibble(
+    id = c("alpha", "beta", "gamma"),
+    color = c("firebrick", "cornflowerblue", "khaki"),
+    val = c(100,200,300)
   )
   
   sankey_edges <- tibble(
@@ -159,13 +166,15 @@ server <- function(input, output) {
   scatterplot_data <- tibble(
     value = c(100, 70, 40, 15),
     weigth = c(.45, .6, -.2, .1),
-    type = c("alpha", "beta", "gamma", "delta")
+    type = c("alpha", "beta", "gamma", "delta"),
+    color = c("firebrick", "cornflowerblue", "khaki", "cadetblue")
   )
   
   stacked_data <- tibble(
     id = c(rep("alpha", 3), rep("beta", 3)),
     ab1 = c(4,5,6,4,5,6),
-    ab2 = c(7,25,13,17,8,13)
+    ab2 = c(7,25,13,17,8,13),
+    color = c(rep("cornflowerblue", 3), rep("firebrick", 3))
   )
   
   treemap_data <- tibble(
@@ -175,7 +184,8 @@ server <- function(input, output) {
     icon = c(
       rep("https://datausa.io/static/images/attrs/thing_apple.png", 3),
       rep("https://datausa.io/static/images/attrs/thing_fish.png", 2)
-    )
+    ),
+    color = c(rep("cornflowerblue", 3), rep("firebrick", 2))
   )
 
   # Output ----
@@ -356,6 +366,7 @@ server <- function(input, output) {
         size = "value"
       ) %>%
       d3p_id(c("name", "skill")) %>% 
+      d3p_color("color") %>% 
       d3p_title(
         list(
           value = "This is a title",
@@ -374,10 +385,11 @@ server <- function(input, output) {
   output$sankey <- renderD3plus({
     d3plus() %>%
       d3p_type("sankey") %>%
-      d3p_data(size = 100, nodes = sankey_nodes, edges = sankey_edges) %>%
+      d3p_data(data = sankey_data, size = "val", nodes = sankey_nodes, edges = sankey_edges) %>%
       # should be something like
       # d3p_data(size = 100, nodes = nodes, edges = list(strength = "strength", value = edges)) %>%
       d3p_id("id") %>% 
+      d3p_color("color") %>% 
       d3p_focus(list(tooltip = FALSE, value = "gamma")) %>% 
       d3p_title(
         list(
@@ -399,6 +411,7 @@ server <- function(input, output) {
       d3p_data(data = scatterplot_data) %>%
       d3p_id(c("type")) %>% 
       d3p_axis(x = "value", y = "weigth") %>% 
+      d3p_color("color") %>% 
       d3p_title(
         list(
           value = "This is a title",
@@ -419,6 +432,8 @@ server <- function(input, output) {
       d3p_data(data = stacked_data) %>%
       d3p_id("id") %>%
       d3p_axis(x = "ab1", y = "ab2") %>% 
+      d3p_color("color") %>% 
+      d3p_font(family = "Fira Sans", weight = 400) %>% 
       d3p_title(
         list(
           value = "This is a title",
@@ -439,14 +454,15 @@ server <- function(input, output) {
       d3p_type("tree_map") %>%
       d3p_data(data = treemap_data, size = "value") %>%
       d3p_id(c("parent", "id")) %>%
-      d3p_color("parent") %>%
+      d3p_depth(1) %>% 
+      d3p_color("color") %>%
+      d3p_font(family = "Fira Sans", weight = 400) %>% 
       d3p_labels(align = "left", valign = "top") %>%
       d3p_icon(style = "knockout", value = "icon") %>%
       d3p_legend(size = 30) %>%
-      d3p_depth(1) %>% 
       d3p_title(
         list(
-          value = "This is a Treemap",
+          value = "This is a title",
           sub = "This is a subtitle",
           total = TRUE
         )

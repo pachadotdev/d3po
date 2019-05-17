@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 source/
+dev/*.js
+javascript/node_modules/
+javascript/d3po*.js

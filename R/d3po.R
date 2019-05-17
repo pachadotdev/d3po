@@ -1,8 +1,8 @@
-#' d3plus
+#' d3po
 #'
-#' This function provides 'D3Plus' methods from R console
+#' This function provides 'd3po' methods from R console
 #'
-#' @param data D3Plus need explicit specified data objects formatted as JSON, and this parameter passed it from R.
+#' @param data d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.
 #' @param elementId Dummy string parameter. Useful when you have two or more charts on the same page.
 #' @param width Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
@@ -15,51 +15,51 @@
 #'   x = c(4, 5, 6, 4, 5, 6),
 #'   y = c(7, 25, 13, 7, 8, 13)
 #' )
-#' 
-#' d3plus() %>% d3p_data(dta) %>% d3p_type("bar")
-#' d3plus() %>% d3p_data(dta) %>% d3p_type("hbar")
-#' d3plus() %>% d3p_data(dta) %>% d3p_type("area")
+#'
+#' d3po() %>% d3po_data(dta) %>% d3po_type("bar")
+#' d3po() %>% d3po_data(dta) %>% d3po_type("hbar")
+#' d3po() %>% d3po_data(dta) %>% d3po_type("area")
 #' @export
-d3plus <- function(data, width = "0", height = "0", elementId = NULL) {
+d3po <- function(data, width = "0", height = "0", elementId = NULL) {
   x <- list()
 
   # create widget
   htmlwidgets::createWidget(
-    name = "d3plus",
+    name = "d3po",
     x,
     width = width,
     height = height,
-    package = "d3plus",
+    package = "d3po",
     elementId = elementId
   )
 }
 
-#' Shiny bindings for 'D3Plus'
+#' Shiny bindings for 'd3po'
 #'
-#' Output and render functions for using D3Plus within Shiny
+#' Output and render functions for using d3po within Shiny
 #' applications and interactive Rmd documents.
 #'
 #' @param outputId output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a D3Plus object
+#' @param expr An expression that generates a d3po object
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #
-#' @name d3plus-shiny
+#' @name d3po-shiny
 #'
 #' @export
-d3plusOutput <- function(outputId, width = "0", height = "0") {
-  htmlwidgets::shinyWidgetOutput(outputId, "d3plus", width, height, package = "d3plus")
+d3poOutput <- function(outputId, width = "0", height = "0") {
+  htmlwidgets::shinyWidgetOutput(outputId, "d3po", width, height, package = "d3po")
 }
 
-#' @rdname d3plus-shiny
+#' @rdname d3po-shiny
 #' @export
-renderD3plus <- function(expr, env = parent.frame(), quoted = FALSE) {
+renderd3po <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) {
     expr <- substitute(expr)
   } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, d3plusOutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr, d3poOutput, env, quoted = TRUE)
 }

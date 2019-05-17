@@ -1,7 +1,7 @@
 # WIP
 
 library(dplyr)
-library(d3plus)
+library(d3po)
 
 network_data <- tibble(
   name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
@@ -19,18 +19,18 @@ network_nodes <- tibble(
   y = c(1,1,2,2,1.5,2)
 )
 
-d3plus() %>%
-  d3p_type("network") %>%
-  d3p_data(data = network_data, size = "val", nodes = network_nodes, edges = network_edges) %>%
-  d3p_id("name") %>%
-  d3p_title(
+d3po() %>%
+  d3po_type("network") %>%
+  d3po_data(data = network_data, size = "val", nodes = network_nodes, edges = network_edges) %>%
+  d3po_id("name") %>%
+  d3po_title(
     list(
       value = "Titles and Footers Example",
       sub = "Subtitles are smaller than titles.",
       total = TRUE
     )
   ) %>%
-  d3p_footer(
+  d3po_footer(
     list(
       link = "https://www.duckduckgo.com",
       value = "Click here to search DuckDuckGo"

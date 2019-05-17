@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: 'd3plus',
+  name: 'd3po',
 
   type: 'output',
 
@@ -23,7 +23,7 @@ HTMLWidgets.widget({
     window.x = x;
     window.el = el;
 
-    var chart = new d3plus.viz();
+    var chart = new d3po.viz();
 
     // visualization method
     
@@ -76,7 +76,7 @@ HTMLWidgets.widget({
       chart.data(data);
     }
     if (x.id) {
-      chart.id(x.id); // id means "group by" in D3plus 1
+      chart.id(x.id); // id means "group by" in d3po 1
     }
     if (x.size) {
       chart.size(x.size);

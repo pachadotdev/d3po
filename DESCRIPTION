@@ -1,7 +1,7 @@
-Package: d3plus
+Package: d3po
 Type: Package
-Title: Seamless 'D3Plus' Integration
-Version: 0.1.0
+Title: Seamless 'd3po' Integration
+Version: 0.0.0.9006
 Author: Mauricio Vargas [aut,cre],
   Joshua Kunst [aut]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
@@ -12,4 +12,3 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-

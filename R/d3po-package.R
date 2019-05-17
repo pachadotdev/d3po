@@ -1,26 +1,26 @@
 #' An `htmlwidget` interface to the
-#' d3plus javascript chart library
+#' d3po javascript chart library
 #'
-#' @name d3plus
+#' @name d3po
 #' @docType package
 #' @author Mauricio Vargas
 NULL
 
-#' d3plus exported operators and S3 methods
+#' d3po exported operators and S3 methods
 #'
 #' The following functions are imported and then re-exported
-#' from the d3plus package to avoid listing the magrittr
-#' as Depends of d3plus.
+#' from the d3po package to avoid listing the magrittr
+#' as Depends of d3po.
 #'
-#' @name d3plus-exports
+#' @name d3po-exports
 NULL
 
 #' @importFrom magrittr %>%
 #' @name %>%
-#' @rdname d3plus-exports
+#' @rdname d3po-exports
 NULL
 
 #' @importFrom htmlwidgets JS
 #' @name JS
-#' @rdname d3plus-exports
+#' @rdname d3po-exports
 NULL

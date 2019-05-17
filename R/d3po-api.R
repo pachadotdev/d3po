@@ -1,17 +1,17 @@
 #' @export
-d3p_type <- function(d3p, type = NULL) {
+d3po_type <- function(d3p, type = NULL) {
   d3p$x[["type"]] <- type
   d3p
 }
 
 #' @export
-d3p_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
+d3po_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
   stopifnot(
     is.null(data) | is.data.frame(data),
     is.null(nodes) | is.data.frame(nodes),
     is.null(edges) | is.data.frame(edges)
   )
-  
+
   d3p$x[["coords"]] <- coords
   d3p$x[["data"]] <- data
   d3p$x[["edges"]] <- edges
@@ -22,68 +22,68 @@ d3p_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL, 
 }
 
 #' @export
-d3p_id <- function(d3p, id = NULL) {
+d3po_id <- function(d3p, id = NULL) {
   d3p$x[["id"]] <- id
   d3p
 }
 
 #' @export
-d3p_color <- function(d3p, color = NULL) {
+d3po_color <- function(d3p, color = NULL) {
   d3p$x[["color"]] <- color
   d3p
 }
 
 #' @export
-d3p_labels <- function(d3p, ...) {
+d3po_labels <- function(d3p, ...) {
   d3p$x$labels <- list(...)
   d3p
 }
 
 #' @export
-d3p_icon <- function(d3p, ...) {
+d3po_icon <- function(d3p, ...) {
   d3p$x$icon <- list(...)
   d3p
 }
 
 #' @export
-d3p_legend <- function(d3p, ...) {
+d3po_legend <- function(d3p, ...) {
   d3p$x$legend <- list(...)
   d3p
 }
 
 #' @export
-d3p_axis <- function(d3p, x = NULL, y = NULL) {
+d3po_axis <- function(d3p, x = NULL, y = NULL) {
   d3p$x[["xaxis"]] <- x
   d3p$x[["yaxis"]] <- y
   d3p
 }
 
 #' @export
-d3p_depth <- function(d3p, depth = 0) {
+d3po_depth <- function(d3p, depth = 0) {
   d3p$x[["depth"]] <- depth
   d3p
 }
 
 #' @export
-d3p_focus <- function(d3p, focus = NULL) {
+d3po_focus <- function(d3p, focus = NULL) {
   d3p$x[["focus"]] <- focus
   d3p
 }
 
 #' @export
-d3p_font <- function(d3p, ...) {
+d3po_font <- function(d3p, ...) {
   d3p$x$font <- list(...)
   d3p
 }
 
 #' @export
-d3p_title <- function(d3p, title = NULL) {
+d3po_title <- function(d3p, title = NULL) {
   d3p$x[["title"]] <- title
   d3p
 }
 
 #' @export
-d3p_footer <- function(d3p, footer = NULL) {
+d3po_footer <- function(d3p, footer = NULL) {
   d3p$x[["footer"]] <- footer
   d3p
 }

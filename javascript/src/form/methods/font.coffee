@@ -16,8 +16,8 @@ module.exports =
     size:       12
     spacing:    0
     transform:  transform()
-    weight:     400
+    weight:     200
   size:       12
   spacing:    0
   transform:  transform()
-  weight:     400
+  weight:     200

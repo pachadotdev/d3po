@@ -10,9 +10,9 @@ print = (type, message, style) ->
     console[type] "%c[ d3po ]%c " + message, "font-weight: 800;" +
                                            "color: #b35c1e;" +
                                            "margin-left: 0px;",
-                                           "font-weight:400;" + style
+                                           "font-weight: 400;" + style
   else
-    console[type] "%c" + message, style + "font-weight:400;"
+    console[type] "%c" + message, style + "font-weight: 400;"
   return
 
 print.comment = (message) ->

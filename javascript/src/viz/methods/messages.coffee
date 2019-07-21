@@ -7,12 +7,6 @@ module.exports =
   background:
     accepted: [false, String]
     value: false
-  branding:
-    accepted: [Boolean]
-    image:
-      dark: "http://d3po.org/assets/img/icon-transparent-invert.png"
-      light: "http://d3po.org/assets/img/icon-transparent.png"
-    value:    false
   font:
     color:      "#444"
     decoration: decoration()

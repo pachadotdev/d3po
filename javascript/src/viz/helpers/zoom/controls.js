@@ -66,7 +66,7 @@ module.exports = function() {
 
   #zoom_in {
     cursor: pointer;
-    font: normal 18px/20px Arial, Helvetica, sans-serif;
+    font: normal 18px/20px "Fira Sans", sans-serif;
   }
 
   #zoom_out {
@@ -76,7 +76,7 @@ module.exports = function() {
 
   #zoom_reset {
     cursor: pointer;
-    font: bold 15px/19px Arial, Helvetica, sans-serif;
+    font: bold 15px/19px "Fira Sans", sans-serif;
   }
 
   */

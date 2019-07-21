@@ -115,34 +115,6 @@ module.exports = function(vars,message) {
 
   var online = navigator.onLine, square = 75;
 
-  var branding = vars.g.message.selectAll(".d3po_message_branding")
-    .data(vars.messages.branding.value && position === "center" ? [0] : []);
-
-  branding.enter().append("div")
-    .attr("class", "d3po_message_branding")
-    .style("margin-top", "15px")
-    .style("padding-top", "0px")
-    .style("display", "block")
-    .style("font-size", "11px")
-    .style("background-size", square + "px")
-    .style("background-position", "center 10px")
-    .style("background-repeat", "no-repeat")
-    .style("cursor", "pointer")
-    .on(events.click, function(){
-      window.open("http://www.d3po.org/", "_blank");
-    });
-
-  var logo = d3.hsl(bg).l < 0.5 ? vars.messages.branding.image.dark : vars.messages.branding.image.light;
-
-  branding
-    .text(online ? "Powered by:" : "Powered by d3po")
-    .style("background-color", online ? bg : "transparent")
-    .style("background-image", online ? "url('" + logo + "')" : "none")
-    .style("min-width", online ? square + "px" : "auto")
-    .style("height", online ? square + "px" : "auto");
-
-  branding.exit().remove();
-
   vars.g.message
     .style("display", message ? "inline-block" : "none")
     .call(style).style("opacity", message ? 1 : 0)

@@ -27,7 +27,7 @@ module.exports =
     family:     family()
     size:       11
     transform:  transform()
-    weight:     400
+    weight:     200
   margin:
     process: (value) ->
 

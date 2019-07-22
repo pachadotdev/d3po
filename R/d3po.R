@@ -20,7 +20,7 @@
 #' d3po() %>% d3po_data(dta) %>% d3po_type("hbar")
 #' d3po() %>% d3po_data(dta) %>% d3po_type("area")
 #' @export
-d3po <- function(data, width = "100%", height = "0", elementId = NULL) {
+d3po <- function(data, width = "100%", height = "100%", elementId = NULL) {
   x <- list()
 
   # create widget
@@ -51,7 +51,7 @@ d3po <- function(data, width = "100%", height = "0", elementId = NULL) {
 #' @name d3po-shiny
 #'
 #' @export
-d3poOutput <- function(outputId, width = "100%", height = "0") {
+d3poOutput <- function(outputId, width = "100%", height = "100%") {
   htmlwidgets::shinyWidgetOutput(outputId, "d3po", width, height, package = "d3po")
 }
 

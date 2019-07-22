@@ -1,3 +1,6 @@
+library(dplyr)
+library(d3po)
+
 treemap_data <- tibble(
   parent = c(rep("Group 1", 3), rep("Group 2", 2)),
   id = c("alpha", "beta", "gamma", "delta", "eta"),

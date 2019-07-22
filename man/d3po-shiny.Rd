@@ -2,17 +2,15 @@
 % Please edit documentation in R/d3po.R
 \name{d3po-shiny}
 \alias{d3po-shiny}
-\alias{d3poOutput}
-\alias{renderd3po}
+\alias{d3po_output}
+\alias{render_d3po}
 \title{Shiny bindings for 'd3po'}
 \usage{
-d3poOutput(outputId, width = "0", height = "0")
+d3po_output(output_id, width = "100\%", height = "100\%")
 
-renderd3po(expr, env = parent.frame(), quoted = FALSE)
+render_d3po(expr, env = parent.frame(), quoted = FALSE)
 }
 \arguments{
-\item{outputId}{output variable to read from}
-
 \item{width, height}{Must be a valid CSS unit (like \code{'100\%'},
 \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 string and have \code{'px'} appended.}
@@ -23,6 +21,8 @@ string and have \code{'px'} appended.}
 
 \item{quoted}{Is \code{expr} a quoted expression (with \code{quote()})? This
 is useful if you want to save an expression in a variable.}
+
+\item{outputId}{output variable to read from}
 }
 \description{
 Output and render functions for using d3po within Shiny

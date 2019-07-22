@@ -19,7 +19,7 @@ module.exports = function(value) {
     [/[\335]/g, "Y"], [/[\375\377]/g, "y"]
   ];
 
-  return "" + value.replace(/[^A-Za-z0-9\-_]/g, function(char) {
+  return "" + value.toString().replace(/[^A-Za-z0-9\-_]/g, function(char) {
 
     if (char === " ") return "-";
 

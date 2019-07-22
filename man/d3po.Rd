@@ -7,7 +7,7 @@
 \title{An `htmlwidget` interface to the
 d3po javascript chart library}
 \usage{
-d3po(data, width = "0", height = "0", elementId = NULL)
+d3po(data, width = "100\%", height = "100\%", elementId = NULL)
 }
 \arguments{
 \item{data}{d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.}

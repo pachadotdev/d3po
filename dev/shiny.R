@@ -31,43 +31,43 @@ ui <- fluidPage(
 
     mainPanel(
       h1("Bar"),
-      d3poOutput("bar", height = "400px"),
+      d3po_output("bar", height = "400px"),
 
       h1("Box and whiskers"),
-      d3poOutput("box", height = "400px"),
+      d3po_output("box", height = "400px"),
 
       h1("Bubbles"),
-      d3poOutput("bubbles", height = "400px"),
+      d3po_output("bubbles", height = "400px"),
 
       h1("Geomap"),
-      d3poOutput("geomap", height = "400px"),
+      d3po_output("geomap", height = "400px"),
 
       h1("Line"),
-      d3poOutput("line", height = "400px"),
+      d3po_output("line", height = "400px"),
 
       h1("Network"),
-      d3poOutput("network", height = "400px"),
+      d3po_output("network", height = "400px"),
 
       h1("Pie"),
-      d3poOutput("pie", height = "400px"),
+      d3po_output("pie", height = "400px"),
 
       h1("Radar"),
-      d3poOutput("radar", height = "400px"),
+      d3po_output("radar", height = "400px"),
 
       h1("Rings"),
-      d3poOutput("rings", height = "400px"),
+      d3po_output("rings", height = "400px"),
 
       h1("Sankey"),
-      d3poOutput("sankey", height = "400px"),
+      d3po_output("sankey", height = "400px"),
 
       h1("Scatterplot"),
-      d3poOutput("scatterplot", height = "400px"),
+      d3po_output("scatterplot", height = "400px"),
 
       h1("Stacked"),
-      d3poOutput("stacked", height = "400px"),
+      d3po_output("stacked", height = "400px"),
 
       h1("Treemap"),
-      d3poOutput("treemap", height = "400px")
+      d3po_output("treemap", height = "400px")
     )
   )
 )
@@ -190,7 +190,7 @@ server <- function(input, output) {
 
   # Output ----
 
-  output$bar <- renderd3po({
+  output$bar <- render_d3po({
     d3po() %>%
       d3po_type("bar") %>%
       d3po_data(data = bar_data) %>%
@@ -211,7 +211,7 @@ server <- function(input, output) {
       )
   })
 
-  output$box <- renderd3po({
+  output$box <- render_d3po({
     d3po() %>%
       d3po_type("box") %>%
       d3po_data(data = box_data) %>%
@@ -231,7 +231,7 @@ server <- function(input, output) {
       )
   })
 
-  output$bubbles <- renderd3po({
+  output$bubbles <- render_d3po({
     d3po() %>%
       d3po_type("bubbles") %>%
       d3po_data(data = bubbles_data, size = "value") %>%
@@ -253,7 +253,7 @@ server <- function(input, output) {
       )
   })
 
-  output$geomap <- renderd3po({
+  output$geomap <- render_d3po({
     d3po() %>%
       d3po_type("geo_map") %>%
       d3po_data(
@@ -278,7 +278,7 @@ server <- function(input, output) {
       )
   })
 
-  output$line <- renderd3po({
+  output$line <- render_d3po({
     d3po() %>%
       d3po_type("line") %>%
       d3po_data(data = line_data) %>%
@@ -298,7 +298,7 @@ server <- function(input, output) {
       )
   })
 
-  output$network <- renderd3po({
+  output$network <- render_d3po({
     d3po() %>%
       d3po_type("network") %>%
       d3po_data(data = network_data, size = "val", nodes = network_nodes, edges = network_edges) %>%
@@ -318,7 +318,7 @@ server <- function(input, output) {
       )
   })
 
-  output$pie <- renderd3po({
+  output$pie <- render_d3po({
     d3po() %>%
       d3po_type("pie") %>%
       d3po_data(data = pie_data, size = "value") %>%
@@ -338,7 +338,7 @@ server <- function(input, output) {
       )
   })
 
-  output$rings <- renderd3po({
+  output$rings <- render_d3po({
     d3po() %>%
       d3po_type("rings") %>%
       d3po_data(edges = rings_edges) %>%
@@ -358,7 +358,7 @@ server <- function(input, output) {
       )
   })
 
-  output$radar <- renderd3po({
+  output$radar <- render_d3po({
     d3po() %>%
       d3po_type("radar") %>%
       d3po_data(
@@ -382,7 +382,7 @@ server <- function(input, output) {
       )
   })
 
-  output$sankey <- renderd3po({
+  output$sankey <- render_d3po({
     d3po() %>%
       d3po_type("sankey") %>%
       d3po_data(data = sankey_data, size = "val", nodes = sankey_nodes, edges = sankey_edges) %>%
@@ -405,7 +405,7 @@ server <- function(input, output) {
       )
   })
 
-  output$scatterplot <- renderd3po({
+  output$scatterplot <- render_d3po({
     d3po() %>%
       d3po_type("scatter") %>%
       d3po_data(data = scatterplot_data) %>%
@@ -426,7 +426,7 @@ server <- function(input, output) {
       )
   })
 
-  output$stacked <- renderd3po({
+  output$stacked <- render_d3po({
     d3po() %>%
       d3po_type("stacked") %>%
       d3po_data(data = stacked_data) %>%
@@ -449,7 +449,7 @@ server <- function(input, output) {
       )
   })
 
-  output$treemap <- renderd3po({
+  output$treemap <- render_d3po({
     d3po() %>%
       d3po_type("tree_map") %>%
       d3po_data(data = treemap_data, size = "value") %>%

@@ -51,15 +51,15 @@ d3po <- function(data, width = "100%", height = "100%", elementId = NULL) {
 #' @name d3po-shiny
 #'
 #' @export
-d3poOutput <- function(outputId, width = "100%", height = "100%") {
-  htmlwidgets::shinyWidgetOutput(outputId, "d3po", width, height, package = "d3po")
+d3po_output <- function(output_id, width = "100%", height = "100%") {
+  htmlwidgets::shinyWidgetOutput(output_id, "d3po", width, height, package = "d3po")
 }
 
 #' @rdname d3po-shiny
 #' @export
-renderd3po <- function(expr, env = parent.frame(), quoted = FALSE) {
+render_d3po <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) {
     expr <- substitute(expr)
   } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, d3poOutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr, d3po_output, env, quoted = TRUE)
 }

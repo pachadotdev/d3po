@@ -2,6 +2,7 @@
 
 export(d3po)
 export(d3po_axis)
+export(d3po_background)
 export(d3po_color)
 export(d3po_data)
 export(d3po_depth)

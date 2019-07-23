@@ -144,6 +144,11 @@ HTMLWidgets.widget({
       chart.tooltipConfig(x.tooltipConfig);
     }
     
+    // background
+    if (x.background) {
+      chart.background(x.background);
+    }
+    
     chart.container("#" + el.id);
 
     setTimeout(function() {

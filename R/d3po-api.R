@@ -87,3 +87,9 @@ d3po_footer <- function(d3p, footer = NULL) {
   d3p$x[["footer"]] <- footer
   d3p
 }
+
+#' @export
+d3po_background <- function(d3p, background = NULL) {
+  d3p$x[["background"]] <- background
+  d3p
+}

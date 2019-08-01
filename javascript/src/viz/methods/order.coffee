@@ -3,7 +3,6 @@ module.exports =
   agg:
     accepted: [false, Function, "sum", "min", "max", "mean", "median"]
     value:    false
-  deprecates: ["sort"]
   sort:
     accepted:   ["asc", "desc"]
     value:      "desc"

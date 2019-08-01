@@ -3,4 +3,4 @@ module.exports =
   mode:
     accepted: (vars) -> vars.types[vars.type.value].modes or [false]
     value:    false
-  value:    "tree_map"
+  value:    "treemap"

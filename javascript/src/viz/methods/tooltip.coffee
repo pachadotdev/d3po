@@ -14,7 +14,6 @@ module.exports =
   curtain:
     color:   "#ffffff"
     opacity: 0.8
-  deprecates: "tooltip_info"
   extent:
     accepted: [Boolean]
     value:    true
@@ -29,7 +28,6 @@ module.exports =
     value:    false
   html:
     accepted:   [false, Function, Object, String]
-    deprecates: "click_function"
     value:      false
   iqr:
     accepted: [Boolean]

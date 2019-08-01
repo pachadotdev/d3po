@@ -1,7 +1,6 @@
 module.exports =
   dev:
     accepted:     "{0} is not an accepted value for {1}, please use one of the following: {2}."
-    deprecated:   "the {0} method has been removed, please update your code to use {1}."
     noChange:     "{0} was not updated because it did not change."
     noContainer:  "cannot find a container on the page matching {0}."
     of:           "of"
@@ -122,7 +121,7 @@ module.exports =
     box:      "Box Plot"
     bubbles:  "Bubbles"
     chart:    "Chart"
-    geo_map:  "Geo Map"
+    geomap:  "Geo Map"
     line:     "Line Plot"
     network:  "Network"
     paths:    "Paths"
@@ -131,4 +130,4 @@ module.exports =
     scatter:  "Scatter Plot"
     stacked:  "Stacked Area"
     table:    "Table"
-    tree_map: "Tree Map"
+    treemap: "Tree Map"

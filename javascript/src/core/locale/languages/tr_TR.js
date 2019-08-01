@@ -15,7 +15,6 @@ module.exports = {
     },
     "dev": {
         "accepted": "{0} {1}, aşağıdakilerden birini kullanın lütfen için kabul değer değildir: {2}.",
-        "deprecated": "{0} yöntemi kaldırıldı, kullanmak için kodunuzu güncelleyin {1}.",
         "noChange": "{0} o değişmedi çünkü güncelleştirildi.",
         "noContainer": "sayfa eşleştirme {0} üzerine bir kap bulamıyorum.",
         "of": "arasında",
@@ -92,13 +91,13 @@ module.exports = {
     "visualization": {
         "bubbles": "baloncuklar",
         "chart": "Grafik",
-        "geo_map": "coğrafi Harita",
+        "geomap": "coğrafi Harita",
         "line": "çizgi Arsa",
         "network": "Ağ",
         "rings": "halkalar",
         "scatter": "Dağılım grafiği",
         "stacked": "yığılmış Alan",
-        "tree_map": "ağaç Haritası",
+        "treemap": "ağaç Haritası",
         "bar": "Bar grafik",
         "box": "kutu Grafiği",
         "paths": "yollar",

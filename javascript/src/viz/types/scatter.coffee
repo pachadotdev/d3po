@@ -45,7 +45,7 @@ scatter.setup = (vars) ->
   if vars.time.value and !vars.axes.discrete
     vars.self.x scale: "discrete" if vars.time.value is vars.x.value
     vars.self.y scale: "discrete" if vars.time.value is vars.y.value
-scatter.shapes = ["circle", "square", "donut"]
+scatter.shapes = ["circle"]
 scatter.tooltip = "static"
 
 module.exports = scatter

@@ -1,7 +1,7 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Geo Map
 #------------------------------------------------------------------------------
-geo_map = (vars) ->
+geomap = (vars) ->
 
   # topojson.presimplify vars.coords.value
 
@@ -26,11 +26,11 @@ geo_map = (vars) ->
 
 
 # Visualization Settings and Helper Functions
-geo_map.libs         = ["topojson"]
-geo_map.nesting      = false
-geo_map.requirements = ["coords"]
-geo_map.scale        = 1
-geo_map.shapes       = ["coordinates"]
-geo_map.zoom         = true
+geomap.libs         = ["topojson"]
+geomap.nesting      = false
+geomap.requirements = ["coords"]
+geomap.scale        = 1
+geomap.shapes       = ["coordinates"]
+geomap.zoom         = true
 
-module.exports = geo_map
+module.exports = geomap

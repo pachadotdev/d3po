@@ -7,7 +7,6 @@ module.exports =
     if list.length then list else ["square"]
   interpolate:
     accepted:   ["basis", "basis-open", "cardinal", "cardinal-open", "linear", "monotone", "step", "step-before", "step-after"]
-    deprecates: "stack_type"
     value:      "linear"
   rendering: rendering()
   value:     false

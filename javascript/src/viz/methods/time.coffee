@@ -3,10 +3,8 @@ filter = require "../../core/methods/filter.coffee"
 module.exports =
   accepted:   [Array, Boolean, Function, Object, String]
   dataFilter: true
-  deprecates: ["year", "year_var"]
   fixed:
     accepted:   [Boolean]
-    deprecates: ["static_axis", "static_axes"]
     value:      false
   format:
     accepted: [false, Array, Function, String]

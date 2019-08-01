@@ -35,22 +35,7 @@ initialize = (vars, obj, method, p) ->
 
   for o of obj
 
-    if o is "deprecates"
-
-      deps = if obj[o] instanceof Array then obj[o] else [obj[o]]
-
-      for d in deps
-        vars.self[d] = ((dep, n) ->
-          (x) ->
-            str = vars.format.locale.value.dev.deprecated
-            dep = "." + dep + "()"
-            rec = if p then "\"" + n + "\" in ." + p + "()" else "." + n + "()"
-            doc = p or n
-            print.error stringFormat(str, dep, rec), doc
-            vars.self
-        )(d, method)
-
-    else if o is "global"
+    if o is "global"
       vars[method] = [] unless method of vars
 
     else if o isnt "value"

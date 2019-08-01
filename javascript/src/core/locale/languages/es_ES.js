@@ -15,7 +15,6 @@ module.exports = {
     },
     "dev": {
         "accepted": "{0} no es un valor aceptado para {1}, por favor utilice uno de los siguientes: {2}.",
-        "deprecated": "el método {0} ha sido eliminado, por favor, actualiza tu código para utilizar {1}.",
         "noChange": "{0} no se actualiza porque no cambió.",
         "noContainer": "no se puede encontrar un contenedor en la página correspondiente a {0}.",
         "of": "de",
@@ -93,13 +92,13 @@ module.exports = {
     "visualization": {
         "bubbles": "Burbujas",
         "chart": "Gráfico",
-        "geo_map": "Mapa",
+        "geomap": "Mapa",
         "line": "Gráfico de linea",
         "network": "Red",
         "rings": "Anillos",
         "scatter": "Gráfico De Dispersión",
         "stacked": "Área Apilada",
-        "tree_map": "Tree Map",
+        "treemap": "Tree Map",
         "bar": "Gráfico De Barras",
         "box": "Diagrama de Cajas",
         "paths": "Caminos",

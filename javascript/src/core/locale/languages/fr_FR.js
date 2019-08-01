@@ -15,7 +15,6 @@ module.exports = {
     },
     "dev": {
         "accepted": "{0} n'est pas une option valide pour {1}, les valeurs possibles sont: {2}.",
-        "deprecated": "{0} a été éliminé de la version courante, mettez à jour votre code source avec {1}.",
         "noChange": "{0} n'a pas été mis à jour car inchangé.",
         "noContainer": "impossible de trouver un contenant correspondant à {0}.",
         "of": "de",
@@ -103,13 +102,13 @@ module.exports = {
     "visualization": {
         "bubbles": "Bulles",
         "chart": "Graphique",
-        "geo_map": "Carte",
+        "geomap": "Carte",
         "line": "Courbes",
         "network": "Réseau",
         "rings": "Anneaux",
         "scatter": "Nuage de points",
         "stacked": "Aires empilées",
-        "tree_map": "Arbre",
+        "treemap": "Arbre",
         "bar": "Diagramme en barres",
         "box": "Boîtes à Moustaches",
         "paths": "Chemins",

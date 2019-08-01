@@ -15,8 +15,8 @@ module.exports = ->
       bar:      require "./types/bar.coffee"
       bubbles:  require "./types/bubbles.coffee"
       box:      require "./types/box.coffee"
-      chart:    require "./types/deprecated/chart.coffee"
-      geo_map:  require "./types/geo_map.coffee"
+      donut:    require "./types/donut.coffee"
+      geomap:  require "./types/geomap.coffee"
       line:     require "./types/line.coffee"
       network:  require "./types/network.js"
       paths:    require "./types/paths.coffee"
@@ -27,7 +27,7 @@ module.exports = ->
       scatter:  require "./types/scatter.coffee"
       stacked:  require "./types/area.coffee"
       table:    require "./types/table.js"
-      tree_map: require "./types/tree_map.coffee"
+      treemap: require "./types/treemap.coffee"
 
   # Main drawing function
   vars.self = (selection) ->

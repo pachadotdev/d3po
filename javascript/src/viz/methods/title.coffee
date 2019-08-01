@@ -25,7 +25,6 @@ module.exports =
     value
   sub:
     accepted:   [false, Function, String]
-    deprecates: "sub_title"
     font:
       align:      "center"
       color:      "#444444"
@@ -40,7 +39,6 @@ module.exports =
     value:    false
   total:
     accepted:   [Boolean, Object]
-    deprecates: "total_bar"
     font:
       align:      "center"
       color:      "#444444"

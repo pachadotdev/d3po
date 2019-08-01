@@ -1,0 +1,31 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<!-- load D3js -->
+<script src="d3.min.js"></script>
+
+<!-- load d3po after D3js -->
+<script src="d3po.js"></script>
+
+<!-- create container element for visualization -->
+<div id="viz"></div>
+
+<script>
+
+  var sample_data = [
+    {"value": 100, "weight": .45, "type": "alpha"},
+    {"value": 70, "weight": .60, "type": "beta"},
+    {"value": 40, "weight": -.2, "type": "gamma"},
+    {"value": 15, "weight": .1, "type": "delta"}
+  ]
+
+  var visualization = d3po.viz()
+    .container("#viz")
+    .data(sample_data)
+    .type("scatter")
+    .id("type")
+    .x("value")
+    .y("weight")
+    .draw()
+
+</script>

@@ -1,6 +1,5 @@
 module.exports =
   accepted:   [false, Number, String]
-  deprecates: "highlight"
   process:    (value, vars) ->
 
     element = vars.data.element.value

@@ -2,7 +2,7 @@ dataThreshold = require("../../core/data/threshold.js")
 groupData     = require("../../core/data/group.coffee")
 mergeObject   = require("../../object/merge.coffee")
 
-tree_map = (vars) ->
+treemap = (vars) ->
 
   groupedData = groupData(vars, vars.data.viz)
 
@@ -45,10 +45,10 @@ tree_map = (vars) ->
   returnData
 
 # Visualization Settings and Helper Functions
-tree_map.filter       = dataThreshold
-tree_map.modes        = ["squarify", "slice", "dice", "slice-dice"]
-tree_map.requirements = ["data", "size"]
-tree_map.shapes       = ["square"]
-tree_map.threshold    = (vars) -> (40 * 40) / (vars.width.viz * vars.height.viz)
+treemap.filter       = dataThreshold
+treemap.modes        = ["squarify", "slice", "dice", "slice-dice"]
+treemap.requirements = ["data", "size"]
+treemap.shapes       = ["square"]
+treemap.threshold    = (vars) -> (40 * 40) / (vars.width.viz * vars.height.viz)
 
-module.exports = tree_map
+module.exports = treemap

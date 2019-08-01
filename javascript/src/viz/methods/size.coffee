@@ -3,11 +3,9 @@ filter = require "../../core/methods/filter.coffee"
 module.exports =
   accepted:   [false, Function, Number, Object, String]
   dataFilter: true
-  deprecates: ["value", "value_var"]
   mute:       filter(true)
   scale:
     accepted:   [Function]
-    deprecates: "size_scale"
     domain:
       min:
         accepted: [false, Number]

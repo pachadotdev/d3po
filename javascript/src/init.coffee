@@ -192,8 +192,6 @@ d3po.viz = require "./viz/viz.coffee"
 # Flash a console message if they are loading the old, unneeded stylesheet!
 stylesheet = require "./client/css.coffee"
 message    = require "./core/console/print.coffee"
-if stylesheet "d3po.css"
-  message.warning "d3po.css has been deprecated, you do not need to load this file.", d3po.repo+"releases/tag/v1.4.0"
 
 window.d3po  = d3po if typeof window isnt "undefined"
 module.exports = d3po

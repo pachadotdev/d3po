@@ -3,7 +3,6 @@ scale  = require("../../color/scale.coffee")
 
 module.exports =
   accepted:   [false, Array, Function, Object, String]
-  deprecates: "color_var"
   domain:
     accepted: [false, Array]
     value: false

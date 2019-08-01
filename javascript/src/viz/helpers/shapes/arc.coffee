@@ -6,8 +6,8 @@ angles      = {start: {}, end: {}}
 module.exports = (vars, selection, enter, exit) ->
 
   arc = d3.svg.arc()
-    .innerRadius 0
-    .outerRadius (d) -> d.d3po.r
+    .innerRadius (d) -> d.d3po.r_inner
+    .outerRadius (d) -> d.d3po.r_outer
     .startAngle (d) -> d.d3po.startAngle
     .endAngle (d) -> d.d3po.endAngle
 
@@ -35,8 +35,8 @@ module.exports = (vars, selection, enter, exit) ->
   if vars.draw.timing
 
     newarc = d3.svg.arc()
-      .innerRadius 0
-      .outerRadius (d) -> d.d3po.r
+      .innerRadius (d) -> d.d3po.r_inner
+      .outerRadius (d) -> d.d3po.r_outer
       .startAngle (d) ->
         angles.start[d.d3po.id] = 0 if angles.start[d.d3po.id] is undefined
         angles.start[d.d3po.id] = d.d3po.startAngle if isNaN(angles.start[d.d3po.id])

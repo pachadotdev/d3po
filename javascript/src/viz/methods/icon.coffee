@@ -9,9 +9,7 @@ module.exports =
     process:  process
     rotate:   0
     value:    "fa-angle-left"
-  deprecates: "icon_var"
   style:
     accepted:   [Object, String]
-    deprecates: "icon_style"
     value:      "default"
   value: false

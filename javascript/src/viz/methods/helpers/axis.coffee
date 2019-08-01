@@ -34,7 +34,6 @@ module.exports = (axis) ->
     rendering: rendering()
     value: true
   dataFilter: true
-  deprecates: [axis + "axis", axis + "axis_val", axis + "axis_var"]
   domain:
     accepted: [false, Array]
     value:    false
@@ -121,7 +120,6 @@ module.exports = (axis) ->
     value:    false
   scale:
     accepted:   ["linear", "log", "discrete", "share"]
-    deprecates: ["layout", "unique_axis", axis + "axis_scale"]
     process:    (value, vars) ->
       for scale in ["log", "discrete", "share"]
         if scale is value

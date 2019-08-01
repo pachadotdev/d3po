@@ -11,7 +11,6 @@ module.exports = {
   },
   "scroll"     : {
     "accepted"   : [ Boolean ],
-    "deprecates" : "scroll_zoom",
     "value"      : true
   },
   "value"      : true

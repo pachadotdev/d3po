@@ -9,7 +9,6 @@ module.exports =
     accepted:     [Object]
     objectAccess: false
     value:        {}
-  deprecates: ["number_format", "text_format"]
   locale:
     accepted: -> d3.keys locale
     process:  (value) ->

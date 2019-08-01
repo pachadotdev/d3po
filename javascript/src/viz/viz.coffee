@@ -17,6 +17,7 @@ module.exports = ->
       box:      require "./types/box.coffee"
       donut:    require "./types/donut.coffee"
       geomap:  require "./types/geomap.coffee"
+      halfdonut:    require "./types/halfdonut.coffee"
       line:     require "./types/line.coffee"
       network:  require "./types/network.js"
       paths:    require "./types/paths.coffee"

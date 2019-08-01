@@ -37,8 +37,14 @@ HTMLWidgets.widget({
       case "bubbles":
         chart.type("bubbles");
         break;
-      case "geo_map":
-        chart.type("geo_map");
+      case "donut":
+        chart.type("donut");
+        break;
+      case "geomap":
+        chart.type("geomap");
+        break;
+      case "halfdonut":
+        chart.type("halfdonut");
         break;
       case "line":
         chart.type("line");
@@ -64,8 +70,8 @@ HTMLWidgets.widget({
       case "stacked":
         chart.type("stacked");
         break;
-      case "tree_map":
-        chart.type("tree_map");
+      case "treemap":
+        chart.type("treemap");
         break;
       default:
         chart = null;

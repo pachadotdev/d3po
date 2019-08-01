@@ -1,7 +1,7 @@
 Package: d3po
 Type: Package
 Title: A javascript library designed to work with Shiny.
-Version: 0.1.1
+Version: 0.1.2
 Author: Mauricio Vargas [aut,cre],
   Joshua Kunst [aut]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>

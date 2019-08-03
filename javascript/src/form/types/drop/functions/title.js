@@ -1,4 +1,4 @@
-var events = require("../../../../client/pointer.coffee"),
+var events = require("../../../../client/pointer.js"),
   lighter = require("../../../../color/lighter.coffee"),
   print = require("../../../../core/console/print.coffee"),
   textColor = require("../../../../color/text.coffee")

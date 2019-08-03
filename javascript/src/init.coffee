@@ -41,14 +41,14 @@ d3po.array =
 # @static
 ###
 d3po.client =
-  css:       require "./client/css.coffee"
+  css:       require "./client/css.js"
   ie:        require "./client/ie.js"
-  pointer:   require "./client/pointer.coffee"
-  prefix:    require "./client/prefix.coffee"
-  rtl:       require "./client/rtl.coffee"
+  pointer:   require "./client/pointer.js"
+  prefix:    require "./client/prefix.js"
+  rtl:       require "./client/rtl.js"
   scroll:    require "./client/scroll.js"
-  scrollbar: require "./client/scrollbar.coffee"
-  touch:     require "./client/touch.coffee"
+  scrollbar: require "./client/scrollbar.js"
+  touch:     require "./client/touch.js"
 
 ###*
 # Utilities related to color manipulation.
@@ -190,7 +190,7 @@ d3po.util =
 d3po.viz = require "./viz/viz.coffee"
 
 # Flash a console message if they are loading the old, unneeded stylesheet!
-stylesheet = require "./client/css.coffee"
+stylesheet = require "./client/css.js"
 message    = require "./core/console/print.coffee"
 
 window.d3po  = d3po if typeof window isnt "undefined"

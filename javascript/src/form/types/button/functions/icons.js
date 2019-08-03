@@ -1,5 +1,5 @@
-var prefix = require("../../../../client/prefix.coffee"),
-  rtl = require("../../../../client/rtl.coffee")
+var prefix = require("../../../../client/prefix.js"),
+  rtl = require("../../../../client/rtl.js")
 
 module.exports = function(elem, vars) {
 

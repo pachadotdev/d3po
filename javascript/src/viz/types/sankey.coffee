@@ -1,6 +1,6 @@
 
 d3sankey      = require "./sankey.js"
-events        = require "../../client/pointer.coffee"
+events        = require "../../client/pointer.js"
 removeTooltip = require "../../tooltip/remove.coffee"
 uniques       = require "../../util/uniques.coffee"
 

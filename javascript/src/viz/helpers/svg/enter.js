@@ -1,7 +1,7 @@
-var events = require("../../../client/pointer.coffee"),
-  prefix = require("../../../client/prefix.coffee"),
+var events = require("../../../client/pointer.js"),
+  prefix = require("../../../client/prefix.js"),
   print = require("../../../core/console/print.coffee"),
-  touch = require("../../../client/touch.coffee"),
+  touch = require("../../../client/touch.js"),
   touchEvent = require("../zoom/propagation.coffee");
 
 // Enter SVG Elements

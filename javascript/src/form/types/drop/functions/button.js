@@ -1,5 +1,5 @@
 var copy = require("../../../../util/copy.coffee"),
-  events = require("../../../../client/pointer.coffee"),
+  events = require("../../../../client/pointer.js"),
   form = require("../../../form.js"),
   print = require("../../../../core/console/print.coffee")
 

@@ -1,12 +1,12 @@
 var defaultLocale = require("../core/locale/languages/en_US.coffee"),
-  events = require("../client/pointer.coffee"),
+  events = require("../client/pointer.js"),
   legible = require("../color/legible.coffee"),
   move = require("./move.coffee"),
-  prefix = require("../client/prefix.coffee"),
-  rtl = require("../client/rtl.coffee"),
+  prefix = require("../client/prefix.js"),
+  rtl = require("../client/rtl.js"),
   removeTooltip = require("./remove.coffee"),
   scroll = require("../client/scroll.js"),
-  scrollBar = require("../client/scrollbar.coffee"),
+  scrollBar = require("../client/scrollbar.js"),
   stringList = require("../string/list.coffee"),
   textColor = require("../color/text.coffee")
 

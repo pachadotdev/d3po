@@ -1,6 +1,6 @@
 var copy = require("../../../util/copy.coffee"),
   closest = require("../../../util/closest.coffee"),
-  events = require("../../../client/pointer.coffee"),
+  events = require("../../../client/pointer.js"),
   shapeStyle = require("./style.coffee"),
   fetchValue = require("../../../core/fetch/value.coffee");
 

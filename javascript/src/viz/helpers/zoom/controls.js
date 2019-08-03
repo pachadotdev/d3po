@@ -1,4 +1,4 @@
-var events = require("../../../client/pointer.coffee")
+var events = require("../../../client/pointer.js")
 
 module.exports = function() {
 

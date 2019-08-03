@@ -4,7 +4,7 @@ var copy = require("../../../util/copy.coffee"),
   fetchText = require("../../../core/fetch/text.js"),
   legible = require("../../../color/legible.coffee"),
   mergeObject = require("../../../object/merge.coffee"),
-  prefix = require("../../../client/prefix.coffee"),
+  prefix = require("../../../client/prefix.js"),
   stringFormat = require("../../../string/format.js"),
   validObject = require("../../../object/validate.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

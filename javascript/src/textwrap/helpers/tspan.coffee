@@ -1,4 +1,4 @@
-rtl = require "../../client/rtl.coffee"
+rtl = require "../../client/rtl.js"
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Flows the text into tspans

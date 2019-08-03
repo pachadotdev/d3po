@@ -1,7 +1,7 @@
-events     = require "../../../client/pointer.coffee"
+events     = require "../../../client/pointer.js"
 lighter    = require "../../../color/lighter.coffee"
 print      = require "../../../core/console/print.coffee"
-stylesheet = require "../../../client/css.coffee"
+stylesheet = require "../../../client/css.js"
 
 # Creates "back" button, if applicable
 module.exports = (vars) ->

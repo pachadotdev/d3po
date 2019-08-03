@@ -4,7 +4,7 @@ var arraySort = require("../../../array/sort.js"),
   createTooltip = require("../tooltip/create.js"),
   dataNest = require("../../../core/data/nest.js"),
   dataURL = require("../../../util/dataURL.coffee"),
-  events = require("../../../client/pointer.coffee"),
+  events = require("../../../client/pointer.js"),
   fetchValue = require("../../../core/fetch/value.coffee"),
   fetchColor = require("../../../core/fetch/color.coffee"),
   fetchText = require("../../../core/fetch/text.js"),
@@ -15,7 +15,7 @@ var arraySort = require("../../../array/sort.js"),
   scroll = require("../../../client/scroll.js"),
   stringStrip = require("../../../string/strip.js"),
   textWrap = require("../../../textwrap/textwrap.coffee"),
-  touch = require("../../../client/touch.coffee"),
+  touch = require("../../../client/touch.js"),
   validObject = require("../../../object/validate.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key

@@ -1,7 +1,7 @@
 module.exports = (elem, vars, color) ->
 
   color  = require "./color.coffee"
-  events = require "../../../../client/pointer.coffee"
+  events = require "../../../../client/pointer.js"
   ie     = require "../../../../client/ie.js"
 
   elem

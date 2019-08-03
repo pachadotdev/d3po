@@ -1,5 +1,5 @@
 copy       = require "../../../../../util/copy.coffee"
-events     = require "../../../../../client/pointer.coffee"
+events     = require "../../../../../client/pointer.js"
 fetchColor = require "../../../../../core/fetch/color.coffee"
 fetchValue = require "../../../../../core/fetch/value.coffee"
 legible    = require "../../../../../color/legible.coffee"

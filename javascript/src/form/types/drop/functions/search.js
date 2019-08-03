@@ -1,4 +1,4 @@
-var prefix = require("../../../../client/prefix.coffee"),
+var prefix = require("../../../../client/prefix.js"),
   print = require("../../../../core/console/print.coffee")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the search box, if enabled.

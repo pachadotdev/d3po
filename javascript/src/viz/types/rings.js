@@ -1,5 +1,5 @@
 var arraySort = require("../../array/sort.js"),
-  events = require("../../client/pointer.coffee"),
+  events = require("../../client/pointer.js"),
   fetchValue = require("../../core/fetch/value.coffee"),
   fetchColor = require("../../core/fetch/color.coffee"),
   legible = require("../../color/legible.coffee"),

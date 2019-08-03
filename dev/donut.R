@@ -27,4 +27,5 @@ d3po() %>%
       link = "https://www.duckduckgo.com",
       value = "Click here to search DuckDuckGo"
     )
-  )
+  ) %>% 
+  d3po_labels(align = "center", valign = "center")

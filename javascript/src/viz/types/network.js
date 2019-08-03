@@ -148,7 +148,7 @@ var network = function(vars) {
 network.nesting      = false
 network.requirements = ["nodes"]
 network.scale        = 1.05
-network.shapes       = [ "circle" , "square" , "donut" ]
+network.shapes       = [ "circle" ]
 network.tooltip      = "static"
 network.zoom         = true
 

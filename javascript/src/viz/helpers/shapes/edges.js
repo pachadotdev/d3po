@@ -1,31 +1,30 @@
 var buckets = require("../../../util/buckets.coffee"),
-    offset  = require("../../../geom/offset.coffee");
+  offset = require("../../../geom/offset.coffee");
 
 module.exports = function(vars) {
 
   var edges = vars.returned.edges || [],
-      scale = vars.zoom.behavior.scaleExtent()[0];
+    scale = vars.zoom.behavior.scaleExtent()[0];
 
   if (typeof vars.edges.size.value === "string") {
 
-    var strokeDomain = d3.extent(edges, function(e){
-                         return e[vars.edges.size.value];
-                       }),
-        maxSize = d3.min(vars.returned.nodes || [], function(n){
-                        return n.d3po.r;
-                      }) * (vars.edges.size.scale * 2);
+    var strokeDomain = d3.extent(edges, function(e) {
+        return e[vars.edges.size.value];
+      }),
+      maxSize = d3.min(vars.returned.nodes || [], function(n) {
+        return n.d3po.r;
+      }) * (vars.edges.size.scale * 2);
 
     vars.edges.scale = d3.scale.sqrt()
       .domain(strokeDomain)
-      .range([vars.edges.size.min,maxSize*scale]);
+      .range([vars.edges.size.min, maxSize * scale]);
 
-  }
-  else {
+  } else {
 
     var defaultWidth = typeof vars.edges.size.value == "number" ?
-                       vars.edges.size.value : vars.edges.size.min;
+      vars.edges.size.value : vars.edges.size.min;
 
-    vars.edges.scale = function(){
+    vars.edges.scale = function() {
       return defaultWidth;
     };
 
@@ -36,10 +35,10 @@ module.exports = function(vars) {
 
   if (vars.edges.opacity.changed && o_type === "string") {
     vars.edges.opacity.scale.value
-      .domain(d3.extent(edges, function(d){
+      .domain(d3.extent(edges, function(d) {
         return d[o];
       }))
-      .range([vars.edges.opacity.min.value,1]);
+      .range([vars.edges.opacity.min.value, 1]);
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -49,9 +48,9 @@ module.exports = function(vars) {
 
     l
       .attr("opacity", 0)
-      .style("stroke-width",0)
-      .style("stroke",vars.background.value)
-      .style("fill","none");
+      .style("stroke-width", 0)
+      .style("stroke", vars.background.value)
+      .style("fill", "none");
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -62,47 +61,45 @@ module.exports = function(vars) {
     var marker = vars.edges.arrows.value;
 
     edges
-      .attr("opacity", function(d){
+      .attr("opacity", function(d) {
         return o_type === "number" ? o :
-               o_type === "function" ? o(d, vars) :
-               vars.edges.opacity.scale.value(d[o]);
+          o_type === "function" ? o(d, vars) :
+          vars.edges.opacity.scale.value(d[o]);
       })
-      .style("stroke-width",function(e){
+      .style("stroke-width", function(e) {
         return vars.edges.scale(e[vars.edges.size.value]);
       })
-      .style("stroke",vars.edges.color)
-      .attr("marker-start",function(e){
+      .style("stroke", vars.edges.color)
+      .attr("marker-start", function(e) {
 
         var direction = vars.edges.arrows.direction.value;
 
         if ("bucket" in e.d3po) {
-          var d = "_"+e.d3po.bucket;
-        }
-        else {
+          var d = "_" + e.d3po.bucket;
+        } else {
           var d = "";
         }
 
-        return direction == "source" && marker
-             ? "url(#d3po_edge_marker_default"+d+")" : "none"
+        return direction == "source" && marker ?
+          "url(#d3po_edge_marker_default" + d + ")" : "none"
 
       })
-      .attr("marker-end",function(e){
+      .attr("marker-end", function(e) {
 
         var direction = vars.edges.arrows.direction.value
 
         if ("bucket" in e.d3po) {
-          var d = "_"+e.d3po.bucket
-        }
-        else {
+          var d = "_" + e.d3po.bucket
+        } else {
           var d = ""
         }
 
-        return direction == "target" && marker
-             ? "url(#d3po_edge_marker_default"+d+")" : "none"
+        return direction == "target" && marker ?
+          "url(#d3po_edge_marker_default" + d + ")" : "none"
 
       })
-      .attr("vector-effect","non-scaling-stroke")
-      .attr("pointer-events","none")
+      .attr("vector-effect", "non-scaling-stroke")
+      .attr("pointer-events", "none")
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -110,16 +107,16 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   function line(l) {
     l
-      .attr("x1",function(d){
+      .attr("x1", function(d) {
         return d[vars.edges.source].d3po.edges[d[vars.edges.target][vars.id.value]].x;
       })
-      .attr("y1",function(d){
+      .attr("y1", function(d) {
         return d[vars.edges.source].d3po.edges[d[vars.edges.target][vars.id.value]].y;
       })
-      .attr("x2",function(d){
+      .attr("x2", function(d) {
         return d[vars.edges.target].d3po.edges[d[vars.edges.source][vars.id.value]].x;
       })
-      .attr("y2",function(d){
+      .attr("y2", function(d) {
         return d[vars.edges.target].d3po.edges[d[vars.edges.source][vars.id.value]].y;
       });
   }
@@ -150,58 +147,69 @@ module.exports = function(vars) {
       if ("spline" in d.d3po) {
 
         var length = this.getTotalLength(),
-            center = this.getPointAtLength(length/2),
-            prev = this.getPointAtLength((length/2)-(length*.1)),
-            next = this.getPointAtLength((length/2)+(length*.1)),
-            radians = Math.atan2(next.y-prev.y,next.x-prev.x),
-            angle = radians*(180/Math.PI),
-            bounding = this.parentNode.getBBox(),
-            width = length*.8,
-            x = center.x,
-            y = center.y
+          center = this.getPointAtLength(length / 2),
+          prev = this.getPointAtLength((length / 2) - (length * .1)),
+          next = this.getPointAtLength((length / 2) + (length * .1)),
+          radians = Math.atan2(next.y - prev.y, next.x - prev.x),
+          angle = radians * (180 / Math.PI),
+          bounding = this.parentNode.getBBox(),
+          width = length * .8,
+          x = center.x,
+          y = center.y
 
-      }
-      else {
+      } else {
 
         var bounds = this.getBBox(),
-            source = d[vars.edges.source],
-            target = d[vars.edges.target],
-            start = {"x": source.d3po.edges[target[vars.id.value]].x, "y": source.d3po.edges[target[vars.id.value]].y},
-            end = {"x": target.d3po.edges[source[vars.id.value]].x, "y": target.d3po.edges[source[vars.id.value]].y},
-            xdiff = end.x-start.x,
-            ydiff = end.y-start.y,
-            center = {"x": end.x-(xdiff)/2, "y": end.y-(ydiff)/2},
-            radians = Math.atan2(ydiff,xdiff),
-            angle = radians*(180/Math.PI),
-            length = Math.sqrt((xdiff*xdiff)+(ydiff*ydiff)),
-            width = length,
-            x = center.x,
-            y = center.y
+          source = d[vars.edges.source],
+          target = d[vars.edges.target],
+          start = {
+            "x": source.d3po.edges[target[vars.id.value]].x,
+            "y": source.d3po.edges[target[vars.id.value]].y
+          },
+          end = {
+            "x": target.d3po.edges[source[vars.id.value]].x,
+            "y": target.d3po.edges[source[vars.id.value]].y
+          },
+          xdiff = end.x - start.x,
+          ydiff = end.y - start.y,
+          center = {
+            "x": end.x - (xdiff) / 2,
+            "y": end.y - (ydiff) / 2
+          },
+          radians = Math.atan2(ydiff, xdiff),
+          angle = radians * (180 / Math.PI),
+          length = Math.sqrt((xdiff * xdiff) + (ydiff * ydiff)),
+          width = length,
+          x = center.x,
+          y = center.y
 
       }
 
-      width += vars.labels.padding*2
+      width += vars.labels.padding * 2
 
       var m = 0
       if (vars.edges.arrows.value) {
-        m = typeof vars.edges.arrows.value === "number"
-          ? vars.edges.arrows.value : 8
-        m = m/vars.zoom.behavior.scaleExtent()[1]
-        width -= m*2
+        m = typeof vars.edges.arrows.value === "number" ?
+          vars.edges.arrows.value : 8
+        m = m / vars.zoom.behavior.scaleExtent()[1]
+        width -= m * 2
       }
 
       if (angle < -90 || angle > 90) {
         angle -= 180
       }
 
-      if (width*vars.zoom.behavior.scaleExtent()[0] > 20) {
+      if (width * vars.zoom.behavior.scaleExtent()[0] > 20) {
 
         d.d3po_label = {
           "x": x,
           "y": y,
-          "translate": {"x": x, "y": y},
+          "translate": {
+            "x": x,
+            "y": y
+          },
           "w": width,
-          "h": 15+vars.labels.padding*2,
+          "h": 15 + vars.labels.padding * 2,
           "angle": angle,
           "anchor": "middle",
           "valign": "center",
@@ -220,25 +228,25 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Enter/update/exit the Arrow Marker
   //----------------------------------------------------------------------------
-  var markerData = vars.edges.arrows.value ? typeof vars.edges.size.value == "string"
-                  ? [ "default_0", "default_1", "default_2",
-                      "highlight_0", "highlight_1", "highlight_2",
-                      "focus_0", "focus_1", "focus_2" ]
-                  : [ "default", "highlight", "focus" ] : []
+  var markerData = vars.edges.arrows.value ? typeof vars.edges.size.value == "string" ?
+    ["default_0", "default_1", "default_2",
+      "highlight_0", "highlight_1", "highlight_2",
+      "focus_0", "focus_1", "focus_2"
+    ] :
+    ["default", "highlight", "focus"] : []
 
   if (typeof vars.edges.size.value == "string") {
-    var b = buckets(vars.edges.scale.range(),4)
-      , markerSize = []
+    var b = buckets(vars.edges.scale.range(), 4),
+      markerSize = []
     for (var i = 0; i < 3; i++) {
-      markerSize.push(b[i+1]+(b[1]-b[0])*(i+2)*2)
+      markerSize.push(b[i + 1] + (b[1] - b[0]) * (i + 2) * 2)
     }
-  }
-  else {
-    var m = typeof vars.edges.arrows.value === "number"
-          ? vars.edges.arrows.value : 8
+  } else {
+    var m = typeof vars.edges.arrows.value === "number" ?
+      vars.edges.arrows.value : 8
 
-    var markerSize = typeof vars.edges.size.value === "number"
-                    ? vars.edges.size.value/m : m
+    var markerSize = typeof vars.edges.size.value === "number" ?
+      vars.edges.size.value / m : m
   }
 
   var marker = vars.defs.selectAll(".d3po_edge_marker")
@@ -246,137 +254,125 @@ module.exports = function(vars) {
 
   var marker_style = function(path) {
     path
-      .attr("d",function(id){
+      .attr("d", function(id) {
 
         var depth = id.split("_")
 
         if (depth.length == 2 && vars.edges.scale) {
           depth = parseInt(depth[1])
           var m = markerSize[depth]
-        }
-        else {
+        } else {
           var m = markerSize
         }
 
         if (vars.edges.arrows.direction.value == "target") {
-          return "M 0,-"+m/2+" L "+m*.85+",0 L 0,"+m/2+" L 0,-"+m/2
-        }
-        else {
-          return "M 0,-"+m/2+" L -"+m*.85+",0 L 0,"+m/2+" L 0,-"+m/2
+          return "M 0,-" + m / 2 + " L " + m * .85 + ",0 L 0," + m / 2 + " L 0,-" + m / 2
+        } else {
+          return "M 0,-" + m / 2 + " L -" + m * .85 + ",0 L 0," + m / 2 + " L 0,-" + m / 2
         }
       })
-      .attr("fill",function(d){
+      .attr("fill", function(d) {
 
         var type = d.split("_")[0]
 
         if (type == "default") {
           return vars.edges.color
-        }
-        else if (type == "focus") {
+        } else if (type == "focus") {
           return vars.color.focus
-        }
-        else {
+        } else {
           return vars.color.primary
         }
       })
-      .attr("transform","scale("+1/scale+")")
+      .attr("transform", "scale(" + 1 / scale + ")")
   }
 
   if (vars.draw.timing) {
     marker.exit().transition().duration(vars.draw.timing)
-      .attr("opacity",0)
+      .attr("opacity", 0)
       .remove()
 
     marker.select("path").transition().duration(vars.draw.timing)
-      .attr("opacity",1)
+      .attr("opacity", 1)
       .call(marker_style)
-  }
-  else {
+  } else {
     marker.exit().remove()
 
     marker.select("path")
-      .attr("opacity",1)
+      .attr("opacity", 1)
       .call(marker_style)
   }
 
   var opacity = vars.draw.timing ? 0 : 1
   var enter = marker.enter().append("marker")
-    .attr("id",function(d){
-      return "d3po_edge_marker_"+d
+    .attr("id", function(d) {
+      return "d3po_edge_marker_" + d
     })
-    .attr("class","d3po_edge_marker")
-    .attr("orient","auto")
-    .attr("markerUnits","userSpaceOnUse")
-    .style("overflow","visible")
+    .attr("class", "d3po_edge_marker")
+    .attr("orient", "auto")
+    .attr("markerUnits", "userSpaceOnUse")
+    .style("overflow", "visible")
     .append("path")
-    .attr("opacity",opacity)
-    .attr("vector-effect","non-scaling-stroke")
+    .attr("opacity", opacity)
+    .attr("vector-effect", "non-scaling-stroke")
     .call(marker_style)
 
   if (vars.draw.timing) {
     enter.transition().duration(vars.draw.timing)
-      .attr("opacity",1)
+      .attr("opacity", 1)
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Bind "edges" data to lines in the "edges" group
   //----------------------------------------------------------------------------
-  var strokeBuckets = typeof vars.edges.size.value == "string"
-                    ? buckets(vars.edges.scale.domain(),4)
-                    : null
-    , direction = vars.edges.arrows.direction.value
+  var strokeBuckets = typeof vars.edges.size.value == "string" ?
+    buckets(vars.edges.scale.domain(), 4) :
+    null,
+    direction = vars.edges.arrows.direction.value
 
-  var line_data = edges.filter(function(l){
+  var line_data = edges.filter(function(l) {
 
     if (!l.d3po) l.d3po = {}
 
-    l.d3po.id = "edge_"+l[vars.edges.source][vars.id.value]+"_"+l[vars.edges.target][vars.id.value]
+    l.d3po.id = "edge_" + l[vars.edges.source][vars.id.value] + "_" + l[vars.edges.target][vars.id.value]
 
-    if ( l.d3po.spline !== true ) {
+    if (l.d3po.spline !== true) {
 
       if (strokeBuckets) {
         var size = l[vars.edges.size.value]
-        l.d3po.bucket = size < strokeBuckets[1] ? 0
-                        : size < strokeBuckets[2] ? 1 : 2
-        var marker = markerSize[l.d3po.bucket]*.85/scale
-      }
-      else {
+        l.d3po.bucket = size < strokeBuckets[1] ? 0 :
+          size < strokeBuckets[2] ? 1 : 2
+        var marker = markerSize[l.d3po.bucket] * .85 / scale
+      } else {
         delete l.d3po.bucket
-        var marker = markerSize*.85/scale
+        var marker = markerSize * .85 / scale
       }
 
-      var source = l[vars.edges.source]
-        , target = l[vars.edges.target]
+      var source = l[vars.edges.source],
+        target = l[vars.edges.target]
 
       if (!source.d3po || !target.d3po) return false
 
-      var sourceAngle = Math.atan2( source.d3po.y - target.d3po.y
-                                  , source.d3po.x - target.d3po.x )
-        , targetAngle = Math.atan2( target.d3po.y - source.d3po.y
-                                  , target.d3po.x - source.d3po.x )
-        , sourceRadius = direction == "source" && vars.edges.arrows.value
-                       ? source.d3po.r + marker
-                       : source.d3po.r
-        , targetRadius = direction == "target" && vars.edges.arrows.value
-                       ? target.d3po.r + marker
-                       : target.d3po.r
-        , sourceOffset = offset( sourceAngle
-                                           , sourceRadius
-                                           , vars.shape.value )
-        , targetOffset = offset( targetAngle
-                                           , targetRadius
-                                           , vars.shape.value )
+      var sourceAngle = Math.atan2(source.d3po.y - target.d3po.y, source.d3po.x - target.d3po.x),
+        targetAngle = Math.atan2(target.d3po.y - source.d3po.y, target.d3po.x - source.d3po.x),
+        sourceRadius = direction == "source" && vars.edges.arrows.value ?
+        source.d3po.r + marker :
+        source.d3po.r,
+        targetRadius = direction == "target" && vars.edges.arrows.value ?
+        target.d3po.r + marker :
+        target.d3po.r,
+        sourceOffset = offset(sourceAngle, sourceRadius, vars.shape.value),
+        targetOffset = offset(targetAngle, targetRadius, vars.shape.value)
 
       if (!("edges" in source.d3po)) source.d3po.edges = {}
       source.d3po.edges[target[vars.id.value]] = {
-          "x": source.d3po.x - sourceOffset.x,
-          "y": source.d3po.y - sourceOffset.y
+        "x": source.d3po.x - sourceOffset.x,
+        "y": source.d3po.y - sourceOffset.y
       }
 
       if (!("edges" in target.d3po)) target.d3po.edges = {}
       target.d3po.edges[source[vars.id.value]] = {
-          "x": target.d3po.x - targetOffset.x,
-          "y": target.d3po.y - targetOffset.y
+        "x": target.d3po.x - targetOffset.x,
+        "y": target.d3po.y - targetOffset.y
       }
 
       return true
@@ -387,70 +383,66 @@ module.exports = function(vars) {
   })
 
   var lines = vars.g.edges.selectAll("g.d3po_edge_line")
-    .data(line_data,function(d){
+    .data(line_data, function(d) {
 
       return d.d3po.id
 
     })
 
-  var spline_data = edges.filter(function(l){
+  var spline_data = edges.filter(function(l) {
 
     if (l.d3po.spline) {
 
       if (strokeBuckets) {
         var size = l[vars.edges.size.value]
-        l.d3po.bucket = size < strokeBuckets[1] ? 0
-                        : size < strokeBuckets[2] ? 1 : 2
-        var marker = markerSize[l.d3po.bucket]*.85/scale
-      }
-      else {
+        l.d3po.bucket = size < strokeBuckets[1] ? 0 :
+          size < strokeBuckets[2] ? 1 : 2
+        var marker = markerSize[l.d3po.bucket] * .85 / scale
+      } else {
         delete l.d3po.bucket
-        var marker = markerSize*.85/scale
+        var marker = markerSize * .85 / scale
       }
 
-      var source = l[vars.edges.source]
-        , target = l[vars.edges.target]
-        , sourceEdge = source.d3po.edges ? source.d3po.edges[target[vars.id.value]] || {} : {}
-        , targetEdge = target.d3po.edges ? target.d3po.edges[source[vars.id.value]] || {} : {}
-        , sourceMod = vars.edges.arrows.value && direction == "source" ? marker : 0
-        , targetMod = vars.edges.arrows.value && direction == "target" ? marker : 0
-        , angleTweak = 0.1
-        , sourceTweak = source.d3po.x > target.d3po.x ? 1-angleTweak : 1+angleTweak
-        , targetTweak = source.d3po.x > target.d3po.x ? 1+angleTweak : 1-angleTweak
-        , sourceAngle = typeof sourceEdge.angle === "number" ? sourceEdge.angle
-                      : Math.atan2( source.d3po.y - target.d3po.y
-                                  , source.d3po.x - target.d3po.x ) * sourceTweak
-        , sourceOffset = offset(sourceAngle, source.d3po.r + sourceMod, vars.shape.value )
-        , targetAngle = typeof targetEdge.angle === "number" ? targetEdge.angle
-                      : Math.atan2( target.d3po.y - source.d3po.y
-                                  , target.d3po.x - source.d3po.x ) * targetTweak
-        , targetOffset = offset(targetAngle, target.d3po.r + targetMod, vars.shape.value )
-        , start = [source.d3po.x-sourceOffset.x, source.d3po.y-sourceOffset.y]
-        , startOffset = sourceEdge.offset ? offset(sourceAngle,sourceEdge.offset) : false
-        , startPoint = startOffset ? [start[0]-startOffset.x,start[1]-startOffset.y] : start
-        , end = [target.d3po.x-targetOffset.x, target.d3po.y-targetOffset.y]
-        , endOffset = targetEdge.offset ? offset(targetAngle,targetEdge.offset) : false
-        , endPoint = endOffset ? [end[0]-endOffset.x,end[1]-endOffset.y] : end
-        , xd = endPoint[0] - startPoint[0]
-        , yd = endPoint[1] - startPoint[1]
-        , sourceDistance = typeof sourceEdge.radius === "number" ? sourceEdge.radius : Math.sqrt(xd*xd+yd*yd)/4
-        , targetDistance = typeof targetEdge.radius === "number" ? targetEdge.radius : Math.sqrt(xd*xd+yd*yd)/4
-        , startAnchor = offset(sourceAngle,sourceDistance-source.d3po.r-sourceMod*2)
-        , endAnchor = offset(targetAngle,targetDistance-target.d3po.r-targetMod*2)
+      var source = l[vars.edges.source],
+        target = l[vars.edges.target],
+        sourceEdge = source.d3po.edges ? source.d3po.edges[target[vars.id.value]] || {} : {},
+        targetEdge = target.d3po.edges ? target.d3po.edges[source[vars.id.value]] || {} : {},
+        sourceMod = vars.edges.arrows.value && direction == "source" ? marker : 0,
+        targetMod = vars.edges.arrows.value && direction == "target" ? marker : 0,
+        angleTweak = 0.1,
+        sourceTweak = source.d3po.x > target.d3po.x ? 1 - angleTweak : 1 + angleTweak,
+        targetTweak = source.d3po.x > target.d3po.x ? 1 + angleTweak : 1 - angleTweak,
+        sourceAngle = typeof sourceEdge.angle === "number" ? sourceEdge.angle :
+        Math.atan2(source.d3po.y - target.d3po.y, source.d3po.x - target.d3po.x) * sourceTweak,
+        sourceOffset = offset(sourceAngle, source.d3po.r + sourceMod, vars.shape.value),
+        targetAngle = typeof targetEdge.angle === "number" ? targetEdge.angle :
+        Math.atan2(target.d3po.y - source.d3po.y, target.d3po.x - source.d3po.x) * targetTweak,
+        targetOffset = offset(targetAngle, target.d3po.r + targetMod, vars.shape.value),
+        start = [source.d3po.x - sourceOffset.x, source.d3po.y - sourceOffset.y],
+        startOffset = sourceEdge.offset ? offset(sourceAngle, sourceEdge.offset) : false,
+        startPoint = startOffset ? [start[0] - startOffset.x, start[1] - startOffset.y] : start,
+        end = [target.d3po.x - targetOffset.x, target.d3po.y - targetOffset.y],
+        endOffset = targetEdge.offset ? offset(targetAngle, targetEdge.offset) : false,
+        endPoint = endOffset ? [end[0] - endOffset.x, end[1] - endOffset.y] : end,
+        xd = endPoint[0] - startPoint[0],
+        yd = endPoint[1] - startPoint[1],
+        sourceDistance = typeof sourceEdge.radius === "number" ? sourceEdge.radius : Math.sqrt(xd * xd + yd * yd) / 4,
+        targetDistance = typeof targetEdge.radius === "number" ? targetEdge.radius : Math.sqrt(xd * xd + yd * yd) / 4,
+        startAnchor = offset(sourceAngle, sourceDistance - source.d3po.r - sourceMod * 2),
+        endAnchor = offset(targetAngle, targetDistance - target.d3po.r - targetMod * 2)
 
-      l.d3po.spline = [ start, end ]
-      var testAngle = Math.abs(Math.atan2( source.d3po.y - target.d3po.y
-                                         , source.d3po.x - target.d3po.x )).toFixed(5)
-        , testStart = Math.abs(sourceAngle).toFixed(5)
-        , testEnd   = Math.abs(targetAngle - Math.PI).toFixed(5)
+      l.d3po.spline = [start, end]
+      var testAngle = Math.abs(Math.atan2(source.d3po.y - target.d3po.y, source.d3po.x - target.d3po.x)).toFixed(5),
+        testStart = Math.abs(sourceAngle).toFixed(5),
+        testEnd = Math.abs(targetAngle - Math.PI).toFixed(5)
 
-      if (testStart !== testEnd || [testStart,testEnd].indexOf(testAngle) < 0) {
+      if (testStart !== testEnd || [testStart, testEnd].indexOf(testAngle) < 0) {
 
-        l.d3po.spline.splice(1,0,[startPoint[0]-startAnchor.x,startPoint[1]-startAnchor.y],
-                                   [endPoint[0]-endAnchor.x,endPoint[1]-endAnchor.y])
+        l.d3po.spline.splice(1, 0, [startPoint[0] - startAnchor.x, startPoint[1] - startAnchor.y],
+          [endPoint[0] - endAnchor.x, endPoint[1] - endAnchor.y])
 
-        if (startOffset) l.d3po.spline.splice(1,0,startPoint)
-        if (endOffset) l.d3po.spline.splice(l.d3po.spline.length-1,0,endPoint)
+        if (startOffset) l.d3po.spline.splice(1, 0, startPoint)
+        if (endOffset) l.d3po.spline.splice(l.d3po.spline.length - 1, 0, endPoint)
 
       }
 
@@ -463,7 +455,7 @@ module.exports = function(vars) {
   })
 
   var splines = vars.g.edges.selectAll("g.d3po_edge_path")
-    .data(spline_data,function(d){
+    .data(spline_data, function(d) {
 
       return d.d3po.id
 
@@ -472,57 +464,60 @@ module.exports = function(vars) {
   if (vars.draw.timing) {
 
     lines.exit().transition().duration(vars.draw.timing)
-      .attr("opacity",0)
+      .attr("opacity", 0)
       .remove()
 
     splines.exit().transition().duration(vars.draw.timing)
-      .attr("opacity",0)
+      .attr("opacity", 0)
       .remove()
 
     lines.selectAll("text.d3po_label, rect.d3po_label_bg")
-      .transition().duration(vars.draw.timing/2)
-      .attr("opacity",0)
+      .transition().duration(vars.draw.timing / 2)
+      .attr("opacity", 0)
       .remove()
 
     splines.selectAll("text.d3po_label, rect.d3po_label_bg")
-      .transition().duration(vars.draw.timing/2)
-      .attr("opacity",0)
+      .transition().duration(vars.draw.timing / 2)
+      .attr("opacity", 0)
       .remove()
 
     lines.selectAll("line")
-      .data(function(d){ return [d] })
+      .data(function(d) {
+        return [d]
+      })
       .transition().duration(vars.draw.timing)
-        .call(line)
-        .call(style)
-        .each("end",label)
+      .call(line)
+      .call(style)
+      .each("end", label)
 
     splines.selectAll("path")
-      .data(function(d){ return [d] })
+      .data(function(d) {
+        return [d]
+      })
       .transition().duration(vars.draw.timing)
-        .call(spline)
-        .call(style)
-        .each("end",label)
+      .call(spline)
+      .call(style)
+      .each("end", label)
 
     lines.enter().append("g")
-      .attr("class","d3po_edge_line")
+      .attr("class", "d3po_edge_line")
       .append("line")
       .call(line)
       .call(init)
       .transition().duration(vars.draw.timing)
-        .call(style)
-        .each("end",label)
+      .call(style)
+      .each("end", label)
 
     splines.enter().append("g")
-      .attr("class","d3po_edge_path")
+      .attr("class", "d3po_edge_path")
       .append("path")
       .call(spline)
       .call(init)
       .transition().duration(vars.draw.timing)
-        .call(style)
-        .each("end",label)
+      .call(style)
+      .each("end", label)
 
-  }
-  else {
+  } else {
 
     lines.exit().remove()
 
@@ -535,19 +530,23 @@ module.exports = function(vars) {
       .remove()
 
     lines.selectAll("line")
-      .data(function(d){ return [d] })
+      .data(function(d) {
+        return [d]
+      })
       .call(line)
       .call(style)
       .call(label)
 
     splines.selectAll("path")
-      .data(function(d){ return [d] })
+      .data(function(d) {
+        return [d]
+      })
       .call(spline)
       .call(style)
       .call(label)
 
     lines.enter().append("g")
-      .attr("class","d3po_edge_line")
+      .attr("class", "d3po_edge_line")
       .append("line")
       .call(line)
       .call(init)
@@ -555,7 +554,7 @@ module.exports = function(vars) {
       .call(label)
 
     splines.enter().append("g")
-      .attr("class","d3po_edge_path")
+      .attr("class", "d3po_edge_path")
       .append("path")
       .call(spline)
       .call(init)

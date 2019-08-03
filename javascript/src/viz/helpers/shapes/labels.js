@@ -88,24 +88,40 @@ module.exports = function(vars, group) {
 
           var yOffset = vars.labels.valign.value === "bottom" ? t.share : 0;
 
-          textWrap()
-            .align(t.anchor || vars.labels.align.value)
-            .container(d3.select(this))
-            .height(t.h * scale[1] - t.share)
-            .padding(t.padding / 2)
-            .resize(resize)
-            .size(size)
-            .shape(t.shape || "square")
-            .text(t.names + "\n" + vars.format.value(t.share * 100, {
-              "key": "share",
-              "vars": vars
-            }))
-            .valign(vars.labels.valign.value)
-            .width(t.w * scale[1])
-            .x(t.x - t.w * scale[1] / 2 + t.padding / 2)
-            .y(t.y - t.h * scale[1] / 2 + t.padding / 2 + yOffset)
-            .draw();
-
+          if (isNaN(t.percentage)) {
+            textWrap()
+              .align(t.anchor || vars.labels.align.value)
+              .container(d3.select(this))
+              .height(t.h * scale[1] - t.share)
+              .padding(t.padding / 2)
+              .resize(resize)
+              .size(size)
+              .shape(t.shape || "square")
+              .text(t.names)
+              .valign(vars.labels.valign.value)
+              .width(t.w * scale[1])
+              .x(t.x - t.w * scale[1] / 2 + t.padding / 2)
+              .y(t.y - t.h * scale[1] / 2 + t.padding / 2 + yOffset)
+              .draw();
+          } else {
+            textWrap()
+              .align(t.anchor || vars.labels.align.value)
+              .container(d3.select(this))
+              .height(t.h * scale[1] - t.share)
+              .padding(t.padding / 2)
+              .resize(resize)
+              .size(size)
+              .shape(t.shape || "square")
+              .text(t.names + "\n" + vars.format.value(t.percentage * 100, {
+                "key": "share",
+                "vars": vars
+              }))
+              .valign(vars.labels.valign.value)
+              .width(t.w * scale[1])
+              .x(t.x - t.w * scale[1] / 2 + t.padding / 2)
+              .y(t.y - t.h * scale[1] / 2 + t.padding / 2 + yOffset)
+              .draw();
+          }
       })
       .attr("transform", function(t) {
         var translate = d3.select(this).attr("transform") || "";
@@ -183,7 +199,8 @@ module.exports = function(vars, group) {
           }
 
           label.names = names;
-          label.share = d.d3po.share;
+          label.share = share_size;
+          label.percentage = d.d3po.share;
           label.parent = d;
 
           var text = group.selectAll("text#d3po_label_" + d.d3po.id)

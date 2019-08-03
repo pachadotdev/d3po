@@ -1,16 +1,16 @@
 var copy = require("../../../../util/copy.coffee"),
-    events = require("../../../../client/pointer.coffee"),
-    form   = require("../../../form.js"),
-    print  = require("../../../../core/console/print.coffee")
+  events = require("../../../../client/pointer.coffee"),
+  form = require("../../../form.js"),
+  print = require("../../../../core/console/print.coffee")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the main drop button.
 //------------------------------------------------------------------------------
-module.exports = function ( vars ) {
+module.exports = function(vars) {
 
-  if ( !("button" in vars.container) ) {
+  if (!("button" in vars.container)) {
 
-    if ( vars.dev.value ) print.time("creating main button")
+    if (vars.dev.value) print.time("creating main button")
 
     vars.container.button = form()
       .container(vars.container.ui)
@@ -19,17 +19,17 @@ module.exports = function ( vars ) {
         "margin": 0
       })
 
-    if ( vars.dev.value ) print.timeEnd("creating main button")
+    if (vars.dev.value) print.timeEnd("creating main button")
 
   }
 
-  if ( vars.focus.changed || vars.data.changed || vars.depth.changed ) {
+  if (vars.focus.changed || vars.data.changed || vars.depth.changed) {
 
     var depth = vars.depth.value
 
-    var buttonData = copy(vars.data.value.filter(function(d){
+    var buttonData = copy(vars.data.value.filter(function(d) {
       var match = false
-      for ( var i = 0 ; i < vars.id.nesting.length ; i++ ) {
+      for (var i = 0; i < vars.id.nesting.length; i++) {
         var level = vars.id.nesting[i]
         match = level in d && d[level] === vars.focus.value
         if (match) {
@@ -40,13 +40,13 @@ module.exports = function ( vars ) {
       return match
     })[0])
 
-    if ( !buttonData ) {
+    if (!buttonData) {
       buttonData = vars.container.button.data()[0] || vars.data.viz[0]
     }
 
     vars.container.button
       .data([buttonData])
-      .id( vars.id.nesting )
+      .id(vars.id.nesting)
       .depth(depth)
 
   }
@@ -58,7 +58,7 @@ module.exports = function ( vars ) {
       "update": vars.draw.update
     })
     .focus("")
-    .font( vars.font )
+    .font(vars.font)
     .format(vars.format)
     .hover(hover)
     .icon({
@@ -66,7 +66,7 @@ module.exports = function ( vars ) {
       "select": vars.icon.drop.value,
       "value": vars.icon.value
     })
-    .text( vars.text.value )
+    .text(vars.text.value)
     .timing({
       "ui": vars.draw.timing
     })
@@ -82,7 +82,7 @@ module.exports = function ( vars ) {
 
   vars.margin.top += button.node().offsetHeight || button.node().getBoundingClientRect().height
 
-  button.on(events.click,function(){
+  button.on(events.click, function() {
     vars.self.open(!vars.open.value).draw()
   })
 

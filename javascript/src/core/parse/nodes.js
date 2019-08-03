@@ -10,14 +10,13 @@ module.exports = function(vars) {
       print.time(timerString);
     }
 
-    var set = vars.nodes.value.filter(function(n){
+    var set = vars.nodes.value.filter(function(n) {
       return typeof n.x === "number" && typeof n.y === "number";
     }).length;
 
     if (set === vars.nodes.value.length) {
       vars.nodes.positions = true;
-    }
-    else {
+    } else {
 
       var force = d3.layout.force()
         .size([vars.width.viz, vars.height.viz])
@@ -27,22 +26,21 @@ module.exports = function(vars) {
       var strength = vars.edges.strength.value;
       if (strength) {
         if (typeof strength === "string") {
-          force.linkStrength(function(e){
+          force.linkStrength(function(e) {
             return e[strength];
           });
-        }
-        else {
+        } else {
           force.linkStrength(strength);
         }
       }
 
       var iterations = 50,
-          threshold = 0.01;
+        threshold = 0.01;
 
       force.start(); // Defaults to alpha = 0.1
       for (var i = iterations; i > 0; --i) {
         force.tick();
-        if(force.alpha() < threshold) {
+        if (force.alpha() < threshold) {
           break;
         }
       }

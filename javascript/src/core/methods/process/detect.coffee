@@ -1,5 +1,5 @@
 copy   = require("../../../util/copy.coffee")
-update = require("../../../array/update.coffee")
+update = require("../../../array/update.js")
 
 # Process object's value
 module.exports = (vars, object, value) ->

@@ -1,32 +1,32 @@
-var shapeStyle  = require("./style.coffee")
+var shapeStyle = require("./style.coffee")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars,selection,enter,exit) {
+module.exports = function(vars, selection, enter, exit) {
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize check scale on enter and exit.
   //----------------------------------------------------------------------------
-  function init(paths){
+  function init(paths) {
     paths.attr("d", d3.svg.symbol().type("triangle-up").size(10))
   }
-  
+
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Change scale of check on update.
   //---------------------------------------------------------------------------
-  function update(paths){
-    paths.attr("d", d3.svg.symbol().type("triangle-up").size(function(d){
+  function update(paths) {
+    paths.attr("d", d3.svg.symbol().type("triangle-up").size(function(d) {
       var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
-      return d3.scale.pow().exponent(2)(smaller_dim/2);
+      return d3.scale.pow().exponent(2)(smaller_dim / 2);
     }))
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // "paths" Enter
   //----------------------------------------------------------------------------
-  enter.append("path").attr("class","d3po_data")
+  enter.append("path").attr("class", "d3po_data")
     .call(init)
-    .call(shapeStyle,vars)
+    .call(shapeStyle, vars)
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // "paths" Update
@@ -39,13 +39,12 @@ module.exports = function(vars,selection,enter,exit) {
   if (vars.draw.timing) {
     selection.selectAll("path.d3po_data")
       .transition().duration(vars.draw.timing)
-        .call(update)
-        .call(shapeStyle,vars)
-  }
-  else {
+      .call(update)
+      .call(shapeStyle, vars)
+  } else {
     selection.selectAll("path.d3po_data")
       .call(update)
-      .call(shapeStyle,vars)
+      .call(shapeStyle, vars)
   }
 
 }

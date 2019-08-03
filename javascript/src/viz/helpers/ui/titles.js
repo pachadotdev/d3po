@@ -1,15 +1,15 @@
 var events = require("../../../client/pointer.coffee"),
-    fetchValue = require("../../../core/fetch/value.coffee"),
-    print      = require("../../../core/console/print.coffee"),
-    rtl        = require("../../../client/rtl.coffee"),
-    textWrap   = require("../../../textwrap/textwrap.coffee")
+  fetchValue = require("../../../core/fetch/value.coffee"),
+  print = require("../../../core/console/print.coffee"),
+  rtl = require("../../../client/rtl.coffee"),
+  textWrap = require("../../../textwrap/textwrap.coffee")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws appropriate titles
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
 
-  var total_key = vars.size.value ? vars.size.value
-    : vars.color.type === "number" ? vars.color.value : false
+  var total_key = vars.size.value ? vars.size.value :
+    vars.color.type === "number" ? vars.color.value : false
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If there is no data or the title bar is not needed,
@@ -23,13 +23,13 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   else if (total_key) {
 
-    if ( vars.dev.value ) {
+    if (vars.dev.value) {
       print.time("calculating total value")
     }
 
     var total_data = vars.data.pool;
     if (vars.focus.value.length) {
-      total_data = vars.data.viz.filter(function(d){
+      total_data = vars.data.viz.filter(function(d) {
         return d[vars.id.value] == vars.focus.value[0];
       });
     }
@@ -38,10 +38,9 @@ module.exports = function(vars) {
     var total;
     if (agg.constructor === Function) {
       total = agg(total_data);
-    }
-    else {
+    } else {
 
-      total_data = total_data.reduce(function(arr, d){
+      total_data = total_data.reduce(function(arr, d) {
         var vals = fetchValue(vars, d, total_key);
         if (vals instanceof Array) arr = arr.concat(vals);
         else arr.push(vals);
@@ -61,46 +60,52 @@ module.exports = function(vars) {
 
       if (vars.data.mute.length || vars.data.solo.length || vars.focus.value.length) {
 
-        var overall_total = d3.sum(vars.data.value, function(d){
+        var overall_total = d3.sum(vars.data.value, function(d) {
           if (vars.time.solo.value.length > 0) {
-            var match = vars.time.solo.value.indexOf(fetchValue(vars,d,vars.time.value)) >= 0
-          }
-          else if (vars.time.mute.value.length > 0) {
-            var match = vars.time.solo.value.indexOf(fetchValue(vars,d,vars.time.value)) < 0
-          }
-          else {
+            var match = vars.time.solo.value.indexOf(fetchValue(vars, d, vars.time.value)) >= 0
+          } else if (vars.time.mute.value.length > 0) {
+            var match = vars.time.solo.value.indexOf(fetchValue(vars, d, vars.time.value)) < 0
+          } else {
             var match = true
           }
           if (match) {
-            return fetchValue(vars,d,total_key)
+            return fetchValue(vars, d, total_key)
           }
         })
 
         if (overall_total > total) {
 
-          var pct = (total/overall_total)*100,
-              ot = vars.format.value(overall_total, {"key": vars.size.value, "vars": vars});
+          var pct = (total / overall_total) * 100,
+            ot = vars.format.value(overall_total, {
+              "key": vars.size.value,
+              "vars": vars
+            });
 
-              pct = " ("+vars.format.value(pct,{"key": "share", "vars": vars})+ " " + vars.format.locale.value.dev.of + " " + ot +")";
-              
+          pct = " (" + vars.format.value(pct, {
+            "key": "share",
+            "vars": vars
+          }) + " " + vars.format.locale.value.dev.of + " " + ot + ")";
+
         }
       }
 
-      total = vars.format.value(total, {"key": vars.size.value, "vars": vars})
-      var obj = vars.title.total.value
-        , prefix = obj.prefix || vars.format.value(vars.format.locale.value.ui.total)+": "
+      total = vars.format.value(total, {
+        "key": vars.size.value,
+        "vars": vars
+      })
+      var obj = vars.title.total.value,
+        prefix = obj.prefix || vars.format.value(vars.format.locale.value.ui.total) + ": "
       total = prefix + total
       obj.suffix ? total = total + obj.suffix : null
       total += pct
 
     }
 
-    if ( vars.dev.value ) {
+    if (vars.dev.value) {
       print.timeEnd("calculating total value")
     }
 
-  }
-  else {
+  } else {
     var total = false
   }
 
@@ -161,22 +166,22 @@ module.exports = function(vars) {
   function style(title) {
 
     title
-      .attr("font-size",function(t){
+      .attr("font-size", function(t) {
         return t.style.font.size
       })
-      .attr("fill",function(t){
+      .attr("fill", function(t) {
         return t.link ? vars.links.font.color : t.style.font.color
       })
-      .attr("font-family",function(t){
+      .attr("font-family", function(t) {
         return t.link ? vars.links.font.family.value : t.style.font.family.value
       })
-      .attr("font-weight",function(t){
+      .attr("font-weight", function(t) {
         return t.link ? vars.links.font.weight : t.style.font.weight
       })
-      .style("text-decoration",function(t){
+      .style("text-decoration", function(t) {
         return t.link ? vars.links.font.decoration.value : t.style.font.decoration.value
       })
-      .style("text-transform",function(t){
+      .style("text-transform", function(t) {
         return t.link ? vars.links.font.transform.value : t.style.font.transform.value
       })
 
@@ -185,22 +190,22 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Enter Titles
   //----------------------------------------------------------------------------
-  if ( vars.dev.value ) print.time("drawing titles")
+  if (vars.dev.value) print.time("drawing titles")
   var titles = vars.svg.selectAll("g.d3po_title")
-    .data(title_data,function(t){
+    .data(title_data, function(t) {
       return t.type
     })
 
-  var titleWidth = vars.title.width || vars.width.value-vars.margin.left-vars.margin.right;
+  var titleWidth = vars.title.width || vars.width.value - vars.margin.left - vars.margin.right;
 
   titles.enter().append("g")
-    .attr("class", function(t){
+    .attr("class", function(t) {
       return "d3po_title " + t.type;
     })
-    .attr("opacity",0)
+    .attr("opacity", 0)
     .append("text")
-      .attr("stroke", "none")
-      .call(style)
+    .attr("stroke", "none")
+    .call(style)
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Wrap text and calculate positions, then transition style and opacity
@@ -209,17 +214,15 @@ module.exports = function(vars) {
     var align = d.style.font.align;
     if (align == "center") {
       return "middle";
-    }
-    else if ((align == "left" && !rtl) || (align == "right" && rtl)) {
+    } else if ((align == "left" && !rtl) || (align == "right" && rtl)) {
       return "start";
-    }
-    else if ((align == "left" && rtl) || (align == "right" && !rtl)) {
+    } else if ((align == "left" && rtl) || (align == "right" && !rtl)) {
       return "end";
     }
     return align;
   }
   titles
-    .each(function(d){
+    .each(function(d) {
 
       var container = d3.select(this).select("text").call(style);
 
@@ -235,75 +238,72 @@ module.exports = function(vars) {
         .draw()
 
       d.y = vars.margin[d.style.position]
-      vars.margin[d.style.position] += this.getBBox().height + d.style.padding*2
+      vars.margin[d.style.position] += this.getBBox().height + d.style.padding * 2
 
     })
-    .on(events.over,function(t){
+    .on(events.over, function(t) {
       if (t.link) {
         d3.select(this)
           .transition().duration(vars.timing.mouseevents)
-          .style("cursor","pointer")
+          .style("cursor", "pointer")
           .select("text")
-            .attr("fill",vars.links.hover.color)
-            .attr("font-family",vars.links.hover.family.value)
-            .attr("font-weight",vars.links.hover.weight)
-            .style("text-decoration",vars.links.hover.decoration.value)
-            .style("text-transform",vars.links.hover.transform.value)
+          .attr("fill", vars.links.hover.color)
+          .attr("font-family", vars.links.hover.family.value)
+          .attr("font-weight", vars.links.hover.weight)
+          .style("text-decoration", vars.links.hover.decoration.value)
+          .style("text-transform", vars.links.hover.transform.value)
       }
     })
-    .on(events.out,function(t){
+    .on(events.out, function(t) {
       if (t.link) {
         d3.select(this)
           .transition().duration(vars.timing.mouseevents)
-          .style("cursor","auto")
+          .style("cursor", "auto")
           .select("text")
-            .call(style)
+          .call(style)
       }
     })
-    .on(events.click,function(t){
+    .on(events.click, function(t) {
       if (t.link) {
         var target = t.link.charAt(0) != "/" ? "_blank" : "_self"
-        window.open(t.link,target)
+        window.open(t.link, target)
       }
     })
-    .attr("opacity",1)
-    .attr("transform",function(t){
+    .attr("opacity", 1)
+    .attr("transform", function(t) {
       var pos = t.style.position,
-          y = pos == "top" ? 0+t.y : vars.height.value-t.y
+        y = pos == "top" ? 0 + t.y : vars.height.value - t.y
       if (pos == "bottom") {
-        y -= this.getBBox().height+t.style.padding
-      }
-      else {
+        y -= this.getBBox().height + t.style.padding
+      } else {
         y += t.style.padding
       }
       var align = getAlign(t);
       if (align === "start") {
         var x = vars.margin.left + vars.title.padding;
-      }
-      else {
+      } else {
         var w = d3.select(this).select("text").node().getBBox().width;
         if (align === "middle") {
-          x = vars.width.value/2 - titleWidth/2;
-        }
-        else {
+          x = vars.width.value / 2 - titleWidth / 2;
+        } else {
           x = vars.width.value - titleWidth - vars.margin.right - vars.title.padding;
         }
       }
-      return "translate("+x+","+y+")";
+      return "translate(" + x + "," + y + ")";
     })
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Exit unused titles
   //----------------------------------------------------------------------------
   titles.exit().transition().duration(vars.draw.timing)
-    .attr("opacity",0)
+    .attr("opacity", 0)
     .remove()
 
-  if ( vars.margin.top > 0 ) {
+  if (vars.margin.top > 0) {
     vars.margin.top += vars.title.padding
   }
 
-  if ( vars.margin.bottom > 0 ) {
+  if (vars.margin.bottom > 0) {
     vars.margin.bottom += vars.title.padding
   }
 
@@ -312,6 +312,6 @@ module.exports = function(vars) {
     vars.margin[vars.title.position] = min
   }
 
-  if ( vars.dev.value ) print.timeEnd("drawing titles")
+  if (vars.dev.value) print.timeEnd("drawing titles")
 
 }

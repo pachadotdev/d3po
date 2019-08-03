@@ -1,13 +1,13 @@
-browserify  = require "browserify"
-connect     = require "gulp-connect"
-error       = require "./error.coffee"
-gulp        = require "gulp"
-gutil       = require "gulp-util"
-notify      = require "gulp-notify"
-path        = require "path"
-source      = require "vinyl-source-stream"
-timer       = require "gulp-duration"
-watchify    = require "watchify"
+browserify = require "browserify"
+connect = require "gulp-connect"
+error = require "./error.coffee"
+gulp = require "gulp"
+gutil = require "gulp-util"
+notify = require "gulp-notify"
+path = require "path"
+source = require "vinyl-source-stream"
+timer = require "gulp-duration"
+watchify = require "watchify"
 watcherDone = undefined
 
 test_dir = "./tests/**/*.*"
@@ -30,7 +30,7 @@ rebundle = ->
     .pipe gulp.dest("./")
     .pipe timer("Total Build Time")
     .pipe(notify(
-      title:   "d3po"
+      title: "d3po"
       message: "New Build Compiled"
     ))
     .pipe connect.reload()

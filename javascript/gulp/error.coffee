@@ -1,4 +1,4 @@
 module.exports =
-  title:    "d3po"
+  title: "d3po"
   subtitle: "Build Error"
-  message:  "Error: <%= error.message %>"
+  message: "Error: <%= error.message %>"

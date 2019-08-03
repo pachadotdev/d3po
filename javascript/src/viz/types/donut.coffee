@@ -1,4 +1,4 @@
-comparator    = require "../../array/comparator.coffee"
+comparator    = require "../../array/comparator.js"
 dataThreshold = require "../../core/data/threshold.js"
 groupData     = require "../../core/data/group.coffee"
 

@@ -3,7 +3,7 @@ module.exports = function(vars) {
   var edges = vars.returned.edges || [];
 
   var paths = vars.g.edges.selectAll("g.d3po_edge_path")
-    .data(edges, function(d){
+    .data(edges, function(d) {
       d.d3po.id = "path_" + d[vars.edges.source][vars.id.value] + "_" + d[vars.edges.target][vars.id.value];
       return d.d3po.id;
     });
@@ -16,7 +16,7 @@ module.exports = function(vars) {
       })
       .style("stroke", "#ddd")
       .style("fill", "none")
-      .attr("transform", function(d){
+      .attr("transform", function(d) {
         return "translate(" + d.d3po.x + "," + d.d3po.y + ")";
       });
   }
@@ -24,28 +24,29 @@ module.exports = function(vars) {
   if (vars.draw.timing) {
 
     paths.exit().transition().duration(vars.draw.timing)
-      .attr("opacity",0)
+      .attr("opacity", 0)
       .remove();
 
     paths.selectAll("text.d3po_label, rect.d3po_label_bg")
-      .transition().duration(vars.draw.timing/2)
-      .attr("opacity",0)
+      .transition().duration(vars.draw.timing / 2)
+      .attr("opacity", 0)
       .remove();
 
     paths.selectAll("path")
-      .data(function(d){ return [d] })
+      .data(function(d) {
+        return [d]
+      })
       .transition().duration(vars.draw.timing)
-        .call(pathStyles);
+      .call(pathStyles);
 
     paths.enter().append("g")
-      .attr("class","d3po_edge_path")
+      .attr("class", "d3po_edge_path")
       .append("path")
       .style("stroke-width", 0)
       .transition().duration(vars.draw.timing)
-        .call(pathStyles);
+      .call(pathStyles);
 
-  }
-  else {
+  } else {
 
     paths.exit().remove();
 
@@ -53,11 +54,13 @@ module.exports = function(vars) {
       .remove();
 
     paths.selectAll("path")
-      .data(function(d){ return [d] })
+      .data(function(d) {
+        return [d]
+      })
       .call(pathStyles);
 
     paths.enter().append("g")
-      .attr("class","d3po_edge_path")
+      .attr("class", "d3po_edge_path")
       .append("path")
       .call(pathStyles);
 

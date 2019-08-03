@@ -1,26 +1,26 @@
 var events = require("../../../../client/pointer.coffee"),
-    lighter   = require("../../../../color/lighter.coffee"),
-    print     = require("../../../../core/console/print.coffee"),
-    textColor = require("../../../../color/text.coffee")
+  lighter = require("../../../../color/lighter.coffee"),
+  print = require("../../../../core/console/print.coffee"),
+  textColor = require("../../../../color/text.coffee")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the title and back button.
 //------------------------------------------------------------------------------
-module.exports = function ( vars ) {
+module.exports = function(vars) {
 
-  if ( vars.open.value ) {
+  if (vars.open.value) {
 
-    if ( vars.dev.value ) print.time("creating title and back button")
+    if (vars.dev.value) print.time("creating title and back button")
 
-    var self    = this
-      , enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0
-      , title   = enabled
-      , focus   = vars.container.button.data(Object).viz[0]
+    var self = this,
+      enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0,
+      title = enabled,
+      focus = vars.container.button.data(Object).viz[0]
 
     title = true
     for (var i = 0; i < vars.id.nesting.length; i++) {
       var level = vars.id.nesting[i]
-      if ( level in focus && focus[level] === vars.focus.value ) {
+      if (level in focus && focus[level] === vars.focus.value) {
         title = false
         break;
       }
@@ -32,30 +32,30 @@ module.exports = function ( vars ) {
     function boxStyle(elem) {
 
       elem
-        .style("padding",vars.ui.padding.css)
-        .style("display","block")
-        .style("background-color",vars.ui.color.secondary.value)
-        .style("font-family",vars.font.secondary.family.value)
-        .style("font-size",vars.font.secondary.size+"px")
-        .style("font-weight",vars.font.secondary.weight)
-        .style("text-align",vars.font.secondary.align)
-        .style("color",textColor(vars.ui.color.secondary.value))
+        .style("padding", vars.ui.padding.css)
+        .style("display", "block")
+        .style("background-color", vars.ui.color.secondary.value)
+        .style("font-family", vars.font.secondary.family.value)
+        .style("font-size", vars.font.secondary.size + "px")
+        .style("font-weight", vars.font.secondary.weight)
+        .style("text-align", vars.font.secondary.align)
+        .style("color", textColor(vars.ui.color.secondary.value))
 
     }
 
     function backStyle(elem) {
 
-      if ( !elem.empty() ) {
+      if (!elem.empty()) {
 
-        var className = vars.icon.back.value.indexOf("fa-") === 0 ? " fa "+vars.icon.back.value : ""
+        var className = vars.icon.back.value.indexOf("fa-") === 0 ? " fa " + vars.icon.back.value : ""
         className = "d3po_drop_back" + className
 
         var text = vars.icon.back.value.indexOf("fa-") === 0 ? "" : vars.icon.back.value
 
         elem
-          .style("position","absolute")
-          .attr("class",className)
-          .style("top",vars.ui.padding.top+(vars.font.secondary.size/2)/2.5+"px")
+          .style("position", "absolute")
+          .attr("class", className)
+          .style("top", vars.ui.padding.top + (vars.font.secondary.size / 2) / 2.5 + "px")
           .html(text)
 
       }
@@ -68,7 +68,7 @@ module.exports = function ( vars ) {
 
       elem
         .text(vars.format.value(text))
-        .style("padding","0px "+(vars.ui.padding.left+vars.ui.padding.right)+"px")
+        .style("padding", "0px " + (vars.ui.padding.left + vars.ui.padding.right) + "px")
 
     }
 
@@ -81,8 +81,7 @@ module.exports = function ( vars ) {
         .transition().duration(vars.draw.timing)
         .call(titleStyle)
 
-    }
-    else {
+    } else {
 
       vars.container.title
         .call(boxStyle)
@@ -96,53 +95,53 @@ module.exports = function ( vars ) {
       .call(backStyle)
 
     var enter = vars.container.title.enter()
-      .insert("div","#d3po_drop_list_"+vars.container.id)
-        .attr("class","d3po_drop_title")
-        .attr("id","d3po_drop_title_"+vars.container.id)
-        .call(boxStyle)
+      .insert("div", "#d3po_drop_list_" + vars.container.id)
+      .attr("class", "d3po_drop_title")
+      .attr("id", "d3po_drop_title_" + vars.container.id)
+      .call(boxStyle)
 
     enter.append("span")
-      .attr("id","d3po_drop_back_"+vars.container.id)
-      .attr("class","d3po_drop_back")
+      .attr("id", "d3po_drop_back_" + vars.container.id)
+      .attr("class", "d3po_drop_back")
       .call(backStyle)
 
     enter.append("div")
-      .attr("id","d3po_drop_title_text_"+vars.container.id)
-      .attr("class","d3po_drop_title_text")
+      .attr("id", "d3po_drop_title_text_" + vars.container.id)
+      .attr("class", "d3po_drop_title_text")
       .call(titleStyle)
 
     vars.container.title
-      .on(events.over,function(d,i){
+      .on(events.over, function(d, i) {
 
         var color = lighter(vars.ui.color.secondary.value)
 
-        d3.select(this).style("cursor","pointer")
+        d3.select(this).style("cursor", "pointer")
           .transition().duration(vars.timing.mouseevents)
-          .style("background-color",color)
-          .style("color",textColor(color))
+          .style("background-color", color)
+          .style("color", textColor(color))
 
       })
-      .on(events.out,function(d){
+      .on(events.out, function(d) {
 
         var color = vars.ui.color.secondary.value
 
-        d3.select(this).style("cursor","auto")
+        d3.select(this).style("cursor", "auto")
           .transition().duration(vars.timing.mouseevents)
-          .style("background-color",color)
-          .style("color",textColor(color))
+          .style("background-color", color)
+          .style("color", textColor(color))
 
       })
-      .on(events.click,function(d){
+      .on(events.click, function(d) {
         vars.history.back()
       })
 
     vars.container.title.exit().remove()
 
-    if ( enabled ) {
+    if (enabled) {
       vars.margin.title += vars.container.title.node().offsetHeight || vars.container.title.node().getBoundingClientRect().height
     }
 
-    if ( vars.dev.value ) print.timeEnd("creating title and back button")
+    if (vars.dev.value) print.timeEnd("creating title and back button")
 
   }
 

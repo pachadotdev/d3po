@@ -1,4 +1,4 @@
-arraySort  = require("../../array/sort.coffee")
+arraySort  = require("../../array/sort.js")
 fetchValue = require("../../core/fetch/value.coffee")
 fetchColor = require("../../core/fetch/color.coffee")
 fetchText  = require("../../core/fetch/text.js")

@@ -2,16 +2,16 @@ var process = require("../../core/methods/process/data.coffee");
 
 module.exports = {
   "accepted": [false, Array, Function, String],
-  "arrows":   {
-    "accepted":  [ Boolean , Number ],
+  "arrows": {
+    "accepted": [Boolean, Number],
     "direction": {
-      "accepted": [ "source" , "target" ],
-      "value":    "target"
+      "accepted": ["source", "target"],
+      "value": "target"
     },
     "value": false
   },
-  "color":       "#d0d0d0",
-  "connections": function(focus,id,objects) {
+  "color": "#d0d0d0",
+  "connections": function(focus, id, objects) {
 
     var self = this
 
@@ -22,13 +22,13 @@ module.exports = {
     if (!id) var id = "id"
 
     var edges = self.restricted || self.value,
-        targets = []
+      targets = []
 
     if (!focus) {
       return edges
     }
 
-    var connections = edges.filter(function(edge){
+    var connections = edges.filter(function(edge) {
 
       var match = false
 
@@ -37,8 +37,7 @@ module.exports = {
         if (objects) {
           targets.push(edge[self.target])
         }
-      }
-      else if (edge[self.target][id] == focus) {
+      } else if (edge[self.target][id] == focus) {
         match = true
         if (objects) {
           targets.push(edge[self.source])
@@ -53,22 +52,22 @@ module.exports = {
 
   },
   "delimiter": {
-    "accepted": [ String ],
-    "value":    "|"
+    "accepted": [String],
+    "value": "|"
   },
   "filetype": {
-    "accepted": [false, "json", "xml","html", "csv", "dsv", "tsv", "txt"],
-    "value":    false
+    "accepted": [false, "json", "xml", "html", "csv", "dsv", "tsv", "txt"],
+    "value": false
   },
   "interpolate": {
     "accepted": ["basis", "cardinal", "linear", "monotone", "step"],
-    "value":    "basis"
+    "value": "basis"
   },
   "label": false,
   "large": 100,
   "limit": {
     "accepted": [false, Function, Number],
-    "value":    false
+    "value": false
   },
   "opacity": {
     "accepted": [Function, Number, String],
@@ -82,18 +81,18 @@ module.exports = {
     },
     "value": 1
   },
-  "process":  process,
+  "process": process,
   "size": {
     "accepted": [false, Number, String],
     "min": 1,
     "scale": 0.5,
     "value": false
   },
-  "source":   "source",
+  "source": "source",
   "strength": {
     "accepted": [false, Function, Number, String],
-    "value":    false
+    "value": false
   },
   "target": "target",
-  "value":  false
+  "value": false
 };

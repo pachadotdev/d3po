@@ -1,7 +1,7 @@
 fetchValue = require "../../core/fetch/value.coffee"
 graph      = require "./helpers/graph/draw.coffee"
 nest       = require "./helpers/graph/nest.coffee"
-sort       = require "../../array/sort.coffee"
+sort       = require "../../array/sort.js"
 stack      = require "./helpers/graph/stack.coffee"
 
 # Line Plot

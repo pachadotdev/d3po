@@ -6,7 +6,7 @@ print        = require "../console/print.coffee"
 process      = require "./process/detect.coffee"
 rejected     = require "./rejected.coffee"
 stringFormat = require "../../string/format.js"
-updateArray  = require "../../array/update.coffee"
+updateArray  = require "../../array/update.js"
 
 # Sets a method's value.
 module.exports = (vars, method, object, key, value) ->

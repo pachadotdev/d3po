@@ -1,82 +1,80 @@
-var arraySort     = require("../../../array/sort.coffee"),
-    createTooltip = require("../../../tooltip/create.js"),
-    dataNest      = require("../../../core/data/nest.js"),
-    fetchData     = require("./data.js"),
-    fetchColor    = require("../../../core/fetch/color.coffee"),
-    fetchText     = require("../../../core/fetch/text.js"),
-    fetchValue    = require("../../../core/fetch/value.coffee"),
-    mergeObject   = require("../../../object/merge.coffee"),
-    removeTooltip = require("../../../tooltip/remove.coffee"),
-    segments      = require("../shapes/segments.coffee"),
-    scroll        = require("../../../client/scroll.js"),
-    uniques       = require("../../../util/uniques.coffee"),
-    validObject   = require("../../../object/validate.coffee"),
-    zoomDirection = require("../zoom/direction.coffee");
+var arraySort = require("../../../array/sort.js"),
+  createTooltip = require("../../../tooltip/create.js"),
+  dataNest = require("../../../core/data/nest.js"),
+  fetchData = require("./data.js"),
+  fetchColor = require("../../../core/fetch/color.coffee"),
+  fetchText = require("../../../core/fetch/text.js"),
+  fetchValue = require("../../../core/fetch/value.coffee"),
+  mergeObject = require("../../../object/merge.coffee"),
+  removeTooltip = require("../../../tooltip/remove.coffee"),
+  segments = require("../shapes/segments.coffee"),
+  scroll = require("../../../client/scroll.js"),
+  uniques = require("../../../util/uniques.coffee"),
+  validObject = require("../../../object/validate.coffee"),
+  zoomDirection = require("../zoom/direction.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates correctly formatted tooltip for Apps
 //-------------------------------------------------------------------
 module.exports = function(params) {
 
-  if ( !( "d3po" in params.data ) ) {
+  if (!("d3po" in params.data)) {
     params.data.d3po = {}
   }
 
   var vars = params.vars,
-      d = params.data,
-      dataDepth = "d3po" in d && "depth" in d.d3po ? d.d3po.depth : vars.depth.value,
-      ex = params.ex,
-      mouse = params.mouseevents ? params.mouseevents : false,
-      arrow = "arrow" in params ? params.arrow : true,
-      id = fetchValue(vars,d,vars.id.value),
-      tooltip_id = params.id || vars.type.value
+    d = params.data,
+    dataDepth = "d3po" in d && "depth" in d.d3po ? d.d3po.depth : vars.depth.value,
+    ex = params.ex,
+    mouse = params.mouseevents ? params.mouseevents : false,
+    arrow = "arrow" in params ? params.arrow : true,
+    id = fetchValue(vars, d, vars.id.value),
+    tooltip_id = params.id || vars.type.value
 
   if ((d3.event && d3.event.type == "click") && (vars.tooltip.html.value || vars.tooltip.value.long) && !("fullscreen" in params)) {
     var fullscreen = true,
-        arrow = false,
-        mouse = true,
-        length = "long",
-        footer = vars.footer.value
+      arrow = false,
+      mouse = true,
+      length = "long",
+      footer = vars.footer.value
 
     vars.covered = true
-  }
-  else {
+  } else {
     var fullscreen = false,
-        align = params.anchor || vars.tooltip.anchor,
-        length = params.length || "short",
-        zoom = zoomDirection(d, vars)
+      align = params.anchor || vars.tooltip.anchor,
+      length = params.length || "short",
+      zoom = zoomDirection(d, vars)
 
     if (zoom === -1) {
-      var key = vars.id.nesting[dataDepth-1],
-          parent = fetchValue(vars,id,key)
+      var key = vars.id.nesting[dataDepth - 1],
+        parent = fetchValue(vars, id, key)
     }
 
     var text = "";
     if (!(!vars.mouse.click.value || (vars.mouse.viz && vars.mouse.viz.click === false))) {
       if (zoom === 1 && vars.zoom.value) {
         var text = vars.format.value(vars.format.locale.value.ui.expand)
-      }
-      else if (zoom === -1 && vars.zoom.value && vars.history.states.length && !vars.tooltip.value.long) {
+      } else if (zoom === -1 && vars.zoom.value && vars.history.states.length && !vars.tooltip.value.long) {
         var text = vars.format.value(vars.format.locale.value.ui.collapse)
-      }
-      else if (!vars.small && length == "short" && (vars.tooltip.html.value || vars.tooltip.value.long) && (vars.focus.value.length !== 1 || vars.focus.value[0] != id)) {
+      } else if (!vars.small && length == "short" && (vars.tooltip.html.value || vars.tooltip.value.long) && (vars.focus.value.length !== 1 || vars.focus.value[0] != id)) {
         var text = vars.format.locale.value.ui.moreInfo
-      }
-      else if (length == "long") {
+      } else if (length == "long") {
         var text = vars.footer.value || ""
       }
     }
 
-    var footer = text.length ? vars.format.value(text,{"key": "footer", "vars": vars}) : false
+    var footer = text.length ? vars.format.value(text, {
+      "key": "footer",
+      "vars": vars
+    }) : false
 
   }
 
   if ("x" in params) {
     var x = params.x;
-  }
-  else if (vars.types[vars.type.value].tooltip === "static") {
+  } else if (vars.types[vars.type.value].tooltip === "static") {
     var x = d.d3po.x;
     if (vars.zoom.translate && vars.zoom.scale) {
-      x = vars.zoom.translate[0]+x*vars.zoom.scale;
+      x = vars.zoom.translate[0] + x * vars.zoom.scale;
     }
     x += vars.margin.left;
     if (params.length !== "long") {
@@ -84,18 +82,16 @@ module.exports = function(params) {
       x += vars.container.value.node().getBoundingClientRect().left;
       x += parseFloat(vars.container.value.style("padding-left"), 10);
     }
-  }
-  else {
+  } else {
     var x = d3.mouse(d3.select("html").node())[0];
   }
 
   if ("y" in params) {
     var y = params.y;
-  }
-  else if (vars.types[vars.type.value].tooltip == "static") {
+  } else if (vars.types[vars.type.value].tooltip == "static") {
     var y = d.d3po.y;
     if (vars.zoom.translate && vars.zoom.scale) {
-      y = vars.zoom.translate[1]+y*vars.zoom.scale;
+      y = vars.zoom.translate[1] + y * vars.zoom.scale;
     }
     y += vars.margin.top;
     if (params.length !== "long") {
@@ -103,21 +99,18 @@ module.exports = function(params) {
       y += vars.container.value.node().getBoundingClientRect().top;
       y += parseFloat(vars.container.value.style("padding-top"), 10);
     }
-  }
-  else {
+  } else {
     var y = d3.mouse(d3.select("html").node())[1];
   }
 
   if ("offset" in params) {
     var offset = params.offset;
-  }
-  else if (vars.types[vars.type.value].tooltip == "static") {
-    var offset = d.d3po.r ? d.d3po.r : d.d3po.height/2;
+  } else if (vars.types[vars.type.value].tooltip == "static") {
+    var offset = d.d3po.r ? d.d3po.r : d.d3po.height / 2;
     if (vars.zoom.scale) {
       offset = offset * vars.zoom.scale;
     }
-  }
-  else {
+  } else {
     var offset = 3;
   }
 
@@ -126,14 +119,14 @@ module.exports = function(params) {
     var titleDepth = "depth" in params ? params.depth : dataDepth;
 
     var ex = {},
-        children,
-        depth     = vars.id.nesting[titleDepth+1] in d ? titleDepth + 1 : titleDepth,
-        nestKey   = vars.id.nesting[depth],
-        nameList  = "merged" in d.d3po ? d.d3po.merged : d[nestKey];
+      children,
+      depth = vars.id.nesting[titleDepth + 1] in d ? titleDepth + 1 : titleDepth,
+      nestKey = vars.id.nesting[depth],
+      nameList = "merged" in d.d3po ? d.d3po.merged : d[nestKey];
 
     if (!(nameList instanceof Array)) nameList = [nameList];
 
-    var dataValue = fetchValue( vars , d , vars.size.value );
+    var dataValue = fetchValue(vars, d, vars.size.value);
 
     if (vars.tooltip.children.value) {
 
@@ -143,12 +136,11 @@ module.exports = function(params) {
       if (vars.size.value && validObject(nameList[0])) {
 
         var namesNoValues = [];
-        var namesWithValues = nameList.filter(function(n){
+        var namesWithValues = nameList.filter(function(n) {
           var val = fetchValue(vars, n, vars.size.value);
           if (val !== null && (!("d3po" in n) || !n.d3po.merged)) {
             return true;
-          }
-          else {
+          } else {
             namesNoValues.push(n);
           }
         });
@@ -161,42 +153,47 @@ module.exports = function(params) {
 
       var maxChildrenShownInShortMode = vars.tooltip.children.value === true ? 3 : vars.tooltip.children.value;
       var limit = length === "short" ? maxChildrenShownInShortMode : vars.data.large,
-          listLength = nameList.length,
-          max   = d3.min([listLength , limit]),
-          objs  = [];
+        listLength = nameList.length,
+        max = d3.min([listLength, limit]),
+        objs = [];
 
-      children = {"values": []};
+      children = {
+        "values": []
+      };
       for (var i = 0; i < max; i++) {
 
         if (!nameList.length) break;
 
-        var obj  = nameList.shift(),
-            name = fetchText(vars, obj, depth)[0],
-            id   = validObject(obj) ? fetchValue(vars, obj, nestKey, depth) : obj;
+        var obj = nameList.shift(),
+          name = fetchText(vars, obj, depth)[0],
+          id = validObject(obj) ? fetchValue(vars, obj, nestKey, depth) : obj;
 
         if (id !== d[vars.id.nesting[titleDepth]] && name && !children[name]) {
 
           var value = validObject(obj) ? fetchValue(vars, obj, vars.size.value, nestKey) : null,
-              color = fetchColor(vars, obj, nestKey);
+            color = fetchColor(vars, obj, nestKey);
 
-          children[name] = value && !(value instanceof Array) ? vars.format.value(value, {"key": vars.size.value, "vars": vars, "data": obj}) : "";
+          children[name] = value && !(value instanceof Array) ? vars.format.value(value, {
+            "key": vars.size.value,
+            "vars": vars,
+            "data": obj
+          }) : "";
           var child = {};
           child[name] = children[name];
           children.values.push(child);
 
           if (color) {
-            if ( !children.d3po_colors ) children.d3po_colors = {};
+            if (!children.d3po_colors) children.d3po_colors = {};
             children.d3po_colors[name] = color;
           }
 
-        }
-        else {
+        } else {
           i--;
         }
 
       }
 
-      if ( listLength > max ) {
+      if (listLength > max) {
         children.d3poMore = listLength - max;
       }
 
@@ -208,10 +205,10 @@ module.exports = function(params) {
 
     function getLabel(method) {
       return typeof vars[method].value === "string" ? vars[method].value :
-             vars.format.locale.value.method[method];
+        vars.format.locale.value.method[method];
     }
 
-    if ( vars.tooltip.size.value ) {
+    if (vars.tooltip.size.value) {
       if (dataValue && typeof vars.size.value !== "number") {
         ex[getLabel("size")] = dataValue;
       }
@@ -227,37 +224,51 @@ module.exports = function(params) {
     }
 
     var active = segments(vars, d, "active"),
-        temp   = segments(vars, d, "temp"),
-        total  = segments(vars, d, "total");
+      temp = segments(vars, d, "temp"),
+      total = segments(vars, d, "total");
 
     if (typeof active == "number" && active > 0 && total) {
-      ex[getLabel("active")] = active+"/"+total+" ("+vars.format.value((active/total)*100, {"key": "share", "vars": vars, "data": d})+")";
+      ex[getLabel("active")] = active + "/" + total + " (" + vars.format.value((active / total) * 100, {
+        "key": "share",
+        "vars": vars,
+        "data": d
+      }) + ")";
     }
 
     if (typeof temp == "number" && temp > 0 && total) {
-      ex[getLabel("temp")] = temp+"/"+total+" ("+vars.format.value((temp/total)*100, {"key": "share", "vars": vars, "data": d})+")";
+      ex[getLabel("temp")] = temp + "/" + total + " (" + vars.format.value((temp / total) * 100, {
+        "key": "share",
+        "vars": vars,
+        "data": d
+      }) + ")";
     }
 
-    if ( vars.tooltip.share.value && d.d3po.share ) {
-      ex.share = vars.format.value(d.d3po.share*100, {"key": "share", "vars": vars, "data": d});
+    if (vars.tooltip.share.value && d.d3po.share) {
+      ex.share = vars.format.value(d.d3po.share * 100, {
+        "key": "share",
+        "vars": vars,
+        "data": d
+      });
     }
 
     var depth = "depth" in params ? params.depth : dataDepth,
-        title = params.title || fetchText(vars,d,depth)[0],
-        icon = uniques(d, vars.icon.value, fetchValue, vars, vars.id.nesting[depth]),
-        tooltip_data = params.titleOnly ? [] : fetchData(vars,d,length,ex,children,depth);
+      title = params.title || fetchText(vars, d, depth)[0],
+      icon = uniques(d, vars.icon.value, fetchValue, vars, vars.id.nesting[depth]),
+      tooltip_data = params.titleOnly ? [] : fetchData(vars, d, length, ex, children, depth);
 
     if (icon.length === 1 && typeof icon[0] === "string") {
       icon = icon[0];
-    }
-    else {
+    } else {
       icon = false;
     }
 
     if ((tooltip_data.length > 0 || footer) || ((!d.d3po_label && length == "short" && title) || (d.d3po_label && (!("visible" in d.d3po_label) || ("visible" in d.d3po_label && d.d3po_label.visible === false))))) {
 
       if (!title) {
-        title = vars.format.value(id, {"key": vars.id.value, "vars": vars});
+        title = vars.format.value(id, {
+          "key": vars.id.value,
+          "vars": vars
+        });
       }
 
       var depth = "d3po" in d && "merged" in d.d3po ? dataDepth - 1 : "depth" in params ? params.depth : dataDepth;
@@ -268,19 +279,16 @@ module.exports = function(params) {
 
       if (typeof vars.icon.style.value == "string") {
         var icon_style = vars.icon.style.value
-      }
-      else if (typeof vars.icon.style.value == "object" && vars.icon.style.value[depth]) {
+      } else if (typeof vars.icon.style.value == "object" && vars.icon.style.value[depth]) {
         var icon_style = vars.icon.style.value[depth]
-      }
-      else {
+      } else {
         var icon_style = "default"
       }
 
       var width = vars.tooltip.small;
       if (params.width) {
         width = params.width;
-      }
-      else if (fullscreen) {
+      } else if (fullscreen) {
         width = vars.tooltip.large;
       }
 
@@ -324,8 +332,7 @@ module.exports = function(params) {
         "y": y
       })
 
-    }
-    else {
+    } else {
       removeTooltip(tooltip_id)
     }
 
@@ -335,24 +342,20 @@ module.exports = function(params) {
 
     if (typeof vars.tooltip.html.value == "string") {
       make_tooltip(vars.tooltip.html.value)
-    }
-    else if (typeof vars.tooltip.html.value == "function") {
+    } else if (typeof vars.tooltip.html.value == "function") {
       make_tooltip(vars.tooltip.html.value(id))
-    }
-    else if (vars.tooltip.html.value && typeof vars.tooltip.html.value == "object" && vars.tooltip.html.value.url) {
+    } else if (vars.tooltip.html.value && typeof vars.tooltip.html.value == "object" && vars.tooltip.html.value.url) {
       var tooltip_url = vars.tooltip.html.value.url;
       if (typeof tooltip_url === "function") tooltip_url = tooltip_url(id);
-      d3.json(tooltip_url,function(data){
+      d3.json(tooltip_url, function(data) {
         var html = vars.tooltip.html.value.callback ? vars.tooltip.html.value.callback(data) : data
         make_tooltip(html)
       })
-    }
-    else {
+    } else {
       make_tooltip(params.html)
     }
 
-  }
-  else {
+  } else {
     make_tooltip(params.html)
   }
 

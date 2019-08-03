@@ -1,4 +1,4 @@
-arraySort  = require "../../../../../array/sort.coffee"
+arraySort  = require "../../../../../array/sort.js"
 buffer     = require "./buffer.coffee"
 buckets    = require "../../../../../util/buckets.coffee"
 fetchData  = require "../../../../../core/fetch/data.js"

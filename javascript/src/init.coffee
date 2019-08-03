@@ -29,10 +29,10 @@ d3po.repo = "https://github.com/pachamaltese/d3po/"
 # @static
 ###
 d3po.array =
-  comparator: require "./array/comparator.coffee"
-  contains:   require "./array/contains.coffee"
-  sort:       require "./array/sort.coffee"
-  update:     require "./array/update.coffee"
+  comparator: require "./array/comparator.js"
+  contains:   require "./array/contains.js"
+  sort:       require "./array/sort.js"
+  update:     require "./array/update.js"
 
 ###*
 # Utilities related to the client's browser.
@@ -62,7 +62,7 @@ d3po.color =
   mix:      require "./color/mix.coffee"
   random:   require "./color/random.coffee"
   scale:    require "./color/scale.coffee"
-  sort:     require "./color/sort.coffee"
+  sort:     require "./color/sort.js"
   text:     require "./color/text.coffee"
   validate: require "./color/validate.coffee"
 

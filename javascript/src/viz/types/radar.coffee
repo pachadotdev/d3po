@@ -1,5 +1,5 @@
-comparator    = require "../../array/comparator.coffee"
-sort          = require "../../array/sort.coffee"
+comparator    = require "../../array/comparator.js"
+sort          = require "../../array/sort.js"
 dataThreshold = require "../../core/data/threshold.js"
 fetchText     = require "../../core/fetch/text.js"
 fetchValue    = require "../../core/fetch/value.coffee"

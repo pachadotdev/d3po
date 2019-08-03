@@ -2,16 +2,15 @@ var print = require("../../../../core/console/print.coffee")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Toggles the state of the dropdown menu.
 //------------------------------------------------------------------------------
-module.exports = function ( vars ) {
+module.exports = function(vars) {
 
-  if ( vars.dev.value ) print.time("rotating arrow")
+  if (vars.dev.value) print.time("rotating arrow")
 
   var offset = vars.icon.drop.value === "&#x276f;" ? 90 : 0
 
   if (vars.open.value != vars.open.flipped.value) {
     var rotate = 180 + offset
-  }
-  else {
+  } else {
     var rotate = offset
   }
 
@@ -24,6 +23,6 @@ module.exports = function ( vars ) {
     })
     .draw()
 
-  if ( vars.dev.value ) print.timeEnd("rotating arrow")
+  if (vars.dev.value) print.timeEnd("rotating arrow")
 
 }

@@ -1,4 +1,4 @@
-contains = require "../../array/contains.coffee"
+contains = require "../../array/contains.js"
 format   = require "../../string/format.js"
 list     = require "../../string/list.coffee"
 print    = require "../console/print.coffee"

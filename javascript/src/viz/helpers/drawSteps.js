@@ -1,48 +1,48 @@
-var dataFormat    = require("../../core/data/format.js"),
-    dataColor     = require("../../core/data/color.js"),
-    dataKeys      = require("../../core/data/keys.coffee"),
-    dataLoad      = require("../../core/data/load.coffee"),
-    drawDrawer    = require("./ui/drawer.js"),
-    drawLegend    = require("./ui/legend.js"),
-    drawTimeline  = require("./ui/timeline.coffee"),
-    errorCheck    = require("./errorCheck.js"),
-    fetchData     = require("../../core/fetch/data.js"),
-    finish        = require("./finish.js"),
-    focusTooltip  = require("./focus/tooltip.coffee"),
-    history       = require("./ui/history.coffee"),
-    parseEdges    = require("../../core/parse/edges.js"),
-    parseNodes    = require("../../core/parse/nodes.js"),
-    print         = require("../../core/console/print.coffee"),
-    removeTooltip = require("../../tooltip/remove.coffee"),
-    runType       = require("./types/run.coffee"),
-    shapes        = require("./shapes/draw.js"),
-    stringFormat  = require("../../string/format.js"),
-    svgSetup      = require("./svg/enter.js"),
-    svgUpdate     = require("./svg/update.js"),
-    titles        = require("./ui/titles.js"),
-    validObject   = require("../../object/validate.coffee")
+var dataFormat = require("../../core/data/format.js"),
+  dataColor = require("../../core/data/color.js"),
+  dataKeys = require("../../core/data/keys.coffee"),
+  dataLoad = require("../../core/data/load.coffee"),
+  drawDrawer = require("./ui/drawer.js"),
+  drawLegend = require("./ui/legend.js"),
+  drawTimeline = require("./ui/timeline.coffee"),
+  errorCheck = require("./errorCheck.js"),
+  fetchData = require("../../core/fetch/data.js"),
+  finish = require("./finish.js"),
+  focusTooltip = require("./focus/tooltip.coffee"),
+  history = require("./ui/history.coffee"),
+  parseEdges = require("../../core/parse/edges.js"),
+  parseNodes = require("../../core/parse/nodes.js"),
+  print = require("../../core/console/print.coffee"),
+  removeTooltip = require("../../tooltip/remove.coffee"),
+  runType = require("./types/run.coffee"),
+  shapes = require("./shapes/draw.js"),
+  stringFormat = require("../../string/format.js"),
+  svgSetup = require("./svg/enter.js"),
+  svgUpdate = require("./svg/update.js"),
+  titles = require("./ui/titles.js"),
+  validObject = require("../../object/validate.coffee")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculate steps needed to redraw the visualization
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
 
-  var steps       = []
-    , appType     = vars.type.value
-    , locale      = vars.format.locale.value
-    , uiMessage   = locale.message.ui
-    , drawMessage = locale.message.draw
+  var steps = [],
+    appType = vars.type.value,
+    locale = vars.format.locale.value,
+    uiMessage = locale.message.ui,
+    drawMessage = locale.message.draw
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Check to see if any data needs to be loaded with JSON
   //----------------------------------------------------------------------------
-  var urlLoads = [ "data" , "attrs" , "coords" , "nodes" , "edges" ]
-  urlLoads.forEach(function(u){
+  var urlLoads = ["data", "attrs", "coords", "nodes", "edges"]
+  urlLoads.forEach(function(u) {
 
     if (!vars.error.value && !vars[u].loaded && vars[u].url) {
 
       steps.push({
-        "function": function( vars , next ){
-          dataLoad( vars , u , next )
+        "function": function(vars, next) {
+          dataLoad(vars, u, next)
         },
         "message": locale.message.loading,
         "wait": true
@@ -54,11 +54,11 @@ module.exports = function(vars) {
 
   if (vars.draw.update) {
 
-    var appName     = locale.visualization[appType] || appType
-      , appSetup    = vars.types[appType].setup || false
-      , appReqs     = vars.types[appType].requirements || []
-      , appMessage  = stringFormat(locale.message.initializing,appName)
-      , dataMessage = locale.message.data
+    var appName = locale.visualization[appType] || appType,
+      appSetup = vars.types[appType].setup || false,
+      appReqs = vars.types[appType].requirements || [],
+      appMessage = stringFormat(locale.message.initializing, appName),
+      dataMessage = locale.message.data
 
     if (!(appReqs instanceof Array)) appReqs = [appReqs]
     appName = appName.toLowerCase()
@@ -69,16 +69,16 @@ module.exports = function(vars) {
     if (!vars.error.value && typeof appSetup === "function") {
 
       steps.push({
-        "function": function( vars ) {
+        "function": function(vars) {
 
-          if ( vars.dev.value ) {
+          if (vars.dev.value) {
             var timerString = "running " + appName + " setup"
-            print.time( timerString )
+            print.time(timerString)
           }
 
-          appSetup( vars )
+          appSetup(vars)
 
-          if ( vars.dev.value ) print.timeEnd( timerString )
+          if (vars.dev.value) print.timeEnd(timerString)
 
         },
         "message": appMessage
@@ -91,7 +91,10 @@ module.exports = function(vars) {
     //--------------------------------------------------------------------------
     if (vars.container.changed) {
 
-      steps.push({ "function" : svgSetup , "message" : appMessage })
+      steps.push({
+        "function": svgSetup,
+        "message": appMessage
+      })
 
     }
 
@@ -101,18 +104,18 @@ module.exports = function(vars) {
     if (!(appType in vars.g.apps)) {
 
       steps.push({
-        "function": function( vars ) {
+        "function": function(vars) {
 
-          if ( vars.dev.value ) {
+          if (vars.dev.value) {
             var timerString = "creating " + appName + " group"
-            print.time( timerString )
+            print.time(timerString)
           }
 
           vars.g.apps[appType] = vars.g.app.append("g")
             .attr("id", appType)
             .attr("opacity", 0);
 
-          if ( vars.dev.value ) print.timeEnd( timerString )
+          if (vars.dev.value) print.timeEnd(timerString)
 
         },
         "message": appMessage
@@ -143,7 +146,7 @@ module.exports = function(vars) {
     if (vars.attrs.changed) {
 
       steps.push({
-        "function": function( vars ) {
+        "function": function(vars) {
           dataKeys(vars, "attrs")
         },
         "message": dataMessage
@@ -157,48 +160,45 @@ module.exports = function(vars) {
     steps.push({
       "function": function(vars) {
 
-          if (!vars.color.type || vars.color.changed || vars.data.changed ||
-              vars.attrs.changed || vars.id.changed || vars.depth.changed ||
-              vars.id.solo.changed ||
-              (!vars.time.fixed.value && (vars.time.solo.changed || vars.time.mute.changed))) {
+        if (!vars.color.type || vars.color.changed || vars.data.changed ||
+          vars.attrs.changed || vars.id.changed || vars.depth.changed ||
+          vars.id.solo.changed ||
+          (!vars.time.fixed.value && (vars.time.solo.changed || vars.time.mute.changed))) {
 
-            vars.color.valueScale = false;
+          vars.color.valueScale = false;
 
-            if ( vars.dev.value ) {
-              var timerString = "checking color type";
-              print.time(timerString);
-            }
-
-            vars.color.type = false;
-
-            if (vars.color.value) {
-
-              var colorKey = vars.color.value;
-
-              if ( validObject(colorKey) ) {
-                if (colorKey[vars.id.value]) {
-                  colorKey = colorKey[vars.id.value];
-                }
-                else {
-                  colorKey = colorKey[d3.keys(colorKey)[0]];
-                }
-              }
-
-              if (vars.data.keys && colorKey in vars.data.keys) {
-                vars.color.type = vars.data.keys[colorKey];
-              }
-              else if (vars.attrs.keys && colorKey in vars.attrs.keys) {
-                vars.color.type = vars.attrs.keys[colorKey];
-              }
-
-            }
-            else if (vars.data.keys) {
-              vars.color.type = vars.data.keys[vars.id.value];
-            }
-
-            if (vars.dev.value) print.timeEnd(timerString);
-
+          if (vars.dev.value) {
+            var timerString = "checking color type";
+            print.time(timerString);
           }
+
+          vars.color.type = false;
+
+          if (vars.color.value) {
+
+            var colorKey = vars.color.value;
+
+            if (validObject(colorKey)) {
+              if (colorKey[vars.id.value]) {
+                colorKey = colorKey[vars.id.value];
+              } else {
+                colorKey = colorKey[d3.keys(colorKey)[0]];
+              }
+            }
+
+            if (vars.data.keys && colorKey in vars.data.keys) {
+              vars.color.type = vars.data.keys[colorKey];
+            } else if (vars.attrs.keys && colorKey in vars.attrs.keys) {
+              vars.color.type = vars.attrs.keys[colorKey];
+            }
+
+          } else if (vars.data.keys) {
+            vars.color.type = vars.data.keys[vars.id.value];
+          }
+
+          if (vars.dev.value) print.timeEnd(timerString);
+
+        }
 
       },
       "message": dataMessage
@@ -207,22 +207,31 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Format nodes/edges if needed
     //--------------------------------------------------------------------------
-    if ( (appReqs.indexOf("edges") >= 0 && vars.edges.value
-    && ( !vars.edges.linked || vars.edges.changed ))
-    || (appReqs.indexOf("nodes") >= 0 && !vars.nodes.value && vars.edges.value) ) {
-      steps.push({ "function" : parseEdges, "message" : dataMessage })
+    if ((appReqs.indexOf("edges") >= 0 && vars.edges.value &&
+        (!vars.edges.linked || vars.edges.changed)) ||
+      (appReqs.indexOf("nodes") >= 0 && !vars.nodes.value && vars.edges.value)) {
+      steps.push({
+        "function": parseEdges,
+        "message": dataMessage
+      })
     }
 
-    if ( appReqs.indexOf("nodes") >= 0 && vars.edges.value
-    && ( !vars.nodes.positions || vars.nodes.changed || vars.type.changed ) ) {
-      steps.push({ "function" : parseNodes , "message" : dataMessage })
+    if (appReqs.indexOf("nodes") >= 0 && vars.edges.value &&
+      (!vars.nodes.positions || vars.nodes.changed || vars.type.changed)) {
+      steps.push({
+        "function": parseNodes,
+        "message": dataMessage
+      })
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Groups data by time and nesting.
     //--------------------------------------------------------------------------
     if (vars.data.changed || vars.time.changed || vars.time.format.changed || vars.type.changed || vars.id.changed || (vars.x.scale.changed && [vars.x.scale.value, vars.x.scale.previous].indexOf("discrete") >= 0) || (vars.y.scale.changed && [vars.y.scale.value, vars.y.scale.previous].indexOf("discrete") >= 0)) {
-      steps.push({ "function" : dataFormat , "message" : dataMessage })
+      steps.push({
+        "function": dataFormat,
+        "message": dataMessage
+      })
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -235,21 +244,20 @@ module.exports = function(vars) {
           var year = vars.time.fixed.value ? ["all"] : null
           if (vars.dev.value) {
             var timerString = year ? "fetching pool data" : "fetching data"
-            print.time( timerString )
+            print.time(timerString)
           }
-          vars.data.pool = fetchData( vars , year )
-          if (vars.dev.value) print.timeEnd( timerString )
-          if ( !year ) {
+          vars.data.pool = fetchData(vars, year)
+          if (vars.dev.value) print.timeEnd(timerString)
+          if (!year) {
             vars.data.viz = vars.data.pool
-          }
-          else {
-            if ( vars.dev.value ) print.time("fetching data for current year")
-            vars.data.viz = fetchData( vars )
-            if ( vars.dev.value ) print.timeEnd("fetching data for current year")
+          } else {
+            if (vars.dev.value) print.time("fetching data for current year")
+            vars.data.viz = fetchData(vars)
+            if (vars.dev.value) print.timeEnd("fetching data for current year")
           }
 
           vars.draw.timing = vars.data.viz.length < vars.data.large ?
-                             vars.timing.transitions : 0;
+            vars.timing.transitions : 0;
 
         },
         "message": dataMessage
@@ -264,7 +272,7 @@ module.exports = function(vars) {
         "check": function(vars) {
 
           return vars.color.value && vars.color.type === "number" &&
-                 vars.color.valueScale === false
+            vars.color.valueScale === false
 
         },
         "function": dataColor,
@@ -279,21 +287,24 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   steps.push({
     "function": function(vars) {
-      if ( vars.dev.value ) {
+      if (vars.dev.value) {
         var str = vars.format.locale.value.message.tooltipReset
         print.time(str)
       }
-      if ( vars.type.previous && appType !== vars.type.previous ) {
+      if (vars.type.previous && appType !== vars.type.previous) {
         removeTooltip(vars.type.previous)
       }
       removeTooltip(appType)
-      if ( vars.dev.value ) print.timeEnd(str)
+      if (vars.dev.value) print.timeEnd(str)
     },
     "message": uiMessage
   })
 
   if (!vars.error.value) {
-    steps.push({"function": errorCheck, "message": uiMessage})
+    steps.push({
+      "function": errorCheck,
+      "message": uiMessage
+    })
   }
 
   steps.push({
@@ -309,30 +320,29 @@ module.exports = function(vars) {
           drawTimeline(vars)
           drawLegend(vars)
 
-        }
-        else {
+        } else {
 
-          if ( vars.dev.value ) print.time("calculating margins")
+          if (vars.dev.value) print.time("calculating margins")
 
-          var drawer = vars.container.value.select("div#d3po_drawer").node().offsetHeight
-                    || vars.container.value.select("div#d3po_drawer").node().getBoundingClientRect().height
+          var drawer = vars.container.value.select("div#d3po_drawer").node().offsetHeight ||
+            vars.container.value.select("div#d3po_drawer").node().getBoundingClientRect().height
 
           var timeline = vars.g.timeline.node().getBBox()
-          timeline = vars.timeline.value ? timeline.height+vars.ui.padding : 0
+          timeline = vars.timeline.value ? timeline.height + vars.ui.padding : 0
 
           var legend = vars.g.legend.node().getBBox()
-          legend = vars.legend.value ? legend.height+vars.ui.padding : 0
+          legend = vars.legend.value ? legend.height + vars.ui.padding : 0
 
-          vars.margin.bottom += drawer+timeline+legend
+          vars.margin.bottom += drawer + timeline + legend
 
-          if ( vars.dev.value ) print.timeEnd("calculating margins")
+          if (vars.dev.value) print.timeEnd("calculating margins")
 
         }
       }
 
       history(vars)
-      vars.height.viz -= (vars.margin.top+vars.margin.bottom)
-      vars.width.viz -= (vars.margin.left+vars.margin.right)
+      vars.height.viz -= (vars.margin.top + vars.margin.bottom)
+      vars.width.viz -= (vars.margin.left + vars.margin.right)
 
     },
     "message": uiMessage
@@ -352,14 +362,14 @@ module.exports = function(vars) {
 
   if (!vars.error.value && vars.draw.update) {
     steps.push({
-      "function" : [ runType, shapes ],
-      "message"  : drawMessage
+      "function": [runType, shapes],
+      "message": drawMessage
     })
   }
 
   steps.push({
-    "function" : finish,
-    "message" : drawMessage
+    "function": finish,
+    "message": drawMessage
   })
 
   return steps

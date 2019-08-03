@@ -228,12 +228,10 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Enter/update/exit the Arrow Marker
   //----------------------------------------------------------------------------
-  var markerData = vars.edges.arrows.value ? typeof vars.edges.size.value == "string" ?
-    ["default_0", "default_1", "default_2",
-      "highlight_0", "highlight_1", "highlight_2",
-      "focus_0", "focus_1", "focus_2"
-    ] :
-    ["default", "highlight", "focus"] : []
+  var markerData = vars.edges.arrows.value ? typeof vars.edges.size.value == "string" ? ["default_0", "default_1", "default_2",
+    "highlight_0", "highlight_1", "highlight_2",
+    "focus_0", "focus_1", "focus_2"
+  ] : ["default", "highlight", "focus"] : []
 
   if (typeof vars.edges.size.value == "string") {
     var b = buckets(vars.edges.scale.range(), 4),

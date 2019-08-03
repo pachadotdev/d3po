@@ -3,9 +3,9 @@ var form = require("../form.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates a set of Toggle Buttons
 //------------------------------------------------------------------------------
-module.exports = function( vars ) {
+module.exports = function(vars) {
 
-  if ( !("buttons" in vars.container) ) {
+  if (!("buttons" in vars.container)) {
 
     vars.container.buttons = form()
       .container(vars.container.ui)
@@ -13,40 +13,41 @@ module.exports = function( vars ) {
 
   }
 
-  var dataLength  = vars.data.viz.length
-    , buttonWidth = vars.width.value
-                  ? vars.width.value/dataLength
-                  : false
+  var dataLength = vars.data.viz.length,
+    buttonWidth = vars.width.value ?
+    vars.width.value / dataLength :
+    false
 
   var toggles = vars.container.ui.selectAll("div.d3po_toggle")
-    .data(vars.data.viz,function(d){
+    .data(vars.data.viz, function(d) {
       return d[vars.id.value];
     })
 
   toggles.exit().remove();
 
   toggles.enter().append("div")
-    .attr("class","d3po_toggle")
-    .style("display","inline-block")
-    .style("vertical-align","top")
+    .attr("class", "d3po_toggle")
+    .style("display", "inline-block")
+    .style("vertical-align", "top")
 
   toggles.order()
-    .each(function(d){
+    .each(function(d) {
 
       if (!("form" in d.d3po)) {
         d.d3po.form = form().container(d3.select(this))
       }
 
-      var id = vars.id.nesting.length > vars.depth.value ? vars.id.nesting[vars.depth.value+1] : vars.id.value
+      var id = vars.id.nesting.length > vars.depth.value ? vars.id.nesting[vars.depth.value + 1] : vars.id.value
 
       if (d[id] instanceof Array) {
         d.d3po.form
-          .container({"id": vars.container.id+"_"+d[vars.id.value]})
+          .container({
+            "id": vars.container.id + "_" + d[vars.id.value]
+          })
           .data(d[id])
           .id(vars.id.nesting.slice(1))
           .type("drop")
-      }
-      else {
+      } else {
         d.d3po.form
           .data([d])
           .id(vars.id.value)
@@ -55,7 +56,7 @@ module.exports = function( vars ) {
 
       d.d3po.form
         .color(vars.color)
-        .focus(vars.focus.value,function(value){
+        .focus(vars.focus.value, function(value) {
 
           if (value !== vars.focus.value) {
             vars.self.focus(value).draw()
@@ -85,10 +86,10 @@ module.exports = function( vars ) {
 
   if (vars.data.element.value) {
     vars.data.element.value
-      .on("focus."+vars.container.id, function(){
+      .on("focus." + vars.container.id, function() {
         vars.self.focus(this.value).hover(this.value).draw();
       })
-      .on("blur."+vars.container.id, function(){
+      .on("blur." + vars.container.id, function() {
         vars.self.hover(false).draw();
       })
   }

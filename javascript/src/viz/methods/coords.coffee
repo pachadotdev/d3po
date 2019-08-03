@@ -1,5 +1,5 @@
-filter  = require("../../core/methods/filter.coffee")
-process = require("../../core/methods/process/data.coffee")
+filter  = require("../../core/methods/filter.js")
+process = require("../../core/methods/process/data.js")
 
 module.exports =
   accepted:   [false, Array, Function, Object, String]

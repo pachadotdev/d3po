@@ -1,6 +1,6 @@
 var events = require("../../../../client/pointer.js"),
   lighter = require("../../../../color/lighter.js"),
-  print = require("../../../../core/console/print.coffee"),
+  print = require("../../../../core/console/print.js"),
   textColor = require("../../../../color/text.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

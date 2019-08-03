@@ -1,10 +1,10 @@
-align      = require "../../../core/methods/font/align.coffee"
-decoration = require "../../../core/methods/font/decoration.coffee"
-family     = require "../../../core/methods/font/family.coffee"
-filter     = require "../../../core/methods/filter.coffee"
-position   = require "../../../core/methods/font/position.coffee"
+align      = require "../../../core/methods/font/align.js"
+decoration = require "../../../core/methods/font/decoration.js"
+family     = require "../../../core/methods/font/family.js"
+filter     = require "../../../core/methods/filter.js"
+position   = require "../../../core/methods/font/position.js"
 rendering  = require "../../../core/methods/rendering.coffee"
-transform  = require "../../../core/methods/font/transform.coffee"
+transform  = require "../../../core/methods/font/transform.js"
 
 orientMap =
   x:  "bottom"

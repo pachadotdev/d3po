@@ -1,4 +1,4 @@
-var print = require("../../../../core/console/print.coffee")
+var print = require("../../../../core/console/print.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and populates the dropdown list of items.
 //------------------------------------------------------------------------------

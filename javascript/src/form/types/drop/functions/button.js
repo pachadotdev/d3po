@@ -1,7 +1,7 @@
 var copy = require("../../../../util/copy.coffee"),
   events = require("../../../../client/pointer.js"),
   form = require("../../../form.js"),
-  print = require("../../../../core/console/print.coffee")
+  print = require("../../../../core/console/print.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the main drop button.

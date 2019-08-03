@@ -1,12 +1,12 @@
 var arraySort = require("../array/sort.js"),
   attach = require("../core/methods/attach.coffee"),
   dataFormat = require("../core/data/format.js"),
-  dataKeys = require("../core/data/keys.coffee"),
-  dataLoad = require("../core/data/load.coffee"),
+  dataKeys = require("../core/data/keys.js"),
+  dataLoad = require("../core/data/load.js"),
   fetchData = require("../core/fetch/data.js"),
   ie = require("../client/ie.js"),
   methodReset = require("../core/methods/reset.coffee"),
-  print = require("../core/console/print.coffee");
+  print = require("../core/console/print.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Form Element shell
 //------------------------------------------------------------------------------
@@ -315,7 +315,7 @@ module.exports = function() {
   attach(vars, {
     "active": require("./methods/active.coffee"),
     "alt": require("./methods/alt.coffee"),
-    "color": require("./methods/color.coffee"),
+    "color": require("./methods/color.js"),
     "config": require("./methods/config.coffee"),
     "container": require("./methods/container.coffee"),
     "data": require("./methods/data.js"),
@@ -324,14 +324,14 @@ module.exports = function() {
     "draw": require("./methods/draw.js"),
     "focus": require("./methods/focus.coffee"),
     "font": require("./methods/font.coffee"),
-    "format": require("./methods/format.coffee"),
+    "format": require("./methods/format.js"),
     "height": require("./methods/height.coffee"),
     "history": require("./methods/history.coffee"),
     "hover": require("./methods/hover.coffee"),
-    "icon": require("./methods/icon.coffee"),
+    "icon": require("./methods/icon.js"),
     "id": require("./methods/id.coffee"),
     "keywords": require("./methods/keywords.coffee"),
-    "margin": require("./methods/margin.coffee"),
+    "margin": require("./methods/margin.js"),
     "open": require("./methods/open.coffee"),
     "order": require("./methods/order.coffee"),
     "remove": require("./methods/remove.coffee"),

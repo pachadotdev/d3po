@@ -2,8 +2,8 @@ arraySort  = require "../../../../../array/sort.js"
 buffer     = require "./buffer.coffee"
 buckets    = require "../../../../../util/buckets.coffee"
 fetchData  = require "../../../../../core/fetch/data.js"
-fetchValue = require "../../../../../core/fetch/value.coffee"
-print      = require "../../../../../core/console/print.coffee"
+fetchValue = require "../../../../../core/fetch/value.js"
+print      = require "../../../../../core/console/print.js"
 uniques    = require "../../../../../util/uniques.coffee"
 
 module.exports = (vars, opts) ->

@@ -1,7 +1,7 @@
 var arraySort = require("../../array/sort.js"),
   dataNest = require("./nest.js"),
-  fetchValue = require("../fetch/value.coffee"),
-  fetchColor = require("../fetch/color.coffee"),
+  fetchValue = require("../fetch/value.js"),
+  fetchColor = require("../fetch/color.js"),
   fetchText = require("../fetch/text.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Merges data underneath the size threshold

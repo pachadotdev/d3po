@@ -1,6 +1,6 @@
-color = require "./color.coffee"
+color = require "./color.js"
 ie    = require "../../../client/ie.js"
-value = require "../../../core/fetch/value.coffee"
+value = require "../../../core/fetch/value.js"
 
 # Fill style for all shapes
 module.exports = (nodes, vars) ->

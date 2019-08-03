@@ -1,4 +1,4 @@
-var print = require("../../../../core/console/print.coffee")
+var print = require("../../../../core/console/print.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculates scroll position of list.
 //------------------------------------------------------------------------------

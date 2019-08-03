@@ -1,8 +1,8 @@
-family     = require "../../core/methods/font/family.coffee"
-align      = require "../../core/methods/font/align.coffee"
-decoration = require "../../core/methods/font/decoration.coffee"
-margin     = require "../../core/methods/process/margin.coffee"
-transform  = require "../../core/methods/font/transform.coffee"
+family     = require "../../core/methods/font/family.js"
+align      = require "../../core/methods/font/align.js"
+decoration = require "../../core/methods/font/decoration.js"
+margin     = require "../../core/methods/process/margin.js"
+transform  = require "../../core/methods/font/transform.js"
 
 module.exports =
   align: align("center")

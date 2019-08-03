@@ -1,7 +1,7 @@
 var d3selection = require("../../util/d3selection.coffee"),
   hideElement = require("../../core/parse/hideElement.js"),
   parseElement = require("../../core/parse/element.js"),
-  print = require("../../core/console/print.coffee"),
+  print = require("../../core/console/print.js"),
   stringFormat = require("../../string/format.js")
 
 module.exports = {

@@ -1,6 +1,6 @@
 comparator    = require "../../array/comparator.js"
 dataThreshold = require "../../core/data/threshold.js"
-groupData     = require "../../core/data/group.coffee"
+groupData     = require "../../core/data/group.js"
 
 halfdonut = (vars) ->
 

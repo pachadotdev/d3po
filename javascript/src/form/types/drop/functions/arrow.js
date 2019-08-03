@@ -1,4 +1,4 @@
-var print = require("../../../../core/console/print.coffee")
+var print = require("../../../../core/console/print.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Toggles the state of the dropdown menu.
 //------------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 # Creates a Button
 module.exports = (vars) ->
 
-  print       = require "../../../core/console/print.coffee"
-  color       = require "./functions/color.coffee"
+  print       = require "../../../core/console/print.js"
+  color       = require "./functions/color.js"
   icons       = require "./functions/icons.js"
   mouseevents = require "./functions/mouseevents.coffee"
   style       = require "./functions/style.js"

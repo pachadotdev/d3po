@@ -1,7 +1,7 @@
 var copy = require("../../../../util/copy.coffee"),
-  fontTester = require("../../../../core/font/tester.coffee"),
+  fontTester = require("../../../../core/font/tester.js"),
   form = require("../../../form.js"),
-  print = require("../../../../core/console/print.coffee"),
+  print = require("../../../../core/console/print.js"),
   validObject = require("../../../../object/validate.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // If no widths are defined, then this calculates the width needed to fit the

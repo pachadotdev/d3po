@@ -1,4 +1,4 @@
-process = require "../../core/methods/process/margin.coffee"
+process = require "../../core/methods/process/margin.js"
 rendering = require "../../core/methods/rendering.coffee"
 
 module.exports =

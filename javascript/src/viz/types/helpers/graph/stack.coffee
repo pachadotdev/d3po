@@ -1,4 +1,4 @@
-fetchValue = require "../../../../core/fetch/value.coffee"
+fetchValue = require "../../../../core/fetch/value.js"
 
 module.exports = (vars, data) ->
 

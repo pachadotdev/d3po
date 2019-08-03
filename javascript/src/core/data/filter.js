@@ -1,5 +1,5 @@
-var fetchValue = require("../fetch/value.coffee"),
-  print = require("../console/print.coffee"),
+var fetchValue = require("../fetch/value.js"),
+  print = require("../console/print.js"),
   validObject = require("../../object/validate.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Restricts data based on Solo/Mute filters

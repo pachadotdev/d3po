@@ -1,6 +1,6 @@
 var copy = require("../../../util/copy.coffee"),
-  fetchColor = require("../../../core/fetch/color.coffee"),
-  fetchValue = require("../../../core/fetch/value.coffee"),
+  fetchColor = require("../../../core/fetch/color.js"),
+  fetchValue = require("../../../core/fetch/value.js"),
   segments = require("./segments.coffee"),
   shapeStyle = require("./style.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

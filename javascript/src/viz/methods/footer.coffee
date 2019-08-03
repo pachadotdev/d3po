@@ -1,6 +1,6 @@
-family     = require "../../core/methods/font/family.coffee"
-decoration = require "../../core/methods/font/decoration.coffee"
-transform  = require "../../core/methods/font/transform.coffee"
+family     = require "../../core/methods/font/family.js"
+decoration = require "../../core/methods/font/decoration.js"
+transform  = require "../../core/methods/font/transform.js"
 
 module.exports =
   accepted: [false, Number, String]

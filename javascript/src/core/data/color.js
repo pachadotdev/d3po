@@ -1,6 +1,6 @@
 var buckets = require("../../util/buckets.coffee"),
-  fetchValue = require("../fetch/value.coffee"),
-  print = require("../console/print.coffee")
+  fetchValue = require("../fetch/value.js"),
+  print = require("../console/print.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Sets color range of data, if applicable
 //-------------------------------------------------------------------

@@ -1,6 +1,6 @@
 var dataNest = require("./nest.js"),
-  fetchValue = require("../fetch/value.coffee"),
-  print = require("../console/print.coffee"),
+  fetchValue = require("../fetch/value.js"),
+  print = require("../console/print.js"),
   uniques = require("../../util/uniques.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Formats raw data by time and nesting

@@ -4,9 +4,9 @@ fontSizes  = require "../../../font/sizes.coffee"
 events     = require "../../../client/pointer.js"
 mix        = require "../../../color/mix.js"
 prefix     = require "../../../client/prefix.js"
-print      = require "../../../core/console/print.coffee"
+print      = require "../../../core/console/print.js"
 textColor  = require "../../../color/text.js"
-timeDetect = require "../../../core/data/time.coffee"
+timeDetect = require "../../../core/data/time.js"
 
 playInterval = false
 

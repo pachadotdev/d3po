@@ -1,8 +1,8 @@
 var events = require("../../../client/pointer.js"),
-  fetchValue = require("../../../core/fetch/value.coffee"),
-  print = require("../../../core/console/print.coffee"),
+  fetchValue = require("../../../core/fetch/value.js"),
+  print = require("../../../core/console/print.js"),
   rtl = require("../../../client/rtl.js"),
-  textWrap = require("../../../textwrap/textwrap.coffee")
+  textWrap = require("../../../textwrap/textwrap.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws appropriate titles
 //------------------------------------------------------------------------------

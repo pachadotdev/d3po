@@ -1,6 +1,6 @@
 events     = require "../../../client/pointer.js"
 lighter    = require "../../../color/lighter.js"
-print      = require "../../../core/console/print.coffee"
+print      = require "../../../core/console/print.js"
 stylesheet = require "../../../client/css.js"
 
 # Creates "back" button, if applicable

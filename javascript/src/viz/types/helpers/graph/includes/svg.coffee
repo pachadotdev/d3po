@@ -1,5 +1,5 @@
 mix         = require "../../../../../color/mix.js"
-textwrap    = require "../../../../../textwrap/textwrap.coffee"
+textwrap    = require "../../../../../textwrap/textwrap.js"
 validObject = require "../../../../../object/validate.js"
 
 module.exports = (vars) ->

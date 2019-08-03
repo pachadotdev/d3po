@@ -1,4 +1,4 @@
-fontTester = require "../core/font/tester.coffee"
+fontTester = require "../core/font/tester.js"
 
 module.exports = (words, style, opts) ->
 

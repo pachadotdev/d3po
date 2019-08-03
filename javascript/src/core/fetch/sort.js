@@ -2,9 +2,9 @@
 (function() {
   var fetchColor, fetchText, fetchValue;
 
-  fetchValue = require("./value.coffee");
+  fetchValue = require("./value.js");
 
-  fetchColor = require("./color.coffee");
+  fetchColor = require("./color.js");
 
   fetchText = require("./text.js");
 

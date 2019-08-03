@@ -1,6 +1,6 @@
-fetchValue = require "../../core/fetch/value.coffee"
+fetchValue = require "../../core/fetch/value.js"
 graph      = require "./helpers/graph/draw.coffee"
-print      = require "../../core/console/print.coffee"
+print      = require "../../core/console/print.js"
 sort       = require "../../array/sort.js"
 ticks      = require "./helpers/graph/dataTicks.coffee"
 

@@ -1,4 +1,4 @@
-var process = require("../../core/methods/process/data.coffee");
+var process = require("../../core/methods/process/data.js");
 
 module.exports = {
   "accepted": [false, Array, Function, String],

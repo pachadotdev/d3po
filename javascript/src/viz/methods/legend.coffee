@@ -1,4 +1,4 @@
-family = require "../../core/methods/font/family.coffee"
+family = require "../../core/methods/font/family.js"
 
 module.exports =
   accepted: [Boolean]

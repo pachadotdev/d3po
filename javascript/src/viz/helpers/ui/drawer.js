@@ -1,6 +1,6 @@
 var copy = require("../../../util/copy.coffee"),
   form = require("../../../form/form.js"),
-  print = require("../../../core/console/print.coffee"),
+  print = require("../../../core/console/print.js"),
   validObject = require("../../../object/validate.js");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,4 +1,4 @@
-var print = require("../console/print.coffee"),
+var print = require("../console/print.js"),
   stringFormat = require("../../string/format.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

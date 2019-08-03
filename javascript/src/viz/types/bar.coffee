@@ -1,7 +1,7 @@
 buckets    = require "../../util/buckets.coffee"
-fetchValue = require "../../core/fetch/value.coffee"
+fetchValue = require "../../core/fetch/value.js"
 graph      = require "./helpers/graph/draw.coffee"
-nest       = require "./helpers/graph/nest.coffee"
+nest       = require "./helpers/graph/nest.js"
 stack      = require "./helpers/graph/stack.coffee"
 uniques    = require "../../util/uniques.coffee"
 

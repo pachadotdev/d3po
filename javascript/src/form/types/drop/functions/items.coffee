@@ -1,7 +1,7 @@
 active = require("./active.js")
 copy   = require("../../../../util/copy.coffee")
 form   = require("../../../form.js")
-print  = require("../../../../core/console/print.coffee")
+print  = require("../../../../core/console/print.js")
 
 # Populates item list based on filtered data.
 module.exports = (vars) ->

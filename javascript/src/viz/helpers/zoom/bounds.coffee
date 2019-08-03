@@ -1,5 +1,5 @@
 labels    = require "./labels.coffee"
-transform = require "./transform.coffee"
+transform = require "./transform.js"
 
 module.exports = (vars, b, timing) ->
 

@@ -1,6 +1,6 @@
 var items = require("./items.coffee"),
   height = require("./height.js"),
-  print = require("../../../../core/console/print.coffee"),
+  print = require("../../../../core/console/print.js"),
   scrolllist = require("./scroll.js"),
   arrow = require("./arrow.js")
 

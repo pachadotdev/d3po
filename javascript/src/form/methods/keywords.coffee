@@ -1,4 +1,4 @@
-filter = require "../../core/methods/filter.coffee"
+filter = require "../../core/methods/filter.js"
 
 module.exports =
   accepted: [false, Array, Function, Object, String]

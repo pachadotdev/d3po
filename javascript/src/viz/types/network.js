@@ -1,5 +1,5 @@
 var smallestGap = require("../../network/smallestGap.coffee"),
-  fetchValue = require("../../core/fetch/value.coffee");
+  fetchValue = require("../../core/fetch/value.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Network
 //------------------------------------------------------------------------------

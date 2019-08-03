@@ -1,6 +1,6 @@
 var dataFilter = require("../data/filter.js"),
   dataNest = require("../data/nest.js"),
-  print = require("../console/print.coffee"),
+  print = require("../console/print.js"),
   stringFormat = require("../../string/format.js"),
   stringList = require("../../string/list.coffee");
 

@@ -1,4 +1,4 @@
-print = require "../core/console/print.coffee"
+print = require "../core/console/print.js"
 
 # Normalizes the graph input and checks if it is valid.
 module.exports = (edges, options) ->

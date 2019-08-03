@@ -1,6 +1,6 @@
 createTooltip = require "../tooltip/create.js"
-fetchValue    = require "../../../core/fetch/value.coffee"
-print         = require "../../../core/console/print.coffee"
+fetchValue    = require "../../../core/fetch/value.js"
+print         = require "../../../core/console/print.js"
 removeTooltip = require "../../../tooltip/remove.coffee"
 
 # Creates focus tooltip, if applicable

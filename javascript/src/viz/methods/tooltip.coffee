@@ -1,5 +1,5 @@
-family    = require "../../core/methods/font/family.coffee"
-transform = require "../../core/methods/font/transform.coffee"
+family    = require "../../core/methods/font/family.js"
+transform = require "../../core/methods/font/transform.js"
 
 module.exports =
   accepted:   [Boolean, Array, Function, Object, String]

@@ -1,7 +1,7 @@
 contains = require "../../array/contains.js"
 format   = require "../../string/format.js"
 list     = require "../../string/list.coffee"
-print    = require "../console/print.coffee"
+print    = require "../console/print.js"
 
 module.exports = (vars, accepted, value, method, text) ->
 

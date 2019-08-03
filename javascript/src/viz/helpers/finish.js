@@ -3,7 +3,7 @@ var edges = require("./shapes/edges.js"),
   flash = require("./ui/message.js"),
   focusViz = require("./focus/viz.js"),
   methodReset = require("../../core/methods/reset.coffee"),
-  print = require("../../core/console/print.coffee"),
+  print = require("../../core/console/print.js"),
   shapeLabels = require("./shapes/labels.js"),
   titleCase = require("../../string/title.coffee")
 

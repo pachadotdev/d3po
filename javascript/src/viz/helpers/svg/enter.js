@@ -1,6 +1,6 @@
 var events = require("../../../client/pointer.js"),
   prefix = require("../../../client/prefix.js"),
-  print = require("../../../core/console/print.coffee"),
+  print = require("../../../core/console/print.js"),
   touch = require("../../../client/touch.js"),
   touchEvent = require("../zoom/propagation.coffee");
 

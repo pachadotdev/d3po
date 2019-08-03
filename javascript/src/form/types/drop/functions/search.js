@@ -1,5 +1,5 @@
 var prefix = require("../../../../client/prefix.js"),
-  print = require("../../../../core/console/print.coffee")
+  print = require("../../../../core/console/print.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the search box, if enabled.
 //------------------------------------------------------------------------------

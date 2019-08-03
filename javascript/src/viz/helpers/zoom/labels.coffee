@@ -1,4 +1,4 @@
-print = require("../../../core/console/print.coffee")
+print = require("../../../core/console/print.js")
 
 # Sets label opacity based on zoom
 module.exports = (vars) ->

@@ -1,9 +1,9 @@
 buckets    = require "../../../../../util/buckets.coffee"
 buffer     = require "./buffer.coffee"
-fetchValue = require "../../../../../core/fetch/value.coffee"
+fetchValue = require "../../../../../core/fetch/value.js"
 fontSizes  = require "../../../../../font/sizes.coffee"
-textwrap   = require "../../../../../textwrap/textwrap.coffee"
-timeDetect = require "../../../../../core/data/time.coffee"
+textwrap   = require "../../../../../textwrap/textwrap.js"
+timeDetect = require "../../../../../core/data/time.js"
 uniques    = require "../../../../../util/uniques.coffee"
 
 module.exports = (vars, opts) ->

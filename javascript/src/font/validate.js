@@ -2,7 +2,7 @@
 (function() {
   var fontTester, validate;
 
-  fontTester = require("../core/font/tester.coffee");
+  fontTester = require("../core/font/tester.js");
 
   validate = function(fontList) {
     var completed, family, font, fontString, i, j, len, len1, monospace, proportional, testElement, testWidth, tester, valid;

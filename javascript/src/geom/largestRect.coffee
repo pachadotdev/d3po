@@ -48,7 +48,7 @@
   # cy - the y coordinate of the rectangle's center
   # angle - rotation angle in degrees. The anchor of rotation is the center point
 
-# print    = require "../core/console/print.coffee"
+# print    = require "../core/console/print.js"
 simplify = require "simplify-js"
 
 module.exports = (poly, options) ->

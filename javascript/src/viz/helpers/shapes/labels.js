@@ -1,14 +1,14 @@
 var copy = require("../../../util/copy.coffee"),
   fetchText = require("../../../core/fetch/text.js"),
-  fetchValue = require("../../../core/fetch/value.coffee"),
+  fetchValue = require("../../../core/fetch/value.js"),
   mix = require("../../../color/mix.js"),
-  print = require("../../../core/console/print.coffee"),
+  print = require("../../../core/console/print.js"),
   rtl = require("../../../client/rtl.js"),
   segments = require("./segments.coffee"),
-  shapeColor = require("./color.coffee"),
+  shapeColor = require("./color.js"),
   stringList = require("../../../string/list.coffee"),
   textColor = require("../../../color/text.js"),
-  textWrap = require("../../../textwrap/textwrap.coffee");
+  textWrap = require("../../../textwrap/textwrap.js");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "labels" using svg:text and d3po.textwrap

@@ -126,7 +126,7 @@ d3po.network =
 # @static
 ###
 d3po.number =
-  format: require "./number/format.coffee"
+  format: require "./number/format.js"
 
 ###*
 # d3po features a set of methods that relate to various object properties. These methods may be used outside of the normal constraints of the visualizations.
@@ -155,7 +155,7 @@ d3po.string =
 # @class d3po.textwrap
 # @for d3po
 ###
-d3po.textwrap = require "./textwrap/textwrap.coffee"
+d3po.textwrap = require "./textwrap/textwrap.js"
 
 ###*
 # d3po Tooltips
@@ -191,7 +191,7 @@ d3po.viz = require "./viz/viz.coffee"
 
 # Flash a console message if they are loading the old, unneeded stylesheet!
 stylesheet = require "./client/css.js"
-message    = require "./core/console/print.coffee"
+message    = require "./core/console/print.js"
 
 window.d3po  = d3po if typeof window isnt "undefined"
 module.exports = d3po

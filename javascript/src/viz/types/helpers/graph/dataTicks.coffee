@@ -1,6 +1,6 @@
-color   = require "../../../../core/fetch/color.coffee"
+color   = require "../../../../core/fetch/color.js"
 legible = require "../../../../color/legible.js"
-print   = require "../../../../core/console/print.coffee"
+print   = require "../../../../core/console/print.js"
 
 module.exports = (vars) ->
 

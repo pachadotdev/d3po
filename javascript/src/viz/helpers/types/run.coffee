@@ -1,4 +1,4 @@
-print = require "../../../core/console/print.coffee"
+print = require "../../../core/console/print.js"
 
 module.exports = (vars) ->
 

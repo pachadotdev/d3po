@@ -1,5 +1,5 @@
 print       = require "../console/print.coffee"
-validObject = require "../../object/validate.coffee"
+validObject = require "../../object/validate.js"
 
 # Get Key Types from Data
 module.exports = (vars, type) ->

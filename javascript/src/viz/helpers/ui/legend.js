@@ -10,13 +10,13 @@ var arraySort = require("../../../array/sort.js"),
   fetchText = require("../../../core/fetch/text.js"),
   print = require("../../../core/console/print.coffee"),
   removeTooltip = require("../../../tooltip/remove.coffee"),
-  textColor = require("../../../color/text.coffee"),
+  textColor = require("../../../color/text.js"),
   uniqueValues = require("../../../util/uniques.coffee"),
   scroll = require("../../../client/scroll.js"),
   stringStrip = require("../../../string/strip.js"),
   textWrap = require("../../../textwrap/textwrap.coffee"),
   touch = require("../../../client/touch.js"),
-  validObject = require("../../../object/validate.coffee");
+  validObject = require("../../../object/validate.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
 //------------------------------------------------------------------------------

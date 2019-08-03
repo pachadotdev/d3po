@@ -2,10 +2,10 @@ var arraySort = require("../../array/sort.js"),
   events = require("../../client/pointer.js"),
   fetchValue = require("../../core/fetch/value.coffee"),
   fetchColor = require("../../core/fetch/color.coffee"),
-  legible = require("../../color/legible.coffee"),
+  legible = require("../../color/legible.js"),
   removeTooltip = require("../../tooltip/remove.coffee"),
   smallestGap = require("../../network/smallestGap.coffee"),
-  textColor = require("../../color/text.coffee"),
+  textColor = require("../../color/text.js"),
   uniqueValues = require("../../util/uniques.coffee")
 
 var rings = function(vars) {

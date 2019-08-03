@@ -2,11 +2,11 @@ var copy = require("../../../util/copy.coffee"),
   fetchValue = require("../../../core/fetch/value.coffee"),
   fetchColor = require("../../../core/fetch/color.coffee"),
   fetchText = require("../../../core/fetch/text.js"),
-  legible = require("../../../color/legible.coffee"),
+  legible = require("../../../color/legible.js"),
   mergeObject = require("../../../object/merge.coffee"),
   prefix = require("../../../client/prefix.js"),
   stringFormat = require("../../../string/format.js"),
-  validObject = require("../../../object/validate.coffee");
+  validObject = require("../../../object/validate.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates a data object for the Tooltip
 //------------------------------------------------------------------------------

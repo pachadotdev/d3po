@@ -1,6 +1,6 @@
 var defaultLocale = require("../core/locale/languages/en_US.coffee"),
   events = require("../client/pointer.js"),
-  legible = require("../color/legible.coffee"),
+  legible = require("../color/legible.js"),
   move = require("./move.coffee"),
   prefix = require("../client/prefix.js"),
   rtl = require("../client/rtl.js"),
@@ -8,7 +8,7 @@ var defaultLocale = require("../core/locale/languages/en_US.coffee"),
   scroll = require("../client/scroll.js"),
   scrollBar = require("../client/scrollbar.js"),
   stringList = require("../string/list.coffee"),
-  textColor = require("../color/text.coffee")
+  textColor = require("../color/text.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Create a Tooltip

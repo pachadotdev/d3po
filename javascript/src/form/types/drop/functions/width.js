@@ -2,7 +2,7 @@ var copy = require("../../../../util/copy.coffee"),
   fontTester = require("../../../../core/font/tester.coffee"),
   form = require("../../../form.js"),
   print = require("../../../../core/console/print.coffee"),
-  validObject = require("../../../../object/validate.coffee")
+  validObject = require("../../../../object/validate.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // If no widths are defined, then this calculates the width needed to fit the
 // longest entry in the list.

@@ -1,6 +1,6 @@
-mix         = require "../../../../../color/mix.coffee"
+mix         = require "../../../../../color/mix.js"
 textwrap    = require "../../../../../textwrap/textwrap.coffee"
-validObject = require "../../../../../object/validate.coffee"
+validObject = require "../../../../../object/validate.js"
 
 module.exports = (vars) ->
 

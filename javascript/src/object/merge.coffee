@@ -1,5 +1,5 @@
 d3selection = require "../util/d3selection.coffee"
-validate    = require "./validate.coffee"
+validate    = require "./validate.js"
 
 ###*
 # Given any two objects, this method will merge the two objects together, returning a new third object. The values of the second object always overwrite the first.

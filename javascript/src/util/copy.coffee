@@ -1,5 +1,5 @@
 objectMerge    = require "../object/merge.coffee"
-objectValidate = require "../object/validate.coffee"
+objectValidate = require "../object/validate.js"
 
 # Clones a variable
 copy = (variable) ->

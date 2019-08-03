@@ -1,5 +1,5 @@
 events     = require "../../../client/pointer.js"
-lighter    = require "../../../color/lighter.coffee"
+lighter    = require "../../../color/lighter.js"
 print      = require "../../../core/console/print.coffee"
 stylesheet = require "../../../client/css.js"
 

@@ -3,7 +3,7 @@ print        = require "../console/print.coffee"
 process      = require "./process/detect.coffee"
 setMethod    = require "./set.coffee"
 stringFormat = require "../../string/format.js"
-validObject  = require "../../object/validate.coffee"
+validObject  = require "../../object/validate.js"
 
 # Global method shell.
 module.exports = (vars, methods) ->

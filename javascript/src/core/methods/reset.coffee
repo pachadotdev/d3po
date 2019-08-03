@@ -1,4 +1,4 @@
-validObject = require("../../object/validate.coffee")
+validObject = require("../../object/validate.js")
 
 # Resets certain keys in global variables.
 reset = (obj, method) ->

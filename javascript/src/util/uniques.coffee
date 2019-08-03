@@ -1,4 +1,4 @@
-objectValidate = require "../object/validate.coffee"
+objectValidate = require "../object/validate.js"
 
 # Returns list of unique values
 uniques = (data, value, fetch, vars, depth, sorted) ->

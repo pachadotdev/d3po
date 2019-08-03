@@ -1,13 +1,13 @@
 var copy = require("../../../util/copy.coffee"),
   fetchText = require("../../../core/fetch/text.js"),
   fetchValue = require("../../../core/fetch/value.coffee"),
-  mix = require("../../../color/mix.coffee"),
+  mix = require("../../../color/mix.js"),
   print = require("../../../core/console/print.coffee"),
   rtl = require("../../../client/rtl.js"),
   segments = require("./segments.coffee"),
   shapeColor = require("./color.coffee"),
   stringList = require("../../../string/list.coffee"),
-  textColor = require("../../../color/text.coffee"),
+  textColor = require("../../../color/text.js"),
   textWrap = require("../../../textwrap/textwrap.coffee");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

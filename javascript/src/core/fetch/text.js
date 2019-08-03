@@ -1,5 +1,5 @@
 var fetchValue = require("./value.coffee"),
-  validObject = require("../../object/validate.coffee"),
+  validObject = require("../../object/validate.js"),
   uniques = require("../../util/uniques.coffee");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,5 +1,5 @@
 var events = require("../../../client/pointer.js"),
-  textColor = require("../../../color/text.coffee");
+  textColor = require("../../../color/text.js");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates Centered Server Message

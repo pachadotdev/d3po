@@ -4,7 +4,7 @@ flash       = require "./helpers/ui/message.js"
 getSteps    = require "./helpers/drawSteps.js"
 print       = require "../core/console/print.coffee"
 container   = require "./helpers/container.coffee"
-validObject = require "../object/validate.coffee"
+validObject = require "../object/validate.js"
 
 module.exports = ->
 
@@ -167,7 +167,7 @@ module.exports = ->
     size:       require "./methods/size.coffee"
     style:      require "./methods/style.coffee"
     temp:       require "./methods/temp.coffee"
-    text:       require "./methods/text.coffee"
+    text:       require "./methods/text.js"
     time:       require "./methods/time.coffee"
     timeline:   require "./methods/timeline.coffee"
     timing:     require "./methods/timing.coffee"

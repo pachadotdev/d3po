@@ -57,14 +57,14 @@ d3po.client =
 # @static
 ###
 d3po.color =
-  legible:  require "./color/legible.coffee"
-  lighter:  require "./color/lighter.coffee"
-  mix:      require "./color/mix.coffee"
-  random:   require "./color/random.coffee"
-  scale:    require "./color/scale.coffee"
+  legible:  require "./color/legible.js"
+  lighter:  require "./color/lighter.js"
+  mix:      require "./color/mix.js"
+  random:   require "./color/random.js"
+  scale:    require "./color/scale.js"
   sort:     require "./color/sort.js"
-  text:     require "./color/text.coffee"
-  validate: require "./color/validate.coffee"
+  text:     require "./color/text.js"
+  validate: require "./color/validate.js"
 
 ###*
 # Utilities related to manipulating data.
@@ -85,7 +85,7 @@ d3po.data =
 ###
 d3po.font =
   sizes:    require "./font/sizes.coffee"
-  validate: require "./font/validate.coffee"
+  validate: require "./font/validate.js"
 
 ###*
 # d3po Forms
@@ -136,7 +136,7 @@ d3po.number =
 ###
 d3po.object =
   merge:    require "./object/merge.coffee"
-  validate: require "./object/validate.coffee"
+  validate: require "./object/validate.js"
 
 ###*
 # Utilities that process strings.

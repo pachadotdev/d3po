@@ -2,10 +2,10 @@ closest    = require "../../../util/closest.coffee"
 css        = require "../../../client/css.js"
 fontSizes  = require "../../../font/sizes.coffee"
 events     = require "../../../client/pointer.js"
-mix        = require "../../../color/mix.coffee"
+mix        = require "../../../color/mix.js"
 prefix     = require "../../../client/prefix.js"
 print      = require "../../../core/console/print.coffee"
-textColor  = require "../../../color/text.coffee"
+textColor  = require "../../../color/text.js"
 timeDetect = require "../../../core/data/time.coffee"
 
 playInterval = false

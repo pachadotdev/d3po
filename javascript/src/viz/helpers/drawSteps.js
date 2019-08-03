@@ -20,7 +20,7 @@ var dataFormat = require("../../core/data/format.js"),
   svgSetup = require("./svg/enter.js"),
   svgUpdate = require("./svg/update.js"),
   titles = require("./ui/titles.js"),
-  validObject = require("../../object/validate.coffee")
+  validObject = require("../../object/validate.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculate steps needed to redraw the visualization
 //------------------------------------------------------------------------------

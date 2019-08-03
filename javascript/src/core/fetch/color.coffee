@@ -1,7 +1,7 @@
 fetchValue  = require "./value.coffee"
-randomColor = require "../../color/random.coffee"
-validColor  = require "../../color/validate.coffee"
-validObject = require "../../object/validate.coffee"
+randomColor = require "../../color/random.js"
+validColor  = require "../../color/validate.js"
+validObject = require "../../object/validate.js"
 uniques     = require "../../util/uniques.coffee"
 
 # Finds an object's color and returns random if it cannot be found

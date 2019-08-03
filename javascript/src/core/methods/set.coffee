@@ -1,6 +1,6 @@
 copy         = require "../../util/copy.coffee"
 d3selection  = require "../../util/d3selection.coffee"
-validObject  = require "../../object/validate.coffee"
+validObject  = require "../../object/validate.js"
 mergeObject  = require "../../object/merge.coffee"
 print        = require "../console/print.coffee"
 process      = require "./process/detect.coffee"

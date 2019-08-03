@@ -1,7 +1,7 @@
 var events = require("../../../../client/pointer.js"),
-  lighter = require("../../../../color/lighter.coffee"),
+  lighter = require("../../../../color/lighter.js"),
   print = require("../../../../core/console/print.coffee"),
-  textColor = require("../../../../color/text.coffee")
+  textColor = require("../../../../color/text.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the title and back button.

@@ -1,9 +1,9 @@
 # Defines button color
 module.exports = (elem, vars) ->
 
-  legible   = require "../../../../color/legible.coffee"
-  lighter   = require "../../../../color/lighter.coffee"
-  textColor = require "../../../../color/text.coffee"
+  legible   = require "../../../../color/legible.js"
+  lighter   = require "../../../../color/lighter.js"
+  textColor = require "../../../../color/text.js"
 
   elem.style "background-color", (d) ->
 

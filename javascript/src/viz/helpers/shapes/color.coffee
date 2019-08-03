@@ -1,6 +1,6 @@
 fetchValue = require "../../../core/fetch/value.coffee"
 fetchColor = require "../../../core/fetch/color.coffee"
-lighter    = require "../../../color/lighter.coffee"
+lighter    = require "../../../color/lighter.js"
 segments   = require "./segments.coffee"
 
 # Returns the correct fill color for a node

@@ -1,5 +1,5 @@
 print       = require "../console/print.coffee"
-validObject = require "../../object/validate.coffee"
+validObject = require "../../object/validate.js"
 
 # Load Data using JSON
 module.exports = (vars, key, next) ->

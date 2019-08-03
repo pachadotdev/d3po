@@ -2,7 +2,7 @@ arraySort  = require("../../array/sort.js")
 fetchValue = require("../../core/fetch/value.coffee")
 fetchColor = require("../../core/fetch/color.coffee")
 fetchText  = require("../../core/fetch/text.js")
-legible    = require("../../color/legible.coffee")
+legible    = require("../../color/legible.js")
 groupData  = require("../../core/data/group.coffee")
 
 bubbles = (vars) ->

@@ -5,7 +5,7 @@ var child = require("../../../util/child.coffee"),
   fetchValue = require("../../../core/fetch/value.coffee"),
   fetchColor = require("../../../core/fetch/color.coffee"),
   fetchText = require("../../../core/fetch/text.js"),
-  legible = require("../../../color/legible.coffee"),
+  legible = require("../../../color/legible.js"),
   print = require("../../../core/console/print.coffee"),
   removeTooltip = require("../../../tooltip/remove.coffee"),
   segments = require("./segments.coffee"),
@@ -14,7 +14,7 @@ var child = require("../../../util/child.coffee"),
   touch = require("../../../client/touch.js"),
   touchEvent = require("../zoom/propagation.coffee"),
   uniqueValues = require("../../../util/uniques.coffee"),
-  validObject = require("../../../object/validate.coffee"),
+  validObject = require("../../../object/validate.js"),
   zoomDirection = require("../zoom/direction.coffee");
 
 var drawShape = {

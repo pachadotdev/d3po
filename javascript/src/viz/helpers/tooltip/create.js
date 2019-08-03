@@ -10,7 +10,7 @@ var arraySort = require("../../../array/sort.js"),
   segments = require("../shapes/segments.coffee"),
   scroll = require("../../../client/scroll.js"),
   uniques = require("../../../util/uniques.coffee"),
-  validObject = require("../../../object/validate.coffee"),
+  validObject = require("../../../object/validate.js"),
   zoomDirection = require("../zoom/direction.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates correctly formatted tooltip for Apps

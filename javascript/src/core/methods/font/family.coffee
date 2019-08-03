@@ -1,4 +1,4 @@
-validate  = require "../../../font/validate.coffee"
+validate  = require "../../../font/validate.js"
 fira = ["Fira Sans", "sans-serif"]
 
 # Constructs font family property using the validate function

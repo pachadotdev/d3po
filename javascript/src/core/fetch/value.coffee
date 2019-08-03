@@ -1,4 +1,4 @@
-validObject  = require "../../object/validate.coffee"
+validObject  = require "../../object/validate.js"
 uniqueValues = require "../../util/uniques.coffee"
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

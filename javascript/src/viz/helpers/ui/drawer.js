@@ -1,7 +1,7 @@
 var copy = require("../../../util/copy.coffee"),
   form = require("../../../form/form.js"),
   print = require("../../../core/console/print.coffee"),
-  validObject = require("../../../object/validate.coffee");
+  validObject = require("../../../object/validate.js");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws a UI drawer, if defined.

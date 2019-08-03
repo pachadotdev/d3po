@@ -338,7 +338,7 @@ module.exports = function() {
     "search": require("./methods/search.coffee"),
     "select": require("./methods/select.coffee"),
     "selectAll": require("./methods/selectAll.coffee"),
-    "text": require("./methods/text.coffee"),
+    "text": require("./methods/text.js"),
     "timing": require("./methods/timing.coffee"),
     "title": require("./methods/title.coffee"),
     "type": require("./methods/type.coffee"),

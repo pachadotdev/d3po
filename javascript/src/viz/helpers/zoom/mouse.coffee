@@ -1,5 +1,5 @@
 labels        = require "./labels.coffee"
-removeTooltip = require "../../../tooltip/remove.coffee"
+removeTooltip = require "../../../tooltip/remove.js"
 transform     = require "./transform.js"
 
 module.exports = (vars) ->

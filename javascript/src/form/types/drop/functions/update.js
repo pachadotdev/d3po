@@ -1,4 +1,4 @@
-var items = require("./items.coffee"),
+var items = require("./items.js"),
   height = require("./height.js"),
   print = require("../../../../core/console/print.js"),
   scrolllist = require("./scroll.js"),

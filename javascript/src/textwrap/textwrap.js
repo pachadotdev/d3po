@@ -33,12 +33,12 @@
     };
     attach(vars, {
       align: require("./methods/align.js"),
-      config: require("./methods/config.coffee"),
-      container: require("./methods/container.coffee"),
-      dev: require("./methods/dev.coffee"),
+      config: require("./methods/config.js"),
+      container: require("./methods/container.js"),
+      dev: require("./methods/dev.js"),
       draw: require("./methods/draw.coffee"),
       format: require("./methods/format.js"),
-      height: require("./methods/height.coffee"),
+      height: require("./methods/height.js"),
       padding: require("./methods/padding.coffee"),
       resize: require("./methods/resize.coffee"),
       rotate: require("./methods/rotate.coffee"),
@@ -46,7 +46,7 @@
       shape: require("./methods/shape.coffee"),
       size: require("./methods/size.coffee"),
       valign: require("./methods/valign.js"),
-      width: require("./methods/width.coffee"),
+      width: require("./methods/width.js"),
       x: require("./methods/x.coffee"),
       y: require("./methods/y.coffee")
     });

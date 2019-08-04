@@ -1,7 +1,7 @@
 
 d3sankey      = require "./sankey.js"
 events        = require "../../client/pointer.js"
-removeTooltip = require "../../tooltip/remove.coffee"
+removeTooltip = require "../../tooltip/remove.js"
 uniques       = require "../../util/uniques.coffee"
 
 sankey = (vars) ->

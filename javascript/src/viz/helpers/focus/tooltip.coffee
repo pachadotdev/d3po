@@ -1,7 +1,7 @@
 createTooltip = require "../tooltip/create.js"
 fetchValue    = require "../../../core/fetch/value.js"
 print         = require "../../../core/console/print.js"
-removeTooltip = require "../../../tooltip/remove.coffee"
+removeTooltip = require "../../../tooltip/remove.js"
 
 # Creates focus tooltip, if applicable
 module.exports = (vars) ->

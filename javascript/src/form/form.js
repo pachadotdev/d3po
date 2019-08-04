@@ -18,8 +18,8 @@ module.exports = function() {
   var vars = {
     "types": {
       "auto": require("./types/auto.js"),
-      "button": require("./types/button/button.coffee"),
-      "drop": require("./types/drop/drop.coffee"),
+      "button": require("./types/button/button.js"),
+      "drop": require("./types/drop/drop.js"),
       "toggle": require("./types/toggle.js")
     }
   };
@@ -313,37 +313,37 @@ module.exports = function() {
   // Define methods and expose public variables.
   //----------------------------------------------------------------------------
   attach(vars, {
-    "active": require("./methods/active.coffee"),
-    "alt": require("./methods/alt.coffee"),
+    "active": require("./methods/active.js"),
+    "alt": require("./methods/alt.js"),
     "color": require("./methods/color.js"),
-    "config": require("./methods/config.coffee"),
-    "container": require("./methods/container.coffee"),
+    "config": require("./methods/config.js"),
+    "container": require("./methods/container.js"),
     "data": require("./methods/data.js"),
-    "depth": require("./methods/depth.coffee"),
-    "dev": require("./methods/dev.coffee"),
+    "depth": require("./methods/depth.js"),
+    "dev": require("./methods/dev.js"),
     "draw": require("./methods/draw.js"),
-    "focus": require("./methods/focus.coffee"),
-    "font": require("./methods/font.coffee"),
+    "focus": require("./methods/focus.js"),
+    "font": require("./methods/font.js"),
     "format": require("./methods/format.js"),
-    "height": require("./methods/height.coffee"),
-    "history": require("./methods/history.coffee"),
-    "hover": require("./methods/hover.coffee"),
+    "height": require("./methods/height.js"),
+    "history": require("./methods/history.js"),
+    "hover": require("./methods/hover.js"),
     "icon": require("./methods/icon.js"),
-    "id": require("./methods/id.coffee"),
-    "keywords": require("./methods/keywords.coffee"),
+    "id": require("./methods/id.js"),
+    "keywords": require("./methods/keywords.js"),
     "margin": require("./methods/margin.js"),
-    "open": require("./methods/open.coffee"),
-    "order": require("./methods/order.coffee"),
-    "remove": require("./methods/remove.coffee"),
-    "search": require("./methods/search.coffee"),
-    "select": require("./methods/select.coffee"),
-    "selectAll": require("./methods/selectAll.coffee"),
+    "open": require("./methods/open.js"),
+    "order": require("./methods/order.js"),
+    "remove": require("./methods/remove.js"),
+    "search": require("./methods/search.js"),
+    "select": require("./methods/select.js"),
+    "selectAll": require("./methods/selectall.js"),
     "text": require("./methods/text.js"),
-    "timing": require("./methods/timing.coffee"),
+    "timing": require("./methods/timing.js"),
     "title": require("./methods/title.js"),
-    "type": require("./methods/type.coffee"),
-    "ui": require("./methods/ui.coffee"),
-    "width": require("./methods/width.coffee")
+    "type": require("./methods/type.js"),
+    "ui": require("./methods/ui.js"),
+    "width": require("./methods/width.js")
   });
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

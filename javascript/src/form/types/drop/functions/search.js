@@ -8,7 +8,7 @@ module.exports = function(vars) {
   if (vars.dev.value) print.time("creating search")
 
   var data = require("./data.js"),
-    items = require("./items.coffee"),
+    items = require("./items.js"),
     update = require("./update.js")
 
   vars.container.search = vars.container.selector.selectAll("div.d3po_drop_search")

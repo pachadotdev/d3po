@@ -165,7 +165,7 @@ d3po.textwrap = require "./textwrap/textwrap.js"
 d3po.tooltip =
   create: require "./tooltip/create.js"
   move:   require "./tooltip/move.coffee"
-  remove: require "./tooltip/remove.coffee"
+  remove: require "./tooltip/remove.js"
 
 ###*
 # d3po features Utilities that can be used to help with some common javascript processes.

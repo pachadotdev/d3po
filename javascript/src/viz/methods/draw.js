@@ -1,58 +1,58 @@
 var print = require("../../core/console/print.js"),
-  stringFormat = require("../../string/format.js")
+    stringFormat = require("../../string/format.js")
 
 module.exports = {
-  "accepted": [undefined, Function],
-  "first": true,
-  "frozen": false,
-  "process": function(value, vars) {
+    "accepted": [undefined, Function],
+    "first": true,
+    "frozen": false,
+    "process": function(value, vars) {
 
-    if (this.initialized === false) {
-      this.initialized = true
-      return value
-    }
+        if (this.initialized === false) {
+            this.initialized = true
+            return value
+        }
 
-    if (value === undefined && typeof this.value === "function") {
-      value = this.value
-    }
+        if (value === undefined && typeof this.value === "function") {
+            value = this.value
+        }
 
-    if (vars.container.value === false) {
+        if (vars.container.value === false) {
 
-      var str = vars.format.locale.value.dev.setContainer
-      print.warning(str, "container")
+            var str = vars.format.locale.value.dev.setContainer
+            print.warning(str, "container")
 
-    } else if (vars.container.value.empty()) {
+        } else if (vars.container.value.empty()) {
 
-      var str = vars.format.locale.value.dev.noContainer
-      var selector = vars.container.selector || "";
-      print.warning(stringFormat(str, "\"" + selector + "\""), "container")
+            var str = vars.format.locale.value.dev.noContainer
+            var selector = vars.container.selector || "";
+            print.warning(stringFormat(str, "\"" + selector + "\""), "container")
 
-    } else {
+        } else {
 
-      if (vars.dev.value) print.time("total draw time");
+            if (vars.dev.value) print.time("total draw time");
 
-      vars.container.value.call(vars.self);
+            vars.container.value.call(vars.self);
 
-    }
+        }
 
-    if (typeof value === "function" && vars.history.chain.length) {
+        if (typeof value === "function" && vars.history.chain.length) {
 
-      var changesObject = {}
-      vars.history.chain.forEach(function(c) {
-        var method = c.method
-        delete c.method
-        changesObject[method] = c
-      })
+            var changesObject = {}
+            vars.history.chain.forEach(function(c) {
+                var method = c.method
+                delete c.method
+                changesObject[method] = c
+            })
 
-      value(changesObject)
+            value(changesObject)
 
-      vars.history.chain = []
+            vars.history.chain = []
 
-    }
+        }
 
-    return value
+        return value
 
-  },
-  "update": true,
-  "value": undefined
+    },
+    "update": true,
+    "value": undefined
 }

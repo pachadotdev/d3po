@@ -10,7 +10,7 @@
 
   validObject = require("../../object/validate.js");
 
-  uniques = require("../../util/uniques.coffee");
+  uniques = require("../../util/uniques.js");
 
   module.exports = function(vars, id, level) {
     var color, colorLevel, colors, i, obj, value;

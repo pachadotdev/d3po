@@ -164,7 +164,7 @@ d3po.textwrap = require "./textwrap/textwrap.js"
 ###
 d3po.tooltip =
   create: require "./tooltip/create.js"
-  move:   require "./tooltip/move.coffee"
+  move:   require "./tooltip/move.js"
   remove: require "./tooltip/remove.js"
 
 ###*
@@ -174,13 +174,13 @@ d3po.tooltip =
 # @static
 ###
 d3po.util =
-  buckets:     require "./util/buckets.coffee"
-  child:       require "./util/child.coffee"
-  closest:     require "./util/closest.coffee"
+  buckets:     require "./util/buckets.js"
+  child:       require "./util/child.js"
+  closest:     require "./util/closest.js"
   copy:        require "./util/copy.js"
-  d3selection: require "./util/d3selection.coffee"
-  dataurl:     require "./util/dataURL.coffee"
-  uniques:     require "./util/uniques.coffee"
+  d3selection: require "./util/d3selection.js"
+  dataurl:     require "./util/dataurl.js"
+  uniques:     require "./util/uniques.js"
 
 ###*
 # d3po Visualizations

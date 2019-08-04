@@ -1,6 +1,6 @@
 var fetchValue = require("./value.js"),
   validObject = require("../../object/validate.js"),
-  uniques = require("../../util/uniques.coffee");
+  uniques = require("../../util/uniques.js");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Get array of available text values

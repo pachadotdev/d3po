@@ -4,7 +4,7 @@
 
   copy = require("../../util/copy.js");
 
-  d3selection = require("../../util/d3selection.coffee");
+  d3selection = require("../../util/d3selection.js");
 
   validObject = require("../../object/validate.js");
 

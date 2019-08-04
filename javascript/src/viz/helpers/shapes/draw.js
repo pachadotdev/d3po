@@ -1,5 +1,5 @@
-var child = require("../../../util/child.coffee"),
-  closest = require("../../../util/closest.coffee"),
+var child = require("../../../util/child.js"),
+  closest = require("../../../util/closest.js"),
   createTooltip = require("../tooltip/create.js"),
   events = require("../../../client/pointer.js"),
   fetchValue = require("../../../core/fetch/value.js"),
@@ -13,7 +13,7 @@ var child = require("../../../util/child.coffee"),
   stringStrip = require("../../../string/strip.js"),
   touch = require("../../../client/touch.js"),
   touchEvent = require("../zoom/propagation.coffee"),
-  uniqueValues = require("../../../util/uniques.coffee"),
+  uniqueValues = require("../../../util/uniques.js"),
   validObject = require("../../../object/validate.js"),
   zoomDirection = require("../zoom/direction.coffee");
 

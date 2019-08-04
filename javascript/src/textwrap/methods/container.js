@@ -2,7 +2,7 @@
 (function() {
   var d3selection;
 
-  d3selection = require("../../util/d3selection.coffee");
+  d3selection = require("../../util/d3selection.js");
 
   module.exports = {
     accepted: [false, Array, Object, String],

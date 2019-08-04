@@ -2,7 +2,7 @@ var events = require("../../../client/pointer.js"),
   ie = require("../../../client/ie.js"),
   fetchValue = require("../../../core/fetch/value.js"),
   print = require("../../../core/console/print.js"),
-  uniqueValues = require("../../../util/uniques.coffee")
+  uniqueValues = require("../../../util/uniques.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates focus elements, if available

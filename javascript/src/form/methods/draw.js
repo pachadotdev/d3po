@@ -1,4 +1,4 @@
-var d3selection = require("../../util/d3selection.coffee"),
+var d3selection = require("../../util/d3selection.js"),
   hideElement = require("../../core/parse/hideElement.js"),
   parseElement = require("../../core/parse/element.js"),
   print = require("../../core/console/print.js"),

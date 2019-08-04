@@ -6,7 +6,7 @@
 
   stringStrip = require("../../../../string/strip.js");
 
-  uniqueValues = require("../../../../util/uniques.coffee");
+  uniqueValues = require("../../../../util/uniques.js");
 
   module.exports = function(vars, data, keys) {
     var discrete, extras, key, opposite, serialized, ticks, timeAxis;

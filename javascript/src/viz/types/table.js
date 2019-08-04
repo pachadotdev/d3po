@@ -1,5 +1,5 @@
 var fetchValue = require("../../core/fetch/value.js");
-var uniques    = require("../../util/uniques.coffee");
+var uniques    = require("../../util/uniques.js");
 var copy       = require("../../util/copy.js");
 var rand_col   = require("../../color/random.js");
 

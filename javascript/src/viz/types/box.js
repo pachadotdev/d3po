@@ -10,7 +10,7 @@
 
   strip = require("../../string/strip.js");
 
-  uniques = require("../../util/uniques.coffee");
+  uniques = require("../../util/uniques.js");
 
   box = function(vars) {
     var botstr, disMargin, discrete, domains, h, iqrstr, maxstr, medians, medstr, mergeData, minstr, mode, noData, oppMargin, opposite, pctstr, qt1str, qt3str, returnData, size, space, topstr, w;

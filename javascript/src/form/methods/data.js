@@ -1,4 +1,4 @@
-var d3selection = require("../../util/d3selection.coffee"),
+var d3selection = require("../../util/d3selection.js"),
   process = require("../../core/methods/process/data.js");
 
 module.exports = {

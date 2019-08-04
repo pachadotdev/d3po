@@ -2,7 +2,7 @@
 (function() {
   var d3selection, validate;
 
-  d3selection = require("../util/d3selection.coffee");
+  d3selection = require("../util/d3selection.js");
 
   validate = require("./validate.js");
 

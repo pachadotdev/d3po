@@ -1,5 +1,5 @@
-buckets = require "../../../../../util/buckets.coffee"
-closest = require "../../../../../util/closest.coffee"
+buckets = require "../../../../../util/buckets.js"
+closest = require "../../../../../util/closest.js"
 
 module.exports = (vars, axis, buffer) ->
 

@@ -1,10 +1,10 @@
-buckets    = require "../../../../../util/buckets.coffee"
+buckets    = require "../../../../../util/buckets.js"
 buffer     = require "./buffer.coffee"
 fetchValue = require "../../../../../core/fetch/value.js"
 fontSizes  = require "../../../../../font/sizes.js"
 textwrap   = require "../../../../../textwrap/textwrap.js"
 timeDetect = require "../../../../../core/data/time.js"
-uniques    = require "../../../../../util/uniques.coffee"
+uniques    = require "../../../../../util/uniques.js"
 
 module.exports = (vars, opts) ->
 

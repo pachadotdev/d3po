@@ -1,4 +1,4 @@
-closest    = require "../../util/closest.coffee"
+closest    = require "../../util/closest.js"
 fetchValue = require "../../core/fetch/value.js"
 graph      = require "./helpers/graph/draw.js"
 nest       = require "./helpers/graph/nest.js"

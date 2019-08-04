@@ -1,5 +1,5 @@
 var copy = require("../../../util/copy.js"),
-  closest = require("../../../util/closest.coffee"),
+  closest = require("../../../util/closest.js"),
   events = require("../../../client/pointer.js"),
   shapeStyle = require("./style.coffee"),
   fetchValue = require("../../../core/fetch/value.js");

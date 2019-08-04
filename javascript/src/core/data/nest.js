@@ -1,6 +1,6 @@
 var fetchValue = require("../fetch/value.js"),
   validObject = require("../../object/validate.js"),
-  uniqueValues = require("../../util/uniques.coffee");
+  uniqueValues = require("../../util/uniques.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Nests and groups the data.
 //------------------------------------------------------------------------------

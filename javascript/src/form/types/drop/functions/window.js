@@ -1,4 +1,4 @@
-var child = require("../../../../util/child.coffee")
+var child = require("../../../../util/child.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Recursive function that applies a click event to all parent windows that

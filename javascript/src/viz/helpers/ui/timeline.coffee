@@ -1,4 +1,4 @@
-closest    = require "../../../util/closest.coffee"
+closest    = require "../../../util/closest.js"
 css        = require "../../../client/css.js"
 fontSizes  = require "../../../font/sizes.js"
 events     = require "../../../client/pointer.js"

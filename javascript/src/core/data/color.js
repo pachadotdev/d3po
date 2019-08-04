@@ -1,4 +1,4 @@
-var buckets = require("../../util/buckets.coffee"),
+var buckets = require("../../util/buckets.js"),
   fetchValue = require("../fetch/value.js"),
   print = require("../console/print.js")
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

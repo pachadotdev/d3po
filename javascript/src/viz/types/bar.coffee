@@ -1,9 +1,9 @@
-buckets    = require "../../util/buckets.coffee"
+buckets    = require "../../util/buckets.js"
 fetchValue = require "../../core/fetch/value.js"
 graph      = require "./helpers/graph/draw.js"
 nest       = require "./helpers/graph/nest.js"
 stack      = require "./helpers/graph/stack.coffee"
-uniques    = require "../../util/uniques.coffee"
+uniques    = require "../../util/uniques.js"
 
 # Line Plot
 bar = (vars) ->

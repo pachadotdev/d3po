@@ -6,8 +6,8 @@ fetchValue    = require "../../core/fetch/value.js"
 fontSizes     = require "../../font/sizes.js"
 offset        = require "../../geom/offset.js"
 textwrap      = require "../../textwrap/textwrap.js"
-buckets       = require "../../util/buckets.coffee"
-uniques       = require "../../util/uniques.coffee"
+buckets       = require "../../util/buckets.js"
+uniques       = require "../../util/uniques.js"
 
 radar = (vars) ->
 

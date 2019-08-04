@@ -6,7 +6,7 @@ var arraySort = require("../../array/sort.js"),
   removeTooltip = require("../../tooltip/remove.js"),
   smallestGap = require("../../network/smallestgap.js"),
   textColor = require("../../color/text.js"),
-  uniqueValues = require("../../util/uniques.coffee")
+  uniqueValues = require("../../util/uniques.js")
 
 var rings = function(vars) {
 

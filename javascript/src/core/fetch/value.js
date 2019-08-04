@@ -4,7 +4,7 @@
 
   validObject = require("../../object/validate.js");
 
-  uniqueValues = require("../../util/uniques.coffee");
+  uniqueValues = require("../../util/uniques.js");
 
   find = function(vars, node, variable, depth) {
     var cache, nodeObject, returned, val;

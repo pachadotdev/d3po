@@ -9,7 +9,7 @@ var arraySort = require("../../../array/sort.js"),
   removeTooltip = require("../../../tooltip/remove.js"),
   segments = require("../shapes/segments.coffee"),
   scroll = require("../../../client/scroll.js"),
-  uniques = require("../../../util/uniques.coffee"),
+  uniques = require("../../../util/uniques.js"),
   validObject = require("../../../object/validate.js"),
   zoomDirection = require("../zoom/direction.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -2,7 +2,7 @@
 (function() {
   var axes, draw, mouse, plot;
 
-  axes = require("./includes/axes.coffee");
+  axes = require("./includes/axes.js");
 
   draw = require("./includes/svg.coffee");
 

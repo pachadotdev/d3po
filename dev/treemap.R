@@ -19,6 +19,7 @@ d3po() %>%
   d3po_depth(1) %>%
   d3po_color("color") %>%
   d3po_font(family = "Fira Sans", weight = 400) %>%
+  d3po_labels(align = "left", valign = "top") %>%
   d3po_icon(style = "knockout", value = "icon") %>%
   d3po_legend(size = 30) %>%
   d3po_title(

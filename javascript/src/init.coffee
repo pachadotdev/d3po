@@ -73,9 +73,9 @@ d3po.color =
 # @static
 ###
 d3po.data =
-  bestRegress: require "./data/bestRegress.coffee"
-  lof:         require "./data/lof.coffee"
-  mad:         require "./data/mad.coffee"
+  bestRegress: require "./data/bestregression.js"
+  lof:         require "./data/lof.js"
+  mad:         require "./data/mad.js"
 
 ###*
 # Utilities related to fonts.

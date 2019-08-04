@@ -1,4 +1,4 @@
-shortestPath = require "../../network/shortestPath.coffee"
+shortestPath = require "../../network/shortestpath.js"
 fetchValue   = require "../../core/fetch/value.js"
 uniqueValues = require "../../util/uniques.coffee"
 

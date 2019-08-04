@@ -1,5 +1,5 @@
 copy        = require "../../../util/copy.coffee"
-distance    = require "../../../network/distance.coffee"
+distance    = require "../../../network/distance.js"
 fetchText   = require "../../../core/fetch/text.js"
 fontSizes   = require "../../../font/sizes.js"
 largestRect = require "../../../geom/largestrectangle.js"

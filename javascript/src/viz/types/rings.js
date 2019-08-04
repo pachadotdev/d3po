@@ -4,7 +4,7 @@ var arraySort = require("../../array/sort.js"),
   fetchColor = require("../../core/fetch/color.js"),
   legible = require("../../color/legible.js"),
   removeTooltip = require("../../tooltip/remove.coffee"),
-  smallestGap = require("../../network/smallestGap.coffee"),
+  smallestGap = require("../../network/smallestgap.js"),
   textColor = require("../../color/text.js"),
   uniqueValues = require("../../util/uniques.coffee")
 

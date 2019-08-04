@@ -112,12 +112,12 @@ d3po.geom =
 # @static
 ###
 d3po.network =
-  cluster:      require "./network/cluster.coffee"
-  distance:     require "./network/distance.coffee"
-  normalize:    require "./network/normalize.coffee"
-  shortestPath: require "./network/shortestPath.coffee"
-  smallestGap:  require "./network/smallestGap.coffee"
-  subgraph:     require "./network/subgraph.coffee"
+  cluster:      require "./network/cluster.js"
+  distance:     require "./network/distance.js"
+  normalize:    require "./network/normalize.js"
+  shortestPath: require "./network/shortestpath.js"
+  smallestGap:  require "./network/smallestgap.js"
+  subgraph:     require "./network/subgraph.js"
 
 ###*
 # Utilities that process numbers.

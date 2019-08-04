@@ -102,7 +102,7 @@ d3po.form = require "./form/form.js"
 ###
 d3po.geom =
   largestRect: require "./geom/largestRect.coffee"
-  offset:      require "./geom/offset.coffee"
+  offset:      require "./geom/offset.js"
   path2poly:   require "./geom/path2poly.coffee"
 
 ###*

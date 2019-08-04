@@ -1,11 +1,11 @@
 var arraySort = require("../array/sort.js"),
-  attach = require("../core/methods/attach.coffee"),
+  attach = require("../core/methods/attach.js"),
   dataFormat = require("../core/data/format.js"),
   dataKeys = require("../core/data/keys.js"),
   dataLoad = require("../core/data/load.js"),
   fetchData = require("../core/fetch/data.js"),
   ie = require("../client/ie.js"),
-  methodReset = require("../core/methods/reset.coffee"),
+  methodReset = require("../core/methods/reset.js"),
   print = require("../core/console/print.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Form Element shell

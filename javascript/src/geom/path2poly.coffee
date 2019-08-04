@@ -1,4 +1,4 @@
-offset = require "../geom/offset.coffee"
+offset = require "../geom/offset.js"
 
 module.exports = (path) ->
 

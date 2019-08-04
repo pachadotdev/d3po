@@ -1,6 +1,6 @@
 var fetchText = require("../../core/fetch/text.js"),
   print = require("../../core/console/print.js"),
-  rejected = require("../../core/methods/rejected.coffee"),
+  rejected = require("../../core/methods/rejected.js"),
   stringFormat = require("../../string/format.js"),
   stringList = require("../../string/list.coffee")
 

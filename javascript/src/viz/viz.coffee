@@ -1,4 +1,4 @@
-attach      = require "../core/methods/attach.coffee"
+attach      = require "../core/methods/attach.js"
 axis        = require "./methods/helpers/axis.coffee"
 flash       = require "./helpers/ui/message.js"
 getSteps    = require "./helpers/drawSteps.js"

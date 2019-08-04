@@ -3,7 +3,7 @@ decoration = require "../../../core/methods/font/decoration.js"
 family     = require "../../../core/methods/font/family.js"
 filter     = require "../../../core/methods/filter.js"
 position   = require "../../../core/methods/font/position.js"
-rendering  = require "../../../core/methods/rendering.coffee"
+rendering  = require "../../../core/methods/rendering.js"
 transform  = require "../../../core/methods/font/transform.js"
 
 orientMap =

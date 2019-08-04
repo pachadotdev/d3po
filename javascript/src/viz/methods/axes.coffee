@@ -1,5 +1,5 @@
 process = require "../../core/methods/process/margin.js"
-rendering = require "../../core/methods/rendering.coffee"
+rendering = require "../../core/methods/rendering.js"
 
 module.exports =
   background:

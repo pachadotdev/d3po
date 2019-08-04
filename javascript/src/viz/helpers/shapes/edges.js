@@ -1,5 +1,5 @@
 var buckets = require("../../../util/buckets.coffee"),
-  offset = require("../../../geom/offset.coffee");
+  offset = require("../../../geom/offset.js");
 
 module.exports = function(vars) {
 

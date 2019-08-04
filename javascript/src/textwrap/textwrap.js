@@ -2,7 +2,7 @@
 (function() {
   var attach, print, sizes, text, wrap;
 
-  attach = require("../core/methods/attach.coffee");
+  attach = require("../core/methods/attach.js");
 
   sizes = require("./helpers/parseSize.coffee");
 

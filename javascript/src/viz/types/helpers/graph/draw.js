@@ -6,7 +6,7 @@
 
   draw = require("./includes/svg.coffee");
 
-  mouse = require("./includes/mouse.coffee");
+  mouse = require("./includes/mouse.js");
 
   plot = require("./includes/plot.coffee");
 

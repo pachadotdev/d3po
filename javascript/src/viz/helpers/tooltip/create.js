@@ -7,11 +7,11 @@ var arraySort = require("../../../array/sort.js"),
   fetchValue = require("../../../core/fetch/value.js"),
   mergeObject = require("../../../object/merge.js"),
   removeTooltip = require("../../../tooltip/remove.js"),
-  segments = require("../shapes/segments.coffee"),
+  segments = require("../shapes/segments.js"),
   scroll = require("../../../client/scroll.js"),
   uniques = require("../../../util/uniques.js"),
   validObject = require("../../../object/validate.js"),
-  zoomDirection = require("../zoom/direction.coffee");
+  zoomDirection = require("../zoom/direction.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates correctly formatted tooltip for Apps
 //-------------------------------------------------------------------

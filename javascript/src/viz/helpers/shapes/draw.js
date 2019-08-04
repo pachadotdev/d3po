@@ -8,29 +8,29 @@ var child = require("../../../util/child.js"),
   legible = require("../../../color/legible.js"),
   print = require("../../../core/console/print.js"),
   removeTooltip = require("../../../tooltip/remove.js"),
-  segments = require("./segments.coffee"),
+  segments = require("./segments.js"),
   shapeFill = require("./fill.js"),
   stringStrip = require("../../../string/strip.js"),
   touch = require("../../../client/touch.js"),
-  touchEvent = require("../zoom/propagation.coffee"),
+  touchEvent = require("../zoom/propagation.js"),
   uniqueValues = require("../../../util/uniques.js"),
   validObject = require("../../../object/validate.js"),
-  zoomDirection = require("../zoom/direction.coffee");
+  zoomDirection = require("../zoom/direction.js");
 
 var drawShape = {
-  "arc": require("./arc.coffee"),
+  "arc": require("./arc.js"),
   "area": require("./area.js"),
   "check": require("./check.js"),
-  "coordinates": require("./coordinates.coffee"),
+  "coordinates": require("./coordinates.js"),
   "cross": require("./cross.js"),
   "diamond": require("./diamond.js"),
   "donut": require("./donut.js"),
   "line": require("./line.js"),
-  "radial": require("./radial.coffee"),
-  "rect": require("./rect.coffee"),
+  "radial": require("./radial.js"),
+  "rect": require("./rect.js"),
   "triangle_down": require("./triangle_down.js"),
   "triangle_up": require("./triangle_up.js"),
-  "whisker": require("./whisker.coffee")
+  "whisker": require("./whisker.js")
 };
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

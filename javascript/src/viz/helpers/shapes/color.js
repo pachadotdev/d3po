@@ -8,7 +8,7 @@
 
   lighter = require("../../../color/lighter.js");
 
-  segments = require("./segments.coffee");
+  segments = require("./segments.js");
 
   module.exports = function(d, vars, stroke) {
     var active, shape, temp, total;

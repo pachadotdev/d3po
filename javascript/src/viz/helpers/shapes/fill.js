@@ -1,8 +1,8 @@
 var copy = require("../../../util/copy.js"),
   fetchColor = require("../../../core/fetch/color.js"),
   fetchValue = require("../../../core/fetch/value.js"),
-  segments = require("./segments.coffee"),
-  shapeStyle = require("./style.coffee");
+  segments = require("./segments.js"),
+  shapeStyle = require("./style.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------

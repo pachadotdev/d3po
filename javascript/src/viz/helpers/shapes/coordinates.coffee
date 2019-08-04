@@ -2,8 +2,8 @@ copy        = require "../../../util/copy.coffee"
 distance    = require "../../../network/distance.coffee"
 fetchText   = require "../../../core/fetch/text.js"
 fontSizes   = require "../../../font/sizes.js"
-largestRect = require "../../../geom/largestRect.coffee"
-path2poly   = require "../../../geom/path2poly.coffee"
+largestRect = require "../../../geom/largestrectangle.js"
+path2poly   = require "../../../geom/path2poly.js"
 shapeStyle  = require "./style.coffee"
 
 labels = {}

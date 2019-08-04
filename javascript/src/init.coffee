@@ -101,9 +101,9 @@ d3po.form = require "./form/form.js"
 # @static
 ###
 d3po.geom =
-  largestRect: require "./geom/largestRect.coffee"
+  largestRect: require "./geom/largestrectangle.js"
   offset:      require "./geom/offset.js"
-  path2poly:   require "./geom/path2poly.coffee"
+  path2poly:   require "./geom/path2poly.js"
 
 ###*
 # Utilities related to network graphs.

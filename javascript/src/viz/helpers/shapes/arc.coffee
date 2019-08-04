@@ -1,6 +1,6 @@
 shapeStyle  = require "./style.coffee"
-largestRect = require "../../../geom/largestRect.coffee"
-path2poly   = require "../../../geom/path2poly.coffee"
+largestRect = require "../../../geom/largestrectangle.js"
+path2poly   = require "../../../geom/path2poly.js"
 angles      = {start: {}, end: {}}
 
 module.exports = (vars, selection, enter, exit) ->

@@ -1,6 +1,6 @@
 var fetchText = require("../../../core/fetch/text.js"),
   fontSizes = require("../../../font/sizes.js"),
-  largestRect = require("../../../geom/largestRect.coffee"),
+  largestRect = require("../../../geom/largestrectangle.js"),
   shapeStyle = require("./style.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect

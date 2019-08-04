@@ -8,7 +8,7 @@
 
   validObject = require("../../object/validate.js");
 
-  mergeObject = require("../../object/merge.coffee");
+  mergeObject = require("../../object/merge.js");
 
   print = require("../console/print.js");
 

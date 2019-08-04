@@ -4,7 +4,7 @@
 
   locale = require("../../core/locale/locale.js");
 
-  mergeObject = require("../../object/merge.coffee");
+  mergeObject = require("../../object/merge.js");
 
   module.exports = {
     accepted: [Function, String],

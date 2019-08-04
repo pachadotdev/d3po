@@ -1,6 +1,6 @@
 dataThreshold = require("../../core/data/threshold.js")
 groupData     = require("../../core/data/group.js")
-mergeObject   = require("../../object/merge.coffee")
+mergeObject   = require("../../object/merge.js")
 
 treemap = (vars) ->
 

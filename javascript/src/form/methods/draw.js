@@ -1,5 +1,5 @@
 var d3selection = require("../../util/d3selection.js"),
-  hideElement = require("../../core/parse/hideElement.js"),
+  hideElement = require("../../core/parse/hideelement.js"),
   parseElement = require("../../core/parse/element.js"),
   print = require("../../core/console/print.js"),
   stringFormat = require("../../string/format.js")

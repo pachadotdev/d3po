@@ -4,7 +4,7 @@
 
   arraySort = require("../../../../../array/sort.js");
 
-  buffer = require("./buffer.coffee");
+  buffer = require("./buffer.js");
 
   buckets = require("../../../../../util/buckets.js");
 

@@ -4,11 +4,11 @@
 
   axes = require("./includes/axes.js");
 
-  draw = require("./includes/svg.coffee");
+  draw = require("./includes/svg.js");
 
   mouse = require("./includes/mouse.js");
 
-  plot = require("./includes/plot.coffee");
+  plot = require("./includes/plot.js");
 
   module.exports = function(vars, opts) {
     if (opts === void 0) {

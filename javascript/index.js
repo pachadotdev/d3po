@@ -1,5 +1,5 @@
 'use strict';
 
-require('./src/libs.coffee')
+require('./src/libs.js')
 
-module.exports = require('./src/init.coffee')
+module.exports = require('./src/init.js')

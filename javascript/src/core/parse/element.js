@@ -1,4 +1,4 @@
-var hideElement = require("./hideElement.js");
+var hideElement = require("./hideelement.js");
 
 // Parses an HTML element for data
 module.exports = function(vars) {

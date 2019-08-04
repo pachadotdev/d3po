@@ -171,7 +171,7 @@ module.exports = ->
     time:       require "./methods/time.js"
     timeline:   require "./methods/timeline.coffee"
     timing:     require "./methods/timing.coffee"
-    title:      require "./methods/title.coffee"
+    title:      require "./methods/title.js"
     tooltip:    require "./methods/tooltip.coffee"
     total:      require "./methods/total.coffee"
     type:       require "./methods/type.coffee"

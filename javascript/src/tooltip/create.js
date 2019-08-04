@@ -7,7 +7,7 @@ var defaultLocale = require("../core/locale/languages/en_US.js"),
   removeTooltip = require("./remove.coffee"),
   scroll = require("../client/scroll.js"),
   scrollBar = require("../client/scrollbar.js"),
-  stringList = require("../string/list.coffee"),
+  stringList = require("../string/list.js"),
   textColor = require("../color/text.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -5,7 +5,7 @@ var edges = require("./shapes/edges.js"),
   methodReset = require("../../core/methods/reset.js"),
   print = require("../../core/console/print.js"),
   shapeLabels = require("./shapes/labels.js"),
-  titleCase = require("../../string/title.coffee")
+  titleCase = require("../../string/title.js")
 
 var bounds = require("./zoom/bounds.coffee")
 var labels = require("./zoom/labels.coffee")

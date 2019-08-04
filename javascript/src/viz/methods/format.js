@@ -8,7 +8,7 @@
 
   mergeObject = require("../../object/merge.js");
 
-  titleCase = require("../../string/title.coffee");
+  titleCase = require("../../string/title.js");
 
   module.exports = {
     accepted: [Function, String],

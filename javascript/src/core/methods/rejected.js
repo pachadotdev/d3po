@@ -5,7 +5,7 @@
 
   format = require("../../string/format.js");
 
-  list = require("../../string/list.coffee");
+  list = require("../../string/list.js");
 
   print = require("../console/print.js");
 

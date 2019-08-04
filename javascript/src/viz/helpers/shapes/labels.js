@@ -6,7 +6,7 @@ var copy = require("../../../util/copy.coffee"),
   rtl = require("../../../client/rtl.js"),
   segments = require("./segments.coffee"),
   shapeColor = require("./color.js"),
-  stringList = require("../../../string/list.coffee"),
+  stringList = require("../../../string/list.js"),
   textColor = require("../../../color/text.js"),
   textWrap = require("../../../textwrap/textwrap.js");
 

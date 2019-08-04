@@ -2,7 +2,7 @@ var dataFilter = require("../data/filter.js"),
   dataNest = require("../data/nest.js"),
   print = require("../console/print.js"),
   stringFormat = require("../../string/format.js"),
-  stringList = require("../../string/list.coffee");
+  stringList = require("../../string/list.js");
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Fetches specific years of data

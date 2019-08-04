@@ -340,7 +340,7 @@ module.exports = function() {
     "selectAll": require("./methods/selectAll.coffee"),
     "text": require("./methods/text.js"),
     "timing": require("./methods/timing.coffee"),
-    "title": require("./methods/title.coffee"),
+    "title": require("./methods/title.js"),
     "type": require("./methods/type.coffee"),
     "ui": require("./methods/ui.coffee"),
     "width": require("./methods/width.coffee")

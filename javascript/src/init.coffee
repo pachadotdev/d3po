@@ -146,9 +146,9 @@ d3po.object =
 ###
 d3po.string =
   format: require "./string/format.js"
-  list:   require "./string/list.coffee"
+  list:   require "./string/list.js"
   strip:  require "./string/strip.js"
-  title:  require "./string/title.coffee"
+  title:  require "./string/title.js"
 
 ###*
 # d3po SVG Textwrapping

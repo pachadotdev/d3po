@@ -1,4 +1,4 @@
-copy       = require "../../../../../util/copy.coffee"
+copy       = require "../../../../../util/copy.js"
 events     = require "../../../../../client/pointer.js"
 fetchColor = require "../../../../../core/fetch/color.js"
 fetchValue = require "../../../../../core/fetch/value.js"

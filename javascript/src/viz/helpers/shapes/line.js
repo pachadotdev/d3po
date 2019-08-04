@@ -1,4 +1,4 @@
-var copy = require("../../../util/copy.coffee"),
+var copy = require("../../../util/copy.js"),
   closest = require("../../../util/closest.coffee"),
   events = require("../../../client/pointer.js"),
   shapeStyle = require("./style.coffee"),

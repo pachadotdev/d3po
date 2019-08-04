@@ -4,13 +4,13 @@
 
   attach = require("../core/methods/attach.js");
 
-  sizes = require("./helpers/parseSize.coffee");
+  sizes = require("./helpers/parsesize.js");
 
   print = require("../core/console/print.js");
 
-  text = require("./helpers/parseText.coffee");
+  text = require("./helpers/parsetext.js");
 
-  wrap = require("./helpers/wrap.coffee");
+  wrap = require("./helpers/wrap.js");
 
   module.exports = function() {
     var vars;
@@ -36,19 +36,19 @@
       config: require("./methods/config.js"),
       container: require("./methods/container.js"),
       dev: require("./methods/dev.js"),
-      draw: require("./methods/draw.coffee"),
+      draw: require("./methods/draw.js"),
       format: require("./methods/format.js"),
       height: require("./methods/height.js"),
-      padding: require("./methods/padding.coffee"),
-      resize: require("./methods/resize.coffee"),
-      rotate: require("./methods/rotate.coffee"),
+      padding: require("./methods/padding.js"),
+      resize: require("./methods/resize.js"),
+      rotate: require("./methods/rotate.js"),
       text: require("./methods/text.js"),
-      shape: require("./methods/shape.coffee"),
-      size: require("./methods/size.coffee"),
+      shape: require("./methods/shape.js"),
+      size: require("./methods/size.js"),
       valign: require("./methods/valign.js"),
       width: require("./methods/width.js"),
-      x: require("./methods/x.coffee"),
-      y: require("./methods/y.coffee")
+      x: require("./methods/x.js"),
+      y: require("./methods/y.js")
     });
     return vars.self;
   };

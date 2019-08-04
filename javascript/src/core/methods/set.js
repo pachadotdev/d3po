@@ -2,7 +2,7 @@
 (function() {
   var copy, d3selection, mergeObject, print, process, rejected, stringFormat, updateArray, validObject;
 
-  copy = require("../../util/copy.coffee");
+  copy = require("../../util/copy.js");
 
   d3selection = require("../../util/d3selection.coffee");
 

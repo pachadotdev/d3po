@@ -1,6 +1,6 @@
 closest    = require "../../util/closest.coffee"
 fetchValue = require "../../core/fetch/value.js"
-graph      = require "./helpers/graph/draw.coffee"
+graph      = require "./helpers/graph/draw.js"
 nest       = require "./helpers/graph/nest.js"
 sort       = require "../../array/sort.js"
 stack      = require "./helpers/graph/stack.coffee"

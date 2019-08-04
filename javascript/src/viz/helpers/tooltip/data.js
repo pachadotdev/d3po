@@ -1,4 +1,4 @@
-var copy = require("../../../util/copy.coffee"),
+var copy = require("../../../util/copy.js"),
   fetchValue = require("../../../core/fetch/value.js"),
   fetchColor = require("../../../core/fetch/color.js"),
   fetchText = require("../../../core/fetch/text.js"),

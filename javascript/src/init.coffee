@@ -177,7 +177,7 @@ d3po.util =
   buckets:     require "./util/buckets.coffee"
   child:       require "./util/child.coffee"
   closest:     require "./util/closest.coffee"
-  copy:        require "./util/copy.coffee"
+  copy:        require "./util/copy.js"
   d3selection: require "./util/d3selection.coffee"
   dataurl:     require "./util/dataURL.coffee"
   uniques:     require "./util/uniques.coffee"

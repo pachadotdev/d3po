@@ -4,7 +4,7 @@
 
   active = require("./active.js");
 
-  copy = require("../../../../util/copy.coffee");
+  copy = require("../../../../util/copy.js");
 
   form = require("../../../form.js");
 

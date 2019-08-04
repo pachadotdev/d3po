@@ -1,7 +1,7 @@
 (function() {
   var checkObject, copy, createFunction, initialize, print, process, setMethod, stringFormat, validObject;
 
-  copy = require("../../util/copy.coffee");
+  copy = require("../../util/copy.js");
 
   print = require("../console/print.js");
 

@@ -1,6 +1,6 @@
 var arraySort = require("../../../array/sort.js"),
   buckets = require("../../../util/buckets.coffee"),
-  copy = require("../../../util/copy.coffee"),
+  copy = require("../../../util/copy.js"),
   createTooltip = require("../tooltip/create.js"),
   dataNest = require("../../../core/data/nest.js"),
   dataURL = require("../../../util/dataURL.coffee"),

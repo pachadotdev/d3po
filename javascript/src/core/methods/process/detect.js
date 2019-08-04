@@ -2,7 +2,7 @@
 (function() {
   var copy, update;
 
-  copy = require("../../../util/copy.coffee");
+  copy = require("../../../util/copy.js");
 
   update = require("../../../array/update.js");
 

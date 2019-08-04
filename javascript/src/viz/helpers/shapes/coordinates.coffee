@@ -1,4 +1,4 @@
-copy        = require "../../../util/copy.coffee"
+copy        = require "../../../util/copy.js"
 distance    = require "../../../network/distance.js"
 fetchText   = require "../../../core/fetch/text.js"
 fontSizes   = require "../../../font/sizes.js"

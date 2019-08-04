@@ -1,4 +1,4 @@
-var copy = require("../../../../util/copy.coffee"),
+var copy = require("../../../../util/copy.js"),
   events = require("../../../../client/pointer.js"),
   form = require("../../../form.js"),
   print = require("../../../../core/console/print.js")

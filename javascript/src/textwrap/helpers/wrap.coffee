@@ -1,5 +1,5 @@
 flow      = require "./flow.coffee"
-fontSizes = require "../../font/sizes.coffee"
+fontSizes = require "../../font/sizes.js"
 
 # Flows the text into the container
 wrap = (vars) ->

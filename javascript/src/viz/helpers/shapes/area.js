@@ -1,5 +1,5 @@
 var fetchText = require("../../../core/fetch/text.js"),
-  fontSizes = require("../../../font/sizes.coffee"),
+  fontSizes = require("../../../font/sizes.js"),
   largestRect = require("../../../geom/largestRect.coffee"),
   shapeStyle = require("./style.coffee");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

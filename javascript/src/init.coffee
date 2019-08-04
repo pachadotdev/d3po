@@ -84,7 +84,7 @@ d3po.data =
 # @static
 ###
 d3po.font =
-  sizes:    require "./font/sizes.coffee"
+  sizes:    require "./font/sizes.js"
   validate: require "./font/validate.js"
 
 ###*

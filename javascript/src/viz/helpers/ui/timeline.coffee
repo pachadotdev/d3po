@@ -1,6 +1,6 @@
 closest    = require "../../../util/closest.coffee"
 css        = require "../../../client/css.js"
-fontSizes  = require "../../../font/sizes.coffee"
+fontSizes  = require "../../../font/sizes.js"
 events     = require "../../../client/pointer.js"
 mix        = require "../../../color/mix.js"
 prefix     = require "../../../client/prefix.js"

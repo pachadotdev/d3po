@@ -2,7 +2,7 @@
 (function() {
   var sizes;
 
-  sizes = require("../../font/sizes.coffee");
+  sizes = require("../../font/sizes.js");
 
   module.exports = function(vars, opts) {
     var f, format, func, getFormat, limit, locale, p, periods, pp, prev, render, small, step, style, time, total, vals, values;

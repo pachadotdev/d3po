@@ -11,7 +11,7 @@
     "gulp-notify": "^3.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
     "merge-stream": "^2.0.0",
     "require-dir": "^1.2.0",
     "vinyl-source-stream": "^2.0.0",

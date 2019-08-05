@@ -9,8 +9,6 @@
 
   gulp = require("gulp");
 
-  gutil = require("gulp-util");
-
   notify = require("gulp-notify");
 
   path = require("path");

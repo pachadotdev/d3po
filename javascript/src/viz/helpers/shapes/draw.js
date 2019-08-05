@@ -22,14 +22,9 @@ var drawShape = {
     "area": require("./area.js"),
     "check": require("./check.js"),
     "coordinates": require("./coordinates.js"),
-    "cross": require("./cross.js"),
-    "diamond": require("./diamond.js"),
-    "donut": require("./donut.js"),
     "line": require("./line.js"),
     "radial": require("./radial.js"),
     "rect": require("./rect.js"),
-    "triangle_down": require("./triangle_down.js"),
-    "triangle_up": require("./triangle_up.js"),
     "whisker": require("./whisker.js")
 };
 
@@ -56,17 +51,11 @@ module.exports = function(vars) {
         "check": "check",
         "circle": "rect",
         "coordinates": "coordinates",
-        "cross": "cross",
-        "donut": "donut",
-        "diamond": "diamond",
         "line": "line",
         "plus": "cross",
         "radial": "radial",
         "rect": "rect",
         "square": "rect",
-        "triangle_down": "triangle_down",
-        "triangle": "triangle_up",
-        "triangle_up": "triangle_up",
         "whisker": "whisker"
     };
 

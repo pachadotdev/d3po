@@ -5,18 +5,15 @@
         if (["div", "svg"].indexOf(type) < 0) {
             type = "div";
         }
-        styles = {
-            position: "absolute",
-            left: "-9999px",
-            top: "-9999px",
-            visibility: "hidden",
-            display: "block"
-        };
-        attrs = type === "div" ? {} : {
-            position: "absolute"
-        };
         tester = d3.select("body").selectAll(type + ".d3po_tester").data([0]);
-        tester.enter().append(type).attr("class", "d3po_tester").style(styles).attr(attrs);
+        tester.enter().append(type)
+          .attr("class", "d3po_tester")
+          .attr("position", "absolute")
+          .style("position", "absolute")
+          .style("left", "-9999px")
+          .style("top", "-9999px")
+          .style("visibility", "hidden")
+          .style("display", "block");
         return tester;
     };
 

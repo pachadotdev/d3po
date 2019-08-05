@@ -51,7 +51,7 @@
     "numeric": "^1.2.6",
     "simplify-js": "^1.2.1",
     "static-kdtree": "^1.0.1",
-    "topojson": "^1.6.24"
+    "topojson": "^3.0.2"
   },
   "filename": "d3po.min.js",
   "npmName": "d3po",

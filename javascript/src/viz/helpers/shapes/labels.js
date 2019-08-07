@@ -82,7 +82,7 @@ module.exports = function(vars, group) {
                     resize = true;
 
                 if (!(t.resize instanceof Array)) {
-                    size = [7, 40 * (scale[1] / scale[0])];
+                    size = [7, 32 * (scale[1] / scale[0])];
                     resize = t.resize;
                 }
 

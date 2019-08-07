@@ -19,12 +19,7 @@
             return completed[fontString];
         }
         testElement = function(font) {
-            return tester.append("span")
-              .style("font-family", font)
-              .style("font-size", "32px")
-              .style("padding", "0px")
-              .style("margin", "0px")
-              .text("abcdefghiABCDEFGHI_!@#$%^&*()_+1234567890");
+            return tester.append("span").style("font-family", font).style("font-size", "32px").style("padding", "0px").style("margin", "0px").text("abcdefghiABCDEFGHI_!@#$%^&*()_+1234567890");
         };
         testWidth = function(font, control) {
             var elem, width1, width2;

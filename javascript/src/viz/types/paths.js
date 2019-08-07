@@ -100,10 +100,10 @@
             i++;
         }
         labelSpace = vars.size.value && !vars.small ? 30 : 0;
-        y = d3.scaleOrdinal().domain(yDomain).range(d3.range(rowHeight / 2 - labelSpace, vars.height.viz + rowHeight / 2 - labelSpace, (vars.height.viz - rowHeight) / (rows - 1)));
+        y = d3.scale.ordinal().domain(yDomain).range(d3.range(rowHeight / 2 - labelSpace, vars.height.viz + rowHeight / 2 - labelSpace, (vars.height.viz - rowHeight) / (rows - 1)));
         columns = paths["all"].length;
         columnWidth = Math.floor(vars.width.viz / columns);
-        x = d3.scaleLinear().domain([0, columns - 1]).rangeRound([columnWidth / 2, vars.width.viz - columnWidth / 2]);
+        x = d3.scale.linear().domain([0, columns - 1]).rangeRound([columnWidth / 2, vars.width.viz - columnWidth / 2]);
         minRadius = 5;
         maxRadius = d3.min([columnWidth, rowHeight - labelSpace]) * 0.4;
         sizeDomain = d3.extent(vars.data.viz, function(node) {

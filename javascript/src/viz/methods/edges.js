@@ -77,7 +77,7 @@ module.exports = {
         },
         "scale": {
             "accepted": [Function],
-            "value": d3.scaleLinear()
+            "value": d3.scale.linear()
         },
         "value": 1
     },

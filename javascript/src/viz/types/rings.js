@@ -243,7 +243,7 @@ var rings = function(vars) {
             domain[0] = 0
         }
 
-        var radius = d3.scaleLinear()
+        var radius = d3.scale.linear()
             .domain(domain)
             .rangeRound([3, d3.min([primaryMax, secondaryMax])])
 
@@ -252,7 +252,7 @@ var rings = function(vars) {
 
     } else {
 
-        var radius = d3.scaleLinear()
+        var radius = d3.scale.linear()
             .domain([1, 2])
             .rangeRound([primaryMax, secondaryMax])
 

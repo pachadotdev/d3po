@@ -15,7 +15,7 @@ module.exports = function(vars) {
                 return n.d3po.r;
             }) * (vars.edges.size.scale * 2);
 
-        vars.edges.scale = d3.scaleSqrt()
+        vars.edges.scale = d3.scale.sqrt()
             .domain(strokeDomain)
             .range([vars.edges.size.min, maxSize * scale]);
 

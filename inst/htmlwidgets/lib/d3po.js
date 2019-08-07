@@ -358,11 +358,11 @@ exports.nextCombination = function(v) {
 
 
 },{}],3:[function(require,module,exports){
-(function (global,Buffer){
+(function (Buffer){
 /*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 /* eslint-disable no-proto */
@@ -371,80 +371,73 @@ exports.nextCombination = function(v) {
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
-var isArray = require('isarray')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
 exports.INSPECT_MAX_BYTES = 50
 
+var K_MAX_LENGTH = 0x7fffffff
+exports.kMaxLength = K_MAX_LENGTH
+
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
  *   === true    Use Uint8Array implementation (fastest)
- *   === false   Use Object implementation (most compatible, even IE6)
+ *   === false   Print warning and recommend using `buffer` v4.x which has an Object
+ *               implementation (most compatible, even IE6)
  *
  * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
  * Opera 11.6+, iOS 4.2+.
  *
- * Due to various browser bugs, sometimes the Object implementation will be used even
- * when the browser supports typed arrays.
- *
- * Note:
- *
- *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
- *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
- *
- *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
- *
- *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
- *     incorrect length in some situations.
-
- * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
- * get the Object implementation, which is slower but behaves correctly.
+ * We report that the browser does not support typed arrays if the are not subclassable
+ * using __proto__. Firefox 4-29 lacks support for adding new properties to `Uint8Array`
+ * (See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438). IE 10 lacks support
+ * for __proto__ and has a buggy typed array implementation.
  */
-Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
-  ? global.TYPED_ARRAY_SUPPORT
-  : typedArraySupport()
+Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport()
 
-/*
- * Export kMaxLength after typed array support is determined.
- */
-exports.kMaxLength = kMaxLength()
+if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== 'undefined' &&
+    typeof console.error === 'function') {
+  console.error(
+    'This browser lacks typed array (Uint8Array) support which is required by ' +
+    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.'
+  )
+}
 
 function typedArraySupport () {
+  // Can typed array instances can be augmented?
   try {
     var arr = new Uint8Array(1)
-    arr.__proto__ = {__proto__: Uint8Array.prototype, foo: function () { return 42 }}
-    return arr.foo() === 42 && // typed array instances can be augmented
-        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
-        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+    arr.__proto__ = { __proto__: Uint8Array.prototype, foo: function () { return 42 } }
+    return arr.foo() === 42
   } catch (e) {
     return false
   }
 }
 
-function kMaxLength () {
-  return Buffer.TYPED_ARRAY_SUPPORT
-    ? 0x7fffffff
-    : 0x3fffffff
-}
-
-function createBuffer (that, length) {
-  if (kMaxLength() < length) {
-    throw new RangeError('Invalid typed array length')
+Object.defineProperty(Buffer.prototype, 'parent', {
+  enumerable: true,
+  get: function () {
+    if (!Buffer.isBuffer(this)) return undefined
+    return this.buffer
   }
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    // Return an augmented `Uint8Array` instance, for best performance
-    that = new Uint8Array(length)
-    that.__proto__ = Buffer.prototype
-  } else {
-    // Fallback: Return an object instance of the Buffer class
-    if (that === null) {
-      that = new Buffer(length)
-    }
-    that.length = length
-  }
+})
 
-  return that
+Object.defineProperty(Buffer.prototype, 'offset', {
+  enumerable: true,
+  get: function () {
+    if (!Buffer.isBuffer(this)) return undefined
+    return this.byteOffset
+  }
+})
+
+function createBuffer (length) {
+  if (length > K_MAX_LENGTH) {
+    throw new RangeError('The value "' + length + '" is invalid for option "size"')
+  }
+  // Return an augmented `Uint8Array` instance
+  var buf = new Uint8Array(length)
+  buf.__proto__ = Buffer.prototype
+  return buf
 }
 
 /**
@@ -458,44 +451,77 @@ function createBuffer (that, length) {
  */
 
 function Buffer (arg, encodingOrOffset, length) {
-  if (!Buffer.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer)) {
-    return new Buffer(arg, encodingOrOffset, length)
-  }
-
   // Common case.
   if (typeof arg === 'number') {
     if (typeof encodingOrOffset === 'string') {
-      throw new Error(
-        'If encoding is specified then the first argument must be a string'
+      throw new TypeError(
+        'The "string" argument must be of type string. Received type number'
       )
     }
-    return allocUnsafe(this, arg)
+    return allocUnsafe(arg)
   }
-  return from(this, arg, encodingOrOffset, length)
+  return from(arg, encodingOrOffset, length)
+}
+
+// Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
+if (typeof Symbol !== 'undefined' && Symbol.species != null &&
+    Buffer[Symbol.species] === Buffer) {
+  Object.defineProperty(Buffer, Symbol.species, {
+    value: null,
+    configurable: true,
+    enumerable: false,
+    writable: false
+  })
 }
 
 Buffer.poolSize = 8192 // not used by this implementation
 
-// TODO: Legacy, not needed anymore. Remove in next major version.
-Buffer._augment = function (arr) {
-  arr.__proto__ = Buffer.prototype
-  return arr
-}
-
-function from (that, value, encodingOrOffset, length) {
-  if (typeof value === 'number') {
-    throw new TypeError('"value" argument must not be a number')
-  }
-
-  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
-    return fromArrayBuffer(that, value, encodingOrOffset, length)
-  }
-
+function from (value, encodingOrOffset, length) {
   if (typeof value === 'string') {
-    return fromString(that, value, encodingOrOffset)
+    return fromString(value, encodingOrOffset)
   }
 
-  return fromObject(that, value)
+  if (ArrayBuffer.isView(value)) {
+    return fromArrayLike(value)
+  }
+
+  if (value == null) {
+    throw TypeError(
+      'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
+      'or Array-like Object. Received type ' + (typeof value)
+    )
+  }
+
+  if (isInstance(value, ArrayBuffer) ||
+      (value && isInstance(value.buffer, ArrayBuffer))) {
+    return fromArrayBuffer(value, encodingOrOffset, length)
+  }
+
+  if (typeof value === 'number') {
+    throw new TypeError(
+      'The "value" argument must not be of type number. Received type number'
+    )
+  }
+
+  var valueOf = value.valueOf && value.valueOf()
+  if (valueOf != null && valueOf !== value) {
+    return Buffer.from(valueOf, encodingOrOffset, length)
+  }
+
+  var b = fromObject(value)
+  if (b) return b
+
+  if (typeof Symbol !== 'undefined' && Symbol.toPrimitive != null &&
+      typeof value[Symbol.toPrimitive] === 'function') {
+    return Buffer.from(
+      value[Symbol.toPrimitive]('string'), encodingOrOffset, length
+    )
+  }
+
+  throw new TypeError(
+    'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
+    'or Array-like Object. Received type ' + (typeof value)
+  )
 }
 
 /**
@@ -507,44 +533,36 @@ function from (that, value, encodingOrOffset, length) {
  * Buffer.from(arrayBuffer[, byteOffset[, length]])
  **/
 Buffer.from = function (value, encodingOrOffset, length) {
-  return from(null, value, encodingOrOffset, length)
+  return from(value, encodingOrOffset, length)
 }
 
-if (Buffer.TYPED_ARRAY_SUPPORT) {
-  Buffer.prototype.__proto__ = Uint8Array.prototype
-  Buffer.__proto__ = Uint8Array
-  if (typeof Symbol !== 'undefined' && Symbol.species &&
-      Buffer[Symbol.species] === Buffer) {
-    // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
-    Object.defineProperty(Buffer, Symbol.species, {
-      value: null,
-      configurable: true
-    })
-  }
-}
+// Note: Change prototype *after* Buffer.from is defined to workaround Chrome bug:
+// https://github.com/feross/buffer/pull/148
+Buffer.prototype.__proto__ = Uint8Array.prototype
+Buffer.__proto__ = Uint8Array
 
 function assertSize (size) {
   if (typeof size !== 'number') {
-    throw new TypeError('"size" argument must be a number')
+    throw new TypeError('"size" argument must be of type number')
   } else if (size < 0) {
-    throw new RangeError('"size" argument must not be negative')
+    throw new RangeError('The value "' + size + '" is invalid for option "size"')
   }
 }
 
-function alloc (that, size, fill, encoding) {
+function alloc (size, fill, encoding) {
   assertSize(size)
   if (size <= 0) {
-    return createBuffer(that, size)
+    return createBuffer(size)
   }
   if (fill !== undefined) {
     // Only pay attention to encoding if it's a string. This
     // prevents accidentally sending in a number that would
     // be interpretted as a start offset.
     return typeof encoding === 'string'
-      ? createBuffer(that, size).fill(fill, encoding)
-      : createBuffer(that, size).fill(fill)
+      ? createBuffer(size).fill(fill, encoding)
+      : createBuffer(size).fill(fill)
   }
-  return createBuffer(that, size)
+  return createBuffer(size)
 }
 
 /**
@@ -552,132 +570,114 @@ function alloc (that, size, fill, encoding) {
  * alloc(size[, fill[, encoding]])
  **/
 Buffer.alloc = function (size, fill, encoding) {
-  return alloc(null, size, fill, encoding)
+  return alloc(size, fill, encoding)
 }
 
-function allocUnsafe (that, size) {
+function allocUnsafe (size) {
   assertSize(size)
-  that = createBuffer(that, size < 0 ? 0 : checked(size) | 0)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) {
-    for (var i = 0; i < size; ++i) {
-      that[i] = 0
-    }
-  }
-  return that
+  return createBuffer(size < 0 ? 0 : checked(size) | 0)
 }
 
 /**
  * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
  * */
 Buffer.allocUnsafe = function (size) {
-  return allocUnsafe(null, size)
+  return allocUnsafe(size)
 }
 /**
  * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
  */
 Buffer.allocUnsafeSlow = function (size) {
-  return allocUnsafe(null, size)
+  return allocUnsafe(size)
 }
 
-function fromString (that, string, encoding) {
+function fromString (string, encoding) {
   if (typeof encoding !== 'string' || encoding === '') {
     encoding = 'utf8'
   }
 
   if (!Buffer.isEncoding(encoding)) {
-    throw new TypeError('"encoding" must be a valid string encoding')
+    throw new TypeError('Unknown encoding: ' + encoding)
   }
 
   var length = byteLength(string, encoding) | 0
-  that = createBuffer(that, length)
+  var buf = createBuffer(length)
 
-  var actual = that.write(string, encoding)
+  var actual = buf.write(string, encoding)
 
   if (actual !== length) {
     // Writing a hex string, for example, that contains invalid characters will
     // cause everything after the first invalid character to be ignored. (e.g.
     // 'abxxcd' will be treated as 'ab')
-    that = that.slice(0, actual)
+    buf = buf.slice(0, actual)
   }
 
-  return that
+  return buf
 }
 
-function fromArrayLike (that, array) {
+function fromArrayLike (array) {
   var length = array.length < 0 ? 0 : checked(array.length) | 0
-  that = createBuffer(that, length)
+  var buf = createBuffer(length)
   for (var i = 0; i < length; i += 1) {
-    that[i] = array[i] & 255
+    buf[i] = array[i] & 255
   }
-  return that
+  return buf
 }
 
-function fromArrayBuffer (that, array, byteOffset, length) {
-  array.byteLength // this throws if `array` is not a valid ArrayBuffer
-
+function fromArrayBuffer (array, byteOffset, length) {
   if (byteOffset < 0 || array.byteLength < byteOffset) {
-    throw new RangeError('\'offset\' is out of bounds')
+    throw new RangeError('"offset" is outside of buffer bounds')
   }
 
   if (array.byteLength < byteOffset + (length || 0)) {
-    throw new RangeError('\'length\' is out of bounds')
+    throw new RangeError('"length" is outside of buffer bounds')
   }
 
+  var buf
   if (byteOffset === undefined && length === undefined) {
-    array = new Uint8Array(array)
+    buf = new Uint8Array(array)
   } else if (length === undefined) {
-    array = new Uint8Array(array, byteOffset)
+    buf = new Uint8Array(array, byteOffset)
   } else {
-    array = new Uint8Array(array, byteOffset, length)
+    buf = new Uint8Array(array, byteOffset, length)
   }
 
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    // Return an augmented `Uint8Array` instance, for best performance
-    that = array
-    that.__proto__ = Buffer.prototype
-  } else {
-    // Fallback: Return an object instance of the Buffer class
-    that = fromArrayLike(that, array)
-  }
-  return that
+  // Return an augmented `Uint8Array` instance
+  buf.__proto__ = Buffer.prototype
+  return buf
 }
 
-function fromObject (that, obj) {
+function fromObject (obj) {
   if (Buffer.isBuffer(obj)) {
     var len = checked(obj.length) | 0
-    that = createBuffer(that, len)
+    var buf = createBuffer(len)
 
-    if (that.length === 0) {
-      return that
+    if (buf.length === 0) {
+      return buf
     }
 
-    obj.copy(that, 0, 0, len)
-    return that
+    obj.copy(buf, 0, 0, len)
+    return buf
   }
 
-  if (obj) {
-    if ((typeof ArrayBuffer !== 'undefined' &&
-        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
-      if (typeof obj.length !== 'number' || isnan(obj.length)) {
-        return createBuffer(that, 0)
-      }
-      return fromArrayLike(that, obj)
+  if (obj.length !== undefined) {
+    if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
+      return createBuffer(0)
     }
-
-    if (obj.type === 'Buffer' && isArray(obj.data)) {
-      return fromArrayLike(that, obj.data)
-    }
+    return fromArrayLike(obj)
   }
 
-  throw new TypeError('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.')
+  if (obj.type === 'Buffer' && Array.isArray(obj.data)) {
+    return fromArrayLike(obj.data)
+  }
 }
 
 function checked (length) {
-  // Note: cannot use `length < kMaxLength()` here because that fails when
+  // Note: cannot use `length < K_MAX_LENGTH` here because that fails when
   // length is NaN (which is otherwise coerced to zero.)
-  if (length >= kMaxLength()) {
+  if (length >= K_MAX_LENGTH) {
     throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
-                         'size: 0x' + kMaxLength().toString(16) + ' bytes')
+                         'size: 0x' + K_MAX_LENGTH.toString(16) + ' bytes')
   }
   return length | 0
 }
@@ -690,12 +690,17 @@ function SlowBuffer (length) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return !!(b != null && b._isBuffer)
+  return b != null && b._isBuffer === true &&
+    b !== Buffer.prototype // so Buffer.isBuffer(Buffer.prototype) will be false
 }
 
 Buffer.compare = function compare (a, b) {
+  if (isInstance(a, Uint8Array)) a = Buffer.from(a, a.offset, a.byteLength)
+  if (isInstance(b, Uint8Array)) b = Buffer.from(b, b.offset, b.byteLength)
   if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
-    throw new TypeError('Arguments must be Buffers')
+    throw new TypeError(
+      'The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array'
+    )
   }
 
   if (a === b) return 0
@@ -736,7 +741,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
 }
 
 Buffer.concat = function concat (list, length) {
-  if (!isArray(list)) {
+  if (!Array.isArray(list)) {
     throw new TypeError('"list" argument must be an Array of Buffers')
   }
 
@@ -756,6 +761,9 @@ Buffer.concat = function concat (list, length) {
   var pos = 0
   for (i = 0; i < list.length; ++i) {
     var buf = list[i]
+    if (isInstance(buf, Uint8Array)) {
+      buf = Buffer.from(buf)
+    }
     if (!Buffer.isBuffer(buf)) {
       throw new TypeError('"list" argument must be an Array of Buffers')
     }
@@ -769,16 +777,19 @@ function byteLength (string, encoding) {
   if (Buffer.isBuffer(string)) {
     return string.length
   }
-  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
-      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+  if (ArrayBuffer.isView(string) || isInstance(string, ArrayBuffer)) {
     return string.byteLength
   }
   if (typeof string !== 'string') {
-    string = '' + string
+    throw new TypeError(
+      'The "string" argument must be one of type string, Buffer, or ArrayBuffer. ' +
+      'Received type ' + typeof string
+    )
   }
 
   var len = string.length
-  if (len === 0) return 0
+  var mustMatch = (arguments.length > 2 && arguments[2] === true)
+  if (!mustMatch && len === 0) return 0
 
   // Use a for loop to avoid recursion
   var loweredCase = false
@@ -790,7 +801,6 @@ function byteLength (string, encoding) {
         return len
       case 'utf8':
       case 'utf-8':
-      case undefined:
         return utf8ToBytes(string).length
       case 'ucs2':
       case 'ucs-2':
@@ -802,7 +812,9 @@ function byteLength (string, encoding) {
       case 'base64':
         return base64ToBytes(string).length
       default:
-        if (loweredCase) return utf8ToBytes(string).length // assume utf8
+        if (loweredCase) {
+          return mustMatch ? -1 : utf8ToBytes(string).length // assume utf8
+        }
         encoding = ('' + encoding).toLowerCase()
         loweredCase = true
     }
@@ -880,8 +892,12 @@ function slowToString (encoding, start, end) {
   }
 }
 
-// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
-// Buffer instances.
+// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
+// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
+// reliably in a browserify context because there could be multiple different
+// copies of the 'buffer' package in use. This method works even for Buffer
+// instances that were created from another copy of the `buffer` package.
+// See: https://github.com/feross/buffer/issues/154
 Buffer.prototype._isBuffer = true
 
 function swap (b, n, m) {
@@ -928,11 +944,13 @@ Buffer.prototype.swap64 = function swap64 () {
 }
 
 Buffer.prototype.toString = function toString () {
-  var length = this.length | 0
+  var length = this.length
   if (length === 0) return ''
   if (arguments.length === 0) return utf8Slice(this, 0, length)
   return slowToString.apply(this, arguments)
 }
+
+Buffer.prototype.toLocaleString = Buffer.prototype.toString
 
 Buffer.prototype.equals = function equals (b) {
   if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
@@ -943,16 +961,20 @@ Buffer.prototype.equals = function equals (b) {
 Buffer.prototype.inspect = function inspect () {
   var str = ''
   var max = exports.INSPECT_MAX_BYTES
-  if (this.length > 0) {
-    str = this.toString('hex', 0, max).match(/.{2}/g).join(' ')
-    if (this.length > max) str += ' ... '
-  }
+  str = this.toString('hex', 0, max).replace(/(.{2})/g, '$1 ').trim()
+  if (this.length > max) str += ' ... '
   return '<Buffer ' + str + '>'
 }
 
 Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
+  if (isInstance(target, Uint8Array)) {
+    target = Buffer.from(target, target.offset, target.byteLength)
+  }
   if (!Buffer.isBuffer(target)) {
-    throw new TypeError('Argument must be a Buffer')
+    throw new TypeError(
+      'The "target" argument must be one of type Buffer or Uint8Array. ' +
+      'Received type ' + (typeof target)
+    )
   }
 
   if (start === undefined) {
@@ -1031,8 +1053,8 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   } else if (byteOffset < -0x80000000) {
     byteOffset = -0x80000000
   }
-  byteOffset = +byteOffset  // Coerce to Number.
-  if (isNaN(byteOffset)) {
+  byteOffset = +byteOffset // Coerce to Number.
+  if (numberIsNaN(byteOffset)) {
     // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
     byteOffset = dir ? 0 : (buffer.length - 1)
   }
@@ -1061,8 +1083,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
   } else if (typeof val === 'number') {
     val = val & 0xFF // Search for a byte value [0-255]
-    if (Buffer.TYPED_ARRAY_SUPPORT &&
-        typeof Uint8Array.prototype.indexOf === 'function') {
+    if (typeof Uint8Array.prototype.indexOf === 'function') {
       if (dir) {
         return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
       } else {
@@ -1155,16 +1176,14 @@ function hexWrite (buf, string, offset, length) {
     }
   }
 
-  // must be an even number of digits
   var strLen = string.length
-  if (strLen % 2 !== 0) throw new TypeError('Invalid hex string')
 
   if (length > strLen / 2) {
     length = strLen / 2
   }
   for (var i = 0; i < length; ++i) {
     var parsed = parseInt(string.substr(i * 2, 2), 16)
-    if (isNaN(parsed)) return i
+    if (numberIsNaN(parsed)) return i
     buf[offset + i] = parsed
   }
   return i
@@ -1203,15 +1222,14 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
     offset = 0
   // Buffer#write(string, offset[, length][, encoding])
   } else if (isFinite(offset)) {
-    offset = offset | 0
+    offset = offset >>> 0
     if (isFinite(length)) {
-      length = length | 0
+      length = length >>> 0
       if (encoding === undefined) encoding = 'utf8'
     } else {
       encoding = length
       length = undefined
     }
-  // legacy write(string, encoding, offset, length) - remove in v0.13
   } else {
     throw new Error(
       'Buffer.write(string, encoding, offset[, length]) is no longer supported'
@@ -1287,8 +1305,8 @@ function utf8Slice (buf, start, end) {
     var codePoint = null
     var bytesPerSequence = (firstByte > 0xEF) ? 4
       : (firstByte > 0xDF) ? 3
-      : (firstByte > 0xBF) ? 2
-      : 1
+        : (firstByte > 0xBF) ? 2
+          : 1
 
     if (i + bytesPerSequence <= end) {
       var secondByte, thirdByte, fourthByte, tempCodePoint
@@ -1410,7 +1428,7 @@ function utf16leSlice (buf, start, end) {
   var bytes = buf.slice(start, end)
   var res = ''
   for (var i = 0; i < bytes.length; i += 2) {
-    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256)
+    res += String.fromCharCode(bytes[i] + (bytes[i + 1] * 256))
   }
   return res
 }
@@ -1436,18 +1454,9 @@ Buffer.prototype.slice = function slice (start, end) {
 
   if (end < start) end = start
 
-  var newBuf
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    newBuf = this.subarray(start, end)
-    newBuf.__proto__ = Buffer.prototype
-  } else {
-    var sliceLen = end - start
-    newBuf = new Buffer(sliceLen, undefined)
-    for (var i = 0; i < sliceLen; ++i) {
-      newBuf[i] = this[i + start]
-    }
-  }
-
+  var newBuf = this.subarray(start, end)
+  // Return an augmented `Uint8Array` instance
+  newBuf.__proto__ = Buffer.prototype
   return newBuf
 }
 
@@ -1460,8 +1469,8 @@ function checkOffset (offset, ext, length) {
 }
 
 Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) checkOffset(offset, byteLength, this.length)
 
   var val = this[offset]
@@ -1475,8 +1484,8 @@ Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert)
 }
 
 Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) {
     checkOffset(offset, byteLength, this.length)
   }
@@ -1491,21 +1500,25 @@ Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert)
 }
 
 Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 1, this.length)
   return this[offset]
 }
 
 Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   return this[offset] | (this[offset + 1] << 8)
 }
 
 Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   return (this[offset] << 8) | this[offset + 1]
 }
 
 Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return ((this[offset]) |
@@ -1515,6 +1528,7 @@ Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
 }
 
 Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return (this[offset] * 0x1000000) +
@@ -1524,8 +1538,8 @@ Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
 }
 
 Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) checkOffset(offset, byteLength, this.length)
 
   var val = this[offset]
@@ -1542,8 +1556,8 @@ Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
 }
 
 Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) checkOffset(offset, byteLength, this.length)
 
   var i = byteLength
@@ -1560,24 +1574,28 @@ Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
 }
 
 Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 1, this.length)
   if (!(this[offset] & 0x80)) return (this[offset])
   return ((0xff - this[offset] + 1) * -1)
 }
 
 Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   var val = this[offset] | (this[offset + 1] << 8)
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 }
 
 Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   var val = this[offset + 1] | (this[offset] << 8)
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 }
 
 Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return (this[offset]) |
@@ -1587,6 +1605,7 @@ Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
 }
 
 Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return (this[offset] << 24) |
@@ -1596,21 +1615,25 @@ Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
 }
 
 Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
   return ieee754.read(this, offset, true, 23, 4)
 }
 
 Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
   return ieee754.read(this, offset, false, 23, 4)
 }
 
 Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 8, this.length)
   return ieee754.read(this, offset, true, 52, 8)
 }
 
 Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 8, this.length)
   return ieee754.read(this, offset, false, 52, 8)
 }
@@ -1623,8 +1646,8 @@ function checkInt (buf, value, offset, ext, max, min) {
 
 Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) {
     var maxBytes = Math.pow(2, 8 * byteLength) - 1
     checkInt(this, value, offset, byteLength, maxBytes, 0)
@@ -1642,8 +1665,8 @@ Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, 
 
 Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) {
     var maxBytes = Math.pow(2, 8 * byteLength) - 1
     checkInt(this, value, offset, byteLength, maxBytes, 0)
@@ -1661,89 +1684,57 @@ Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, 
 
 Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   this[offset] = (value & 0xff)
   return offset + 1
 }
 
-function objectWriteUInt16 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
-    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
-      (littleEndian ? i : 1 - i) * 8
-  }
-}
-
 Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
-    this[offset + 1] = (value >>> 8)
-  } else {
-    objectWriteUInt16(this, value, offset, true)
-  }
+  this[offset] = (value & 0xff)
+  this[offset + 1] = (value >>> 8)
   return offset + 2
 }
 
 Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 8)
-    this[offset + 1] = (value & 0xff)
-  } else {
-    objectWriteUInt16(this, value, offset, false)
-  }
+  this[offset] = (value >>> 8)
+  this[offset + 1] = (value & 0xff)
   return offset + 2
-}
-
-function objectWriteUInt32 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffffffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
-    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
-  }
 }
 
 Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset + 3] = (value >>> 24)
-    this[offset + 2] = (value >>> 16)
-    this[offset + 1] = (value >>> 8)
-    this[offset] = (value & 0xff)
-  } else {
-    objectWriteUInt32(this, value, offset, true)
-  }
+  this[offset + 3] = (value >>> 24)
+  this[offset + 2] = (value >>> 16)
+  this[offset + 1] = (value >>> 8)
+  this[offset] = (value & 0xff)
   return offset + 4
 }
 
 Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 24)
-    this[offset + 1] = (value >>> 16)
-    this[offset + 2] = (value >>> 8)
-    this[offset + 3] = (value & 0xff)
-  } else {
-    objectWriteUInt32(this, value, offset, false)
-  }
+  this[offset] = (value >>> 24)
+  this[offset + 1] = (value >>> 16)
+  this[offset + 2] = (value >>> 8)
+  this[offset + 3] = (value & 0xff)
   return offset + 4
 }
 
 Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) {
-    var limit = Math.pow(2, 8 * byteLength - 1)
+    var limit = Math.pow(2, (8 * byteLength) - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
   }
@@ -1764,9 +1755,9 @@ Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, no
 
 Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) {
-    var limit = Math.pow(2, 8 * byteLength - 1)
+    var limit = Math.pow(2, (8 * byteLength) - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
   }
@@ -1787,9 +1778,8 @@ Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, no
 
 Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   if (value < 0) value = 0xff + value + 1
   this[offset] = (value & 0xff)
   return offset + 1
@@ -1797,58 +1787,42 @@ Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
 
 Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
-    this[offset + 1] = (value >>> 8)
-  } else {
-    objectWriteUInt16(this, value, offset, true)
-  }
+  this[offset] = (value & 0xff)
+  this[offset + 1] = (value >>> 8)
   return offset + 2
 }
 
 Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 8)
-    this[offset + 1] = (value & 0xff)
-  } else {
-    objectWriteUInt16(this, value, offset, false)
-  }
+  this[offset] = (value >>> 8)
+  this[offset + 1] = (value & 0xff)
   return offset + 2
 }
 
 Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
-    this[offset + 1] = (value >>> 8)
-    this[offset + 2] = (value >>> 16)
-    this[offset + 3] = (value >>> 24)
-  } else {
-    objectWriteUInt32(this, value, offset, true)
-  }
+  this[offset] = (value & 0xff)
+  this[offset + 1] = (value >>> 8)
+  this[offset + 2] = (value >>> 16)
+  this[offset + 3] = (value >>> 24)
   return offset + 4
 }
 
 Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (value < 0) value = 0xffffffff + value + 1
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 24)
-    this[offset + 1] = (value >>> 16)
-    this[offset + 2] = (value >>> 8)
-    this[offset + 3] = (value & 0xff)
-  } else {
-    objectWriteUInt32(this, value, offset, false)
-  }
+  this[offset] = (value >>> 24)
+  this[offset + 1] = (value >>> 16)
+  this[offset + 2] = (value >>> 8)
+  this[offset + 3] = (value & 0xff)
   return offset + 4
 }
 
@@ -1858,6 +1832,8 @@ function checkIEEE754 (buf, value, offset, ext, max, min) {
 }
 
 function writeFloat (buf, value, offset, littleEndian, noAssert) {
+  value = +value
+  offset = offset >>> 0
   if (!noAssert) {
     checkIEEE754(buf, value, offset, 4, 3.4028234663852886e+38, -3.4028234663852886e+38)
   }
@@ -1874,6 +1850,8 @@ Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) 
 }
 
 function writeDouble (buf, value, offset, littleEndian, noAssert) {
+  value = +value
+  offset = offset >>> 0
   if (!noAssert) {
     checkIEEE754(buf, value, offset, 8, 1.7976931348623157E+308, -1.7976931348623157E+308)
   }
@@ -1891,6 +1869,7 @@ Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
 Buffer.prototype.copy = function copy (target, targetStart, start, end) {
+  if (!Buffer.isBuffer(target)) throw new TypeError('argument should be a Buffer')
   if (!start) start = 0
   if (!end && end !== 0) end = this.length
   if (targetStart >= target.length) targetStart = target.length
@@ -1905,7 +1884,7 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   if (targetStart < 0) {
     throw new RangeError('targetStart out of bounds')
   }
-  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
+  if (start < 0 || start >= this.length) throw new RangeError('Index out of range')
   if (end < 0) throw new RangeError('sourceEnd out of bounds')
 
   // Are we oob?
@@ -1915,22 +1894,19 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   }
 
   var len = end - start
-  var i
 
-  if (this === target && start < targetStart && targetStart < end) {
+  if (this === target && typeof Uint8Array.prototype.copyWithin === 'function') {
+    // Use built-in when available, missing from IE11
+    this.copyWithin(targetStart, start, end)
+  } else if (this === target && start < targetStart && targetStart < end) {
     // descending copy from end
-    for (i = len - 1; i >= 0; --i) {
-      target[i + targetStart] = this[i + start]
-    }
-  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
-    // ascending copy from start
-    for (i = 0; i < len; ++i) {
+    for (var i = len - 1; i >= 0; --i) {
       target[i + targetStart] = this[i + start]
     }
   } else {
     Uint8Array.prototype.set.call(
       target,
-      this.subarray(start, start + len),
+      this.subarray(start, end),
       targetStart
     )
   }
@@ -1953,17 +1929,19 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
       encoding = end
       end = this.length
     }
-    if (val.length === 1) {
-      var code = val.charCodeAt(0)
-      if (code < 256) {
-        val = code
-      }
-    }
     if (encoding !== undefined && typeof encoding !== 'string') {
       throw new TypeError('encoding must be a string')
     }
     if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
       throw new TypeError('Unknown encoding: ' + encoding)
+    }
+    if (val.length === 1) {
+      var code = val.charCodeAt(0)
+      if ((encoding === 'utf8' && code < 128) ||
+          encoding === 'latin1') {
+        // Fast path: If `val` fits into a single byte, use that numeric value.
+        val = code
+      }
     }
   } else if (typeof val === 'number') {
     val = val & 255
@@ -1991,8 +1969,12 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
   } else {
     var bytes = Buffer.isBuffer(val)
       ? val
-      : utf8ToBytes(new Buffer(val, encoding).toString())
+      : Buffer.from(val, encoding)
     var len = bytes.length
+    if (len === 0) {
+      throw new TypeError('The value "' + val +
+        '" is invalid for argument "value"')
+    }
     for (i = 0; i < end - start; ++i) {
       this[i + start] = bytes[i % len]
     }
@@ -2004,11 +1986,13 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
 // HELPER FUNCTIONS
 // ================
 
-var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
+var INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
 
 function base64clean (str) {
+  // Node takes equal signs as end of the Base64 encoding
+  str = str.split('=')[0]
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
-  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  str = str.trim().replace(INVALID_BASE64_RE, '')
   // Node converts strings with length < 2 to ''
   if (str.length < 2) return ''
   // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
@@ -2016,11 +2000,6 @@ function base64clean (str) {
     str = str + '='
   }
   return str
-}
-
-function stringtrim (str) {
-  if (str.trim) return str.trim()
-  return str.replace(/^\s+|\s+$/g, '')
 }
 
 function toHex (n) {
@@ -2145,12 +2124,21 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-function isnan (val) {
-  return val !== val // eslint-disable-line no-self-compare
+// ArrayBuffer or Uint8Array objects from other contexts (i.e. iframes) do not pass
+// the `instanceof` check but they should be treated as of that type.
+// See: https://github.com/feross/buffer/issues/166
+function isInstance (obj, type) {
+  return obj instanceof type ||
+    (obj != null && obj.constructor != null && obj.constructor.name != null &&
+      obj.constructor.name === type.name)
+}
+function numberIsNaN (obj) {
+  // For IE11 support
+  return obj !== obj // eslint-disable-line no-self-compare
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"base64-js":1,"buffer":3,"ieee754":10,"isarray":15}],4:[function(require,module,exports){
+}).call(this,require("buffer").Buffer)
+},{"base64-js":1,"buffer":3,"ieee754":10}],4:[function(require,module,exports){
 "use strict"
 
 var createThunk = require("./lib/thunk.js")
@@ -2621,7 +2609,7 @@ function generateCWiseOp(proc, typesig) {
 }
 module.exports = generateCWiseOp
 
-},{"uniq":27}],6:[function(require,module,exports){
+},{"uniq":26}],6:[function(require,module,exports){
 "use strict"
 
 // The function below is called when constructing a cwise function object, and does the following:
@@ -3435,13 +3423,6 @@ function isSlowBuffer (obj) {
 }
 
 },{}],15:[function(require,module,exports){
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
-
-},{}],16:[function(require,module,exports){
 "use strict"
 
 var compile = require("cwise-compiler")
@@ -3904,7 +3885,7 @@ exports.equals = compile({
 
 
 
-},{"cwise-compiler":4}],17:[function(require,module,exports){
+},{"cwise-compiler":4}],16:[function(require,module,exports){
 "use strict"
 
 var ndarray = require("ndarray")
@@ -3927,10 +3908,10 @@ module.exports = function convert(arr, result) {
   return result
 }
 
-},{"./doConvert.js":18,"ndarray":21}],18:[function(require,module,exports){
+},{"./doConvert.js":17,"ndarray":20}],17:[function(require,module,exports){
 module.exports=require('cwise-compiler')({"args":["array","scalar","index"],"pre":{"body":"{}","args":[],"thisVars":[],"localVars":[]},"body":{"body":"{\nvar _inline_1_v=_inline_1_arg1_,_inline_1_i\nfor(_inline_1_i=0;_inline_1_i<_inline_1_arg2_.length-1;++_inline_1_i) {\n_inline_1_v=_inline_1_v[_inline_1_arg2_[_inline_1_i]]\n}\n_inline_1_arg0_=_inline_1_v[_inline_1_arg2_[_inline_1_arg2_.length-1]]\n}","args":[{"name":"_inline_1_arg0_","lvalue":true,"rvalue":false,"count":1},{"name":"_inline_1_arg1_","lvalue":false,"rvalue":true,"count":1},{"name":"_inline_1_arg2_","lvalue":false,"rvalue":true,"count":4}],"thisVars":[],"localVars":["_inline_1_i","_inline_1_v"]},"post":{"body":"{}","args":[],"thisVars":[],"localVars":[]},"funcName":"convert","blockSize":64})
 
-},{"cwise-compiler":4}],19:[function(require,module,exports){
+},{"cwise-compiler":4}],18:[function(require,module,exports){
 "use strict"
 
 var ndarray = require("ndarray")
@@ -4038,7 +4019,7 @@ function eye(shape, dtype) {
 }
 exports.eye = eye
 
-},{"ndarray":21,"ndarray-ops":16,"typedarray-pool":26}],20:[function(require,module,exports){
+},{"ndarray":20,"ndarray-ops":15,"typedarray-pool":25}],19:[function(require,module,exports){
 "use strict"
 
 module.exports = ndSelect
@@ -4274,7 +4255,7 @@ function ndSelect(array, k, compare) {
     return proc(array, k)
   }
 }
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var iota = require("iota-array")
 var isBuffer = require("is-buffer")
 
@@ -4619,7 +4600,7 @@ function wrappedNDArrayCtor(data, shape, stride, offset) {
 
 module.exports = wrappedNDArrayCtor
 
-},{"iota-array":13,"is-buffer":14}],22:[function(require,module,exports){
+},{"iota-array":13,"is-buffer":14}],21:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -9047,7 +9028,7 @@ numeric.svd= function svd(A) {
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*
  (c) 2017, Vladimir Agafonkin
  Simplify.js, a high-performance JS polyline simplification library
@@ -9172,7 +9153,7 @@ else window.simplify = simplify;
 
 })();
 
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict"
 
 module.exports = createKDTree
@@ -9814,7 +9795,7 @@ function deserializeKDTree(data) {
   }
 }
 
-},{"./lib/heap.js":25,"bit-twiddle":2,"inorder-tree-layout":11,"ndarray":21,"ndarray-ops":16,"ndarray-pack":17,"ndarray-scratch":19,"ndarray-select":20,"typedarray-pool":26}],25:[function(require,module,exports){
+},{"./lib/heap.js":24,"bit-twiddle":2,"inorder-tree-layout":11,"ndarray":20,"ndarray-ops":15,"ndarray-pack":16,"ndarray-scratch":18,"ndarray-select":19,"typedarray-pool":25}],24:[function(require,module,exports){
 "use strict"
 
 module.exports = KDTHeap
@@ -9923,7 +9904,7 @@ proto.dispose = function() {
   pool.freeInt32(this.index)
   pool.freeFloat64(this.data)
 }
-},{"typedarray-pool":26}],26:[function(require,module,exports){
+},{"typedarray-pool":25}],25:[function(require,module,exports){
 (function (global,Buffer){
 'use strict'
 
@@ -10140,7 +10121,7 @@ exports.clearCache = function clearCache() {
   }
 }
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"bit-twiddle":2,"buffer":3,"dup":7}],27:[function(require,module,exports){
+},{"bit-twiddle":2,"buffer":3,"dup":7}],26:[function(require,module,exports){
 "use strict"
 
 function unique_pred(list, compare) {
@@ -10199,7 +10180,7 @@ function unique(list, compare, sorted) {
 
 module.exports = unique
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function() {
     var colorSort;
 
@@ -10243,7 +10224,7 @@ module.exports = unique
     };
 
 }).call(this);
-},{"../color/sort.js":45}],29:[function(require,module,exports){
+},{"../color/sort.js":44}],28:[function(require,module,exports){
 (function() {
     module.exports = function(arr, value) {
         var constructor;
@@ -10256,7 +10237,7 @@ module.exports = unique
     };
 
 }).call(this);
-},{}],30:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 // Sorts an array of objects
 (function() {
     var comparator, fetchSort;
@@ -10296,7 +10277,7 @@ module.exports = unique
     };
 
 }).call(this);
-},{"../core/fetch/sort.js":61,"./comparator.js":28}],31:[function(require,module,exports){
+},{"../core/fetch/sort.js":60,"./comparator.js":27}],30:[function(require,module,exports){
 // Updates an array, either overwriting it with a new array, removing an entry
 (function() {
     module.exports = function(arr, x) {
@@ -10321,7 +10302,7 @@ module.exports = unique
     };
 
 }).call(this);
-},{}],32:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 // Checks to see if a stylesheet is loaded
 (function() {
     var sheet;
@@ -10350,10 +10331,10 @@ module.exports = unique
     module.exports = sheet;
 
 }).call(this);
-},{}],33:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 // Determines if the current browser is Internet Explorer.
 module.exports = /(MSIE|Trident\/|Edge\/)/i.test(navigator.userAgent);
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // Creates custom mouse events based on IE and Touch Devices
 (function() {
     var ie, touch;
@@ -10383,7 +10364,7 @@ module.exports = /(MSIE|Trident\/|Edge\/)/i.test(navigator.userAgent);
     }
 
 }).call(this);
-},{"./ie.js":33,"./touch.js":39}],35:[function(require,module,exports){
+},{"./ie.js":32,"./touch.js":38}],34:[function(require,module,exports){
 // Calculates the correct CSS vendor prefix based on the current browser
 (function() {
     var prefix;
@@ -10410,13 +10391,13 @@ module.exports = /(MSIE|Trident\/|Edge\/)/i.test(navigator.userAgent);
     module.exports = prefix;
 
 }).call(this);
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 // Detects right-to-left text direction on the page
 (function() {
     module.exports = d3.select("html").attr("dir") === "rtl";
 
 }).call(this);
-},{}],37:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = {
     "y": function() {
         return (window.pageYOffset !== undefined) ? window.pageYOffset :
@@ -10427,7 +10408,7 @@ module.exports = {
             (document.documentElement || document.body.parentNode || document.body).scrollLeft
     }
 }
-},{}],38:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 // Detects scrollbar width for current browser
 (function() {
     var scrollbar;
@@ -10464,13 +10445,13 @@ module.exports = {
     module.exports = scrollbar;
 
 }).call(this);
-},{}],39:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 // Detects is the current browser supports touch events
 (function() {
     module.exports = ("ontouchstart" in window) || window.DocumentTouch && document instanceof DocumentTouch ? true : false;
 
 }).call(this);
-},{}],40:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 // Darkens a color if it's too light to appear on white
 (function() {
     module.exports = function(color) {
@@ -10486,7 +10467,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],41:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 // Lightens a color
 (function() {
     module.exports = function(color, increment) {
@@ -10502,7 +10483,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],42:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 // Mixes 2 colors with optional opacities
 (function() {
     module.exports = function(c1, c2, o1, o2) {
@@ -10522,7 +10503,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],43:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 // Returns a random color
 (function() {
     var defaultScale;
@@ -10537,13 +10518,13 @@ module.exports = {
     };
 
 }).call(this);
-},{"./scale.js":44}],44:[function(require,module,exports){
+},{"./scale.js":43}],43:[function(require,module,exports){
 // Default d3po color scale
 (function() {
     module.exports = d3.scale.ordinal().range(["#bf3251", "#5c57d9", "#d6c650", "#406662", "#872a41", "#1c26b3", "#d05555", "#549e95", "#993f7b", "#dc8e7a", "#ede788", "#7485aa", "#4d6fd0", "#635b56", "#7454a6", "#a8c380", "#8abdb6", "#74c0e2", "#bcd8af", "#a1aafb", "#a17cb0", "#d1a1bc"]);
 
 }).call(this);
-},{}],45:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 (function() {
     module.exports = function(a, b) {
         var aHSL, bHSL;
@@ -10559,7 +10540,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],46:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 // Returns appropriate text color based off of a given color
 (function() {
     module.exports = function(color) {
@@ -10577,7 +10558,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],47:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 // Tests if a string is a valid color
 (function() {
     module.exports = function(color) {
@@ -10597,7 +10578,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],48:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 // Custom styling and behavior for browser console statements
 (function() {
     var ie, print, wiki;
@@ -10706,7 +10687,7 @@ module.exports = {
     module.exports = print;
 
 }).call(this);
-},{"../../client/ie.js":33,"./wiki.js":49}],49:[function(require,module,exports){
+},{"../../client/ie.js":32,"./wiki.js":48}],48:[function(require,module,exports){
 (function() {
     module.exports = {
         active: "Visualizations#active",
@@ -10771,7 +10752,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],50:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 var buckets = require("../../util/buckets.js"),
     fetchValue = require("../fetch/value.js"),
     print = require("../console/print.js")
@@ -10832,7 +10813,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../util/buckets.js":202,"../console/print.js":48,"../fetch/value.js":63}],51:[function(require,module,exports){
+},{"../../util/buckets.js":201,"../console/print.js":47,"../fetch/value.js":62}],50:[function(require,module,exports){
 var fetchValue = require("../fetch/value.js"),
     print = require("../console/print.js"),
     validObject = require("../../object/validate.js")
@@ -10961,7 +10942,7 @@ module.exports = function(vars, data) {
     return data
 
 }
-},{"../../object/validate.js":170,"../console/print.js":48,"../fetch/value.js":63}],52:[function(require,module,exports){
+},{"../../object/validate.js":169,"../console/print.js":47,"../fetch/value.js":62}],51:[function(require,module,exports){
 var dataNest = require("./nest.js"),
     fetchValue = require("../fetch/value.js"),
     print = require("../console/print.js"),
@@ -11209,7 +11190,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd(timerString);
 
 };
-},{"../../util/uniques.js":208,"../console/print.js":48,"../fetch/value.js":63,"./nest.js":56}],53:[function(require,module,exports){
+},{"../../util/uniques.js":207,"../console/print.js":47,"../fetch/value.js":62,"./nest.js":55}],52:[function(require,module,exports){
 // Groups data into groups to use with D3 layouts. Helps prevent key name
 // mismatches (parent, child, value, etc).
 (function() {
@@ -11254,7 +11235,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../fetch/value.js":63}],54:[function(require,module,exports){
+},{"../fetch/value.js":62}],53:[function(require,module,exports){
 // Get Key Types from Data
 (function() {
     var print, validObject,
@@ -11325,7 +11306,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../object/validate.js":170,"../console/print.js":48}],55:[function(require,module,exports){
+},{"../../object/validate.js":169,"../console/print.js":47}],54:[function(require,module,exports){
 // Load Data using JSON
 (function() {
     var print, validObject;
@@ -11422,7 +11403,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../object/validate.js":170,"../console/print.js":48}],56:[function(require,module,exports){
+},{"../../object/validate.js":169,"../console/print.js":47}],55:[function(require,module,exports){
 var fetchValue = require("../fetch/value.js"),
     validObject = require("../../object/validate.js"),
     uniqueValues = require("../../util/uniques.js");
@@ -11734,7 +11715,7 @@ var rename_key_value = function(obj) {
 };
 
 module.exports = dataNest;
-},{"../../object/validate.js":170,"../../util/uniques.js":208,"../fetch/value.js":63}],57:[function(require,module,exports){
+},{"../../object/validate.js":169,"../../util/uniques.js":207,"../fetch/value.js":62}],56:[function(require,module,exports){
 var arraySort = require("../../array/sort.js"),
     dataNest = require("./nest.js"),
     fetchValue = require("../fetch/value.js"),
@@ -11950,7 +11931,7 @@ module.exports = function(vars, rawData, split) {
     return rawData;
 
 };
-},{"../../array/sort.js":30,"../fetch/color.js":59,"../fetch/text.js":62,"../fetch/value.js":63,"./nest.js":56}],58:[function(require,module,exports){
+},{"../../array/sort.js":29,"../fetch/color.js":58,"../fetch/text.js":61,"../fetch/value.js":62,"./nest.js":55}],57:[function(require,module,exports){
 // Determines visible time markers and formatting
 (function() {
     var sizes;
@@ -12033,7 +12014,7 @@ module.exports = function(vars, rawData, split) {
     };
 
 }).call(this);
-},{"../../font/sizes.js":100}],59:[function(require,module,exports){
+},{"../../font/sizes.js":99}],58:[function(require,module,exports){
 // Finds an object's color and returns random if it cannot be found
 (function() {
     var fetchValue, getColor, getRandom, randomColor, uniques, validColor, validObject;
@@ -12116,7 +12097,7 @@ module.exports = function(vars, rawData, split) {
     };
 
 }).call(this);
-},{"../../color/random.js":43,"../../color/validate.js":47,"../../object/validate.js":170,"../../util/uniques.js":208,"./value.js":63}],60:[function(require,module,exports){
+},{"../../color/random.js":42,"../../color/validate.js":46,"../../object/validate.js":169,"../../util/uniques.js":207,"./value.js":62}],59:[function(require,module,exports){
 var dataFilter = require("../data/filter.js"),
     dataNest = require("../data/nest.js"),
     print = require("../console/print.js"),
@@ -12334,7 +12315,7 @@ module.exports = function(vars, years, depth) {
     }
 
 };
-},{"../../string/format.js":171,"../../string/list.js":172,"../console/print.js":48,"../data/filter.js":51,"../data/nest.js":56}],61:[function(require,module,exports){
+},{"../../string/format.js":170,"../../string/list.js":171,"../console/print.js":47,"../data/filter.js":50,"../data/nest.js":55}],60:[function(require,module,exports){
 (function() {
     var fetchColor, fetchText, fetchValue;
 
@@ -12398,7 +12379,7 @@ module.exports = function(vars, years, depth) {
     };
 
 }).call(this);
-},{"./color.js":59,"./text.js":62,"./value.js":63}],62:[function(require,module,exports){
+},{"./color.js":58,"./text.js":61,"./value.js":62}],61:[function(require,module,exports){
 var fetchValue = require("./value.js"),
     validObject = require("../../object/validate.js"),
     uniques = require("../../util/uniques.js");
@@ -12488,7 +12469,7 @@ module.exports = function(vars, obj, depth) {
     return names;
 
 };
-},{"../../object/validate.js":170,"../../util/uniques.js":208,"./value.js":63}],63:[function(require,module,exports){
+},{"../../object/validate.js":169,"../../util/uniques.js":207,"./value.js":62}],62:[function(require,module,exports){
 // Finds a given variable by searching through the data and attrs
 (function() {
     var cacheInit, checkAttrs, checkData, fetch, fetchArray, filterArray, find, uniqueValues, validObject, valueParse;
@@ -12708,7 +12689,7 @@ module.exports = function(vars, obj, depth) {
     module.exports = fetch;
 
 }).call(this);
-},{"../../object/validate.js":170,"../../util/uniques.js":208}],64:[function(require,module,exports){
+},{"../../object/validate.js":169,"../../util/uniques.js":207}],63:[function(require,module,exports){
 // Creates an invisible test element to populate
 (function() {
     module.exports = function(type) {
@@ -12732,7 +12713,7 @@ module.exports = function(vars, obj, depth) {
     };
 
 }).call(this);
-},{}],65:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 module.exports = {
     "dev": {
         "accepted": "{0} ليس قيمة مقبولة لـ{1}، يرجى إستخدام أحد الإجراءات التالية: {2}.",
@@ -12847,7 +12828,7 @@ module.exports = {
     },
     "uppercase": []
 }
-},{}],66:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -13009,7 +12990,7 @@ module.exports = {
         "UI"
     ]
 }
-},{}],67:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function() {
     module.exports = {
         dev: {
@@ -13155,7 +13136,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],68:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -13316,7 +13297,7 @@ module.exports = {
         "UI"
     ]
 }
-},{}],69:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -13486,7 +13467,7 @@ module.exports = {
         "UI"
     ]
 }
-},{}],70:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ".",
@@ -13623,7 +13604,7 @@ module.exports = {
         "UI"
     ]
 }
-},{}],71:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -13768,7 +13749,7 @@ module.exports = {
         "UI"
     ]
 }
-},{}],72:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -13939,7 +13920,7 @@ module.exports = {
         "IU"
     ]
 }
-},{}],73:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -14099,7 +14080,7 @@ module.exports = {
         "IU"
     ]
 }
-},{}],74:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -14240,7 +14221,7 @@ module.exports = {
         "ID"
     ]
 }
-},{}],75:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ",",
@@ -14400,7 +14381,7 @@ module.exports = {
         "UI"
     ]
 }
-},{}],76:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 module.exports = {
     "format": {
         "decimal": ".",
@@ -14545,7 +14526,7 @@ module.exports = {
         "研发"
     ]
 }
-},{}],77:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 (function() {
     module.exports = {
         ar_SA: require("./languages/ar_SA.js"),
@@ -14563,7 +14544,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"./languages/ar_SA.js":65,"./languages/de_DE.js":66,"./languages/en_US.js":67,"./languages/es_ES.js":68,"./languages/fr_FR.js":69,"./languages/ko_KR.js":70,"./languages/mk_MK.js":71,"./languages/pt_BR.js":72,"./languages/pt_PT.js":73,"./languages/ru_RU.js":74,"./languages/tr_TR.js":75,"./languages/zh_CN.js":76}],78:[function(require,module,exports){
+},{"./languages/ar_SA.js":64,"./languages/de_DE.js":65,"./languages/en_US.js":66,"./languages/es_ES.js":67,"./languages/fr_FR.js":68,"./languages/ko_KR.js":69,"./languages/mk_MK.js":70,"./languages/pt_BR.js":71,"./languages/pt_PT.js":72,"./languages/ru_RU.js":73,"./languages/tr_TR.js":74,"./languages/zh_CN.js":75}],77:[function(require,module,exports){
 (function() {
     var checkObject, copy, createFunction, initialize, print, process, setMethod, stringFormat, validObject;
 
@@ -14721,7 +14702,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../object/validate.js":170,"../../string/format.js":171,"../../util/copy.js":205,"../console/print.js":48,"./process/detect.js":86,"./set.js":92}],79:[function(require,module,exports){
+},{"../../object/validate.js":169,"../../string/format.js":170,"../../util/copy.js":204,"../console/print.js":47,"./process/detect.js":85,"./set.js":91}],78:[function(require,module,exports){
 (function() {
     module.exports = function(g) {
         if (!g) {
@@ -14740,7 +14721,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],80:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function() {
     var rtl;
 
@@ -14777,7 +14758,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../client/rtl.js":36}],81:[function(require,module,exports){
+},{"../../../client/rtl.js":35}],80:[function(require,module,exports){
 (function() {
     module.exports = function(decoration) {
         var accepted;
@@ -14795,7 +14776,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],82:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 // Constructs font family property using the validate function
 (function() {
     var fira, validate;
@@ -14815,7 +14796,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../font/validate.js":101}],83:[function(require,module,exports){
+},{"../../../font/validate.js":100}],82:[function(require,module,exports){
 (function() {
     module.exports = function(position) {
         var accepted;
@@ -14842,7 +14823,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],84:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function() {
     module.exports = function(transform) {
         var accepted;
@@ -14860,7 +14841,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],85:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 // Function to process data by url or element
 (function() {
     module.exports = function(value, vars, method) {
@@ -14887,7 +14868,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],86:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 // Process object's value
 (function() {
     var copy, update;
@@ -14909,7 +14890,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../array/update.js":31,"../../../util/copy.js":205}],87:[function(require,module,exports){
+},{"../../../array/update.js":30,"../../../util/copy.js":204}],86:[function(require,module,exports){
 (function() {
     var stylesheet;
 
@@ -14924,7 +14905,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../client/css.js":32}],88:[function(require,module,exports){
+},{"../../../client/css.js":31}],87:[function(require,module,exports){
 (function() {
     module.exports = function(value, self) {
         var i, j, k, l, len, len1, len2, len3, m, results, side, sides, v;
@@ -14986,7 +14967,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],89:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function() {
     var contains, format, list, print;
 
@@ -15039,7 +15020,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../array/contains.js":29,"../../string/format.js":171,"../../string/list.js":172,"../console/print.js":48}],90:[function(require,module,exports){
+},{"../../array/contains.js":28,"../../string/format.js":170,"../../string/list.js":171,"../console/print.js":47}],89:[function(require,module,exports){
 (function() {
     module.exports = function(rendering) {
         var accepted;
@@ -15054,7 +15035,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],91:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 // Resets certain keys in global variables
 (function() {
     var reset, validObject;
@@ -15081,7 +15062,7 @@ module.exports = {
     module.exports = reset;
 
 }).call(this);
-},{"../../object/validate.js":170}],92:[function(require,module,exports){
+},{"../../object/validate.js":169}],91:[function(require,module,exports){
 // Sets a method's value
 (function() {
     var copy, d3selection, mergeObject, print, process, rejected, stringFormat, updateArray, validObject;
@@ -15238,7 +15219,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../array/update.js":31,"../../object/merge.js":169,"../../object/validate.js":170,"../../string/format.js":171,"../../util/copy.js":205,"../../util/d3selection.js":206,"../console/print.js":48,"./process/detect.js":86,"./rejected.js":89}],93:[function(require,module,exports){
+},{"../../array/update.js":30,"../../object/merge.js":168,"../../object/validate.js":169,"../../string/format.js":170,"../../util/copy.js":204,"../../util/d3selection.js":205,"../console/print.js":47,"./process/detect.js":85,"./rejected.js":88}],92:[function(require,module,exports){
 var print = require("../console/print.js"),
     stringFormat = require("../../string/format.js")
 
@@ -15323,7 +15304,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd(timerString)
 
 }
-},{"../../string/format.js":171,"../console/print.js":48}],94:[function(require,module,exports){
+},{"../../string/format.js":170,"../console/print.js":47}],93:[function(require,module,exports){
 var hideElement = require("./hideelement.js");
 
 // Parses an HTML element for data
@@ -15469,7 +15450,7 @@ module.exports = function(vars) {
     return elementData
 
 };
-},{"./hideelement.js":95}],95:[function(require,module,exports){
+},{"./hideelement.js":94}],94:[function(require,module,exports){
 module.exports = function(elem) {
 
     elem
@@ -15484,7 +15465,7 @@ module.exports = function(elem) {
         .style("overflow", "hidden", "important");
 
 }
-},{}],96:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 var print = require("../console/print.js");
 
 // Calculates node positions, if needed for network.
@@ -15542,7 +15523,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../console/print.js":48}],97:[function(require,module,exports){
+},{"../console/print.js":47}],96:[function(require,module,exports){
 // Finds the best regression model that fits the data using Bayesian Information Criteria
 (function() {
     var numeric;
@@ -15621,7 +15602,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"numeric":22}],98:[function(require,module,exports){
+},{"numeric":21}],97:[function(require,module,exports){
 // Finds outliers in n-dim data using the Local Outlier Factor algorithm
 (function() {
     var kdtree;
@@ -15704,7 +15685,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"static-kdtree":24}],99:[function(require,module,exports){
+},{"static-kdtree":23}],98:[function(require,module,exports){
 // Finds outliers in 1-dim data by computing the median absolute deviation for each point
 (function() {
     module.exports = function(points) {
@@ -15722,7 +15703,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],100:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 (function() {
     var fontTester;
 
@@ -15794,7 +15775,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../core/font/tester.js":64}],101:[function(require,module,exports){
+},{"../core/font/tester.js":63}],100:[function(require,module,exports){
 // Given a single font or a list of font, determines which can be rendered
 (function() {
     var fontTester, validate;
@@ -15854,7 +15835,7 @@ module.exports = function(vars) {
     module.exports = validate;
 
 }).call(this);
-},{"../core/font/tester.js":64}],102:[function(require,module,exports){
+},{"../core/font/tester.js":63}],101:[function(require,module,exports){
 var arraySort = require("../array/sort.js"),
     attach = require("../core/methods/attach.js"),
     dataFormat = require("../core/data/format.js"),
@@ -16209,7 +16190,7 @@ module.exports = function() {
     return vars.self;
 
 };
-},{"../array/sort.js":30,"../client/ie.js":33,"../core/console/print.js":48,"../core/data/format.js":52,"../core/data/keys.js":54,"../core/data/load.js":55,"../core/fetch/data.js":60,"../core/methods/attach.js":78,"../core/methods/reset.js":91,"./methods/active.js":103,"./methods/alt.js":104,"./methods/color.js":105,"./methods/config.js":106,"./methods/container.js":107,"./methods/data.js":108,"./methods/depth.js":109,"./methods/dev.js":110,"./methods/draw.js":111,"./methods/focus.js":112,"./methods/font.js":113,"./methods/format.js":114,"./methods/height.js":115,"./methods/history.js":116,"./methods/hover.js":117,"./methods/icon.js":118,"./methods/id.js":119,"./methods/keywords.js":120,"./methods/margin.js":121,"./methods/open.js":122,"./methods/order.js":123,"./methods/remove.js":124,"./methods/search.js":125,"./methods/select.js":126,"./methods/selectall.js":127,"./methods/text.js":128,"./methods/timing.js":129,"./methods/title.js":130,"./methods/type.js":131,"./methods/ui.js":132,"./methods/width.js":133,"./types/auto.js":134,"./types/button/button.js":135,"./types/drop/drop.js":140,"./types/toggle.js":157}],103:[function(require,module,exports){
+},{"../array/sort.js":29,"../client/ie.js":32,"../core/console/print.js":47,"../core/data/format.js":51,"../core/data/keys.js":53,"../core/data/load.js":54,"../core/fetch/data.js":59,"../core/methods/attach.js":77,"../core/methods/reset.js":90,"./methods/active.js":102,"./methods/alt.js":103,"./methods/color.js":104,"./methods/config.js":105,"./methods/container.js":106,"./methods/data.js":107,"./methods/depth.js":108,"./methods/dev.js":109,"./methods/draw.js":110,"./methods/focus.js":111,"./methods/font.js":112,"./methods/format.js":113,"./methods/height.js":114,"./methods/history.js":115,"./methods/hover.js":116,"./methods/icon.js":117,"./methods/id.js":118,"./methods/keywords.js":119,"./methods/margin.js":120,"./methods/open.js":121,"./methods/order.js":122,"./methods/remove.js":123,"./methods/search.js":124,"./methods/select.js":125,"./methods/selectall.js":126,"./methods/text.js":127,"./methods/timing.js":128,"./methods/title.js":129,"./methods/type.js":130,"./methods/ui.js":131,"./methods/width.js":132,"./types/auto.js":133,"./types/button/button.js":134,"./types/drop/drop.js":139,"./types/toggle.js":156}],102:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -16221,7 +16202,7 @@ module.exports = function() {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],104:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],103:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -16235,7 +16216,7 @@ module.exports = function() {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],105:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],104:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [String],
@@ -16243,7 +16224,7 @@ module.exports = function() {
     };
 
 }).call(this);
-},{}],106:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Object],
@@ -16262,7 +16243,7 @@ module.exports = function() {
     };
 
 }).call(this);
-},{}],107:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 (function() {
     var d3selection;
 
@@ -16288,7 +16269,7 @@ module.exports = function() {
     };
 
 }).call(this);
-},{"../../util/d3selection.js":206}],108:[function(require,module,exports){
+},{"../../util/d3selection.js":205}],107:[function(require,module,exports){
 var d3selection = require("../../util/d3selection.js"),
     process = require("../../core/methods/process/data.js");
 
@@ -16342,7 +16323,7 @@ module.exports = {
     },
     "value": false
 };
-},{"../../core/methods/process/data.js":85,"../../util/d3selection.js":206}],109:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84,"../../util/d3selection.js":205}],108:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Number],
@@ -16350,7 +16331,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],110:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -16358,7 +16339,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],111:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 var d3selection = require("../../util/d3selection.js"),
     hideElement = require("../../core/parse/hideelement.js"),
     parseElement = require("../../core/parse/element.js"),
@@ -16426,7 +16407,7 @@ module.exports = {
     "update": true,
     "value": undefined
 }
-},{"../../core/console/print.js":48,"../../core/parse/element.js":94,"../../core/parse/hideelement.js":95,"../../string/format.js":171,"../../util/d3selection.js":206}],112:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/parse/element.js":93,"../../core/parse/hideelement.js":94,"../../string/format.js":170,"../../util/d3selection.js":205}],111:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number, String],
@@ -16457,7 +16438,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],113:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -16491,7 +16472,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":80,"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],114:[function(require,module,exports){
+},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],113:[function(require,module,exports){
 (function() {
     var formatNumber, locale, mergeObject, titleCase;
 
@@ -16568,7 +16549,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/locale/locale.js":77,"../../number/format.js":168,"../../object/merge.js":169,"../../string/title.js":174}],115:[function(require,module,exports){
+},{"../../core/locale/locale.js":76,"../../number/format.js":167,"../../object/merge.js":168,"../../string/title.js":173}],114:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -16578,7 +16559,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],116:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 (function() {
     module.exports = {
         back: function() {
@@ -16599,7 +16580,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],117:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, Number, String],
@@ -16607,7 +16588,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],118:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 (function() {
     var process;
 
@@ -16663,7 +16644,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/process/icon.js":87}],119:[function(require,module,exports){
+},{"../../core/methods/process/icon.js":86}],118:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -16679,7 +16660,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],120:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],119:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -16693,7 +16674,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],121:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],120:[function(require,module,exports){
 (function() {
     var process;
 
@@ -16714,7 +16695,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/process/margin.js":88}],122:[function(require,module,exports){
+},{"../../core/methods/process/margin.js":87}],121:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -16726,7 +16707,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],123:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Function, String],
@@ -16738,7 +16719,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],124:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [void 0, Function],
@@ -16752,7 +16733,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],125:[function(require,module,exports){
+},{}],124:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: ["auto", Boolean],
@@ -16767,7 +16748,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],126:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [String],
@@ -16785,7 +16766,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],127:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [String],
@@ -16803,7 +16784,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],128:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -16823,7 +16804,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],129:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],128:[function(require,module,exports){
 (function() {
     module.exports = {
         mouseevents: 60,
@@ -16831,7 +16812,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],130:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 (function() {
     var decoration, family, stringStrip, transform;
 
@@ -16869,7 +16850,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84,"../../string/strip.js":173}],131:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83,"../../string/strip.js":172}],130:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: function(vars) {
@@ -16879,7 +16860,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],132:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 (function() {
     var align, decoration, family, margin, transform;
 
@@ -16952,7 +16933,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":80,"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84,"../../core/methods/process/margin.js":88}],133:[function(require,module,exports){
+},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83,"../../core/methods/process/margin.js":87}],132:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -16961,7 +16942,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],134:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Determines form type based on data length.
 //------------------------------------------------------------------------------
@@ -16978,7 +16959,7 @@ module.exports = function(vars) {
     }
 
 }
-},{}],135:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 (function() {
     module.exports = function(vars) {
         var button, checks, color, icons, mouseevents, print, style, updatedButtons;
@@ -17033,7 +17014,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":48,"./functions/color.js":136,"./functions/icons.js":137,"./functions/mouseevents.js":138,"./functions/style.js":139}],136:[function(require,module,exports){
+},{"../../../core/console/print.js":47,"./functions/color.js":135,"./functions/icons.js":136,"./functions/mouseevents.js":137,"./functions/style.js":138}],135:[function(require,module,exports){
 // Defines button color
 (function() {
     module.exports = function(elem, vars) {
@@ -17079,7 +17060,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../../color/legible.js":40,"../../../../color/lighter.js":41,"../../../../color/text.js":46}],137:[function(require,module,exports){
+},{"../../../../color/legible.js":39,"../../../../color/lighter.js":40,"../../../../color/text.js":45}],136:[function(require,module,exports){
 var prefix = require("../../../../client/prefix.js"),
     rtl = require("../../../../client/rtl.js")
 
@@ -17248,7 +17229,7 @@ module.exports = function(elem, vars) {
         })
 
 }
-},{"../../../../client/prefix.js":35,"../../../../client/rtl.js":36}],138:[function(require,module,exports){
+},{"../../../../client/prefix.js":34,"../../../../client/rtl.js":35}],137:[function(require,module,exports){
 (function() {
     module.exports = function(elem, vars, color) {
         var events, ie;
@@ -17279,7 +17260,7 @@ module.exports = function(elem, vars) {
     };
 
 }).call(this);
-},{"../../../../client/ie.js":33,"../../../../client/pointer.js":34,"./color.js":136}],139:[function(require,module,exports){
+},{"../../../../client/ie.js":32,"../../../../client/pointer.js":33,"./color.js":135}],138:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //
 //------------------------------------------------------------------------------
@@ -17297,7 +17278,7 @@ module.exports = function(elem, vars) {
         .style("letter-spacing", vars.font.spacing + "px")
 
 }
-},{}],140:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 // Creates Dropdown Menu
 (function() {
     module.exports = function(vars) {
@@ -17329,7 +17310,7 @@ module.exports = function(elem, vars) {
     };
 
 }).call(this);
-},{"./functions/button.js":143,"./functions/data.js":144,"./functions/element.js":145,"./functions/keyboard.js":148,"./functions/list.js":149,"./functions/search.js":151,"./functions/selector.js":152,"./functions/title.js":153,"./functions/update.js":154,"./functions/width.js":155,"./functions/window.js":156}],141:[function(require,module,exports){
+},{"./functions/button.js":142,"./functions/data.js":143,"./functions/element.js":144,"./functions/keyboard.js":147,"./functions/list.js":148,"./functions/search.js":150,"./functions/selector.js":151,"./functions/title.js":152,"./functions/update.js":153,"./functions/width.js":154,"./functions/window.js":155}],140:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Checks to see if a given variable is allowed to be selected.
 //------------------------------------------------------------------------------
@@ -17361,7 +17342,7 @@ module.exports = function(vars, value, active) {
     return ret.indexOf(true) >= 0
 
 }
-},{}],142:[function(require,module,exports){
+},{}],141:[function(require,module,exports){
 var print = require("../../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Toggles the state of the dropdown menu.
@@ -17390,7 +17371,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("rotating arrow")
 
 }
-},{"../../../../core/console/print.js":48}],143:[function(require,module,exports){
+},{"../../../../core/console/print.js":47}],142:[function(require,module,exports){
 var copy = require("../../../../util/copy.js"),
     events = require("../../../../client/pointer.js"),
     form = require("../../../form.js"),
@@ -17480,7 +17461,7 @@ module.exports = function(vars) {
     })
 
 }
-},{"../../../../client/pointer.js":34,"../../../../core/console/print.js":48,"../../../../util/copy.js":205,"../../../form.js":102}],144:[function(require,module,exports){
+},{"../../../../client/pointer.js":33,"../../../../core/console/print.js":47,"../../../../util/copy.js":204,"../../../form.js":101}],143:[function(require,module,exports){
 var stringFormat = require("../../../../string/format.js"),
     stringStrip = require("../../../../string/strip.js");
 
@@ -17602,7 +17583,7 @@ module.exports = function(vars) {
     }
 
 };
-},{"../../../../string/format.js":171,"../../../../string/strip.js":173}],145:[function(require,module,exports){
+},{"../../../../string/format.js":170,"../../../../string/strip.js":172}],144:[function(require,module,exports){
 // Overrides keyboard behavior of the original input element
 (function() {
     module.exports = function(vars) {
@@ -17633,7 +17614,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],146:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculates the height and orientation of the dropdown list, based on
 // available screen space.
@@ -17669,7 +17650,7 @@ module.exports = function(vars) {
     });
 
 };
-},{}],147:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 // Populates item list based on filtered data
 (function() {
     var active, copy, form, print;
@@ -17756,7 +17737,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../../core/console/print.js":48,"../../../../util/copy.js":205,"../../../form.js":102,"./active.js":141}],148:[function(require,module,exports){
+},{"../../../../core/console/print.js":47,"../../../../util/copy.js":204,"../../../form.js":101,"./active.js":140}],147:[function(require,module,exports){
 // Assigns behavior to the user's keyboard for navigation
 (function() {
     module.exports = function(vars) {
@@ -17837,7 +17818,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],149:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 var print = require("../../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Creates and populates the dropdown list of items.
@@ -17858,7 +17839,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("populating list")
 
 }
-},{"../../../../core/console/print.js":48}],150:[function(require,module,exports){
+},{"../../../../core/console/print.js":47}],149:[function(require,module,exports){
 var print = require("../../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Calculates scroll position of list.
@@ -17957,7 +17938,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../../core/console/print.js":48}],151:[function(require,module,exports){
+},{"../../../../core/console/print.js":47}],150:[function(require,module,exports){
 var prefix = require("../../../../client/prefix.js"),
     print = require("../../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -18054,7 +18035,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("creating search")
 
 }
-},{"../../../../client/prefix.js":35,"../../../../core/console/print.js":48,"./data.js":144,"./items.js":147,"./update.js":154}],152:[function(require,module,exports){
+},{"../../../../client/prefix.js":34,"../../../../core/console/print.js":47,"./data.js":143,"./items.js":146,"./update.js":153}],151:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the div that holds the search box and item list.
 //------------------------------------------------------------------------------
@@ -18075,7 +18056,7 @@ module.exports = function(vars) {
         .style("padding", vars.ui.border + "px")
 
 }
-},{}],153:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 var events = require("../../../../client/pointer.js"),
     lighter = require("../../../../color/lighter.js"),
     print = require("../../../../core/console/print.js"),
@@ -18224,7 +18205,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../../client/pointer.js":34,"../../../../color/lighter.js":41,"../../../../color/text.js":46,"../../../../core/console/print.js":48}],154:[function(require,module,exports){
+},{"../../../../client/pointer.js":33,"../../../../color/lighter.js":40,"../../../../color/text.js":45,"../../../../core/console/print.js":47}],153:[function(require,module,exports){
 var items = require("./items.js"),
     height = require("./height.js"),
     print = require("../../../../core/console/print.js"),
@@ -18386,7 +18367,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("drawing list")
 
 }
-},{"../../../../core/console/print.js":48,"./arrow.js":142,"./height.js":146,"./items.js":147,"./scroll.js":150}],155:[function(require,module,exports){
+},{"../../../../core/console/print.js":47,"./arrow.js":141,"./height.js":145,"./items.js":146,"./scroll.js":149}],154:[function(require,module,exports){
 var copy = require("../../../../util/copy.js"),
     fontTester = require("../../../../core/font/tester.js"),
     form = require("../../../form.js"),
@@ -18488,7 +18469,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../../core/console/print.js":48,"../../../../core/font/tester.js":64,"../../../../object/validate.js":170,"../../../../util/copy.js":205,"../../../form.js":102}],156:[function(require,module,exports){
+},{"../../../../core/console/print.js":47,"../../../../core/font/tester.js":63,"../../../../object/validate.js":169,"../../../../util/copy.js":204,"../../../form.js":101}],155:[function(require,module,exports){
 var child = require("../../../../util/child.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -18531,7 +18512,7 @@ var windowEvents = function(vars, elem) {
 }
 
 module.exports = windowEvents
-},{"../../../../util/child.js":203}],157:[function(require,module,exports){
+},{"../../../../util/child.js":202}],156:[function(require,module,exports){
 var form = require("../form.js")
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -18629,7 +18610,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../form.js":102}],158:[function(require,module,exports){
+},{"../form.js":101}],157:[function(require,module,exports){
 // Finds the maximum area rectangle that fits inside a polygon
 (function() {
     var intersectPoints, lineIntersection, pointInPoly, pointInSegmentBox, polyInsidePoly, rayIntersectsSegment, rotatePoint, rotatePoly, segmentsIntersect, simplify, squaredDist;
@@ -19056,7 +19037,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"simplify-js":23}],159:[function(require,module,exports){
+},{"simplify-js":22}],158:[function(require,module,exports){
 // Gives X and Y offset based off angle and shape
 (function() {
     module.exports = function(radians, distance, shape) {
@@ -19123,7 +19104,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],160:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 (function() {
     var offset;
 
@@ -19172,7 +19153,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../geom/offset.js":159}],161:[function(require,module,exports){
+},{"../geom/offset.js":158}],160:[function(require,module,exports){
 /**
  * @class d3po
  */
@@ -19425,7 +19406,7 @@ module.exports = function(vars) {
     module.exports = d3po;
 
 }).call(this);
-},{"./array/comparator.js":28,"./array/contains.js":29,"./array/sort.js":30,"./array/update.js":31,"./client/css.js":32,"./client/ie.js":33,"./client/pointer.js":34,"./client/prefix.js":35,"./client/rtl.js":36,"./client/scroll.js":37,"./client/scrollbar.js":38,"./client/touch.js":39,"./color/legible.js":40,"./color/lighter.js":41,"./color/mix.js":42,"./color/random.js":43,"./color/scale.js":44,"./color/sort.js":45,"./color/text.js":46,"./color/validate.js":47,"./core/console/print.js":48,"./data/bestregression.js":97,"./data/lof.js":98,"./data/mad.js":99,"./font/sizes.js":100,"./font/validate.js":101,"./form/form.js":102,"./geom/largestrectangle.js":158,"./geom/offset.js":159,"./geom/path2poly.js":160,"./network/cluster.js":162,"./network/distance.js":163,"./network/normalize.js":164,"./network/shortestpath.js":165,"./network/smallestgap.js":166,"./network/subgraph.js":167,"./number/format.js":168,"./object/merge.js":169,"./object/validate.js":170,"./string/format.js":171,"./string/list.js":172,"./string/strip.js":173,"./string/title.js":174,"./textwrap/textwrap.js":198,"./tooltip/create.js":199,"./tooltip/move.js":200,"./tooltip/remove.js":201,"./util/buckets.js":202,"./util/child.js":203,"./util/closest.js":204,"./util/copy.js":205,"./util/d3selection.js":206,"./util/dataurl.js":207,"./util/uniques.js":208,"./viz/viz.js":331}],162:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":330}],161:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -19567,7 +19548,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./normalize.js":164}],163:[function(require,module,exports){
+},{"./normalize.js":163}],162:[function(require,module,exports){
 (function() {
     module.exports = function(n1, n2) {
         var xx, yy;
@@ -19583,7 +19564,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],164:[function(require,module,exports){
+},{}],163:[function(require,module,exports){
 // Normalizes the graph input and checks if it is valid
 (function() {
     var print;
@@ -19733,7 +19714,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../core/console/print.js":48}],165:[function(require,module,exports){
+},{"../core/console/print.js":47}],164:[function(require,module,exports){
 // Finds the shortest paths in the graph
 (function() {
     var Heap, normalize;
@@ -19832,7 +19813,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./normalize.js":164,"heap":8}],166:[function(require,module,exports){
+},{"./normalize.js":163,"heap":8}],165:[function(require,module,exports){
 // Returns distances of all objects in array
 (function() {
     var distance;
@@ -19891,7 +19872,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./distance.js":163}],167:[function(require,module,exports){
+},{"./distance.js":162}],166:[function(require,module,exports){
 // Returns a subgraph of distance K away from the source node
 (function() {
     var normalize;
@@ -19963,7 +19944,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./normalize.js":164}],168:[function(require,module,exports){
+},{"./normalize.js":163}],167:[function(require,module,exports){
 // Formats numbers to look "pretty"
 (function() {
     var defaultLocale;
@@ -20051,7 +20032,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../core/locale/languages/en_US.js":67}],169:[function(require,module,exports){
+},{"../core/locale/languages/en_US.js":66}],168:[function(require,module,exports){
 // Given any two objects, this method will merge the two objects together, returning a new third object. The values of the second object always overwrite the first
 (function() {
     var d3selection, validate;
@@ -20103,7 +20084,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../util/d3selection.js":206,"./validate.js":170}],170:[function(require,module,exports){
+},{"../util/d3selection.js":205,"./validate.js":169}],169:[function(require,module,exports){
 /**
  * This function returns true if the variable passed is a literal javascript keyed Object.
  * It's a small, simple function, but it catches some edge-cases that can throw off your
@@ -20120,7 +20101,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],171:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Formats a string similar to Python's "format"
 //------------------------------------------------------------------------------
@@ -20150,7 +20131,7 @@ module.exports = function() {
     }.bind(str));
 
 }
-},{}],172:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 // Converts an array of strings into a string list using commas and "and"
 (function() {
     var format, locale;
@@ -20188,7 +20169,7 @@ module.exports = function() {
     };
 
 }).call(this);
-},{"../core/locale/languages/en_US.js":67,"./format.js":171}],173:[function(require,module,exports){
+},{"../core/locale/languages/en_US.js":66,"./format.js":170}],172:[function(require,module,exports){
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Removes all non ASCII characters
 //------------------------------------------------------------------------------
@@ -20237,7 +20218,7 @@ module.exports = function(value) {
     });
 
 };
-},{}],174:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 (function() {
     var defaultLocale;
 
@@ -20284,7 +20265,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{"../core/locale/languages/en_US.js":67}],175:[function(require,module,exports){
+},{"../core/locale/languages/en_US.js":66}],174:[function(require,module,exports){
 // Flows the text into the container
 (function() {
     var foreign, tspan;
@@ -20302,7 +20283,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{"./foreign.js":176,"./tspan.js":179}],176:[function(require,module,exports){
+},{"./foreign.js":175,"./tspan.js":178}],175:[function(require,module,exports){
 // Flows the text as a foreign element
 (function() {
     module.exports = function(vars) {
@@ -20317,7 +20298,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{}],177:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 (function() {
     module.exports = function(vars) {
         var diff, elem, height, prev, radius, shape, size, width, x, y;
@@ -20411,7 +20392,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{}],178:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 // Fetches text if not specified, and formats text to array
 (function() {
     module.exports = function(vars) {
@@ -20442,7 +20423,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{}],179:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 // Flows the text into tspans
 (function() {
     var rtl;
@@ -20672,7 +20653,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{"../../client/rtl.js":36}],180:[function(require,module,exports){
+},{"../../client/rtl.js":35}],179:[function(require,module,exports){
 // Flows the text into the container
 (function() {
     var flow, fontSizes, resize, wrap;
@@ -20755,7 +20736,7 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{"../../font/sizes.js":100,"./flow.js":175}],181:[function(require,module,exports){
+},{"../../font/sizes.js":99,"./flow.js":174}],180:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, "start", "middle", "end", "left", "center", "right"],
@@ -20771,9 +20752,9 @@ module.exports = function(value) {
     };
 
 }).call(this);
-},{}],182:[function(require,module,exports){
-arguments[4][106][0].apply(exports,arguments)
-},{"dup":106}],183:[function(require,module,exports){
+},{}],181:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"dup":105}],182:[function(require,module,exports){
 (function() {
     var d3selection;
 
@@ -20799,9 +20780,9 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../util/d3selection.js":206}],184:[function(require,module,exports){
-arguments[4][110][0].apply(exports,arguments)
-},{"dup":110}],185:[function(require,module,exports){
+},{"../../util/d3selection.js":205}],183:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"dup":109}],184:[function(require,module,exports){
 (function() {
     var print, stringFormat;
 
@@ -20835,7 +20816,7 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/console/print.js":48,"../../string/format.js":171}],186:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../string/format.js":170}],185:[function(require,module,exports){
 (function() {
     var locale, mergeObject;
 
@@ -20877,7 +20858,7 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/locale/locale.js":77,"../../object/merge.js":169}],187:[function(require,module,exports){
+},{"../../core/locale/locale.js":76,"../../object/merge.js":168}],186:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -20885,11 +20866,11 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],188:[function(require,module,exports){
-arguments[4][187][0].apply(exports,arguments)
-},{"dup":187}],189:[function(require,module,exports){
-arguments[4][110][0].apply(exports,arguments)
-},{"dup":110}],190:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
+arguments[4][186][0].apply(exports,arguments)
+},{"dup":186}],188:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"dup":109}],189:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [-180, -90, 0, 90, 180],
@@ -20897,7 +20878,7 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],191:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: ["circle", "square"],
@@ -20905,7 +20886,7 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],192:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Array, false],
@@ -20913,7 +20894,7 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],193:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Array, Number, String],
@@ -20938,7 +20919,7 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],194:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, "top", "middle", "bottom"],
@@ -20946,13 +20927,13 @@ arguments[4][110][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],195:[function(require,module,exports){
-arguments[4][187][0].apply(exports,arguments)
-},{"dup":187}],196:[function(require,module,exports){
-arguments[4][187][0].apply(exports,arguments)
-},{"dup":187}],197:[function(require,module,exports){
-arguments[4][187][0].apply(exports,arguments)
-},{"dup":187}],198:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
+arguments[4][186][0].apply(exports,arguments)
+},{"dup":186}],195:[function(require,module,exports){
+arguments[4][186][0].apply(exports,arguments)
+},{"dup":186}],196:[function(require,module,exports){
+arguments[4][186][0].apply(exports,arguments)
+},{"dup":186}],197:[function(require,module,exports){
 // Word wraps SVG text
 (function() {
     var attach, print, sizes, text, wrap;
@@ -21009,7 +20990,7 @@ arguments[4][187][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../core/console/print.js":48,"../core/methods/attach.js":78,"./helpers/parsesize.js":177,"./helpers/parsetext.js":178,"./helpers/wrap.js":180,"./methods/align.js":181,"./methods/config.js":182,"./methods/container.js":183,"./methods/dev.js":184,"./methods/draw.js":185,"./methods/format.js":186,"./methods/height.js":187,"./methods/padding.js":188,"./methods/resize.js":189,"./methods/rotate.js":190,"./methods/shape.js":191,"./methods/size.js":192,"./methods/text.js":193,"./methods/valign.js":194,"./methods/width.js":195,"./methods/x.js":196,"./methods/y.js":197}],199:[function(require,module,exports){
+},{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/parsesize.js":176,"./helpers/parsetext.js":177,"./helpers/wrap.js":179,"./methods/align.js":180,"./methods/config.js":181,"./methods/container.js":182,"./methods/dev.js":183,"./methods/draw.js":184,"./methods/format.js":185,"./methods/height.js":186,"./methods/padding.js":187,"./methods/resize.js":188,"./methods/rotate.js":189,"./methods/shape.js":190,"./methods/size.js":191,"./methods/text.js":192,"./methods/valign.js":193,"./methods/width.js":194,"./methods/x.js":195,"./methods/y.js":196}],198:[function(require,module,exports){
 var defaultLocale = require("../core/locale/languages/en_US.js"),
     events = require("../client/pointer.js"),
     legible = require("../color/legible.js"),
@@ -21584,7 +21565,7 @@ function close_descriptions() {
     d3.selectAll("div.d3po_tooltip_data_desc").style("height", "0px");
     d3.selectAll("div.d3po_tooltip_data_help").style("background-color", "#ccc");
 }
-},{"../client/pointer.js":34,"../client/prefix.js":35,"../client/rtl.js":36,"../client/scroll.js":37,"../client/scrollbar.js":38,"../color/legible.js":40,"../color/text.js":46,"../core/locale/languages/en_US.js":67,"../string/list.js":172,"./move.js":200,"./remove.js":201}],200:[function(require,module,exports){
+},{"../client/pointer.js":33,"../client/prefix.js":34,"../client/rtl.js":35,"../client/scroll.js":36,"../client/scrollbar.js":37,"../color/legible.js":39,"../color/text.js":45,"../core/locale/languages/en_US.js":66,"../string/list.js":171,"./move.js":199,"./remove.js":200}],199:[function(require,module,exports){
 (function() {
     var arrowStyle, scroll;
 
@@ -21752,7 +21733,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{"../client/scroll.js":37}],201:[function(require,module,exports){
+},{"../client/scroll.js":36}],200:[function(require,module,exports){
 // Destroy Tooltips
 (function() {
     module.exports = function(id) {
@@ -21766,7 +21747,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{}],202:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 // Expands a min/max into a specified number of buckets
 (function() {
     module.exports = function(arr, n) {
@@ -21777,7 +21758,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{}],203:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 // Checks to see if element is inside of another element
 (function() {
     var d3selection;
@@ -21806,7 +21787,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{"./d3selection.js":206}],204:[function(require,module,exports){
+},{"./d3selection.js":205}],203:[function(require,module,exports){
 // Finds closest value in array
 (function() {
     module.exports = function(arr, value) {
@@ -21829,7 +21810,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{}],205:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 (function() {
     var copy, objectMerge, objectValidate;
 
@@ -21855,7 +21836,7 @@ function close_descriptions() {
     module.exports = copy;
 
 }).call(this);
-},{"../object/merge.js":169,"../object/validate.js":170}],206:[function(require,module,exports){
+},{"../object/merge.js":168,"../object/validate.js":169}],205:[function(require,module,exports){
 // Cross-browser detect for D3 element
 (function() {
     var ie;
@@ -21871,7 +21852,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{"../client/ie.js":33}],207:[function(require,module,exports){
+},{"../client/ie.js":32}],206:[function(require,module,exports){
 // Creates a Base-64 Data URL from and Image URL
 (function() {
     module.exports = function(url, callback) {
@@ -21892,7 +21873,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{}],208:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 // Returns list of unique values
 (function() {
     var objectValidate, uniques;
@@ -21972,7 +21953,7 @@ function close_descriptions() {
     module.exports = uniques;
 
 }).call(this);
-},{"../object/validate.js":170}],209:[function(require,module,exports){
+},{"../object/validate.js":169}],208:[function(require,module,exports){
 // # If placing into a new container, remove it's contents
 // and check text direction.
 // Also initialized app width and height.
@@ -22034,7 +22015,7 @@ function close_descriptions() {
     };
 
 }).call(this);
-},{}],210:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 var dataFormat = require("../../core/data/format.js"),
     dataColor = require("../../core/data/color.js"),
     dataKeys = require("../../core/data/keys.js"),
@@ -22412,7 +22393,7 @@ module.exports = function(vars) {
     return steps
 
 }
-},{"../../core/console/print.js":48,"../../core/data/color.js":50,"../../core/data/format.js":52,"../../core/data/keys.js":54,"../../core/data/load.js":55,"../../core/fetch/data.js":60,"../../core/parse/edges.js":93,"../../core/parse/nodes.js":96,"../../object/validate.js":170,"../../string/format.js":171,"../../tooltip/remove.js":201,"./errorCheck.js":211,"./finish.js":212,"./focus/tooltip.js":213,"./shapes/draw.js":223,"./svg/enter.js":236,"./svg/update.js":237,"./types/run.js":240,"./ui/drawer.js":241,"./ui/history.js":242,"./ui/legend.js":243,"./ui/timeline.js":245,"./ui/titles.js":246}],211:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/data/color.js":49,"../../core/data/format.js":51,"../../core/data/keys.js":53,"../../core/data/load.js":54,"../../core/fetch/data.js":59,"../../core/parse/edges.js":92,"../../core/parse/nodes.js":95,"../../object/validate.js":169,"../../string/format.js":170,"../../tooltip/remove.js":200,"./errorCheck.js":210,"./finish.js":211,"./focus/tooltip.js":212,"./shapes/draw.js":222,"./svg/enter.js":235,"./svg/update.js":236,"./types/run.js":239,"./ui/drawer.js":240,"./ui/history.js":241,"./ui/legend.js":242,"./ui/timeline.js":244,"./ui/titles.js":245}],210:[function(require,module,exports){
 var fetchText = require("../../core/fetch/text.js"),
     print = require("../../core/console/print.js"),
     rejected = require("../../core/methods/rejected.js"),
@@ -22527,7 +22508,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("checking for errors")
 
 }
-},{"../../core/console/print.js":48,"../../core/fetch/text.js":62,"../../core/methods/rejected.js":89,"../../string/format.js":171,"../../string/list.js":172}],212:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/fetch/text.js":61,"../../core/methods/rejected.js":88,"../../string/format.js":170,"../../string/list.js":171}],211:[function(require,module,exports){
 var edges = require("./shapes/edges.js"),
     paths = require("./shapes/paths.js"),
     flash = require("./ui/message.js"),
@@ -22728,7 +22709,7 @@ module.exports = function(vars) {
     }, vars.draw.timing)
 
 }
-},{"../../core/console/print.js":48,"../../core/methods/reset.js":91,"../../string/title.js":174,"./focus/viz.js":214,"./shapes/edges.js":224,"./shapes/labels.js":226,"./shapes/paths.js":228,"./ui/message.js":244,"./zoom/bounds.js":247,"./zoom/labels.js":249,"./zoom/mouse.js":250}],213:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/methods/reset.js":90,"../../string/title.js":173,"./focus/viz.js":213,"./shapes/edges.js":223,"./shapes/labels.js":225,"./shapes/paths.js":227,"./ui/message.js":243,"./zoom/bounds.js":246,"./zoom/labels.js":248,"./zoom/mouse.js":249}],212:[function(require,module,exports){
 // Creates focus tooltip, if applicable
 (function() {
     var createTooltip, fetchValue, print, removeTooltip;
@@ -22783,7 +22764,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":48,"../../../core/fetch/value.js":63,"../../../tooltip/remove.js":201,"../tooltip/create.js":238}],214:[function(require,module,exports){
+},{"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../tooltip/remove.js":200,"../tooltip/create.js":237}],213:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     ie = require("../../../client/ie.js"),
     fetchValue = require("../../../core/fetch/value.js"),
@@ -22942,7 +22923,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../client/ie.js":33,"../../../client/pointer.js":34,"../../../core/console/print.js":48,"../../../core/fetch/value.js":63,"../../../util/uniques.js":208}],215:[function(require,module,exports){
+},{"../../../client/ie.js":32,"../../../client/pointer.js":33,"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../util/uniques.js":207}],214:[function(require,module,exports){
 (function() {
     var angles, largestRect, path2poly, shapeStyle;
 
@@ -23045,7 +23026,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../geom/largestrectangle.js":158,"../../../geom/path2poly.js":160,"./style.js":232}],216:[function(require,module,exports){
+},{"../../../geom/largestrectangle.js":157,"../../../geom/path2poly.js":159,"./style.js":231}],215:[function(require,module,exports){
 var fetchText = require("../../../core/fetch/text.js"),
     fontSizes = require("../../../font/sizes.js"),
     largestRect = require("../../../geom/largestrectangle.js"),
@@ -23184,7 +23165,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"../../../core/fetch/text.js":62,"../../../font/sizes.js":100,"../../../geom/largestrectangle.js":158,"./style.js":232}],217:[function(require,module,exports){
+},{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"./style.js":231}],216:[function(require,module,exports){
 var fetchText = require("../../../core/fetch/text.js"),
     largestRect = require("../../../geom/largestrectangle.js"),
     shapeStyle = require("./style.js")
@@ -23239,7 +23220,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"../../../core/fetch/text.js":62,"../../../geom/largestrectangle.js":158,"./style.js":232}],218:[function(require,module,exports){
+},{"../../../core/fetch/text.js":61,"../../../geom/largestrectangle.js":157,"./style.js":231}],217:[function(require,module,exports){
 // Returns the correct fill color for a node
 (function() {
     var fetchColor, fetchValue, lighter, segments;
@@ -23281,7 +23262,7 @@ module.exports = function(vars, selection, enter, exit) {
     };
 
 }).call(this);
-},{"../../../color/lighter.js":41,"../../../core/fetch/color.js":59,"../../../core/fetch/value.js":63,"./segments.js":231}],219:[function(require,module,exports){
+},{"../../../color/lighter.js":40,"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"./segments.js":230}],218:[function(require,module,exports){
 (function() {
     var copy, distance, fetchText, fontSizes, labels, largestRect, path2poly, shapeStyle;
 
@@ -23442,7 +23423,7 @@ module.exports = function(vars, selection, enter, exit) {
     };
 
 }).call(this);
-},{"../../../core/fetch/text.js":62,"../../../font/sizes.js":100,"../../../geom/largestrectangle.js":158,"../../../geom/path2poly.js":160,"../../../network/distance.js":163,"../../../util/copy.js":205,"./style.js":232}],220:[function(require,module,exports){
+},{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"../../../geom/path2poly.js":159,"../../../network/distance.js":162,"../../../util/copy.js":204,"./style.js":231}],219:[function(require,module,exports){
 var shapeStyle = require("./style.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Draws "square" and "circle" shapes using svg:rect
@@ -23493,7 +23474,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"./style.js":232}],221:[function(require,module,exports){
+},{"./style.js":231}],220:[function(require,module,exports){
 var shapeStyle = require("./style.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Draws "square" and "circle" shapes using svg:rect
@@ -23544,7 +23525,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"./style.js":232}],222:[function(require,module,exports){
+},{"./style.js":231}],221:[function(require,module,exports){
 var shapeStyle = require("./style.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Draws "donut" shapes using svg:path with arcs
@@ -23681,7 +23662,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 };
-},{"./style.js":232}],223:[function(require,module,exports){
+},{"./style.js":231}],222:[function(require,module,exports){
 var child = require("../../../util/child.js"),
     closest = require("../../../util/closest.js"),
     createTooltip = require("../tooltip/create.js"),
@@ -24486,7 +24467,7 @@ module.exports = function(vars) {
         })
 
 }
-},{"../../../client/pointer.js":34,"../../../client/touch.js":39,"../../../color/legible.js":40,"../../../core/console/print.js":48,"../../../core/fetch/color.js":59,"../../../core/fetch/text.js":62,"../../../core/fetch/value.js":63,"../../../object/validate.js":170,"../../../string/strip.js":173,"../../../tooltip/remove.js":201,"../../../util/child.js":203,"../../../util/closest.js":204,"../../../util/uniques.js":208,"../tooltip/create.js":238,"../zoom/direction.js":248,"../zoom/propagation.js":251,"./arc.js":215,"./area.js":216,"./check.js":217,"./coordinates.js":219,"./cross.js":220,"./diamond.js":221,"./donut.js":222,"./fill.js":225,"./line.js":227,"./radial.js":229,"./rect.js":230,"./segments.js":231,"./triangle_down.js":233,"./triangle_up.js":234,"./whisker.js":235}],224:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../tooltip/remove.js":200,"../../../util/child.js":202,"../../../util/closest.js":203,"../../../util/uniques.js":207,"../tooltip/create.js":237,"../zoom/direction.js":247,"../zoom/propagation.js":250,"./arc.js":214,"./area.js":215,"./check.js":216,"./coordinates.js":218,"./cross.js":219,"./diamond.js":220,"./donut.js":221,"./fill.js":224,"./line.js":226,"./radial.js":228,"./rect.js":229,"./segments.js":230,"./triangle_down.js":232,"./triangle_up.js":233,"./whisker.js":234}],223:[function(require,module,exports){
 var buckets = require("../../../util/buckets.js"),
     offset = require("../../../geom/offset.js");
 
@@ -25050,7 +25031,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../geom/offset.js":159,"../../../util/buckets.js":202}],225:[function(require,module,exports){
+},{"../../../geom/offset.js":158,"../../../util/buckets.js":201}],224:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchColor = require("../../../core/fetch/color.js"),
     fetchValue = require("../../../core/fetch/value.js"),
@@ -25329,7 +25310,7 @@ module.exports = function(vars, selection, enter, exit) {
     });
 
 };
-},{"../../../core/fetch/color.js":59,"../../../core/fetch/value.js":63,"../../../util/copy.js":205,"./segments.js":231,"./style.js":232}],226:[function(require,module,exports){
+},{"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"../../../util/copy.js":204,"./segments.js":230,"./style.js":231}],225:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchText = require("../../../core/fetch/text.js"),
     fetchValue = require("../../../core/fetch/value.js"),
@@ -25414,7 +25395,7 @@ module.exports = function(vars, group) {
                     resize = true;
 
                 if (!(t.resize instanceof Array)) {
-                    size = [7, 40 * (scale[1] / scale[0])];
+                    size = [7, 32 * (scale[1] / scale[0])];
                     resize = t.resize;
                 }
 
@@ -25709,7 +25690,8 @@ module.exports = function(vars, group) {
 
     }
 }
-},{"../../../client/rtl.js":36,"../../../color/mix.js":42,"../../../color/text.js":46,"../../../core/console/print.js":48,"../../../core/fetch/text.js":62,"../../../core/fetch/value.js":63,"../../../string/list.js":172,"../../../textwrap/textwrap.js":198,"../../../util/copy.js":205,"./color.js":218,"./segments.js":231}],227:[function(require,module,exports){
+
+},{"../../../client/rtl.js":35,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../string/list.js":171,"../../../textwrap/textwrap.js":197,"../../../util/copy.js":204,"./color.js":217,"./segments.js":230}],226:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     closest = require("../../../util/closest.js"),
     events = require("../../../client/pointer.js"),
@@ -26061,7 +26043,7 @@ function mouseStyle(vars, elem, stroke, mod) {
     }
 
 }
-},{"../../../client/pointer.js":34,"../../../core/fetch/value.js":63,"../../../util/closest.js":204,"../../../util/copy.js":205,"./style.js":232}],228:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../core/fetch/value.js":62,"../../../util/closest.js":203,"../../../util/copy.js":204,"./style.js":231}],227:[function(require,module,exports){
 module.exports = function(vars) {
 
     var edges = vars.returned.edges || [];
@@ -26131,7 +26113,7 @@ module.exports = function(vars) {
     }
 
 }
-},{}],229:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 (function() {
     var angles, interpolates, radii, shapeStyle;
 
@@ -26233,7 +26215,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./style.js":232}],230:[function(require,module,exports){
+},{"./style.js":231}],229:[function(require,module,exports){
 (function() {
     var shapeStyle;
 
@@ -26365,7 +26347,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./style.js":232}],231:[function(require,module,exports){
+},{"./style.js":231}],230:[function(require,module,exports){
 (function() {
     var fetchValue;
 
@@ -26386,7 +26368,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/fetch/value.js":63}],232:[function(require,module,exports){
+},{"../../../core/fetch/value.js":62}],231:[function(require,module,exports){
 // Fill style for all shapes
 (function() {
     var color, ie, value;
@@ -26431,7 +26413,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../client/ie.js":33,"../../../core/fetch/value.js":63,"./color.js":218}],233:[function(require,module,exports){
+},{"../../../client/ie.js":32,"../../../core/fetch/value.js":62,"./color.js":217}],232:[function(require,module,exports){
 var shapeStyle = require("./style.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Draws "square" and "circle" shapes using svg:rect
@@ -26482,7 +26464,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"./style.js":232}],234:[function(require,module,exports){
+},{"./style.js":231}],233:[function(require,module,exports){
 var shapeStyle = require("./style.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Draws "square" and "circle" shapes using svg:rect
@@ -26533,7 +26515,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"./style.js":232}],235:[function(require,module,exports){
+},{"./style.js":231}],234:[function(require,module,exports){
 (function() {
     module.exports = function(vars, selection, enter, exit) {
         var d, data, init, marker, orient, pos, position, size, style;
@@ -26619,7 +26601,7 @@ module.exports = function(vars, selection, enter, exit) {
     };
 
 }).call(this);
-},{}],236:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     prefix = require("../../../client/prefix.js"),
     print = require("../../../core/console/print.js"),
@@ -26785,7 +26767,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("creating SVG elements");
 
 };
-},{"../../../client/pointer.js":34,"../../../client/prefix.js":35,"../../../client/touch.js":39,"../../../core/console/print.js":48,"../zoom/propagation.js":251}],237:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../client/touch.js":38,"../../../core/console/print.js":47,"../zoom/propagation.js":250}],236:[function(require,module,exports){
 var print = require("../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Updating Elements
@@ -26853,7 +26835,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("updating SVG elements")
 
 }
-},{"../../../core/console/print.js":48}],238:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],237:[function(require,module,exports){
 var arraySort = require("../../../array/sort.js"),
     createTooltip = require("../../../tooltip/create.js"),
     dataNest = require("../../../core/data/nest.js"),
@@ -27216,7 +27198,7 @@ module.exports = function(params) {
     }
 
 }
-},{"../../../array/sort.js":30,"../../../client/scroll.js":37,"../../../core/data/nest.js":56,"../../../core/fetch/color.js":59,"../../../core/fetch/text.js":62,"../../../core/fetch/value.js":63,"../../../object/merge.js":169,"../../../object/validate.js":170,"../../../tooltip/create.js":199,"../../../tooltip/remove.js":201,"../../../util/uniques.js":208,"../shapes/segments.js":231,"../zoom/direction.js":248,"./data.js":239}],239:[function(require,module,exports){
+},{"../../../array/sort.js":29,"../../../client/scroll.js":36,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/merge.js":168,"../../../object/validate.js":169,"../../../tooltip/create.js":198,"../../../tooltip/remove.js":200,"../../../util/uniques.js":207,"../shapes/segments.js":230,"../zoom/direction.js":247,"./data.js":238}],238:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     fetchColor = require("../../../core/fetch/color.js"),
@@ -27485,7 +27467,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     return tooltip_data
 
 }
-},{"../../../client/prefix.js":35,"../../../color/legible.js":40,"../../../core/fetch/color.js":59,"../../../core/fetch/text.js":62,"../../../core/fetch/value.js":63,"../../../object/merge.js":169,"../../../object/validate.js":170,"../../../string/format.js":171,"../../../util/copy.js":205}],240:[function(require,module,exports){
+},{"../../../client/prefix.js":34,"../../../color/legible.js":39,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/merge.js":168,"../../../object/validate.js":169,"../../../string/format.js":170,"../../../util/copy.js":204}],239:[function(require,module,exports){
 (function() {
     var print;
 
@@ -27539,7 +27521,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":48}],241:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],240:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     form = require("../../../form/form.js"),
     print = require("../../../core/console/print.js"),
@@ -27689,7 +27671,7 @@ module.exports = function(vars) {
     if (vars.dev.value && enabled) print.timeEnd("drawing custom UI elements");
 
 };
-},{"../../../core/console/print.js":48,"../../../form/form.js":102,"../../../object/validate.js":170,"../../../util/copy.js":205}],242:[function(require,module,exports){
+},{"../../../core/console/print.js":47,"../../../form/form.js":101,"../../../object/validate.js":169,"../../../util/copy.js":204}],241:[function(require,module,exports){
 // Creates "back" button, if applicable
 (function() {
     var events, lighter, print, stylesheet;
@@ -27775,7 +27757,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../client/css.js":32,"../../../client/pointer.js":34,"../../../color/lighter.js":41,"../../../core/console/print.js":48}],243:[function(require,module,exports){
+},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../color/lighter.js":40,"../../../core/console/print.js":47}],242:[function(require,module,exports){
 var arraySort = require("../../../array/sort.js"),
     buckets = require("../../../util/buckets.js"),
     copy = require("../../../util/copy.js"),
@@ -28443,7 +28425,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../array/sort.js":30,"../../../client/pointer.js":34,"../../../client/scroll.js":37,"../../../client/touch.js":39,"../../../color/text.js":46,"../../../core/console/print.js":48,"../../../core/data/nest.js":56,"../../../core/fetch/color.js":59,"../../../core/fetch/text.js":62,"../../../core/fetch/value.js":63,"../../../object/validate.js":170,"../../../string/strip.js":173,"../../../textwrap/textwrap.js":198,"../../../tooltip/remove.js":201,"../../../util/buckets.js":202,"../../../util/copy.js":205,"../../../util/dataurl.js":207,"../../../util/uniques.js":208,"../tooltip/create.js":238}],244:[function(require,module,exports){
+},{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../textwrap/textwrap.js":197,"../../../tooltip/remove.js":200,"../../../util/buckets.js":201,"../../../util/copy.js":204,"../../../util/dataurl.js":206,"../../../util/uniques.js":207,"../tooltip/create.js":237}],243:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     textColor = require("../../../color/text.js");
 
@@ -28559,7 +28541,7 @@ module.exports = function(vars, message) {
         .call(style).style("opacity", message ? 1 : 0)
 
 }
-},{"../../../client/pointer.js":34,"../../../color/text.js":46}],245:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../color/text.js":45}],244:[function(require,module,exports){
 (function() {
     var closest, css, events, fontSizes, mix, playInterval, prefix, print, textColor, timeDetect;
 
@@ -28944,7 +28926,7 @@ module.exports = function(vars, message) {
     };
 
 }).call(this);
-},{"../../../client/css.js":32,"../../../client/pointer.js":34,"../../../client/prefix.js":35,"../../../color/mix.js":42,"../../../color/text.js":46,"../../../core/console/print.js":48,"../../../core/data/time.js":58,"../../../font/sizes.js":100,"../../../util/closest.js":204}],246:[function(require,module,exports){
+},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/time.js":57,"../../../font/sizes.js":99,"../../../util/closest.js":203}],245:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     print = require("../../../core/console/print.js"),
@@ -29262,7 +29244,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("drawing titles")
 
 }
-},{"../../../client/pointer.js":34,"../../../client/rtl.js":36,"../../../core/console/print.js":48,"../../../core/fetch/value.js":63,"../../../textwrap/textwrap.js":198}],247:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/rtl.js":35,"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../textwrap/textwrap.js":197}],246:[function(require,module,exports){
 (function() {
     var labels, transform;
 
@@ -29316,7 +29298,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./labels.js":249,"./transform.js":252}],248:[function(require,module,exports){
+},{"./labels.js":248,"./transform.js":251}],247:[function(require,module,exports){
 (function() {
     module.exports = function(data, vars) {
         var depth, max_depth, nextDepth;
@@ -29335,7 +29317,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],249:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 (function() {
     var print;
 
@@ -29373,7 +29355,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":48}],250:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],249:[function(require,module,exports){
 (function() {
     var labels, removeTooltip, transform;
 
@@ -29430,7 +29412,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../tooltip/remove.js":201,"./labels.js":249,"./transform.js":252}],251:[function(require,module,exports){
+},{"../../../tooltip/remove.js":200,"./labels.js":248,"./transform.js":251}],250:[function(require,module,exports){
 (function() {
     module.exports = function(vars, event) {
         var enabled, zoom, zoomable, zoomed;
@@ -29447,7 +29429,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],252:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 (function() {
     module.exports = function(vars, timing) {
         var translate;
@@ -29464,7 +29446,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],253:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -29482,7 +29464,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],254:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],253:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Object],
@@ -29491,7 +29473,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],255:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 (function() {
     var process;
 
@@ -29513,7 +29495,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":85}],256:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],255:[function(require,module,exports){
 (function() {
     var process, rendering;
 
@@ -29554,7 +29536,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/process/margin.js":88,"../../core/methods/rendering.js":90}],257:[function(require,module,exports){
+},{"../../core/methods/process/margin.js":87,"../../core/methods/rendering.js":89}],256:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [String],
@@ -29562,7 +29544,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],258:[function(require,module,exports){
+},{}],257:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Function, String],
@@ -29570,7 +29552,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],259:[function(require,module,exports){
+},{}],258:[function(require,module,exports){
 (function() {
     var filter, scale;
 
@@ -29611,7 +29593,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../color/scale.js":44,"../../core/methods/filter.js":79}],260:[function(require,module,exports){
+},{"../../color/scale.js":43,"../../core/methods/filter.js":78}],259:[function(require,module,exports){
 module.exports = {
     "accepted": [Array, Function, String],
     "index": {
@@ -29624,9 +29606,9 @@ module.exports = {
     },
     "value": false
 }
-},{}],261:[function(require,module,exports){
-arguments[4][106][0].apply(exports,arguments)
-},{"dup":106}],262:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"dup":105}],261:[function(require,module,exports){
 (function() {
     var d3selection;
 
@@ -29657,7 +29639,7 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../util/d3selection.js":206}],263:[function(require,module,exports){
+},{"../../util/d3selection.js":205}],262:[function(require,module,exports){
 (function() {
     var filter, process;
 
@@ -29697,7 +29679,7 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79,"../../core/methods/process/data.js":85}],264:[function(require,module,exports){
+},{"../../core/methods/filter.js":78,"../../core/methods/process/data.js":84}],263:[function(require,module,exports){
 (function() {
     var fetchValue, ie, stringStrip;
 
@@ -29826,7 +29808,7 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../client/ie.js":33,"../../core/fetch/value.js":63,"../../string/strip.js":173}],265:[function(require,module,exports){
+},{"../../client/ie.js":32,"../../core/fetch/value.js":62,"../../string/strip.js":172}],264:[function(require,module,exports){
 (function() {
     var process;
 
@@ -29866,7 +29848,7 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":85}],266:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],265:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Function, Number],
@@ -29874,7 +29856,7 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],267:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Function, Object],
@@ -29882,9 +29864,9 @@ arguments[4][106][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],268:[function(require,module,exports){
-arguments[4][110][0].apply(exports,arguments)
-},{"dup":110}],269:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"dup":109}],268:[function(require,module,exports){
 var print = require("../../core/console/print.js"),
     stringFormat = require("../../string/format.js")
 
@@ -29943,7 +29925,7 @@ module.exports = {
     "update": true,
     "value": undefined
 }
-},{"../../core/console/print.js":48,"../../string/format.js":171}],270:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../string/format.js":170}],269:[function(require,module,exports){
 var process = require("../../core/methods/process/data.js");
 
 module.exports = {
@@ -30042,7 +30024,7 @@ module.exports = {
     "target": "target",
     "value": false
 };
-},{"../../core/methods/process/data.js":85}],271:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],270:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, String],
@@ -30050,7 +30032,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],272:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Array, Function, Number, String],
@@ -30071,7 +30053,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],273:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -30105,7 +30087,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":80,"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],274:[function(require,module,exports){
+},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],273:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30133,7 +30115,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],275:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],274:[function(require,module,exports){
 (function() {
     var formatNumber, locale, mergeObject, titleCase;
 
@@ -30213,7 +30195,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/locale/locale.js":77,"../../number/format.js":168,"../../object/merge.js":169,"../../string/title.js":174}],276:[function(require,module,exports){
+},{"../../core/locale/locale.js":76,"../../number/format.js":167,"../../object/merge.js":168,"../../string/title.js":173}],275:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -30224,7 +30206,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],277:[function(require,module,exports){
+},{}],276:[function(require,module,exports){
 (function() {
     var align, decoration, family, filter, orientMap, position, rendering, transform;
 
@@ -30457,7 +30439,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../core/methods/filter.js":79,"../../../core/methods/font/align.js":80,"../../../core/methods/font/decoration.js":81,"../../../core/methods/font/family.js":82,"../../../core/methods/font/position.js":83,"../../../core/methods/font/transform.js":84,"../../../core/methods/rendering.js":90}],278:[function(require,module,exports){
+},{"../../../core/methods/filter.js":78,"../../../core/methods/font/align.js":79,"../../../core/methods/font/decoration.js":80,"../../../core/methods/font/family.js":81,"../../../core/methods/font/position.js":82,"../../../core/methods/font/transform.js":83,"../../../core/methods/rendering.js":89}],277:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30480,7 +30462,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],279:[function(require,module,exports){
+},{}],278:[function(require,module,exports){
 (function() {
     var process;
 
@@ -30504,7 +30486,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/process/icon.js":87}],280:[function(require,module,exports){
+},{"../../core/methods/process/icon.js":86}],279:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30524,7 +30506,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],281:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],280:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30577,7 +30559,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],282:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],281:[function(require,module,exports){
 (function() {
     var family;
 
@@ -30637,7 +30619,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/family.js":82}],283:[function(require,module,exports){
+},{"../../core/methods/font/family.js":81}],282:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30665,9 +30647,9 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],284:[function(require,module,exports){
-arguments[4][121][0].apply(exports,arguments)
-},{"../../core/methods/process/margin.js":88,"dup":121}],285:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],283:[function(require,module,exports){
+arguments[4][120][0].apply(exports,arguments)
+},{"../../core/methods/process/margin.js":87,"dup":120}],284:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30700,7 +30682,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],286:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],285:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30724,7 +30706,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],287:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 (function() {
     var process;
 
@@ -30746,7 +30728,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":85}],288:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],287:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, Function, String],
@@ -30762,7 +30744,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],289:[function(require,module,exports){
+},{}],288:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30796,7 +30778,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],290:[function(require,module,exports){
+},{}],289:[function(require,module,exports){
 (function() {
     var rendering;
 
@@ -30824,7 +30806,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/rendering.js":90}],291:[function(require,module,exports){
+},{"../../core/methods/rendering.js":89}],290:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30869,14 +30851,14 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],292:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],291:[function(require,module,exports){
 (function() {
     module.exports = {
         value: false
     };
 
 }).call(this);
-},{}],293:[function(require,module,exports){
+},{}],292:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30890,7 +30872,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],294:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],293:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30905,7 +30887,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],295:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],294:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30928,7 +30910,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":79}],296:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],295:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30971,7 +30953,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],297:[function(require,module,exports){
+},{}],296:[function(require,module,exports){
 (function() {
     module.exports = {
         mouseevents: 60,
@@ -30980,7 +30962,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],298:[function(require,module,exports){
+},{}],297:[function(require,module,exports){
 (function() {
     var decoration, family, stringStrip, transform;
 
@@ -31055,7 +31037,7 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84,"../../string/strip.js":173}],299:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83,"../../string/strip.js":172}],298:[function(require,module,exports){
 (function() {
     var family, transform;
 
@@ -31066,7 +31048,7 @@ arguments[4][121][0].apply(exports,arguments)
     module.exports = {
         accepted: [Boolean, Array, Function, Object, String],
         anchor: "top center",
-        background: "#ffffff",
+        background: "#f4f4f4",
         children: {
             accepted: [Boolean, Number],
             value: true
@@ -31076,7 +31058,7 @@ arguments[4][121][0].apply(exports,arguments)
             value: true
         },
         curtain: {
-            color: "#ffffff",
+            color: "#ddd",
             opacity: 0.8
         },
         extent: {
@@ -31124,9 +31106,10 @@ arguments[4][121][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],300:[function(require,module,exports){
-arguments[4][293][0].apply(exports,arguments)
-},{"../../core/methods/filter.js":79,"dup":293}],301:[function(require,module,exports){
+
+},{"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],299:[function(require,module,exports){
+arguments[4][292][0].apply(exports,arguments)
+},{"../../core/methods/filter.js":78,"dup":292}],300:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: function(vars) {
@@ -31142,7 +31125,7 @@ arguments[4][293][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],302:[function(require,module,exports){
+},{}],301:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -31197,7 +31180,7 @@ arguments[4][293][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":80,"../../core/methods/font/decoration.js":81,"../../core/methods/font/family.js":82,"../../core/methods/font/transform.js":84}],303:[function(require,module,exports){
+},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],302:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -31207,7 +31190,7 @@ arguments[4][293][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],304:[function(require,module,exports){
+},{}],303:[function(require,module,exports){
 module.exports = {
     "accepted": [Boolean],
     "behavior": d3.behavior.zoom().scaleExtent([1, 1]).duration(0),
@@ -31225,7 +31208,7 @@ module.exports = {
     },
     "value": true
 }
-},{}],305:[function(require,module,exports){
+},{}],304:[function(require,module,exports){
 (function() {
     var area, closest, fetchValue, graph, nest, sort, stack, threshold;
 
@@ -31329,7 +31312,7 @@ module.exports = {
     module.exports = area;
 
 }).call(this);
-},{"../../array/sort.js":30,"../../core/data/threshold.js":57,"../../core/fetch/value.js":63,"../../util/closest.js":204,"./helpers/graph/draw.js":313,"./helpers/graph/nest.js":319,"./helpers/graph/stack.js":320}],306:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"../../util/closest.js":203,"./helpers/graph/draw.js":312,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],305:[function(require,module,exports){
 (function() {
     var bar, buckets, fetchValue, graph, nest, stack, uniques,
         indexOf = [].indexOf || function(item) {
@@ -31535,7 +31518,7 @@ module.exports = {
     module.exports = bar;
 
 }).call(this);
-},{"../../core/fetch/value.js":63,"../../util/buckets.js":202,"../../util/uniques.js":208,"./helpers/graph/draw.js":313,"./helpers/graph/nest.js":319,"./helpers/graph/stack.js":320}],307:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":312,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],306:[function(require,module,exports){
 (function() {
     var box, fetchValue, graph, stringFormat, strip, uniques;
 
@@ -31808,7 +31791,7 @@ module.exports = {
     module.exports = box;
 
 }).call(this);
-},{"../../core/fetch/value.js":63,"../../string/format.js":171,"../../string/strip.js":173,"../../util/uniques.js":208,"./helpers/graph/draw.js":313}],308:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../string/format.js":170,"../../string/strip.js":172,"../../util/uniques.js":207,"./helpers/graph/draw.js":312}],307:[function(require,module,exports){
 (function() {
     var arraySort, bubbles, fetchColor, fetchText, fetchValue, groupData, legible;
 
@@ -31953,7 +31936,7 @@ module.exports = {
     module.exports = bubbles;
 
 }).call(this);
-},{"../../array/sort.js":30,"../../color/legible.js":40,"../../core/data/group.js":53,"../../core/fetch/color.js":59,"../../core/fetch/text.js":62,"../../core/fetch/value.js":63}],309:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../color/legible.js":39,"../../core/data/group.js":52,"../../core/fetch/color.js":58,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62}],308:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, donut, groupData;
 
@@ -32008,7 +31991,7 @@ module.exports = {
     module.exports = donut;
 
 }).call(this);
-},{"../../array/comparator.js":28,"../../core/data/group.js":53,"../../core/data/threshold.js":57}],310:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],309:[function(require,module,exports){
 (function() {
     var geomap;
 
@@ -32048,7 +32031,7 @@ module.exports = {
     module.exports = geomap;
 
 }).call(this);
-},{}],311:[function(require,module,exports){
+},{}],310:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, halfdonut;
 
@@ -32107,7 +32090,7 @@ module.exports = {
     module.exports = halfdonut;
 
 }).call(this);
-},{"../../array/comparator.js":28,"../../core/data/group.js":53,"../../core/data/threshold.js":57}],312:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],311:[function(require,module,exports){
 (function() {
     var color, legible, print;
 
@@ -32189,7 +32172,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../color/legible.js":40,"../../../../core/console/print.js":48,"../../../../core/fetch/color.js":59}],313:[function(require,module,exports){
+},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":58}],312:[function(require,module,exports){
 (function() {
     var axes, draw, mouse, plot;
 
@@ -32212,7 +32195,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"./includes/axes.js":314,"./includes/mouse.js":316,"./includes/plot.js":317,"./includes/svg.js":318}],314:[function(require,module,exports){
+},{"./includes/axes.js":313,"./includes/mouse.js":315,"./includes/plot.js":316,"./includes/svg.js":317}],313:[function(require,module,exports){
 (function() {
     var arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
 
@@ -32564,7 +32547,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../array/sort.js":30,"../../../../../core/console/print.js":48,"../../../../../core/fetch/data.js":60,"../../../../../core/fetch/value.js":63,"../../../../../util/buckets.js":202,"../../../../../util/uniques.js":208,"./buffer.js":315}],315:[function(require,module,exports){
+},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":59,"../../../../../core/fetch/value.js":62,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":314}],314:[function(require,module,exports){
 (function() {
     var buckets, closest;
 
@@ -32755,7 +32738,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../util/buckets.js":202,"../../../../../util/closest.js":204}],316:[function(require,module,exports){
+},{"../../../../../util/buckets.js":201,"../../../../../util/closest.js":203}],315:[function(require,module,exports){
 (function() {
     var copy, events, fetchColor, fetchValue, legible, textColor;
 
@@ -33001,7 +32984,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../client/pointer.js":34,"../../../../../color/legible.js":40,"../../../../../color/text.js":46,"../../../../../core/fetch/color.js":59,"../../../../../core/fetch/value.js":63,"../../../../../util/copy.js":205}],317:[function(require,module,exports){
+},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":58,"../../../../../core/fetch/value.js":62,"../../../../../util/copy.js":204}],316:[function(require,module,exports){
 (function() {
     var buckets, buffer, createAxis, fetchValue, fontSizes, formatPower, labelPadding, superscript, textwrap, timeDetect, uniques;
 
@@ -33451,7 +33434,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../core/data/time.js":58,"../../../../../core/fetch/value.js":63,"../../../../../font/sizes.js":100,"../../../../../textwrap/textwrap.js":198,"../../../../../util/buckets.js":202,"../../../../../util/uniques.js":208,"./buffer.js":315}],318:[function(require,module,exports){
+},{"../../../../../core/data/time.js":57,"../../../../../core/fetch/value.js":62,"../../../../../font/sizes.js":99,"../../../../../textwrap/textwrap.js":197,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":314}],317:[function(require,module,exports){
 (function() {
     var mix, textwrap, validObject;
 
@@ -33856,7 +33839,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../color/mix.js":42,"../../../../../object/validate.js":170,"../../../../../textwrap/textwrap.js":198}],319:[function(require,module,exports){
+},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":169,"../../../../../textwrap/textwrap.js":197}],318:[function(require,module,exports){
 (function() {
     var fetchValue, stringStrip, uniqueValues;
 
@@ -33981,7 +33964,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":63,"../../../../string/strip.js":173,"../../../../util/uniques.js":208}],320:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],319:[function(require,module,exports){
 (function() {
     var fetchValue;
 
@@ -34060,7 +34043,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":63}],321:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62}],320:[function(require,module,exports){
 (function() {
     var fetchValue, graph, line, nest, sort, stack;
 
@@ -34140,7 +34123,7 @@ module.exports = {
     module.exports = line;
 
 }).call(this);
-},{"../../array/sort.js":30,"../../core/fetch/value.js":63,"./helpers/graph/draw.js":313,"./helpers/graph/nest.js":319,"./helpers/graph/stack.js":320}],322:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":312,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],321:[function(require,module,exports){
 var smallestGap = require("../../network/smallestgap.js"),
     fetchValue = require("../../core/fetch/value.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -34304,7 +34287,7 @@ network.tooltip = "static"
 network.zoom = true
 
 module.exports = network
-},{"../../core/fetch/value.js":63,"../../network/smallestgap.js":166}],323:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],322:[function(require,module,exports){
 (function() {
     var fetchValue, shortestPath, uniqueValues, viz,
         indexOf = [].indexOf || function(item) {
@@ -34570,7 +34553,7 @@ module.exports = network
     module.exports = viz;
 
 }).call(this);
-},{"../../core/fetch/value.js":63,"../../network/shortestpath.js":165,"../../util/uniques.js":208}],324:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],323:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, pie;
 
@@ -34625,7 +34608,7 @@ module.exports = network
     module.exports = pie;
 
 }).call(this);
-},{"../../array/comparator.js":28,"../../core/data/group.js":53,"../../core/data/threshold.js":57}],325:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],324:[function(require,module,exports){
 (function() {
     var buckets, comparator, dataThreshold, fetchText, fetchValue, fontSizes, offset, radar, sort, textwrap, uniques;
 
@@ -34870,7 +34853,7 @@ module.exports = network
     module.exports = radar;
 
 }).call(this);
-},{"../../array/comparator.js":28,"../../array/sort.js":30,"../../core/data/threshold.js":57,"../../core/fetch/text.js":62,"../../core/fetch/value.js":63,"../../font/sizes.js":100,"../../geom/offset.js":159,"../../textwrap/textwrap.js":198,"../../util/buckets.js":202,"../../util/uniques.js":208}],326:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],325:[function(require,module,exports){
 var arraySort = require("../../array/sort.js"),
     events = require("../../client/pointer.js"),
     fetchValue = require("../../core/fetch/value.js"),
@@ -35370,7 +35353,7 @@ rings.requirements = ["edges", "focus"]
 rings.tooltip = "static"
 
 module.exports = rings
-},{"../../array/sort.js":30,"../../client/pointer.js":34,"../../color/legible.js":40,"../../color/text.js":46,"../../core/fetch/color.js":59,"../../core/fetch/value.js":63,"../../network/smallestgap.js":166,"../../tooltip/remove.js":201,"../../util/uniques.js":208}],327:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],326:[function(require,module,exports){
 (function() {
     var d3sankey, events, removeTooltip, sankey, uniques;
 
@@ -35478,7 +35461,7 @@ module.exports = rings
     module.exports = sankey;
 
 }).call(this);
-},{"../../client/pointer.js":34,"../../tooltip/remove.js":201,"../../util/uniques.js":208,"./sankey.js":327}],328:[function(require,module,exports){
+},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"../../util/uniques.js":207,"./sankey.js":326}],327:[function(require,module,exports){
 (function() {
     var fetchValue, graph, print, scatter, sort, ticks;
 
@@ -35547,7 +35530,7 @@ module.exports = rings
     module.exports = scatter;
 
 }).call(this);
-},{"../../array/sort.js":30,"../../core/console/print.js":48,"../../core/fetch/value.js":63,"./helpers/graph/dataticks.js":312,"./helpers/graph/draw.js":313}],329:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":311,"./helpers/graph/draw.js":312}],328:[function(require,module,exports){
 var fetchValue = require("../../core/fetch/value.js");
 var uniques = require("../../util/uniques.js");
 var copy = require("../../util/copy.js");
@@ -35711,7 +35694,7 @@ table.shapes = ["check", "cross", "diamond", "square", "triangle", "triangle_up"
 table.requirements = ["data", "cols"]
 
 module.exports = table
-},{"../../color/random.js":43,"../../core/fetch/value.js":63,"../../util/copy.js":205,"../../util/uniques.js":208}],330:[function(require,module,exports){
+},{"../../color/random.js":42,"../../core/fetch/value.js":62,"../../util/copy.js":204,"../../util/uniques.js":207}],329:[function(require,module,exports){
 (function() {
     var dataThreshold, groupData, mergeObject, treemap;
 
@@ -35776,7 +35759,7 @@ module.exports = table
     module.exports = treemap;
 
 }).call(this);
-},{"../../core/data/group.js":53,"../../core/data/threshold.js":57,"../../object/merge.js":169}],331:[function(require,module,exports){
+},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],330:[function(require,module,exports){
 (function() {
     var attach, axis, container, flash, getSteps, print, validObject;
 
@@ -35984,4 +35967,4 @@ module.exports = table
     };
 
 }).call(this);
-},{"../core/console/print.js":48,"../core/methods/attach.js":78,"../object/validate.js":170,"./helpers/container.js":209,"./helpers/drawSteps.js":210,"./helpers/ui/message.js":244,"./methods/active.js":253,"./methods/aggs.js":254,"./methods/attrs.js":255,"./methods/axes.js":256,"./methods/background.js":257,"./methods/class.js":258,"./methods/color.js":259,"./methods/cols.js":260,"./methods/config.js":261,"./methods/container.js":262,"./methods/coords.js":263,"./methods/csv.js":264,"./methods/data.js":265,"./methods/depth.js":266,"./methods/descs.js":267,"./methods/dev.js":268,"./methods/draw.js":269,"./methods/edges.js":270,"./methods/error.js":271,"./methods/focus.js":272,"./methods/font.js":273,"./methods/footer.js":274,"./methods/format.js":275,"./methods/height.js":276,"./methods/helpers/axis.js":277,"./methods/history.js":278,"./methods/icon.js":279,"./methods/id.js":280,"./methods/labels.js":281,"./methods/legend.js":282,"./methods/links.js":283,"./methods/margin.js":284,"./methods/messages.js":285,"./methods/mouse.js":286,"./methods/nodes.js":287,"./methods/order.js":288,"./methods/resize.js":289,"./methods/shape.js":290,"./methods/size.js":291,"./methods/style.js":292,"./methods/temp.js":293,"./methods/text.js":294,"./methods/time.js":295,"./methods/timeline.js":296,"./methods/timing.js":297,"./methods/title.js":298,"./methods/tooltip.js":299,"./methods/total.js":300,"./methods/type.js":301,"./methods/ui.js":302,"./methods/width.js":303,"./methods/zoom.js":304,"./types/area.js":305,"./types/bar.js":306,"./types/box.js":307,"./types/bubbles.js":308,"./types/donut.js":309,"./types/geomap.js":310,"./types/halfdonut.js":311,"./types/line.js":321,"./types/network.js":322,"./types/paths.js":323,"./types/pie.js":324,"./types/radar.js":325,"./types/rings.js":326,"./types/sankey.js":327,"./types/scatter.js":328,"./types/table.js":329,"./types/treemap.js":330}]},{},[161]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":77,"../object/validate.js":169,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":243,"./methods/active.js":252,"./methods/aggs.js":253,"./methods/attrs.js":254,"./methods/axes.js":255,"./methods/background.js":256,"./methods/class.js":257,"./methods/color.js":258,"./methods/cols.js":259,"./methods/config.js":260,"./methods/container.js":261,"./methods/coords.js":262,"./methods/csv.js":263,"./methods/data.js":264,"./methods/depth.js":265,"./methods/descs.js":266,"./methods/dev.js":267,"./methods/draw.js":268,"./methods/edges.js":269,"./methods/error.js":270,"./methods/focus.js":271,"./methods/font.js":272,"./methods/footer.js":273,"./methods/format.js":274,"./methods/height.js":275,"./methods/helpers/axis.js":276,"./methods/history.js":277,"./methods/icon.js":278,"./methods/id.js":279,"./methods/labels.js":280,"./methods/legend.js":281,"./methods/links.js":282,"./methods/margin.js":283,"./methods/messages.js":284,"./methods/mouse.js":285,"./methods/nodes.js":286,"./methods/order.js":287,"./methods/resize.js":288,"./methods/shape.js":289,"./methods/size.js":290,"./methods/style.js":291,"./methods/temp.js":292,"./methods/text.js":293,"./methods/time.js":294,"./methods/timeline.js":295,"./methods/timing.js":296,"./methods/title.js":297,"./methods/tooltip.js":298,"./methods/total.js":299,"./methods/type.js":300,"./methods/ui.js":301,"./methods/width.js":302,"./methods/zoom.js":303,"./types/area.js":304,"./types/bar.js":305,"./types/box.js":306,"./types/bubbles.js":307,"./types/donut.js":308,"./types/geomap.js":309,"./types/halfdonut.js":310,"./types/line.js":320,"./types/network.js":321,"./types/paths.js":322,"./types/pie.js":323,"./types/radar.js":324,"./types/rings.js":325,"./types/sankey.js":326,"./types/scatter.js":327,"./types/table.js":328,"./types/treemap.js":329}]},{},[160]);

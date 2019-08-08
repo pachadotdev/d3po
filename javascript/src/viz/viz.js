@@ -38,7 +38,6 @@
                 sankey: require("./types/sankey.js"),
                 scatter: require("./types/scatter.js"),
                 stacked: require("./types/area.js"),
-                table: require("./types/table.js"),
                 treemap: require("./types/treemap.js")
             }
         };

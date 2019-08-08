@@ -19406,7 +19406,7 @@ module.exports = function(vars) {
     module.exports = d3po;
 
 }).call(this);
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":330}],161:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":324}],161:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -22393,7 +22393,7 @@ module.exports = function(vars) {
     return steps
 
 }
-},{"../../core/console/print.js":47,"../../core/data/color.js":49,"../../core/data/format.js":51,"../../core/data/keys.js":53,"../../core/data/load.js":54,"../../core/fetch/data.js":59,"../../core/parse/edges.js":92,"../../core/parse/nodes.js":95,"../../object/validate.js":169,"../../string/format.js":170,"../../tooltip/remove.js":200,"./errorCheck.js":210,"./finish.js":211,"./focus/tooltip.js":212,"./shapes/draw.js":222,"./svg/enter.js":235,"./svg/update.js":236,"./types/run.js":239,"./ui/drawer.js":240,"./ui/history.js":241,"./ui/legend.js":242,"./ui/timeline.js":244,"./ui/titles.js":245}],210:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/data/color.js":49,"../../core/data/format.js":51,"../../core/data/keys.js":53,"../../core/data/load.js":54,"../../core/fetch/data.js":59,"../../core/parse/edges.js":92,"../../core/parse/nodes.js":95,"../../object/validate.js":169,"../../string/format.js":170,"../../tooltip/remove.js":200,"./errorCheck.js":210,"./finish.js":211,"./focus/tooltip.js":212,"./shapes/draw.js":219,"./svg/enter.js":230,"./svg/update.js":231,"./types/run.js":234,"./ui/drawer.js":235,"./ui/history.js":236,"./ui/legend.js":237,"./ui/timeline.js":239,"./ui/titles.js":240}],210:[function(require,module,exports){
 var fetchText = require("../../core/fetch/text.js"),
     print = require("../../core/console/print.js"),
     rejected = require("../../core/methods/rejected.js"),
@@ -22709,7 +22709,7 @@ module.exports = function(vars) {
     }, vars.draw.timing)
 
 }
-},{"../../core/console/print.js":47,"../../core/methods/reset.js":90,"../../string/title.js":173,"./focus/viz.js":213,"./shapes/edges.js":223,"./shapes/labels.js":225,"./shapes/paths.js":227,"./ui/message.js":243,"./zoom/bounds.js":246,"./zoom/labels.js":248,"./zoom/mouse.js":249}],212:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/methods/reset.js":90,"../../string/title.js":173,"./focus/viz.js":213,"./shapes/edges.js":220,"./shapes/labels.js":222,"./shapes/paths.js":224,"./ui/message.js":238,"./zoom/bounds.js":241,"./zoom/labels.js":243,"./zoom/mouse.js":244}],212:[function(require,module,exports){
 // Creates focus tooltip, if applicable
 (function() {
     var createTooltip, fetchValue, print, removeTooltip;
@@ -22764,7 +22764,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../tooltip/remove.js":200,"../tooltip/create.js":237}],213:[function(require,module,exports){
+},{"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../tooltip/remove.js":200,"../tooltip/create.js":232}],213:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     ie = require("../../../client/ie.js"),
     fetchValue = require("../../../core/fetch/value.js"),
@@ -23026,7 +23026,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../geom/largestrectangle.js":157,"../../../geom/path2poly.js":159,"./style.js":231}],215:[function(require,module,exports){
+},{"../../../geom/largestrectangle.js":157,"../../../geom/path2poly.js":159,"./style.js":228}],215:[function(require,module,exports){
 var fetchText = require("../../../core/fetch/text.js"),
     fontSizes = require("../../../font/sizes.js"),
     largestRect = require("../../../geom/largestrectangle.js"),
@@ -23165,7 +23165,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"./style.js":231}],216:[function(require,module,exports){
+},{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"./style.js":228}],216:[function(require,module,exports){
 var fetchText = require("../../../core/fetch/text.js"),
     largestRect = require("../../../geom/largestrectangle.js"),
     shapeStyle = require("./style.js")
@@ -23220,7 +23220,7 @@ module.exports = function(vars, selection, enter, exit) {
     }
 
 }
-},{"../../../core/fetch/text.js":61,"../../../geom/largestrectangle.js":157,"./style.js":231}],217:[function(require,module,exports){
+},{"../../../core/fetch/text.js":61,"../../../geom/largestrectangle.js":157,"./style.js":228}],217:[function(require,module,exports){
 // Returns the correct fill color for a node
 (function() {
     var fetchColor, fetchValue, lighter, segments;
@@ -23262,7 +23262,7 @@ module.exports = function(vars, selection, enter, exit) {
     };
 
 }).call(this);
-},{"../../../color/lighter.js":40,"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"./segments.js":230}],218:[function(require,module,exports){
+},{"../../../color/lighter.js":40,"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"./segments.js":227}],218:[function(require,module,exports){
 (function() {
     var copy, distance, fetchText, fontSizes, labels, largestRect, path2poly, shapeStyle;
 
@@ -23423,246 +23423,7 @@ module.exports = function(vars, selection, enter, exit) {
     };
 
 }).call(this);
-},{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"../../../geom/path2poly.js":159,"../../../network/distance.js":162,"../../../util/copy.js":204,"./style.js":231}],219:[function(require,module,exports){
-var shapeStyle = require("./style.js")
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Draws "square" and "circle" shapes using svg:rect
-    //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Initialize check scale on enter and exit.
-    //----------------------------------------------------------------------------
-    function init(paths) {
-        paths.attr("d", d3.svg.symbol().type("cross").size(10))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Change scale of check on update.
-    //---------------------------------------------------------------------------
-    function update(paths) {
-        paths.attr("d", d3.svg.symbol().type("cross").size(function(d) {
-            var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
-            return d3.scale.pow().exponent(2)(smaller_dim / 2);
-        }))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Enter
-    //----------------------------------------------------------------------------
-    enter.append("path").attr("class", "d3po_data")
-        .call(init)
-        .call(shapeStyle, vars)
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Update
-    //----------------------------------------------------------------------------
-    selection.selectAll("path.d3po_data")
-        .data(function(d) {
-            return [d];
-        })
-
-    if (vars.draw.timing) {
-        selection.selectAll("path.d3po_data")
-            .transition().duration(vars.draw.timing)
-            .call(update)
-            .call(shapeStyle, vars)
-    } else {
-        selection.selectAll("path.d3po_data")
-            .call(update)
-            .call(shapeStyle, vars)
-    }
-
-}
-},{"./style.js":231}],220:[function(require,module,exports){
-var shapeStyle = require("./style.js")
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Draws "square" and "circle" shapes using svg:rect
-    //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Initialize check scale on enter and exit.
-    //----------------------------------------------------------------------------
-    function init(paths) {
-        paths.attr("d", d3.svg.symbol().type("diamond").size(10))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Change scale of check on update.
-    //---------------------------------------------------------------------------
-    function update(paths) {
-        paths.attr("d", d3.svg.symbol().type("diamond").size(function(d) {
-            var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
-            return d3.scale.pow().exponent(2)(smaller_dim / 2);
-        }))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Enter
-    //----------------------------------------------------------------------------
-    enter.append("path").attr("class", "d3po_data")
-        .call(init)
-        .call(shapeStyle, vars)
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Update
-    //----------------------------------------------------------------------------
-    selection.selectAll("path.d3po_data")
-        .data(function(d) {
-            return [d];
-        })
-
-    if (vars.draw.timing) {
-        selection.selectAll("path.d3po_data")
-            .transition().duration(vars.draw.timing)
-            .call(update)
-            .call(shapeStyle, vars)
-    } else {
-        selection.selectAll("path.d3po_data")
-            .call(update)
-            .call(shapeStyle, vars)
-    }
-
-}
-},{"./style.js":231}],221:[function(require,module,exports){
-var shapeStyle = require("./style.js")
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Draws "donut" shapes using svg:path with arcs
-    //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // In order to correctly animate each donut's size and arcs, we need to store
-    // it's previous values in a lookup object that does not get destroyed when
-    // redrawing the visualization.
-    //----------------------------------------------------------------------------
-    if (!vars.arcs) {
-        vars.arcs = {
-            "donut": {},
-            "active": {},
-            "temp": {}
-        }
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // This is the main arc function that determines what values to use for each
-    // arc angle and radius.
-    //----------------------------------------------------------------------------
-    var arc = d3.svg.arc()
-        .startAngle(0)
-        .endAngle(function(d) {
-            var a = vars.arcs[d.d3po.shape][d.d3po.id].a;
-            return a > Math.PI * 2 ? Math.PI * 2 : a;
-        })
-        .innerRadius(function(d) {
-            if (d.d3po.static) return 0;
-            var r = vars.arcs[d.d3po.shape][d.d3po.id].r;
-            return r * vars.data.donut.size;
-        })
-        .outerRadius(function(d) {
-            return vars.arcs[d.d3po.shape][d.d3po.id].r;
-        })
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // This is the main "arcTween" function where all of the animation happens
-    // for each arc.
-    //----------------------------------------------------------------------------
-    function size(path, mod, rad, ang) {
-        if (!mod) var mod = 0
-        if (typeof rad != "number") var rad = undefined
-        if (typeof ang != "number") var ang = undefined
-        path.attrTween("d", function(d) {
-            if (rad == undefined) var r = d.d3po.r ? d.d3po.r : d3.max([d.d3po.width, d.d3po.height])
-            else var r = rad
-            if (ang == undefined) var a = d.d3po.segments[d.d3po.shape]
-            else var a = ang
-            if (!vars.arcs[d.d3po.shape][d.d3po.id]) {
-                vars.arcs[d.d3po.shape][d.d3po.id] = {
-                    "r": 0
-                }
-                vars.arcs[d.d3po.shape][d.d3po.id].a = Math.PI * 2
-            }
-            var radius = d3.interpolate(vars.arcs[d.d3po.shape][d.d3po.id].r, r + mod),
-                angle = d3.interpolate(vars.arcs[d.d3po.shape][d.d3po.id].a, a)
-            return function(t) {
-                vars.arcs[d.d3po.shape][d.d3po.id].r = radius(t)
-                vars.arcs[d.d3po.shape][d.d3po.id].a = angle(t)
-                return arc(d)
-            }
-        })
-    }
-
-    function data(d) {
-
-        if (d.d3po.label) {
-            d.d3po_label = d.d3po.label;
-        } else {
-            delete d.d3po_label;
-        }
-
-        return [d];
-    }
-
-    if (vars.draw.timing) {
-
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // "paths" Exit
-        //----------------------------------------------------------------------------
-        exit.selectAll("path.d3po_data").transition().duration(vars.draw.timing)
-            .call(size, 0, 0)
-            .each("end", function(d) {
-                delete vars.arcs[d.d3po.shape][d.d3po.id];
-            });
-
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // "paths" Update
-        //----------------------------------------------------------------------------
-        selection.selectAll("path.d3po_data")
-            .data(data)
-            .transition().duration(vars.draw.timing)
-            .call(size)
-            .call(shapeStyle, vars);
-
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // "paths" Enter
-        //----------------------------------------------------------------------------
-        enter.append("path")
-            .attr("class", "d3po_data")
-            .transition().duration(0)
-            .call(size, 0, 0)
-            .call(shapeStyle, vars)
-            .transition().duration(vars.draw.timing)
-            .call(size)
-            .call(shapeStyle, vars);
-
-    } else {
-
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // "paths" Exit
-        //----------------------------------------------------------------------------
-        exit.selectAll("path.d3po_data")
-            .each(function(d) {
-                delete vars.arcs[d.d3po.shape][d.d3po.id];
-            });
-
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // "paths" Enter
-        //----------------------------------------------------------------------------
-        enter.append("path")
-            .attr("class", "d3po_data");
-
-        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // "paths" Update
-        //----------------------------------------------------------------------------
-        selection.selectAll("path.d3po_data")
-            .data(data)
-            .call(size)
-            .call(shapeStyle, vars);
-    }
-
-};
-},{"./style.js":231}],222:[function(require,module,exports){
+},{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"../../../geom/path2poly.js":159,"../../../network/distance.js":162,"../../../util/copy.js":204,"./style.js":228}],219:[function(require,module,exports){
 var child = require("../../../util/child.js"),
     closest = require("../../../util/closest.js"),
     createTooltip = require("../tooltip/create.js"),
@@ -23687,14 +23448,9 @@ var drawShape = {
     "area": require("./area.js"),
     "check": require("./check.js"),
     "coordinates": require("./coordinates.js"),
-    "cross": require("./cross.js"),
-    "diamond": require("./diamond.js"),
-    "donut": require("./donut.js"),
     "line": require("./line.js"),
     "radial": require("./radial.js"),
     "rect": require("./rect.js"),
-    "triangle_down": require("./triangle_down.js"),
-    "triangle_up": require("./triangle_up.js"),
     "whisker": require("./whisker.js")
 };
 
@@ -23721,17 +23477,11 @@ module.exports = function(vars) {
         "check": "check",
         "circle": "rect",
         "coordinates": "coordinates",
-        "cross": "cross",
         "donut": "donut",
-        "diamond": "diamond",
         "line": "line",
-        "plus": "cross",
         "radial": "radial",
         "rect": "rect",
         "square": "rect",
-        "triangle_down": "triangle_down",
-        "triangle": "triangle_up",
-        "triangle_up": "triangle_up",
         "whisker": "whisker"
     };
 
@@ -23882,30 +23632,6 @@ module.exports = function(vars) {
 
                         d = id(d)
 
-                        if (!d.d3po.segments) {
-
-                            d.d3po.segments = {
-                                "donut": Math.PI * 2
-                            }
-                            var active = segments(vars, d, "active"),
-                                temp = segments(vars, d, "temp"),
-                                total = segments(vars, d, "total");
-
-                            if (total) {
-                                if (active) {
-                                    d.d3po.segments.active = (active / total) * (Math.PI * 2)
-                                } else {
-                                    d.d3po.segments.active = 0
-                                }
-                                if (temp) {
-                                    d.d3po.segments.temp = ((temp / total) * (Math.PI * 2)) + d.d3po.segments.active
-                                } else {
-                                    d.d3po.segments.temp = 0
-                                }
-                            }
-
-                        }
-
                     }
 
                 }
@@ -23966,9 +23692,9 @@ module.exports = function(vars) {
         if (vars.dev.value) print.timeEnd("drawing \"" + shape + "\" shapes")
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // Check for active and temp fills for rects and donuts
+        // Check for active and temp fills for rects
         //--------------------------------------------------------------------------
-        if (["rect", "donut"].indexOf(shape) >= 0 && vars.types[vars.type.value].fill) {
+        if (["rect"].indexOf(shape) >= 0 && vars.types[vars.type.value].fill) {
             if (vars.dev.value) print.time("filling \"" + shape + "\" shapes")
             shapeFill(vars, selection, enter, exit, transform)
             if (vars.dev.value) print.timeEnd("filling \"" + shape + "\" shapes")
@@ -24467,7 +24193,8 @@ module.exports = function(vars) {
         })
 
 }
-},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../tooltip/remove.js":200,"../../../util/child.js":202,"../../../util/closest.js":203,"../../../util/uniques.js":207,"../tooltip/create.js":237,"../zoom/direction.js":247,"../zoom/propagation.js":250,"./arc.js":214,"./area.js":215,"./check.js":216,"./coordinates.js":218,"./cross.js":219,"./diamond.js":220,"./donut.js":221,"./fill.js":224,"./line.js":226,"./radial.js":228,"./rect.js":229,"./segments.js":230,"./triangle_down.js":232,"./triangle_up.js":233,"./whisker.js":234}],223:[function(require,module,exports){
+
+},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../tooltip/remove.js":200,"../../../util/child.js":202,"../../../util/closest.js":203,"../../../util/uniques.js":207,"../tooltip/create.js":232,"../zoom/direction.js":242,"../zoom/propagation.js":245,"./arc.js":214,"./area.js":215,"./check.js":216,"./coordinates.js":218,"./fill.js":221,"./line.js":223,"./radial.js":225,"./rect.js":226,"./segments.js":227,"./whisker.js":229}],220:[function(require,module,exports){
 var buckets = require("../../../util/buckets.js"),
     offset = require("../../../geom/offset.js");
 
@@ -25031,7 +24758,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../geom/offset.js":158,"../../../util/buckets.js":201}],224:[function(require,module,exports){
+},{"../../../geom/offset.js":158,"../../../util/buckets.js":201}],221:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchColor = require("../../../core/fetch/color.js"),
     fetchValue = require("../../../core/fetch/value.js"),
@@ -25079,12 +24806,12 @@ module.exports = function(vars, selection, enter, exit) {
             })
             .attr("rx", function(d) {
                 var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
-                var rounded = ["circle", "donut"].indexOf(vars.shape.value) >= 0;
+                var rounded = ["circle"].indexOf(vars.shape.value) >= 0;
                 return rounded ? (w + mod) / 2 : 0;
             })
             .attr("ry", function(d) {
                 var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
-                var rounded = ["circle", "donut"].indexOf(vars.shape.value) >= 0;
+                var rounded = ["circle"].indexOf(vars.shape.value) >= 0;
                 return rounded ? (h + mod) / 2 : 0;
             })
             .attr("shape-rendering", function(d) {
@@ -25094,72 +24821,6 @@ module.exports = function(vars, selection, enter, exit) {
                     return "auto";
                 }
             });
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // In order to correctly animate each donut's size and arcs, we need to store
-    // it's previous values in a lookup object that does not get destroyed when
-    // redrawing the visualization.
-    //----------------------------------------------------------------------------
-    if (!vars.arcs) {
-        vars.arcs = {
-            "donut": {},
-            "active": {},
-            "temp": {}
-        };
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // This is the main arc function that determines what values to use for each
-    // arc angle and radius.
-    //----------------------------------------------------------------------------
-    var arc = d3.svg.arc()
-        .startAngle(0)
-        .endAngle(function(d) {
-            var a = vars.arcs[d.d3po.shape][d.d3po.id].a;
-            return a > Math.PI * 2 ? Math.PI * 2 : a;
-        })
-        .innerRadius(function(d) {
-            if (!d.d3po.static && vars.shape.value === "donut") {
-                var r = vars.arcs[d.d3po.shape][d.d3po.id].r;
-                return r * vars.data.donut.size;
-            } else {
-                return 0;
-            }
-        })
-        .outerRadius(function(d) {
-            var r = vars.arcs[d.d3po.shape][d.d3po.id].r;
-            return vars.shape.value === "donut" ? r : r * 2;
-        });
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // This is the main "arcTween" function where all of the animation happens
-    // for each arc.
-    //----------------------------------------------------------------------------
-    function size(path, mod, rad, ang) {
-        if (!mod) mod = 0;
-        if (typeof rad != "number") rad = undefined;
-        if (typeof ang != "number") ang = undefined;
-        path.attrTween("d", function(d) {
-            if (rad === undefined) var r = d.d3po.r ? d.d3po.r : d3.max([d.d3po.width, d.d3po.height]);
-            else var r = rad;
-            if (ang === undefined) var a = d.d3po.segments[d.d3po.shape];
-            else var a = ang;
-            if (!vars.arcs[d.d3po.shape][d.d3po.id]) {
-                vars.arcs[d.d3po.shape][d.d3po.id] = {
-                    "r": 0
-                };
-                vars.arcs[d.d3po.shape][d.d3po.id].a = d.d3po.shape === "donut" ? Math.PI * 2 : 0;
-            }
-            var radius = d3.interpolate(vars.arcs[d.d3po.shape][d.d3po.id].r, r + mod),
-                angle = d3.interpolate(vars.arcs[d.d3po.shape][d.d3po.id].a, a);
-
-            return function(t) {
-                vars.arcs[d.d3po.shape][d.d3po.id].r = radius(t);
-                vars.arcs[d.d3po.shape][d.d3po.id].a = angle(t);
-                return arc(d);
-            };
-        });
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -25310,7 +24971,8 @@ module.exports = function(vars, selection, enter, exit) {
     });
 
 };
-},{"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"../../../util/copy.js":204,"./segments.js":230,"./style.js":231}],225:[function(require,module,exports){
+
+},{"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"../../../util/copy.js":204,"./segments.js":227,"./style.js":228}],222:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchText = require("../../../core/fetch/text.js"),
     fetchValue = require("../../../core/fetch/value.js"),
@@ -25691,7 +25353,7 @@ module.exports = function(vars, group) {
     }
 }
 
-},{"../../../client/rtl.js":35,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../string/list.js":171,"../../../textwrap/textwrap.js":197,"../../../util/copy.js":204,"./color.js":217,"./segments.js":230}],226:[function(require,module,exports){
+},{"../../../client/rtl.js":35,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../string/list.js":171,"../../../textwrap/textwrap.js":197,"../../../util/copy.js":204,"./color.js":217,"./segments.js":227}],223:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     closest = require("../../../util/closest.js"),
     events = require("../../../client/pointer.js"),
@@ -26043,7 +25705,8 @@ function mouseStyle(vars, elem, stroke, mod) {
     }
 
 }
-},{"../../../client/pointer.js":33,"../../../core/fetch/value.js":62,"../../../util/closest.js":203,"../../../util/copy.js":204,"./style.js":231}],227:[function(require,module,exports){
+
+},{"../../../client/pointer.js":33,"../../../core/fetch/value.js":62,"../../../util/closest.js":203,"../../../util/copy.js":204,"./style.js":228}],224:[function(require,module,exports){
 module.exports = function(vars) {
 
     var edges = vars.returned.edges || [];
@@ -26113,7 +25776,7 @@ module.exports = function(vars) {
     }
 
 }
-},{}],228:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 (function() {
     var angles, interpolates, radii, shapeStyle;
 
@@ -26215,7 +25878,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./style.js":231}],229:[function(require,module,exports){
+},{"./style.js":228}],226:[function(require,module,exports){
 (function() {
     var shapeStyle;
 
@@ -26347,7 +26010,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./style.js":231}],230:[function(require,module,exports){
+},{"./style.js":228}],227:[function(require,module,exports){
 (function() {
     var fetchValue;
 
@@ -26368,7 +26031,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/fetch/value.js":62}],231:[function(require,module,exports){
+},{"../../../core/fetch/value.js":62}],228:[function(require,module,exports){
 // Fill style for all shapes
 (function() {
     var color, ie, value;
@@ -26413,109 +26076,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../client/ie.js":32,"../../../core/fetch/value.js":62,"./color.js":217}],232:[function(require,module,exports){
-var shapeStyle = require("./style.js")
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Draws "square" and "circle" shapes using svg:rect
-    //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Initialize check scale on enter and exit.
-    //----------------------------------------------------------------------------
-    function init(paths) {
-        paths.attr("d", d3.svg.symbol().type("triangle-down").size(10))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Change scale of check on update.
-    //---------------------------------------------------------------------------
-    function update(paths) {
-        paths.attr("d", d3.svg.symbol().type("triangle-down").size(function(d) {
-            var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
-            return d3.scale.pow().exponent(2)(smaller_dim / 2);
-        }))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Enter
-    //----------------------------------------------------------------------------
-    enter.append("path").attr("class", "d3po_data")
-        .call(init)
-        .call(shapeStyle, vars)
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Update
-    //----------------------------------------------------------------------------
-    selection.selectAll("path.d3po_data")
-        .data(function(d) {
-            return [d];
-        })
-
-    if (vars.draw.timing) {
-        selection.selectAll("path.d3po_data")
-            .transition().duration(vars.draw.timing)
-            .call(update)
-            .call(shapeStyle, vars)
-    } else {
-        selection.selectAll("path.d3po_data")
-            .call(update)
-            .call(shapeStyle, vars)
-    }
-
-}
-},{"./style.js":231}],233:[function(require,module,exports){
-var shapeStyle = require("./style.js")
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Draws "square" and "circle" shapes using svg:rect
-    //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Initialize check scale on enter and exit.
-    //----------------------------------------------------------------------------
-    function init(paths) {
-        paths.attr("d", d3.svg.symbol().type("triangle-up").size(10))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Change scale of check on update.
-    //---------------------------------------------------------------------------
-    function update(paths) {
-        paths.attr("d", d3.svg.symbol().type("triangle-up").size(function(d) {
-            var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
-            return d3.scale.pow().exponent(2)(smaller_dim / 2);
-        }))
-    }
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Enter
-    //----------------------------------------------------------------------------
-    enter.append("path").attr("class", "d3po_data")
-        .call(init)
-        .call(shapeStyle, vars)
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // "paths" Update
-    //----------------------------------------------------------------------------
-    selection.selectAll("path.d3po_data")
-        .data(function(d) {
-            return [d];
-        })
-
-    if (vars.draw.timing) {
-        selection.selectAll("path.d3po_data")
-            .transition().duration(vars.draw.timing)
-            .call(update)
-            .call(shapeStyle, vars)
-    } else {
-        selection.selectAll("path.d3po_data")
-            .call(update)
-            .call(shapeStyle, vars)
-    }
-
-}
-},{"./style.js":231}],234:[function(require,module,exports){
+},{"../../../client/ie.js":32,"../../../core/fetch/value.js":62,"./color.js":217}],229:[function(require,module,exports){
 (function() {
     module.exports = function(vars, selection, enter, exit) {
         var d, data, init, marker, orient, pos, position, size, style;
@@ -26601,7 +26162,7 @@ module.exports = function(vars, selection, enter, exit) {
     };
 
 }).call(this);
-},{}],235:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     prefix = require("../../../client/prefix.js"),
     print = require("../../../core/console/print.js"),
@@ -26767,7 +26328,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("creating SVG elements");
 
 };
-},{"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../client/touch.js":38,"../../../core/console/print.js":47,"../zoom/propagation.js":250}],236:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../client/touch.js":38,"../../../core/console/print.js":47,"../zoom/propagation.js":245}],231:[function(require,module,exports){
 var print = require("../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Updating Elements
@@ -26835,7 +26396,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("updating SVG elements")
 
 }
-},{"../../../core/console/print.js":47}],237:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],232:[function(require,module,exports){
 var arraySort = require("../../../array/sort.js"),
     createTooltip = require("../../../tooltip/create.js"),
     dataNest = require("../../../core/data/nest.js"),
@@ -27198,7 +26759,7 @@ module.exports = function(params) {
     }
 
 }
-},{"../../../array/sort.js":29,"../../../client/scroll.js":36,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/merge.js":168,"../../../object/validate.js":169,"../../../tooltip/create.js":198,"../../../tooltip/remove.js":200,"../../../util/uniques.js":207,"../shapes/segments.js":230,"../zoom/direction.js":247,"./data.js":238}],238:[function(require,module,exports){
+},{"../../../array/sort.js":29,"../../../client/scroll.js":36,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/merge.js":168,"../../../object/validate.js":169,"../../../tooltip/create.js":198,"../../../tooltip/remove.js":200,"../../../util/uniques.js":207,"../shapes/segments.js":227,"../zoom/direction.js":242,"./data.js":233}],233:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     fetchColor = require("../../../core/fetch/color.js"),
@@ -27467,7 +27028,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     return tooltip_data
 
 }
-},{"../../../client/prefix.js":34,"../../../color/legible.js":39,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/merge.js":168,"../../../object/validate.js":169,"../../../string/format.js":170,"../../../util/copy.js":204}],239:[function(require,module,exports){
+},{"../../../client/prefix.js":34,"../../../color/legible.js":39,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/merge.js":168,"../../../object/validate.js":169,"../../../string/format.js":170,"../../../util/copy.js":204}],234:[function(require,module,exports){
 (function() {
     var print;
 
@@ -27521,7 +27082,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":47}],240:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],235:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     form = require("../../../form/form.js"),
     print = require("../../../core/console/print.js"),
@@ -27671,7 +27232,7 @@ module.exports = function(vars) {
     if (vars.dev.value && enabled) print.timeEnd("drawing custom UI elements");
 
 };
-},{"../../../core/console/print.js":47,"../../../form/form.js":101,"../../../object/validate.js":169,"../../../util/copy.js":204}],241:[function(require,module,exports){
+},{"../../../core/console/print.js":47,"../../../form/form.js":101,"../../../object/validate.js":169,"../../../util/copy.js":204}],236:[function(require,module,exports){
 // Creates "back" button, if applicable
 (function() {
     var events, lighter, print, stylesheet;
@@ -27757,7 +27318,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../color/lighter.js":40,"../../../core/console/print.js":47}],242:[function(require,module,exports){
+},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../color/lighter.js":40,"../../../core/console/print.js":47}],237:[function(require,module,exports){
 var arraySort = require("../../../array/sort.js"),
     buckets = require("../../../util/buckets.js"),
     copy = require("../../../util/copy.js"),
@@ -28425,7 +27986,7 @@ module.exports = function(vars) {
     }
 
 }
-},{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../textwrap/textwrap.js":197,"../../../tooltip/remove.js":200,"../../../util/buckets.js":201,"../../../util/copy.js":204,"../../../util/dataurl.js":206,"../../../util/uniques.js":207,"../tooltip/create.js":237}],243:[function(require,module,exports){
+},{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../textwrap/textwrap.js":197,"../../../tooltip/remove.js":200,"../../../util/buckets.js":201,"../../../util/copy.js":204,"../../../util/dataurl.js":206,"../../../util/uniques.js":207,"../tooltip/create.js":232}],238:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     textColor = require("../../../color/text.js");
 
@@ -28541,7 +28102,7 @@ module.exports = function(vars, message) {
         .call(style).style("opacity", message ? 1 : 0)
 
 }
-},{"../../../client/pointer.js":33,"../../../color/text.js":45}],244:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../color/text.js":45}],239:[function(require,module,exports){
 (function() {
     var closest, css, events, fontSizes, mix, playInterval, prefix, print, textColor, timeDetect;
 
@@ -28926,7 +28487,7 @@ module.exports = function(vars, message) {
     };
 
 }).call(this);
-},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/time.js":57,"../../../font/sizes.js":99,"../../../util/closest.js":203}],245:[function(require,module,exports){
+},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/time.js":57,"../../../font/sizes.js":99,"../../../util/closest.js":203}],240:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     print = require("../../../core/console/print.js"),
@@ -29244,7 +28805,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("drawing titles")
 
 }
-},{"../../../client/pointer.js":33,"../../../client/rtl.js":35,"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../textwrap/textwrap.js":197}],246:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/rtl.js":35,"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../textwrap/textwrap.js":197}],241:[function(require,module,exports){
 (function() {
     var labels, transform;
 
@@ -29298,7 +28859,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./labels.js":248,"./transform.js":251}],247:[function(require,module,exports){
+},{"./labels.js":243,"./transform.js":246}],242:[function(require,module,exports){
 (function() {
     module.exports = function(data, vars) {
         var depth, max_depth, nextDepth;
@@ -29317,7 +28878,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],248:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 (function() {
     var print;
 
@@ -29355,7 +28916,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":47}],249:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],244:[function(require,module,exports){
 (function() {
     var labels, removeTooltip, transform;
 
@@ -29412,7 +28973,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../tooltip/remove.js":200,"./labels.js":248,"./transform.js":251}],250:[function(require,module,exports){
+},{"../../../tooltip/remove.js":200,"./labels.js":243,"./transform.js":246}],245:[function(require,module,exports){
 (function() {
     module.exports = function(vars, event) {
         var enabled, zoom, zoomable, zoomed;
@@ -29429,7 +28990,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],251:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 (function() {
     module.exports = function(vars, timing) {
         var translate;
@@ -29446,7 +29007,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],252:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -29464,7 +29025,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78}],253:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],248:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Object],
@@ -29473,7 +29034,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],254:[function(require,module,exports){
+},{}],249:[function(require,module,exports){
 (function() {
     var process;
 
@@ -29495,7 +29056,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":84}],255:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],250:[function(require,module,exports){
 (function() {
     var process, rendering;
 
@@ -29536,7 +29097,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/process/margin.js":87,"../../core/methods/rendering.js":89}],256:[function(require,module,exports){
+},{"../../core/methods/process/margin.js":87,"../../core/methods/rendering.js":89}],251:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [String],
@@ -29544,7 +29105,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],257:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Function, String],
@@ -29552,7 +29113,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],258:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 (function() {
     var filter, scale;
 
@@ -29593,7 +29154,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../color/scale.js":43,"../../core/methods/filter.js":78}],259:[function(require,module,exports){
+},{"../../color/scale.js":43,"../../core/methods/filter.js":78}],254:[function(require,module,exports){
 module.exports = {
     "accepted": [Array, Function, String],
     "index": {
@@ -29606,9 +29167,9 @@ module.exports = {
     },
     "value": false
 }
-},{}],260:[function(require,module,exports){
+},{}],255:[function(require,module,exports){
 arguments[4][105][0].apply(exports,arguments)
-},{"dup":105}],261:[function(require,module,exports){
+},{"dup":105}],256:[function(require,module,exports){
 (function() {
     var d3selection;
 
@@ -29639,7 +29200,7 @@ arguments[4][105][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../util/d3selection.js":205}],262:[function(require,module,exports){
+},{"../../util/d3selection.js":205}],257:[function(require,module,exports){
 (function() {
     var filter, process;
 
@@ -29679,7 +29240,7 @@ arguments[4][105][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78,"../../core/methods/process/data.js":84}],263:[function(require,module,exports){
+},{"../../core/methods/filter.js":78,"../../core/methods/process/data.js":84}],258:[function(require,module,exports){
 (function() {
     var fetchValue, ie, stringStrip;
 
@@ -29808,7 +29369,7 @@ arguments[4][105][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../client/ie.js":32,"../../core/fetch/value.js":62,"../../string/strip.js":172}],264:[function(require,module,exports){
+},{"../../client/ie.js":32,"../../core/fetch/value.js":62,"../../string/strip.js":172}],259:[function(require,module,exports){
 (function() {
     var process;
 
@@ -29820,9 +29381,6 @@ arguments[4][105][0].apply(exports,arguments)
         delimiter: {
             accepted: [String],
             value: "|"
-        },
-        donut: {
-            size: 0.35
         },
         filetype: {
             accepted: [false, "json", "xml", "html", "csv", "dsv", "tsv", "txt"],
@@ -29848,7 +29406,8 @@ arguments[4][105][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":84}],265:[function(require,module,exports){
+
+},{"../../core/methods/process/data.js":84}],260:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Function, Number],
@@ -29856,7 +29415,7 @@ arguments[4][105][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],266:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Function, Object],
@@ -29864,9 +29423,9 @@ arguments[4][105][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],267:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 arguments[4][109][0].apply(exports,arguments)
-},{"dup":109}],268:[function(require,module,exports){
+},{"dup":109}],263:[function(require,module,exports){
 var print = require("../../core/console/print.js"),
     stringFormat = require("../../string/format.js")
 
@@ -29925,7 +29484,7 @@ module.exports = {
     "update": true,
     "value": undefined
 }
-},{"../../core/console/print.js":47,"../../string/format.js":170}],269:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../string/format.js":170}],264:[function(require,module,exports){
 var process = require("../../core/methods/process/data.js");
 
 module.exports = {
@@ -30024,7 +29583,7 @@ module.exports = {
     "target": "target",
     "value": false
 };
-},{"../../core/methods/process/data.js":84}],270:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],265:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, String],
@@ -30032,7 +29591,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],271:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Array, Function, Number, String],
@@ -30053,7 +29612,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],272:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -30087,7 +29646,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],273:[function(require,module,exports){
+},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],268:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30115,7 +29674,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],274:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],269:[function(require,module,exports){
 (function() {
     var formatNumber, locale, mergeObject, titleCase;
 
@@ -30195,7 +29754,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/locale/locale.js":76,"../../number/format.js":167,"../../object/merge.js":168,"../../string/title.js":173}],275:[function(require,module,exports){
+},{"../../core/locale/locale.js":76,"../../number/format.js":167,"../../object/merge.js":168,"../../string/title.js":173}],270:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -30206,7 +29765,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],276:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 (function() {
     var align, decoration, family, filter, orientMap, position, rendering, transform;
 
@@ -30439,7 +29998,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../core/methods/filter.js":78,"../../../core/methods/font/align.js":79,"../../../core/methods/font/decoration.js":80,"../../../core/methods/font/family.js":81,"../../../core/methods/font/position.js":82,"../../../core/methods/font/transform.js":83,"../../../core/methods/rendering.js":89}],277:[function(require,module,exports){
+},{"../../../core/methods/filter.js":78,"../../../core/methods/font/align.js":79,"../../../core/methods/font/decoration.js":80,"../../../core/methods/font/family.js":81,"../../../core/methods/font/position.js":82,"../../../core/methods/font/transform.js":83,"../../../core/methods/rendering.js":89}],272:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30462,7 +30021,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],278:[function(require,module,exports){
+},{}],273:[function(require,module,exports){
 (function() {
     var process;
 
@@ -30486,7 +30045,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/process/icon.js":86}],279:[function(require,module,exports){
+},{"../../core/methods/process/icon.js":86}],274:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30506,7 +30065,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78}],280:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],275:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30559,7 +30118,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],281:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],276:[function(require,module,exports){
 (function() {
     var family;
 
@@ -30619,7 +30178,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/family.js":81}],282:[function(require,module,exports){
+},{"../../core/methods/font/family.js":81}],277:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30647,9 +30206,9 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],283:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],278:[function(require,module,exports){
 arguments[4][120][0].apply(exports,arguments)
-},{"../../core/methods/process/margin.js":87,"dup":120}],284:[function(require,module,exports){
+},{"../../core/methods/process/margin.js":87,"dup":120}],279:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -30682,7 +30241,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],285:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],280:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30706,7 +30265,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],286:[function(require,module,exports){
+},{}],281:[function(require,module,exports){
 (function() {
     var process;
 
@@ -30728,7 +30287,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":84}],287:[function(require,module,exports){
+},{"../../core/methods/process/data.js":84}],282:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, Function, String],
@@ -30744,7 +30303,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],288:[function(require,module,exports){
+},{}],283:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30778,7 +30337,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],289:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 (function() {
     var rendering;
 
@@ -30806,7 +30365,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/rendering.js":89}],290:[function(require,module,exports){
+},{"../../core/methods/rendering.js":89}],285:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30851,14 +30410,14 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78}],291:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],286:[function(require,module,exports){
 (function() {
     module.exports = {
         value: false
     };
 
 }).call(this);
-},{}],292:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30872,7 +30431,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78}],293:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],288:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30887,7 +30446,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78}],294:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],289:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -30910,7 +30469,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":78}],295:[function(require,module,exports){
+},{"../../core/methods/filter.js":78}],290:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -30953,7 +30512,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],296:[function(require,module,exports){
+},{}],291:[function(require,module,exports){
 (function() {
     module.exports = {
         mouseevents: 60,
@@ -30962,7 +30521,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],297:[function(require,module,exports){
+},{}],292:[function(require,module,exports){
 (function() {
     var decoration, family, stringStrip, transform;
 
@@ -31037,7 +30596,7 @@ arguments[4][120][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83,"../../string/strip.js":172}],298:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83,"../../string/strip.js":172}],293:[function(require,module,exports){
 (function() {
     var family, transform;
 
@@ -31107,9 +30666,9 @@ arguments[4][120][0].apply(exports,arguments)
 
 }).call(this);
 
-},{"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],299:[function(require,module,exports){
-arguments[4][292][0].apply(exports,arguments)
-},{"../../core/methods/filter.js":78,"dup":292}],300:[function(require,module,exports){
+},{"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],294:[function(require,module,exports){
+arguments[4][287][0].apply(exports,arguments)
+},{"../../core/methods/filter.js":78,"dup":287}],295:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: function(vars) {
@@ -31125,7 +30684,7 @@ arguments[4][292][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],301:[function(require,module,exports){
+},{}],296:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -31180,7 +30739,7 @@ arguments[4][292][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],302:[function(require,module,exports){
+},{"../../core/methods/font/align.js":79,"../../core/methods/font/decoration.js":80,"../../core/methods/font/family.js":81,"../../core/methods/font/transform.js":83}],297:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -31190,7 +30749,7 @@ arguments[4][292][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],303:[function(require,module,exports){
+},{}],298:[function(require,module,exports){
 module.exports = {
     "accepted": [Boolean],
     "behavior": d3.behavior.zoom().scaleExtent([1, 1]).duration(0),
@@ -31208,7 +30767,7 @@ module.exports = {
     },
     "value": true
 }
-},{}],304:[function(require,module,exports){
+},{}],299:[function(require,module,exports){
 (function() {
     var area, closest, fetchValue, graph, nest, sort, stack, threshold;
 
@@ -31312,7 +30871,7 @@ module.exports = {
     module.exports = area;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"../../util/closest.js":203,"./helpers/graph/draw.js":312,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],305:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"../../util/closest.js":203,"./helpers/graph/draw.js":307,"./helpers/graph/nest.js":313,"./helpers/graph/stack.js":314}],300:[function(require,module,exports){
 (function() {
     var bar, buckets, fetchValue, graph, nest, stack, uniques,
         indexOf = [].indexOf || function(item) {
@@ -31518,7 +31077,7 @@ module.exports = {
     module.exports = bar;
 
 }).call(this);
-},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":312,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],306:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":307,"./helpers/graph/nest.js":313,"./helpers/graph/stack.js":314}],301:[function(require,module,exports){
 (function() {
     var box, fetchValue, graph, stringFormat, strip, uniques;
 
@@ -31776,7 +31335,7 @@ module.exports = {
 
     box.requirements = ["data", "x", "y"];
 
-    box.shapes = ["circle", "check", "cross", "diamond", "square", "triangle", "triangle_up", "triangle_down"];
+    box.shapes = ["circle", "square"];
 
     box.setup = function(vars) {
         var axis;
@@ -31791,7 +31350,8 @@ module.exports = {
     module.exports = box;
 
 }).call(this);
-},{"../../core/fetch/value.js":62,"../../string/format.js":170,"../../string/strip.js":172,"../../util/uniques.js":207,"./helpers/graph/draw.js":312}],307:[function(require,module,exports){
+
+},{"../../core/fetch/value.js":62,"../../string/format.js":170,"../../string/strip.js":172,"../../util/uniques.js":207,"./helpers/graph/draw.js":307}],302:[function(require,module,exports){
 (function() {
     var arraySort, bubbles, fetchColor, fetchText, fetchValue, groupData, legible;
 
@@ -31936,7 +31496,7 @@ module.exports = {
     module.exports = bubbles;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../color/legible.js":39,"../../core/data/group.js":52,"../../core/fetch/color.js":58,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62}],308:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../color/legible.js":39,"../../core/data/group.js":52,"../../core/fetch/color.js":58,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62}],303:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, donut, groupData;
 
@@ -31991,7 +31551,7 @@ module.exports = {
     module.exports = donut;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],309:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],304:[function(require,module,exports){
 (function() {
     var geomap;
 
@@ -32031,7 +31591,7 @@ module.exports = {
     module.exports = geomap;
 
 }).call(this);
-},{}],310:[function(require,module,exports){
+},{}],305:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, halfdonut;
 
@@ -32090,7 +31650,7 @@ module.exports = {
     module.exports = halfdonut;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],311:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],306:[function(require,module,exports){
 (function() {
     var color, legible, print;
 
@@ -32172,7 +31732,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":58}],312:[function(require,module,exports){
+},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":58}],307:[function(require,module,exports){
 (function() {
     var axes, draw, mouse, plot;
 
@@ -32195,7 +31755,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"./includes/axes.js":313,"./includes/mouse.js":315,"./includes/plot.js":316,"./includes/svg.js":317}],313:[function(require,module,exports){
+},{"./includes/axes.js":308,"./includes/mouse.js":310,"./includes/plot.js":311,"./includes/svg.js":312}],308:[function(require,module,exports){
 (function() {
     var arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
 
@@ -32547,7 +32107,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":59,"../../../../../core/fetch/value.js":62,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":314}],314:[function(require,module,exports){
+},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":59,"../../../../../core/fetch/value.js":62,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":309}],309:[function(require,module,exports){
 (function() {
     var buckets, closest;
 
@@ -32738,7 +32298,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../util/buckets.js":201,"../../../../../util/closest.js":203}],315:[function(require,module,exports){
+},{"../../../../../util/buckets.js":201,"../../../../../util/closest.js":203}],310:[function(require,module,exports){
 (function() {
     var copy, events, fetchColor, fetchValue, legible, textColor;
 
@@ -32984,7 +32544,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":58,"../../../../../core/fetch/value.js":62,"../../../../../util/copy.js":204}],316:[function(require,module,exports){
+},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":58,"../../../../../core/fetch/value.js":62,"../../../../../util/copy.js":204}],311:[function(require,module,exports){
 (function() {
     var buckets, buffer, createAxis, fetchValue, fontSizes, formatPower, labelPadding, superscript, textwrap, timeDetect, uniques;
 
@@ -33434,7 +32994,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../core/data/time.js":57,"../../../../../core/fetch/value.js":62,"../../../../../font/sizes.js":99,"../../../../../textwrap/textwrap.js":197,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":314}],317:[function(require,module,exports){
+},{"../../../../../core/data/time.js":57,"../../../../../core/fetch/value.js":62,"../../../../../font/sizes.js":99,"../../../../../textwrap/textwrap.js":197,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":309}],312:[function(require,module,exports){
 (function() {
     var mix, textwrap, validObject;
 
@@ -33839,7 +33399,8 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":169,"../../../../../textwrap/textwrap.js":197}],318:[function(require,module,exports){
+
+},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":169,"../../../../../textwrap/textwrap.js":197}],313:[function(require,module,exports){
 (function() {
     var fetchValue, stringStrip, uniqueValues;
 
@@ -33964,7 +33525,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],319:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],314:[function(require,module,exports){
 (function() {
     var fetchValue;
 
@@ -34043,7 +33604,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":62}],320:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62}],315:[function(require,module,exports){
 (function() {
     var fetchValue, graph, line, nest, sort, stack;
 
@@ -34123,7 +33684,7 @@ module.exports = {
     module.exports = line;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":312,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],321:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":307,"./helpers/graph/nest.js":313,"./helpers/graph/stack.js":314}],316:[function(require,module,exports){
 var smallestGap = require("../../network/smallestgap.js"),
     fetchValue = require("../../core/fetch/value.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -34287,7 +33848,7 @@ network.tooltip = "static"
 network.zoom = true
 
 module.exports = network
-},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],322:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],317:[function(require,module,exports){
 (function() {
     var fetchValue, shortestPath, uniqueValues, viz,
         indexOf = [].indexOf || function(item) {
@@ -34546,14 +34107,15 @@ module.exports = network
 
     viz.scale = 1;
 
-    viz.shapes = ["circle", "square", "donut"];
+    viz.shapes = ["circle", "square"];
 
     viz.tooltip = "static";
 
     module.exports = viz;
 
 }).call(this);
-},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],323:[function(require,module,exports){
+
+},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],318:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, pie;
 
@@ -34608,7 +34170,7 @@ module.exports = network
     module.exports = pie;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],324:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],319:[function(require,module,exports){
 (function() {
     var buckets, comparator, dataThreshold, fetchText, fetchValue, fontSizes, offset, radar, sort, textwrap, uniques;
 
@@ -34853,7 +34415,7 @@ module.exports = network
     module.exports = radar;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],325:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],320:[function(require,module,exports){
 var arraySort = require("../../array/sort.js"),
     events = require("../../client/pointer.js"),
     fetchValue = require("../../core/fetch/value.js"),
@@ -35353,7 +34915,7 @@ rings.requirements = ["edges", "focus"]
 rings.tooltip = "static"
 
 module.exports = rings
-},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],326:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],321:[function(require,module,exports){
 (function() {
     var d3sankey, events, removeTooltip, sankey, uniques;
 
@@ -35461,7 +35023,7 @@ module.exports = rings
     module.exports = sankey;
 
 }).call(this);
-},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"../../util/uniques.js":207,"./sankey.js":326}],327:[function(require,module,exports){
+},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"../../util/uniques.js":207,"./sankey.js":321}],322:[function(require,module,exports){
 (function() {
     var fetchValue, graph, print, scatter, sort, ticks;
 
@@ -35530,171 +35092,7 @@ module.exports = rings
     module.exports = scatter;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":311,"./helpers/graph/draw.js":312}],328:[function(require,module,exports){
-var fetchValue = require("../../core/fetch/value.js");
-var uniques = require("../../util/uniques.js");
-var copy = require("../../util/copy.js");
-var rand_col = require("../../color/random.js");
-
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Table
-//------------------------------------------------------------------------------
-
-var table = function(vars) {
-
-    // get unique IDs and columns
-    var ids = uniques(vars.data.viz, vars.id.value, fetchValue, vars);
-    var cols = uniques(vars.cols.value);
-
-    // if user wants to show the row labels (default behavior) add this as a col
-    if (cols.indexOf("label") < 0 && vars.cols.index.value) {
-        cols.unshift("label");
-    }
-
-    // width/height are a function of number of IDs and columns
-    var item_height = vars.height.viz / (ids.length + 1); // add 1 for header offset
-    var item_width = vars.width.viz / cols.length;
-
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // Setup background
-    //----------------------------------------------------------------------------
-    vars.group.selectAll("rect").data([0]).enter()
-        .append("rect")
-        .attr("class", "background")
-        .attr("height", vars.height.viz)
-        .attr("width", vars.width.viz)
-        .style("fill", vars.color.missing)
-        // draw line separater w/ enter/update/exit
-    var lines_horiz = vars.group.selectAll("line.horiz").data(vars.data.viz);
-    lines_horiz.enter().append("line").attr("class", "horiz")
-    lines_horiz
-        .attr("x1", 0)
-        .attr("y1", function(d, row_i) {
-            return (item_height * row_i) + item_height
-        })
-        .attr("x2", vars.width.viz)
-        .attr("y2", function(d, row_i) {
-            return (item_height * row_i) + item_height
-        })
-        .style("fill", "#fff")
-        .style("stroke", "#fff")
-    lines_horiz.exit().remove()
-        // draw line separater w/ enter/update/exit
-    var lines_vert = vars.group.selectAll("line.vert").data(cols);
-    lines_vert.enter().append("line").attr("class", "vert")
-    lines_vert
-        .attr("x1", function(d, col_i) {
-            return (item_width * col_i) + item_width
-        })
-        .attr("y1", 0)
-        .attr("x2", function(d, col_i) {
-            return (item_width * col_i) + item_width
-        })
-        .attr("y2", vars.height.viz)
-        .style("fill", "#fff")
-        .style("stroke", "#fff")
-    lines_vert.exit().remove()
-
-    var ret = []
-    var colors = {}
-
-    // doing 2 things here, first we add our column headers to our ret array as
-    // items dor d3po to draw. We also compute the color scales for each column
-    cols.forEach(function(col, col_i) {
-        // add columns
-        var header = {
-            "d3po": {
-                "x": (item_width * col_i) + item_width / 2,
-                "y": item_height / 2,
-                "width": item_width,
-                "height": item_height,
-                "id": "d3p_header_" + col.toString().replace(/ /g, "_"),
-                "shape": "square",
-                "color": "#fff",
-                "text": vars.format.value(col)
-            }
-        }
-        if (col == vars.id.value) {
-            header.d3po.color = "#fff";
-        }
-        if (col == "label") {
-            header.d3po.label = false;
-            header.d3po.color = "#fff";
-            header.d3po.stroke = "#fff";
-        }
-        ret.push(header)
-
-        // set up color scales
-        if (vars.data.keys[col] == "number") {
-            var domain_extent = d3.extent(vars.data.viz, function(d) {
-                return d[col];
-            })
-            if (domain_extent[0] == domain_extent[1]) {
-                domain_extent = [domain_extent[0] - 1, domain_extent[1]]
-            }
-            colors[col] = d3.scale.linear().domain(domain_extent).range([vars.color.missing, rand_col(col)])
-        } else if (vars.data.keys[col] == "boolean") {
-            colors[col] = function(bool) {
-                return bool ? rand_col(col) : vars.color.missing;
-            }
-        }
-    })
-
-    vars.data.viz.forEach(function(d, row_i) {
-        // offset for column headers
-        row_i += 1;
-
-        // loop through each user defined column to create new "object" to draw
-        cols.forEach(function(col, col_i) {
-
-            // need to clone data since we'll be dupliating it for each column
-            var d_clone = copy(d);
-
-            // set unique ID otherwise it'd be the same in each column
-            d_clone.d3po.id = "d3p_" + d_clone[vars.id.value].toString().replace(/ /g, "_") + "_" + col;
-            d_clone.d3po.x = (item_width * col_i) + item_width / 2;
-            d_clone.d3po.y = (item_height * row_i) + item_height / 2;
-            d_clone.d3po.width = item_width;
-            d_clone.d3po.height = item_height;
-
-            if (col == "label") {
-                d_clone.d3po.shape = "square";
-                d_clone.d3po.color = "#fff";
-                // special case for top left corner
-                ret.push(d_clone)
-            }
-
-            // be sure that this column is actually in this data item
-            if (d3.keys(d).indexOf(col) >= 0 && col in d) {
-                if (colors[col]) {
-                    d_clone.d3po.color = colors[col](d_clone[col]);
-                }
-                d_clone.d3po.text = vars.format.value(d_clone[col]);
-                if (vars.data.keys[col] == "boolean") {
-                    d_clone.d3po.label = false;
-                } else if (vars.data.keys[col] == "string") {
-                    d_clone.d3po.color = vars.color.missing;
-                    d_clone.d3po.stroke = "#fff";
-                    d_clone.d3po.shape = "square";
-                }
-                ret.push(d_clone)
-            }
-        })
-
-    })
-
-    return ret
-
-};
-
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Visualization Settings and Helper Functions
-//------------------------------------------------------------------------------
-table.shapes = ["check", "cross", "diamond", "square", "triangle", "triangle_up", "triangle_down"]
-table.requirements = ["data", "cols"]
-
-module.exports = table
-},{"../../color/random.js":42,"../../core/fetch/value.js":62,"../../util/copy.js":204,"../../util/uniques.js":207}],329:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":306,"./helpers/graph/draw.js":307}],323:[function(require,module,exports){
 (function() {
     var dataThreshold, groupData, mergeObject, treemap;
 
@@ -35759,7 +35157,7 @@ module.exports = table
     module.exports = treemap;
 
 }).call(this);
-},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],330:[function(require,module,exports){
+},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],324:[function(require,module,exports){
 (function() {
     var attach, axis, container, flash, getSteps, print, validObject;
 
@@ -35800,7 +35198,6 @@ module.exports = table
                 sankey: require("./types/sankey.js"),
                 scatter: require("./types/scatter.js"),
                 stacked: require("./types/area.js"),
-                table: require("./types/table.js"),
                 treemap: require("./types/treemap.js")
             }
         };
@@ -35967,4 +35364,5 @@ module.exports = table
     };
 
 }).call(this);
-},{"../core/console/print.js":47,"../core/methods/attach.js":77,"../object/validate.js":169,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":243,"./methods/active.js":252,"./methods/aggs.js":253,"./methods/attrs.js":254,"./methods/axes.js":255,"./methods/background.js":256,"./methods/class.js":257,"./methods/color.js":258,"./methods/cols.js":259,"./methods/config.js":260,"./methods/container.js":261,"./methods/coords.js":262,"./methods/csv.js":263,"./methods/data.js":264,"./methods/depth.js":265,"./methods/descs.js":266,"./methods/dev.js":267,"./methods/draw.js":268,"./methods/edges.js":269,"./methods/error.js":270,"./methods/focus.js":271,"./methods/font.js":272,"./methods/footer.js":273,"./methods/format.js":274,"./methods/height.js":275,"./methods/helpers/axis.js":276,"./methods/history.js":277,"./methods/icon.js":278,"./methods/id.js":279,"./methods/labels.js":280,"./methods/legend.js":281,"./methods/links.js":282,"./methods/margin.js":283,"./methods/messages.js":284,"./methods/mouse.js":285,"./methods/nodes.js":286,"./methods/order.js":287,"./methods/resize.js":288,"./methods/shape.js":289,"./methods/size.js":290,"./methods/style.js":291,"./methods/temp.js":292,"./methods/text.js":293,"./methods/time.js":294,"./methods/timeline.js":295,"./methods/timing.js":296,"./methods/title.js":297,"./methods/tooltip.js":298,"./methods/total.js":299,"./methods/type.js":300,"./methods/ui.js":301,"./methods/width.js":302,"./methods/zoom.js":303,"./types/area.js":304,"./types/bar.js":305,"./types/box.js":306,"./types/bubbles.js":307,"./types/donut.js":308,"./types/geomap.js":309,"./types/halfdonut.js":310,"./types/line.js":320,"./types/network.js":321,"./types/paths.js":322,"./types/pie.js":323,"./types/radar.js":324,"./types/rings.js":325,"./types/sankey.js":326,"./types/scatter.js":327,"./types/table.js":328,"./types/treemap.js":329}]},{},[160]);
+
+},{"../core/console/print.js":47,"../core/methods/attach.js":77,"../object/validate.js":169,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":238,"./methods/active.js":247,"./methods/aggs.js":248,"./methods/attrs.js":249,"./methods/axes.js":250,"./methods/background.js":251,"./methods/class.js":252,"./methods/color.js":253,"./methods/cols.js":254,"./methods/config.js":255,"./methods/container.js":256,"./methods/coords.js":257,"./methods/csv.js":258,"./methods/data.js":259,"./methods/depth.js":260,"./methods/descs.js":261,"./methods/dev.js":262,"./methods/draw.js":263,"./methods/edges.js":264,"./methods/error.js":265,"./methods/focus.js":266,"./methods/font.js":267,"./methods/footer.js":268,"./methods/format.js":269,"./methods/height.js":270,"./methods/helpers/axis.js":271,"./methods/history.js":272,"./methods/icon.js":273,"./methods/id.js":274,"./methods/labels.js":275,"./methods/legend.js":276,"./methods/links.js":277,"./methods/margin.js":278,"./methods/messages.js":279,"./methods/mouse.js":280,"./methods/nodes.js":281,"./methods/order.js":282,"./methods/resize.js":283,"./methods/shape.js":284,"./methods/size.js":285,"./methods/style.js":286,"./methods/temp.js":287,"./methods/text.js":288,"./methods/time.js":289,"./methods/timeline.js":290,"./methods/timing.js":291,"./methods/title.js":292,"./methods/tooltip.js":293,"./methods/total.js":294,"./methods/type.js":295,"./methods/ui.js":296,"./methods/width.js":297,"./methods/zoom.js":298,"./types/area.js":299,"./types/bar.js":300,"./types/box.js":301,"./types/bubbles.js":302,"./types/donut.js":303,"./types/geomap.js":304,"./types/halfdonut.js":305,"./types/line.js":315,"./types/network.js":316,"./types/paths.js":317,"./types/pie.js":318,"./types/radar.js":319,"./types/rings.js":320,"./types/sankey.js":321,"./types/scatter.js":322,"./types/treemap.js":323}]},{},[160]);

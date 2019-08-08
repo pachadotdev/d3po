@@ -9,7 +9,7 @@ line_data <- tibble(
 
 d3po() %>%
   d3po_type("line") %>%
-  d3po_data(data = line_data) %>%
+  d3po_data(data = line_data, size = 2) %>%
   d3po_id("id") %>%
   d3po_axis(x = "ab2", y = "ab2") %>%
   d3po_title(

@@ -12694,11 +12694,10 @@ module.exports = function(vars, obj, depth) {
 (function() {
     module.exports = function(type) {
         var tester;
-        tester = d3
+        d3
           .select("body")
           .selectAll("div" + ".d3po_tester")
-          .data([0]);
-        tester
+          .data([0])
           .enter()
           .append("div")
           .attr("class", "d3po_tester")
@@ -12708,9 +12707,9 @@ module.exports = function(vars, obj, depth) {
           .style("top", "-9999px")
           .style("visibility", "hidden")
           .style("display", "block");
+        tester = d3.select('div.d3po_tester')
         return tester;
     };
-
 }).call(this);
 
 },{}],64:[function(require,module,exports){

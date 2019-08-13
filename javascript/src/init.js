@@ -221,7 +221,7 @@
      */
 
     d3po.util = {
-        //buckets: require("./util/buckets.js"),
+        buckets: require("./util/buckets.js"),
         //child: require("./util/child.js"),
         closest: require("./util/closest.js"),
         copy: require("./util/copy.js"),

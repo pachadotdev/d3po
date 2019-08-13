@@ -80,7 +80,7 @@
         //scale: require("./color/scale.js"),
         sort: require("./color/sort.js"),
         //text: require("./color/text.js"),
-        //validate: require("./color/validate.js")
+        validate: require("./color/validate.js")
     };
 
 

@@ -10,7 +10,7 @@
         if (color.indexOf("hsl") === 0) {
             color = color.split(",")[2].split(")")[0];
         }
-        testColor = d3.rgb(color).toString();
+        testColor = d3.rgb(color).formatHex();
         blackColors = ["black", "#000", "#000000", "0%", "0,0,0"];
         userBlack = blackColors.indexOf(color) >= 0;
         return testColor !== "#000000" || userBlack;

@@ -40,9 +40,9 @@
 
     d3po.array = {
         //comparator: require("./array/comparator.js"),
-        //contains: require("./array/contains.js"),
+        contains: require("./array/contains.js"),
         //sort: require("./array/sort.js"),
-        //update: require("./array/update.js")
+        update: require("./array/update.js")
     };
 
 
@@ -54,14 +54,14 @@
      */
 
     d3po.client = {
-        //css: require("./client/css.js"),
-        //ie: require("./client/ie.js"),
-        //pointer: require("./client/pointer.js"),
-        //prefix: require("./client/prefix.js"),
+        css: require("./client/css.js"),
+        ie: require("./client/ie.js"),
+        pointer: require("./client/pointer.js"),
+        prefix: require("./client/prefix.js"),
         //rtl: require("./client/rtl.js"),
-        //scroll: require("./client/scroll.js"),
-        //scrollbar: require("./client/scrollbar.js"),
-        //touch: require("./client/touch.js")
+        scroll: require("./client/scroll.js"),
+        scrollbar: require("./client/scrollbar.js"),
+        touch: require("./client/touch.js")
     };
 
 
@@ -92,8 +92,8 @@
      */
 
     d3po.data = {
-        //bestRegress: require("./data/bestregression.js"),
-        //lof: require("./data/lof.js"),
+        bestRegress: require("./data/bestregression.js"),
+        lof: require("./data/lof.js"),
         //mad: require("./data/mad.js")
     };
 
@@ -129,8 +129,8 @@
 
     d3po.geom = {
         //largestRect: require("./geom/largestrectangle.js"),
-        //offset: require("./geom/offset.js"),
-        //path2poly: require("./geom/path2poly.js")
+        offset: require("./geom/offset.js"),
+        path2poly: require("./geom/path2poly.js")
     };
 
 
@@ -142,12 +142,12 @@
      */
 
     d3po.network = {
-        //cluster: require("./network/cluster.js"),
-        //distance: require("./network/distance.js"),
-        //normalize: require("./network/normalize.js"),
-        //shortestPath: require("./network/shortestpath.js"),
+        cluster: require("./network/cluster.js"),
+        distance: require("./network/distance.js"),
+        normalize: require("./network/normalize.js"),
+        shortestPath: require("./network/shortestpath.js"),
         //smallestGap: require("./network/smallestgap.js"),
-        //subgraph: require("./network/subgraph.js")
+        subgraph: require("./network/subgraph.js")
     };
 
 
@@ -172,7 +172,7 @@
 
     d3po.object = {
         //merge: require("./object/merge.js"),
-        //validate: require("./object/validate.js")
+        validate: require("./object/validate.js")
     };
 
 
@@ -184,10 +184,10 @@
      */
 
     d3po.string = {
-        //format: require("./string/format.js"),
-        //list: require("./string/list.js"),
-        //strip: require("./string/strip.js"),
-        //title: require("./string/title.js")
+        format: require("./string/format.js"),
+        list: require("./string/list.js"),
+        strip: require("./string/strip.js"),
+        title: require("./string/title.js")
     };
 
 
@@ -223,11 +223,11 @@
     d3po.util = {
         //buckets: require("./util/buckets.js"),
         //child: require("./util/child.js"),
-        //closest: require("./util/closest.js"),
+        closest: require("./util/closest.js"),
         //copy: require("./util/copy.js"),
         //d3selection: require("./util/d3selection.js"),
-        //dataurl: require("./util/dataurl.js"),
-        //uniques: require("./util/uniques.js")
+        dataurl: require("./util/dataurl.js"),
+        uniques: require("./util/uniques.js")
     };
 
 

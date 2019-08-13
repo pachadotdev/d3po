@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A javascript library designed to work with Shiny. It extends the popular D3 to enable fast and beautiful visualizations.",
   "devDependencies": {
-    "browserify": "^16.3.0",
+    "browserify": "^16.5.0",
     "gulp": "^4.0.2",
     "gulp-chmod": "^3.0.0",
     "gulp-connect": "^5.7.0",
@@ -45,7 +45,7 @@
   },
   "homepage": "http://www.d3po.org",
   "dependencies": {
-    "acorn": "^6.2.1",
+    "acorn": "^6.3.0",
     "d3": "^3.5.17",
     "heap": "^0.2.6",
     "numeric": "^1.2.6",

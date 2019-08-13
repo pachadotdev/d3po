@@ -34,13 +34,13 @@
             fileType = vars[key].filetype.value;
         }
         if (fileType === "dsv") {
-            parser = d3.dsv(vars[key].delimiter.value, "text/plain");
+            parser = function(input) {return d3.dsv(vars[key].delimiter.value, input);};
         } else {
             parser = d3[fileType];
         }
-        return parser(url, function(error, data) {
-            var k, ret;
-            if (!error && data) {
+        return parser(url)
+            .then(function(data) {
+                var k, ret;
                 if (typeof vars[key].callback === "function") {
                     ret = vars[key].callback(data);
                     if (ret) {
@@ -83,13 +83,16 @@
                 }
                 vars[key].changed = true;
                 vars[key].loaded = true;
-            } else {
+            })
+            .catch(function(error) {
                 vars.error.internal = "Could not load data from: \"" + url + "\"";
-            }
-            if (consoleMessage) {
-                print.timeEnd("loading " + key);
-            }
-            return next();
+            })
+            .then(function(data) {
+                if (consoleMessage) {
+                    print.timeEnd("loading " + key);
+                }
+                return next();
+            })
         });
     };
 

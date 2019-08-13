@@ -1,4 +1,5 @@
 var dataNest = require("./nest.js"),
+    multiFormat = require("./multiformat.js"),
     fetchValue = require("../fetch/value.js"),
     print = require("../console/print.js"),
     uniques = require("../../util/uniques.js");
@@ -149,24 +150,6 @@ module.exports = function(vars) {
 
         vars.data.time.getFormat = getFormat;
 
-        // See https://observablehq.com/@severo/custom-time-format-d3-5-x
-        function d3_time_format_multi(timeFormatLocale, formatsArray) {
-          function multiFormat(date) {
-            let i = 0,
-              found = false,
-              fmt = "%c";
-            while (!found && i < formatsArray.length) {
-              found = formatsArray[i][1](date);
-              if (found) fmt = formatsArray[i][0];
-              i++;
-            }
-            return fmt;
-          }
-          return function(date) {
-            return timeFormatLocale.format(multiFormat(date))(date);
-          };
-        }
-
         if (userFormat) {
 
             if (typeof userFormat === "string") {
@@ -174,7 +157,7 @@ module.exports = function(vars) {
             } else if (typeof userFormat === "function") {
                 vars.data.time.format = userFormat;
             } else if (userFormat instanceof Array) {
-                vars.data.time.format = d3_time_format_multi(d3.timeFormatLocale(locale.format), userFormat);
+                vars.data.time.format = multiFormat(d3.timeFormatLocale(locale.format), userFormat);
             }
             vars.data.time.multiFormat = vars.data.time.format;
 
@@ -197,7 +180,7 @@ module.exports = function(vars) {
                 multi[multi.length - 1][1] = function(d) {
                     return true;
                 }
-                vars.data.time.multiFormat = d3_time_format_multi(d3.timeFormatLocale(locale.format), multi);
+                vars.data.time.multiFormat = multiFormat(d3.timeFormatLocale(locale.format), multi);
             } else {
                 vars.data.time.multiFormat = vars.data.time.format;
             }

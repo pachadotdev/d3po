@@ -94,7 +94,7 @@
     d3po.data = {
         bestRegress: require("./data/bestregression.js"),
         lof: require("./data/lof.js"),
-        //mad: require("./data/mad.js")
+        mad: require("./data/mad.js")
     };
 
 

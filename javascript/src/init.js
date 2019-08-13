@@ -207,9 +207,9 @@
      */
 
     d3po.tooltip = {
-        //create: require("./tooltip/create.js"),
-        //move: require("./tooltip/move.js"),
-        //remove: require("./tooltip/remove.js")
+        create: require("./tooltip/create.js"),
+        move: require("./tooltip/move.js"),
+        remove: require("./tooltip/remove.js")
     };
 
 

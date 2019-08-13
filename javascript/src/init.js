@@ -171,7 +171,7 @@
      */
 
     d3po.object = {
-        //merge: require("./object/merge.js"),
+        merge: require("./object/merge.js"),
         validate: require("./object/validate.js")
     };
 

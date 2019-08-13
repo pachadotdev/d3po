@@ -224,7 +224,7 @@
         //buckets: require("./util/buckets.js"),
         //child: require("./util/child.js"),
         closest: require("./util/closest.js"),
-        //copy: require("./util/copy.js"),
+        copy: require("./util/copy.js"),
         d3selection: require("./util/d3selection.js"),
         dataurl: require("./util/dataurl.js"),
         uniques: require("./util/uniques.js")

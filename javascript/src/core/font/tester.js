@@ -15,8 +15,7 @@
         attrs = type === "div" ? {} : {
             position: "absolute"
         };
-        tester = d3.select("body").selectAll(type + ".d3po_tester").data([0]);
-        tester.enter().append(type).attr("class", "d3po_tester").style(styles).attr(attrs);
+        tester = d3.select("body").selectAll(type + ".d3po_tester").data([0]).join(type).classed("d3po_tester", true).styles(styles).attrs(attrs);
         return tester;
     };
 

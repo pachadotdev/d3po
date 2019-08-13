@@ -146,7 +146,7 @@
         distance: require("./network/distance.js"),
         normalize: require("./network/normalize.js"),
         shortestPath: require("./network/shortestpath.js"),
-        //smallestGap: require("./network/smallestgap.js"),
+        smallestGap: require("./network/smallestgap.js"),
         subgraph: require("./network/subgraph.js")
     };
 

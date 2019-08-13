@@ -78,7 +78,7 @@
         //mix: require("./color/mix.js"),
         //random: require("./color/random.js"),
         //scale: require("./color/scale.js"),
-        //sort: require("./color/sort.js"),
+        sort: require("./color/sort.js"),
         //text: require("./color/text.js"),
         //validate: require("./color/validate.js")
     };

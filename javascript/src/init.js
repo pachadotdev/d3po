@@ -39,10 +39,10 @@
      */
 
     d3po.array = {
-        comparator: require("./array/comparator.js"),
-        contains: require("./array/contains.js"),
-        sort: require("./array/sort.js"),
-        update: require("./array/update.js")
+        //comparator: require("./array/comparator.js"),
+        //contains: require("./array/contains.js"),
+        //sort: require("./array/sort.js"),
+        //update: require("./array/update.js")
     };
 
 
@@ -54,14 +54,14 @@
      */
 
     d3po.client = {
-        css: require("./client/css.js"),
-        ie: require("./client/ie.js"),
-        pointer: require("./client/pointer.js"),
-        prefix: require("./client/prefix.js"),
-        rtl: require("./client/rtl.js"),
-        scroll: require("./client/scroll.js"),
-        scrollbar: require("./client/scrollbar.js"),
-        touch: require("./client/touch.js")
+        //css: require("./client/css.js"),
+        //ie: require("./client/ie.js"),
+        //pointer: require("./client/pointer.js"),
+        //prefix: require("./client/prefix.js"),
+        //rtl: require("./client/rtl.js"),
+        //scroll: require("./client/scroll.js"),
+        //scrollbar: require("./client/scrollbar.js"),
+        //touch: require("./client/touch.js")
     };
 
 
@@ -73,14 +73,14 @@
      */
 
     d3po.color = {
-        legible: require("./color/legible.js"),
-        lighter: require("./color/lighter.js"),
-        mix: require("./color/mix.js"),
-        random: require("./color/random.js"),
-        scale: require("./color/scale.js"),
-        sort: require("./color/sort.js"),
-        text: require("./color/text.js"),
-        validate: require("./color/validate.js")
+        //legible: require("./color/legible.js"),
+        //lighter: require("./color/lighter.js"),
+        //mix: require("./color/mix.js"),
+        //random: require("./color/random.js"),
+        //scale: require("./color/scale.js"),
+        //sort: require("./color/sort.js"),
+        //text: require("./color/text.js"),
+        //validate: require("./color/validate.js")
     };
 
 
@@ -92,9 +92,9 @@
      */
 
     d3po.data = {
-        bestRegress: require("./data/bestregression.js"),
-        lof: require("./data/lof.js"),
-        mad: require("./data/mad.js")
+        //bestRegress: require("./data/bestregression.js"),
+        //lof: require("./data/lof.js"),
+        //mad: require("./data/mad.js")
     };
 
 
@@ -106,8 +106,8 @@
      */
 
     d3po.font = {
-        sizes: require("./font/sizes.js"),
-        validate: require("./font/validate.js")
+        //sizes: require("./font/sizes.js"),
+        //validate: require("./font/validate.js")
     };
 
 
@@ -117,7 +117,7 @@
      * @for d3po
      */
 
-    d3po.form = require("./form/form.js");
+    //d3po.form = require("./form/form.js");
 
 
     /**
@@ -128,9 +128,9 @@
      */
 
     d3po.geom = {
-        largestRect: require("./geom/largestrectangle.js"),
-        offset: require("./geom/offset.js"),
-        path2poly: require("./geom/path2poly.js")
+        //largestRect: require("./geom/largestrectangle.js"),
+        //offset: require("./geom/offset.js"),
+        //path2poly: require("./geom/path2poly.js")
     };
 
 
@@ -142,12 +142,12 @@
      */
 
     d3po.network = {
-        cluster: require("./network/cluster.js"),
-        distance: require("./network/distance.js"),
-        normalize: require("./network/normalize.js"),
-        shortestPath: require("./network/shortestpath.js"),
-        smallestGap: require("./network/smallestgap.js"),
-        subgraph: require("./network/subgraph.js")
+        //cluster: require("./network/cluster.js"),
+        //distance: require("./network/distance.js"),
+        //normalize: require("./network/normalize.js"),
+        //shortestPath: require("./network/shortestpath.js"),
+        //smallestGap: require("./network/smallestgap.js"),
+        //subgraph: require("./network/subgraph.js")
     };
 
 
@@ -159,7 +159,7 @@
      */
 
     d3po.number = {
-        format: require("./number/format.js")
+        //format: require("./number/format.js")
     };
 
 
@@ -171,8 +171,8 @@
      */
 
     d3po.object = {
-        merge: require("./object/merge.js"),
-        validate: require("./object/validate.js")
+        //merge: require("./object/merge.js"),
+        //validate: require("./object/validate.js")
     };
 
 
@@ -184,10 +184,10 @@
      */
 
     d3po.string = {
-        format: require("./string/format.js"),
-        list: require("./string/list.js"),
-        strip: require("./string/strip.js"),
-        title: require("./string/title.js")
+        //format: require("./string/format.js"),
+        //list: require("./string/list.js"),
+        //strip: require("./string/strip.js"),
+        //title: require("./string/title.js")
     };
 
 
@@ -197,7 +197,7 @@
      * @for d3po
      */
 
-    d3po.textwrap = require("./textwrap/textwrap.js");
+    //d3po.textwrap = require("./textwrap/textwrap.js");
 
 
     /**
@@ -207,9 +207,9 @@
      */
 
     d3po.tooltip = {
-        create: require("./tooltip/create.js"),
-        move: require("./tooltip/move.js"),
-        remove: require("./tooltip/remove.js")
+        //create: require("./tooltip/create.js"),
+        //move: require("./tooltip/move.js"),
+        //remove: require("./tooltip/remove.js")
     };
 
 
@@ -221,13 +221,13 @@
      */
 
     d3po.util = {
-        buckets: require("./util/buckets.js"),
-        child: require("./util/child.js"),
-        closest: require("./util/closest.js"),
-        copy: require("./util/copy.js"),
-        d3selection: require("./util/d3selection.js"),
-        dataurl: require("./util/dataurl.js"),
-        uniques: require("./util/uniques.js")
+        //buckets: require("./util/buckets.js"),
+        //child: require("./util/child.js"),
+        //closest: require("./util/closest.js"),
+        //copy: require("./util/copy.js"),
+        //d3selection: require("./util/d3selection.js"),
+        //dataurl: require("./util/dataurl.js"),
+        //uniques: require("./util/uniques.js")
     };
 
 
@@ -237,7 +237,7 @@
      * @for d3po
      */
 
-    d3po.viz = require("./viz/viz.js");
+    //d3po.viz = require("./viz/viz.js");
 
     stylesheet = require("./client/css.js");
 

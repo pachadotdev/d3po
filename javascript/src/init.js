@@ -41,7 +41,7 @@
     d3po.array = {
         comparator: require("./array/comparator.js"),
         contains: require("./array/contains.js"),
-        //sort: require("./array/sort.js"),
+        sort: require("./array/sort.js"),
         update: require("./array/update.js")
     };
 
@@ -76,8 +76,8 @@
         //legible: require("./color/legible.js"),
         //lighter: require("./color/lighter.js"),
         //mix: require("./color/mix.js"),
-        //random: require("./color/random.js"),
-        //scale: require("./color/scale.js"),
+        random: require("./color/random.js"),
+        scale: require("./color/scale.js"),
         sort: require("./color/sort.js"),
         //text: require("./color/text.js"),
         validate: require("./color/validate.js")

@@ -149,14 +149,32 @@ module.exports = function(vars) {
 
         vars.data.time.getFormat = getFormat;
 
+        // See https://observablehq.com/@severo/custom-time-format-d3-5-x
+        function d3_time_format_multi(timeFormatLocale, formatsArray) {
+          function multiFormat(date) {
+            let i = 0,
+              found = false,
+              fmt = "%c";
+            while (!found && i < formatsArray.length) {
+              found = formatsArray[i][1](date);
+              if (found) fmt = formatsArray[i][0];
+              i++;
+            }
+            return fmt;
+          }
+          return function(date) {
+            return timeFormatLocale.format(multiFormat(date))(date);
+          };
+        }
+
         if (userFormat) {
 
             if (typeof userFormat === "string") {
-                vars.data.time.format = d3.locale(locale.format).timeFormat(userFormat);
+                vars.data.time.format = d3.timeFormatLocale(locale.format).format(userFormat);
             } else if (typeof userFormat === "function") {
                 vars.data.time.format = userFormat;
             } else if (userFormat instanceof Array) {
-                vars.data.time.format = d3.locale(locale.format).timeFormat.multi(userFormat);
+                vars.data.time.format = d3_time_format_multi(d3.timeFormatLocale(locale.format), userFormat);
             }
             vars.data.time.multiFormat = vars.data.time.format;
 
@@ -174,12 +192,12 @@ module.exports = function(vars) {
                 multi.push([format, functions[p]]);
             }
 
-            vars.data.time.format = d3.locale(locale.format).timeFormat(getFormat(stepType, totalType));
+            vars.data.time.format = d3.timeFormatLocale(locale.format).format(getFormat(stepType, totalType));
             if (multi.length > 1) {
                 multi[multi.length - 1][1] = function(d) {
                     return true;
                 }
-                vars.data.time.multiFormat = d3.locale(locale.format).timeFormat.multi(multi);
+                vars.data.time.multiFormat = d3_time_format_multi(d3.timeFormatLocale(locale.format), multi);
             } else {
                 vars.data.time.multiFormat = vars.data.time.format;
             }

@@ -18,26 +18,25 @@ module.exports = function(vars) {
             vars.nodes.positions = true;
         } else {
 
-            var force = d3.layout.force()
-                .size([vars.width.viz, vars.height.viz])
-                .nodes(vars.nodes.value)
-                .links(vars.edges.value);
-
+            var forceLink = d3.forceLink(vars.edges.value);
             var strength = vars.edges.strength.value;
             if (strength) {
                 if (typeof strength === "string") {
-                    force.linkStrength(function(e) {
+                    forceLink.strength(function(e) {
                         return e[strength];
                     });
                 } else {
-                    force.linkStrength(strength);
+                    forceLink.strength(strength);
                 }
             }
+
+            var force = d3.forceSimulation(vars.nodes.value)
+                .force("center", d3.forceCenter([vars.width.viz / 2, vars.height.viz / 2]))
+                .force("links", forceLink);
 
             var iterations = 50,
                 threshold = 0.01;
 
-            force.start(); // Defaults to alpha = 0.1
             for (var i = iterations; i > 0; --i) {
                 force.tick();
                 if (force.alpha() < threshold) {

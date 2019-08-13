@@ -128,7 +128,7 @@
      */
 
     d3po.geom = {
-        //largestRect: require("./geom/largestrectangle.js"),
+        largestRect: require("./geom/largestrectangle.js"),
         offset: require("./geom/offset.js"),
         path2poly: require("./geom/path2poly.js")
     };

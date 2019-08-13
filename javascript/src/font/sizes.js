@@ -38,7 +38,7 @@
         getHeight = function(elem) {
             return elem.parentNode.getBBox().height || elem.getBoundingClientRect().height;
         };
-        tspans.enter().append("tspan").text(String).style(style).attr(attr).each(function(d) {
+        tspans.enter().append("tspan").text(String).styles(style).attrs(attr).each(function(d) {
             if (typeof opts.mod === "function") {
                 return opts.mod(this);
             }

@@ -39,7 +39,7 @@
      */
 
     d3po.array = {
-        //comparator: require("./array/comparator.js"),
+        comparator: require("./array/comparator.js"),
         contains: require("./array/contains.js"),
         //sort: require("./array/sort.js"),
         update: require("./array/update.js")

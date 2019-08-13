@@ -58,7 +58,7 @@
         ie: require("./client/ie.js"),
         pointer: require("./client/pointer.js"),
         prefix: require("./client/prefix.js"),
-        //rtl: require("./client/rtl.js"),
+        rtl: require("./client/rtl.js"),
         scroll: require("./client/scroll.js"),
         scrollbar: require("./client/scrollbar.js"),
         touch: require("./client/touch.js")

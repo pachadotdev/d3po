@@ -73,7 +73,7 @@
      */
 
     d3po.color = {
-        //legible: require("./color/legible.js"),
+        legible: require("./color/legible.js"),
         //lighter: require("./color/lighter.js"),
         //mix: require("./color/mix.js"),
         random: require("./color/random.js"),

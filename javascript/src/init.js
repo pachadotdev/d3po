@@ -107,7 +107,7 @@
 
     d3po.font = {
         sizes: require("./font/sizes.js"),
-        //validate: require("./font/validate.js")
+        validate: require("./font/validate.js")
     };
 
 

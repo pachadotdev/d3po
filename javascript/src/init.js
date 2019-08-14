@@ -197,7 +197,7 @@
      * @for d3po
      */
 
-    //d3po.textwrap = require("./textwrap/textwrap.js");
+    d3po.textwrap = require("./textwrap/textwrap.js");
 
 
     /**

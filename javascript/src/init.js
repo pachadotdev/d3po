@@ -117,7 +117,7 @@
      * @for d3po
      */
 
-    //d3po.form = require("./form/form.js");
+    d3po.form = require("./form/form.js");
 
 
     /**

@@ -8,14 +8,14 @@ module.exports = function(vars, selection, enter, exit) {
     // Initialize check scale on enter and exit.
     //----------------------------------------------------------------------------
     function init(paths) {
-        paths.attr("d", d3.svg.symbol().type("cross").size(10))
+        paths.attr("d", d3.symbol().type(d3.symbolCross).size(10))
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Change scale of check on update.
     //---------------------------------------------------------------------------
     function update(paths) {
-        paths.attr("d", d3.svg.symbol().type("cross").size(function(d) {
+        paths.attr("d", d3.svg.symbol().type(d3.symbolCross).size(function(d) {
             var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
             return d3.scale.pow().exponent(2)(smaller_dim / 2);
         }))

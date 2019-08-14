@@ -21,7 +21,7 @@ module.exports = function(vars, selection, enter, exit) {
     // This is the main arc function that determines what values to use for each
     // arc angle and radius.
     //----------------------------------------------------------------------------
-    var arc = d3.svg.arc()
+    var arc = d3.arc()
         .startAngle(0)
         .endAngle(function(d) {
             var a = vars.arcs[d.d3po.shape][d.d3po.id].a;

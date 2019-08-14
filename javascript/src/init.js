@@ -159,7 +159,7 @@
      */
 
     d3po.number = {
-        //format: require("./number/format.js")
+        format: require("./number/format.js")
     };
 
 

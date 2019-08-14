@@ -21,7 +21,7 @@
                 return d.d3po.stroke;
             } else {
                 c = d.values ? color(d.values[0], vars) : color(d, vars, true);
-                return d3.rgb(c).darker(0.6);
+                return d3.rgb(c).darker(0.6).formatHex();
             }
         }).style("stroke-width", function(d) {
             var v;

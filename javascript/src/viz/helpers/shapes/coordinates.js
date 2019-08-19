@@ -13,7 +13,7 @@
 
     path2poly = require("../../../geom/path2poly.js");
 
-    getProjection = require("./projection.js");
+    projections = require("./projections.js");
 
     shapeStyle = require("./style.js");
 
@@ -21,7 +21,9 @@
 
     module.exports = function(vars, selection, enter, exit) {
         var projection, size_change;
-        projection = getProjection(vars.coords.projection.value)();
+        projection = (typeof vars.coords.projection.value === "function")?
+            vars.coords.projection.value:
+            projections.fromString(vars.coords.projection.value)();
         if (projection.center) {
             projection.center(vars.coords.center);
         }

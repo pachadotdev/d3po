@@ -1,8 +1,8 @@
 // Corresponds d3 3.x projection to d3 5.x
 (function() {
 
-    module.exports = function(projection) {
-        var functions = {
+    var projections = {},
+        dict = {
             "albers": d3.geoAlbers,
             "albersUsa": d3.geoAlbersUsa,
             "azimuthalEqualArea": d3.geoAzimuthalEqualArea,
@@ -15,14 +15,16 @@
             "mercator": d3.geoMercator,
             "orthographic": d3.geoOrthographic,
             "stereographic": d3.geoStereographic,
-            "transverseMercator": d3.geoTransverseMercator,
-            "default": d3.geoMercator
-        };
-        if (typeof projection === "function") {
-            return projection;
-        } else {
-            return functions[projection] || functions["default"];
-        }
+            "transverseMercator": d3.geoTransverseMercator
+        },
+        default = "mercator";
+
+    projections.allowedStrings = Object.keys(dict)
+
+    projections.fromString = function(value) {
+        return dict[value] || dict[default];
     };
+
+    module.exports = projections;
 
 }).call(this);

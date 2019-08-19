@@ -99,7 +99,7 @@ var table = function(vars) {
             if (domain_extent[0] == domain_extent[1]) {
                 domain_extent = [domain_extent[0] - 1, domain_extent[1]]
             }
-            colors[col] = d3.scale.linear().domain(domain_extent).range([vars.color.missing, rand_col(col)])
+            colors[col] = d3.scaleLinear().domain(domain_extent).range([vars.color.missing, rand_col(col)])
         } else if (vars.data.keys[col] == "boolean") {
             colors[col] = function(bool) {
                 return bool ? rand_col(col) : vars.color.missing;

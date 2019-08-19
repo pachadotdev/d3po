@@ -98,7 +98,7 @@
             return results;
         })();
         maxData = d3.max(d3.merge(maxData));
-        radius = d3.scale.linear().domain([0, maxData]).range([0, maxRadius]);
+        radius = d3.scaleLinear().domain([0, maxData]).range([0, maxRadius]);
         ids = (function() {
             var j, len, results;
             results = [];
@@ -109,7 +109,7 @@
             return results;
         })();
         ids = uniques(d3.merge(ids));
-        idIndex = d3.scale.ordinal().domain(ids).range(d3.range(0, ids.length));
+        idIndex = d3.scaleOrdinal().domain(ids).range(d3.range(0, ids.length));
         for (j = 0, len = data.length; j < len; j++) {
             d = data[j];
             d.d3po.x = vars.width.viz / 2 + vars.margin.top;
@@ -154,7 +154,7 @@
             return d;
         });
         rings.exit().transition().duration(vars.draw.timing).attr("opacity", 0).remove();
-        labelIndex = d3.scale.ordinal().domain(labels).range(d3.range(0, labels.length));
+        labelIndex = d3.scaleOrdinal().domain(labels).range(d3.range(0, labels.length));
         labelData = [];
         for (n = 0, len3 = labels.length; n < len3; n++) {
             l = labels[n];

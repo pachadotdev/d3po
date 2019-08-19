@@ -95,7 +95,6 @@
                 }
                 return next();
             })
-        });
-    };
+        };
 
 }).call(this);

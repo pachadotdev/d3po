@@ -16,6 +16,8 @@
         },
         default = "category10";
 
+    schemes.defaultString = default;
+
     schemes.allowedStrings = Object.keys(dict)
 
     schemes.fromString = function(string) {

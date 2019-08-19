@@ -19,6 +19,8 @@
         },
         default = "mercator";
 
+    projections.defaultString = default;
+
     projections.allowedStrings = Object.keys(dict)
 
     projections.fromString = function(value) {

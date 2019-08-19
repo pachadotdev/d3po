@@ -15,6 +15,8 @@
         },
         default = "linear";
 
+    curves.defaultString = default;
+
     curves.allowedStrings = Object.keys(dict)
 
     curves.fromString = function(string) {

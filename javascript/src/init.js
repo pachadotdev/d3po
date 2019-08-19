@@ -237,7 +237,7 @@
      * @for d3po
      */
 
-    //d3po.viz = require("./viz/viz.js");
+    d3po.viz = require("./viz/viz.js");
 
     stylesheet = require("./client/css.js");
 

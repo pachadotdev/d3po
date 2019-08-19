@@ -1,6 +1,8 @@
 // Load Data using JSON
 (function() {
-    var print, validObject;
+    var filetypes, print, validObject;
+
+    filetypes = require("../../viz/helpers/d3functions/filetypes.js");
 
     print = require("../console/print.js");
 
@@ -36,7 +38,7 @@
         if (fileType === "dsv") {
             parser = function(input) {return d3.dsv(vars[key].delimiter.value, input);};
         } else {
-            parser = d3[fileType];
+            parser = filetypes.fromString(fileType);
         }
         return parser(url)
             .then(function(data) {

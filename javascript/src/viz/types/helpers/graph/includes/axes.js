@@ -1,5 +1,7 @@
 (function() {
-    var arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
+    var aggs, arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
+
+    aggs = require("../../viz/helpers/d3functions/aggs.js");
 
     arraySort = require("../../../../../array/sort.js");
 
@@ -233,7 +235,7 @@
                     for (k in counts) {
                         v = counts[k];
                         if (aggType === "string") {
-                            counts[k] = d3[agg](v);
+                            counts[k] = aggs.fromString(agg)(v);
                         } else if (aggType === "function") {
                             counts[k] = agg(v, sortKey);
                         }

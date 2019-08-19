@@ -16,9 +16,9 @@
         },
         default = "category10";
 
-    schemes.allowedValues = Object.keys(dict)
+    schemes.allowedStrings = Object.keys(dict)
 
-    schemes.get = function(string) {
+    schemes.fromString = function(string) {
         return dict[string] || dict[default];
     };
 

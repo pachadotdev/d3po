@@ -20,14 +20,14 @@
         primary: "#d74b03",
         range: ["#B22200", "#FFEE8D", "#759143"],
         scale: {
-            accepted: [Array, Function, "d3po"].concat(schemes.allowedValues),
+            accepted: [Array, Function, "d3po"].concat(schemes.allowedStrings),
             process: function(value) {
                 if (value instanceof Array) {
                     return d3.scaleOrdinal().range(value);
                 } else if (value === "d3po") {
                     return scale;
                 } else if (typeof value === "string") {
-                    return schemes.get(value)();
+                    return schemes.fromString(value)();
                 } else {
                     return value;
                 }

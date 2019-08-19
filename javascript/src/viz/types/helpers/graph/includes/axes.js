@@ -1,7 +1,7 @@
 (function() {
     var aggs, arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
 
-    aggs = require("../../viz/helpers/d3functions/aggs.js");
+    aggs = require("../../../../helpers/d3functions/aggs.js");
 
     arraySort = require("../../../../../array/sort.js");
 
@@ -15,7 +15,7 @@
 
     print = require("../../../../../core/console/print.js");
 
-    scales = require("../../../helpers/d3functions/scales.js");
+    scales = require("../../../../helpers/d3functions/scales.js");
 
     uniques = require("../../../../../util/uniques.js");
 

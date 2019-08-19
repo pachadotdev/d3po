@@ -1,4 +1,4 @@
-var aggs = require("../../viz/helpers/d3functions/aggs.js"),
+var aggs = require("../d3functions/aggs.js"),
     events = require("../../../client/pointer.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     print = require("../../../core/console/print.js"),

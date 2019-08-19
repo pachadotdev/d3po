@@ -11,15 +11,14 @@
             "tsv": d3.tsv,
             "txt": d3.text,
             "text": d3.text
-        },
-        default = "json";
+        };
 
-    filetypes.defaultString = default;
+    filetypes.defaultString = "json";
 
     filetypes.allowedStrings = Object.keys(dict)
 
     filetypes.fromString = function(string) {
-        return dict[string] || dict[default];
+        return dict[string] || dict[filetypes.defaultString];
     };
 
     module.exports = filetypes;

@@ -12,15 +12,14 @@
             "quantile": d3.scaleQuantile,
             "identity": d3.scaleIdentity,
             "ordinal": d3.scaleOrdinal
-        },
-        default = "linear";
+        };
 
-    scales.defaultString = default;
+    scales.defaultString = "linear";
 
     scales.allowedStrings = Object.keys(dict)
 
     scales.fromString = function(string) {
-        return dict[string] || dict[default];
+        return dict[string] || dict[scales.defaultString];
     };
 
     module.exports = scales;

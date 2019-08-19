@@ -13,15 +13,14 @@
             "set2": d3.schemeSet2,
             "set3": d3.schemeSet3,
             "tableau10": d3.schemeTableau10
-        },
-        default = "category10";
+        };
 
-    colorscales.defaultString = default;
+    colorscales.defaultString = "category10";
 
     colorscales.allowedStrings = Object.keys(dict)
 
     colorscales.fromString = function(string) {
-        return dict[string] || dict[default];
+        return dict[string] || dict[colorscales.defaultString];
     };
 
     module.exports = colorscales;

@@ -16,15 +16,14 @@
             "orthographic": d3.geoOrthographic,
             "stereographic": d3.geoStereographic,
             "transverseMercator": d3.geoTransverseMercator
-        },
-        default = "mercator";
+        };
 
-    projections.defaultString = default;
+    projections.defaultString = "mercator";
 
     projections.allowedStrings = Object.keys(dict)
 
     projections.fromString = function(value) {
-        return dict[value] || dict[default];
+        return dict[value] || dict[projections.defaultString];
     };
 
     module.exports = projections;

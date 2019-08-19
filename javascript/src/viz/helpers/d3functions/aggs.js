@@ -8,15 +8,14 @@
             "max": d3.max,
             "mean": d3.mean,
             "median": d3.median
-        },
-        default = "sum";
+        };
 
-    aggs.defaultString = default;
+    aggs.defaultString = "sum";
 
     aggs.allowedStrings = Object.keys(dict)
 
     aggs.fromString = function(string) {
-        return dict[string] || dict[default];
+        return dict[string] || dict[aggs.defaultString];
     };
 
     module.exports = aggs;

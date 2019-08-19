@@ -12,15 +12,14 @@
             "step": d3.curveStep,
             "step-before": d3.curveStepBefore,
             "step-after": d3.curveStepAfter
-        },
-        default = "linear";
+        };
 
-    curves.defaultString = default;
+    curves.defaultString = "linear";
 
     curves.allowedStrings = Object.keys(dict)
 
     curves.fromString = function(string) {
-        return dict[string] || dict[default];
+        return dict[string] || dict[curves.defaultString];
     };
 
     module.exports = curves;

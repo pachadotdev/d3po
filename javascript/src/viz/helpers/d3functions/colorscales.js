@@ -1,7 +1,7 @@
 // Corresponds d3 3.x color schemes to d3 5.x ones
 (function() {
 
-    var schemes = {},
+    var colorscales = {},
         dict = {
             "category10": d3.schemeCategory10,
             "accent": d3.schemeAccent,
@@ -16,14 +16,14 @@
         },
         default = "category10";
 
-    schemes.defaultString = default;
+    colorscales.defaultString = default;
 
-    schemes.allowedStrings = Object.keys(dict)
+    colorscales.allowedStrings = Object.keys(dict)
 
-    schemes.fromString = function(string) {
+    colorscales.fromString = function(string) {
         return dict[string] || dict[default];
     };
 
-    module.exports = schemes;
+    module.exports = colorscales;
 
 }).call(this);

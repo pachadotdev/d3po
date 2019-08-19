@@ -9,7 +9,7 @@
 
     donut = function(vars) {
         var d, donutData, donutLayout, groupedData, i, item, len, outer_radius, returnData;
-        donutLayout = d3.layout.pie().value(function(d) {
+        donutLayout = d3.pie().value(function(d) {
             return d.value;
         }).sort(function(a, b) {
             if (vars.order.value) {

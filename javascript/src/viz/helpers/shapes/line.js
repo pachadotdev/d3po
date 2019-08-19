@@ -1,7 +1,7 @@
 var copy = require("../../../util/copy.js"),
     closest = require("../../../util/closest.js"),
     events = require("../../../client/pointer.js"),
-    curves = require("./curves.js"),
+    curves = require("../d3functions/curves.js"),
     shapeStyle = require("./style.js"),
     fetchValue = require("../../../core/fetch/value.js");
 

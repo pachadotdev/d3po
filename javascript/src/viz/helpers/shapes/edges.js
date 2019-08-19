@@ -1,5 +1,5 @@
 var buckets = require("../../../util/buckets.js"),
-    curves = require("./curves.js"),
+    curves = require("../d3functions/curves.js"),
     offset = require("../../../geom/offset.js");
 
 module.exports = function(vars) {

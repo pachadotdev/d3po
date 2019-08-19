@@ -5,7 +5,7 @@
 
     process = require("../../core/methods/process/data.js");
 
-    projections = require("../helpers/shapes/projections.js");
+    projections = require("../helpers/d3functions/projections.js");
 
     module.exports = {
         accepted: [false, Array, Function, Object, String],

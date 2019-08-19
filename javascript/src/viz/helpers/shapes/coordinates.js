@@ -13,7 +13,7 @@
 
     path2poly = require("../../../geom/path2poly.js");
 
-    projections = require("./projections.js");
+    projections = require("../d3functions/projections.js");
 
     shapeStyle = require("./style.js");
 

@@ -1,7 +1,7 @@
 var fetchText = require("../../../core/fetch/text.js"),
     fontSizes = require("../../../font/sizes.js"),
     largestRect = require("../../../geom/largestrectangle.js"),
-    curves = require("./curves.js"),
+    curves = require("../d3functions/curves.js"),
     shapeStyle = require("./style.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect

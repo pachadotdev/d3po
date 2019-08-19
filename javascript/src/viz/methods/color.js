@@ -5,7 +5,7 @@
 
     scale = require("../../color/scale.js");
 
-    schemes = require("../../color/schemes.js");
+    schemes = require("../helpers/d3functions/schemes.js");
 
     module.exports = {
         accepted: [false, Array, Function, Object, String],

@@ -19,7 +19,7 @@
                     var primary;
                     primary = this.value;
                     if (!vars.ui.color.secondary.value) {
-                        vars.ui.color.secondary.value = d3.rgb(primary).darker(0.75).toString();
+                        vars.ui.color.secondary.value = d3.rgb(primary).darker(0.75).formatHex();
                     }
                     return value;
                 },

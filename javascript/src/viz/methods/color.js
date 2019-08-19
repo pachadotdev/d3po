@@ -5,7 +5,7 @@
 
     scale = require("../../color/scale.js");
 
-    schemes = require("../helpers/d3functions/schemes.js");
+    colorScales = require("../helpers/d3functions/colorscales.js");
 
     module.exports = {
         accepted: [false, Array, Function, Object, String],
@@ -20,14 +20,14 @@
         primary: "#d74b03",
         range: ["#B22200", "#FFEE8D", "#759143"],
         scale: {
-            accepted: [Array, Function, "d3po"].concat(schemes.allowedStrings),
+            accepted: [Array, Function, "d3po"].concat(colorScales.allowedStrings),
             process: function(value) {
                 if (value instanceof Array) {
                     return d3.scaleOrdinal().range(value);
                 } else if (value === "d3po") {
                     return scale;
                 } else if (typeof value === "string") {
-                    return schemes.fromString(value)();
+                    return colorScales.fromString(value)();
                 } else {
                     return value;
                 }

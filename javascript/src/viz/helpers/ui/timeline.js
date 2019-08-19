@@ -322,7 +322,7 @@
             } else {
                 tickColor = vars.x.ticks.color;
             }
-            ticks.attr("transform", "translate(" + start_x + "," + (vars.ui.padding + 1) + ")").transition().duration(vars.draw.timing).call(d3.svg.axis().scale(x).orient("top").ticks(function() {
+            ticks.attr("transform", "translate(" + start_x + "," + (vars.ui.padding + 1) + ")").transition().duration(vars.draw.timing).call(d3.axisTop().scale(x).ticks(function() {
                 return year_ticks;
             }).tickFormat("").tickSize(-timelineHeight).tickPadding(0)).selectAll("line").attr("stroke-width", 1).attr("shape-rendering", "crispEdges").attr("stroke", function(d) {
                 if (visible.indexOf(+d) >= 0) {

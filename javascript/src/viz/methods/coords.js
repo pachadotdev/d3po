@@ -5,6 +5,8 @@
 
     process = require("../../core/methods/process/data.js");
 
+    projections = require("../helpers/shapes/projections.js");
+
     module.exports = {
         accepted: [false, Array, Function, Object, String],
         center: [0, 0],
@@ -21,8 +23,8 @@
         padding: 20,
         process: process,
         projection: {
-            accepted: ["albers", "albersUsa", "azimuthalEqualArea", "azimuthalEquidistant", "conicConformal", "conicEqualArea", "conicEquidistant", "equirectangular", "gnomonic", "mercator", "orthographic", "stereographic", "transverseMercator", Function],
-            value: "mercator"
+            accepted: projections.allowedStrings.concat([Function]),
+            value: projections.defaultString
         },
         simplify: {
             accepted: [Boolean],

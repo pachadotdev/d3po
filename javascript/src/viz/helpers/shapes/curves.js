@@ -1,8 +1,8 @@
 // Corresponds d3 3.x interpolation modes to d3 5.x curves
 (function() {
 
-    module.exports = function(interpolationMode) {
-        var curves = {
+    var curves = {},
+        dict = {
             "basis": d3.curveBasis,
             "basis-open": d3.curveBasisOpen,
             "cardinal": d3.curveCardinal,
@@ -11,10 +11,16 @@
             "monotone": d3.curveMonotoneY,
             "step": d3.curveStep,
             "step-before": d3.curveStepBefore,
-            "step-after": d3.curveStepAfter,
-            "default": d3.curveLinear
-        };
-        return curves[interpolationMode] || curves["default"];
+            "step-after": d3.curveStepAfter
+        },
+        default = "linear";
+
+    curves.allowedStrings = Object.keys(dict)
+
+    curves.fromString = function(string) {
+        return dict[string] || dict[default];
     };
+
+    module.exports = curves;
 
 }).call(this);

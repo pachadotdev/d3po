@@ -13,6 +13,8 @@
 
     print = require("../../../../../core/console/print.js");
 
+    scales = require("../../../helpers/d3functions/scales.js");
+
     uniques = require("../../../../../util/uniques.js");
 
     module.exports = function(vars, opts) {
@@ -298,7 +300,7 @@
             }
         }
         vars[axis].scale.ticks = t;
-        retScale = d3.scale[scaleType]().domain(range).range(rangeArray);
+        retScale = scales.fromString(scaleType)().domain(range).range(rangeArray);
         if ("clamp" in retScale) {
             retScale.clamp(true);
         }

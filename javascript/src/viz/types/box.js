@@ -255,7 +255,7 @@
 
     box.requirements = ["data", "x", "y"];
 
-    box.shapes = ["circle", "square"];
+    box.shapes = ["circle", "check", "cross", "diamond", "square", "triangle", "triangle_up", "triangle_down"];
 
     box.setup = function(vars) {
         var axis;

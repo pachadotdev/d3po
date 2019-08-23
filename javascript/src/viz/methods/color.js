@@ -21,7 +21,7 @@
             accepted: [Array, Function, "d3po", "category10", "category20", "category20b", "category20c"],
             process: function(value) {
                 if (value instanceof Array) {
-                    return d3.scaleOrdinal().range(value);
+                    return d3.scale.ordinal().range(value);
                 } else if (value === "d3po") {
                     return scale;
                 } else if (typeof value === "string") {

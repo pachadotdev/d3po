@@ -46,7 +46,7 @@ module.exports = function(vars) {
             }
         }
 
-        vars.color.valueScale = d3.scaleSqrt()
+        vars.color.valueScale = d3.scale.sqrt()
             .domain(data_range)
             .range(color_range)
             .interpolate(d3.interpolateRgb)

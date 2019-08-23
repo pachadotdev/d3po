@@ -31,7 +31,7 @@
                     value: 3
                 }
             },
-            value: d3.scaleSqrt()
+            value: d3.scale.sqrt()
         },
         solo: filter(true),
         threshold: {

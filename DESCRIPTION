@@ -2,18 +2,8 @@ Package: d3po
 Type: Package
 Title: A javascript library designed to work with Shiny.
 Version: 0.1.2
-Author: c(
-  person("Mauricio", "Vargas", 
-    role = c("aut","cre","cph"), 
-    email = "mvargas@dcc.uchile.cl", 
-    comment = c(ORCID = "0000-0003-1017-7574")),
-  person("Joshua", "Kunst", 
-    role = c("aut", "cre", "cph"),
-    email = "jbkunst@gmail.com"),
-  person("Ariel", "Alvarado", 
-    role = c("ctb"),
-    email = "alvarado.ariel.contact@gmail.com")
-  )
+Author: Mauricio Vargas [aut,cre],
+  Joshua Kunst [aut]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
 Description: A javascript library designed to work with Shiny. It extends the popular 
   D3 to enable fast and beautiful visualizations.

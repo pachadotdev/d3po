@@ -22,9 +22,14 @@ var drawShape = {
     "area": require("./area.js"),
     "check": require("./check.js"),
     "coordinates": require("./coordinates.js"),
+    "cross": require("./cross.js"),
+    "diamond": require("./diamond.js"),
+    "donut": require("./donut.js"),
     "line": require("./line.js"),
     "radial": require("./radial.js"),
     "rect": require("./rect.js"),
+    "triangle_down": require("./triangle_down.js"),
+    "triangle_up": require("./triangle_up.js"),
     "whisker": require("./whisker.js")
 };
 
@@ -51,11 +56,17 @@ module.exports = function(vars) {
         "check": "check",
         "circle": "rect",
         "coordinates": "coordinates",
+        "cross": "cross",
         "donut": "donut",
+        "diamond": "diamond",
         "line": "line",
+        "plus": "cross",
         "radial": "radial",
         "rect": "rect",
         "square": "rect",
+        "triangle_down": "triangle_down",
+        "triangle": "triangle_up",
+        "triangle_up": "triangle_up",
         "whisker": "whisker"
     };
 
@@ -206,6 +217,30 @@ module.exports = function(vars) {
 
                         d = id(d)
 
+                        if (!d.d3po.segments) {
+
+                            d.d3po.segments = {
+                                "donut": Math.PI * 2
+                            }
+                            var active = segments(vars, d, "active"),
+                                temp = segments(vars, d, "temp"),
+                                total = segments(vars, d, "total");
+
+                            if (total) {
+                                if (active) {
+                                    d.d3po.segments.active = (active / total) * (Math.PI * 2)
+                                } else {
+                                    d.d3po.segments.active = 0
+                                }
+                                if (temp) {
+                                    d.d3po.segments.temp = ((temp / total) * (Math.PI * 2)) + d.d3po.segments.active
+                                } else {
+                                    d.d3po.segments.temp = 0
+                                }
+                            }
+
+                        }
+
                     }
 
                 }
@@ -266,9 +301,9 @@ module.exports = function(vars) {
         if (vars.dev.value) print.timeEnd("drawing \"" + shape + "\" shapes")
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // Check for active and temp fills for rects
+        // Check for active and temp fills for rects and donuts
         //--------------------------------------------------------------------------
-        if (["rect"].indexOf(shape) >= 0 && vars.types[vars.type.value].fill) {
+        if (["rect", "donut"].indexOf(shape) >= 0 && vars.types[vars.type.value].fill) {
             if (vars.dev.value) print.time("filling \"" + shape + "\" shapes")
             shapeFill(vars, selection, enter, exit, transform)
             if (vars.dev.value) print.timeEnd("filling \"" + shape + "\" shapes")

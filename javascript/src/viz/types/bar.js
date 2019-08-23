@@ -62,14 +62,14 @@
                 }
                 maxSize /= divisions;
                 offset = space / 2 - maxSize / 2 - padding;
-                x = d3.scaleOrdinal();
+                x = d3.scale.ordinal();
                 if (divisions === 1) {
                     x.domain([0]).range([0]);
                 } else {
                     x.domain([0, divisions - 1]).range([-offset, offset]);
                 }
             } else {
-                x = d3.scaleLinear();
+                x = d3.scale.linear();
             }
         }
         data = [];

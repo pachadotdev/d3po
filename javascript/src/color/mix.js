@@ -13,7 +13,7 @@
         r = (o1 * c1.r + o2 * c2.r - o1 * o2 * c2.r) / (o1 + o2 - o1 * o2);
         g = (o1 * c1.g + o2 * c2.g - o1 * o2 * c2.g) / (o1 + o2 - o1 * o2);
         b = (o1 * c1.b + o2 * c2.b - o1 * o2 * c2.b) / (o1 + o2 - o1 * o2);
-        return d3.rgb(r, g, b).toString();
+        return d3.rgb(r, g, b).formatHex();
     };
 
 }).call(this);

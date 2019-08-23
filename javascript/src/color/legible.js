@@ -9,7 +9,7 @@
             }
             hsl.l = 0.45;
         }
-        return hsl.toString();
+        return hsl.formatHex();
     };
 
 }).call(this);

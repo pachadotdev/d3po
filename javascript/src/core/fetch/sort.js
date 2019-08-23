@@ -1,5 +1,7 @@
 (function() {
-    var fetchColor, fetchText, fetchValue;
+    var aggs, fetchColor, fetchText, fetchValue;
+
+    aggs = require("../../viz/helpers/d3functions/aggs.js");
 
     fetchValue = require("./value.js");
 
@@ -43,7 +45,7 @@
             if ([vars.data.keys[key], vars.attrs.keys[key]].indexOf("number") >= 0) {
                 agg = vars.order.agg.value || vars.aggs.value[key] || "sum";
                 if (agg.constructor === String) {
-                    agg = d3[agg];
+                    agg = aggs.fromString(agg);
                 }
                 if (!(value instanceof Array)) {
                     value = [value];

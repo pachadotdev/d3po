@@ -45,12 +45,12 @@ module.exports = function(vars, selection, enter, exit) {
             })
             .attr("rx", function(d) {
                 var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
-                var rounded = ["circle"].indexOf(vars.shape.value) >= 0;
+                var rounded = ["circle", "donut"].indexOf(vars.shape.value) >= 0;
                 return rounded ? (w + mod) / 2 : 0;
             })
             .attr("ry", function(d) {
                 var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
-                var rounded = ["circle"].indexOf(vars.shape.value) >= 0;
+                var rounded = ["circle", "donut"].indexOf(vars.shape.value) >= 0;
                 return rounded ? (h + mod) / 2 : 0;
             })
             .attr("shape-rendering", function(d) {
@@ -60,6 +60,72 @@ module.exports = function(vars, selection, enter, exit) {
                     return "auto";
                 }
             });
+    }
+
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // In order to correctly animate each donut's size and arcs, we need to store
+    // it's previous values in a lookup object that does not get destroyed when
+    // redrawing the visualization.
+    //----------------------------------------------------------------------------
+    if (!vars.arcs) {
+        vars.arcs = {
+            "donut": {},
+            "active": {},
+            "temp": {}
+        };
+    }
+
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // This is the main arc function that determines what values to use for each
+    // arc angle and radius.
+    //----------------------------------------------------------------------------
+    var arc = d3.arc()
+        .startAngle(0)
+        .endAngle(function(d) {
+            var a = vars.arcs[d.d3po.shape][d.d3po.id].a;
+            return a > Math.PI * 2 ? Math.PI * 2 : a;
+        })
+        .innerRadius(function(d) {
+            if (!d.d3po.static && vars.shape.value === "donut") {
+                var r = vars.arcs[d.d3po.shape][d.d3po.id].r;
+                return r * vars.data.donut.size;
+            } else {
+                return 0;
+            }
+        })
+        .outerRadius(function(d) {
+            var r = vars.arcs[d.d3po.shape][d.d3po.id].r;
+            return vars.shape.value === "donut" ? r : r * 2;
+        });
+
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // This is the main "arcTween" function where all of the animation happens
+    // for each arc.
+    //----------------------------------------------------------------------------
+    function size(path, mod, rad, ang) {
+        if (!mod) mod = 0;
+        if (typeof rad != "number") rad = undefined;
+        if (typeof ang != "number") ang = undefined;
+        path.attrTween("d", function(d) {
+            if (rad === undefined) var r = d.d3po.r ? d.d3po.r : d3.max([d.d3po.width, d.d3po.height]);
+            else var r = rad;
+            if (ang === undefined) var a = d.d3po.segments[d.d3po.shape];
+            else var a = ang;
+            if (!vars.arcs[d.d3po.shape][d.d3po.id]) {
+                vars.arcs[d.d3po.shape][d.d3po.id] = {
+                    "r": 0
+                };
+                vars.arcs[d.d3po.shape][d.d3po.id].a = d.d3po.shape === "donut" ? Math.PI * 2 : 0;
+            }
+            var radius = d3.interpolate(vars.arcs[d.d3po.shape][d.d3po.id].r, r + mod),
+                angle = d3.interpolate(vars.arcs[d.d3po.shape][d.d3po.id].a, a);
+
+            return function(t) {
+                vars.arcs[d.d3po.shape][d.d3po.id].r = radius(t);
+                vars.arcs[d.d3po.shape][d.d3po.id].a = angle(t);
+                return arc(d);
+            };
+        });
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

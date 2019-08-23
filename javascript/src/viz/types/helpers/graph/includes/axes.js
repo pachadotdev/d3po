@@ -1,5 +1,7 @@
 (function() {
-    var arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
+    var aggs, arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
+
+    aggs = require("../../../../helpers/d3functions/aggs.js");
 
     arraySort = require("../../../../../array/sort.js");
 
@@ -12,6 +14,8 @@
     fetchValue = require("../../../../../core/fetch/value.js");
 
     print = require("../../../../../core/console/print.js");
+
+    scales = require("../../../../helpers/d3functions/scales.js");
 
     uniques = require("../../../../../util/uniques.js");
 
@@ -231,7 +235,7 @@
                     for (k in counts) {
                         v = counts[k];
                         if (aggType === "string") {
-                            counts[k] = d3[agg](v);
+                            counts[k] = aggs.fromString(agg)(v);
                         } else if (aggType === "function") {
                             counts[k] = agg(v, sortKey);
                         }
@@ -298,7 +302,7 @@
             }
         }
         vars[axis].scale.ticks = t;
-        retScale = d3.scale[scaleType]().domain(range).range(rangeArray);
+        retScale = scales.fromString(scaleType)().domain(range).range(rangeArray);
         if ("clamp" in retScale) {
             retScale.clamp(true);
         }

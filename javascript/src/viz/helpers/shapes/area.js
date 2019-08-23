@@ -1,6 +1,7 @@
 var fetchText = require("../../../core/fetch/text.js"),
     fontSizes = require("../../../font/sizes.js"),
     largestRect = require("../../../geom/largestrectangle.js"),
+    curves = require("../d3functions/curves.js"),
     shapeStyle = require("./style.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
@@ -10,7 +11,7 @@ module.exports = function(vars, selection, enter, exit) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // D3 area definition
     //----------------------------------------------------------------------------
-    var area = d3.svg.area()
+    var area = d3.area()
         .x(function(d) {
             return d.d3po.x;
         })
@@ -20,9 +21,9 @@ module.exports = function(vars, selection, enter, exit) {
         .y1(function(d) {
             return d.d3po.y;
         })
-        .interpolate(vars.shape.interpolate.value);
+        .curve(curves.fromString(vars.shape.interpolate.value));
 
-    var startArea = d3.svg.area()
+    var startArea = d3.area()
         .x(function(d) {
             return d.d3po.x;
         })
@@ -32,7 +33,7 @@ module.exports = function(vars, selection, enter, exit) {
         .y1(function(d) {
             return d.d3po.y0;
         })
-        .interpolate(vars.shape.interpolate.value);
+        .curve(curves.fromString(vars.shape.interpolate.value));
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // "paths" Enter

@@ -1,4 +1,5 @@
-var arraySort = require("../../array/sort.js"),
+var aggs = require("../../viz/helpers/d3functions/aggs.js"),
+    arraySort = require("../../array/sort.js"),
     dataNest = require("./nest.js"),
     fetchValue = require("../fetch/value.js"),
     fetchColor = require("../fetch/color.js"),
@@ -48,7 +49,7 @@ module.exports = function(vars, rawData, split) {
                     if (typeof vars.aggs.value[vars.size.value] == "function") {
                         total = vars.aggs.value[vars.size.value](leaves);
                     } else if (typeof vars.aggs.value[vars.size.value] == "string") {
-                        total = d3[vars.aggs.value[vars.size.value]](leaves, function(l) {
+                        total = aggs.fromString(vars.aggs.value[vars.size.value])(leaves, function(l) {
                             return fetchValue(vars, l, vars.size.value);
                         });
                     }

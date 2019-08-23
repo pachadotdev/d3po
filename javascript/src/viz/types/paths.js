@@ -256,7 +256,7 @@
 
     viz.scale = 1;
 
-    viz.shapes = ["circle", "square"];
+    viz.shapes = ["circle", "square", "donut"];
 
     viz.tooltip = "static";
 

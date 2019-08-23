@@ -1,6 +1,7 @@
 var copy = require("../../../util/copy.js"),
     closest = require("../../../util/closest.js"),
     events = require("../../../client/pointer.js"),
+    curves = require("../d3functions/curves.js"),
     shapeStyle = require("./style.js"),
     fetchValue = require("../../../core/fetch/value.js");
 
@@ -13,14 +14,14 @@ module.exports = function(vars, selection, enter, exit) {
     // The D3 line function that determines what variables to use for x and y
     // positioning, as well as line interpolation defined by the user.
     //----------------------------------------------------------------------------
-    var line = d3.svg.line()
+    var line = d3.line()
         .x(function(d) {
             return d.d3po.x;
         })
         .y(function(d) {
             return d.d3po.y;
         })
-        .interpolate(vars.shape.interpolate.value);
+        .curve(curves.fromString(vars.shape.interpolate.value));
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Divide each line into it's segments. We do this so that there can be gaps

@@ -1,4 +1,5 @@
 var dataNest = require("./nest.js"),
+    multiFormat = require("./multiformat.js"),
     fetchValue = require("../fetch/value.js"),
     print = require("../console/print.js"),
     uniques = require("../../util/uniques.js");
@@ -152,11 +153,11 @@ module.exports = function(vars) {
         if (userFormat) {
 
             if (typeof userFormat === "string") {
-                vars.data.time.format = d3.locale(locale.format).timeFormat(userFormat);
+                vars.data.time.format = d3.timeFormatLocale(locale.format).format(userFormat);
             } else if (typeof userFormat === "function") {
                 vars.data.time.format = userFormat;
             } else if (userFormat instanceof Array) {
-                vars.data.time.format = d3.locale(locale.format).timeFormat.multi(userFormat);
+                vars.data.time.format = multiFormat(d3.timeFormatLocale(locale.format), userFormat);
             }
             vars.data.time.multiFormat = vars.data.time.format;
 
@@ -174,12 +175,12 @@ module.exports = function(vars) {
                 multi.push([format, functions[p]]);
             }
 
-            vars.data.time.format = d3.locale(locale.format).timeFormat(getFormat(stepType, totalType));
+            vars.data.time.format = d3.timeFormatLocale(locale.format).format(getFormat(stepType, totalType));
             if (multi.length > 1) {
                 multi[multi.length - 1][1] = function(d) {
                     return true;
                 }
-                vars.data.time.multiFormat = d3.locale(locale.format).timeFormat.multi(multi);
+                vars.data.time.multiFormat = multiFormat(d3.timeFormatLocale(locale.format), multi);
             } else {
                 vars.data.time.multiFormat = vars.data.time.format;
             }

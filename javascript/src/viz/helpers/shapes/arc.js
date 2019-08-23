@@ -14,7 +14,7 @@
 
     module.exports = function(vars, selection, enter, exit) {
         var arc, arcTween, data, newarc;
-        arc = d3.svg.arc().innerRadius(function(d) {
+        arc = d3.arc().innerRadius(function(d) {
             return d.d3po.r_inner;
         }).outerRadius(function(d) {
             return d.d3po.r_outer;
@@ -50,7 +50,7 @@
             return [d];
         };
         if (vars.draw.timing) {
-            newarc = d3.svg.arc().innerRadius(function(d) {
+            newarc = d3.arc().innerRadius(function(d) {
                 return d.d3po.r_inner;
             }).outerRadius(function(d) {
                 return d.d3po.r_outer;

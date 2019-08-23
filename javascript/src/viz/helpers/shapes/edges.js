@@ -1,4 +1,5 @@
 var buckets = require("../../../util/buckets.js"),
+    curves = require("../d3functions/curves.js"),
     offset = require("../../../geom/offset.js");
 
 module.exports = function(vars) {
@@ -124,7 +125,7 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Positioning of Splines
     //----------------------------------------------------------------------------
-    var curve = d3.svg.line().interpolate(vars.edges.interpolate.value);
+    var curve = d3.line().curve(curves.fromString(vars.edges.interpolate.value));
 
     function spline(l) {
         l

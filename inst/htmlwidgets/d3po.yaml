@@ -8,7 +8,7 @@ dependencies:
     version: 0.1.0
     src: htmlwidgets/lib/
     script:
-      - d3po.min.js
+      - d3po.js
   - name: topojson
     version: 1.6.24
     src: htmlwidgets/lib/

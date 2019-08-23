@@ -1,4 +1,5 @@
-var fetchValue = require("../fetch/value.js"),
+var aggs = require("../../viz/helpers/d3functions/aggs.js"),
+    fetchValue = require("../fetch/value.js"),
     validObject = require("../../object/validate.js"),
     uniqueValues = require("../../util/uniques.js");
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -105,7 +106,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
                 returnObj.d3po[c] = segmentAgg(leaves);
             } else {
 
-                returnObj.d3po[c] = d3[segmentAgg](leaves, function(d) {
+                returnObj.d3po[c] = aggs.fromString(segmentAgg)(leaves, function(d) {
 
                     var a = c === "total" ? 1 : 0;
                     if (vars[c].value) {
@@ -149,7 +150,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
                     vals = vals.filter(function(d) {
                         return typeof d === keyType;
                     });
-                    if (vals.length) returnObj[key] = d3[agg](vals);
+                    if (vals.length) returnObj[key] = aggs.fromString(agg)(vals);
                 } else {
 
                     var testVals = checkVal(leaves, key);

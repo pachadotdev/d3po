@@ -60,7 +60,7 @@
                 }
             }
         }
-        area = Math.abs(d3.geom.polygon(poly).area());
+        area = Math.abs(d3.polygonArea(poly));
         if (area === 0) {
             return null;
         }
@@ -117,7 +117,7 @@
         widthStep = Math.min(boxWidth, boxHeight) / 50;
         if (origins == null) {
             origins = [];
-            centroid = d3.geom.polygon(poly).centroid();
+            centroid = d3.polygonCentroid(poly);
             if (pointInPoly(centroid, poly)) {
                 origins.push(centroid);
             }

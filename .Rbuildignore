@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 dev/
-javascript/
+src_d3_50/
+src_d3_35/
 LICENSE

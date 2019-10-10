@@ -4,11 +4,14 @@
 \alias{d3po-shiny}
 \alias{d3po_output}
 \alias{render_d3po}
+\alias{d3po_proxy}
 \title{Shiny bindings for 'd3po'}
 \usage{
 d3po_output(output_id, width = "100\%", height = "100\%")
 
 render_d3po(expr, env = parent.frame(), quoted = FALSE)
+
+d3po_proxy(id, session = shiny::getDefaultReactiveDomain())
 }
 \arguments{
 \item{width, height}{Must be a valid CSS unit (like \code{'100\%'},
@@ -21,6 +24,8 @@ string and have \code{'px'} appended.}
 
 \item{quoted}{Is \code{expr} a quoted expression (with \code{quote()})? This
 is useful if you want to save an expression in a variable.}
+
+\item{id}{Id of}
 
 \item{outputId}{output variable to read from}
 }

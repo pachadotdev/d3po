@@ -9,7 +9,7 @@
 
     pie = function(vars) {
         var d, groupedData, i, item, len, pieData, pieLayout, radius, returnData;
-        pieLayout = d3.layout.pie().value(function(d) {
+        pieLayout = d3.pie().value(function(d) {
             return d.value;
         }).sort(function(a, b) {
             if (vars.order.value) {

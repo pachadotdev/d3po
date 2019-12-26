@@ -15,7 +15,7 @@
     module.exports = function(vars, selection, enter, exit) {
         var data, newRadial, nextLevel, radial, radialTween;
         nextLevel = vars.id.nesting[vars.depth.value + 1];
-        radial = d3.svg.line.radial().interpolate("linear-closed").radius(function(d) {
+        radial = d3.lineRadial().curve(d3.curveLinearClosed).radius(function(d) {
             return d.d3po.r;
         }).angle(function(d) {
             return d.d3po.a;
@@ -41,7 +41,7 @@
                 }
                 return results;
             });
-            newRadial = d3.svg.line.radial().interpolate("linear-closed").radius(function(d, i) {
+            newRadial = d3.lineRadial().curve(d3.curveLinearClosed).radius(function(d, i) {
                 if (radii[d.d3po.id] === void 0) {
                     radii[d.d3po.id] = 0;
                 }

@@ -9,7 +9,7 @@
         increment = (1 - c.l) * increment;
         c.l += increment;
         c.s -= increment;
-        return c.toString();
+        return c.formatHex();
     };
 
 }).call(this);

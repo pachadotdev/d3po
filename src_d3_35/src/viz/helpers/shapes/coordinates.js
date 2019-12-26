@@ -1,5 +1,5 @@
 (function() {
-    var copy, distance, fetchText, fontSizes, labels, largestRect, path2poly, shapeStyle;
+    var copy, distance, fetchText, fontSizes, labels, largestRect, path2poly, getProjection, shapeStyle;
 
     copy = require("../../../util/copy.js");
 
@@ -13,13 +13,17 @@
 
     path2poly = require("../../../geom/path2poly.js");
 
+    projections = require("../d3functions/projections.js");
+
     shapeStyle = require("./style.js");
 
     labels = {};
 
     module.exports = function(vars, selection, enter, exit) {
         var projection, size_change;
-        projection = d3.geo[vars.coords.projection.value]();
+        projection = (typeof vars.coords.projection.value === "function")?
+            vars.coords.projection.value:
+            projections.fromString(vars.coords.projection.value)();
         if (projection.center) {
             projection.center(vars.coords.center);
         }
@@ -27,7 +31,7 @@
             vars.zoom.scale = 1;
         }
         vars.zoom.area = 1 / vars.zoom.scale / vars.zoom.scale;
-        vars.path = d3.geo.path().projection(projection);
+        vars.path = d3.geoPath().projection(projection);
         if (vars.draw.timing) {
             selection.selectAll("path.d3po_data").attr("d", vars.path).transition().duration(vars.draw.timing).call(shapeStyle, vars);
         } else {

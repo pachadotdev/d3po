@@ -1,7 +1,8 @@
 // Determines visible time markers and formatting
 (function() {
-    var sizes;
+    var multiFormat, sizes;
 
+    multiFormat = require("./multiformat.js"),
     sizes = require("../../font/sizes.js");
 
     module.exports = function(vars, opts) {
@@ -45,7 +46,7 @@
                     return match;
                 });
                 if (periods[p] === total) {
-                    format = d3.locale(locale).timeFormat(getFormat(periods[p], total));
+                    format = d3.timeFormatLocale(locale).format(getFormat(periods[p], total));
                 } else {
                     pp = p;
                     format = [];
@@ -60,7 +61,7 @@
                     format[format.length - 1][1] = function() {
                         return true;
                     };
-                    format = d3.locale(locale).timeFormat.multi(format);
+                    format = multiFormat(d3.timeFormatLocale(locale), format);
                 }
                 render = sizes(vals.map(function(v) {
                     return format(v);

@@ -19,7 +19,7 @@ module.exports = function(vars) {
         elem
             .style("padding", vars.ui.padding.css)
             .style("display", "block")
-            .style("background-color", d3.rgb(vars.ui.color.primary.value).darker(0.15).toString())
+            .style("background-color", d3.rgb(vars.ui.color.primary.value).darker(0.15).formatHex())
 
     }
 

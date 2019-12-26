@@ -18,7 +18,7 @@
             locale = defaultLocale;
         }
         time = locale.time.slice();
-        format = d3.locale(locale.format);
+        format = d3.formatLocale(locale.format);
         if (!opts) {
             opts = {};
         }
@@ -35,11 +35,11 @@
             if (number === 0) {
                 ret = 0;
             } else if (number >= 100) {
-                ret = format.numberFormat(",f")(number);
+                ret = format.format(",f")(number);
             } else if (number > 99) {
-                ret = format.numberFormat(".3g")(number);
+                ret = format.format(".3g")(number);
             } else {
-                ret = format.numberFormat(".2g")(number);
+                ret = format.format(".2g")(number);
             }
             ret += "%";
         } else if (number < 10 && number > -10) {
@@ -52,25 +52,18 @@
                     sigs += 1 + zeros;
                 }
             }
-            ret = format.numberFormat("." + sigs + "g")(number);
+            ret = format.format("." + sigs + "g")(number);
         } else if (length > 3) {
-            symbol = d3.formatPrefix(number).symbol;
-            symbol = symbol.replace("G", "B");
-            number = d3.formatPrefix(number).scale(number);
-            number = format.numberFormat(".3g")(number);
-            number = number.replace(locale.format.decimal, ".");
-            number = parseFloat(number) + "";
-            number = number.replace(".", locale.format.decimal);
-            ret = number + symbol;
+            ret = format.formatPrefix(".3g", number)(number).replace("G", "B");
         } else if (length === 3) {
-            ret = format.numberFormat(",f")(number);
+            ret = format.format(",f")(number);
         } else if (number === 0) {
             ret = 0;
         } else {
             if (number === parseInt(number, 10)) {
-                ret = format.numberFormat(".2")(number);
+                ret = format.format(".2")(number);
             } else {
-                ret = format.numberFormat(".3g")(number);
+                ret = format.format(".3g")(number);
             }
         }
         if (ret.length > 2 && "" + ret.indexOf(".0") === ret.length - 2) {

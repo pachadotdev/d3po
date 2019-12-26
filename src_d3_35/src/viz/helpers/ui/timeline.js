@@ -290,7 +290,7 @@
                 return i;
             });
             text.enter().append("text").attr("stroke", "none").attr("y", 0).attr("dy", "0.5ex").attr("x", 0);
-            x = d3.time.scale().domain(d3.extent(year_ticks)).rangeRound([0, timelineWidth]);
+            x = d3.scaleTime().domain(d3.extent(year_ticks)).rangeRound([0, timelineWidth]);
             text.order().attr(textStyle).text(function(d, i) {
                 if (visible.indexOf(+d) >= 0) {
                     return timeFormat(d);
@@ -322,7 +322,7 @@
             } else {
                 tickColor = vars.x.ticks.color;
             }
-            ticks.attr("transform", "translate(" + start_x + "," + (vars.ui.padding + 1) + ")").transition().duration(vars.draw.timing).call(d3.svg.axis().scale(x).orient("top").ticks(function() {
+            ticks.attr("transform", "translate(" + start_x + "," + (vars.ui.padding + 1) + ")").transition().duration(vars.draw.timing).call(d3.axisTop().scale(x).ticks(function() {
                 return year_ticks;
             }).tickFormat("").tickSize(-timelineHeight).tickPadding(0)).selectAll("line").attr("stroke-width", 1).attr("shape-rendering", "crispEdges").attr("stroke", function(d) {
                 if (visible.indexOf(+d) >= 0) {

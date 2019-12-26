@@ -10,7 +10,7 @@
             opts = {};
         }
         distances = [];
-        quad = d3.geom.quadtree().x(function(d) {
+        quad = d3.quadtree().x(function(d) {
             if (opts.accessor) {
                 return opts.accessor(d)[0];
             } else {
@@ -23,7 +23,7 @@
                 return d[1];
             }
         });
-        quad(arr).visit(function(node) {
+        quad.addData(arr).visit(function(node) {
             var i, j, len, len1, n1, n2, ref, ref1;
             if (!node.leaf) {
                 ref = node.nodes;

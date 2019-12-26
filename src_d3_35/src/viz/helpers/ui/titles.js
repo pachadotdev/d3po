@@ -1,4 +1,5 @@
-var events = require("../../../client/pointer.js"),
+var aggs = require("../d3functions/aggs.js"),
+    events = require("../../../client/pointer.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     print = require("../../../core/console/print.js"),
     rtl = require("../../../client/rtl.js"),
@@ -47,7 +48,7 @@ module.exports = function(vars) {
                 return arr;
             }, []);
 
-            total = d3[agg](total_data);
+            total = aggs.fromString(agg)(total_data);
         }
 
         if (total === 0 || total === null || total === undefined) {

@@ -13,7 +13,7 @@
                 color = vars.ui.color.primary.value;
             }
             if (vars.hover.value === d[vars.id.value]) {
-                color = d3.rgb(color).darker(0.15).toString();
+                color = d3.rgb(color).darker(0.15).formatHex();
             }
             return color;
         }).style("color", function(d) {
@@ -33,7 +33,7 @@
                     bg = vars.ui.color.primary.value;
                 }
                 if (vars.hover.value === d[vars.id.value]) {
-                    bg = d3.rgb(bg).darker(0.15).toString();
+                    bg = d3.rgb(bg).darker(0.15).formatHex();
                 }
                 color = textColor(bg);
             }

@@ -9,7 +9,7 @@
 
     halfdonut = function(vars) {
         var d, groupedData, halfdonutData, halfdonutLayout, i, item, len, outer_radius, returnData;
-        halfdonutLayout = d3.layout.pie().value(function(d) {
+        halfdonutLayout = d3.pie().value(function(d) {
             return d.value;
         }).startAngle(function(d) {
             return -90 * (Math.PI / 180);

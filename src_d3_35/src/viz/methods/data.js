@@ -10,6 +10,9 @@
             accepted: [String],
             value: "|"
         },
+        donut: {
+            size: 0.35
+        },
         filetype: {
             accepted: [false, "json", "xml", "html", "csv", "dsv", "tsv", "txt"],
             value: false

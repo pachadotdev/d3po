@@ -13,6 +13,7 @@
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.2",
     "merge-stream": "^2.0.0",
+    "prettier": "^1.19.1",
     "require-dir": "^1.2.0",
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.11.1"
@@ -69,6 +70,7 @@
   ],
   "scripts": {
     "start": "./node_modules/.bin/gulp",
-    "build": "./node_modules/.bin/gulp release"
+    "build": "./node_modules/.bin/gulp release",
+    "prettier": "prettier --single-quote --write 'src/**/*.js'"
   }
 }

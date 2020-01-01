@@ -1,42 +1,45 @@
-var events = require("../../../client/pointer.js")
+var events = require('../../../client/pointer.js');
 
 module.exports = function() {
+  d3.select('#d3po.utilsts.zoom_controls').remove();
 
-    d3.select("#d3po.utilsts.zoom_controls").remove()
+  if (!vars.small) {
+    // Create Zoom Controls
+    var zoom_enter = vars.container.value
+      .append('div')
+      .attr('id', 'd3po.utilsts.zoom_controls')
+      .style('top', vars.margin.top + 5 + 'px');
 
-    if (!vars.small) {
-        // Create Zoom Controls
-        var zoom_enter = vars.container.value.append("div")
-            .attr("id", "d3po.utilsts.zoom_controls")
-            .style("top", (vars.margin.top + 5) + "px")
+    zoom_enter
+      .append('div')
+      .attr('id', 'zoom_in')
+      .attr('unselectable', 'on')
+      .on(events.click, function() {
+        vars.zoom('in');
+      })
+      .text('+');
 
-        zoom_enter.append("div")
-            .attr("id", "zoom_in")
-            .attr("unselectable", "on")
-            .on(events.click, function() {
-                vars.zoom("in")
-            })
-            .text("+")
+    zoom_enter
+      .append('div')
+      .attr('id', 'zoom_out')
+      .attr('unselectable', 'on')
+      .on(events.click, function() {
+        vars.zoom('out');
+      })
+      .text('-');
 
-        zoom_enter.append("div")
-            .attr("id", "zoom_out")
-            .attr("unselectable", "on")
-            .on(events.click, function() {
-                vars.zoom("out")
-            })
-            .text("-")
+    zoom_enter
+      .append('div')
+      .attr('id', 'zoom_reset')
+      .attr('unselectable', 'on')
+      .on(events.click, function() {
+        vars.zoom('reset');
+        vars.draw.update();
+      })
+      .html('&#8634;');
+  }
 
-        zoom_enter.append("div")
-            .attr("id", "zoom_reset")
-            .attr("unselectable", "on")
-            .on(events.click, function() {
-                vars.zoom("reset")
-                vars.draw.update()
-            })
-            .html("\&#8634;")
-    }
-
-    /* Old Styles
+  /* Old Styles
 
     #zoom_controls {
       position: absolute;
@@ -84,5 +87,4 @@ module.exports = function() {
     }
 
     */
-
-}
+};

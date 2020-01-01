@@ -9,8 +9,7 @@
  */
 
 (function() {
-    module.exports = function(obj) {
-        return obj && obj.constructor === Object;
-    };
-
-}).call(this);
+  module.exports = function(obj) {
+    return obj && obj.constructor === Object;
+  };
+}.call(this));

@@ -1,7 +1,6 @@
 (function() {
-    module.exports = {
-        accepted: ["circle", "square"],
-        value: false
-    };
-
-}).call(this);
+  module.exports = {
+    accepted: ['circle', 'square'],
+    value: false
+  };
+}.call(this));

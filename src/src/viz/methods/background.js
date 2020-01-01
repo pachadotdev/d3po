@@ -1,7 +1,6 @@
 (function() {
-    module.exports = {
-        accepted: [String],
-        value: "#ffffff"
-    };
-
-}).call(this);
+  module.exports = {
+    accepted: [String],
+    value: '#ffffff'
+  };
+}.call(this));

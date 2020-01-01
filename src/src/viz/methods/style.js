@@ -1,6 +1,5 @@
 (function() {
-    module.exports = {
-        value: false
-    };
-
-}).call(this);
+  module.exports = {
+    value: false
+  };
+}.call(this));

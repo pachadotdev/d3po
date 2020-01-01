@@ -1,7 +1,6 @@
 (function() {
-    module.exports = {
-        accepted: [Boolean, String],
-        value: false
-    };
-
-}).call(this);
+  module.exports = {
+    accepted: [Boolean, String],
+    value: false
+  };
+}.call(this));

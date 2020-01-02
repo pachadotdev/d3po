@@ -73,6 +73,6 @@
     "start": "./node_modules/.bin/gulp",
     "build": "./node_modules/.bin/gulp release",
     "prettier": "prettier --single-quote --write 'src/**/*.js'",
-    "eslint": "eslint src/** --fix"
+    "eslint": "eslint --fix src/**"
   }
 }

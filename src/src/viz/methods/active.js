@@ -1,16 +1,16 @@
 (function() {
-    var filter;
+  var filter;
 
-    filter = require('../../core/methods/filter.js');
+  filter = require('../../core/methods/filter.js');
 
-    module.exports = {
-        accepted: [false, Function, Object, String],
-        mute: filter(true),
-        solo: filter(true),
-        spotlight: {
-            accepted: [Boolean],
-            value: false
-        },
-        value: false
-    };
+  module.exports = {
+    accepted: [false, Function, Object, String],
+    mute: filter(true),
+    solo: filter(true),
+    spotlight: {
+      accepted: [Boolean],
+      value: false
+    },
+    value: false
+  };
 }.call(this));

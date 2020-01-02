@@ -1,7 +1,7 @@
 (function() {
-    module.exports = {
-        accepted: [false, Number],
-        secondary: false,
-        value: false
-    };
+  module.exports = {
+    accepted: [false, Number],
+    secondary: false,
+    value: false
+  };
 }.call(this));

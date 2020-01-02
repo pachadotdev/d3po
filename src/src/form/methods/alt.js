@@ -1,12 +1,12 @@
 (function() {
-    var filter;
+  var filter;
 
-    filter = require('../../core/methods/filter.js');
+  filter = require('../../core/methods/filter.js');
 
-    module.exports = {
-        accepted: [false, Array, Function, Object, String],
-        mute: filter(true),
-        solo: filter(true),
-        value: 'alt'
-    };
+  module.exports = {
+    accepted: [false, Array, Function, Object, String],
+    mute: filter(true),
+    solo: filter(true),
+    value: 'alt'
+  };
 }.call(this));

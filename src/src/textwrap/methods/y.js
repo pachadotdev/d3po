@@ -1,6 +1,6 @@
 (function() {
-  module.exports = {
-    accepted: [false, Number],
-    value: false
-  };
+    module.exports = {
+        accepted: [false, Number],
+        value: false
+    };
 }.call(this));

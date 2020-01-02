@@ -84,9 +84,9 @@ module.exports = function(params) {
 
     var footer = text.length
       ? vars.format.value(text, {
-          key: 'footer',
-          vars: vars
-        })
+        key: 'footer',
+        vars: vars
+      })
       : false;
   }
 
@@ -197,10 +197,10 @@ module.exports = function(params) {
           children[name] =
             value && !(value instanceof Array)
               ? vars.format.value(value, {
-                  key: vars.size.value,
-                  vars: vars,
-                  data: obj
-                })
+                key: vars.size.value,
+                vars: vars,
+                data: obj
+              })
               : '';
           var child = {};
           child[name] = children[name];
@@ -337,8 +337,8 @@ module.exports = function(params) {
         'd3po' in d && 'merged' in d.d3po
           ? dataDepth - 1
           : 'depth' in params
-          ? params.depth
-          : dataDepth;
+            ? params.depth
+            : dataDepth;
 
       if (depth < 0) depth = 0;
 

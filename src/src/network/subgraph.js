@@ -28,13 +28,13 @@
       }
     }
     (source = options.source),
-      (directed = options.directed),
-      (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (K = options.K),
-      (nodes = options.nodes);
+    (directed = options.directed),
+    (distance = options.distance),
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (K = options.K),
+    (nodes = options.nodes);
     visited = {};
     visited[source] = true;
     dfs = function(origin, curr_distance) {

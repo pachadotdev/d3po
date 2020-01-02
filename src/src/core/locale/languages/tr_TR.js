@@ -179,7 +179,7 @@ module.exports = {
   },
   uppercase: [
     'CEO',
-    "CEO'lar",
+    'CEO\'lar',
     'CFO',
     'CFO',
     'CNC',

@@ -420,10 +420,10 @@
                 vars[axis].label.height / 2 -
                 vars[axis].label.padding
             : axis === 'y2'
-            ? vars.width.viz -
+              ? vars.width.viz -
               vars[axis].label.height / 2 -
               vars[axis].label.padding
-            : vars[axis].label.height / 2 + vars[axis].label.padding
+              : vars[axis].label.height / 2 + vars[axis].label.padding
         )
         .attr('transform', axis.indexOf('y') === 0 ? 'rotate(-90)' : null)
         .attr('font-family', vars[axis].label.font.family.value)
@@ -565,8 +565,8 @@
           if (valid) {
             d = !validObject(line)
               ? {
-                  position: d
-                }
+                position: d
+              }
               : line;
             d.coords = {
               line: vars[axis].scale.viz(d.position)
@@ -586,8 +586,8 @@
                   d.align === 'left'
                     ? vars.axes.height
                     : d.align === 'center'
-                    ? vars.axes.height / 2
-                    : 0;
+                      ? vars.axes.height / 2
+                      : 0;
                 if (d.align === 'left') {
                   textPos -= d.padding * 2;
                 }
@@ -599,8 +599,8 @@
                   d.align === 'left'
                     ? 0
                     : d.align === 'center'
-                    ? vars.axes.width / 2
-                    : vars.axes.width;
+                      ? vars.axes.width / 2
+                      : vars.axes.width;
                 if (d.align === 'right') {
                   textPos -= d.padding * 2;
                 }

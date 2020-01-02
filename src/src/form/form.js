@@ -161,8 +161,8 @@ module.exports = function() {
                 level === vars.id.value
                   ? vars.text.value || vars.id.value
                   : vars.text.nesting !== true && level in vars.text.nesting
-                  ? vars.text.nesting[level]
-                  : level;
+                    ? vars.text.nesting[level]
+                    : level;
 
             for (var k in d) {
               if (typeof d[k] !== 'object') {

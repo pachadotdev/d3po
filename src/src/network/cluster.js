@@ -51,10 +51,10 @@
       }
     }
     (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (nodes = options.nodes);
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (nodes = options.nodes);
     nodesMap = {};
     for (id in nodes) {
       nodesMap[id] = {

@@ -10,8 +10,8 @@ module.exports = function(vars) {
   var total_key = vars.size.value
     ? vars.size.value
     : vars.color.type === 'number'
-    ? vars.color.value
-    : false;
+      ? vars.color.value
+      : false;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If there is no data or the title bar is not needed,

@@ -145,8 +145,8 @@ module.exports = function(vars) {
         : vars.focus.value.length &&
           vars.types[vars.type.value].zoom &&
           vars.zoom.value
-        ? 1 - vars.tooltip.curtain.opacity
-        : 1;
+          ? 1 - vars.tooltip.curtain.opacity
+          : 1;
 
     var timing = vars.draw.timing;
 

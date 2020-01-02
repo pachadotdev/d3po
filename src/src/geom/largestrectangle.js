@@ -146,13 +146,13 @@
     (ref = d3.extent(poly, function(d) {
       return d[0];
     })),
-      (minx = ref[0]),
-      (maxx = ref[1]);
+    (minx = ref[0]),
+    (maxx = ref[1]);
     (ref1 = d3.extent(poly, function(d) {
       return d[1];
     })),
-      (miny = ref1[0]),
-      (maxy = ref1[1]);
+    (miny = ref1[0]),
+    (maxy = ref1[1]);
     tolerance = Math.min(maxx - minx, maxy - miny) * options.tolerance;
     tempPoly = (function() {
       var j, len, results;
@@ -187,13 +187,13 @@
     (ref2 = d3.extent(poly, function(d) {
       return d[0];
     })),
-      (minx = ref2[0]),
-      (maxx = ref2[1]);
+    (minx = ref2[0]),
+    (maxx = ref2[1]);
     (ref3 = d3.extent(poly, function(d) {
       return d[1];
     })),
-      (miny = ref3[0]),
-      (maxy = ref3[1]);
+    (miny = ref3[0]),
+    (maxy = ref3[1]);
     bBox = [
       [minx, miny],
       [maxx, miny],
@@ -201,8 +201,8 @@
       [minx, maxy]
     ];
     (ref4 = [maxx - minx, maxy - miny]),
-      (boxWidth = ref4[0]),
-      (boxHeight = ref4[1]);
+    (boxWidth = ref4[0]),
+    (boxHeight = ref4[1]);
     widthStep = Math.min(boxWidth, boxHeight) / 50;
     if (origins == null) {
       origins = [];
@@ -239,11 +239,11 @@
       for (i = k = 0, len1 = origins.length; k < len1; i = ++k) {
         origOrigin = origins[i];
         (ref5 = intersectPoints(poly, origOrigin, angleRad)),
-          (p1W = ref5[0]),
-          (p2W = ref5[1]);
+        (p1W = ref5[0]),
+        (p2W = ref5[1]);
         (ref6 = intersectPoints(poly, origOrigin, angleRad + Math.PI / 2)),
-          (p1H = ref6[0]),
-          (p2H = ref6[1]);
+        (p1H = ref6[0]),
+        (p2H = ref6[1]);
         modifOrigins = [];
         if (p1W != null && p2W != null) {
           modifOrigins.push([(p1W[0] + p2W[0]) / 2, (p1W[1] + p2W[1]) / 2]);
@@ -272,8 +272,8 @@
             });
           }
           (ref7 = intersectPoints(poly, origin, angleRad)),
-            (p1W = ref7[0]),
-            (p2W = ref7[1]);
+          (p1W = ref7[0]),
+          (p2W = ref7[1]);
           if (p1W === null || p2W === null) {
             continue;
           }
@@ -283,8 +283,8 @@
           );
           maxWidth = 2 * Math.sqrt(minSqDistW);
           (ref8 = intersectPoints(poly, origin, angleRad + Math.PI / 2)),
-            (p1H = ref8[0]),
-            (p2H = ref8[1]);
+          (p1H = ref8[0]),
+          (p2H = ref8[1]);
           if (p1H === null || p2H === null) {
             continue;
           }

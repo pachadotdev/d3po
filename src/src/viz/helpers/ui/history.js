@@ -105,8 +105,8 @@
             stylesheet('font-awesome') &&
             vars.icon.back.value.indexOf('fa-') === 0
           ) {
-            arrow = "<i class='fa " + vars.icon.back.value;
-            arrow += "' style='margin-top:2px;margin-right:4px;'></i>";
+            arrow = '<i class=\'fa ' + vars.icon.back.value;
+            arrow += '\' style=\'margin-top:2px;margin-right:4px;\'></i>';
           } else {
             arrow = vars.icon.back.value + ' ';
           }

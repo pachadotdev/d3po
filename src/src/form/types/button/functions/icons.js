@@ -62,7 +62,7 @@ module.exports = function(elem, vars) {
       })
       .style('background-image', function(c) {
         if (c === 'icon') {
-          return "url('" + d[vars.icon.value] + "')";
+          return 'url(\'' + d[vars.icon.value] + '\')';
         }
         return 'none';
       })

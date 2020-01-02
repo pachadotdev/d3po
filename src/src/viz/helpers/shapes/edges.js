@@ -64,8 +64,8 @@ module.exports = function(vars) {
         return o_type === 'number'
           ? o
           : o_type === 'function'
-          ? o(d, vars)
-          : vars.edges.opacity.scale.value(d[o]);
+            ? o(d, vars)
+            : vars.edges.opacity.scale.value(d[o]);
       })
       .style('stroke-width', function(e) {
         return vars.edges.scale(e[vars.edges.size.value]);
@@ -230,16 +230,16 @@ module.exports = function(vars) {
   var markerData = vars.edges.arrows.value
     ? typeof vars.edges.size.value == 'string'
       ? [
-          'default_0',
-          'default_1',
-          'default_2',
-          'highlight_0',
-          'highlight_1',
-          'highlight_2',
-          'focus_0',
-          'focus_1',
-          'focus_2'
-        ]
+        'default_0',
+        'default_1',
+        'default_2',
+        'highlight_0',
+        'highlight_1',
+        'highlight_2',
+        'focus_0',
+        'focus_1',
+        'focus_2'
+      ]
       : ['default', 'highlight', 'focus']
     : [];
 
@@ -467,9 +467,9 @@ module.exports = function(vars) {
           typeof sourceEdge.angle === 'number'
             ? sourceEdge.angle
             : Math.atan2(
-                source.d3po.y - target.d3po.y,
-                source.d3po.x - target.d3po.x
-              ) * sourceTweak,
+              source.d3po.y - target.d3po.y,
+              source.d3po.x - target.d3po.x
+            ) * sourceTweak,
         sourceOffset = offset(
           sourceAngle,
           source.d3po.r + sourceMod,
@@ -479,9 +479,9 @@ module.exports = function(vars) {
           typeof targetEdge.angle === 'number'
             ? targetEdge.angle
             : Math.atan2(
-                target.d3po.y - source.d3po.y,
-                target.d3po.x - source.d3po.x
-              ) * targetTweak,
+              target.d3po.y - source.d3po.y,
+              target.d3po.x - source.d3po.x
+            ) * targetTweak,
         targetOffset = offset(
           targetAngle,
           target.d3po.r + targetMod,

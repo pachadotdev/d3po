@@ -1,16 +1,23 @@
 <!doctype html>
 <meta charset="utf-8">
+<style>
+#tests {
+}
+#tests iframe {
+  transform: scale(0.5);
+  transform-origin: 0px 0px;
+  width: 1280px;
+  height: 720px;
+  border: 0;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px 0px;
+}
+</style>
 
-<script src="d3.v5.min.js"></script>
-<script>
-  // Expose D3 version 5 as the global "d5".
-  // Temporary measure to support incremental migration.
-  const d5 = d3;
-</script>
-<script src="d3.min.js"></script>
 <script src="d3po.full.min.js"></script>
 
-<div id="exports"></div>
+<div id="tests">
+  <iframe src="test/donut.html" />
+</div>
 
 <script>
   var trade_data = [
@@ -30,4 +37,25 @@
     .size("usd")
     .labels({"align": "left", "valign": "top"})
     .draw()
+</script>
+<script>
+
+  var data = [
+    {"value": 100, "name": "alpha"},
+    {"value": 70, "name": "beta"},
+    {"value": 40, "name": "gamma"},
+    {"value": 15, "name": "delta"},
+    {"value": 5, "name": "epsilon"},
+    {"value": 1, "name": "zeta"}
+  ]
+
+  d3po.viz()
+    .container("#viz")
+    .data(data)
+    .type("donut")
+    .id("name")
+    .size("value")
+    .resize(true)
+    .draw()
+
 </script>

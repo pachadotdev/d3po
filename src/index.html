@@ -1,61 +1,32 @@
 <!doctype html>
 <meta charset="utf-8">
 <style>
-#tests {
+.tests {
+  display: flex;
+  flex-wrap: wrap;
 }
-#tests iframe {
-  transform: scale(0.5);
+.tests div {
+  width: 320px;
+  height: 180px;
+  padding: 10px;
+}
+iframe {
+  transform: scale(0.25);
   transform-origin: 0px 0px;
   width: 1280px;
   height: 720px;
-  border: 0;
-  box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px 0px;
+  border: 0px;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 7px 0px;
 }
 </style>
 
-<script src="d3po.full.min.js"></script>
-
-<div id="tests">
-  <iframe src="test/donut.html" />
+<div class="tests">
+  <div><iframe src="test/donut.html"></iframe></div>
+  <div><iframe src="test/geo.html"></iframe></div>
+  <div><iframe src="test/halfdonut.html"></iframe></div>
+  <div><iframe src="test/network.html"></iframe></div>
+  <div><iframe src="test/pie.html"></iframe></div>
+  <div><iframe src="test/scatterplot.html"></iframe></div>
+  <div><iframe src="test/treemap.html"></iframe></div>
 </div>
-
-<script>
-  var trade_data = [
-    {"usd": 34590873460, "product": "Oil"},
-    {"usd": 12897429187, "product": "Cars"},
-    {"usd": 8974520985, "product": "Airplanes"},
-    {"usd": 9872342, "product": "Apples"},
-    {"usd": 6897234098, "product": "Shoes"},
-    {"usd": 590834587, "product": "Glass"},
-    {"usd": 987234261, "product": "Horses"}
-  ]
-  var visualization = d3po.viz()
-    .container("#exports")
-    .data(trade_data)
-    .type("treemap")
-    .id("product")
-    .size("usd")
-    .labels({"align": "left", "valign": "top"})
-    .draw()
-</script>
-<script>
-
-  var data = [
-    {"value": 100, "name": "alpha"},
-    {"value": 70, "name": "beta"},
-    {"value": 40, "name": "gamma"},
-    {"value": 15, "name": "delta"},
-    {"value": 5, "name": "epsilon"},
-    {"value": 1, "name": "zeta"}
-  ]
-
-  d3po.viz()
-    .container("#viz")
-    .data(data)
-    .type("donut")
-    .id("name")
-    .size("value")
-    .resize(true)
-    .draw()
-
-</script>

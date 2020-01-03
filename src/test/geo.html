@@ -1,9 +1,13 @@
 <!doctype html>
 <meta charset="utf-8">
 
-<script src="d3.min.js"></script>
-<script src="topojson.min.js"></script>
-<script src="d3po.full.js"></script>
+<!-- TODO remove this once migration is complete. -->
+<script src="../d3.v5.min.js"></script>
+<script>const d5 = d3;</script>
+
+<script src="../d3.min.js"></script>
+<script src="../topojson.min.js"></script>
+<script src="../d3po.js"></script>
 
 <div id="viz"></div>
 
@@ -18,7 +22,7 @@
   var visualization = d3po.viz()
     .container("#viz")
     .data(sample_data)
-    .coords("http://d3plus.org/topojson/countries.json")
+    .coords("https://d3plus.org/topojson/countries.json")
     .type("geomap")
     .id("country")
     .text("name")

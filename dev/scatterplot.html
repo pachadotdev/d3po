@@ -13,10 +13,10 @@
 <script>
 
   var sample_data = [
-    {"value": 100, "weight": .45, "type": "alpha"},
-    {"value": 70, "weight": .60, "type": "beta"},
-    {"value": 40, "weight": -.2, "type": "gamma"},
-    {"value": 15, "weight": .1, "type": "delta"}
+    {"x": 100, "y": .45, "type": "alpha", "size": 4},
+    {"x": 70, "y": .60, "type": "beta", "size": 3},
+    {"x": 40, "y": -.2, "type": "gamma", "size": 2},
+    {"x": 15, "y": .1, "type": "delta", "size": 1}
   ]
 
   var visualization = d3po.viz()
@@ -24,8 +24,9 @@
     .data(sample_data)
     .type("scatter")
     .id("type")
-    .x("value")
-    .y("weight")
+    .x("x")
+    .y("y")
+    .size("size")
     .draw()
 
 </script>

@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<!-- TODO remove this once migration is complete. -->
+<script src="../d3.v5.min.js"></script>
+<script>const d5 = d3;</script>
+
+<script src="../d3.min.js"></script>
+<script src="../d3po.js"></script>
+
+<div id="viz"></div>
+
+<script>
+
+  var data = [
+    {"value": 100, "name": "alpha"},
+    {"value": 70, "name": "beta"},
+    {"value": 40, "name": "gamma"},
+    {"value": 15, "name": "delta"},
+    {"value": 5, "name": "epsilon"},
+    {"value": 1, "name": "zeta"}
+  ]
+
+  d3po.viz()
+    .container("#viz")
+    .data(data)
+    .type("donut")
+    .id("name")
+    .size("value")
+    .resize(true)
+    .draw()
+
+</script>

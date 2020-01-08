@@ -1,0 +1,32 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<!-- TODO remove this once migration is complete. -->
+<script src="../d3.v5.min.js"></script>
+<script>const d5 = d3;</script>
+
+<script src="../d3.min.js"></script>
+<script src="../topojson.min.js"></script>
+<script src="../d3po.js"></script>
+
+<div id="viz"></div>
+
+<script>
+  var sample_data = [
+    {"value": 2315987123, "country": "nausa", "name": "United States"},
+    {"value": 38157121349, "country": "aschn", "name": "China"},
+    {"value": 21891735098, "country": "euesp", "name": "Spain"},
+    {"value": 9807134982, "country": "sabra", "name": "Brazil"}
+  ]
+
+  var visualization = d3po.viz()
+    .container("#viz")
+    .data(sample_data)
+    .coords("https://d3plus.org/topojson/countries.json")
+    .type("geomap")
+    .id("country")
+    .text("name")
+    .color("value")
+    .tooltip("value")
+    .draw()
+</script>

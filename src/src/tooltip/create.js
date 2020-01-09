@@ -1,5 +1,6 @@
 var defaultLocale = require('../core/locale/languages/en_US.js'),
   events = require('../client/pointer.js'),
+  list = require('./string/list.js'),
   legible = require('../color/legible.js'),
   move = require('./move.js'),
   prefix = require('../client/prefix.js'),
@@ -90,7 +91,7 @@ module.exports = function(params) {
   var title_width = params.width - 30;
 
   if (params.fullscreen) {
-    var curtain = params.parent
+    params.parent
       .append('div')
       .attr('id', 'd3po_tooltip_curtain_' + params.id)
       .attr('class', 'd3po_tooltip_curtain')
@@ -155,12 +156,15 @@ module.exports = function(params) {
       .style('z-index', 1)
       .style('width', params.width + 'px');
   } else {
+    var w;
     if (params.width == 'auto') {
-      var w = 'auto';
+      w = 'auto';
       container.style('max-width', params.max_width + 'px');
-    } else var w = params.width - 14 + 'px';
+    } else {
+      w = params.width - 14 + 'px';
+    }
 
-    var body = container.style('width', w);
+    body = container.style('width', w);
   }
 
   if (params.title || params.icon) {
@@ -172,7 +176,7 @@ module.exports = function(params) {
   }
 
   if (params.fullscreen) {
-    var close = tooltip
+    tooltip
       .append('div')
       .attr('class', 'd3po_tooltip_close')
       .style('background-color', params.color)
@@ -217,14 +221,15 @@ module.exports = function(params) {
 
     var newout = function() {
       var target = d3.event.toElement || d3.event.relatedTarget;
+      var istooltip;
       if (target) {
         var c =
           typeof target.className == 'string'
             ? target.className
             : target.className.baseVal;
-        var istooltip = c.indexOf('d3po_tooltip') == 0;
+        istooltip = c.indexOf('d3po_tooltip') == 0;
       } else {
-        var istooltip = false;
+        istooltip = false;
       }
       if (
         !target ||
@@ -259,7 +264,7 @@ module.exports = function(params) {
   }
 
   if (params.arrow) {
-    var arrow = tooltip
+    tooltip
       .append('div')
       .attr('class', 'd3po_tooltip_arrow')
       .style('background-color', params.background)
@@ -299,7 +304,7 @@ module.exports = function(params) {
     if (params.icon) mw -= params.iconsize + 6;
     mw += 'px';
 
-    var title = header
+    header
       .append('div')
       .attr('class', 'd3po_tooltip_title')
       .style('max-width', mw)
@@ -318,7 +323,7 @@ module.exports = function(params) {
   }
 
   if (params.description) {
-    var description = body
+    body
       .append('div')
       .attr('class', 'd3po_tooltip_description')
       .style('font-size', '12px')
@@ -529,7 +534,7 @@ module.exports = function(params) {
 
   if (params.html && params.fullscreen && !params.stacked) {
     var h = params.height - 12;
-    var w = tooltip.node().offsetWidth - params.width - 44;
+    w = tooltip.node().offsetWidth - params.width - 44;
     container
       .append('div')
       .attr('class', 'd3po_tooltip_html')
@@ -556,9 +561,9 @@ module.exports = function(params) {
       var limit = params.fixed
         ? parentHeight - params.y - 10
         : parentHeight - 10;
-      var h = params.height < limit ? params.height : limit;
+      h = params.height < limit ? params.height : limit;
     } else {
-      var h = params.height;
+      h = params.height;
     }
     h -= parseFloat(container.style('padding-top'), 10);
     h -= parseFloat(container.style('padding-bottom'), 10);

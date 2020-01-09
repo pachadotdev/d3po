@@ -8,7 +8,8 @@ module.exports = {
   'globals': {
     'Atomics': 'readonly',
     'SharedArrayBuffer': 'readonly',
-    'd3': 'readonly'
+    'd3': 'readonly',
+    'topojson': 'readonly'
   },
   'parserOptions': {
     'ecmaVersion': 2018

@@ -30896,7 +30896,6 @@ module.exports = function(vars) {
     }
 
     var agg = vars.aggs.value[total_key] || 'sum';
-    var total;
     if (agg.constructor === Function) {
       total = agg(total_data);
     } else {
@@ -30923,18 +30922,19 @@ module.exports = function(vars) {
         vars.focus.value.length
       ) {
         var overall_total = d3.sum(vars.data.value, function(d) {
+          var match;
           if (vars.time.solo.value.length > 0) {
-            var match =
+            match =
               vars.time.solo.value.indexOf(
                 fetchValue(vars, d, vars.time.value)
               ) >= 0;
           } else if (vars.time.mute.value.length > 0) {
-            var match =
+            match =
               vars.time.solo.value.indexOf(
                 fetchValue(vars, d, vars.time.value)
               ) < 0;
           } else {
-            var match = true;
+            match = true;
           }
           if (match) {
             return fetchValue(vars, d, total_key);
@@ -30942,11 +30942,11 @@ module.exports = function(vars) {
         });
 
         if (overall_total > total) {
-          var pct = (total / overall_total) * 100,
-            ot = vars.format.value(overall_total, {
-              key: vars.size.value,
-              vars: vars
-            });
+          pct = (total / overall_total) * 100;
+          var ot = vars.format.value(overall_total, {
+            key: vars.size.value,
+            vars: vars
+          });
 
           pct =
             ' (' +
@@ -30979,7 +30979,7 @@ module.exports = function(vars) {
       print.timeEnd('calculating total value');
     }
   } else {
-    var total = false;
+    total = false;
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -31011,7 +31011,7 @@ module.exports = function(vars) {
       });
     }
     if (vars.title.sub.value) {
-      var title = vars.title.sub.value;
+      title = vars.title.sub.value;
       if (typeof title === 'function') title = title(vars.self);
       title_data.push({
         link: vars.title.sub.link,
@@ -31162,11 +31162,6 @@ module.exports = function(vars) {
       if (align === 'start') {
         var x = vars.margin.left + vars.title.padding;
       } else {
-        var w = d3
-          .select(this)
-          .select('text')
-          .node()
-          .getBBox().width;
         if (align === 'middle') {
           x = vars.width.value / 2 - titleWidth / 2;
         } else {

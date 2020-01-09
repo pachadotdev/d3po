@@ -30193,7 +30193,6 @@ module.exports = function(vars, message) {
   var closest,
     css,
     events,
-    fontSizes,
     mix,
     playInterval,
     prefix,
@@ -30204,8 +30203,6 @@ module.exports = function(vars, message) {
   closest = require('../../../util/closest.js');
 
   css = require('../../../client/css.js');
-
-  fontSizes = require('../../../font/sizes.js');
 
   events = require('../../../client/pointer.js');
 
@@ -30684,7 +30681,7 @@ module.exports = function(vars, message) {
       text
         .order()
         .attr(textStyle)
-        .text(function(d, i) {
+        .text(function(d) {
           if (visible.indexOf(+d) >= 0) {
             return timeFormat(d);
           } else {
@@ -30699,7 +30696,7 @@ module.exports = function(vars, message) {
           }
         })
         .attr('fill', textFill)
-        .attr('transform', function(d, i) {
+        .attr('transform', function(d) {
           var dx, dy;
           dx = start_x + x(d);
           if (!timelineOffset) {
@@ -30808,7 +30805,7 @@ module.exports = function(vars, message) {
           .attr('class', 'd3po_handle');
         handles
           .attr('fill', vars.timeline.handles.color)
-          .attr('transform', function(d) {
+          .attr('transform', function() {
             var mod;
             if (this.parentNode.className.baseVal === 'resize e') {
               mod = -vars.timeline.handles.size;
@@ -30857,7 +30854,7 @@ module.exports = function(vars, message) {
   };
 }.call(this));
 
-},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/time.js":57,"../../../font/sizes.js":99,"../../../util/closest.js":203}],240:[function(require,module,exports){
+},{"../../../client/css.js":31,"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../color/mix.js":41,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/time.js":57,"../../../util/closest.js":203}],240:[function(require,module,exports){
 var events = require('../../../client/pointer.js'),
   fetchValue = require('../../../core/fetch/value.js'),
   print = require('../../../core/console/print.js'),

@@ -24656,9 +24656,7 @@ module.exports = function(vars, selection, enter, exit) {
 },{"../../../core/fetch/text.js":61,"../../../geom/largestrectangle.js":157,"./style.js":228}],217:[function(require,module,exports){
 // Returns the correct fill color for a node
 (function() {
-  var fetchColor, fetchValue, lighter, segments;
-
-  fetchValue = require('../../../core/fetch/value.js');
+  var fetchColor, lighter, segments;
 
   fetchColor = require('../../../core/fetch/color.js');
 
@@ -24704,7 +24702,7 @@ module.exports = function(vars, selection, enter, exit) {
   };
 }.call(this));
 
-},{"../../../color/lighter.js":40,"../../../core/fetch/color.js":58,"../../../core/fetch/value.js":62,"./segments.js":227}],218:[function(require,module,exports){
+},{"../../../color/lighter.js":40,"../../../core/fetch/color.js":58,"./segments.js":227}],218:[function(require,module,exports){
 (function() {
   var copy,
     distance,

@@ -33288,9 +33288,7 @@ module.exports = {
 
 },{}],299:[function(require,module,exports){
 (function() {
-  var area, closest, fetchValue, graph, nest, sort, stack, threshold;
-
-  closest = require('../../util/closest.js');
+  var area, fetchValue, graph, nest, sort, stack, threshold;
 
   fetchValue = require('../../core/fetch/value.js');
 
@@ -33399,7 +33397,7 @@ module.exports = {
   module.exports = area;
 }.call(this));
 
-},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"../../util/closest.js":203,"./helpers/graph/draw.js":307,"./helpers/graph/nest.js":313,"./helpers/graph/stack.js":314}],300:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":307,"./helpers/graph/nest.js":313,"./helpers/graph/stack.js":314}],300:[function(require,module,exports){
 (function() {
   var bar,
     buckets,

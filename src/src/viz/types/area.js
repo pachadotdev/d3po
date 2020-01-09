@@ -1,7 +1,5 @@
 (function() {
-  var area, closest, fetchValue, graph, nest, sort, stack, threshold;
-
-  closest = require('../../util/closest.js');
+  var area, fetchValue, graph, nest, sort, stack, threshold;
 
   fetchValue = require('../../core/fetch/value.js');
 

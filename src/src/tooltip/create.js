@@ -1,6 +1,6 @@
 var defaultLocale = require('../core/locale/languages/en_US.js'),
   events = require('../client/pointer.js'),
-  list = require('./string/list.js'),
+  list = require('../string/list.js'),
   legible = require('../color/legible.js'),
   move = require('./move.js'),
   prefix = require('../client/prefix.js'),

@@ -21453,14 +21453,13 @@ module.exports = function(value) {
   defaultLocale = require('../core/locale/languages/en_US.js');
 
   module.exports = function(text, opts) {
-    var biglow, bigs, key, locale, smalls;
+    var biglow, bigs, locale, smalls;
     if (!text) {
       return '';
     }
     if (!opts) {
       opts = {};
     }
-    key = opts.key;
     if (text.charAt(text.length - 1) === '.') {
       return text.charAt(0).toUpperCase() + text.substr(1);
     }
@@ -21480,20 +21479,19 @@ module.exports = function(value) {
     return text.replace(
       /[^\s!-#%&(-\x2A,-:;\x3F@\x5B-\x5D_\x7B}\u00A1\u00A7\u00AB\u00B6\u00B7\u00BB\u00BF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E3B\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]*/g,
       function(txt, i) {
-        var bigindex, new_txt;
+        var bigindex;
         if (txt) {
           bigindex = biglow.indexOf(txt.toLowerCase());
           if (bigindex >= 0) {
-            return (new_txt = bigs[bigindex]);
+            return bigs[bigindex];
           } else if (
             smalls.indexOf(txt.toLowerCase()) >= 0 &&
             i !== 0 &&
             i !== text.length - 1
           ) {
-            return (new_txt = txt.toLowerCase());
+            return txt.toLowerCase();
           } else {
-            return (new_txt =
-              txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
           }
         } else {
           return '';
@@ -21653,9 +21651,9 @@ module.exports = function(value) {
       text = vars.container.value.text();
       if (text) {
         if (text.indexOf('tspan') >= 0) {
-          text.replace(/\<\/tspan\>\<tspan\>/g, ' ');
-          text.replace(/\<\/tspan\>/g, '');
-          text.replace(/\<tspan\>/g, '');
+          text.replace(/<\/tspan><tspan>/g, ' ');
+          text.replace(/<\/tspan>/g, '');
+          text.replace(/<tspan>/g, '');
         }
         text = text.replace(/(\r\n|\n|\r)/gm, '');
         text = text.replace(/^\s+|\s+$/g, '');
@@ -22228,7 +22226,7 @@ arguments[4][109][0].apply(exports,arguments)
       accepted: [Boolean],
       value: false
     },
-    init: function(vars) {
+    init: function() {
       var s;
       s = this.split.value;
       this.split['break'] = new RegExp(
@@ -22325,6 +22323,7 @@ arguments[4][186][0].apply(exports,arguments)
 },{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/parsesize.js":176,"./helpers/parsetext.js":177,"./helpers/wrap.js":179,"./methods/align.js":180,"./methods/config.js":181,"./methods/container.js":182,"./methods/dev.js":183,"./methods/draw.js":184,"./methods/format.js":185,"./methods/height.js":186,"./methods/padding.js":187,"./methods/resize.js":188,"./methods/rotate.js":189,"./methods/shape.js":190,"./methods/size.js":191,"./methods/text.js":192,"./methods/valign.js":193,"./methods/width.js":194,"./methods/x.js":195,"./methods/y.js":196}],198:[function(require,module,exports){
 var defaultLocale = require('../core/locale/languages/en_US.js'),
   events = require('../client/pointer.js'),
+  list = require('../string/list.js'),
   legible = require('../color/legible.js'),
   move = require('./move.js'),
   prefix = require('../client/prefix.js'),
@@ -22858,7 +22857,7 @@ module.exports = function(params) {
 
   if (params.html && params.fullscreen && !params.stacked) {
     var h = params.height - 12;
-    var w = tooltip.node().offsetWidth - params.width - 44;
+    w = tooltip.node().offsetWidth - params.width - 44;
     container
       .append('div')
       .attr('class', 'd3po_tooltip_html')
@@ -22885,9 +22884,9 @@ module.exports = function(params) {
       var limit = params.fixed
         ? parentHeight - params.y - 10
         : parentHeight - 10;
-      var h = params.height < limit ? params.height : limit;
+      h = params.height < limit ? params.height : limit;
     } else {
-      var h = params.height;
+      h = params.height;
     }
     h -= parseFloat(container.style('padding-top'), 10);
     h -= parseFloat(container.style('padding-bottom'), 10);

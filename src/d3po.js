@@ -17814,7 +17814,7 @@ module.exports = function(elem, vars) {
     (vars.font.align.value === 'right' && !rtl) ||
     (rtl && vars.font.align.value === 'right');
 
-  elem.each(function(d, i) {
+  elem.each(function(d) {
     var children = ['label'];
 
     if (d[vars.icon.value] && vars.data.viz.length <= vars.data.large) {
@@ -17912,12 +17912,13 @@ module.exports = function(elem, vars) {
         if (c === 'label') {
           return '0px';
         }
+        var h;
         if (this.offsetHeight || this.getBoundingClientRect().height) {
-          var h = this.offsetHeight || this.getBoundingClientRect().height;
+          h = this.offsetHeight || this.getBoundingClientRect().height;
         } else if (c === 'selected') {
-          var h = vars.font.size;
+          h = vars.font.size;
         } else {
-          var h = buffer;
+          h = buffer;
         }
         return -h / 2 + 'px';
       })
@@ -17996,14 +17997,15 @@ module.exports = function(elem, vars) {
       text.style('padding', vars.ui.padding.css);
     }
 
+    var width;
     if (typeof vars.width.value === 'number') {
-      var width = vars.width.value;
+      width = vars.width.value;
       width -= parseFloat(text.style('padding-left'), 10);
       width -= parseFloat(text.style('padding-right'), 10);
       width -= vars.ui.border * 2;
       width += 'px';
     } else {
-      var width = 'auto';
+      width = 'auto';
     }
 
     text.style('width', width);

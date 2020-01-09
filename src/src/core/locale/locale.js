@@ -10,7 +10,7 @@
     pt_BR: require('./languages/pt_BR.js'),
     pt_PT: require('./languages/pt_PT.js'),
     ru_RU: require('./languages/ru_RU.js'),
-    zh_CN: require('./languages/tr_TR.js'),
+    zh_TR: require('./languages/tr_TR.js'),
     zh_CN: require('./languages/zh_CN.js')
   };
 }.call(this));

@@ -8,7 +8,7 @@ module.exports = function(vars) {
 
     var hidden = false;
     if (vars.container.selector.style('display') == 'none') {
-      var hidden = true;
+      hidden = true;
     }
 
     if (hidden) vars.container.selector.style('display', 'block');
@@ -55,13 +55,13 @@ module.exports = function(vars) {
         typeof vars.hover.value !== 'boolean'
           ? vars.hover.value
           : vars.focus.value;
-      options.each(function(d, i) {
+      options.each(function(d) {
         if (d[vars.id.value] === matchID) {
           option = this;
         }
       });
 
-      var hidden = false;
+      hidden = false;
       if (vars.container.selector.style('display') === 'none') {
         hidden = true;
         vars.container.selector.style('display', 'block');

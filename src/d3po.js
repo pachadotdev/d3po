@@ -18156,10 +18156,11 @@ module.exports = function(vars) {
 
   var offset = vars.icon.drop.value === '&#x276f;' ? 90 : 0;
 
+  var rotate;
   if (vars.open.value != vars.open.flipped.value) {
-    var rotate = 180 + offset;
+    rotate = 180 + offset;
   } else {
-    var rotate = offset;
+    rotate = offset;
   }
 
   vars.container.button

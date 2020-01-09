@@ -17744,9 +17744,8 @@ module.exports = function(vars) {
 // Defines button color
 (function() {
   module.exports = function(elem, vars) {
-    var legible, lighter, textColor;
+    var legible, textColor;
     legible = require('../../../../color/legible.js');
-    lighter = require('../../../../color/lighter.js');
     textColor = require('../../../../color/text.js');
     return elem
       .style('background-color', function(d) {
@@ -17805,7 +17804,7 @@ module.exports = function(vars) {
   };
 }.call(this));
 
-},{"../../../../color/legible.js":39,"../../../../color/lighter.js":40,"../../../../color/text.js":45}],136:[function(require,module,exports){
+},{"../../../../color/legible.js":39,"../../../../color/text.js":45}],136:[function(require,module,exports){
 var prefix = require('../../../../client/prefix.js'),
   rtl = require('../../../../client/rtl.js');
 

@@ -91,12 +91,12 @@
       })(endpoint);
     }
     if (distance == null) {
-      distance = function(edge) {
+      distance = function() {
         return 1;
       };
     } else if (typeof distance === 'number') {
       distance = (function(distance) {
-        return function(edge) {
+        return function() {
           return distance;
         };
       })(distance);

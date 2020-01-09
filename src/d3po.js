@@ -24593,13 +24593,11 @@ module.exports = function(vars, selection, enter, exit) {
 };
 
 },{"../../../core/fetch/text.js":61,"../../../font/sizes.js":99,"../../../geom/largestrectangle.js":157,"./style.js":228}],216:[function(require,module,exports){
-var fetchText = require('../../../core/fetch/text.js'),
-  largestRect = require('../../../geom/largestrectangle.js'),
-  shapeStyle = require('./style.js');
+var  shapeStyle = require('./style.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
+module.exports = function(vars, selection, enter) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize check scale on enter and exit.
   //----------------------------------------------------------------------------
@@ -24653,7 +24651,7 @@ module.exports = function(vars, selection, enter, exit) {
   }
 };
 
-},{"../../../core/fetch/text.js":61,"../../../geom/largestrectangle.js":157,"./style.js":228}],217:[function(require,module,exports){
+},{"./style.js":228}],217:[function(require,module,exports){
 // Returns the correct fill color for a node
 (function() {
   var fetchColor, lighter, segments;

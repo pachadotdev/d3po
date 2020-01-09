@@ -1,10 +1,8 @@
-var fetchText = require('../../../core/fetch/text.js'),
-  largestRect = require('../../../geom/largestrectangle.js'),
-  shapeStyle = require('./style.js');
+var  shapeStyle = require('./style.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
+module.exports = function(vars, selection, enter) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize check scale on enter and exit.
   //----------------------------------------------------------------------------

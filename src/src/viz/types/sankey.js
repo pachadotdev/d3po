@@ -1,13 +1,11 @@
 (function() {
-  var d3sankey, events, removeTooltip, sankey, uniques;
+  var d3sankey, events, removeTooltip, sankey;
 
   d3sankey = require('./sankey.js');
 
   events = require('../../client/pointer.js');
 
   removeTooltip = require('../../tooltip/remove.js');
-
-  uniques = require('../../util/uniques.js');
 
   sankey = function(vars) {
     var d,

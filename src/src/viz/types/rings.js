@@ -134,15 +134,13 @@ var rings = function(vars) {
   );
 
   var offset = 0,
-    radian = Math.PI * 2,
-    start = 0;
+    radian = Math.PI * 2;
 
   primaries.forEach(function(p, i) {
     var children = p.d3po.edges.length || 1,
       space = (radian / total) * children;
 
     if (i == 0) {
-      start = angle;
       offset -= space / 2;
     }
 
@@ -155,17 +153,17 @@ var rings = function(vars) {
 
     offset += space;
     p.d3po.edges.sort(function(a, b) {
-      var a =
+      var a1 =
           a[vars.edges.source][vars.id.value] == p[vars.id.value]
             ? a[vars.edges.target]
             : a[vars.edges.source],
-        b =
+        b1 =
           b[vars.edges.source][vars.id.value] == p[vars.id.value]
             ? b[vars.edges.target]
             : b[vars.edges.source];
 
       return arraySort(
-        [a, b],
+        [a1, b1],
         sort,
         vars.order.sort.value,
         vars.color.value || [],
@@ -191,7 +189,7 @@ var rings = function(vars) {
         d[vars.id.value] = c[vars.id.value];
       }
 
-      a = angle - (s * children) / 2 + s / 2 + s * i;
+      var a = angle - (s * children) / 2 + s / 2 + s * i;
       d.d3po.radians = a;
       d.d3po.x = vars.width.viz / 2 + secondaryRing * Math.cos(a);
       d.d3po.y = vars.height.viz / 2 + secondaryRing * Math.sin(a);
@@ -217,17 +215,18 @@ var rings = function(vars) {
   if (!secondaryDistance) {
     secondaryDistance = ring_width / 4;
   }
-
+  var primaryMax;
   if (primaryDistance / 2 - 4 < 8) {
-    var primaryMax = d3.min([primaryDistance / 2, 8]);
+    primaryMax = d3.min([primaryDistance / 2, 8]);
   } else {
-    var primaryMax = primaryDistance / 2 - 4;
+    primaryMax = primaryDistance / 2 - 4;
   }
 
+  var secondaryMax;
   if (secondaryDistance / 2 - 4 < 4) {
-    var secondaryMax = d3.min([secondaryDistance / 2, 4]);
+    secondaryMax = d3.min([secondaryDistance / 2, 4]);
   } else {
-    var secondaryMax = secondaryDistance / 2 - 4;
+    secondaryMax = secondaryDistance / 2 - 4;
   }
 
   if (secondaryMax > ring_width / 10) {
@@ -261,7 +260,7 @@ var rings = function(vars) {
       domain[0] = 0;
     }
 
-    var radius = d3.scale
+    radius = d3.scale
       .linear()
       .domain(domain)
       .rangeRound([3, d3.min([primaryMax, secondaryMax])]);
@@ -269,7 +268,7 @@ var rings = function(vars) {
     var val = fetchValue(vars, center, vars.size.value);
     center.d3po.r = radius(val);
   } else {
-    var radius = d3.scale
+    radius = d3.scale
       .linear()
       .domain([1, 2])
       .rangeRound([primaryMax, secondaryMax]);
@@ -293,7 +292,7 @@ var rings = function(vars) {
 
   nodes = [center].concat(primaries).concat(secondaries);
 
-  primaries.forEach(function(p, i) {
+  primaries.forEach(function(p) {
     var check = [vars.edges.source, vars.edges.target],
       edge = p.d3po.edge;
 
@@ -320,12 +319,9 @@ var rings = function(vars) {
           })[0];
 
           if (!target) {
-            var r = primaryRing;
             target = primaries.filter(function(s) {
               return s[vars.id.value] == c[vars.id.value];
             })[0];
-          } else {
-            var r = secondaryRing;
           }
 
           if (target) {
@@ -388,13 +384,14 @@ var rings = function(vars) {
         var angle = n.d3po.rotate,
           width = ring_width - vars.labels.padding * 3 - n.d3po.r;
 
+        var buffer, anchor;
         if (angle < -90 || angle > 90) {
           angle = angle - 180;
-          var buffer = -(n.d3po.r + width / 2 + vars.labels.padding),
-            anchor = 'end';
+          buffer = -(n.d3po.r + width / 2 + vars.labels.padding),
+          anchor = 'end';
         } else {
-          var buffer = n.d3po.r + width / 2 + vars.labels.padding,
-            anchor = 'start';
+          buffer = n.d3po.r + width / 2 + vars.labels.padding,
+          anchor = 'start';
         }
 
         var background = primaries.indexOf(n) >= 0 ? true : false;
@@ -415,7 +412,7 @@ var rings = function(vars) {
           mouse: true
         };
       } else if (vars.size.value || vars.edges.label) {
-        var height = primaryRing - n.d3po.r * 2 - vars.labels.padding * 2;
+        height = primaryRing - n.d3po.r * 2 - vars.labels.padding * 2;
 
         n.d3po.label = {
           x: 0,

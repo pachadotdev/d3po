@@ -38454,15 +38454,13 @@ var rings = function(vars) {
   );
 
   var offset = 0,
-    radian = Math.PI * 2,
-    start = 0;
+    radian = Math.PI * 2;
 
   primaries.forEach(function(p, i) {
     var children = p.d3po.edges.length || 1,
       space = (radian / total) * children;
 
     if (i == 0) {
-      start = angle;
       offset -= space / 2;
     }
 
@@ -38475,17 +38473,17 @@ var rings = function(vars) {
 
     offset += space;
     p.d3po.edges.sort(function(a, b) {
-      var a =
+      var a1 =
           a[vars.edges.source][vars.id.value] == p[vars.id.value]
             ? a[vars.edges.target]
             : a[vars.edges.source],
-        b =
+        b1 =
           b[vars.edges.source][vars.id.value] == p[vars.id.value]
             ? b[vars.edges.target]
             : b[vars.edges.source];
 
       return arraySort(
-        [a, b],
+        [a1, b1],
         sort,
         vars.order.sort.value,
         vars.color.value || [],
@@ -38511,7 +38509,7 @@ var rings = function(vars) {
         d[vars.id.value] = c[vars.id.value];
       }
 
-      a = angle - (s * children) / 2 + s / 2 + s * i;
+      var a = angle - (s * children) / 2 + s / 2 + s * i;
       d.d3po.radians = a;
       d.d3po.x = vars.width.viz / 2 + secondaryRing * Math.cos(a);
       d.d3po.y = vars.height.viz / 2 + secondaryRing * Math.sin(a);
@@ -38537,17 +38535,18 @@ var rings = function(vars) {
   if (!secondaryDistance) {
     secondaryDistance = ring_width / 4;
   }
-
+  var primaryMax;
   if (primaryDistance / 2 - 4 < 8) {
-    var primaryMax = d3.min([primaryDistance / 2, 8]);
+    primaryMax = d3.min([primaryDistance / 2, 8]);
   } else {
-    var primaryMax = primaryDistance / 2 - 4;
+    primaryMax = primaryDistance / 2 - 4;
   }
 
+  var secondaryMax;
   if (secondaryDistance / 2 - 4 < 4) {
-    var secondaryMax = d3.min([secondaryDistance / 2, 4]);
+    secondaryMax = d3.min([secondaryDistance / 2, 4]);
   } else {
-    var secondaryMax = secondaryDistance / 2 - 4;
+    secondaryMax = secondaryDistance / 2 - 4;
   }
 
   if (secondaryMax > ring_width / 10) {
@@ -38581,7 +38580,7 @@ var rings = function(vars) {
       domain[0] = 0;
     }
 
-    var radius = d3.scale
+    radius = d3.scale
       .linear()
       .domain(domain)
       .rangeRound([3, d3.min([primaryMax, secondaryMax])]);
@@ -38589,7 +38588,7 @@ var rings = function(vars) {
     var val = fetchValue(vars, center, vars.size.value);
     center.d3po.r = radius(val);
   } else {
-    var radius = d3.scale
+    radius = d3.scale
       .linear()
       .domain([1, 2])
       .rangeRound([primaryMax, secondaryMax]);
@@ -38613,7 +38612,7 @@ var rings = function(vars) {
 
   nodes = [center].concat(primaries).concat(secondaries);
 
-  primaries.forEach(function(p, i) {
+  primaries.forEach(function(p) {
     var check = [vars.edges.source, vars.edges.target],
       edge = p.d3po.edge;
 
@@ -38640,12 +38639,9 @@ var rings = function(vars) {
           })[0];
 
           if (!target) {
-            var r = primaryRing;
             target = primaries.filter(function(s) {
               return s[vars.id.value] == c[vars.id.value];
             })[0];
-          } else {
-            var r = secondaryRing;
           }
 
           if (target) {
@@ -38708,13 +38704,14 @@ var rings = function(vars) {
         var angle = n.d3po.rotate,
           width = ring_width - vars.labels.padding * 3 - n.d3po.r;
 
+        var buffer, anchor;
         if (angle < -90 || angle > 90) {
           angle = angle - 180;
-          var buffer = -(n.d3po.r + width / 2 + vars.labels.padding),
-            anchor = 'end';
+          buffer = -(n.d3po.r + width / 2 + vars.labels.padding),
+          anchor = 'end';
         } else {
-          var buffer = n.d3po.r + width / 2 + vars.labels.padding,
-            anchor = 'start';
+          buffer = n.d3po.r + width / 2 + vars.labels.padding,
+          anchor = 'start';
         }
 
         var background = primaries.indexOf(n) >= 0 ? true : false;
@@ -38735,7 +38732,7 @@ var rings = function(vars) {
           mouse: true
         };
       } else if (vars.size.value || vars.edges.label) {
-        var height = primaryRing - n.d3po.r * 2 - vars.labels.padding * 2;
+        height = primaryRing - n.d3po.r * 2 - vars.labels.padding * 2;
 
         n.d3po.label = {
           x: 0,
@@ -38825,15 +38822,13 @@ module.exports = rings;
 
 },{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],321:[function(require,module,exports){
 (function() {
-  var d3sankey, events, removeTooltip, sankey, uniques;
+  var d3sankey, events, removeTooltip, sankey;
 
   d3sankey = require('./sankey.js');
 
   events = require('../../client/pointer.js');
 
   removeTooltip = require('../../tooltip/remove.js');
-
-  uniques = require('../../util/uniques.js');
 
   sankey = function(vars) {
     var d,
@@ -38954,15 +38949,13 @@ module.exports = rings;
   module.exports = sankey;
 }.call(this));
 
-},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"../../util/uniques.js":207,"./sankey.js":321}],322:[function(require,module,exports){
+},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"./sankey.js":321}],322:[function(require,module,exports){
 (function() {
-  var fetchValue, graph, print, scatter, sort, ticks;
+  var fetchValue, graph, scatter, sort, ticks;
 
   fetchValue = require('../../core/fetch/value.js');
 
   graph = require('./helpers/graph/draw.js');
-
-  print = require('../../core/console/print.js');
 
   sort = require('../../array/sort.js');
 
@@ -39029,7 +39022,7 @@ module.exports = rings;
   module.exports = scatter;
 }.call(this));
 
-},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":306,"./helpers/graph/draw.js":307}],323:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":306,"./helpers/graph/draw.js":307}],323:[function(require,module,exports){
 (function() {
   var dataThreshold, groupData, mergeObject, treemap;
 
@@ -39105,7 +39098,7 @@ module.exports = rings;
 
 },{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],324:[function(require,module,exports){
 (function() {
-  var attach, axis, container, flash, getSteps, print, validObject;
+  var attach, axis, container, flash, getSteps, print;
 
   attach = require('../core/methods/attach.js');
 
@@ -39118,8 +39111,6 @@ module.exports = rings;
   print = require('../core/console/print.js');
 
   container = require('./helpers/container.js');
-
-  validObject = require('../object/validate.js');
 
   module.exports = function() {
     var vars;
@@ -39317,4 +39308,4 @@ module.exports = rings;
   };
 }.call(this));
 
-},{"../core/console/print.js":47,"../core/methods/attach.js":77,"../object/validate.js":169,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":238,"./methods/active.js":247,"./methods/aggs.js":248,"./methods/attrs.js":249,"./methods/axes.js":250,"./methods/background.js":251,"./methods/class.js":252,"./methods/color.js":253,"./methods/cols.js":254,"./methods/config.js":255,"./methods/container.js":256,"./methods/coords.js":257,"./methods/csv.js":258,"./methods/data.js":259,"./methods/depth.js":260,"./methods/descs.js":261,"./methods/dev.js":262,"./methods/draw.js":263,"./methods/edges.js":264,"./methods/error.js":265,"./methods/focus.js":266,"./methods/font.js":267,"./methods/footer.js":268,"./methods/format.js":269,"./methods/height.js":270,"./methods/helpers/axis.js":271,"./methods/history.js":272,"./methods/icon.js":273,"./methods/id.js":274,"./methods/labels.js":275,"./methods/legend.js":276,"./methods/links.js":277,"./methods/margin.js":278,"./methods/messages.js":279,"./methods/mouse.js":280,"./methods/nodes.js":281,"./methods/order.js":282,"./methods/resize.js":283,"./methods/shape.js":284,"./methods/size.js":285,"./methods/style.js":286,"./methods/temp.js":287,"./methods/text.js":288,"./methods/time.js":289,"./methods/timeline.js":290,"./methods/timing.js":291,"./methods/title.js":292,"./methods/tooltip.js":293,"./methods/total.js":294,"./methods/type.js":295,"./methods/ui.js":296,"./methods/width.js":297,"./methods/zoom.js":298,"./types/area.js":299,"./types/bar.js":300,"./types/box.js":301,"./types/bubbles.js":302,"./types/donut.js":303,"./types/geomap.js":304,"./types/halfdonut.js":305,"./types/line.js":315,"./types/network.js":316,"./types/paths.js":317,"./types/pie.js":318,"./types/radar.js":319,"./types/rings.js":320,"./types/sankey.js":321,"./types/scatter.js":322,"./types/treemap.js":323}]},{},[160]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":238,"./methods/active.js":247,"./methods/aggs.js":248,"./methods/attrs.js":249,"./methods/axes.js":250,"./methods/background.js":251,"./methods/class.js":252,"./methods/color.js":253,"./methods/cols.js":254,"./methods/config.js":255,"./methods/container.js":256,"./methods/coords.js":257,"./methods/csv.js":258,"./methods/data.js":259,"./methods/depth.js":260,"./methods/descs.js":261,"./methods/dev.js":262,"./methods/draw.js":263,"./methods/edges.js":264,"./methods/error.js":265,"./methods/focus.js":266,"./methods/font.js":267,"./methods/footer.js":268,"./methods/format.js":269,"./methods/height.js":270,"./methods/helpers/axis.js":271,"./methods/history.js":272,"./methods/icon.js":273,"./methods/id.js":274,"./methods/labels.js":275,"./methods/legend.js":276,"./methods/links.js":277,"./methods/margin.js":278,"./methods/messages.js":279,"./methods/mouse.js":280,"./methods/nodes.js":281,"./methods/order.js":282,"./methods/resize.js":283,"./methods/shape.js":284,"./methods/size.js":285,"./methods/style.js":286,"./methods/temp.js":287,"./methods/text.js":288,"./methods/time.js":289,"./methods/timeline.js":290,"./methods/timing.js":291,"./methods/title.js":292,"./methods/tooltip.js":293,"./methods/total.js":294,"./methods/type.js":295,"./methods/ui.js":296,"./methods/width.js":297,"./methods/zoom.js":298,"./types/area.js":299,"./types/bar.js":300,"./types/box.js":301,"./types/bubbles.js":302,"./types/donut.js":303,"./types/geomap.js":304,"./types/halfdonut.js":305,"./types/line.js":315,"./types/network.js":316,"./types/paths.js":317,"./types/pie.js":318,"./types/radar.js":319,"./types/rings.js":320,"./types/sankey.js":321,"./types/scatter.js":322,"./types/treemap.js":323}]},{},[160]);

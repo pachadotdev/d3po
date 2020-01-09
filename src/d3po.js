@@ -18975,8 +18975,7 @@ module.exports = function(vars) {
   if (vars.open.value) {
     if (vars.dev.value) print.time('creating title and back button');
 
-    var self = this,
-      enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0,
+    var enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0,
       title = enabled,
       focus = vars.container.button.data(Object).viz[0];
 
@@ -19077,7 +19076,7 @@ module.exports = function(vars) {
       .call(titleStyle);
 
     vars.container.title
-      .on(events.over, function(d, i) {
+      .on(events.over, function() {
         var color = lighter(vars.ui.color.secondary.value);
 
         d3.select(this)
@@ -19087,7 +19086,7 @@ module.exports = function(vars) {
           .style('background-color', color)
           .style('color', textColor(color));
       })
-      .on(events.out, function(d) {
+      .on(events.out, function() {
         var color = vars.ui.color.secondary.value;
 
         d3.select(this)
@@ -19097,7 +19096,7 @@ module.exports = function(vars) {
           .style('background-color', color)
           .style('color', textColor(color));
       })
-      .on(events.click, function(d) {
+      .on(events.click, function() {
         vars.history.back();
       });
 

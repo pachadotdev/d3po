@@ -31988,7 +31988,9 @@ module.exports = {
       return [];
     }
 
-    if (!id) var id = 'id';
+    if (!id){
+      id = 'id';
+    }
 
     var edges = self.restricted || self.value,
       targets = [];

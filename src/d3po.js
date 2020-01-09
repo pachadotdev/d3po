@@ -19392,7 +19392,7 @@ var child = require('../../../../util/child.js');
 //------------------------------------------------------------------------------
 var windowEvents = function(vars, elem) {
   if (elem === undefined) {
-    var elem = window;
+    elem = window;
   }
 
   d3.select(elem).on('click.' + vars.container.id, function() {
@@ -19419,10 +19419,11 @@ var windowEvents = function(vars, elem) {
     }
   });
 
+  var same_origin;
   try {
-    var same_origin = window.parent.location.host === window.location.host;
+    same_origin = window.parent.location.host === window.location.host;
   } catch (e) {
-    var same_origin = false;
+    same_origin = false;
   }
 
   if (same_origin) {

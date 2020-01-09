@@ -35665,8 +35665,7 @@ module.exports = {
     labelPadding,
     superscript,
     textwrap,
-    timeDetect,
-    uniques;
+    timeDetect;
 
   buckets = require('../../../../../util/buckets.js');
 
@@ -35679,8 +35678,6 @@ module.exports = {
   textwrap = require('../../../../../textwrap/textwrap.js');
 
   timeDetect = require('../../../../../core/data/time.js');
-
-  uniques = require('../../../../../util/uniques.js');
 
   module.exports = function(vars, opts) {
     var axes,
@@ -35931,7 +35928,7 @@ module.exports = {
             });
           });
         } else if (vars[axis].value === vars.time.value) {
-          yText = yValues.map(function(d, i) {
+          yText = yValues.map(function(d) {
             return vars[axis].ticks.format(new Date(d));
           });
         } else {
@@ -36013,7 +36010,7 @@ module.exports = {
               });
             });
           } else if (vars[axis].value === vars.time.value) {
-            xText = xValues.map(function(d, i) {
+            xText = xValues.map(function(d) {
               return vars[axis].ticks.format(new Date(d));
             });
           } else {
@@ -36154,7 +36151,7 @@ module.exports = {
       .orient(vars[axis].orient.value)
       .scale(vars[axis].scale.viz)
       .tickValues(vars[axis].ticks.values)
-      .tickFormat(function(d, i) {
+      .tickFormat(function(d) {
         var c, scale;
         if (vars[axis].ticks.hidden) {
           return null;
@@ -36215,7 +36212,7 @@ module.exports = {
   };
 }.call(this));
 
-},{"../../../../../core/data/time.js":57,"../../../../../core/fetch/value.js":62,"../../../../../font/sizes.js":99,"../../../../../textwrap/textwrap.js":197,"../../../../../util/buckets.js":201,"../../../../../util/uniques.js":207,"./buffer.js":309}],312:[function(require,module,exports){
+},{"../../../../../core/data/time.js":57,"../../../../../core/fetch/value.js":62,"../../../../../font/sizes.js":99,"../../../../../textwrap/textwrap.js":197,"../../../../../util/buckets.js":201,"./buffer.js":309}],312:[function(require,module,exports){
 (function() {
   var mix, textwrap, validObject;
 

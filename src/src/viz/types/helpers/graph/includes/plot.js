@@ -8,8 +8,7 @@
     labelPadding,
     superscript,
     textwrap,
-    timeDetect,
-    uniques;
+    timeDetect;
 
   buckets = require('../../../../../util/buckets.js');
 
@@ -22,8 +21,6 @@
   textwrap = require('../../../../../textwrap/textwrap.js');
 
   timeDetect = require('../../../../../core/data/time.js');
-
-  uniques = require('../../../../../util/uniques.js');
 
   module.exports = function(vars, opts) {
     var axes,
@@ -274,7 +271,7 @@
             });
           });
         } else if (vars[axis].value === vars.time.value) {
-          yText = yValues.map(function(d, i) {
+          yText = yValues.map(function(d) {
             return vars[axis].ticks.format(new Date(d));
           });
         } else {
@@ -356,7 +353,7 @@
               });
             });
           } else if (vars[axis].value === vars.time.value) {
-            xText = xValues.map(function(d, i) {
+            xText = xValues.map(function(d) {
               return vars[axis].ticks.format(new Date(d));
             });
           } else {
@@ -497,7 +494,7 @@
       .orient(vars[axis].orient.value)
       .scale(vars[axis].scale.viz)
       .tickValues(vars[axis].ticks.values)
-      .tickFormat(function(d, i) {
+      .tickFormat(function(d) {
         var c, scale;
         if (vars[axis].ticks.hidden) {
           return null;

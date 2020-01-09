@@ -1,7 +1,5 @@
 (function() {
-  var copy, events, fetchColor, fetchValue, legible, textColor;
-
-  copy = require('../../../../../util/copy.js');
+  var events, fetchColor, fetchValue, legible, textColor;
 
   events = require('../../../../../client/pointer.js');
 
@@ -94,7 +92,7 @@
     };
     lineStyle = function(line) {
       return line
-        .style('stroke', function(d) {
+        .style('stroke', function() {
           if (vars.shape.value === 'area') {
             return 'white';
           } else {

@@ -35278,9 +35278,7 @@ module.exports = {
 
 },{"../../../../../util/buckets.js":201,"../../../../../util/closest.js":203}],310:[function(require,module,exports){
 (function() {
-  var copy, events, fetchColor, fetchValue, legible, textColor;
-
-  copy = require('../../../../../util/copy.js');
+  var events, fetchColor, fetchValue, legible, textColor;
 
   events = require('../../../../../client/pointer.js');
 
@@ -35373,7 +35371,7 @@ module.exports = {
     };
     lineStyle = function(line) {
       return line
-        .style('stroke', function(d) {
+        .style('stroke', function() {
           if (vars.shape.value === 'area') {
             return 'white';
           } else {
@@ -35654,7 +35652,7 @@ module.exports = {
   };
 }.call(this));
 
-},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":58,"../../../../../core/fetch/value.js":62,"../../../../../util/copy.js":204}],311:[function(require,module,exports){
+},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":58,"../../../../../core/fetch/value.js":62}],311:[function(require,module,exports){
 (function() {
   var buckets,
     buffer,

@@ -16579,7 +16579,7 @@ module.exports = function() {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Create the main drawing function.
   //----------------------------------------------------------------------------
-  vars.self = function(selection) {
+  vars.self = function() {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Set timing to 0 if it's the first time running this function or if the
     // data length is longer than the "large" limit
@@ -16697,7 +16697,7 @@ module.exports = function() {
             optionData = optionData.concat(vars.data.nested.all[level]);
           }
 
-          options = vars.data.element.value
+          var options = vars.data.element.value
             .selectAll('option')
             .data(optionData, function(d) {
               var level = d ? getLevel(d) : false;
@@ -16749,9 +16749,9 @@ module.exports = function() {
             }
           });
         } else {
-          var tag = vars.data.element.value.attr('type').toLowerCase();
+          tag = vars.data.element.value.attr('type').toLowerCase();
           if (tag === 'radio') {
-            vars.data.element.value.each(function(d) {
+            vars.data.element.value.each(function() {
               if (this.value === vars.focus.value) {
                 this.checked = true;
               } else {
@@ -16836,7 +16836,7 @@ module.exports = function() {
           .style('border-style', 'solid')
           .style('border-width', vars.ui.border + 'px')
           .text(String)
-          .each(function(d) {
+          .each(function() {
             vars.margin.left = this.offsetWidth;
           });
       }

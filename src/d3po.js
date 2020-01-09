@@ -37909,22 +37909,13 @@ module.exports = network;
 },{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],319:[function(require,module,exports){
 (function() {
   var buckets,
-    comparator,
-    dataThreshold,
     fetchText,
     fetchValue,
     fontSizes,
     offset,
     radar,
-    sort,
     textwrap,
     uniques;
-
-  comparator = require('../../array/comparator.js');
-
-  sort = require('../../array/sort.js');
-
-  dataThreshold = require('../../core/data/threshold.js');
 
   fetchText = require('../../core/fetch/text.js');
 
@@ -37947,7 +37938,6 @@ module.exports = network;
       angle,
       buffer,
       c,
-      center,
       children,
       d,
       data,
@@ -37983,7 +37973,6 @@ module.exports = network;
       radius,
       ref,
       ref1,
-      righty,
       ringData,
       ringStyle,
       rings,
@@ -37991,10 +37980,7 @@ module.exports = network;
       sizes,
       text,
       textStyle,
-      top,
-      total,
-      x,
-      y;
+      total;
     data = vars.data.viz;
     nextDepth = vars.depth.value + 1;
     nextLevel = vars.id.nesting[nextDepth];
@@ -38178,25 +38164,11 @@ module.exports = network;
         buffer = maxRadius + vars.labels.padding * 2;
         anchor = 'start';
       }
-      top = a2 < 0 || a2 > Math.PI;
-      righty = a2 < Math.PI / 2;
       ov = maxRadius;
       if (vars.labels.value) {
         ov += vars.labels.padding;
       }
       o = offset(a2, ov);
-      x = o.x;
-      y = o.y;
-      if (!righty) {
-        x -= labelWidth;
-      }
-      if (top) {
-        y -= labelHeight;
-      }
-      center = [0, Math.PI].indexOf(angle * labelIndex(l)) >= 0;
-      if (center) {
-        x -= labelWidth / 2;
-      }
       labelData.push({
         text: l,
         angle: a,
@@ -38229,7 +38201,7 @@ module.exports = network;
     labelStyle = function(label) {
       return label
         .attr(textStyle)
-        .each(function(l, i) {
+        .each(function(l) {
           return textwrap()
             .container(d3.select(this))
             .height(labelHeight)
@@ -38317,7 +38289,7 @@ module.exports = network;
   module.exports = radar;
 }.call(this));
 
-},{"../../array/comparator.js":27,"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],320:[function(require,module,exports){
+},{"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],320:[function(require,module,exports){
 var arraySort = require('../../array/sort.js'),
   events = require('../../client/pointer.js'),
   fetchValue = require('../../core/fetch/value.js'),

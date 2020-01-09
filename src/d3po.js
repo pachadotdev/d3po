@@ -27507,7 +27507,7 @@ module.exports = function(vars) {
       newRadial = d3.svg.line
         .radial()
         .interpolate('linear-closed')
-        .radius(function(d, i) {
+        .radius(function(d) {
           if (radii[d.d3po.id] === void 0) {
             radii[d.d3po.id] = 0;
           }
@@ -27516,7 +27516,7 @@ module.exports = function(vars) {
           }
           return radii[d.d3po.id];
         })
-        .angle(function(d, i) {
+        .angle(function(d) {
           if (angles[d.d3po.id] === void 0) {
             angles[d.d3po.id] = d.d3po.a;
           }

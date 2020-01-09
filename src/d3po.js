@@ -28056,7 +28056,7 @@ module.exports = function(vars) {
     .attr('opacity', 0);
 
   vars.g.overlay
-    .on(events.move, function(d) {
+    .on(events.move, function() {
       if (touch) touchEvent(vars, d3.event);
 
       if (
@@ -28069,7 +28069,7 @@ module.exports = function(vars) {
         d3.select(this).style('cursor', 'auto');
       }
     })
-    .on(events.up, function(d) {
+    .on(events.up, function() {
       if (touch) touchEvent(vars, d3.event);
 
       if (
@@ -28082,7 +28082,7 @@ module.exports = function(vars) {
         d3.select(this).style('cursor', 'auto');
       }
     })
-    .on(events.down, function(d) {
+    .on(events.down, function() {
       if (touch) touchEvent(vars, d3.event);
 
       if (

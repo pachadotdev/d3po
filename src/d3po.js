@@ -33788,7 +33788,6 @@ module.exports = {
           top,
           topLabel,
           topWhisker,
-          uniqs,
           val,
           values,
           x,
@@ -33800,7 +33799,6 @@ module.exports = {
         values.sort(function(a, b) {
           return a - b;
         });
-        uniqs = uniques(values);
         first = d3.quantile(values, 0.25);
         median = d3.quantile(values, 0.5);
         second = d3.quantile(values, 0.75);

@@ -34359,10 +34359,10 @@ module.exports = {
       .value(function(d) {
         return d.value;
       })
-      .startAngle(function(d) {
+      .startAngle(function() {
         return -90 * (Math.PI / 180);
       })
-      .endAngle(function(d) {
+      .endAngle(function() {
         return 90 * (Math.PI / 180);
       })
       .sort(function(a, b) {

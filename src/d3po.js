@@ -24935,7 +24935,6 @@ var child = require('../../../util/child.js'),
   legible = require('../../../color/legible.js'),
   print = require('../../../core/console/print.js'),
   removeTooltip = require('../../../tooltip/remove.js'),
-  segments = require('./segments.js'),
   shapeFill = require('./fill.js'),
   stringStrip = require('../../../string/strip.js'),
   touch = require('../../../client/touch.js'),
@@ -25091,12 +25090,6 @@ module.exports = function(vars) {
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  // Initialize arrays for labels and sizes
-  //----------------------------------------------------------------------------
-  var labels = [],
-    shares = [];
-
-  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Create groups by shape, apply data, and call specific shape drawing class.
   //----------------------------------------------------------------------------
   for (var shape in shapes) {
@@ -25131,15 +25124,16 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Groups Exit
     //--------------------------------------------------------------------------
+    var exit;
     if (vars.draw.timing) {
-      var exit = selection
+      exit = selection
         .exit()
         .transition()
         .duration(vars.draw.timing)
         .attr('opacity', 0)
         .remove();
     } else {
-      var exit = selection.exit().remove();
+      exit = selection.exit().remove();
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -25241,10 +25235,11 @@ module.exports = function(vars) {
         .attr('marker-start', function(e) {
           var direction = vars.edges.arrows.direction.value;
 
+          var d;
           if ('bucket' in e.d3po) {
-            var d = '_' + e.d3po.bucket;
+            d = '_' + e.d3po.bucket;
           } else {
-            var d = '';
+            d = '';
           }
 
           return direction == 'source' && marker
@@ -25254,10 +25249,11 @@ module.exports = function(vars) {
         .attr('marker-end', function(e) {
           var direction = vars.edges.arrows.direction.value;
 
+          var d;
           if ('bucket' in e.d3po) {
-            var d = '_' + e.d3po.bucket;
+            d = '_' + e.d3po.bucket;
           } else {
-            var d = '';
+            d = '';
           }
 
           return direction == 'target' && marker
@@ -25405,9 +25401,6 @@ module.exports = function(vars) {
                     !vars.tooltip.value.long)));
 
             d3.select(this).style('cursor', pointer ? 'pointer' : 'auto');
-
-            // vars.covered = false
-            var tooltipType = vars.types[vars.type.value].tooltip || 'follow';
 
             if (d.values && vars.axes.discrete) {
               var index = vars.axes.discrete === 'x' ? 0 : 1,
@@ -25671,7 +25664,7 @@ module.exports = function(vars) {
   });
 };
 
-},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../tooltip/remove.js":200,"../../../util/child.js":202,"../../../util/closest.js":203,"../../../util/uniques.js":207,"../tooltip/create.js":232,"../zoom/direction.js":242,"../zoom/propagation.js":245,"./arc.js":214,"./area.js":215,"./check.js":216,"./coordinates.js":218,"./fill.js":221,"./line.js":223,"./radial.js":225,"./rect.js":226,"./segments.js":227,"./whisker.js":229}],220:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../tooltip/remove.js":200,"../../../util/child.js":202,"../../../util/closest.js":203,"../../../util/uniques.js":207,"../tooltip/create.js":232,"../zoom/direction.js":242,"../zoom/propagation.js":245,"./arc.js":214,"./area.js":215,"./check.js":216,"./coordinates.js":218,"./fill.js":221,"./line.js":223,"./radial.js":225,"./rect.js":226,"./whisker.js":229}],220:[function(require,module,exports){
 var buckets = require('../../../util/buckets.js'),
   offset = require('../../../geom/offset.js');
 

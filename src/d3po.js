@@ -36683,7 +36683,7 @@ module.exports = {
         .enter()
         .append('g')
         .attr('id', 'd3po_graph_' + axis + 'grid');
-      lines = grid.selectAll('line').data(gridData, function(d, i) {
+      lines = grid.selectAll('line').data(gridData, function(d) {
         if (d.constructor === Date) {
           return d.getTime();
         } else {
@@ -36946,7 +36946,7 @@ module.exports = {
         lineRects
           .transition()
           .delay(vars.draw.timing)
-          .each('end', function(d) {
+          .each('end', function() {
             return d3
               .select(this)
               .transition()

@@ -61,7 +61,7 @@ module.exports = function(vars) {
       elementData.push(data_obj);
 
       if (this.selected) {
-        for (var i = vars.id.nesting.length - 1; i >= 0; i--) {
+        for (i = vars.id.nesting.length - 1; i >= 0; i--) {
           var level = vars.id.nesting[i];
           if (level in data_obj) {
             vars.self.focus(data_obj[level]);
@@ -78,7 +78,7 @@ module.exports = function(vars) {
       });
     }
 
-    vars.data.element.value.each(function(o, i) {
+    vars.data.element.value.each(function() {
       var data_obj = {};
 
       get_attributes(data_obj, this);

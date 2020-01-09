@@ -20248,9 +20248,7 @@ module.exports = function(vars) {
  */
 
 (function() {
-  var d3po, message, stylesheet;
-
-  d3po = {};
+  var d3po = {};
 
   /**
    * The current version of **d3po** you are using. Returns a string in
@@ -20467,9 +20465,6 @@ module.exports = function(vars) {
 
   d3po.viz = require('./viz/viz.js');
 
-  stylesheet = require('./client/css.js');
-
-  message = require('./core/console/print.js');
 
   if (typeof window !== 'undefined') {
     window.d3po = d3po;
@@ -20478,7 +20473,7 @@ module.exports = function(vars) {
   module.exports = d3po;
 }.call(this));
 
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":324}],161:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":324}],161:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004

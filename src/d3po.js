@@ -12297,8 +12297,6 @@ module.exports = function(vars, years, depth) {
   cacheID = cacheID.join('_');
   vars.data.cacheID = cacheID;
 
-  var match = false;
-
   for (var c = 0; c < cacheKeys.length; c++) {
     var matchKey = cacheKeys[c]
       .split('_')

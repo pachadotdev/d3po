@@ -18914,7 +18914,7 @@ module.exports = function(vars) {
 
   vars.container.search
     .select('input')
-    .on('keyup.' + vars.container.id, function(d) {
+    .on('keyup.' + vars.container.id, function() {
       var term = this.value;
       if (vars.search.term !== term) {
         vars.search.term = term;

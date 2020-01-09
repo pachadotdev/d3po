@@ -28688,38 +28688,38 @@ var copy = require('../../../util/copy.js'),
 // Creates a data object for the Tooltip
 //------------------------------------------------------------------------------
 module.exports = function(vars, id, length, extras, children, depth) {
+  var other_length,extra_data, a;
   if (vars.small) {
     return [];
   }
 
-  if (!length) var length = 'long';
+  if (!length) length = 'long';
   if (length == 'long') {
-    var other_length = 'short';
+    other_length = 'short';
   } else {
-    var other_length = 'long';
+    other_length = 'long';
   }
 
-  var extra_data = {};
   if (extras && typeof extras == 'string') extras = [extras];
   else if (extras && typeof extras == 'object') {
     extra_data = mergeObject(extra_data, extras);
-    var extras = [];
+    extras = [];
     for (var k in extra_data) {
       extras.push(k);
     }
-  } else if (!extras) var extras = [];
+  } else if (!extras) extras = [];
 
   var tooltip_highlights = [];
 
   if (vars.tooltip.value instanceof Array) {
-    var a = vars.tooltip.value;
+    a = vars.tooltip.value;
   } else if (typeof vars.tooltip.value == 'string') {
-    var a = [vars.tooltip.value];
+    a = [vars.tooltip.value];
   } else {
     if (vars.tooltip.value[vars.id.nesting[depth]]) {
-      var a = vars.tooltip.value[vars.id.nesting[depth]];
+      a = vars.tooltip.value[vars.id.nesting[depth]];
     } else {
-      var a = vars.tooltip.value;
+      a = vars.tooltip.value;
     }
 
     if (!(a instanceof Array)) {
@@ -28751,7 +28751,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
 
   function format_key(key, group) {
     if (vars.attrs.value[group]) var id_var = group;
-    else var id_var = null;
+    else id_var = null;
 
     if (group) group = vars.format.value(group);
 
@@ -28780,7 +28780,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
 
       if (value instanceof Array) {
         value.forEach(function(v) {
-          v = vars.format.value(v, {
+          vars.format.value(v, {
             key: key,
             vars: vars,
             data: id
@@ -28823,7 +28823,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     };
 
   if (vars.id.nesting.length && depth < vars.id.nesting.length - 1) {
-    var a = copy(a);
+    a = copy(a);
     vars.id.nesting.forEach(function(n, i) {
       if (i > depth && a[n]) delete a[n];
     });
@@ -28839,10 +28839,9 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   if (vars.tooltip.value.long && typeof vars.tooltip.value.long == 'object') {
-    var placed = [];
 
-    for (var group in vars.tooltip.value.long) {
-      for (var i = extras.length; i > 0; i--) {
+    for (group in vars.tooltip.value.long) {
+      for (i = extras.length; i > 0; i--) {
         var e = extras[i - 1];
         if (vars.tooltip.value.long[group].indexOf(e) >= 0) {
           if (!a[group]) a[group] = [];
@@ -28858,7 +28857,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     a[''] = a[''].concat(extras);
   }
 
-  for (var group in a) {
+  for (group in a) {
     a[group].forEach(function(t) {
       format_key(t, group);
     });
@@ -28901,13 +28900,13 @@ module.exports = function(vars, id, length, extras, children, depth) {
           return d[vars.id.value] === conn[vars.id.value];
         });
 
-        var c = c.length ? c[0] : conn;
+        c = c.length ? c[0] : conn;
 
         var name = fetchText(vars, c)[0],
           color = fetchColor(vars, c),
           size = vars.tooltip.font.size,
           radius = vars.shape.value == 'square' ? 0 : size;
-        styles = [
+        var styles = [
           'background-color: ' + color,
           'border-color: ' + legible(color),
           'border-style: solid',
@@ -28920,7 +28919,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
           'top: 0px',
           prefix() + 'border-radius: ' + radius + 'px'
         ];
-        node = '<div style=\'' + styles.join('; ') + ';\'></div>';
+        var node = '<div style=\'' + styles.join('; ') + ';\'></div>';
 
         var nodeClick = function() {
           vars.self.focus([c[vars.id.value]]).draw();

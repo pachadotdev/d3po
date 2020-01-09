@@ -16439,7 +16439,7 @@ module.exports = function(vars) {
       .text(String)
       .style(style)
       .attr(attr)
-      .each(function(d) {
+      .each(function() {
         if (typeof opts.mod === 'function') {
           return opts.mod(this);
         }

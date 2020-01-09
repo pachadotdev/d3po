@@ -1,7 +1,6 @@
 var arraySort = require('../../array/sort.js'),
   dataNest = require('./nest.js'),
   fetchValue = require('../fetch/value.js'),
-  fetchColor = require('../fetch/color.js'),
   fetchText = require('../fetch/text.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Merges data underneath the size threshold
@@ -123,7 +122,7 @@ module.exports = function(vars, rawData, split) {
       merged.forEach(function(m) {
         var parent = vars.id.nesting[vars.depth.value - 1];
         var p_id = fetchValue(vars, m, parent);
-        children = parent
+        var children = parent
           ? removed.filter(function(r) {
             return fetchValue(vars, r, parent) === p_id;
           })

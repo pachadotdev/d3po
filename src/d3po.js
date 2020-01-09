@@ -11784,7 +11784,6 @@ module.exports = dataNest;
 var arraySort = require('../../array/sort.js'),
   dataNest = require('./nest.js'),
   fetchValue = require('../fetch/value.js'),
-  fetchColor = require('../fetch/color.js'),
   fetchText = require('../fetch/text.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Merges data underneath the size threshold
@@ -11906,7 +11905,7 @@ module.exports = function(vars, rawData, split) {
       merged.forEach(function(m) {
         var parent = vars.id.nesting[vars.depth.value - 1];
         var p_id = fetchValue(vars, m, parent);
-        children = parent
+        var children = parent
           ? removed.filter(function(r) {
             return fetchValue(vars, r, parent) === p_id;
           })
@@ -12010,7 +12009,7 @@ module.exports = function(vars, rawData, split) {
   return rawData;
 };
 
-},{"../../array/sort.js":29,"../fetch/color.js":58,"../fetch/text.js":61,"../fetch/value.js":62,"./nest.js":55}],57:[function(require,module,exports){
+},{"../../array/sort.js":29,"../fetch/text.js":61,"../fetch/value.js":62,"./nest.js":55}],57:[function(require,module,exports){
 // Determines visible time markers and formatting
 (function() {
   var sizes;

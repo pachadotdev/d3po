@@ -18018,7 +18018,7 @@ module.exports = function(elem, vars) {
     events = require('../../../../client/pointer.js');
     ie = require('../../../../client/ie.js');
     return elem
-      .on(events.over, function(d, i) {
+      .on(events.over, function(d){
         vars.self.hover(d[vars.id.value]);
         if (ie || !vars.draw.timing) {
           return d3
@@ -18034,7 +18034,7 @@ module.exports = function(elem, vars) {
             .call(color, vars);
         }
       })
-      .on(events.out, function(d) {
+      .on(events.out, function() {
         vars.self.hover(false);
         if (ie || !vars.draw.timing) {
           return d3

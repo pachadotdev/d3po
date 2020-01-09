@@ -32818,7 +32818,7 @@ arguments[4][120][0].apply(exports,arguments)
       d3.select(window).on(
         'resize.' + vars.container.id,
         (function(_this) {
-          return function(e) {
+          return function() {
             clearTimeout(resize);
             return (resize = setTimeout(resizeEnd, _this.timeout));
           };

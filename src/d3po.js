@@ -37323,11 +37323,12 @@ var network = function(vars) {
   }
   if (typeof val_range[0] == 'undefined') val_range = [1, 1];
 
+  var max_size ,min_size ;
   if (typeof vars.size.value === 'number') {
-    var max_size = vars.size.value;
-    var min_size = vars.size.value;
+    max_size = vars.size.value;
+    min_size = vars.size.value;
   } else {
-    var max_size = smallestGap(nodes, {
+    max_size = smallestGap(nodes, {
       accessor: function(n) {
         return [n.x, n.y];
       }
@@ -37343,7 +37344,7 @@ var network = function(vars) {
     }
 
     if (val_range[0] === val_range[1]) {
-      var min_size = limit;
+      min_size = limit;
       max_size = limit;
     } else {
       var width = x_range[1] + max_size * 1.1 - (x_range[0] - max_size * 1.1),
@@ -37351,12 +37352,13 @@ var network = function(vars) {
         aspect = width / height,
         app = vars.width.viz / vars.height.viz;
 
+      var scale;
       if (app > aspect) {
-        var scale = vars.height.viz / height;
+        scale = vars.height.viz / height;
       } else {
-        var scale = vars.width.viz / width;
+        scale = vars.width.viz / width;
       }
-      var min_size = max_size * 0.25;
+      min_size = max_size * 0.25;
       if (min_size * scale < 2) {
         min_size = 2 / scale;
       }
@@ -37405,7 +37407,7 @@ var network = function(vars) {
     return b.d3po.r - a.d3po.r;
   });
 
-  edges.forEach(function(l, i) {
+  edges.forEach(function(l) {
     if (l.d3po) {
       delete l.d3po.spline;
     }

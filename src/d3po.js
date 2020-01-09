@@ -28259,7 +28259,6 @@ module.exports = function(params) {
     d = params.data,
     dataDepth =
       'd3po' in d && 'depth' in d.d3po ? d.d3po.depth : vars.depth.value,
-    ex = params.ex,
     mouse = params.mouseevents ? params.mouseevents : false,
     arrow = 'arrow' in params ? params.arrow : true,
     id = fetchValue(vars, d, vars.id.value),
@@ -28272,22 +28271,20 @@ module.exports = function(params) {
     !('fullscreen' in params)
   ) {
     var fullscreen = true,
-      arrow = false,
-      mouse = true,
       length = 'long',
       footer = vars.footer.value;
 
+    arrow = false,
+    mouse = true,
+
     vars.covered = true;
   } else {
-    var fullscreen = false,
+    var
       align = params.anchor || vars.tooltip.anchor,
-      length = params.length || 'short',
       zoom = zoomDirection(d, vars);
+    fullscreen = false;
+    length = params.length || 'short';
 
-    if (zoom === -1) {
-      var key = vars.id.nesting[dataDepth - 1],
-        parent = fetchValue(vars, id, key);
-    }
 
     var text = '';
     if (
@@ -28297,27 +28294,27 @@ module.exports = function(params) {
       )
     ) {
       if (zoom === 1 && vars.zoom.value) {
-        var text = vars.format.value(vars.format.locale.value.ui.expand);
+        text = vars.format.value(vars.format.locale.value.ui.expand);
       } else if (
         zoom === -1 &&
         vars.zoom.value &&
         vars.history.states.length &&
         !vars.tooltip.value.long
       ) {
-        var text = vars.format.value(vars.format.locale.value.ui.collapse);
+        text = vars.format.value(vars.format.locale.value.ui.collapse);
       } else if (
         !vars.small &&
         length == 'short' &&
         (vars.tooltip.html.value || vars.tooltip.value.long) &&
         (vars.focus.value.length !== 1 || vars.focus.value[0] != id)
       ) {
-        var text = vars.format.locale.value.ui.moreInfo;
+        text = vars.format.locale.value.ui.moreInfo;
       } else if (length == 'long') {
-        var text = vars.footer.value || '';
+        text = vars.footer.value || '';
       }
     }
 
-    var footer = text.length
+    footer = text.length
       ? vars.format.value(text, {
         key: 'footer',
         vars: vars
@@ -28325,10 +28322,11 @@ module.exports = function(params) {
       : false;
   }
 
+  var x ,y, offset;
   if ('x' in params) {
-    var x = params.x;
+    x = params.x;
   } else if (vars.types[vars.type.value].tooltip === 'static') {
-    var x = d.d3po.x;
+    x = d.d3po.x;
     if (vars.zoom.translate && vars.zoom.scale) {
       x = vars.zoom.translate[0] + x * vars.zoom.scale;
     }
@@ -28339,13 +28337,13 @@ module.exports = function(params) {
       x += parseFloat(vars.container.value.style('padding-left'), 10);
     }
   } else {
-    var x = d3.mouse(d3.select('html').node())[0];
+    x = d3.mouse(d3.select('html').node())[0];
   }
 
   if ('y' in params) {
-    var y = params.y;
+    y = params.y;
   } else if (vars.types[vars.type.value].tooltip == 'static') {
-    var y = d.d3po.y;
+    y = d.d3po.y;
     if (vars.zoom.translate && vars.zoom.scale) {
       y = vars.zoom.translate[1] + y * vars.zoom.scale;
     }
@@ -28356,18 +28354,18 @@ module.exports = function(params) {
       y += parseFloat(vars.container.value.style('padding-top'), 10);
     }
   } else {
-    var y = d3.mouse(d3.select('html').node())[1];
+    y = d3.mouse(d3.select('html').node())[1];
   }
 
   if ('offset' in params) {
-    var offset = params.offset;
+    offset = params.offset;
   } else if (vars.types[vars.type.value].tooltip == 'static') {
-    var offset = d.d3po.r ? d.d3po.r : d.d3po.height / 2;
+    offset = d.d3po.r ? d.d3po.r : d.d3po.height / 2;
     if (vars.zoom.scale) {
       offset = offset * vars.zoom.scale;
     }
   } else {
-    var offset = 3;
+    offset = 3;
   }
 
   function make_tooltip(html) {
@@ -28410,8 +28408,7 @@ module.exports = function(params) {
       var limit =
           length === 'short' ? maxChildrenShownInShortMode : vars.data.large,
         listLength = nameList.length,
-        max = d3.min([listLength, limit]),
-        objs = [];
+        max = d3.min([listLength, limit]);
 
       children = {
         values: []
@@ -28534,8 +28531,8 @@ module.exports = function(params) {
       });
     }
 
-    var depth = 'depth' in params ? params.depth : dataDepth,
-      title = params.title || fetchText(vars, d, depth)[0],
+    depth = 'depth' in params ? params.depth : dataDepth;
+    var title = params.title || fetchText(vars, d, depth)[0],
       icon = uniques(
         d,
         vars.icon.value,
@@ -28568,7 +28565,7 @@ module.exports = function(params) {
         });
       }
 
-      var depth =
+      depth =
         'd3po' in d && 'merged' in d.d3po
           ? dataDepth - 1
           : 'depth' in params
@@ -28585,9 +28582,9 @@ module.exports = function(params) {
         typeof vars.icon.style.value == 'object' &&
         vars.icon.style.value[depth]
       ) {
-        var icon_style = vars.icon.style.value[depth];
+        icon_style = vars.icon.style.value[depth];
       } else {
-        var icon_style = 'default';
+        icon_style = 'default';
       }
 
       var width = vars.tooltip.small;

@@ -15,11 +15,12 @@ module.exports = {
       value = this.value;
     }
 
+    var str;
     if (vars.container.value === false) {
-      var str = vars.format.locale.value.dev.setContainer;
+      str = vars.format.locale.value.dev.setContainer;
       print.warning(str, 'container');
     } else if (vars.container.value.empty()) {
-      var str = vars.format.locale.value.dev.noContainer;
+      str = vars.format.locale.value.dev.noContainer;
       var selector = vars.container.selector || '';
       print.warning(stringFormat(str, '"' + selector + '"'), 'container');
     } else {

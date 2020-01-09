@@ -220,7 +220,6 @@
 
   d3po.viz = require('./viz/viz.js');
 
-
   if (typeof window !== 'undefined') {
     window.d3po = d3po;
   }

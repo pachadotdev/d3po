@@ -19558,7 +19558,6 @@ module.exports = function(vars) {
       area,
       aspectRatioStep,
       aspectRatios,
-      bBox,
       boxHeight,
       boxWidth,
       centroid,
@@ -19728,12 +19727,6 @@ module.exports = function(vars) {
     })),
     (miny = ref3[0]),
     (maxy = ref3[1]);
-    bBox = [
-      [minx, miny],
-      [maxx, miny],
-      [maxx, maxy],
-      [minx, maxy]
-    ];
     (ref4 = [maxx - minx, maxy - miny]),
     (boxWidth = ref4[0]),
     (boxHeight = ref4[1]);
@@ -20464,7 +20457,6 @@ module.exports = function(vars) {
    */
 
   d3po.viz = require('./viz/viz.js');
-
 
   if (typeof window !== 'undefined') {
     window.d3po = d3po;

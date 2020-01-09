@@ -24,7 +24,6 @@
       area,
       aspectRatioStep,
       aspectRatios,
-      bBox,
       boxHeight,
       boxWidth,
       centroid,
@@ -194,12 +193,6 @@
     })),
     (miny = ref3[0]),
     (maxy = ref3[1]);
-    bBox = [
-      [minx, miny],
-      [maxx, miny],
-      [maxx, maxy],
-      [minx, maxy]
-    ];
     (ref4 = [maxx - minx, maxy - miny]),
     (boxWidth = ref4[0]),
     (boxHeight = ref4[1]);

@@ -37154,9 +37154,6 @@ module.exports = {
         );
       })
       .out(function(d, y0, y) {
-        var negative, value;
-        value = fetchValue(vars, d, vars[stacked].value);
-        negative = value < 0;
         if (scale === 'share') {
           d.d3po[stacked + '0'] = (1 - y0) * flip;
           d.d3po[stacked] = d.d3po[stacked + '0'] - y * flip;

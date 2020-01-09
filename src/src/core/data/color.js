@@ -7,10 +7,11 @@ var buckets = require('../../util/buckets.js'),
 module.exports = function(vars) {
   if (vars.dev.value) print.time('getting color data range');
 
+  var data_range;
   if (vars.color.domain.value) {
-    var data_range = vars.color.domain.value;
+    data_range = vars.color.domain.value;
   } else {
-    var data_range = [];
+    data_range = [];
     vars.data.pool.forEach(function(d) {
       var val = parseFloat(fetchValue(vars, d, vars.color.value));
       if (typeof val == 'number' && !isNaN(val) && data_range.indexOf(val) < 0)
@@ -21,23 +22,22 @@ module.exports = function(vars) {
   if (vars.dev.value) print.timeEnd('getting color data range');
 
   if (data_range.length > 1) {
-    var data_domain = null;
-
     if (vars.dev.value) print.time('calculating color scale');
 
     data_range = d3.extent(data_range);
 
+    var color_range;
     if (data_range[0] < 0 && data_range[1] > 0) {
-      var color_range = vars.color.range;
+      color_range = vars.color.range;
       if (color_range.length == 3) {
         data_range.push(data_range[1]);
         data_range[1] = 0;
       }
     } else if (data_range[1] > 0 && data_range[0] >= 0) {
-      var color_range = vars.color.heatmap;
+      color_range = vars.color.heatmap;
       data_range = buckets(data_range, color_range.length);
     } else {
-      var color_range = vars.color.range.slice(0);
+      color_range = vars.color.range.slice(0);
       if (data_range[0] < 0) {
         color_range.pop();
       } else {

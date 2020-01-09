@@ -8,8 +8,7 @@
   normalize = require('./normalize.js');
 
   module.exports = function(edges, options) {
-    var Q,
-      a,
+    var a,
       b,
       cid,
       commSize,
@@ -17,7 +16,6 @@
       communities,
       community,
       deltaQ,
-      distance,
       edge,
       endpoint,
       events,
@@ -50,11 +48,10 @@
         return null;
       }
     }
-    (distance = options.distance),
-    (nodeid = options.nodeid),
-    (startpoint = options.startpoint),
-    (endpoint = options.endpoint),
-    (nodes = options.nodes);
+    nodeid = options.nodeid;
+    startpoint = options.startpoint;
+    endpoint = options.endpoint;
+    nodes = options.nodes;
     nodesMap = {};
     for (id in nodes) {
       nodesMap[id] = {
@@ -83,7 +80,6 @@
       }
     }
     communities = {};
-    Q = 0;
     for (id in nodesMap) {
       node = nodesMap[id];
       communities[id] = {
@@ -151,7 +147,6 @@
       }
       delete communities[maxa];
       delete linksMap[maxa];
-      Q += deltaQ;
       iter++;
     }
     commSizes = (function() {

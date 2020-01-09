@@ -15114,7 +15114,7 @@ module.exports = {
     return results;
   };
 
-  initialize = function(vars, obj, method, p) {
+  initialize = function(vars, obj, method) {
     var o;
     obj.previous = false;
     obj.changed = false;

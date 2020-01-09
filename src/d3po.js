@@ -16906,17 +16906,13 @@ module.exports = function() {
 
 },{"../array/sort.js":29,"../client/ie.js":32,"../core/console/print.js":47,"../core/data/format.js":51,"../core/data/keys.js":53,"../core/data/load.js":54,"../core/fetch/data.js":59,"../core/methods/attach.js":77,"../core/methods/reset.js":90,"./methods/active.js":102,"./methods/alt.js":103,"./methods/color.js":104,"./methods/config.js":105,"./methods/container.js":106,"./methods/data.js":107,"./methods/depth.js":108,"./methods/dev.js":109,"./methods/draw.js":110,"./methods/focus.js":111,"./methods/font.js":112,"./methods/format.js":113,"./methods/height.js":114,"./methods/history.js":115,"./methods/hover.js":116,"./methods/icon.js":117,"./methods/id.js":118,"./methods/keywords.js":119,"./methods/margin.js":120,"./methods/open.js":121,"./methods/order.js":122,"./methods/remove.js":123,"./methods/search.js":124,"./methods/select.js":125,"./methods/selectall.js":126,"./methods/text.js":127,"./methods/timing.js":128,"./methods/title.js":129,"./methods/type.js":130,"./methods/ui.js":131,"./methods/width.js":132,"./types/auto.js":133,"./types/button/button.js":134,"./types/drop/drop.js":139,"./types/toggle.js":156}],102:[function(require,module,exports){
 (function() {
-  var filter;
-
-  filter = require('../../core/methods/filter.js');
-
   module.exports = {
     accepted: [false, Array, Function, Number, String],
     value: false
   };
 }.call(this));
 
-},{"../../core/methods/filter.js":78}],103:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 (function() {
   var filter;
 

@@ -32,19 +32,20 @@ module.exports = function(vars) {
     }
   });
 
+  var str, app, and;
   if (missing.length > 1) {
-    var str = vars.format.locale.value.error.methods,
-      app =
-        vars.format.locale.value.visualization[vars.type.value] ||
-        vars.type.value,
-      and = vars.format.locale.value.ui.and;
+    str = vars.format.locale.value.error.methods;
+    app =
+      vars.format.locale.value.visualization[vars.type.value] ||
+      vars.type.value;
+    and = vars.format.locale.value.ui.and;
     missing = stringList(missing, and);
     vars.error.internal = stringFormat(str, app, missing);
   } else if (missing.length === 1) {
-    var str = vars.format.locale.value.error.method,
-      app =
-        vars.format.locale.value.visualization[vars.type.value] ||
-        vars.type.value;
+    str = vars.format.locale.value.error.method,
+    app =
+      vars.format.locale.value.visualization[vars.type.value] ||
+      vars.type.value;
     vars.error.internal = stringFormat(str, app, missing[0]);
   }
 
@@ -61,8 +62,8 @@ module.exports = function(vars) {
       vars.id.value
     );
     if (connections.length == 0) {
-      var name = fetchText(vars, vars.focus.value[0], vars.depth.value),
-        str = vars.format.locale.value.error.connections;
+      var name = fetchText(vars, vars.focus.value[0], vars.depth.value);
+      str = vars.format.locale.value.error.connections;
       vars.error.internal = stringFormat(str, '"' + name + '"');
     }
   }
@@ -70,24 +71,24 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Check to see if we have all required libraries
   //----------------------------------------------------------------------------
-  var reqs = ['d3'];
+  reqs = ['d3'];
   if (vars.types[vars.type.value].libs) {
     reqs = reqs.concat(vars.types[vars.type.value].libs);
   }
-  var missing = [];
+  missing = [];
   reqs.forEach(function(r) {
     if (!window[r]) missing.push('"' + r + '"');
   });
 
   if (missing.length > 1) {
-    var str = vars.format.locale.value.error.libs,
-      app = vars.format.locale.value.visualization[vars.type.value],
-      and = vars.format.locale.value.ui.and;
+    str = vars.format.locale.value.error.libs;
+    app = vars.format.locale.value.visualization[vars.type.value];
+    and = vars.format.locale.value.ui.and;
     missing = stringList(missing, and);
     vars.error.internal = stringFormat(str, app, missing);
   } else if (missing.length === 1) {
-    var str = vars.format.locale.value.error.lib,
-      app = vars.format.locale.value.visualization[vars.type.value];
+    str = vars.format.locale.value.error.lib;
+    app = vars.format.locale.value.visualization[vars.type.value];
     vars.error.internal = stringFormat(str, app, missing[0]);
   }
 

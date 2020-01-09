@@ -24,7 +24,7 @@
 
   labels = {};
 
-  module.exports = function(vars, selection, enter, exit) {
+  module.exports = function(vars, selection, enter) {
     var projection, size_change;
     projection = d3.geo[vars.coords.projection.value]();
     if (projection.center) {
@@ -104,10 +104,7 @@
           areaM = 0;
           largest = copy(d);
           reduced = copy(d);
-          d.geometry.coordinates = d.geometry.coordinates.filter(function(
-            c,
-            i
-          ) {
+          d.geometry.coordinates = d.geometry.coordinates.filter(function(c) {
             var a;
             reduced.geometry.coordinates = [c];
             a = vars.path.area(reduced);

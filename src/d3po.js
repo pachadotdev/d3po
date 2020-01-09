@@ -19287,8 +19287,7 @@ var copy = require('../../../../util/copy.js'),
 // longest entry in the list.
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
-  var data = [],
-    buffer = 0;
+  var data = [];
   for (var level in vars.data.nested.all) {
     var newData = vars.data.nested.all[level],
       key =
@@ -19352,7 +19351,7 @@ module.exports = function(vars) {
     var w = [];
     button
       .selectAll('div.d3po_node')
-      .each(function(o) {
+      .each(function() {
         w.push(this.offsetWidth + 1);
       })
       .remove();

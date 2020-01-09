@@ -29333,7 +29333,6 @@ var arraySort = require('../../../array/sort.js'),
   scroll = require('../../../client/scroll.js'),
   stringStrip = require('../../../string/strip.js'),
   textWrap = require('../../../textwrap/textwrap.js'),
-  touch = require('../../../client/touch.js'),
   validObject = require('../../../object/validate.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
@@ -29424,7 +29423,7 @@ module.exports = function(vars) {
       if (square_size instanceof Array) {
         if (vars.dev.value) print.time('calculating legend size');
 
-        for (var i = square_size[1]; i >= square_size[0]; i--) {
+        for (i = square_size[1]; i >= square_size[0]; i--) {
           key_width = i * colors.length + vars.ui.padding * (colors.length + 1);
           if (available_width >= key_width) {
             square_size = i;
@@ -29569,7 +29568,7 @@ module.exports = function(vars) {
                   .attr('xlink:href', icon)
                   .attr('width', square_size)
                   .attr('height', square_size)
-                  .each(function(d) {
+                  .each(function() {
                     if (
                       icon.indexOf('/') === 0 ||
                       icon.indexOf(window.location.hostname) >= 0
@@ -29614,7 +29613,7 @@ module.exports = function(vars) {
                       .attr('fill', textColor(color))
                       .attr('x', 0)
                       .attr('y', 0)
-                      .each(function(t) {
+                      .each(function() {
                         textWrap()
                           .align('middle')
                           .container(d3.select(this))
@@ -29678,7 +29677,7 @@ module.exports = function(vars) {
 
         if (vars.legend.tooltip.value) {
           keys
-            .on(events.over, function(d, i) {
+            .on(events.over, function(d) {
               d3.select(this).style('cursor', 'pointer');
 
               var bounds = this.getBoundingClientRect(),
@@ -29790,7 +29789,7 @@ module.exports = function(vars) {
                 offset: square_size * 0.4
               });
             })
-            .on(events.out, function(d) {
+            .on(events.out, function() {
               removeTooltip(vars.type.value);
             });
         }
@@ -29807,8 +29806,8 @@ module.exports = function(vars) {
         .attr('opacity', 0)
         .remove();
 
-      var values = vars.color.valueScale.domain(),
-        colors = vars.color.valueScale.range();
+      var values = vars.color.valueScale.domain();
+      colors = vars.color.valueScale.range();
 
       if (values.length <= 2) {
         values = buckets(values, 6);
@@ -29859,7 +29858,7 @@ module.exports = function(vars) {
         .enter()
         .append('rect')
         .attr('id', 'gradient')
-        .attr('x', function(d) {
+        .attr('x', function() {
           if (vars.legend.align == 'middle') {
             return vars.width.value / 2;
           } else if (vars.legend.align == 'end') {
@@ -29884,7 +29883,7 @@ module.exports = function(vars) {
         .append('text')
         .attr('class', 'd3po_tick')
         .attr('stroke', 'none')
-        .attr('x', function(d) {
+        .attr('x', function() {
           if (vars.legend.align == 'middle') {
             return vars.width.value / 2;
           } else if (vars.legend.align == 'end') {
@@ -29893,7 +29892,7 @@ module.exports = function(vars) {
             return 0;
           }
         })
-        .attr('y', function(d) {
+        .attr('y', function() {
           return (
             this.getBBox().height +
             vars.legend.gradient.height +
@@ -29916,21 +29915,21 @@ module.exports = function(vars) {
             vars: vars
           });
         })
-        .attr('y', function(d) {
+        .attr('y', function() {
           return (
             this.getBBox().height +
             vars.legend.gradient.height +
             vars.ui.padding * 2
           );
         })
-        .each(function(d) {
+        .each(function() {
           var w = Math.ceil(this.getBBox().width);
           if (w > label_width) label_width = w;
         });
 
       label_width += vars.labels.padding * 2;
 
-      var key_width = label_width * (values.length - 1);
+      key_width = label_width * (values.length - 1);
 
       if (key_width + label_width < vars.width.value) {
         if (key_width + label_width < vars.width.value / 2) {
@@ -29939,7 +29938,6 @@ module.exports = function(vars) {
           key_width -= label_width;
         }
 
-        var start_x;
         if (vars.legend.align == 'start') {
           start_x = vars.ui.padding;
         } else if (vars.legend.align == 'end') {
@@ -29970,7 +29968,7 @@ module.exports = function(vars) {
           .enter()
           .append('rect')
           .attr('class', 'd3po_tick')
-          .attr('x', function(d) {
+          .attr('x', function() {
             if (vars.legend.align == 'middle') {
               return vars.width.value / 2;
             } else if (vars.legend.align == 'end') {
@@ -30006,7 +30004,7 @@ module.exports = function(vars) {
         gradient
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function(d) {
+          .attr('x', function() {
             if (vars.legend.align == 'middle') {
               return vars.width.value / 2 - key_width / 2;
             } else if (vars.legend.align == 'end') {
@@ -30034,14 +30032,14 @@ module.exports = function(vars) {
   } else {
     key_display = false;
   }
-  if (vars.legend.value && key && key_display) {
+  if (vars.legend.value && key_display) {
     if (vars.dev.value) print.time('positioning legend');
 
     if (square_size) {
       var key_height = square_size + vars.ui.padding;
     } else {
-      var key_box = vars.g.legend.node().getBBox(),
-        key_height = key_box.height + key_box.y;
+      var key_box = vars.g.legend.node().getBBox();
+      key_height = key_box.height + key_box.y;
     }
 
     if (vars.margin.bottom === 0) {
@@ -30070,7 +30068,7 @@ module.exports = function(vars) {
   }
 };
 
-},{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../textwrap/textwrap.js":197,"../../../tooltip/remove.js":200,"../../../util/buckets.js":201,"../../../util/copy.js":204,"../../../util/dataurl.js":206,"../../../util/uniques.js":207,"../tooltip/create.js":232}],238:[function(require,module,exports){
+},{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../textwrap/textwrap.js":197,"../../../tooltip/remove.js":200,"../../../util/buckets.js":201,"../../../util/copy.js":204,"../../../util/dataurl.js":206,"../../../util/uniques.js":207,"../tooltip/create.js":232}],238:[function(require,module,exports){
 var textColor = require('../../../color/text.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

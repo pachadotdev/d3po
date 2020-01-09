@@ -4,7 +4,7 @@ module.exports = {
     accepted: [Boolean],
     value: true
   },
-  process: function(value, vars) {
+  process: function(value) {
     if (typeof value === 'string') value = [value];
     return value;
   },

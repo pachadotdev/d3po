@@ -1,6 +1,6 @@
 // Creates "back" button, if applicable
 (function() {
-  var events, lighter, print, stylesheet;
+  var events, lighter, print;
 
   events = require('../../../client/pointer.js');
 
@@ -8,13 +8,10 @@
 
   print = require('../../../core/console/print.js');
 
-  stylesheet = require('../../../client/css.js');
-
   module.exports = function(vars) {
     var button,
       color,
       containerPadding,
-      enter,
       family,
       left,
       min_height,
@@ -93,25 +90,6 @@
           .style('font-weight', weight)
           .style('font-size', size + 'px');
       };
-      enter = button
-        .enter()
-        .append('div')
-        .attr('id', 'd3po_back_button')
-        .style('opacity', 0)
-        .call(style)
-        .html(function() {
-          var arrow;
-          if (
-            stylesheet('font-awesome') &&
-            vars.icon.back.value.indexOf('fa-') === 0
-          ) {
-            arrow = '<i class=\'fa ' + vars.icon.back.value;
-            arrow += '\' style=\'margin-top:2px;margin-right:4px;\'></i>';
-          } else {
-            arrow = vars.icon.back.value + ' ';
-          }
-          return arrow + vars.format.value(vars.format.locale.value.ui.back);
-        });
       button
         .on(events.over, function() {
           if (!vars.small && vars.history.states.length > 0) {

@@ -74,10 +74,11 @@ module.exports = function(vars) {
       .attr('marker-start', function(e) {
         var direction = vars.edges.arrows.direction.value;
 
+        var d;
         if ('bucket' in e.d3po) {
-          var d = '_' + e.d3po.bucket;
+          d = '_' + e.d3po.bucket;
         } else {
-          var d = '';
+          d = '';
         }
 
         return direction == 'source' && marker
@@ -87,10 +88,11 @@ module.exports = function(vars) {
       .attr('marker-end', function(e) {
         var direction = vars.edges.arrows.direction.value;
 
+        var d;
         if ('bucket' in e.d3po) {
-          var d = '_' + e.d3po.bucket;
+          d = '_' + e.d3po.bucket;
         } else {
-          var d = '';
+          d = '';
         }
 
         return direction == 'target' && marker
@@ -156,13 +158,11 @@ module.exports = function(vars) {
           next = this.getPointAtLength(length / 2 + length * 0.1),
           radians = Math.atan2(next.y - prev.y, next.x - prev.x),
           angle = radians * (180 / Math.PI),
-          bounding = this.parentNode.getBBox(),
           width = length * 0.8,
           x = center.x,
           y = center.y;
       } else {
-        var bounds = this.getBBox(),
-          source = d[vars.edges.source],
+        var source = d[vars.edges.source],
           target = d[vars.edges.target],
           start = {
             x: source.d3po.edges[target[vars.id.value]].x,
@@ -173,17 +173,17 @@ module.exports = function(vars) {
             y: target.d3po.edges[source[vars.id.value]].y
           },
           xdiff = end.x - start.x,
-          ydiff = end.y - start.y,
-          center = {
-            x: end.x - xdiff / 2,
-            y: end.y - ydiff / 2
-          },
-          radians = Math.atan2(ydiff, xdiff),
-          angle = radians * (180 / Math.PI),
-          length = Math.sqrt(xdiff * xdiff + ydiff * ydiff),
-          width = length,
-          x = center.x,
-          y = center.y;
+          ydiff = end.y - start.y;
+        center = {
+          x: end.x - xdiff / 2,
+          y: end.y - ydiff / 2
+        };
+        radians = Math.atan2(ydiff, xdiff);
+        angle = radians * (180 / Math.PI);
+        length = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+        width = length;
+        x = center.x;
+        y = center.y;
       }
 
       width += vars.labels.padding * 2;
@@ -253,7 +253,7 @@ module.exports = function(vars) {
     var m =
       typeof vars.edges.arrows.value === 'number' ? vars.edges.arrows.value : 8;
 
-    var markerSize =
+    markerSize =
       typeof vars.edges.size.value === 'number' ? vars.edges.size.value / m : m;
   }
 
@@ -266,11 +266,12 @@ module.exports = function(vars) {
       .attr('d', function(id) {
         var depth = id.split('_');
 
+        var m;
         if (depth.length == 2 && vars.edges.scale) {
           depth = parseInt(depth[1]);
-          var m = markerSize[depth];
+          m = markerSize[depth];
         } else {
-          var m = markerSize;
+          m = markerSize;
         }
 
         if (vars.edges.arrows.direction.value == 'target') {
@@ -376,14 +377,15 @@ module.exports = function(vars) {
       l[vars.edges.target][vars.id.value];
 
     if (l.d3po.spline !== true) {
+      var marker;
       if (strokeBuckets) {
         var size = l[vars.edges.size.value];
         l.d3po.bucket =
           size < strokeBuckets[1] ? 0 : size < strokeBuckets[2] ? 1 : 2;
-        var marker = (markerSize[l.d3po.bucket] * 0.85) / scale;
+        marker = (markerSize[l.d3po.bucket] * 0.85) / scale;
       } else {
         delete l.d3po.bucket;
-        var marker = (markerSize * 0.85) / scale;
+        marker = (markerSize * 0.85) / scale;
       }
 
       var source = l[vars.edges.source],
@@ -436,14 +438,15 @@ module.exports = function(vars) {
 
   var spline_data = edges.filter(function(l) {
     if (l.d3po.spline) {
+      var marker;
       if (strokeBuckets) {
         var size = l[vars.edges.size.value];
         l.d3po.bucket =
           size < strokeBuckets[1] ? 0 : size < strokeBuckets[2] ? 1 : 2;
-        var marker = (markerSize[l.d3po.bucket] * 0.85) / scale;
+        marker = (markerSize[l.d3po.bucket] * 0.85) / scale;
       } else {
         delete l.d3po.bucket;
-        var marker = (markerSize * 0.85) / scale;
+        marker = (markerSize * 0.85) / scale;
       }
 
       var source = l[vars.edges.source],

@@ -9,7 +9,9 @@ module.exports = {
     'Atomics': 'readonly',
     'SharedArrayBuffer': 'readonly',
     'd3': 'readonly',
-    'topojson': 'readonly'
+    'd3po': 'readonly',
+    'topojson': 'readonly',
+    'DocumentTouch': 'readonly'
   },
   'parserOptions': {
     'ecmaVersion': 2018

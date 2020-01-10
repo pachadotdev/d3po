@@ -60,7 +60,7 @@ module.exports = function(vars) {
 
     var getDiff = function(start, end, i) {
       if (!vars.data.time.stepDivider) {
-        arr = conversions.slice(0, i);
+        var arr = conversions.slice(0, i);
         if (arr.length) {
           vars.data.time.stepDivider = arr.reduce(function(a, b) {
             return a * b;
@@ -129,7 +129,7 @@ module.exports = function(vars) {
         function(d) {
           return d.getMonth();
         },
-        function(d) {
+        function() {
           return true;
         }
       ];
@@ -197,7 +197,7 @@ module.exports = function(vars) {
         .locale(locale.format)
         .timeFormat(getFormat(stepType, totalType));
       if (multi.length > 1) {
-        multi[multi.length - 1][1] = function(d) {
+        multi[multi.length - 1][1] = function() {
           return true;
         };
         vars.data.time.multiFormat = d3

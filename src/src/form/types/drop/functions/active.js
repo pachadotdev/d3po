@@ -2,8 +2,8 @@
 // Checks to see if a given variable is allowed to be selected.
 //------------------------------------------------------------------------------
 module.exports = function(vars, value, active) {
-  var ret = [],
-    active = active || vars.active.value;
+  var ret = [];
+  active = active || vars.active.value;
 
   if (active instanceof Array) {
     for (var i = 0; i < active.length; i++) {

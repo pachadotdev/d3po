@@ -3,9 +3,7 @@
  */
 
 (function() {
-  var d3po, message, stylesheet;
-
-  d3po = {};
+  var d3po = {};
 
   /**
    * The current version of **d3po** you are using. Returns a string in
@@ -221,10 +219,6 @@
    */
 
   d3po.viz = require('./viz/viz.js');
-
-  stylesheet = require('./client/css.js');
-
-  message = require('./core/console/print.js');
 
   if (typeof window !== 'undefined') {
     window.d3po = d3po;

@@ -1,11 +1,9 @@
 (function() {
-  var fetchValue, graph, print, scatter, sort, ticks;
+  var fetchValue, graph, scatter, sort, ticks;
 
   fetchValue = require('../../core/fetch/value.js');
 
   graph = require('./helpers/graph/draw.js');
-
-  print = require('../../core/console/print.js');
 
   sort = require('../../array/sort.js');
 

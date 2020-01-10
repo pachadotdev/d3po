@@ -22,7 +22,6 @@
       m,
       point,
       prevBIC,
-      q,
       ref,
       ref1,
       residual,
@@ -80,9 +79,9 @@
           var m, ref1, results;
           results = [];
           for (
-            q = m = 0, ref1 = N;
+            m = 0, ref1 = N;
             0 <= ref1 ? m < ref1 : m > ref1;
-            q = 0 <= ref1 ? ++m : --m
+            0 <= ref1 ? ++m : --m
           ) {
             results.push(1);
           }

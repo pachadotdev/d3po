@@ -1,5 +1,4 @@
-var events = require('../../../client/pointer.js'),
-  textColor = require('../../../color/text.js');
+var textColor = require('../../../color/text.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates Centered Server Message
@@ -11,26 +10,27 @@ module.exports = function(vars, message) {
     vars.messages.style.value ||
     (message === vars.error.internal ? 'large' : vars.messages.style.backup);
 
+  var font, position;
   if (size === 'large') {
-    var font = vars.messages,
-      position = 'center';
+    font = vars.messages;
+    position = 'center';
   } else {
     if (vars.footer.value) {
-      var font = vars.footer;
+      font = vars.footer;
     } else if (vars.title.value) {
-      var font = vars.title;
+      font = vars.title;
     } else if (vars.title.sub.value) {
-      var font = vars.title.sub;
+      font = vars.title.sub;
     } else if (vars.title.total.value) {
-      var font = vars.title.total;
+      font = vars.title.total;
     } else {
-      var font = vars.title.sub;
+      font = vars.title.sub;
     }
 
-    var position = font.position;
+    position = font.position;
   }
 
-  var font = {
+  font = {
     color: font.font.color,
     'font-family': font.font.family.value,
     'font-weight': font.font.weight,
@@ -105,9 +105,6 @@ module.exports = function(vars, message) {
   vars.g.message
     .select('.d3po_message_text')
     .text(message ? message : vars.g.message.text());
-
-  var online = navigator.onLine,
-    square = 75;
 
   vars.g.message
     .style('display', message ? 'inline-block' : 'none')

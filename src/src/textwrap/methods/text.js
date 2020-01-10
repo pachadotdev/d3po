@@ -5,7 +5,7 @@
       accepted: [Boolean],
       value: false
     },
-    init: function(vars) {
+    init: function() {
       var s;
       s = this.split.value;
       this.split['break'] = new RegExp(

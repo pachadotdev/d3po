@@ -6,9 +6,9 @@
       text = vars.container.value.text();
       if (text) {
         if (text.indexOf('tspan') >= 0) {
-          text.replace(/\<\/tspan\>\<tspan\>/g, ' ');
-          text.replace(/\<\/tspan\>/g, '');
-          text.replace(/\<tspan\>/g, '');
+          text.replace(/<\/tspan><tspan>/g, ' ');
+          text.replace(/<\/tspan>/g, '');
+          text.replace(/<tspan>/g, '');
         }
         text = text.replace(/(\r\n|\n|\r)/gm, '');
         text = text.replace(/^\s+|\s+$/g, '');

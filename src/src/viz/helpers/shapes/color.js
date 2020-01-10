@@ -1,8 +1,6 @@
 // Returns the correct fill color for a node
 (function() {
-  var fetchColor, fetchValue, lighter, segments;
-
-  fetchValue = require('../../../core/fetch/value.js');
+  var fetchColor, lighter, segments;
 
   fetchColor = require('../../../core/fetch/color.js');
 

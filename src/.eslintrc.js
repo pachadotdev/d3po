@@ -8,7 +8,10 @@ module.exports = {
   'globals': {
     'Atomics': 'readonly',
     'SharedArrayBuffer': 'readonly',
-    'd3': 'readonly'
+    'd3': 'readonly',
+    'd3po': 'readonly',
+    'topojson': 'readonly',
+    'DocumentTouch': 'readonly'
   },
   'parserOptions': {
     'ecmaVersion': 2018
@@ -29,6 +32,7 @@ module.exports = {
     'semi': [
       'error',
       'always'
-    ]
+    ],
+    'no-inner-declarations': 'off'
   }
 };

@@ -7,7 +7,7 @@ var copy = require('../../../util/copy.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "line" shapes using svg:line
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
+module.exports = function(vars, selection) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // The D3 line function that determines what variables to use for x and y
   // positioning, as well as line interpolation defined by the user.
@@ -215,11 +215,11 @@ module.exports = function(vars, selection, enter, exit) {
     // Mouse "paths" Update
     //--------------------------------------------------------------------------
     mouse
-      .on(events.over, function(m) {
+      .on(events.over, function() {
         if (!vars.draw.frozen && vars.mouse.value && vars.mouse.over.value)
           mouseStyle(vars, this, stroke, 2);
       })
-      .on(events.out, function(d) {
+      .on(events.out, function() {
         if (!vars.draw.frozen && vars.mouse.value && vars.mouse.out.value)
           mouseStyle(vars, this, stroke, 0);
       });

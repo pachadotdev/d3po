@@ -2,7 +2,6 @@
   var closest,
     css,
     events,
-    fontSizes,
     mix,
     playInterval,
     prefix,
@@ -13,8 +12,6 @@
   closest = require('../../../util/closest.js');
 
   css = require('../../../client/css.js');
-
-  fontSizes = require('../../../font/sizes.js');
 
   events = require('../../../client/pointer.js');
 
@@ -493,7 +490,7 @@
       text
         .order()
         .attr(textStyle)
-        .text(function(d, i) {
+        .text(function(d) {
           if (visible.indexOf(+d) >= 0) {
             return timeFormat(d);
           } else {
@@ -508,7 +505,7 @@
           }
         })
         .attr('fill', textFill)
-        .attr('transform', function(d, i) {
+        .attr('transform', function(d) {
           var dx, dy;
           dx = start_x + x(d);
           if (!timelineOffset) {
@@ -617,7 +614,7 @@
           .attr('class', 'd3po_handle');
         handles
           .attr('fill', vars.timeline.handles.color)
-          .attr('transform', function(d) {
+          .attr('transform', function() {
             var mod;
             if (this.parentNode.className.baseVal === 'resize e') {
               mod = -vars.timeline.handles.size;

@@ -1,6 +1,6 @@
-var events = require('../../../client/pointer.js'),
-  ie = require('../../../client/ie.js'),
+var ie = require('../../../client/ie.js'),
   fetchValue = require('../../../core/fetch/value.js'),
+  events = require('../../../client/pointer.js'),
   print = require('../../../core/console/print.js'),
   uniqueValues = require('../../../util/uniques.js');
 
@@ -51,10 +51,11 @@ module.exports = function(vars) {
         .attr('marker-start', function(e) {
           var direction = vars.edges.arrows.direction.value;
 
+          var d;
           if ('bucket' in e.d3po) {
-            var d = '_' + e.d3po.bucket;
+            d = '_' + e.d3po.bucket;
           } else {
-            var d = '';
+            d = '';
           }
 
           return direction == 'source' && marker
@@ -64,10 +65,11 @@ module.exports = function(vars) {
         .attr('marker-end', function(e) {
           var direction = vars.edges.arrows.direction.value;
 
+          var d;
           if ('bucket' in e.d3po) {
-            var d = '_' + e.d3po.bucket;
+            d = '_' + e.d3po.bucket;
           } else {
-            var d = '';
+            d = '';
           }
 
           return direction == 'target' && marker
@@ -91,10 +93,10 @@ module.exports = function(vars) {
       x_buffer = [0],
       y_buffer = [0];
 
-    var groups = vars.g.data.selectAll('g').each(function(d) {
+    vars.g.data.selectAll('g').each(function(d) {
       if (focii.indexOf(d[vars.id.value]) >= 0) {
         var elem = vars.g.data_focus.node().appendChild(this.cloneNode(true));
-        var elem = d3
+        elem = d3
           .select(elem)
           .datum(d)
           .attr('opacity', 1);
@@ -121,7 +123,7 @@ module.exports = function(vars) {
           }
         }
 
-        for (e in events) {
+        for (var e in events) {
           var evt = d3.select(this).on(events[e]);
           if (evt) {
             elem.on(events[e], evt);

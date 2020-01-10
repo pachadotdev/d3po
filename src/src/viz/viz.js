@@ -1,5 +1,5 @@
 (function() {
-  var attach, axis, container, flash, getSteps, print, validObject;
+  var attach, axis, container, flash, getSteps, print;
 
   attach = require('../core/methods/attach.js');
 
@@ -12,8 +12,6 @@
   print = require('../core/console/print.js');
 
   container = require('./helpers/container.js');
-
-  validObject = require('../object/validate.js');
 
   module.exports = function() {
     var vars;

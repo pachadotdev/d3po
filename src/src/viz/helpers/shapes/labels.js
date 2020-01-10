@@ -1,9 +1,7 @@
-var copy = require('../../../util/copy.js'),
-  fetchText = require('../../../core/fetch/text.js'),
+var fetchText = require('../../../core/fetch/text.js'),
   fetchValue = require('../../../core/fetch/value.js'),
   mix = require('../../../color/mix.js'),
   print = require('../../../core/console/print.js'),
-  rtl = require('../../../client/rtl.js'),
   segments = require('./segments.js'),
   shapeColor = require('./color.js'),
   stringList = require('../../../string/list.js'),
@@ -47,8 +45,6 @@ module.exports = function(vars, group) {
   // Label Styling
   //----------------------------------------------------------------------------
   var style = function(text) {
-    var salign = vars.labels.valign.value === 'bottom' ? 'top' : 'bottom';
-
     text
       .attr('font-weight', vars.labels.font.weight)
       .attr('font-family', vars.labels.font.family.value)
@@ -66,10 +62,6 @@ module.exports = function(vars, group) {
         return mix(color, legible, 0.2, opacity);
       })
       .each(function(t) {
-        if (t.resize instanceof Array) {
-          var min = t.resize[0],
-            max = t.resize[1];
-        }
 
         var size = t.resize,
           resize = true;
@@ -182,11 +174,11 @@ module.exports = function(vars, group) {
         } else if (d && 'd3po' in d) {
           var active = segments(vars, d, 'active'),
             temp = segments(vars, d, 'temp'),
-            total = segments(vars, d, 'total'),
-            background =
-              (!temp && !active) ||
-              active >= total ||
-              (!active && temp >= total);
+            total = segments(vars, d, 'total');
+          background =
+            (!temp && !active) ||
+            active >= total ||
+            (!active && temp >= total);
         }
       }
 
@@ -316,8 +308,8 @@ module.exports = function(vars, group) {
                 bounds.y += parseFloat(y);
               }
             } else {
-              var background_data = [],
-                bounds = {};
+              background_data = [];
+              bounds = {};
             }
 
             var bg = group
@@ -422,7 +414,7 @@ module.exports = function(vars, group) {
     if (vars.dev.value) print.timeEnd(timerString);
   } else {
     if (vars.dev.value) {
-      var timerString = 'removing ' + group + ' labels';
+      timerString = 'removing ' + group + ' labels';
       print.time(timerString);
     }
 

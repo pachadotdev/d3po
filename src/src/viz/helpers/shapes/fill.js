@@ -1,12 +1,11 @@
 var copy = require('../../../util/copy.js'),
   fetchColor = require('../../../core/fetch/color.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
   segments = require('./segments.js'),
   shapeStyle = require('./style.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter, exit) {
+module.exports = function(vars, selection) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // The position and size of each rectangle on enter and exit.
   //----------------------------------------------------------------------------
@@ -50,7 +49,7 @@ module.exports = function(vars, selection, enter, exit) {
         var rounded = ['circle'].indexOf(vars.shape.value) >= 0;
         return rounded ? (h + mod) / 2 : 0;
       })
-      .attr('shape-rendering', function(d) {
+      .attr('shape-rendering', function() {
         if (['square'].indexOf(vars.shape.value) >= 0) {
           return vars.shape.rendering.value;
         } else {
@@ -81,7 +80,7 @@ module.exports = function(vars, selection, enter, exit) {
       }
 
       if (active && (active < total || temp)) {
-        var c = copy(d);
+        c = copy(d);
         c.d3po.shape = 'active';
         fill_data.push(c);
       }
@@ -194,8 +193,7 @@ module.exports = function(vars, selection, enter, exit) {
     fills
       .transition()
       .duration(vars.draw.timing)
-      .call(shapeStyle, vars)
-      .call(size);
+      .call(shapeStyle, vars);
 
     fills
       .enter()
@@ -205,17 +203,14 @@ module.exports = function(vars, selection, enter, exit) {
       .transition()
       .duration(0)
       .call(shapeStyle, vars)
-      .call(size, 0, undefined, 0)
       .transition()
       .duration(vars.draw.timing)
-      .call(size)
       .call(shapeStyle, vars);
 
     fills
       .exit()
       .transition()
       .duration(vars.draw.timing)
-      .call(size, 0, undefined, 0)
       .remove();
   });
 };

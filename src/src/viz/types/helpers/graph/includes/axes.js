@@ -183,7 +183,7 @@
     }
   };
 
-  axisRange = function(vars, axis, zero, buffer) {
+  axisRange = function(vars, axis, zero) {
     var agg,
       aggType,
       allNegative,

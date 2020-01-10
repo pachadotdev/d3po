@@ -1,9 +1,8 @@
 // Defines button color
 (function() {
   module.exports = function(elem, vars) {
-    var legible, lighter, textColor;
+    var legible, textColor;
     legible = require('../../../../color/legible.js');
-    lighter = require('../../../../color/lighter.js');
     textColor = require('../../../../color/text.js');
     return elem
       .style('background-color', function(d) {

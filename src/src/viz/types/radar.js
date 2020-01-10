@@ -1,21 +1,12 @@
 (function() {
   var buckets,
-    comparator,
-    dataThreshold,
     fetchText,
     fetchValue,
     fontSizes,
     offset,
     radar,
-    sort,
     textwrap,
     uniques;
-
-  comparator = require('../../array/comparator.js');
-
-  sort = require('../../array/sort.js');
-
-  dataThreshold = require('../../core/data/threshold.js');
 
   fetchText = require('../../core/fetch/text.js');
 
@@ -38,7 +29,6 @@
       angle,
       buffer,
       c,
-      center,
       children,
       d,
       data,
@@ -74,7 +64,6 @@
       radius,
       ref,
       ref1,
-      righty,
       ringData,
       ringStyle,
       rings,
@@ -82,10 +71,7 @@
       sizes,
       text,
       textStyle,
-      top,
-      total,
-      x,
-      y;
+      total;
     data = vars.data.viz;
     nextDepth = vars.depth.value + 1;
     nextLevel = vars.id.nesting[nextDepth];
@@ -269,25 +255,11 @@
         buffer = maxRadius + vars.labels.padding * 2;
         anchor = 'start';
       }
-      top = a2 < 0 || a2 > Math.PI;
-      righty = a2 < Math.PI / 2;
       ov = maxRadius;
       if (vars.labels.value) {
         ov += vars.labels.padding;
       }
       o = offset(a2, ov);
-      x = o.x;
-      y = o.y;
-      if (!righty) {
-        x -= labelWidth;
-      }
-      if (top) {
-        y -= labelHeight;
-      }
-      center = [0, Math.PI].indexOf(angle * labelIndex(l)) >= 0;
-      if (center) {
-        x -= labelWidth / 2;
-      }
       labelData.push({
         text: l,
         angle: a,
@@ -320,7 +292,7 @@
     labelStyle = function(label) {
       return label
         .attr(textStyle)
-        .each(function(l, i) {
+        .each(function(l) {
           return textwrap()
             .container(d3.select(this))
             .height(labelHeight)

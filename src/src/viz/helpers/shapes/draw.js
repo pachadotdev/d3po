@@ -8,7 +8,6 @@ var child = require('../../../util/child.js'),
   legible = require('../../../color/legible.js'),
   print = require('../../../core/console/print.js'),
   removeTooltip = require('../../../tooltip/remove.js'),
-  segments = require('./segments.js'),
   shapeFill = require('./fill.js'),
   stringStrip = require('../../../string/strip.js'),
   touch = require('../../../client/touch.js'),
@@ -164,12 +163,6 @@ module.exports = function(vars) {
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  // Initialize arrays for labels and sizes
-  //----------------------------------------------------------------------------
-  var labels = [],
-    shares = [];
-
-  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Create groups by shape, apply data, and call specific shape drawing class.
   //----------------------------------------------------------------------------
   for (var shape in shapes) {
@@ -204,15 +197,16 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Groups Exit
     //--------------------------------------------------------------------------
+    var exit;
     if (vars.draw.timing) {
-      var exit = selection
+      exit = selection
         .exit()
         .transition()
         .duration(vars.draw.timing)
         .attr('opacity', 0)
         .remove();
     } else {
-      var exit = selection.exit().remove();
+      exit = selection.exit().remove();
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -314,10 +308,11 @@ module.exports = function(vars) {
         .attr('marker-start', function(e) {
           var direction = vars.edges.arrows.direction.value;
 
+          var d;
           if ('bucket' in e.d3po) {
-            var d = '_' + e.d3po.bucket;
+            d = '_' + e.d3po.bucket;
           } else {
-            var d = '';
+            d = '';
           }
 
           return direction == 'source' && marker
@@ -327,10 +322,11 @@ module.exports = function(vars) {
         .attr('marker-end', function(e) {
           var direction = vars.edges.arrows.direction.value;
 
+          var d;
           if ('bucket' in e.d3po) {
-            var d = '_' + e.d3po.bucket;
+            d = '_' + e.d3po.bucket;
           } else {
-            var d = '';
+            d = '';
           }
 
           return direction == 'target' && marker
@@ -478,9 +474,6 @@ module.exports = function(vars) {
                     !vars.tooltip.value.long)));
 
             d3.select(this).style('cursor', pointer ? 'pointer' : 'auto');
-
-            // vars.covered = false
-            var tooltipType = vars.types[vars.type.value].tooltip || 'follow';
 
             if (d.values && vars.axes.discrete) {
               var index = vars.axes.discrete === 'x' ? 0 : 1,

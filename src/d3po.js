@@ -24146,6 +24146,7 @@ module.exports = function(vars) {
 },{"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../tooltip/remove.js":200,"../tooltip/create.js":232}],213:[function(require,module,exports){
 var ie = require('../../../client/ie.js'),
   fetchValue = require('../../../core/fetch/value.js'),
+  events = require('../../../client/pointer.js'),
   print = require('../../../core/console/print.js'),
   uniqueValues = require('../../../util/uniques.js');
 
@@ -24238,6 +24239,45 @@ module.exports = function(vars) {
       x_buffer = [0],
       y_buffer = [0];
 
+    vars.g.data.selectAll('g').each(function(d) {
+      if (focii.indexOf(d[vars.id.value]) >= 0) {
+        var elem = vars.g.data_focus.node().appendChild(this.cloneNode(true));
+        elem = d3
+          .select(elem)
+          .datum(d)
+          .attr('opacity', 1);
+
+        if (vars.shape.value == 'coordinates') {
+          vars.zoom.viewport = vars.path.bounds(vars.zoom.coords[d.d3po.id]);
+        } else if ('d3po' in d) {
+          if ('x' in d.d3po) {
+            x_bounds.push(d.d3po.x);
+          }
+          if ('y' in d.d3po) {
+            y_bounds.push(d.d3po.y);
+          }
+          if ('r' in d.d3po) {
+            x_buffer.push(d.d3po.r);
+            y_buffer.push(d.d3po.r);
+          } else {
+            if ('width' in d.d3po) {
+              x_buffer.push(d.d3po.width / 2);
+            }
+            if ('height' in d.d3po) {
+              y_buffer.push(d.d3po.height / 2);
+            }
+          }
+        }
+
+        for (var e in events) {
+          var evt = d3.select(this).on(events[e]);
+          if (evt) {
+            elem.on(events[e], evt);
+          }
+        }
+      }
+    });
+
     if (x_bounds.length && y_bounds.length) {
       var xcoords = d3.extent(x_bounds),
         ycoords = d3.extent(y_bounds),
@@ -24263,7 +24303,7 @@ module.exports = function(vars) {
   }
 };
 
-},{"../../../client/ie.js":32,"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../util/uniques.js":207}],214:[function(require,module,exports){
+},{"../../../client/ie.js":32,"../../../client/pointer.js":33,"../../../core/console/print.js":47,"../../../core/fetch/value.js":62,"../../../util/uniques.js":207}],214:[function(require,module,exports){
 (function() {
   var angles, largestRect, path2poly, shapeStyle;
 

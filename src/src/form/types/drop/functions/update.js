@@ -61,7 +61,9 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Update List
   //----------------------------------------------------------------------------
-  if (vars.dev.value) print.time('drawing list');
+  if (vars.dev.value) {
+    print.time('drawing list');
+  }
 
   function position(elem) {
     var flipped = vars.open.flipped.value;
@@ -157,5 +159,7 @@ module.exports = function(vars) {
       .tween('scroll', scrollTopTween(vars.container.listScroll));
   }
 
-  if (vars.dev.value) print.timeEnd('drawing list');
+  if (vars.dev.value) {
+    print.timeEnd('drawing list');
+  }
 };

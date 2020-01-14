@@ -37,14 +37,14 @@
       target,
       vdebug;
     (source = options.source),
-    (target = options.target),
-    (directed = options.directed),
-    (distance = options.distance),
-    (nodeid = options.nodeid),
-    (startpoint = options.startpoint),
-    (endpoint = options.endpoint),
-    (K = options.K),
-    (vdebug = options.vdebug);
+      (target = options.target),
+      (directed = options.directed),
+      (distance = options.distance),
+      (nodeid = options.nodeid),
+      (startpoint = options.startpoint),
+      (endpoint = options.endpoint),
+      (K = options.K),
+      (vdebug = options.vdebug);
     if (!directed) {
       directed = false;
     }

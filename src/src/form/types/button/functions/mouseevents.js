@@ -5,7 +5,7 @@
     events = require('../../../../client/pointer.js');
     ie = require('../../../../client/ie.js');
     return elem
-      .on(events.over, function(d){
+      .on(events.over, function(d) {
         vars.self.hover(d[vars.id.value]);
         if (ie || !vars.draw.timing) {
           return d3

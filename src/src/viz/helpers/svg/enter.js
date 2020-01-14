@@ -6,7 +6,9 @@ var events = require('../../../client/pointer.js'),
 
 // Enter SVG Elements
 module.exports = function(vars) {
-  if (vars.dev.value) print.time('creating SVG elements');
+  if (vars.dev.value) {
+    print.time('creating SVG elements');
+  }
 
   // Enter SVG
   vars.svg = vars.container.value.selectAll('svg#d3po').data([0]);
@@ -107,7 +109,9 @@ module.exports = function(vars) {
 
   vars.g.overlay
     .on(events.move, function() {
-      if (touch) touchEvent(vars, d3.event);
+      if (touch) {
+        touchEvent(vars, d3.event);
+      }
 
       if (
         vars.types[vars.type.value].zoom &&
@@ -120,7 +124,9 @@ module.exports = function(vars) {
       }
     })
     .on(events.up, function() {
-      if (touch) touchEvent(vars, d3.event);
+      if (touch) {
+        touchEvent(vars, d3.event);
+      }
 
       if (
         vars.types[vars.type.value].zoom &&
@@ -133,7 +139,9 @@ module.exports = function(vars) {
       }
     })
     .on(events.down, function() {
-      if (touch) touchEvent(vars, d3.event);
+      if (touch) {
+        touchEvent(vars, d3.event);
+      }
 
       if (
         vars.types[vars.type.value].zoom &&
@@ -201,5 +209,7 @@ module.exports = function(vars) {
   vars.defs = vars.svg.selectAll('defs').data(['defs']);
   vars.defs.enter().append('defs');
 
-  if (vars.dev.value) print.timeEnd('creating SVG elements');
+  if (vars.dev.value) {
+    print.timeEnd('creating SVG elements');
+  }
 };

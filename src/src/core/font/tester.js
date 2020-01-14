@@ -16,8 +16,8 @@
       type === 'div'
         ? {}
         : {
-          position: 'absolute'
-        };
+            position: 'absolute'
+          };
     tester = d3
       .select('body')
       .selectAll(type + '.d3po_tester')

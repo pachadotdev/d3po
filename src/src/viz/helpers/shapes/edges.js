@@ -64,8 +64,8 @@ module.exports = function(vars) {
         return o_type === 'number'
           ? o
           : o_type === 'function'
-            ? o(d, vars)
-            : vars.edges.opacity.scale.value(d[o]);
+          ? o(d, vars)
+          : vars.edges.opacity.scale.value(d[o]);
       })
       .style('stroke-width', function(e) {
         return vars.edges.scale(e[vars.edges.size.value]);
@@ -230,16 +230,16 @@ module.exports = function(vars) {
   var markerData = vars.edges.arrows.value
     ? typeof vars.edges.size.value == 'string'
       ? [
-        'default_0',
-        'default_1',
-        'default_2',
-        'highlight_0',
-        'highlight_1',
-        'highlight_2',
-        'focus_0',
-        'focus_1',
-        'focus_2'
-      ]
+          'default_0',
+          'default_1',
+          'default_2',
+          'highlight_0',
+          'highlight_1',
+          'highlight_2',
+          'focus_0',
+          'focus_1',
+          'focus_2'
+        ]
       : ['default', 'highlight', 'focus']
     : [];
 
@@ -368,7 +368,9 @@ module.exports = function(vars) {
     direction = vars.edges.arrows.direction.value;
 
   var line_data = edges.filter(function(l) {
-    if (!l.d3po) l.d3po = {};
+    if (!l.d3po) {
+      l.d3po = {};
+    }
 
     l.d3po.id =
       'edge_' +
@@ -391,7 +393,9 @@ module.exports = function(vars) {
       var source = l[vars.edges.source],
         target = l[vars.edges.target];
 
-      if (!source.d3po || !target.d3po) return false;
+      if (!source.d3po || !target.d3po) {
+        return false;
+      }
 
       var sourceAngle = Math.atan2(
           source.d3po.y - target.d3po.y,
@@ -412,13 +416,17 @@ module.exports = function(vars) {
         sourceOffset = offset(sourceAngle, sourceRadius, vars.shape.value),
         targetOffset = offset(targetAngle, targetRadius, vars.shape.value);
 
-      if (!('edges' in source.d3po)) source.d3po.edges = {};
+      if (!('edges' in source.d3po)) {
+        source.d3po.edges = {};
+      }
       source.d3po.edges[target[vars.id.value]] = {
         x: source.d3po.x - sourceOffset.x,
         y: source.d3po.y - sourceOffset.y
       };
 
-      if (!('edges' in target.d3po)) target.d3po.edges = {};
+      if (!('edges' in target.d3po)) {
+        target.d3po.edges = {};
+      }
       target.d3po.edges[source[vars.id.value]] = {
         x: target.d3po.x - targetOffset.x,
         y: target.d3po.y - targetOffset.y
@@ -470,9 +478,9 @@ module.exports = function(vars) {
           typeof sourceEdge.angle === 'number'
             ? sourceEdge.angle
             : Math.atan2(
-              source.d3po.y - target.d3po.y,
-              source.d3po.x - target.d3po.x
-            ) * sourceTweak,
+                source.d3po.y - target.d3po.y,
+                source.d3po.x - target.d3po.x
+              ) * sourceTweak,
         sourceOffset = offset(
           sourceAngle,
           source.d3po.r + sourceMod,
@@ -482,9 +490,9 @@ module.exports = function(vars) {
           typeof targetEdge.angle === 'number'
             ? targetEdge.angle
             : Math.atan2(
-              target.d3po.y - source.d3po.y,
-              target.d3po.x - source.d3po.x
-            ) * targetTweak,
+                target.d3po.y - source.d3po.y,
+                target.d3po.x - source.d3po.x
+              ) * targetTweak,
         targetOffset = offset(
           targetAngle,
           target.d3po.r + targetMod,
@@ -547,9 +555,12 @@ module.exports = function(vars) {
           [endPoint[0] - endAnchor.x, endPoint[1] - endAnchor.y]
         );
 
-        if (startOffset) l.d3po.spline.splice(1, 0, startPoint);
-        if (endOffset)
+        if (startOffset) {
+          l.d3po.spline.splice(1, 0, startPoint);
+        }
+        if (endOffset) {
           l.d3po.spline.splice(l.d3po.spline.length - 1, 0, endPoint);
+        }
       }
 
       return true;

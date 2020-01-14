@@ -36,15 +36,21 @@ module.exports = function(vars, selection) {
       var s = stroke;
       if (s.constructor !== Number) {
         var v = fetchValue(vars, l, stroke);
-        if (v && v.length) s = d3.max(v);
-        else s = vars.data.stroke.width;
+        if (v && v.length) {
+          s = d3.max(v);
+        } else {
+          s = vars.data.stroke.width;
+        }
       }
       return s < 15 ? 15 : s;
     };
 
   var ticks = discrete.ticks.values.map(function(d) {
-    if (d.constructor === Date) return d.getTime();
-    else return d;
+    if (d.constructor === Date) {
+      return d.getTime();
+    } else {
+      return d;
+    }
   });
 
   selection.each(function(d) {
@@ -59,7 +65,9 @@ module.exports = function(vars, selection) {
     d.values.forEach(function(v, i, arr) {
       var k = fetchValue(vars, v, discrete.value);
 
-      if (k.constructor === Date) k = k.getTime();
+      if (k.constructor === Date) {
+        k = k.getTime();
+      }
 
       var index = ticks.indexOf(closest(ticks, k));
 
@@ -91,7 +99,9 @@ module.exports = function(vars, selection) {
     // Bind segment data to "paths"
     //--------------------------------------------------------------------------
     var paths = group.selectAll('path.d3po_line').data(segments, function(d) {
-      if (!d.d3po) d.d3po = {};
+      if (!d.d3po) {
+        d.d3po = {};
+      }
       d.d3po.shape = 'line';
       return d.segment_key;
     });
@@ -100,7 +110,9 @@ module.exports = function(vars, selection) {
     // Bind node data to "rects"
     //--------------------------------------------------------------------------
     var rects = group.selectAll('rect.d3po_anchor').data(nodes, function(d) {
-      if (!d.d3po) d.d3po = {};
+      if (!d.d3po) {
+        d.d3po = {};
+      }
       d.d3po.r = stroke;
       return d.d3po.id;
     });
@@ -216,12 +228,14 @@ module.exports = function(vars, selection) {
     //--------------------------------------------------------------------------
     mouse
       .on(events.over, function() {
-        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.over.value)
+        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.over.value) {
           mouseStyle(vars, this, stroke, 2);
+        }
       })
       .on(events.out, function() {
-        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.out.value)
+        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.out.value) {
           mouseStyle(vars, this, stroke, 0);
+        }
       });
 
     if (vars.draw.timing) {
@@ -265,7 +279,9 @@ function init(n) {
 // The position and size of each anchor point on update.
 //----------------------------------------------------------------------------
 function update(n, mod) {
-  if (mod === undefined) mod = 0;
+  if (mod === undefined) {
+    mod = 0;
+  }
 
   n.attr('x', function(d) {
     var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
@@ -295,7 +311,9 @@ function update(n, mod) {
 
 function mouseStyle(vars, elem, stroke, mod) {
   var timing = vars.draw.timing ? vars.timing.mouseevents : 0;
-  if (mod === undefined) mod = 0;
+  if (mod === undefined) {
+    mod = 0;
+  }
 
   if (timing) {
     d3.select(elem.parentNode)
@@ -306,8 +324,11 @@ function mouseStyle(vars, elem, stroke, mod) {
         var s = stroke;
         if (s.constructor !== Number) {
           var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s + mod;
       });
@@ -320,8 +341,11 @@ function mouseStyle(vars, elem, stroke, mod) {
         var s = stroke;
         if (s.constructor !== Number) {
           var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s;
       })
@@ -333,8 +357,11 @@ function mouseStyle(vars, elem, stroke, mod) {
         var s = stroke;
         if (s.constructor !== Number) {
           var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s + mod;
       });
@@ -345,8 +372,11 @@ function mouseStyle(vars, elem, stroke, mod) {
         var s = stroke;
         if (s.constructor !== Number) {
           var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s;
       })

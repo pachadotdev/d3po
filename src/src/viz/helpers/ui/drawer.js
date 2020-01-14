@@ -10,7 +10,9 @@ module.exports = function(vars) {
   var enabled = vars.ui.value && vars.ui.value.length,
     position = vars.ui.position.value;
 
-  if (vars.dev.value && enabled) print.time('drawing custom UI elements');
+  if (vars.dev.value && enabled) {
+    print.time('drawing custom UI elements');
+  }
 
   var drawer = vars.container.value
     .selectAll('div#d3po_drawer')
@@ -68,7 +70,9 @@ module.exports = function(vars) {
       };
     } else {
       focus = d.focus || d.value[0];
-      if (validObject(focus)) focus = focus[d3.keys(focus)[0]];
+      if (validObject(focus)) {
+        focus = focus[d3.keys(focus)[0]];
+      }
       if (typeof d.method === 'function') {
         callback = function(value) {
           if (value !== focus) {
@@ -142,5 +146,7 @@ module.exports = function(vars) {
     vars.margin[position] += drawerHeight;
   }
 
-  if (vars.dev.value && enabled) print.timeEnd('drawing custom UI elements');
+  if (vars.dev.value && enabled) {
+    print.timeEnd('drawing custom UI elements');
+  }
 };

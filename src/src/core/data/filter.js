@@ -5,7 +5,9 @@ var fetchValue = require('../fetch/value.js'),
 // Restricts data based on Solo/Mute filters
 //------------------------------------------------------------------------------
 module.exports = function(vars, data) {
-  if (vars.dev.value) print.time('filtering data');
+  if (vars.dev.value) {
+    print.time('filtering data');
+  }
 
   var availableKeys = d3.keys(vars.data.keys || {});
 
@@ -73,7 +75,9 @@ module.exports = function(vars, data) {
             var new_data = d.filter(function(dd) {
               return test_value(fetchValue(vars, dd, nesting[n]));
             });
-            if (new_data.length) d = new_data;
+            if (new_data.length) {
+              d = new_data;
+            }
           }
         } else {
           d = d.filter(function(dd) {
@@ -87,13 +91,19 @@ module.exports = function(vars, data) {
 
       if (v === 'id') {
         if ('nodes' in vars && vars.nodes.value) {
-          if (vars.dev.value) print.time('filtering nodes');
+          if (vars.dev.value) {
+            print.time('filtering nodes');
+          }
           vars.nodes.restricted = filter_data(vars.nodes.value);
-          if (vars.dev.value) print.timeEnd('filtering nodes');
+          if (vars.dev.value) {
+            print.timeEnd('filtering nodes');
+          }
         }
 
         if ('edges' in vars && vars.edges.value) {
-          if (vars.dev.value) print.time('filtering edges');
+          if (vars.dev.value) {
+            print.time('filtering edges');
+          }
           vars.edges.restricted = vars.edges.value.filter(function(d) {
             var points = filter_data([
               d[vars.edges.source],
@@ -101,7 +111,9 @@ module.exports = function(vars, data) {
             ]);
             return points.length === 2;
           });
-          if (vars.dev.value) print.timeEnd('filtering edges');
+          if (vars.dev.value) {
+            print.timeEnd('filtering edges');
+          }
         }
       }
     });
@@ -110,7 +122,9 @@ module.exports = function(vars, data) {
     vars.edges.restricted = undefined;
   }
 
-  if (vars.dev.value) print.timeEnd('filtering data');
+  if (vars.dev.value) {
+    print.timeEnd('filtering data');
+  }
 
   return data;
 };

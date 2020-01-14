@@ -41,7 +41,9 @@ module.exports = function() {
     // Create/update the UI element
     //--------------------------------------------------------------------------
     if (vars.data.value instanceof Array) {
-      if (vars.dev.value) print.group('drawing "' + vars.type.value + '"');
+      if (vars.dev.value) {
+        print.group('drawing "' + vars.type.value + '"');
+      }
 
       //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       // Analyze new data, if changed.
@@ -86,15 +88,18 @@ module.exports = function() {
             val =
               option.getAttribute('data-' + vars.id.value) ||
               option.getAttribute(vars.id.value);
-          if (val) vars.focus.value = val;
+          if (val) {
+            vars.focus.value = val;
+          }
         }
 
         if (vars.focus.value === false && vars.data.viz.length) {
           vars.focus.value = vars.data.viz[0][vars.id.value];
         }
 
-        if (vars.dev.value && vars.focus.value !== false)
+        if (vars.dev.value && vars.focus.value !== false) {
           print.log('"value" set to "' + vars.focus.value + '"');
+        }
       }
 
       var getLevel = function(d, depth) {
@@ -123,10 +128,14 @@ module.exports = function() {
         if (vars.search.value === 'auto') {
           if (vars.data.viz.length > 10) {
             vars.search.enabled = true;
-            if (vars.dev.value) print.log('Search enabled.');
+            if (vars.dev.value) {
+              print.log('Search enabled.');
+            }
           } else {
             vars.search.enabled = false;
-            if (vars.dev.value) print.log('Search disabled.');
+            if (vars.dev.value) {
+              print.log('Search disabled.');
+            }
           }
         } else {
           vars.search.enabled = vars.search.value;
@@ -161,8 +170,8 @@ module.exports = function() {
                 level === vars.id.value
                   ? vars.text.value || vars.id.value
                   : vars.text.nesting !== true && level in vars.text.nesting
-                    ? vars.text.nesting[level]
-                    : level;
+                  ? vars.text.nesting[level]
+                  : level;
 
             for (var k in d) {
               if (typeof d[k] !== 'object') {
@@ -293,9 +302,13 @@ module.exports = function() {
       //------------------------------------------------------------------------
       if (vars.data.value.length) {
         var app = vars.format.locale.value.visualization[vars.type.value];
-        if (vars.dev.value) print.time('drawing ' + app);
+        if (vars.dev.value) {
+          print.time('drawing ' + app);
+        }
         vars.types[vars.type.value](vars);
-        if (vars.dev.value) print.timeEnd('drawing ' + app);
+        if (vars.dev.value) {
+          print.timeEnd('drawing ' + app);
+        }
       } else if (vars.data.url && (!vars.data.loaded || vars.data.stream)) {
         dataLoad(vars, 'data', vars.self.draw);
       }
@@ -303,7 +316,9 @@ module.exports = function() {
       //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       // Initialization complete
       //------------------------------------------------------------------------
-      if (vars.dev.value) print.timeEnd('total draw time');
+      if (vars.dev.value) {
+        print.timeEnd('total draw time');
+      }
       methodReset(vars);
     }
   };

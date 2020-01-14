@@ -53,7 +53,9 @@ module.exports = function(vars, group) {
         return t.mouse ? 'auto' : 'none';
       })
       .attr('fill', function(t) {
-        if (t.color) return t.color;
+        if (t.color) {
+          return t.color;
+        }
 
         var color = shapeColor(t.parent, vars),
           legible = textColor(color),
@@ -62,7 +64,6 @@ module.exports = function(vars, group) {
         return mix(color, legible, 0.2, opacity);
       })
       .each(function(t) {
-
         var size = t.resize,
           resize = true;
 
@@ -158,15 +159,17 @@ module.exports = function(vars, group) {
         names = d.d3po.text
           ? d.d3po.text
           : label && label.names
-            ? label.names
-            : vars.labels.text.value
-              ? fetchValue(vars, d, vars.labels.text.value)
-              : fetchText(vars, d),
+          ? label.names
+          : vars.labels.text.value
+          ? fetchValue(vars, d, vars.labels.text.value)
+          : fetchText(vars, d),
         group = label && 'group' in label ? label.group : d3.select(this),
         share_size = 0,
         fill = vars.types[vars.type.value].fill;
 
-      if (!(names instanceof Array)) names = [names];
+      if (!(names instanceof Array)) {
+        names = [names];
+      }
 
       if (label) {
         if (['line', 'area'].indexOf(vars.shape.value) >= 0) {
@@ -176,9 +179,7 @@ module.exports = function(vars, group) {
             temp = segments(vars, d, 'temp'),
             total = segments(vars, d, 'total');
           background =
-            (!temp && !active) ||
-            active >= total ||
-            (!active && temp >= total);
+            (!temp && !active) || active >= total || (!active && temp >= total);
         }
       }
 
@@ -188,8 +189,8 @@ module.exports = function(vars, group) {
             vars.labels.resize.value === false
               ? false
               : label && 'resize' in label
-                ? label.resize
-                : true;
+              ? label.resize
+              : true;
 
           label.padding =
             typeof label.padding === 'number'
@@ -220,7 +221,9 @@ module.exports = function(vars, group) {
           var text = group
               .selectAll('text#d3po_label_' + d.d3po.id)
               .data([label], function(t) {
-                if (!t) return false;
+                if (!t) {
+                  return false;
+                }
                 return t.names;
               }),
             fontSize = label.resize
@@ -319,16 +322,16 @@ module.exports = function(vars, group) {
                 typeof label.background === 'number'
                   ? label.background
                   : typeof label.background === 'string'
-                    ? 1
-                    : 0.6;
+                  ? 1
+                  : 0.6;
 
             function bg_style(elem) {
               var color =
                   typeof label.background === 'string'
                     ? label.background
                     : vars.background.value === 'none'
-                      ? '#ffffff'
-                      : vars.background.value,
+                    ? '#ffffff'
+                    : vars.background.value,
                 fill =
                   typeof label.background === 'string'
                     ? label.background
@@ -411,7 +414,9 @@ module.exports = function(vars, group) {
       }
     });
 
-    if (vars.dev.value) print.timeEnd(timerString);
+    if (vars.dev.value) {
+      print.timeEnd(timerString);
+    }
   } else {
     if (vars.dev.value) {
       timerString = 'removing ' + group + ' labels';
@@ -422,6 +427,8 @@ module.exports = function(vars, group) {
 
     vars.g.labels.selectAll('text.d3po_label, rect.d3po_label_bg').call(remove);
 
-    if (vars.dev.value) print.timeEnd(timerString);
+    if (vars.dev.value) {
+      print.timeEnd(timerString);
+    }
   }
 };

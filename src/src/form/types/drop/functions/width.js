@@ -37,7 +37,9 @@ module.exports = function(vars) {
           : vars.text.secondary.value || vars.text.value,
       font = key === 'value' ? vars.font : vars.font.secondary;
 
-    if (vars.dev.value) print.time('calculating ' + type + ' width');
+    if (vars.dev.value) {
+      print.time('calculating ' + type + ' width');
+    }
 
     var button = form()
       .container(fontTester())
@@ -82,7 +84,9 @@ module.exports = function(vars) {
 
     vars.self.width(dropWidth);
 
-    if (vars.dev.value) print.timeEnd('calculating ' + type + ' width');
+    if (vars.dev.value) {
+      print.timeEnd('calculating ' + type + ' width');
+    }
   }
 
   if (typeof vars.width.value !== 'number') {

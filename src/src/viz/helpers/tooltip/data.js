@@ -11,26 +11,31 @@ var copy = require('../../../util/copy.js'),
 // Creates a data object for the Tooltip
 //------------------------------------------------------------------------------
 module.exports = function(vars, id, length, extras, children, depth) {
-  var other_length,extra_data, a;
+  var other_length, extra_data, a;
   if (vars.small) {
     return [];
   }
 
-  if (!length) length = 'long';
+  if (!length) {
+    length = 'long';
+  }
   if (length == 'long') {
     other_length = 'short';
   } else {
     other_length = 'long';
   }
 
-  if (extras && typeof extras == 'string') extras = [extras];
-  else if (extras && typeof extras == 'object') {
+  if (extras && typeof extras == 'string') {
+    extras = [extras];
+  } else if (extras && typeof extras == 'object') {
     extra_data = mergeObject(extra_data, extras);
     extras = [];
     for (var k in extra_data) {
       extras.push(k);
     }
-  } else if (!extras) extras = [];
+  } else if (!extras) {
+    extras = [];
+  }
 
   var tooltip_highlights = [];
 
@@ -73,10 +78,15 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   function format_key(key, group) {
-    if (vars.attrs.value[group]) var id_var = group;
-    else id_var = null;
+    if (vars.attrs.value[group]) {
+      var id_var = group;
+    } else {
+      id_var = null;
+    }
 
-    if (group) group = vars.format.value(group);
+    if (group) {
+      group = vars.format.value(group);
+    }
 
     var value = extra_data[key] || fetchValue(vars, id, key, id_var);
 
@@ -140,20 +150,25 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   var tooltip_data = [];
-  if (a.constructor === Array)
+  if (a.constructor === Array) {
     a = {
       '': a
     };
+  }
 
   if (vars.id.nesting.length && depth < vars.id.nesting.length - 1) {
     a = copy(a);
     vars.id.nesting.forEach(function(n, i) {
-      if (i > depth && a[n]) delete a[n];
+      if (i > depth && a[n]) {
+        delete a[n];
+      }
     });
   }
 
   for (var group in a) {
-    if (a[group].constructor !== Array) a[group] = [a[group]];
+    if (a[group].constructor !== Array) {
+      a[group] = [a[group]];
+    }
     for (var i = extras.length; i > 0; i--) {
       if (a[group].indexOf(extras[i - 1]) >= 0) {
         extras.splice(i - 1, 1);
@@ -162,12 +177,13 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   if (vars.tooltip.value.long && typeof vars.tooltip.value.long == 'object') {
-
     for (group in vars.tooltip.value.long) {
       for (i = extras.length; i > 0; i--) {
         var e = extras[i - 1];
         if (vars.tooltip.value.long[group].indexOf(e) >= 0) {
-          if (!a[group]) a[group] = [];
+          if (!a[group]) {
+            a[group] = [];
+          }
           a[group].push(e);
           extras.splice(i - 1, 1);
         }
@@ -176,7 +192,9 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   if (extras.length) {
-    if (!a['']) a[''] = [];
+    if (!a['']) {
+      a[''] = [];
+    }
     a[''] = a[''].concat(extras);
   }
 
@@ -242,7 +260,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
           'top: 0px',
           prefix() + 'border-radius: ' + radius + 'px'
         ];
-        var node = '<div style=\'' + styles.join('; ') + ';\'></div>';
+        var node = "<div style='" + styles.join('; ') + ";'></div>";
 
         var nodeClick = function() {
           vars.self.focus([c[vars.id.value]]).draw();
@@ -253,11 +271,11 @@ module.exports = function(vars, id, length, extras, children, depth) {
           highlight: false,
           link: nodeClick,
           name:
-            '<div id=\'d3potooltipfocuslink_' +
+            "<div id='d3potooltipfocuslink_" +
             c[vars.id.value] +
-            '\' class=\'d3po_tooltip_focus_link\' style=\'position:relative;padding-left:' +
+            "' class='d3po_tooltip_focus_link' style='position:relative;padding-left:" +
             size * 1.5 +
-            'px;\'>' +
+            "px;'>" +
             node +
             name +
             '</div>'

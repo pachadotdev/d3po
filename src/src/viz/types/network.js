@@ -26,9 +26,11 @@ var network = function(vars) {
       return val === 0 ? null : val;
     });
   }
-  if (typeof val_range[0] == 'undefined') val_range = [1, 1];
+  if (typeof val_range[0] == 'undefined') {
+    val_range = [1, 1];
+  }
 
-  var max_size ,min_size ;
+  var max_size, min_size;
   if (typeof vars.size.value === 'number') {
     max_size = vars.size.value;
     min_size = vars.size.value;

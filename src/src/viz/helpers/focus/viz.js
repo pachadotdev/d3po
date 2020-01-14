@@ -17,7 +17,9 @@ module.exports = function(vars) {
     vars.types[vars.type.value].zoom &&
     vars.zoom.value
   ) {
-    if (vars.dev.value) print.time('drawing focus elements');
+    if (vars.dev.value) {
+      print.time('drawing focus elements');
+    }
 
     var edges = vars.g.edges.selectAll('g');
 
@@ -43,7 +45,9 @@ module.exports = function(vars) {
         .attr('vector-effect', 'non-scaling-stroke')
         .style('stroke', vars.color.focus)
         .style('stroke-width', function() {
-          if (ie && vars.types[vars.type.value].zoom) return 0;
+          if (ie && vars.types[vars.type.value].zoom) {
+            return 0;
+          }
           return vars.edges.size.value
             ? d3.select(this).style('stroke-width')
             : vars.data.stroke.width * 2;
@@ -151,7 +155,9 @@ module.exports = function(vars) {
         ie && vars.types[vars.type.value].zoom ? 0 : vars.data.stroke.width * 2
       );
 
-    if (vars.dev.value) print.timeEnd('drawing focus elements');
+    if (vars.dev.value) {
+      print.timeEnd('drawing focus elements');
+    }
   } else {
     vars.zoom.viewport = false;
   }

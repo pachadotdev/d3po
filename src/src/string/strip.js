@@ -31,7 +31,9 @@ module.exports = function(value) {
   return (
     '' +
     value.toString().replace(/[^A-Za-z0-9\-_]/g, function(char) {
-      if (char === ' ') return '-';
+      if (char === ' ') {
+        return '-';
+      }
 
       var ret = false;
       for (var d = 0; d < diacritics.length; d++) {

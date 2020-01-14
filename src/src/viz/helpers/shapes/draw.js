@@ -65,9 +65,13 @@ module.exports = function(vars) {
   data.forEach(function(d) {
     var s = d.d3po && d.d3po.shape ? d.d3po.shape : vars.shape.value;
     if (s in shapeLookup) {
-      if (d.d3po) d.d3po.shape = s;
+      if (d.d3po) {
+        d.d3po.shape = s;
+      }
       s = shapeLookup[s];
-      if (!shapes[s]) shapes[s] = [];
+      if (!shapes[s]) {
+        shapes[s] = [];
+      }
       shapes[s].push(d);
     }
   });
@@ -87,7 +91,9 @@ module.exports = function(vars) {
       ['x', 'y', 'x2', 'y2'].forEach(function(axis) {
         if (vars[axis].scale.value == 'discrete') {
           var val = fetchValue(vars, d, vars[axis].value);
-          if (val.constructor === Date) val = val.getTime();
+          if (val.constructor === Date) {
+            val = val.getTime();
+          }
           d.d3po.id += '_' + val;
         }
       });
@@ -172,7 +178,9 @@ module.exports = function(vars) {
     var selection = vars.g.data
       .selectAll('g.d3po_' + shape)
       .data(shapes[shape], function(d) {
-        if (!d.d3po) d.d3po = {};
+        if (!d.d3po) {
+          d.d3po = {};
+        }
 
         if (shape === 'coordinates') {
           d.d3po.id = d.id;
@@ -248,17 +256,25 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Draw appropriate graphics inside of each group
     //--------------------------------------------------------------------------
-    if (vars.dev.value) print.time('drawing "' + shape + '" shapes');
+    if (vars.dev.value) {
+      print.time('drawing "' + shape + '" shapes');
+    }
     drawShape[shape](vars, selection, enter, exit, transform);
-    if (vars.dev.value) print.timeEnd('drawing "' + shape + '" shapes');
+    if (vars.dev.value) {
+      print.timeEnd('drawing "' + shape + '" shapes');
+    }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Check for active and temp fills for rects
     //--------------------------------------------------------------------------
     if (['rect'].indexOf(shape) >= 0 && vars.types[vars.type.value].fill) {
-      if (vars.dev.value) print.time('filling "' + shape + '" shapes');
+      if (vars.dev.value) {
+        print.time('filling "' + shape + '" shapes');
+      }
       shapeFill(vars, selection, enter, exit, transform);
-      if (vars.dev.value) print.timeEnd('filling "' + shape + '" shapes');
+      if (vars.dev.value) {
+        print.timeEnd('filling "' + shape + '" shapes');
+      }
     }
   }
 
@@ -375,7 +391,9 @@ module.exports = function(vars) {
     vars.g.data
       .selectAll('g')
       .on(events.over, function(d) {
-        if (touch) touchEvent(vars, d3.event);
+        if (touch) {
+          touchEvent(vars, d3.event);
+        }
 
         if (
           !d3.event.buttons &&
@@ -447,7 +465,9 @@ module.exports = function(vars) {
         }
       })
       .on(events.move, function(d) {
-        if (touch) touchEvent(vars, d3.event);
+        if (touch) {
+          touchEvent(vars, d3.event);
+        }
 
         if (
           !d3.event.buttons &&
@@ -504,7 +524,9 @@ module.exports = function(vars) {
         }
       })
       .on(events.out, function(d) {
-        if (touch) touchEvent(vars, d3.event);
+        if (touch) {
+          touchEvent(vars, d3.event);
+        }
 
         if (!d3.event.buttons && vars.mouse.value && vars.mouse.out.value) {
           var defaultClick = typeof vars.mouse.out.value !== 'function';

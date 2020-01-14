@@ -5,7 +5,9 @@ var buckets = require('../../util/buckets.js'),
 // Sets color range of data, if applicable
 //-------------------------------------------------------------------
 module.exports = function(vars) {
-  if (vars.dev.value) print.time('getting color data range');
+  if (vars.dev.value) {
+    print.time('getting color data range');
+  }
 
   var data_range;
   if (vars.color.domain.value) {
@@ -14,15 +16,24 @@ module.exports = function(vars) {
     data_range = [];
     vars.data.pool.forEach(function(d) {
       var val = parseFloat(fetchValue(vars, d, vars.color.value));
-      if (typeof val == 'number' && !isNaN(val) && data_range.indexOf(val) < 0)
+      if (
+        typeof val == 'number' &&
+        !isNaN(val) &&
+        data_range.indexOf(val) < 0
+      ) {
         data_range.push(val);
+      }
     });
   }
 
-  if (vars.dev.value) print.timeEnd('getting color data range');
+  if (vars.dev.value) {
+    print.timeEnd('getting color data range');
+  }
 
   if (data_range.length > 1) {
-    if (vars.dev.value) print.time('calculating color scale');
+    if (vars.dev.value) {
+      print.time('calculating color scale');
+    }
 
     data_range = d3.extent(data_range);
 
@@ -51,7 +62,9 @@ module.exports = function(vars) {
       .range(color_range)
       .interpolate(d3.interpolateRgb);
 
-    if (vars.dev.value) print.timeEnd('calculating color scale');
+    if (vars.dev.value) {
+      print.timeEnd('calculating color scale');
+    }
   } else {
     vars.color.valueScale = null;
   }

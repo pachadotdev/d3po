@@ -3,12 +3,12 @@ module.exports = {
     return window.pageYOffset !== undefined
       ? window.pageYOffset
       : (document.documentElement || document.body.parentNode || document.body)
-        .scrollTop;
+          .scrollTop;
   },
   x: function() {
     return window.pageXOffset !== undefined
       ? window.pageXOffset
       : (document.documentElement || document.body.parentNode || document.body)
-        .scrollLeft;
+          .scrollLeft;
   }
 };

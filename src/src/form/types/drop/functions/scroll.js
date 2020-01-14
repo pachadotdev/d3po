@@ -4,14 +4,18 @@ var print = require('../../../../core/console/print.js');
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
   if (vars.open.value) {
-    if (vars.dev.value) print.time('calculating height');
+    if (vars.dev.value) {
+      print.time('calculating height');
+    }
 
     var hidden = false;
     if (vars.container.selector.style('display') == 'none') {
       hidden = true;
     }
 
-    if (hidden) vars.container.selector.style('display', 'block');
+    if (hidden) {
+      vars.container.selector.style('display', 'block');
+    }
 
     var old_height = vars.container.selector.style('height'),
       old_scroll = vars.container.selector.property('scrollTop'),
@@ -40,12 +44,18 @@ module.exports = function(vars) {
       scrolling = true;
     }
 
-    if (hidden) vars.container.selector.style('display', 'none');
+    if (hidden) {
+      vars.container.selector.style('display', 'none');
+    }
 
-    if (vars.dev.value) print.timeEnd('calculating height');
+    if (vars.dev.value) {
+      print.timeEnd('calculating height');
+    }
 
     if (scrolling) {
-      if (vars.dev.value) print.time('calculating scroll position');
+      if (vars.dev.value) {
+        print.time('calculating scroll position');
+      }
 
       var options = vars.container.list
         .select('div')
@@ -72,7 +82,9 @@ module.exports = function(vars) {
           option.offsetHeight || option.getBoundingClientRect().height,
         list_top = vars.container.list.property('scrollTop');
 
-      if (hidden) vars.container.selector.style('display', 'none');
+      if (hidden) {
+        vars.container.selector.style('display', 'none');
+      }
 
       if (hidden || vars.data.changed || vars.depth.changed) {
         vars.container.listScroll = button_top;
@@ -91,7 +103,9 @@ module.exports = function(vars) {
         }
       }
 
-      if (vars.dev.value) print.timeEnd('calculating scroll position');
+      if (vars.dev.value) {
+        print.timeEnd('calculating scroll position');
+      }
     } else {
       vars.container.listScroll = 0;
     }

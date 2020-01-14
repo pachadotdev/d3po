@@ -216,10 +216,14 @@ module.exports = function(vars) {
       m['set' + vars.data.time.stepType](
         m['get' + vars.data.time.stepType]() + s
       );
-      if (m <= max) vars.data.time.ticks.push(m);
+      if (m <= max) {
+        vars.data.time.ticks.push(m);
+      }
     }
 
-    if (vars.dev.value) print.timeEnd(timerString);
+    if (vars.dev.value) {
+      print.timeEnd(timerString);
+    }
   }
 
   if (vars.dev.value) {
@@ -244,7 +248,9 @@ module.exports = function(vars) {
   } else {
     var timeData = vars.data.value.reduce(function(o, d) {
       var ms = fetchValue(vars, d, vars.time.value).getTime();
-      if (!(ms in o)) o[ms] = [];
+      if (!(ms in o)) {
+        o[ms] = [];
+      }
       o[ms].push(d);
       return o;
     }, {});
@@ -265,5 +271,7 @@ module.exports = function(vars) {
     });
   }
 
-  if (vars.dev.value) print.timeEnd(timerString);
+  if (vars.dev.value) {
+    print.timeEnd(timerString);
+  }
 };

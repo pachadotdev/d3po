@@ -8,7 +8,9 @@ var fetchText = require('../../core/fetch/text.js'),
 // Miscellaneous Error Checks
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
-  if (vars.dev.value) print.time('checking for errors');
+  if (vars.dev.value) {
+    print.time('checking for errors');
+  }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Check to see if we have all required variables set
@@ -16,14 +18,19 @@ module.exports = function(vars) {
   var reqs = ['id'],
     app_reqs = vars.types[vars.type.value].requirements;
   if (app_reqs) {
-    if (!(app_reqs instanceof Array)) reqs.push(app_reqs);
-    else reqs = reqs.concat(vars.types[vars.type.value].requirements);
+    if (!(app_reqs instanceof Array)) {
+      reqs.push(app_reqs);
+    } else {
+      reqs = reqs.concat(vars.types[vars.type.value].requirements);
+    }
   }
 
   var missing = [];
   reqs.forEach(function(r) {
     if (typeof r === 'string') {
-      if (!vars[r].value || !vars[r].value.length) missing.push('"' + r + '"');
+      if (!vars[r].value || !vars[r].value.length) {
+        missing.push('"' + r + '"');
+      }
     } else if (typeof r === 'function') {
       var reqReturn = r(vars);
       if (!reqReturn.status && reqReturn.text) {
@@ -42,10 +49,10 @@ module.exports = function(vars) {
     missing = stringList(missing, and);
     vars.error.internal = stringFormat(str, app, missing);
   } else if (missing.length === 1) {
-    str = vars.format.locale.value.error.method,
-    app =
-      vars.format.locale.value.visualization[vars.type.value] ||
-      vars.type.value;
+    (str = vars.format.locale.value.error.method),
+      (app =
+        vars.format.locale.value.visualization[vars.type.value] ||
+        vars.type.value);
     vars.error.internal = stringFormat(str, app, missing[0]);
   }
 
@@ -77,7 +84,9 @@ module.exports = function(vars) {
   }
   missing = [];
   reqs.forEach(function(r) {
-    if (!window[r]) missing.push('"' + r + '"');
+    if (!window[r]) {
+      missing.push('"' + r + '"');
+    }
   });
 
   if (missing.length > 1) {
@@ -96,7 +105,9 @@ module.exports = function(vars) {
   // Check to see if the requested app supports the set shape
   //----------------------------------------------------------------------------
   var shapes = vars.shape.accepted(vars);
-  if (!(shapes instanceof Array)) shapes = [shapes];
+  if (!(shapes instanceof Array)) {
+    shapes = [shapes];
+  }
   var shape = vars.shape.value;
 
   if (!shape || rejected(vars, shapes, shape, 'shape')) {
@@ -108,7 +119,9 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   if ('modes' in vars.types[vars.type.value]) {
     var modes = vars.types[vars.type.value].modes;
-    if (!(modes instanceof Array)) modes = [modes];
+    if (!(modes instanceof Array)) {
+      modes = [modes];
+    }
     var mode = vars.type.mode.value;
 
     if (!mode || rejected(vars, modes, mode, 'mode')) {
@@ -118,5 +131,7 @@ module.exports = function(vars) {
     }
   }
 
-  if (vars.dev.value) print.timeEnd('checking for errors');
+  if (vars.dev.value) {
+    print.timeEnd('checking for errors');
+  }
 };

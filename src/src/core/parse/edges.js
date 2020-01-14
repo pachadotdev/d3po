@@ -11,7 +11,9 @@ module.exports = function(vars) {
   }
 
   var appReqs = vars.types[vars.type.value].requirements;
-  if (!(appReqs instanceof Array)) appReqs = [appReqs];
+  if (!(appReqs instanceof Array)) {
+    appReqs = [appReqs];
+  }
   var createNodes = appReqs.indexOf('nodes') >= 0 && !vars.nodes.value;
 
   if (createNodes) {
@@ -79,5 +81,7 @@ module.exports = function(vars) {
 
   vars.edges.linked = true;
 
-  if (vars.dev.value) print.timeEnd(timerString);
+  if (vars.dev.value) {
+    print.timeEnd(timerString);
+  }
 };

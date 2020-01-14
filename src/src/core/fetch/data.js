@@ -8,12 +8,18 @@ var dataFilter = require('../data/filter.js'),
 // Fetches specific years of data
 //-------------------------------------------------------------------
 module.exports = function(vars, years, depth) {
-  if (!vars.data.value) return [];
+  if (!vars.data.value) {
+    return [];
+  }
 
-  if (depth === undefined) depth = vars.depth.value;
+  if (depth === undefined) {
+    depth = vars.depth.value;
+  }
   var nestLevel = vars.id.nesting[depth];
 
-  if (years && !(years instanceof Array)) years = [years];
+  if (years && !(years instanceof Array)) {
+    years = [years];
+  }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If "years" have not been requested, determine the years using .time()
@@ -33,13 +39,17 @@ module.exports = function(vars, years, depth) {
         if (typeof y === 'function') {
           for (var ti = 0; ti < vars.data.time.values.length; ti++) {
             var ms = vars.data.time.values[ti].getTime();
-            if (y(ms)) years.push(ms);
+            if (y(ms)) {
+              years.push(ms);
+            }
           }
         } else if (y.constructor === Date) {
           years.push(new Date(y).getTime());
         } else {
           y += '';
-          if (y.length === 4 && parseInt(y) + '' === y) y = y + '/01/01';
+          if (y.length === 4 && parseInt(y) + '' === y) {
+            y = y + '/01/01';
+          }
           var d = new Date(y);
           if (d !== 'Invalid Date') {
             // d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
@@ -53,7 +63,9 @@ module.exports = function(vars, years, depth) {
           return years.indexOf(t.getTime()) < 0;
         });
       }
-    } else years.push('all');
+    } else {
+      years.push('all');
+    }
   } else {
     years = ['all'];
   }
@@ -82,7 +94,9 @@ module.exports = function(vars, years, depth) {
     }
   }
 
-  if (vars.axes && vars.axes.discrete) cacheID.push(vars.axes.discrete);
+  if (vars.axes && vars.axes.discrete) {
+    cacheID.push(vars.axes.discrete);
+  }
 
   cacheID = cacheID.join('_');
   vars.data.cacheID = cacheID;
@@ -104,7 +118,9 @@ module.exports = function(vars, years, depth) {
   var returnData;
 
   if (vars.data.cache[cacheID]) {
-    if (vars.dev.value) print.comment('data already cached');
+    if (vars.dev.value) {
+      print.comment('data already cached');
+    }
 
     returnData = vars.data.cache[cacheID].data;
     if ('nodes' in vars) {
@@ -148,7 +164,9 @@ module.exports = function(vars, years, depth) {
       vars.error.internal = stringFormat(str, missing);
       vars.time.missing = true;
     } else {
-      if (vars.time) vars.time.missing = false;
+      if (vars.time) {
+        vars.time.missing = false;
+      }
 
       if (years.length > 1) {
         var separated = false;
@@ -191,7 +209,9 @@ module.exports = function(vars, years, depth) {
         returnData = vizFilter(vars, returnData);
       }
 
-      if (vars.dev.value) print.comment('storing data in cache');
+      if (vars.dev.value) {
+        print.comment('storing data in cache');
+      }
     }
 
     return returnData;

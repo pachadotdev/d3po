@@ -340,8 +340,9 @@ var rings = function(vars) {
                 return n[vars.id.value] == edge[node][vars.id.value];
               })[0];
 
-              if (edge[node].d3po.edges === undefined)
+              if (edge[node].d3po.edges === undefined) {
                 edge[node].d3po.edges = {};
+              }
 
               var oppID =
                 i === 0
@@ -387,11 +388,11 @@ var rings = function(vars) {
         var buffer, anchor;
         if (angle < -90 || angle > 90) {
           angle = angle - 180;
-          buffer = -(n.d3po.r + width / 2 + vars.labels.padding),
-          anchor = 'end';
+          (buffer = -(n.d3po.r + width / 2 + vars.labels.padding)),
+            (anchor = 'end');
         } else {
-          buffer = n.d3po.r + width / 2 + vars.labels.padding,
-          anchor = 'start';
+          (buffer = n.d3po.r + width / 2 + vars.labels.padding),
+            (anchor = 'start');
         }
 
         var background = primaries.indexOf(n) >= 0 ? true : false;

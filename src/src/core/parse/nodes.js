@@ -47,6 +47,8 @@ module.exports = function(vars) {
       vars.nodes.positions = true;
     }
 
-    if (vars.dev.value) print.timeEnd(timerString);
+    if (vars.dev.value) {
+      print.timeEnd(timerString);
+    }
   }
 };

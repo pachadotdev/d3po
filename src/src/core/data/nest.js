@@ -5,7 +5,9 @@ var fetchValue = require('../fetch/value.js'),
 // Nests and groups the data.
 //------------------------------------------------------------------------------
 var dataNest = function(vars, flatData, nestingLevels, discrete) {
-  if (discrete === undefined) discrete = true;
+  if (discrete === undefined) {
+    discrete = true;
+  }
 
   var nestedData = d3.nest(),
     groupedData = [],
@@ -83,9 +85,13 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     if (merged === leaves.length) {
       for (var ll = 0; ll < leaves.length; ll++) {
         var l = leaves[ll];
-        if (!returnObj.d3po.merged) returnObj.d3po.merged = [];
+        if (!returnObj.d3po.merged) {
+          returnObj.d3po.merged = [];
+        }
         returnObj.d3po.merged = returnObj.d3po.merged.concat(l.d3po.merged);
-        if (l.d3po.text) returnObj.d3po.text = l.d3po.text;
+        if (l.d3po.text) {
+          returnObj.d3po.text = l.d3po.text;
+        }
       }
     }
 
@@ -108,7 +114,9 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
           var a = c === 'total' ? 1 : 0;
           if (vars[c].value) {
             a = fetchValue(vars, d, vars[c].value);
-            if (typeof a !== 'number') a = a ? 1 : 0;
+            if (typeof a !== 'number') {
+              a = a ? 1 : 0;
+            }
           }
           return a;
         });
@@ -148,7 +156,9 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
           vals = vals.filter(function(d) {
             return typeof d === keyType;
           });
-          if (vals.length) returnObj[key] = d3[agg](vals);
+          if (vals.length) {
+            returnObj[key] = d3[agg](vals);
+          }
         } else {
           var testVals = checkVal(leaves, key);
           var keyValues =

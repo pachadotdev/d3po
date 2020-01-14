@@ -30,7 +30,9 @@ module.exports = function(vars) {
   if (!vars.error.value) {
     var zoom = vars.zoom.viewport || vars.zoom.bounds;
     if (vars.types[vars.type.value].zoom && vars.zoom.value && zoom) {
-      if (vars.dev.value) print.time('calculating zoom');
+      if (vars.dev.value) {
+        print.time('calculating zoom');
+      }
 
       if (vars.draw.first || vars.zoom.reset) {
         bounds(vars, zoom, 0);
@@ -47,7 +49,9 @@ module.exports = function(vars) {
         bounds(vars, zoom);
       }
 
-      if (vars.dev.value) print.timeEnd('calculating zoom');
+      if (vars.dev.value) {
+        print.timeEnd('calculating zoom');
+      }
     } else {
       vars.zoom.bounds = [
         [0, 0],
@@ -107,7 +111,9 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   if (!vars.error.value) {
     var reqs = vars.types[vars.type.value].requirements || [];
-    if (!(reqs instanceof Array)) reqs = [reqs];
+    if (!(reqs instanceof Array)) {
+      reqs = [reqs];
+    }
     var data_req = reqs.indexOf('data') >= 0;
     if (!vars.error.internal) {
       if ((!vars.data.viz || !vars.returned.nodes.length) && data_req) {
@@ -121,7 +127,9 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   var prev = vars.type.previous;
   if (prev && vars.type.value != prev && vars.g.apps[prev]) {
-    if (vars.dev.value) print.time('hiding "' + prev + '"');
+    if (vars.dev.value) {
+      print.time('hiding "' + prev + '"');
+    }
     if (vars.draw.timing) {
       vars.g.apps[prev]
         .transition()
@@ -130,7 +138,9 @@ module.exports = function(vars) {
     } else {
       vars.g.apps[prev].attr('opacity', 0);
     }
-    if (vars.dev.value) print.timeEnd();
+    if (vars.dev.value) {
+      print.timeEnd();
+    }
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,8 +155,8 @@ module.exports = function(vars) {
         : vars.focus.value.length &&
           vars.types[vars.type.value].zoom &&
           vars.zoom.value
-          ? 1 - vars.tooltip.curtain.opacity
-          : 1;
+        ? 1 - vars.tooltip.curtain.opacity
+        : 1;
 
     var timing = vars.draw.timing;
 

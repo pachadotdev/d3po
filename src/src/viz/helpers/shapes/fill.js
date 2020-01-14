@@ -21,7 +21,9 @@ module.exports = function(vars, selection) {
   // The position and size of each rectangle on update.
   //----------------------------------------------------------------------------
   function update(nodes, mod) {
-    if (!mod) mod = 0;
+    if (!mod) {
+      mod = 0;
+    }
     nodes
       .attr('x', function(d) {
         var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;

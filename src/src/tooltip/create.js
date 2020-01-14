@@ -53,7 +53,9 @@ module.exports = function(params) {
       window.innerHeight + scroll.y()
     ];
     var sb = scrollBar();
-    if (document.body.scrollHeight > window.innerHeight) params.limit[0] -= sb;
+    if (document.body.scrollHeight > window.innerHeight) {
+      params.limit[0] -= sb;
+    }
   } else {
     params.limit = [
       parseFloat(params.parent.style('width'), 10),
@@ -81,8 +83,11 @@ module.exports = function(params) {
   } else if (params.align) {
     var a = params.align.split(' ');
     params.anchor.y = a[0];
-    if (a[1]) params.anchor.x = a[1];
-    else params.anchor.x = 'center';
+    if (a[1]) {
+      params.anchor.x = a[1];
+    } else {
+      params.anchor.x = 'center';
+    }
   } else {
     params.anchor.x = 'center';
     params.anchor.y = 'top';
@@ -301,7 +306,9 @@ module.exports = function(params) {
 
   if (params.title) {
     var mw = params.max_width - 6;
-    if (params.icon) mw -= params.iconsize + 6;
+    if (params.icon) {
+      mw -= params.iconsize + 6;
+    }
     mw += 'px';
 
     header
@@ -470,14 +477,18 @@ module.exports = function(params) {
       }
 
       var w = parseFloat(val.style('width'), 10);
-      if (w > params.width / 2) w = params.width / 2;
-      if (w > val_width) val_width = w;
+      if (w > params.width / 2) {
+        w = params.width / 2;
+      }
+      if (w > val_width) {
+        val_width = w;
+      }
 
       if (i != params.data.length - 1) {
         if (
           (d.group && d.group == params.data[i + 1].group) ||
           (!d.group && !params.data[i + 1].group)
-        )
+        ) {
           data_container
             .append('div')
             .attr('class', 'd3po_tooltip_data_seperator')
@@ -485,6 +496,7 @@ module.exports = function(params) {
             .style('display', 'block')
             .style('height', '1px')
             .style('margin', '0px 3px');
+        }
       }
     });
 
@@ -553,8 +565,11 @@ module.exports = function(params) {
 
   params.width = tooltip.node().offsetWidth;
 
-  if (params.anchor.y != 'center') params.height += params.arrow_offset;
-  else params.width += params.arrow_offset;
+  if (params.anchor.y != 'center') {
+    params.height += params.arrow_offset;
+  } else {
+    params.width += params.arrow_offset;
+  }
 
   if (params.data || ((!params.fullscreen || params.stacked) && params.html)) {
     if (!params.fullscreen || params.stacked) {

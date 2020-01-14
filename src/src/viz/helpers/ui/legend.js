@@ -30,7 +30,9 @@ module.exports = function(vars) {
     vars.legend.value
   ) {
     if (!vars.color.valueScale) {
-      if (vars.dev.value) print.time('grouping data by colors');
+      if (vars.dev.value) {
+        print.time('grouping data by colors');
+      }
 
       var data;
       if (
@@ -93,7 +95,9 @@ module.exports = function(vars) {
       // if (vars.icon.value && vars.legend.icons.value) legendNesting.push(vars.icon.value);
       var colors = dataNest(vars, data, legendNesting, false);
 
-      if (vars.dev.value) print.timeEnd('grouping data by color');
+      if (vars.dev.value) {
+        print.timeEnd('grouping data by color');
+      }
 
       var available_width = vars.width.value;
 
@@ -103,7 +107,9 @@ module.exports = function(vars) {
         square_size * colors.length + vars.ui.padding * (colors.length + 1);
 
       if (square_size instanceof Array) {
-        if (vars.dev.value) print.time('calculating legend size');
+        if (vars.dev.value) {
+          print.time('calculating legend size');
+        }
 
         for (i = square_size[1]; i >= square_size[0]; i--) {
           key_width = i * colors.length + vars.ui.padding * (colors.length + 1);
@@ -113,7 +119,9 @@ module.exports = function(vars) {
           }
         }
 
-        if (vars.dev.value) print.timeEnd('calculating legend size');
+        if (vars.dev.value) {
+          print.timeEnd('calculating legend size');
+        }
       } else if (typeof square_size != 'number' && square_size !== false) {
         square_size = 30;
       }
@@ -123,7 +131,9 @@ module.exports = function(vars) {
       } else {
         key_width -= vars.ui.padding * 2;
 
-        if (vars.dev.value) print.time('sorting legend');
+        if (vars.dev.value) {
+          print.time('sorting legend');
+        }
 
         if (typeof vars.legend.order.value === 'function') {
           colors = vars.legend.order.value(colors);
@@ -147,9 +157,13 @@ module.exports = function(vars) {
           );
         }
 
-        if (vars.dev.value) print.timeEnd('sorting legend');
+        if (vars.dev.value) {
+          print.timeEnd('sorting legend');
+        }
 
-        if (vars.dev.value) print.time('drawing legend');
+        if (vars.dev.value) {
+          print.time('drawing legend');
+        }
 
         var start_x;
 
@@ -325,7 +339,9 @@ module.exports = function(vars) {
           .selectAll('g.d3po_color')
           .data(colors, function(d) {
             var c = fetchColor(vars, d, colorKey);
-            if (!(c in colorInt)) colorInt[c] = -1;
+            if (!(c in colorInt)) {
+              colorInt[c] = -1;
+            }
             colorInt[c]++;
             return colorInt[c] + '_' + c;
           });
@@ -382,25 +398,25 @@ module.exports = function(vars) {
                   idIndex >= 0
                     ? fetchText(vars, d, idIndex)[0]
                     : vars.format.value(
-                      fetchValue(vars, d, vars.color.value, colorKey),
-                      {
-                        key: vars.color.value,
-                        vars: vars,
-                        data: d
-                      }
-                    );
+                        fetchValue(vars, d, vars.color.value, colorKey),
+                        {
+                          key: vars.color.value,
+                          vars: vars,
+                          data: d
+                        }
+                      );
               }
 
               var html, js;
               if (vars.legend.filters.value && !(id instanceof Array)) {
-                html = '<div style=\'text-align:center;\'>';
+                html = "<div style='text-align:center;'>";
                 var loc = vars.format.locale.value;
                 html +=
-                  '<div class=\'mute\'>' +
+                  "<div class='mute'>" +
                   vars.format.value(loc.method.mute) +
                   '</div>';
                 html +=
-                  '<div class=\'solo\'>' +
+                  "<div class='solo'>" +
                   vars.format.value(loc.method.solo) +
                   '</div>';
                 html += '</div>';
@@ -476,10 +492,14 @@ module.exports = function(vars) {
             });
         }
 
-        if (vars.dev.value) print.timeEnd('drawing legend');
+        if (vars.dev.value) {
+          print.timeEnd('drawing legend');
+        }
       }
     } else if (vars.color.valueScale) {
-      if (vars.dev.value) print.time('drawing color scale');
+      if (vars.dev.value) {
+        print.time('drawing color scale');
+      }
 
       vars.g.legend
         .selectAll('g.d3po_color')
@@ -606,7 +626,9 @@ module.exports = function(vars) {
         })
         .each(function() {
           var w = Math.ceil(this.getBBox().width);
-          if (w > label_width) label_width = w;
+          if (w > label_width) {
+            label_width = w;
+          }
         });
 
       label_width += vars.labels.padding * 2;
@@ -704,7 +726,9 @@ module.exports = function(vars) {
           .duration(vars.draw.timing)
           .attr('opacity', 1);
 
-        if (vars.dev.value) print.timeEnd('drawing color scale');
+        if (vars.dev.value) {
+          print.timeEnd('drawing color scale');
+        }
       } else {
         key_display = false;
       }
@@ -715,7 +739,9 @@ module.exports = function(vars) {
     key_display = false;
   }
   if (vars.legend.value && key_display) {
-    if (vars.dev.value) print.time('positioning legend');
+    if (vars.dev.value) {
+      print.time('positioning legend');
+    }
 
     if (square_size) {
       var key_height = square_size + vars.ui.padding;
@@ -737,15 +763,21 @@ module.exports = function(vars) {
         'translate(0,' + (vars.height.value - vars.margin.bottom) + ')'
       );
 
-    if (vars.dev.value) print.timeEnd('positioning legend');
+    if (vars.dev.value) {
+      print.timeEnd('positioning legend');
+    }
   } else {
-    if (vars.dev.value) print.time('hiding legend');
+    if (vars.dev.value) {
+      print.time('hiding legend');
+    }
 
     vars.g.legend
       .transition()
       .duration(vars.draw.timing)
       .attr('transform', 'translate(0,' + vars.height.value + ')');
 
-    if (vars.dev.value) print.timeEnd('hiding legend');
+    if (vars.dev.value) {
+      print.timeEnd('hiding legend');
+    }
   }
 };

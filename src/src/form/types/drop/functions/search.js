@@ -4,7 +4,9 @@ var prefix = require('../../../../client/prefix.js'),
 // Creates and styles the search box, if enabled.
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
-  if (vars.dev.value) print.time('creating search');
+  if (vars.dev.value) {
+    print.time('creating search');
+  }
 
   var data = require('./data.js'),
     items = require('./items.js'),
@@ -107,5 +109,7 @@ module.exports = function(vars) {
     vars.margin.title += vars.search.height;
   }
 
-  if (vars.dev.value) print.timeEnd('creating search');
+  if (vars.dev.value) {
+    print.timeEnd('creating search');
+  }
 };

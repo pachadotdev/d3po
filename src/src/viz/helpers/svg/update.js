@@ -3,7 +3,9 @@ var print = require('../../../core/console/print.js');
 // Updating Elements
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
-  if (vars.dev.value) print.time('updating SVG elements');
+  if (vars.dev.value) {
+    print.time('updating SVG elements');
+  }
 
   if (vars.draw.timing) {
     // Update Parent Element
@@ -72,5 +74,7 @@ module.exports = function(vars) {
     );
   }
 
-  if (vars.dev.value) print.timeEnd('updating SVG elements');
+  if (vars.dev.value) {
+    print.timeEnd('updating SVG elements');
+  }
 };

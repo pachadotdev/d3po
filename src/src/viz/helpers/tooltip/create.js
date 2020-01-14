@@ -39,17 +39,12 @@ module.exports = function(params) {
       length = 'long',
       footer = vars.footer.value;
 
-    arrow = false,
-    mouse = true,
-
-    vars.covered = true;
+    (arrow = false), (mouse = true), (vars.covered = true);
   } else {
-    var
-      align = params.anchor || vars.tooltip.anchor,
+    var align = params.anchor || vars.tooltip.anchor,
       zoom = zoomDirection(d, vars);
     fullscreen = false;
     length = params.length || 'short';
-
 
     var text = '';
     if (
@@ -81,13 +76,13 @@ module.exports = function(params) {
 
     footer = text.length
       ? vars.format.value(text, {
-        key: 'footer',
-        vars: vars
-      })
+          key: 'footer',
+          vars: vars
+        })
       : false;
   }
 
-  var x ,y, offset;
+  var x, y, offset;
   if ('x' in params) {
     x = params.x;
   } else if (vars.types[vars.type.value].tooltip === 'static') {
@@ -143,14 +138,17 @@ module.exports = function(params) {
       nestKey = vars.id.nesting[depth],
       nameList = 'merged' in d.d3po ? d.d3po.merged : d[nestKey];
 
-    if (!(nameList instanceof Array)) nameList = [nameList];
+    if (!(nameList instanceof Array)) {
+      nameList = [nameList];
+    }
 
     var dataValue = fetchValue(vars, d, vars.size.value);
 
     if (vars.tooltip.children.value) {
       nameList = nameList.slice(0);
-      if (nameList.length > 1 && validObject(nameList[0]))
+      if (nameList.length > 1 && validObject(nameList[0])) {
         nameList = dataNest(vars, nameList, [nestKey]);
+      }
 
       if (vars.size.value && validObject(nameList[0])) {
         var namesNoValues = [];
@@ -179,7 +177,9 @@ module.exports = function(params) {
         values: []
       };
       for (var i = 0; i < max; i++) {
-        if (!nameList.length) break;
+        if (!nameList.length) {
+          break;
+        }
 
         var obj = nameList.shift(),
           name = fetchText(vars, obj, depth)[0],
@@ -194,17 +194,19 @@ module.exports = function(params) {
           children[name] =
             value && !(value instanceof Array)
               ? vars.format.value(value, {
-                key: vars.size.value,
-                vars: vars,
-                data: obj
-              })
+                  key: vars.size.value,
+                  vars: vars,
+                  data: obj
+                })
               : '';
           var child = {};
           child[name] = children[name];
           children.values.push(child);
 
           if (color) {
-            if (!children.d3po_colors) children.d3po_colors = {};
+            if (!children.d3po_colors) {
+              children.d3po_colors = {};
+            }
             children.d3po_colors[name] = color;
           }
         } else {
@@ -319,9 +321,9 @@ module.exports = function(params) {
       tooltip_data.length > 0 ||
       footer ||
       (!d.d3po_label && length == 'short' && title) ||
-        (d.d3po_label &&
-          (!('visible' in d.d3po_label) ||
-            ('visible' in d.d3po_label && d.d3po_label.visible === false)))
+      (d.d3po_label &&
+        (!('visible' in d.d3po_label) ||
+          ('visible' in d.d3po_label && d.d3po_label.visible === false)))
     ) {
       if (!title) {
         title = vars.format.value(id, {
@@ -334,10 +336,12 @@ module.exports = function(params) {
         'd3po' in d && 'merged' in d.d3po
           ? dataDepth - 1
           : 'depth' in params
-            ? params.depth
-            : dataDepth;
+          ? params.depth
+          : dataDepth;
 
-      if (depth < 0) depth = 0;
+      if (depth < 0) {
+        depth = 0;
+      }
 
       depth = vars.id.nesting[depth];
 
@@ -421,7 +425,9 @@ module.exports = function(params) {
       vars.tooltip.html.value.url
     ) {
       var tooltip_url = vars.tooltip.html.value.url;
-      if (typeof tooltip_url === 'function') tooltip_url = tooltip_url(id);
+      if (typeof tooltip_url === 'function') {
+        tooltip_url = tooltip_url(id);
+      }
       d3.json(tooltip_url, function(data) {
         var html = vars.tooltip.html.value.callback
           ? vars.tooltip.html.value.callback(data)

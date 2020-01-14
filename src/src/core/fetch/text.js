@@ -6,7 +6,9 @@ var fetchValue = require('./value.js'),
 // Get array of available text values
 //------------------------------------------------------------------------------
 module.exports = function(vars, obj, depth) {
-  if (typeof depth !== 'number') depth = vars.depth.value;
+  if (typeof depth !== 'number') {
+    depth = vars.depth.value;
+  }
 
   var key = vars.id.nesting[depth],
     textKeys;
@@ -19,8 +21,9 @@ module.exports = function(vars, obj, depth) {
     }
   } else {
     textKeys = [];
-    if (vars.text.value && depth === vars.depth.value)
+    if (vars.text.value && depth === vars.depth.value) {
       textKeys.push(vars.text.value);
+    }
     textKeys.push(key);
   }
 
@@ -79,7 +82,9 @@ module.exports = function(vars, obj, depth) {
             });
           }
         });
-        if (name.length === 1) name = name[0];
+        if (name.length === 1) {
+          name = name[0];
+        }
         names.push(name);
       }
     });

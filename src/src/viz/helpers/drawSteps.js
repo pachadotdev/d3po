@@ -54,7 +54,9 @@ module.exports = function(vars) {
       appMessage = stringFormat(locale.message.initializing, appName),
       dataMessage = locale.message.data;
 
-    if (!(appReqs instanceof Array)) appReqs = [appReqs];
+    if (!(appReqs instanceof Array)) {
+      appReqs = [appReqs];
+    }
     appName = appName.toLowerCase();
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -70,7 +72,9 @@ module.exports = function(vars) {
 
           appSetup(vars);
 
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
         },
         message: appMessage
       });
@@ -102,7 +106,9 @@ module.exports = function(vars) {
             .attr('id', appType)
             .attr('opacity', 0);
 
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
         },
         message: appMessage
       });
@@ -180,7 +186,9 @@ module.exports = function(vars) {
             vars.color.type = vars.data.keys[vars.id.value];
           }
 
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
         }
       },
       message: dataMessage
@@ -244,13 +252,19 @@ module.exports = function(vars) {
             print.time(timerString);
           }
           vars.data.pool = fetchData(vars, year);
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
           if (!year) {
             vars.data.viz = vars.data.pool;
           } else {
-            if (vars.dev.value) print.time('fetching data for current year');
+            if (vars.dev.value) {
+              print.time('fetching data for current year');
+            }
             vars.data.viz = fetchData(vars);
-            if (vars.dev.value) print.timeEnd('fetching data for current year');
+            if (vars.dev.value) {
+              print.timeEnd('fetching data for current year');
+            }
           }
 
           vars.draw.timing =
@@ -293,7 +307,9 @@ module.exports = function(vars) {
         removeTooltip(vars.type.previous);
       }
       removeTooltip(appType);
-      if (vars.dev.value) print.timeEnd(str);
+      if (vars.dev.value) {
+        print.timeEnd(str);
+      }
     },
     message: uiMessage
   });
@@ -316,7 +332,9 @@ module.exports = function(vars) {
           drawTimeline(vars);
           drawLegend(vars);
         } else {
-          if (vars.dev.value) print.time('calculating margins');
+          if (vars.dev.value) {
+            print.time('calculating margins');
+          }
 
           var drawer =
             vars.container.value.select('div#d3po_drawer').node()
@@ -336,7 +354,9 @@ module.exports = function(vars) {
 
           vars.margin.bottom += drawer + timeline + legend;
 
-          if (vars.dev.value) print.timeEnd('calculating margins');
+          if (vars.dev.value) {
+            print.timeEnd('calculating margins');
+          }
         }
       }
 

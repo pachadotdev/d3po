@@ -10,8 +10,8 @@ module.exports = function(vars) {
   var total_key = vars.size.value
     ? vars.size.value
     : vars.color.type === 'number'
-      ? vars.color.value
-      : false;
+    ? vars.color.value
+    : false;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If there is no data or the title bar is not needed,
@@ -41,8 +41,11 @@ module.exports = function(vars) {
     } else {
       total_data = total_data.reduce(function(arr, d) {
         var vals = fetchValue(vars, d, total_key);
-        if (vals instanceof Array) arr = arr.concat(vals);
-        else arr.push(vals);
+        if (vals instanceof Array) {
+          arr = arr.concat(vals);
+        } else {
+          arr.push(vals);
+        }
         return arr;
       }, []);
 
@@ -142,7 +145,9 @@ module.exports = function(vars) {
   if (!vars.small) {
     if (vars.title.value) {
       var title = vars.title.value;
-      if (typeof title === 'function') title = title(vars.self);
+      if (typeof title === 'function') {
+        title = title(vars.self);
+      }
       title_data.push({
         link: vars.title.link,
         style: vars.title,
@@ -152,7 +157,9 @@ module.exports = function(vars) {
     }
     if (vars.title.sub.value) {
       title = vars.title.sub.value;
-      if (typeof title === 'function') title = title(vars.self);
+      if (typeof title === 'function') {
+        title = title(vars.self);
+      }
       title_data.push({
         link: vars.title.sub.link,
         style: vars.title.sub,
@@ -204,7 +211,9 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Enter Titles
   //----------------------------------------------------------------------------
-  if (vars.dev.value) print.time('drawing titles');
+  if (vars.dev.value) {
+    print.time('drawing titles');
+  }
   var titles = vars.svg.selectAll('g.d3po_title').data(title_data, function(t) {
     return t.type;
   });
@@ -338,5 +347,7 @@ module.exports = function(vars) {
     vars.margin[vars.title.position] = min;
   }
 
-  if (vars.dev.value) print.timeEnd('drawing titles');
+  if (vars.dev.value) {
+    print.timeEnd('drawing titles');
+  }
 };

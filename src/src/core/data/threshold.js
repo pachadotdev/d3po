@@ -96,10 +96,16 @@ module.exports = function(vars, rawData, split) {
         var val = fetchValue(vars, d, vars.size.value);
         if (val > 0) {
           if (vars.depth.value === 0) {
-            if (val > cutoff) cutoff = val;
+            if (val > cutoff) {
+              cutoff = val;
+            }
           } else {
-            if (!(p in cutoff)) cutoff[p] = 0;
-            if (val > cutoff[p]) cutoff[p] = val;
+            if (!(p in cutoff)) {
+              cutoff[p] = 0;
+            }
+            if (val > cutoff[p]) {
+              cutoff[p] = val;
+            }
           }
           removed.push(d);
         }
@@ -124,8 +130,8 @@ module.exports = function(vars, rawData, split) {
         var p_id = fetchValue(vars, m, parent);
         var children = parent
           ? removed.filter(function(r) {
-            return fetchValue(vars, r, parent) === p_id;
-          })
+              return fetchValue(vars, r, parent) === p_id;
+            })
           : removed;
 
         if (children.length > 1) {
@@ -185,9 +191,9 @@ module.exports = function(vars, rawData, split) {
             textLabel = textLabel.length
               ? textLabel[0].split(' < ')[0]
               : vars.format.value(vars.format.locale.value.ui.values, {
-                key: 'threshold',
-                vars: vars
-              });
+                  key: 'threshold',
+                  vars: vars
+                });
             if ((p_id, labelException.indexOf(p_id) < 0)) {
               textLabel +=
                 ' < ' +

@@ -24,7 +24,9 @@ module.exports = {
       var selector = vars.container.selector || '';
       print.warning(stringFormat(str, '"' + selector + '"'), 'container');
     } else {
-      if (vars.dev.value) print.time('total draw time');
+      if (vars.dev.value) {
+        print.time('total draw time');
+      }
 
       vars.container.value.call(vars.self);
     }

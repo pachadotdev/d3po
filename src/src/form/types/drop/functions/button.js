@@ -8,7 +8,9 @@ var copy = require('../../../../util/copy.js'),
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
   if (!('button' in vars.container)) {
-    if (vars.dev.value) print.time('creating main button');
+    if (vars.dev.value) {
+      print.time('creating main button');
+    }
 
     vars.container.button = form()
       .container(vars.container.ui)
@@ -17,7 +19,9 @@ module.exports = function(vars) {
         margin: 0
       });
 
-    if (vars.dev.value) print.timeEnd('creating main button');
+    if (vars.dev.value) {
+      print.timeEnd('creating main button');
+    }
   }
 
   if (vars.focus.changed || vars.data.changed || vars.depth.changed) {

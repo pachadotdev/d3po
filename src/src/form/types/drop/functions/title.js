@@ -8,7 +8,9 @@ var events = require('../../../../client/pointer.js'),
 //------------------------------------------------------------------------------
 module.exports = function(vars) {
   if (vars.open.value) {
-    if (vars.dev.value) print.time('creating title and back button');
+    if (vars.dev.value) {
+      print.time('creating title and back button');
+    }
 
     var enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0,
       title = enabled,
@@ -143,6 +145,8 @@ module.exports = function(vars) {
         vars.container.title.node().getBoundingClientRect().height;
     }
 
-    if (vars.dev.value) print.timeEnd('creating title and back button');
+    if (vars.dev.value) {
+      print.timeEnd('creating title and back button');
+    }
   }
 };

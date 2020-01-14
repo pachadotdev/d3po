@@ -5,7 +5,9 @@ module.exports = {
     value: true
   },
   process: function(value) {
-    if (typeof value === 'string') value = [value];
+    if (typeof value === 'string') {
+      value = [value];
+    }
     return value;
   },
   value: false

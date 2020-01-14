@@ -18,7 +18,7 @@ module.exports = {
       return [];
     }
 
-    if (!id){
+    if (!id) {
       id = 'id';
     }
 

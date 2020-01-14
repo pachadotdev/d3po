@@ -1,6 +1,10 @@
 // Word wraps SVG text
-(function() {
-  var attach, print, sizes, text, wrap;
+(() => {
+  let attach;
+  let print;
+  let sizes;
+  let text;
+  let wrap;
 
   attach = require('../core/methods/attach.js');
 
@@ -12,11 +16,11 @@
 
   wrap = require('./helpers/wrap.js');
 
-  module.exports = function() {
-    var vars;
+  module.exports = () => {
+    let vars;
     vars = {
       self: function(selection) {
-        selection.each(function() {
+        selection.each(() => {
           sizes(vars);
           if (vars.size.value[0] <= vars.height.inner) {
             text(vars);
@@ -52,4 +56,4 @@
     });
     return vars.self;
   };
-}.call(this));
+}).call(this);

@@ -1,10 +1,12 @@
-(function() {
-  var colorSort;
+(() => {
+  let colorSort;
 
   colorSort = require('../color/sort.js');
 
-  module.exports = function(a, b, keys, sort, colors, vars, depth) {
-    var i, k, retVal;
+  module.exports = (a, b, keys, sort, colors, vars, depth) => {
+    let i;
+    let k;
+    let retVal;
     if (!sort) {
       sort = 'asc';
     }
@@ -39,4 +41,4 @@
       return -retVal;
     }
   };
-}.call(this));
+}).call(this);

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: ['auto', Boolean],
     process: function(value) {
@@ -10,4 +10,4 @@
     term: '',
     value: 'auto'
   };
-}.call(this));
+}).call(this);

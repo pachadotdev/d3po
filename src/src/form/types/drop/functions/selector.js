@@ -1,7 +1,7 @@
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the div that holds the search box and item list.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   vars.container.selector = vars.container.ui
     .selectAll('div.d3po_drop_selector')
     .data(['selector']);

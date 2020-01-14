@@ -1,22 +1,22 @@
-var child = require('../../../util/child.js'),
-  closest = require('../../../util/closest.js'),
-  createTooltip = require('../tooltip/create.js'),
-  events = require('../../../client/pointer.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
-  fetchColor = require('../../../core/fetch/color.js'),
-  fetchText = require('../../../core/fetch/text.js'),
-  legible = require('../../../color/legible.js'),
-  print = require('../../../core/console/print.js'),
-  removeTooltip = require('../../../tooltip/remove.js'),
-  shapeFill = require('./fill.js'),
-  stringStrip = require('../../../string/strip.js'),
-  touch = require('../../../client/touch.js'),
-  touchEvent = require('../zoom/propagation.js'),
-  uniqueValues = require('../../../util/uniques.js'),
-  validObject = require('../../../object/validate.js'),
-  zoomDirection = require('../zoom/direction.js');
+const child = require('../../../util/child.js');
+const closest = require('../../../util/closest.js');
+const createTooltip = require('../tooltip/create.js');
+const events = require('../../../client/pointer.js');
+const fetchValue = require('../../../core/fetch/value.js');
+const fetchColor = require('../../../core/fetch/color.js');
+const fetchText = require('../../../core/fetch/text.js');
+const legible = require('../../../color/legible.js');
+const print = require('../../../core/console/print.js');
+const removeTooltip = require('../../../tooltip/remove.js');
+const shapeFill = require('./fill.js');
+const stringStrip = require('../../../string/strip.js');
+const touch = require('../../../client/touch.js');
+const touchEvent = require('../zoom/propagation.js');
+const uniqueValues = require('../../../util/uniques.js');
+const validObject = require('../../../object/validate.js');
+const zoomDirection = require('../zoom/direction.js');
 
-var drawShape = {
+const drawShape = {
   arc: require('./arc.js'),
   area: require('./area.js'),
   check: require('./check.js'),
@@ -30,9 +30,9 @@ var drawShape = {
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws the appropriate shape based on the data
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var data = vars.returned.nodes || [],
-    edges = vars.returned.edges || [];
+module.exports = vars => {
+  const data = vars.returned.nodes || [];
+  const edges = vars.returned.edges || [];
 
   vars.draw.timing =
     data.length < vars.data.large && edges.length < vars.edges.large
@@ -44,7 +44,7 @@ module.exports = function(vars) {
   // example, both "square", and "circle" shapes use "rect" as their drawing
   // class.
   //----------------------------------------------------------------------------
-  var shapeLookup = {
+  const shapeLookup = {
     arc: 'arc',
     area: 'area',
     check: 'check',
@@ -61,9 +61,9 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Split the data by each shape type in the data.
   //----------------------------------------------------------------------------
-  var shapes = {};
-  data.forEach(function(d) {
-    var s = d.d3po && d.d3po.shape ? d.d3po.shape : vars.shape.value;
+  const shapes = {};
+  data.forEach(d => {
+    let s = d.d3po && d.d3po.shape ? d.d3po.shape : vars.shape.value;
     if (s in shapeLookup) {
       if (d.d3po) {
         d.d3po.shape = s;
@@ -82,15 +82,15 @@ module.exports = function(vars) {
   function id(d) {
     if (!d.d3po.id) {
       d.d3po.id = '';
-      for (var i = 0; i <= vars.depth.value; i++) {
+      for (let i = 0; i <= vars.depth.value; i++) {
         d.d3po.id += fetchValue(vars, d, vars.id.nesting[i]) + '_';
       }
 
       d.d3po.id += shape;
 
-      ['x', 'y', 'x2', 'y2'].forEach(function(axis) {
+      ['x', 'y', 'x2', 'y2'].forEach(axis => {
         if (vars[axis].scale.value == 'discrete') {
-          var val = fetchValue(vars, d, vars[axis].value);
+          let val = fetchValue(vars, d, vars[axis].value);
           if (val.constructor === Date) {
             val = val.getTime();
           }
@@ -112,8 +112,8 @@ module.exports = function(vars) {
   // Transforms the positions and scale of each group.
   //----------------------------------------------------------------------------
   function transform(g, grow) {
-    var scales = vars.types[vars.type.value].scale,
-      scale = 1;
+    const scales = vars.types[vars.type.value].scale;
+    let scale = 1;
     if (scales) {
       if (validObject[scales] && vars.shape.value in scales) {
         scale = scales[vars.shape.value];
@@ -125,10 +125,10 @@ module.exports = function(vars) {
     }
 
     scale = grow ? scale : 1;
-    g.attr('transform', function(d) {
+    g.attr('transform', d => {
       if (['line', 'area', 'coordinates'].indexOf(shape) < 0) {
-        var x = d.d3po.x || 0,
-          y = d.d3po.y || 0;
+        const x = d.d3po.x || 0;
+        const y = d.d3po.y || 0;
         return 'translate(' + x + ',' + y + ')scale(' + scale + ')';
       } else {
         return 'scale(' + scale + ')';
@@ -140,10 +140,8 @@ module.exports = function(vars) {
   // Sets the class name for a group
   //----------------------------------------------------------------------------
   function className(g) {
-    g.attr('id', function(d) {
-      return 'd3po_group_' + d.d3po.id;
-    }).attr('class', function(d) {
-      var c = vars.class.value
+    g.attr('id', d => 'd3po_group_' + d.d3po.id).attr('class', d => {
+      const c = vars.class.value
         ? ' ' + fetchValue(vars, d, vars.class.value)
         : '';
       return 'd3po_' + shape + c;
@@ -153,9 +151,9 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Remove old groups
   //----------------------------------------------------------------------------
-  for (var s in shapeLookup) {
+  for (const s in shapeLookup) {
     if (!(shapeLookup[s] in shapes) || d3.keys(shapes).length === 0) {
-      var oldShapes = vars.g.data.selectAll('g.d3po_' + shapeLookup[s]);
+      const oldShapes = vars.g.data.selectAll('g.d3po_' + shapeLookup[s]);
       if (vars.draw.timing) {
         oldShapes
           .transition()
@@ -175,9 +173,9 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Bind Data to Groups
     //--------------------------------------------------------------------------
-    var selection = vars.g.data
+    const selection = vars.g.data
       .selectAll('g.d3po_' + shape)
-      .data(shapes[shape], function(d) {
+      .data(shapes[shape], d => {
         if (!d.d3po) {
           d.d3po = {};
         }
@@ -189,7 +187,7 @@ module.exports = function(vars) {
 
         if (!d.d3po.id) {
           if (d.values) {
-            d.values.forEach(function(v) {
+            d.values.forEach(v => {
               v = id(v);
               v.d3po.shape = 'circle';
             });
@@ -205,7 +203,7 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Groups Exit
     //--------------------------------------------------------------------------
-    var exit;
+    let exit;
     if (vars.draw.timing) {
       exit = selection
         .exit()
@@ -233,8 +231,8 @@ module.exports = function(vars) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Groups Enter
     //--------------------------------------------------------------------------
-    var opacity = vars.draw.timing ? 0 : 1;
-    var enter = selection
+    const opacity = vars.draw.timing ? 0 : 1;
+    const enter = selection
       .enter()
       .append('g')
       .attr('opacity', opacity)
@@ -286,9 +284,9 @@ module.exports = function(vars) {
       vars.g.edge_hover.selectAll('*').remove();
 
       vars.g.edges.selectAll('g').each(function(l) {
-        var id = d[vars.id.value],
-          source = l[vars.edges.source][vars.id.value],
-          target = l[vars.edges.target][vars.id.value];
+        const id = d[vars.id.value];
+        const source = l[vars.edges.source][vars.id.value];
+        const target = l[vars.edges.target][vars.id.value];
 
         if (
           source == id ||
@@ -298,7 +296,9 @@ module.exports = function(vars) {
           target == 'left_' + id ||
           target == 'right_' + id
         ) {
-          var elem = vars.g.edge_hover.node().appendChild(this.cloneNode(true));
+          const elem = vars.g.edge_hover
+            .node()
+            .appendChild(this.cloneNode(true));
           d3.select(elem)
             .datum(l)
             .attr('opacity', 1)
@@ -307,7 +307,7 @@ module.exports = function(vars) {
         }
       });
 
-      var marker = vars.edges.arrows.value;
+      const marker = vars.edges.arrows.value;
 
       vars.g.edge_hover
         .attr('opacity', 0)
@@ -321,10 +321,10 @@ module.exports = function(vars) {
             ? d3.select(this).style('stroke-width')
             : vars.data.stroke.width * 2;
         })
-        .attr('marker-start', function(e) {
-          var direction = vars.edges.arrows.direction.value;
+        .attr('marker-start', e => {
+          const direction = vars.edges.arrows.direction.value;
 
-          var d;
+          let d;
           if ('bucket' in e.d3po) {
             d = '_' + e.d3po.bucket;
           } else {
@@ -335,10 +335,10 @@ module.exports = function(vars) {
             ? 'url(#d3po_edge_marker_highlight' + d + ')'
             : 'none';
         })
-        .attr('marker-end', function(e) {
-          var direction = vars.edges.arrows.direction.value;
+        .attr('marker-end', e => {
+          const direction = vars.edges.arrows.direction.value;
 
-          var d;
+          let d;
           if ('bucket' in e.d3po) {
             d = '_' + e.d3po.bucket;
           } else {
@@ -402,13 +402,13 @@ module.exports = function(vars) {
           !vars.draw.frozen &&
           (!d.d3po || !d.d3po.static)
         ) {
-          var defaultClick = typeof vars.mouse.over.value !== 'function';
+          let defaultClick = typeof vars.mouse.over.value !== 'function';
           if (typeof vars.mouse.over.value === 'function') {
             defaultClick = vars.mouse.over.value(d, vars.self);
           }
           if (defaultClick) {
-            var zoomDir = zoomDirection(d.d3po_data || d, vars);
-            var pointer =
+            const zoomDir = zoomDirection(d.d3po_data || d, vars);
+            const pointer =
               typeof vars.mouse.viz === 'function' ||
               typeof vars.mouse.viz[events.click] === 'function' ||
               (vars.zoom.value &&
@@ -434,18 +434,19 @@ module.exports = function(vars) {
             vars.covered = false;
 
             if (d.values && vars.axes.discrete) {
-              var index = vars.axes.discrete === 'x' ? 0 : 1,
-                mouse = d3.mouse(vars.container.value.node())[index],
-                positions = uniqueValues(d.values, function(x) {
-                  return x.d3po[vars.axes.discrete];
-                }),
-                match = closest(positions, mouse);
+              const index = vars.axes.discrete === 'x' ? 0 : 1;
+              const mouse = d3.mouse(vars.container.value.node())[index];
+              const positions = uniqueValues(
+                d.values,
+                x => x.d3po[vars.axes.discrete]
+              );
+              const match = closest(positions, mouse);
 
               d.d3po_data = d.values[positions.indexOf(match)];
               d.d3po = d.values[positions.indexOf(match)].d3po;
             }
 
-            var tooltip_data = d.d3po_data ? d.d3po_data : d;
+            const tooltip_data = d.d3po_data ? d.d3po_data : d;
 
             createTooltip({
               vars: vars,
@@ -476,13 +477,13 @@ module.exports = function(vars) {
           !vars.draw.frozen &&
           (!d.d3po || !d.d3po.static)
         ) {
-          var defaultClick = typeof vars.mouse.move.value !== 'function';
+          let defaultClick = typeof vars.mouse.move.value !== 'function';
           if (typeof vars.mouse.move.value === 'function') {
             defaultClick = vars.mouse.move.value(d, vars.self);
           }
           if (defaultClick) {
-            var zoomDir = zoomDirection(d.d3po_data || d, vars);
-            var pointer =
+            const zoomDir = zoomDirection(d.d3po_data || d, vars);
+            const pointer =
               typeof vars.mouse.viz === 'function' ||
               typeof vars.mouse.viz[events.click] === 'function' ||
               (vars.zoom.value &&
@@ -496,18 +497,19 @@ module.exports = function(vars) {
             d3.select(this).style('cursor', pointer ? 'pointer' : 'auto');
 
             if (d.values && vars.axes.discrete) {
-              var index = vars.axes.discrete === 'x' ? 0 : 1,
-                mouse = d3.mouse(vars.container.value.node())[index],
-                positions = uniqueValues(d.values, function(x) {
-                  return x.d3po[vars.axes.discrete];
-                }),
-                match = closest(positions, mouse);
+              const index = vars.axes.discrete === 'x' ? 0 : 1;
+              const mouse = d3.mouse(vars.container.value.node())[index];
+              const positions = uniqueValues(
+                d.values,
+                x => x.d3po[vars.axes.discrete]
+              );
+              const match = closest(positions, mouse);
 
               d.d3po_data = d.values[positions.indexOf(match)];
               d.d3po = d.values[positions.indexOf(match)].d3po;
             }
 
-            var tooltip_data = d.d3po_data ? d.d3po_data : d;
+            const tooltip_data = d.d3po_data ? d.d3po_data : d;
             createTooltip({
               vars: vars,
               data: tooltip_data
@@ -529,12 +531,12 @@ module.exports = function(vars) {
         }
 
         if (!d3.event.buttons && vars.mouse.value && vars.mouse.out.value) {
-          var defaultClick = typeof vars.mouse.out.value !== 'function';
+          let defaultClick = typeof vars.mouse.out.value !== 'function';
           if (typeof vars.mouse.out.value === 'function') {
             defaultClick = vars.mouse.out.value(d, vars.self);
           }
           if (defaultClick) {
-            var childElement = child(this, d3.event.toElement);
+            const childElement = child(this, d3.event.toElement);
 
             if (
               !childElement &&
@@ -570,7 +572,7 @@ module.exports = function(vars) {
         }
       });
   } else {
-    var mouseEvent = function() {
+    const mouseEvent = () => {
       touchEvent(vars, d3.event);
     };
 
@@ -581,7 +583,7 @@ module.exports = function(vars) {
       .on(events.out, mouseEvent);
   }
 
-  d3.select(window).on('scroll.d3po', function() {
+  d3.select(window).on('scroll.d3po', () => {
     removeTooltip(vars.type.value);
   });
 
@@ -594,18 +596,19 @@ module.exports = function(vars) {
       !vars.draw.frozen &&
       (!d.d3po || !d.d3po.static)
     ) {
-      var defaultClick = typeof vars.mouse.click.value !== 'function';
+      let defaultClick = typeof vars.mouse.click.value !== 'function';
       if (typeof vars.mouse.click.value === 'function') {
         defaultClick = vars.mouse.click.value(d, vars.self);
       }
       if (defaultClick) {
         if (d.values && vars.axes.discrete) {
-          var index = vars.axes.discrete === 'x' ? 0 : 1,
-            mouse = d3.mouse(vars.container.value.node())[index],
-            positions = uniqueValues(d.values, function(x) {
-              return x.d3po[vars.axes.discrete];
-            }),
-            match = closest(positions, mouse);
+          const index = vars.axes.discrete === 'x' ? 0 : 1;
+          const mouse = d3.mouse(vars.container.value.node())[index];
+          const positions = uniqueValues(
+            d.values,
+            x => x.d3po[vars.axes.discrete]
+          );
+          const match = closest(positions, mouse);
 
           d.d3po_data = d.values[positions.indexOf(match)];
           d.d3po = d.values[positions.indexOf(match)].d3po;
@@ -619,16 +622,16 @@ module.exports = function(vars) {
           vars.mouse.viz[events.click](d.d3po_data || d, vars);
         }
 
-        var depth_delta = zoomDirection(d.d3po_data || d, vars),
-          previous = vars.id.solo.value,
-          title = fetchText(vars, d)[0],
-          color = legible(fetchColor(vars, d)),
-          prev_sub = vars.title.sub.value || false,
-          prev_color = vars.title.sub.font.color,
-          prev_total = vars.title.total.font.color;
+        const depth_delta = zoomDirection(d.d3po_data || d, vars);
+        const previous = vars.id.solo.value;
+        const title = fetchText(vars, d)[0];
+        const color = legible(fetchColor(vars, d));
+        const prev_sub = vars.title.sub.value || false;
+        const prev_color = vars.title.sub.font.color;
+        const prev_total = vars.title.total.font.color;
 
         if (d.d3po.threshold && d.d3po.merged && vars.zoom.value) {
-          vars.history.states.push(function() {
+          vars.history.states.push(() => {
             vars.self
               .id({
                 solo: previous
@@ -670,9 +673,9 @@ module.exports = function(vars) {
             })
             .draw();
         } else if (depth_delta === 1 && vars.zoom.value) {
-          var id = fetchValue(vars, d.d3po_data || d, vars.id.value);
+          const id = fetchValue(vars, d.d3po_data || d, vars.id.value);
 
-          vars.history.states.push(function() {
+          vars.history.states.push(() => {
             vars.self
               .depth(vars.depth.value - 1)
               .id({
@@ -747,7 +750,7 @@ module.exports = function(vars) {
         ) {
           edge_update();
 
-          var tooltip_data = d.d3po_data ? d.d3po_data : d;
+          const tooltip_data = d.d3po_data ? d.d3po_data : d;
 
           createTooltip({
             vars: vars,

@@ -1,5 +1,8 @@
-(function() {
-  var decoration, family, stringStrip, transform;
+(() => {
+  let decoration;
+  let family;
+  let stringStrip;
+  let transform;
 
   decoration = require('../../core/methods/font/decoration.js');
 
@@ -22,7 +25,7 @@
     },
     link: false,
     process: function(value, vars) {
-      var id;
+      let id;
       if (vars.container.id.indexOf('default') === 0 && value) {
         id = stringStrip(value).toLowerCase();
         vars.self.container({
@@ -33,4 +36,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

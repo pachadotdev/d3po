@@ -1,5 +1,7 @@
-(function() {
-  var decoration, family, transform;
+(() => {
+  let decoration;
+  let family;
+  let transform;
 
   decoration = require('../../core/methods/font/decoration.js');
 
@@ -12,7 +14,7 @@
     align: {
       accepted: ['start', 'middle', 'end', 'left', 'center', 'right'],
       process: function(value) {
-        var css;
+        let css;
         css = ['left', 'center', 'right'].indexOf(value);
         if (css >= 0) {
           value = this.accepted[css];
@@ -48,4 +50,4 @@
     },
     value: true
   };
-}.call(this));
+}).call(this);

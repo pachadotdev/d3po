@@ -1,8 +1,8 @@
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Determines form type based on data length.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var dataLength = vars.data.value.length;
+module.exports = vars => {
+  const dataLength = vars.data.value.length;
 
   if (dataLength === 1) {
     vars.self.type('button').draw();

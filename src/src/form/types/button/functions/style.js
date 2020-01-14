@@ -1,7 +1,7 @@
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //
 //------------------------------------------------------------------------------
-module.exports = function(elem, vars) {
+module.exports = (elem, vars) => {
   elem
     .style('position', 'relative')
     .style('margin', vars.ui.margin.css)

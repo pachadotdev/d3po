@@ -1,5 +1,7 @@
-(function() {
-  var color, legible, print;
+(() => {
+  let color;
+  let legible;
+  let print;
 
   color = require('../../../../core/fetch/color.js');
 
@@ -7,49 +9,39 @@
 
   print = require('../../../../core/console/print.js');
 
-  module.exports = function(vars) {
-    var axes,
-      axis,
-      axisData,
-      data,
-      i,
-      len,
-      margin,
-      ref,
-      style,
-      tick,
-      ticks,
-      timing;
+  module.exports = vars => {
+    let axes;
+    let axis;
+    let axisData;
+    let data;
+    let i;
+    let len;
+    let margin;
+    let ref;
+    let style;
+    let tick;
+    let ticks;
+    let timing;
     axes = vars.axes;
     margin = vars.axes.margin.viz;
     data = axes.stacked || !axes.ticks.value ? [] : vars.data.viz;
     timing = data.length * 2 > vars.data.large ? 0 : vars.draw.timing;
-    style = function(line, axis) {
+    style = (line, axis) => {
       if (axis.indexOf('y') === 0) {
         line
           .attr('x1', -2)
           .attr('x2', -8)
-          .attr('y1', function(d) {
-            return d.d3po.y - margin.top;
-          })
-          .attr('y2', function(d) {
-            return d.d3po.y - margin.top;
-          });
+          .attr('y1', d => d.d3po.y - margin.top)
+          .attr('y2', d => d.d3po.y - margin.top);
       } else {
         line
-          .attr('x1', function(d) {
-            return d.d3po.x - margin.left;
-          })
-          .attr('x2', function(d) {
-            return d.d3po.x - margin.left;
-          })
+          .attr('x1', d => d.d3po.x - margin.left)
+          .attr('x2', d => d.d3po.x - margin.left)
           .attr('y1', axes.height + 2)
           .attr('y2', axes.height + 8);
       }
       return line
-        .style('stroke', function(d) {
-          return legible(color(vars, d));
-        })
+        .style('stroke', d => legible(color(vars, d)))
         .style('stroke-width', vars.data.stroke.width)
         .attr('shape-rendering', vars.shape.rendering.value);
     };
@@ -59,8 +51,8 @@
     ticks = vars.group
       .select('g#d3po_graph_plane')
       .selectAll('g.d3po_data_tick')
-      .data(data, function(d) {
-        var mod;
+      .data(data, d => {
+        let mod;
         mod = axes.discrete ? '_' + d.d3po[axes.discrete] : '';
         return 'tick_' + d[vars.id.value] + '_' + d.d3po.depth + mod;
       });
@@ -81,9 +73,7 @@
       axisData = timing && axis !== axes.discrete ? data : [];
       tick = ticks
         .selectAll('line.d3po_data_' + axis)
-        .data(axisData, function(d) {
-          return 'tick_' + d[vars.id.value] + '_' + d.d3po.depth;
-        });
+        .data(axisData, d => 'tick_' + d[vars.id.value] + '_' + d.d3po.depth);
       if (vars.dev.value && timing) {
         print.timeEnd('creating ' + axis + ' ticks');
       }
@@ -123,4 +113,4 @@
       ticks.exit().remove();
     }
   };
-}.call(this));
+}).call(this);

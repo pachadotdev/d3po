@@ -1,22 +1,22 @@
-var defaultLocale = require('../core/locale/languages/en_US.js'),
-  events = require('../client/pointer.js'),
-  list = require('../string/list.js'),
-  legible = require('../color/legible.js'),
-  move = require('./move.js'),
-  prefix = require('../client/prefix.js'),
-  rtl = require('../client/rtl.js'),
-  removeTooltip = require('./remove.js'),
-  scroll = require('../client/scroll.js'),
-  scrollBar = require('../client/scrollbar.js'),
-  stringList = require('../string/list.js'),
-  textColor = require('../color/text.js');
+const defaultLocale = require('../core/locale/languages/en_US.js');
+const events = require('../client/pointer.js');
+const list = require('../string/list.js');
+const legible = require('../color/legible.js');
+const move = require('./move.js');
+const prefix = require('../client/prefix.js');
+const rtl = require('../client/rtl.js');
+const removeTooltip = require('./remove.js');
+const scroll = require('../client/scroll.js');
+const scrollBar = require('../client/scrollbar.js');
+const stringList = require('../string/list.js');
+const textColor = require('../color/text.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Create a Tooltip
 //-------------------------------------------------------------------
-module.exports = function(params) {
-  var default_width = params.fullscreen ? 250 : 200,
-    vendor = prefix();
+module.exports = params => {
+  const default_width = params.fullscreen ? 250 : 200;
+  const vendor = prefix();
   params.width = params.width || default_width;
   params.max_width = params.max_width || 386;
   params.id = params.id || 'default';
@@ -38,7 +38,7 @@ module.exports = function(params) {
   params.locale = params.locale || defaultLocale;
   params.stacked = params.stacked || false;
 
-  var parentHeight = params.parent
+  const parentHeight = params.parent
     ? params.parent.node().offsetHeight ||
       params.parent.node().getBoundingClientRect().height
     : 0;
@@ -52,7 +52,7 @@ module.exports = function(params) {
       window.innerWidth + scroll.x(),
       window.innerHeight + scroll.y()
     ];
-    var sb = scrollBar();
+    const sb = scrollBar();
     if (document.body.scrollHeight > window.innerHeight) {
       params.limit[0] -= sb;
     }
@@ -64,8 +64,8 @@ module.exports = function(params) {
   }
 
   if (params.title instanceof Array) {
-    var and = params.locale.ui.and,
-      more = params.locale.ui.more;
+    const and = params.locale.ui.and;
+    const more = params.locale.ui.more;
 
     params.title = stringList(params.title, and, 3, more);
   }
@@ -81,7 +81,7 @@ module.exports = function(params) {
       : window.innerWidth / 2;
     params.y = params.parent ? parentHeight / 2 : window.innerHeight / 2;
   } else if (params.align) {
-    var a = params.align.split(' ');
+    const a = params.align.split(' ');
     params.anchor.y = a[0];
     if (a[1]) {
       params.anchor.x = a[1];
@@ -93,7 +93,7 @@ module.exports = function(params) {
     params.anchor.y = 'top';
   }
 
-  var title_width = params.width - 30;
+  let title_width = params.width - 30;
 
   if (params.fullscreen) {
     params.parent
@@ -108,12 +108,12 @@ module.exports = function(params) {
       .style('right', '0px')
       .style('bottom', '0px')
       .style('left', '0px')
-      .on(events.click, function() {
+      .on(events.click, () => {
         removeTooltip(params.id);
       });
   }
 
-  var tooltip = params.parent
+  const tooltip = params.parent
     .append('div')
     .datum(params)
     .attr('id', 'd3po_tooltip_id_' + params.id)
@@ -138,7 +138,7 @@ module.exports = function(params) {
     tooltip.style('z-index', 2000);
   }
 
-  var container = tooltip
+  const container = tooltip
     .append('div')
     .datum(params)
     .attr('class', 'd3po_tooltip_container')
@@ -207,11 +207,11 @@ module.exports = function(params) {
           .style('cursor', 'auto')
           .style(vendor + 'box-shadow', '0 1px 3px rgba(0, 0, 0, 0.25)');
       })
-      .on(events.click, function() {
+      .on(events.click, () => {
         removeTooltip(params.id);
       });
 
-    d3.select('body').on('keydown.esc_' + params.id, function() {
+    d3.select('body').on('keydown.esc_' + params.id, () => {
       if (d3.event.keyCode === 27) {
         removeTooltip(params.id);
         d3.select('body').on('keydown.esc_' + params.id, null);
@@ -222,13 +222,13 @@ module.exports = function(params) {
   if (!params.mouseevents) {
     tooltip.style('pointer-events', 'none');
   } else if (params.mouseevents !== true) {
-    var oldout = d3.select(params.mouseevents).on(events.out);
+    const oldout = d3.select(params.mouseevents).on(events.out);
 
-    var newout = function() {
-      var target = d3.event.toElement || d3.event.relatedTarget;
-      var istooltip;
+    const newout = () => {
+      const target = d3.event.toElement || d3.event.relatedTarget;
+      let istooltip;
       if (target) {
-        var c =
+        const c =
           typeof target.className == 'string'
             ? target.className
             : target.className.baseVal;
@@ -248,8 +248,8 @@ module.exports = function(params) {
       }
     };
 
-    var ischild = function(parent, child) {
-      var node = child.parentNode;
+    var ischild = (parent, child) => {
+      let node = child.parentNode;
       while (node !== null) {
         if (node == parent) {
           return true;
@@ -262,7 +262,7 @@ module.exports = function(params) {
     d3.select(params.mouseevents).on(events.out, newout);
     tooltip.on(events.out, newout);
 
-    var move_event = d3.select(params.mouseevents).on(events.move);
+    const move_event = d3.select(params.mouseevents).on(events.move);
     if (move_event) {
       tooltip.on(events.move, move_event);
     }
@@ -285,7 +285,7 @@ module.exports = function(params) {
   }
 
   if (params.icon) {
-    var title_icon = header
+    const title_icon = header
       .append('div')
       .attr('class', 'd3po_tooltip_icon')
       .style('width', params.iconsize + 'px')
@@ -305,7 +305,7 @@ module.exports = function(params) {
   }
 
   if (params.title) {
-    var mw = params.max_width - 6;
+    let mw = params.max_width - 6;
     if (params.icon) {
       mw -= params.iconsize + 6;
     }
@@ -347,11 +347,11 @@ module.exports = function(params) {
   }
 
   if (params.data) {
-    var val_width = 0,
-      val_heights = {};
+    let val_width = 0;
+    const val_heights = {};
 
-    var last_group = null;
-    params.data.forEach(function(d, i) {
+    let last_group = null;
+    params.data.forEach((d, i) => {
       if (d.group) {
         if (last_group != d.group) {
           last_group = d.group;
@@ -365,7 +365,7 @@ module.exports = function(params) {
         }
       }
 
-      var block = data_container
+      const block = data_container
         .append('div')
         .attr('class', 'd3po_tooltip_data_block')
         .style('font-size', '12px')
@@ -379,12 +379,12 @@ module.exports = function(params) {
         block.style('color', legible(d.highlight));
       }
 
-      var name = block
+      const name = block
         .append('div')
         .attr('class', 'd3po_tooltip_data_name')
         .style('display', 'inline-block')
         .html(d.name)
-        .on(events.out, function() {
+        .on(events.out, () => {
           d3.event.stopPropagation();
         });
 
@@ -393,13 +393,13 @@ module.exports = function(params) {
       }
 
       if (d.value instanceof Array) {
-        var and = params.locale.ui.and,
-          more = params.locale.ui.more;
+        const and = params.locale.ui.and;
+        const more = params.locale.ui.more;
 
         d.value = list(d.value, and, 3, more);
       }
 
-      var val = block
+      const val = block
         .append('div')
         .attr('class', 'd3po_tooltip_data_value')
         .style('display', 'block')
@@ -407,7 +407,7 @@ module.exports = function(params) {
         .style('text-align', 'right')
         .style('top', '3px')
         .html(d.value)
-        .on(events.out, function() {
+        .on(events.out, () => {
           d3.event.stopPropagation();
         });
 
@@ -418,7 +418,7 @@ module.exports = function(params) {
       }
 
       if (params.mouseevents && d.desc) {
-        var desc = block
+        const desc = block
           .append('div')
           .attr('class', 'd3po_tooltip_data_desc')
           .style('color', '#888')
@@ -426,17 +426,17 @@ module.exports = function(params) {
           .style(vendor + 'transition', 'height 0.5s')
           .style('width', '85%')
           .text(d.desc)
-          .on(events.out, function() {
+          .on(events.out, () => {
             d3.event.stopPropagation();
           });
 
-        var dh =
+        const dh =
           desc.node().offsetHeight ||
           desc.node().getBoundingClientRect().height;
 
         desc.style('height', '0px');
 
-        var help = name
+        const help = name
           .append('div')
           .attr('class', 'd3po_tooltip_data_help')
           .style('background-color', '#ccc')
@@ -455,28 +455,28 @@ module.exports = function(params) {
           .style(prefix + 'transition', 'background-color 0.5s')
           .text('?')
           .on(events.over, function() {
-            var c = d3.select(this.parentNode.parentNode).style('color');
+            const c = d3.select(this.parentNode.parentNode).style('color');
             d3.select(this).style('background-color', c);
             desc.style('height', dh + 'px');
           })
-          .on(events.out, function() {
+          .on(events.out, () => {
             d3.event.stopPropagation();
           });
 
         name.style('cursor', 'pointer').on(events.over, function() {
           close_descriptions();
-          var c = d3.select(this.parentNode).style('color');
+          const c = d3.select(this.parentNode).style('color');
           help.style('background-color', c);
           desc.style('height', dh + 'px');
         });
 
-        block.on(events.out, function() {
+        block.on(events.out, () => {
           d3.event.stopPropagation();
           close_descriptions();
         });
       }
 
-      var w = parseFloat(val.style('width'), 10);
+      let w = parseFloat(val.style('width'), 10);
       if (w > params.width / 2) {
         w = params.width / 2;
       }
@@ -503,7 +503,7 @@ module.exports = function(params) {
     data_container
       .selectAll('.d3po_tooltip_data_name')
       .style('width', function() {
-        var w = parseFloat(d3.select(this.parentNode).style('width'), 10);
+        const w = parseFloat(d3.select(this.parentNode).style('width'), 10);
         return w - val_width - 30 + 'px';
       });
 
@@ -511,15 +511,13 @@ module.exports = function(params) {
       .selectAll('.d3po_tooltip_data_value')
       .style('width', val_width + 'px')
       .each(function(d) {
-        var h = parseFloat(d3.select(this).style('height'), 10);
+        const h = parseFloat(d3.select(this).style('height'), 10);
         val_heights[d.name] = h;
       });
 
     data_container
       .selectAll('.d3po_tooltip_data_name')
-      .style('min-height', function(d) {
-        return val_heights[d.name] + 'px';
-      });
+      .style('min-height', d => val_heights[d.name] + 'px');
   }
 
   if (params.html && (!params.fullscreen || params.stacked)) {
@@ -529,7 +527,7 @@ module.exports = function(params) {
     }
   }
 
-  var footer = body
+  const footer = body
     .append('div')
     .attr('class', 'd3po_tooltip_footer')
     .style('font-size', '10px')
@@ -573,7 +571,7 @@ module.exports = function(params) {
 
   if (params.data || ((!params.fullscreen || params.stacked) && params.html)) {
     if (!params.fullscreen || params.stacked) {
-      var limit = params.fixed
+      const limit = params.fixed
         ? parentHeight - params.y - 10
         : parentHeight - 10;
       h = params.height < limit ? params.height : limit;

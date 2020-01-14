@@ -1,86 +1,86 @@
 // Finds the maximum area rectangle that fits inside a polygon
-(function() {
-  var intersectPoints,
-    lineIntersection,
-    pointInPoly,
-    pointInSegmentBox,
-    polyInsidePoly,
-    rayIntersectsSegment,
-    rotatePoint,
-    rotatePoly,
-    segmentsIntersect,
-    simplify,
-    squaredDist;
+(() => {
+  let intersectPoints;
+  let lineIntersection;
+  let pointInPoly;
+  let pointInSegmentBox;
+  let polyInsidePoly;
+  let rayIntersectsSegment;
+  let rotatePoint;
+  let rotatePoly;
+  let segmentsIntersect;
+  let simplify;
+  let squaredDist;
 
   simplify = require('simplify-js');
 
-  module.exports = function(poly, options) {
-    var aRatio,
-      aRatios,
-      angle,
-      angleRad,
-      angleStep,
-      angles,
-      area,
-      aspectRatioStep,
-      aspectRatios,
-      boxHeight,
-      boxWidth,
-      centroid,
-      events,
-      height,
-      i,
-      insidePoly,
-      j,
-      k,
-      l,
-      left,
-      len,
-      len1,
-      len2,
-      len3,
-      m,
-      maxArea,
-      maxAspectRatio,
-      maxHeight,
-      maxRect,
-      maxWidth,
-      maxx,
-      maxy,
-      minAspectRatio,
-      minSqDistH,
-      minSqDistW,
-      minx,
-      miny,
-      modifOrigins,
-      origOrigin,
-      origin,
-      origins,
-      p,
-      p1H,
-      p1W,
-      p2H,
-      p2W,
-      rectPoly,
-      ref,
-      ref1,
-      ref2,
-      ref3,
-      ref4,
-      ref5,
-      ref6,
-      ref7,
-      ref8,
-      right,
-      rndPoint,
-      rndX,
-      rndY,
-      tempPoly,
-      tolerance,
-      width,
-      widthStep,
-      x0,
-      y0;
+  module.exports = (poly, options) => {
+    let aRatio;
+    let aRatios;
+    let angle;
+    let angleRad;
+    let angleStep;
+    let angles;
+    let area;
+    let aspectRatioStep;
+    let aspectRatios;
+    let boxHeight;
+    let boxWidth;
+    let centroid;
+    let events;
+    let height;
+    let i;
+    let insidePoly;
+    let j;
+    let k;
+    let l;
+    let left;
+    let len;
+    let len1;
+    let len2;
+    let len3;
+    let m;
+    let maxArea;
+    let maxAspectRatio;
+    let maxHeight;
+    let maxRect;
+    let maxWidth;
+    let maxx;
+    let maxy;
+    let minAspectRatio;
+    let minSqDistH;
+    let minSqDistW;
+    let minx;
+    let miny;
+    let modifOrigins;
+    let origOrigin;
+    let origin;
+    let origins;
+    let p;
+    let p1H;
+    let p1W;
+    let p2H;
+    let p2W;
+    let rectPoly;
+    let ref;
+    let ref1;
+    let ref2;
+    let ref3;
+    let ref4;
+    let ref5;
+    let ref6;
+    let ref7;
+    let ref8;
+    let right;
+    let rndPoint;
+    let rndX;
+    let rndY;
+    let tempPoly;
+    let tolerance;
+    let width;
+    let widthStep;
+    let x0;
+    let y0;
     if (poly.length < 3) {
       return null;
     }
@@ -142,19 +142,13 @@
     if (area === 0) {
       return null;
     }
-    (ref = d3.extent(poly, function(d) {
-      return d[0];
-    })),
-      (minx = ref[0]),
-      (maxx = ref[1]);
-    (ref1 = d3.extent(poly, function(d) {
-      return d[1];
-    })),
-      (miny = ref1[0]),
-      (maxy = ref1[1]);
+    (ref = d3.extent(poly, d => d[0])), (minx = ref[0]), (maxx = ref[1]);
+    (ref1 = d3.extent(poly, d => d[1])), (miny = ref1[0]), (maxy = ref1[1]);
     tolerance = Math.min(maxx - minx, maxy - miny) * options.tolerance;
-    tempPoly = (function() {
-      var j, len, results;
+    tempPoly = (() => {
+      let j;
+      let len;
+      let results;
       results = [];
       for (j = 0, len = poly.length; j < len; j++) {
         p = poly[j];
@@ -167,8 +161,10 @@
     })();
     if (tolerance > 0) {
       tempPoly = simplify(tempPoly, tolerance);
-      poly = (function() {
-        var j, len, results;
+      poly = (() => {
+        let j;
+        let len;
+        let results;
         results = [];
         for (j = 0, len = tempPoly.length; j < len; j++) {
           p = tempPoly[j];
@@ -183,19 +179,11 @@
         poly: poly
       });
     }
-    (ref2 = d3.extent(poly, function(d) {
-      return d[0];
-    })),
-      (minx = ref2[0]),
-      (maxx = ref2[1]);
-    (ref3 = d3.extent(poly, function(d) {
-      return d[1];
-    })),
-      (miny = ref3[0]),
-      (maxy = ref3[1]);
+    (ref2 = d3.extent(poly, d => d[0])), (minx = ref2[0]), (maxx = ref2[1]);
+    (ref3 = d3.extent(poly, d => d[1])), (miny = ref3[0]), (maxy = ref3[1]);
     (ref4 = [maxx - minx, maxy - miny]),
-      (boxWidth = ref4[0]),
-      (boxHeight = ref4[1]);
+    (boxWidth = ref4[0]),
+    (boxHeight = ref4[1]);
     widthStep = Math.min(boxWidth, boxHeight) / 50;
     if (origins == null) {
       origins = [];
@@ -232,11 +220,11 @@
       for (i = k = 0, len1 = origins.length; k < len1; i = ++k) {
         origOrigin = origins[i];
         (ref5 = intersectPoints(poly, origOrigin, angleRad)),
-          (p1W = ref5[0]),
-          (p2W = ref5[1]);
+        (p1W = ref5[0]),
+        (p2W = ref5[1]);
         (ref6 = intersectPoints(poly, origOrigin, angleRad + Math.PI / 2)),
-          (p1H = ref6[0]),
-          (p2H = ref6[1]);
+        (p1H = ref6[0]),
+        (p2H = ref6[1]);
         modifOrigins = [];
         if (p1W != null && p2W != null) {
           modifOrigins.push([(p1W[0] + p2W[0]) / 2, (p1W[1] + p2W[1]) / 2]);
@@ -265,8 +253,8 @@
             });
           }
           (ref7 = intersectPoints(poly, origin, angleRad)),
-            (p1W = ref7[0]),
-            (p2W = ref7[1]);
+          (p1W = ref7[0]),
+          (p2W = ref7[1]);
           if (p1W === null || p2W === null) {
             continue;
           }
@@ -276,8 +264,8 @@
           );
           maxWidth = 2 * Math.sqrt(minSqDistW);
           (ref8 = intersectPoints(poly, origin, angleRad + Math.PI / 2)),
-            (p1H = ref8[0]),
-            (p2H = ref8[1]);
+          (p1H = ref8[0]),
+          (p2H = ref8[1]);
           if (p1H === null || p2H === null) {
             continue;
           }
@@ -369,15 +357,20 @@
     return [maxRect, maxArea, events];
   };
 
-  squaredDist = function(a, b) {
-    var deltax, deltay;
+  squaredDist = (a, b) => {
+    let deltax;
+    let deltay;
     deltax = b[0] - a[0];
     deltay = b[1] - a[1];
     return deltax * deltax + deltay * deltay;
   };
 
-  rayIntersectsSegment = function(p, p1, p2) {
-    var a, b, mAB, mAP, ref;
+  rayIntersectsSegment = (p, p1, p2) => {
+    let a;
+    let b;
+    let mAB;
+    let mAP;
+    let ref;
     (ref = p1[1] < p2[1] ? [p1, p2] : [p2, p1]), (a = ref[0]), (b = ref[1]);
     if (p[1] === b[1] || p[1] === a[1]) {
       p[1] += Number.MIN_VALUE;
@@ -395,8 +388,12 @@
     }
   };
 
-  pointInPoly = function(p, poly) {
-    var a, b, c, i, n;
+  pointInPoly = (p, poly) => {
+    let a;
+    let b;
+    let c;
+    let i;
+    let n;
     i = -1;
     n = poly.length;
     b = poly[n - 1];
@@ -411,8 +408,10 @@
     return c % 2 !== 0;
   };
 
-  pointInSegmentBox = function(p, p1, q1) {
-    var eps, px, py;
+  pointInSegmentBox = (p, p1, q1) => {
+    let eps;
+    let px;
+    let py;
     eps = 1e-9;
     (px = p[0]), (py = p[1]);
     if (
@@ -426,8 +425,17 @@
     return true;
   };
 
-  lineIntersection = function(p1, q1, p2, q2) {
-    var cross1, cross2, denom, dx1, dx2, dy1, dy2, eps, px, py;
+  lineIntersection = (p1, q1, p2, q2) => {
+    let cross1;
+    let cross2;
+    let denom;
+    let dx1;
+    let dx2;
+    let dy1;
+    let dy2;
+    let eps;
+    let px;
+    let py;
     eps = 1e-9;
     dx1 = p1[0] - q1[0];
     dy1 = p1[1] - q1[1];
@@ -444,8 +452,8 @@
     return [px, py];
   };
 
-  segmentsIntersect = function(p1, q1, p2, q2) {
-    var p;
+  segmentsIntersect = (p1, q1, p2, q2) => {
+    let p;
     p = lineIntersection(p1, q1, p2, q2);
     if (p == null) {
       return false;
@@ -453,8 +461,15 @@
     return pointInSegmentBox(p, p1, q1) && pointInSegmentBox(p, p2, q2);
   };
 
-  polyInsidePoly = function(polyA, polyB) {
-    var aA, aB, bA, bB, iA, iB, nA, nB;
+  polyInsidePoly = (polyA, polyB) => {
+    let aA;
+    let aB;
+    let bA;
+    let bB;
+    let iA;
+    let iB;
+    let nA;
+    let nB;
     iA = -1;
     nA = polyA.length;
     nB = polyB.length;
@@ -475,8 +490,11 @@
     return pointInPoly(polyA[0], polyB);
   };
 
-  rotatePoint = function(p, alpha, origin) {
-    var cosAlpha, sinAlpha, xshifted, yshifted;
+  rotatePoint = (p, alpha, origin) => {
+    let cosAlpha;
+    let sinAlpha;
+    let xshifted;
+    let yshifted;
     if (origin == null) {
       origin = [0, 0];
     }
@@ -490,8 +508,11 @@
     ];
   };
 
-  rotatePoly = function(poly, alpha, origin) {
-    var j, len, point, results;
+  rotatePoly = (poly, alpha, origin) => {
+    let j;
+    let len;
+    let point;
+    let results;
     results = [];
     for (j = 0, len = poly.length; j < len; j++) {
       point = poly[j];
@@ -500,22 +521,22 @@
     return results;
   };
 
-  intersectPoints = function(poly, origin, alpha) {
-    var a,
-      b,
-      closestPointLeft,
-      closestPointRight,
-      eps,
-      i,
-      idx,
-      minSqDistLeft,
-      minSqDistRight,
-      n,
-      p,
-      shiftedOrigin,
-      sqDist,
-      x0,
-      y0;
+  intersectPoints = (poly, origin, alpha) => {
+    let a;
+    let b;
+    let closestPointLeft;
+    let closestPointRight;
+    let eps;
+    let i;
+    let idx;
+    let minSqDistLeft;
+    let minSqDistRight;
+    let n;
+    let p;
+    let shiftedOrigin;
+    let sqDist;
+    let x0;
+    let y0;
     eps = 1e-9;
     origin = [
       origin[0] + eps * Math.cos(alpha),
@@ -555,4 +576,4 @@
     }
     return [closestPointLeft, closestPointRight];
   };
-}.call(this));
+}).call(this);

@@ -1,17 +1,17 @@
 // Creates Dropdown Menu
-(function() {
-  module.exports = function(vars) {
-    var button,
-      data,
-      element,
-      keyboard,
-      list,
-      search,
-      selector,
-      title,
-      update,
-      width,
-      windowevent;
+(() => {
+  module.exports = vars => {
+    let button;
+    let data;
+    let element;
+    let keyboard;
+    let list;
+    let search;
+    let selector;
+    let title;
+    let update;
+    let width;
+    let windowevent;
     element = require('./functions/element.js');
     keyboard = require('./functions/keyboard.js');
     windowevent = require('./functions/window.js');
@@ -37,4 +37,4 @@
     data(vars);
     return update(vars);
   };
-}.call(this));
+}).call(this);

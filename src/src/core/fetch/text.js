@@ -1,17 +1,17 @@
-var fetchValue = require('./value.js'),
-  validObject = require('../../object/validate.js'),
-  uniques = require('../../util/uniques.js');
+const fetchValue = require('./value.js');
+const validObject = require('../../object/validate.js');
+const uniques = require('../../util/uniques.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Get array of available text values
 //------------------------------------------------------------------------------
-module.exports = function(vars, obj, depth) {
+module.exports = (vars, obj, depth) => {
   if (typeof depth !== 'number') {
     depth = vars.depth.value;
   }
 
-  var key = vars.id.nesting[depth],
-    textKeys;
+  const key = vars.id.nesting[depth];
+  let textKeys;
 
   if (vars.text.nesting && validObject(vars.text.nesting)) {
     if (vars.text.nesting[key]) {
@@ -31,7 +31,7 @@ module.exports = function(vars, obj, depth) {
     textKeys = [textKeys];
   }
 
-  var names = [];
+  const names = [];
 
   if (validObject(obj) && 'd3po' in obj && obj.d3po.text) {
     names.push(obj.d3po.text.toString());
@@ -42,7 +42,7 @@ module.exports = function(vars, obj, depth) {
       })
     );
   } else {
-    var formatObj = validObject(obj) ? obj : undefined;
+    const formatObj = validObject(obj) ? obj : undefined;
 
     if (formatObj && obj[vars.id.value] instanceof Array) {
       obj = obj[vars.id.value];
@@ -50,30 +50,27 @@ module.exports = function(vars, obj, depth) {
       obj = [obj];
     }
 
-    textKeys.forEach(function(t) {
-      var name = uniques(obj, t, fetchValue, vars, key);
+    textKeys.forEach(t => {
+      let name = uniques(obj, t, fetchValue, vars, key);
 
       if (name.length) {
         if (name.length > 1) {
-          name = name.filter(function(n) {
-            return (
+          name = name.filter(
+            n =>
               n instanceof Array ||
               (typeof n === 'string' && n.indexOf(' < ') < 0)
-            );
-          });
+          );
         }
-        name = name.map(function(n) {
+        name = name.map(n => {
           if (n instanceof Array) {
-            n = n.filter(function(nn) {
-              return nn;
-            });
-            return n.map(function(nn) {
-              return vars.format.value(nn.toString(), {
+            n = n.filter(nn => nn);
+            return n.map(nn =>
+              vars.format.value(nn.toString(), {
                 vars: vars,
                 data: formatObj,
                 key: t
-              });
-            });
+              })
+            );
           } else if (n) {
             return vars.format.value(n.toString(), {
               vars: vars,

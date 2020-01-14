@@ -2,42 +2,42 @@
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
 
-(function() {
-  var normalize;
+(() => {
+  let normalize;
 
   normalize = require('./normalize.js');
 
-  module.exports = function(edges, options) {
-    var a,
-      b,
-      cid,
-      commSize,
-      commSizes,
-      communities,
-      community,
-      deltaQ,
-      edge,
-      endpoint,
-      events,
-      i,
-      id,
-      iter,
-      j,
-      k,
-      len,
-      len1,
-      linksMap,
-      m,
-      maxa,
-      maxb,
-      node,
-      nodeid,
-      nodes,
-      nodesMap,
-      ref,
-      ref1,
-      result,
-      startpoint;
+  module.exports = (edges, options) => {
+    let a;
+    let b;
+    let cid;
+    let commSize;
+    let commSizes;
+    let communities;
+    let community;
+    let deltaQ;
+    let edge;
+    let endpoint;
+    let events;
+    let i;
+    let id;
+    let iter;
+    let j;
+    let k;
+    let len;
+    let len1;
+    let linksMap;
+    let m;
+    let maxa;
+    let maxb;
+    let node;
+    let nodeid;
+    let nodes;
+    let nodesMap;
+    let ref;
+    let ref1;
+    let result;
+    let startpoint;
     events = [];
     if (options == null) {
       options = {};
@@ -149,8 +149,8 @@
       delete linksMap[maxa];
       iter++;
     }
-    commSizes = (function() {
-      var results;
+    commSizes = (() => {
+      let results;
       results = [];
       for (cid in communities) {
         community = communities[cid];
@@ -158,11 +158,11 @@
       }
       return results;
     })();
-    commSizes.sort(function(a, b) {
-      return b[1] - a[1];
-    });
-    result = (function() {
-      var l, len2, results;
+    commSizes.sort((a, b) => b[1] - a[1]);
+    result = (() => {
+      let l;
+      let len2;
+      let results;
       results = [];
       for (l = 0, len2 = commSizes.length; l < len2; l++) {
         commSize = commSizes[l];
@@ -172,4 +172,4 @@
     })();
     return [result, events];
   };
-}.call(this));
+}).call(this);

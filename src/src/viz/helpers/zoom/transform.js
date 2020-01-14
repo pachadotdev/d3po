@@ -1,6 +1,6 @@
-(function() {
-  module.exports = function(vars, timing) {
-    var translate;
+(() => {
+  module.exports = (vars, timing) => {
+    let translate;
     if (typeof timing !== 'number') {
       timing = vars.timing.transitions;
     }
@@ -15,4 +15,4 @@
       return vars.g.viz.attr('transform', translate);
     }
   };
-}.call(this));
+}).call(this);

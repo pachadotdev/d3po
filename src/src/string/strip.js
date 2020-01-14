@@ -1,9 +1,9 @@
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Removes all non ASCII characters
 //------------------------------------------------------------------------------
-module.exports = function(value) {
+module.exports = value => {
   // great unicode list: http://asecuritysite.com/coding/asc2
-  var diacritics = [
+  const diacritics = [
     [/[\300-\305]/g, 'A'],
     [/[\340-\345]/g, 'a'],
     [/[\306]/g, 'AE'],
@@ -30,13 +30,13 @@ module.exports = function(value) {
 
   return (
     '' +
-    value.toString().replace(/[^A-Za-z0-9\-_]/g, function(char) {
+    value.toString().replace(/[^A-Za-z0-9\-_]/g, char => {
       if (char === ' ') {
         return '-';
       }
 
-      var ret = false;
-      for (var d = 0; d < diacritics.length; d++) {
+      let ret = false;
+      for (let d = 0; d < diacritics.length; d++) {
         if (new RegExp(diacritics[d][0]).test(char)) {
           ret = diacritics[d][1];
           break;

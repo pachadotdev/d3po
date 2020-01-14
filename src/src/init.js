@@ -2,8 +2,8 @@
  * @class d3po
  */
 
-(function() {
-  var d3po = {};
+(() => {
+  const d3po = {};
 
   /**
    * The current version of **d3po** you are using. Returns a string in
@@ -225,4 +225,4 @@
   }
 
   module.exports = d3po;
-}.call(this));
+}).call(this);

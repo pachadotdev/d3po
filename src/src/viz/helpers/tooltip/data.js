@@ -1,17 +1,19 @@
-var copy = require('../../../util/copy.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
-  fetchColor = require('../../../core/fetch/color.js'),
-  fetchText = require('../../../core/fetch/text.js'),
-  legible = require('../../../color/legible.js'),
-  mergeObject = require('../../../object/merge.js'),
-  prefix = require('../../../client/prefix.js'),
-  stringFormat = require('../../../string/format.js'),
-  validObject = require('../../../object/validate.js');
+const copy = require('../../../util/copy.js');
+const fetchValue = require('../../../core/fetch/value.js');
+const fetchColor = require('../../../core/fetch/color.js');
+const fetchText = require('../../../core/fetch/text.js');
+const legible = require('../../../color/legible.js');
+const mergeObject = require('../../../object/merge.js');
+const prefix = require('../../../client/prefix.js');
+const stringFormat = require('../../../string/format.js');
+const validObject = require('../../../object/validate.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates a data object for the Tooltip
 //------------------------------------------------------------------------------
-module.exports = function(vars, id, length, extras, children, depth) {
-  var other_length, extra_data, a;
+module.exports = (vars, id, length, extras, children, depth) => {
+  let other_length;
+  let extra_data;
+  let a;
   if (vars.small) {
     return [];
   }
@@ -30,14 +32,14 @@ module.exports = function(vars, id, length, extras, children, depth) {
   } else if (extras && typeof extras == 'object') {
     extra_data = mergeObject(extra_data, extras);
     extras = [];
-    for (var k in extra_data) {
+    for (const k in extra_data) {
       extras.push(k);
     }
   } else if (!extras) {
     extras = [];
   }
 
-  var tooltip_highlights = [];
+  const tooltip_highlights = [];
 
   if (vars.tooltip.value instanceof Array) {
     a = vars.tooltip.value;
@@ -88,7 +90,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
       group = vars.format.value(group);
     }
 
-    var value = extra_data[key] || fetchValue(vars, id, key, id_var);
+    let value = extra_data[key] || fetchValue(vars, id, key, id_var);
 
     if (validObject(value)) {
       tooltip_data.push({
@@ -106,13 +108,14 @@ module.exports = function(vars, id, length, extras, children, depth) {
       ((typeof value === 'string' && value.indexOf('d3po_other') < 0) ||
         !(typeof value === 'string'))
     ) {
-      var name = vars.format.locale.value.ui[key]
-          ? vars.format.value(vars.format.locale.value.ui[key])
-          : vars.format.value(key),
-        h = tooltip_highlights.indexOf(key) >= 0;
+      const name = vars.format.locale.value.ui[key]
+        ? vars.format.value(vars.format.locale.value.ui[key])
+        : vars.format.value(key);
+
+      const h = tooltip_highlights.indexOf(key) >= 0;
 
       if (value instanceof Array) {
-        value.forEach(function(v) {
+        value.forEach(v => {
           vars.format.value(v, {
             key: key,
             vars: vars,
@@ -127,7 +130,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
         });
       }
 
-      var obj = {
+      const obj = {
         name: name,
         value: value,
         highlight: h,
@@ -136,7 +139,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
 
       if (vars.descs.value) {
         if (typeof vars.descs.value === 'function') {
-          var descReturn = vars.descs.value(key);
+          const descReturn = vars.descs.value(key);
           if (typeof descReturn === 'string') {
             obj.desc = descReturn;
           }
@@ -158,7 +161,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
 
   if (vars.id.nesting.length && depth < vars.id.nesting.length - 1) {
     a = copy(a);
-    vars.id.nesting.forEach(function(n, i) {
+    vars.id.nesting.forEach((n, i) => {
       if (i > depth && a[n]) {
         delete a[n];
       }
@@ -179,7 +182,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
   if (vars.tooltip.value.long && typeof vars.tooltip.value.long == 'object') {
     for (group in vars.tooltip.value.long) {
       for (i = extras.length; i > 0; i--) {
-        var e = extras[i - 1];
+        const e = extras[i - 1];
         if (vars.tooltip.value.long[group].indexOf(e) >= 0) {
           if (!a[group]) {
             a[group] = [];
@@ -199,17 +202,17 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   for (group in a) {
-    a[group].forEach(function(t) {
+    a[group].forEach(t => {
       format_key(t, group);
     });
   }
 
   if (children) {
-    var title = vars.format.locale.value.ui.including,
-      colors = children.d3po_colors;
+    const title = vars.format.locale.value.ui.including;
+    const colors = children.d3po_colors;
 
-    children.values.forEach(function(child) {
-      var name = d3.keys(child)[0];
+    children.values.forEach(child => {
+      const name = d3.keys(child)[0];
       tooltip_data.push({
         group: vars.format.value(title),
         highlight: colors && colors[name] ? colors[name] : false,
@@ -229,25 +232,25 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   if (vars.tooltip.connections.value && length === 'long') {
-    var connections = vars.edges.connections(
+    const connections = vars.edges.connections(
       id[vars.id.value],
       vars.id.value,
       true
     );
 
     if (connections.length) {
-      connections.forEach(function(conn) {
-        var c = vars.data.viz.filter(function(d) {
-          return d[vars.id.value] === conn[vars.id.value];
-        });
+      connections.forEach(conn => {
+        let c = vars.data.viz.filter(
+          d => d[vars.id.value] === conn[vars.id.value]
+        );
 
         c = c.length ? c[0] : conn;
 
-        var name = fetchText(vars, c)[0],
-          color = fetchColor(vars, c),
-          size = vars.tooltip.font.size,
-          radius = vars.shape.value == 'square' ? 0 : size;
-        var styles = [
+        const name = fetchText(vars, c)[0];
+        const color = fetchColor(vars, c);
+        const size = vars.tooltip.font.size;
+        const radius = vars.shape.value == 'square' ? 0 : size;
+        const styles = [
           'background-color: ' + color,
           'border-color: ' + legible(color),
           'border-style: solid',
@@ -260,9 +263,9 @@ module.exports = function(vars, id, length, extras, children, depth) {
           'top: 0px',
           prefix() + 'border-radius: ' + radius + 'px'
         ];
-        var node = "<div style='" + styles.join('; ') + ";'></div>";
+        const node = '<div style=\'' + styles.join('; ') + ';\'></div>';
 
-        var nodeClick = function() {
+        const nodeClick = () => {
           vars.self.focus([c[vars.id.value]]).draw();
         };
 
@@ -271,11 +274,11 @@ module.exports = function(vars, id, length, extras, children, depth) {
           highlight: false,
           link: nodeClick,
           name:
-            "<div id='d3potooltipfocuslink_" +
+            '<div id=\'d3potooltipfocuslink_' +
             c[vars.id.value] +
-            "' class='d3po_tooltip_focus_link' style='position:relative;padding-left:" +
+            '\' class=\'d3po_tooltip_focus_link\' style=\'position:relative;padding-left:' +
             size * 1.5 +
-            "px;'>" +
+            'px;\'>' +
             node +
             name +
             '</div>'

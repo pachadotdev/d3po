@@ -1,38 +1,26 @@
-var fetchText = require('../../../core/fetch/text.js'),
-  fontSizes = require('../../../font/sizes.js'),
-  largestRect = require('../../../geom/largestrectangle.js'),
-  shapeStyle = require('./style.js');
+const fetchText = require('../../../core/fetch/text.js');
+const fontSizes = require('../../../font/sizes.js');
+const largestRect = require('../../../geom/largestrectangle.js');
+const shapeStyle = require('./style.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter) {
+module.exports = (vars, selection, enter) => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // D3 area definition
   //----------------------------------------------------------------------------
-  var area = d3.svg
+  const area = d3.svg
     .area()
-    .x(function(d) {
-      return d.d3po.x;
-    })
-    .y0(function(d) {
-      return d.d3po.y0;
-    })
-    .y1(function(d) {
-      return d.d3po.y;
-    })
+    .x(d => d.d3po.x)
+    .y0(d => d.d3po.y0)
+    .y1(d => d.d3po.y)
     .interpolate(vars.shape.interpolate.value);
 
-  var startArea = d3.svg
+  const startArea = d3.svg
     .area()
-    .x(function(d) {
-      return d.d3po.x;
-    })
-    .y0(function(d) {
-      return d.d3po.y0;
-    })
-    .y1(function(d) {
-      return d.d3po.y0;
-    })
+    .x(d => d.d3po.x)
+    .y0(d => d.d3po.y0)
+    .y1(d => d.d3po.y0)
     .interpolate(vars.shape.interpolate.value);
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -41,41 +29,37 @@ module.exports = function(vars, selection, enter) {
   enter
     .append('path')
     .attr('class', 'd3po_data')
-    .attr('d', function(d) {
-      return startArea(d.values);
-    })
+    .attr('d', d => startArea(d.values))
     .call(shapeStyle, vars);
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // "paths" Update
   //----------------------------------------------------------------------------
 
-  var style = {
+  const style = {
     'font-weight': vars.labels.font.weight,
     'font-family': vars.labels.font.family.value
   };
 
-  selection.selectAll('path.d3po_data').data(function(d) {
+  selection.selectAll('path.d3po_data').data(d => {
     if (vars.labels.value && d.values.length > 1) {
-      var max = d3.max(d.values, function(v) {
-          return v.d3po.y0 - v.d3po.y;
-        }),
-        lr = false;
+      const max = d3.max(d.values, v => v.d3po.y0 - v.d3po.y);
+      let lr = false;
 
       if (max > vars.labels.font.size) {
-        var tops = [],
-          bottoms = [],
-          names = fetchText(vars, d);
+        let tops = [];
+        const bottoms = [];
+        var names = fetchText(vars, d);
 
-        d.values.forEach(function(v) {
+        d.values.forEach(v => {
           tops.push([v.d3po.x, v.d3po.y]);
           bottoms.push([v.d3po.x, v.d3po.y0]);
         });
         tops = tops.concat(bottoms.reverse());
 
-        var ratio = null;
+        let ratio = null;
         if (names.length) {
-          var size = fontSizes(names[0], style);
+          const size = fontSizes(names[0], style);
           ratio = size[0].width / size[0].height;
         }
 
@@ -87,7 +71,7 @@ module.exports = function(vars, selection, enter) {
       }
 
       if (lr && lr[0]) {
-        var label = {
+        const label = {
           w: ~~lr[0].width,
           h: ~~lr[0].height,
           x: ~~lr[0].cx,
@@ -120,16 +104,12 @@ module.exports = function(vars, selection, enter) {
       .selectAll('path.d3po_data')
       .transition()
       .duration(vars.draw.timing)
-      .attr('d', function(d) {
-        return area(d.values);
-      })
+      .attr('d', d => area(d.values))
       .call(shapeStyle, vars);
   } else {
     selection
       .selectAll('path.d3po_data')
-      .attr('d', function(d) {
-        return area(d.values);
-      })
+      .attr('d', d => area(d.values))
       .call(shapeStyle, vars);
   }
 };

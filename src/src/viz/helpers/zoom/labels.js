@@ -1,17 +1,18 @@
-(function() {
-  var print;
+(() => {
+  let print;
 
   print = require('../../../core/console/print.js');
 
-  module.exports = function(vars) {
-    var opacity, scale;
+  module.exports = vars => {
+    let opacity;
+    let scale;
     if (vars.dev.value) {
       print.time('determining label visibility');
     }
     scale = vars.zoom.behavior.scaleExtent();
-    opacity = function(text) {
-      return text.attr('opacity', function(d) {
-        var size;
+    opacity = text =>
+      text.attr('opacity', function(d) {
+        let size;
         if (!d) {
           d = {};
         }
@@ -23,7 +24,6 @@
           return 0;
         }
       });
-    };
     if (vars.draw.timing) {
       vars.g.viz
         .selectAll('text.d3po_label')
@@ -37,4 +37,4 @@
       return print.timeEnd('determining label visibility');
     }
   };
-}.call(this));
+}).call(this);

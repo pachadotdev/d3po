@@ -1,12 +1,12 @@
-(function() {
-  var copy,
-    distance,
-    fetchText,
-    fontSizes,
-    labels,
-    largestRect,
-    path2poly,
-    shapeStyle;
+(() => {
+  let copy;
+  let distance;
+  let fetchText;
+  let fontSizes;
+  let labels;
+  let largestRect;
+  let path2poly;
+  let shapeStyle;
 
   copy = require('../../../util/copy.js');
 
@@ -24,8 +24,9 @@
 
   labels = {};
 
-  module.exports = function(vars, selection, enter) {
-    var projection, size_change;
+  module.exports = (vars, selection, enter) => {
+    let projection;
+    let size_change;
     projection = d3.geo[vars.coords.projection.value]();
     if (projection.center) {
       projection.center(vars.coords.center);
@@ -50,9 +51,7 @@
     }
     enter
       .append('path')
-      .attr('id', function(d) {
-        return d.id;
-      })
+      .attr('id', d => d.id)
       .attr('class', 'd3po_data')
       .attr('d', vars.path)
       .call(shapeStyle, vars);
@@ -76,36 +75,36 @@
       vars.zoom.bounds = null;
       vars.zoom.reset = true;
       vars.zoom.coords = {};
-      return selection.each(function(d) {
-        var areaM,
-          areas,
-          b,
-          c,
-          center,
-          coords,
-          dist_cutoff,
-          dist_values,
-          distances,
-          i,
-          j,
-          largest,
-          len,
-          names,
-          path,
-          ratio,
-          rect,
-          reduced,
-          ref,
-          size,
-          style;
+      return selection.each(d => {
+        let areaM;
+        let areas;
+        let b;
+        let c;
+        let center;
+        let coords;
+        let dist_cutoff;
+        let dist_values;
+        let distances;
+        let i;
+        let j;
+        let largest;
+        let len;
+        let names;
+        let path;
+        let ratio;
+        let rect;
+        let reduced;
+        let ref;
+        let size;
+        let style;
         if (vars.coords.simplify.value && d.geometry.coordinates.length > 1) {
           distances = [];
           areas = [];
           areaM = 0;
           largest = copy(d);
           reduced = copy(d);
-          d.geometry.coordinates = d.geometry.coordinates.filter(function(c) {
-            var a;
+          d.geometry.coordinates = d.geometry.coordinates.filter(c => {
+            let a;
             reduced.geometry.coordinates = [c];
             a = vars.path.area(reduced);
             if (a > 0) {
@@ -126,22 +125,22 @@
             reduced.geometry.coordinates = [c];
             distances.push(distance(vars.path.centroid(reduced), center));
           }
-          dist_values = distances.reduce(function(arr, dist, i) {
+          dist_values = distances.reduce((arr, dist, i) => {
             if (dist) {
               arr.push(areas[i] / dist);
             }
             return arr;
           }, []);
           dist_cutoff = d3.quantile(dist_values, vars.coords.threshold.value);
-          reduced.geometry.coordinates = d.geometry.coordinates.filter(function(
-            c,
-            i
-          ) {
-            var a, dist;
-            dist = distances[i];
-            a = areas[i];
-            return dist === 0 || a / dist >= dist_cutoff;
-          });
+          reduced.geometry.coordinates = d.geometry.coordinates.filter(
+            (c, i) => {
+              let a;
+              let dist;
+              dist = distances[i];
+              a = areas[i];
+              return dist === 0 || a / dist >= dist_cutoff;
+            }
+          );
           coords = largest.geometry.coordinates[0];
           if (coords && largest.geometry.type === 'MultiPolygon') {
             coords = coords[0];
@@ -207,9 +206,7 @@
       });
     } else if (!vars.focus.value.length) {
       vars.zoom.viewport = false;
-      return selection.each(function(d) {
-        return (d.d3po_label = labels[d.id]);
-      });
+      return selection.each(d => (d.d3po_label = labels[d.id]));
     }
   };
-}.call(this));
+}).call(this);

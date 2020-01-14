@@ -1,17 +1,17 @@
-var events = require('../../../client/pointer.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
-  print = require('../../../core/console/print.js'),
-  rtl = require('../../../client/rtl.js'),
-  textWrap = require('../../../textwrap/textwrap.js');
+const events = require('../../../client/pointer.js');
+const fetchValue = require('../../../core/fetch/value.js');
+const print = require('../../../core/console/print.js');
+const rtl = require('../../../client/rtl.js');
+const textWrap = require('../../../textwrap/textwrap.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws appropriate titles
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var total_key = vars.size.value
+module.exports = vars => {
+  const total_key = vars.size.value
     ? vars.size.value
     : vars.color.type === 'number'
-    ? vars.color.value
-    : false;
+      ? vars.color.value
+      : false;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If there is no data or the title bar is not needed,
@@ -28,19 +28,19 @@ module.exports = function(vars) {
       print.time('calculating total value');
     }
 
-    var total_data = vars.data.pool;
+    let total_data = vars.data.pool;
     if (vars.focus.value.length) {
-      total_data = vars.data.viz.filter(function(d) {
-        return d[vars.id.value] == vars.focus.value[0];
-      });
+      total_data = vars.data.viz.filter(
+        d => d[vars.id.value] == vars.focus.value[0]
+      );
     }
 
-    var agg = vars.aggs.value[total_key] || 'sum';
+    const agg = vars.aggs.value[total_key] || 'sum';
     if (agg.constructor === Function) {
       total = agg(total_data);
     } else {
-      total_data = total_data.reduce(function(arr, d) {
-        var vals = fetchValue(vars, d, total_key);
+      total_data = total_data.reduce((arr, d) => {
+        const vals = fetchValue(vars, d, total_key);
         if (vals instanceof Array) {
           arr = arr.concat(vals);
         } else {
@@ -57,15 +57,15 @@ module.exports = function(vars) {
     }
 
     if (typeof total === 'number') {
-      var pct = '';
+      let pct = '';
 
       if (
         vars.data.mute.length ||
         vars.data.solo.length ||
         vars.focus.value.length
       ) {
-        var overall_total = d3.sum(vars.data.value, function(d) {
-          var match;
+        const overall_total = d3.sum(vars.data.value, d => {
+          let match;
           if (vars.time.solo.value.length > 0) {
             match =
               vars.time.solo.value.indexOf(
@@ -86,7 +86,7 @@ module.exports = function(vars) {
 
         if (overall_total > total) {
           pct = (total / overall_total) * 100;
-          var ot = vars.format.value(overall_total, {
+          const ot = vars.format.value(overall_total, {
             key: vars.size.value,
             vars: vars
           });
@@ -109,10 +109,12 @@ module.exports = function(vars) {
         key: vars.size.value,
         vars: vars
       });
-      var obj = vars.title.total.value,
-        prefix =
-          obj.prefix ||
-          vars.format.value(vars.format.locale.value.ui.total) + ': ';
+      const obj = vars.title.total.value;
+
+      const prefix =
+        obj.prefix ||
+        vars.format.value(vars.format.locale.value.ui.total) + ': ';
+
       total = prefix + total;
       obj.suffix ? (total = total + obj.suffix) : null;
       total += pct;
@@ -128,7 +130,7 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize titles and detect footer
   //----------------------------------------------------------------------------
-  var title_data = [];
+  const title_data = [];
 
   if (vars.footer.value) {
     title_data.push({
@@ -182,30 +184,22 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   function style(title) {
     title
-      .attr('font-size', function(t) {
-        return t.style.font.size;
-      })
-      .attr('fill', function(t) {
-        return t.link ? vars.links.font.color : t.style.font.color;
-      })
-      .attr('font-family', function(t) {
-        return t.link
-          ? vars.links.font.family.value
-          : t.style.font.family.value;
-      })
-      .attr('font-weight', function(t) {
-        return t.link ? vars.links.font.weight : t.style.font.weight;
-      })
-      .style('text-decoration', function(t) {
-        return t.link
+      .attr('font-size', t => t.style.font.size)
+      .attr('fill', t => (t.link ? vars.links.font.color : t.style.font.color))
+      .attr('font-family', t =>
+        t.link ? vars.links.font.family.value : t.style.font.family.value
+      )
+      .attr('font-weight', t =>
+        t.link ? vars.links.font.weight : t.style.font.weight
+      )
+      .style('text-decoration', t =>
+        t.link
           ? vars.links.font.decoration.value
-          : t.style.font.decoration.value;
-      })
-      .style('text-transform', function(t) {
-        return t.link
-          ? vars.links.font.transform.value
-          : t.style.font.transform.value;
-      });
+          : t.style.font.decoration.value
+      )
+      .style('text-transform', t =>
+        t.link ? vars.links.font.transform.value : t.style.font.transform.value
+      );
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -214,19 +208,17 @@ module.exports = function(vars) {
   if (vars.dev.value) {
     print.time('drawing titles');
   }
-  var titles = vars.svg.selectAll('g.d3po_title').data(title_data, function(t) {
-    return t.type;
-  });
+  const titles = vars.svg
+    .selectAll('g.d3po_title')
+    .data(title_data, t => t.type);
 
-  var titleWidth =
+  const titleWidth =
     vars.title.width || vars.width.value - vars.margin.left - vars.margin.right;
 
   titles
     .enter()
     .append('g')
-    .attr('class', function(t) {
-      return 'd3po_title ' + t.type;
-    })
+    .attr('class', t => 'd3po_title ' + t.type)
     .attr('opacity', 0)
     .append('text')
     .attr('stroke', 'none')
@@ -236,7 +228,7 @@ module.exports = function(vars) {
   // Wrap text and calculate positions, then transition style and opacity
   //----------------------------------------------------------------------------
   function getAlign(d) {
-    var align = d.style.font.align;
+    const align = d.style.font.align;
     if (align == 'center') {
       return 'middle';
     } else if ((align == 'left' && !rtl) || (align == 'right' && rtl)) {
@@ -248,12 +240,12 @@ module.exports = function(vars) {
   }
   titles
     .each(function(d) {
-      var container = d3
+      const container = d3
         .select(this)
         .select('text')
         .call(style);
 
-      var align = getAlign(d);
+      const align = getAlign(d);
 
       textWrap()
         .align(align)
@@ -292,22 +284,22 @@ module.exports = function(vars) {
           .call(style);
       }
     })
-    .on(events.click, function(t) {
+    .on(events.click, t => {
       if (t.link) {
-        var target = t.link.charAt(0) != '/' ? '_blank' : '_self';
+        const target = t.link.charAt(0) != '/' ? '_blank' : '_self';
         window.open(t.link, target);
       }
     })
     .attr('opacity', 1)
     .attr('transform', function(t) {
-      var pos = t.style.position,
-        y = pos == 'top' ? 0 + t.y : vars.height.value - t.y;
+      const pos = t.style.position;
+      let y = pos == 'top' ? 0 + t.y : vars.height.value - t.y;
       if (pos == 'bottom') {
         y -= this.getBBox().height + t.style.padding;
       } else {
         y += t.style.padding;
       }
-      var align = getAlign(t);
+      const align = getAlign(t);
       if (align === 'start') {
         var x = vars.margin.left + vars.title.padding;
       } else {
@@ -342,7 +334,7 @@ module.exports = function(vars) {
     vars.margin.bottom += vars.title.padding;
   }
 
-  var min = vars.title.height;
+  const min = vars.title.height;
   if (min && vars.margin[vars.title.position] < min) {
     vars.margin[vars.title.position] = min;
   }

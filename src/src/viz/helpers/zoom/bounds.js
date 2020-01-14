@@ -1,12 +1,21 @@
-(function() {
-  var labels, transform;
+(() => {
+  let labels;
+  let transform;
 
   labels = require('./labels.js');
 
   transform = require('./transform.js');
 
-  module.exports = function(vars, b, timing) {
-    var aspect, extent, fit, max_scale, min, padding, scale, translate, type;
+  module.exports = (vars, b, timing) => {
+    let aspect;
+    let extent;
+    let fit;
+    let max_scale;
+    let min;
+    let padding;
+    let scale;
+    let translate;
+    let type;
     if (!b) {
       b = vars.zoom.bounds;
     }
@@ -57,4 +66,4 @@
     }
     return transform(vars, timing);
   };
-}.call(this));
+}).call(this);

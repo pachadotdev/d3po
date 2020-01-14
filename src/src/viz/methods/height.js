@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [false, Number],
     max: 600,
@@ -6,4 +6,4 @@
     small: 200,
     value: false
   };
-}.call(this));
+}).call(this);

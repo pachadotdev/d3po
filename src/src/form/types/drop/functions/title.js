@@ -1,24 +1,24 @@
-var events = require('../../../../client/pointer.js'),
-  lighter = require('../../../../color/lighter.js'),
-  print = require('../../../../core/console/print.js'),
-  textColor = require('../../../../color/text.js');
+const events = require('../../../../client/pointer.js');
+const lighter = require('../../../../color/lighter.js');
+const print = require('../../../../core/console/print.js');
+const textColor = require('../../../../color/text.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the title and back button.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.open.value) {
     if (vars.dev.value) {
       print.time('creating title and back button');
     }
 
-    var enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0,
-      title = enabled,
-      focus = vars.container.button.data(Object).viz[0];
+    const enabled = vars.id.solo.value.length === 1 && vars.depth.value > 0;
+    let title = enabled;
+    const focus = vars.container.button.data(Object).viz[0];
 
     title = true;
-    for (var i = 0; i < vars.id.nesting.length; i++) {
-      var level = vars.id.nesting[i];
+    for (let i = 0; i < vars.id.nesting.length; i++) {
+      const level = vars.id.nesting[i];
       if (level in focus && focus[level] === vars.focus.value) {
         title = false;
         break;
@@ -43,13 +43,13 @@ module.exports = function(vars) {
 
     function backStyle(elem) {
       if (!elem.empty()) {
-        var className =
+        let className =
           vars.icon.back.value.indexOf('fa-') === 0
             ? ' fa ' + vars.icon.back.value
             : '';
         className = 'd3po_drop_back' + className;
 
-        var text =
+        const text =
           vars.icon.back.value.indexOf('fa-') === 0 ? '' : vars.icon.back.value;
 
         elem
@@ -64,7 +64,7 @@ module.exports = function(vars) {
     }
 
     function titleStyle(elem) {
-      var text = title ? vars.focus.value : vars.format.locale.value.ui.back;
+      const text = title ? vars.focus.value : vars.format.locale.value.ui.back;
 
       elem
         .text(vars.format.value(text))
@@ -93,7 +93,7 @@ module.exports = function(vars) {
 
     vars.container.title.select('span.d3po_drop_back').call(backStyle);
 
-    var enter = vars.container.title
+    const enter = vars.container.title
       .enter()
       .insert('div', '#d3po_drop_list_' + vars.container.id)
       .attr('class', 'd3po_drop_title')
@@ -114,7 +114,7 @@ module.exports = function(vars) {
 
     vars.container.title
       .on(events.over, function() {
-        var color = lighter(vars.ui.color.secondary.value);
+        const color = lighter(vars.ui.color.secondary.value);
 
         d3.select(this)
           .style('cursor', 'pointer')
@@ -124,7 +124,7 @@ module.exports = function(vars) {
           .style('color', textColor(color));
       })
       .on(events.out, function() {
-        var color = vars.ui.color.secondary.value;
+        const color = vars.ui.color.secondary.value;
 
         d3.select(this)
           .style('cursor', 'auto')
@@ -133,7 +133,7 @@ module.exports = function(vars) {
           .style('background-color', color)
           .style('color', textColor(color));
       })
-      .on(events.click, function() {
+      .on(events.click, () => {
         vars.history.back();
       });
 

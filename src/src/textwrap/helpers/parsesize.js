@@ -1,6 +1,15 @@
-(function() {
-  module.exports = function(vars) {
-    var diff, elem, height, prev, radius, shape, size, width, x, y;
+(() => {
+  module.exports = vars => {
+    let diff;
+    let elem;
+    let height;
+    let prev;
+    let radius;
+    let shape;
+    let size;
+    let width;
+    let x;
+    let y;
     elem = vars.container.value;
     prev = elem.node().previousElementSibling;
     shape = prev ? prev.tagName.toLowerCase() : '';
@@ -89,4 +98,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

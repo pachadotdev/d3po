@@ -1,33 +1,35 @@
-var arraySort = require('../../../array/sort.js'),
-  createTooltip = require('../../../tooltip/create.js'),
-  dataNest = require('../../../core/data/nest.js'),
-  fetchData = require('./data.js'),
-  fetchColor = require('../../../core/fetch/color.js'),
-  fetchText = require('../../../core/fetch/text.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
-  mergeObject = require('../../../object/merge.js'),
-  removeTooltip = require('../../../tooltip/remove.js'),
-  segments = require('../shapes/segments.js'),
-  scroll = require('../../../client/scroll.js'),
-  uniques = require('../../../util/uniques.js'),
-  validObject = require('../../../object/validate.js'),
-  zoomDirection = require('../zoom/direction.js');
+const arraySort = require('../../../array/sort.js');
+const createTooltip = require('../../../tooltip/create.js');
+const dataNest = require('../../../core/data/nest.js');
+const fetchData = require('./data.js');
+const fetchColor = require('../../../core/fetch/color.js');
+const fetchText = require('../../../core/fetch/text.js');
+const fetchValue = require('../../../core/fetch/value.js');
+const mergeObject = require('../../../object/merge.js');
+const removeTooltip = require('../../../tooltip/remove.js');
+const segments = require('../shapes/segments.js');
+const scroll = require('../../../client/scroll.js');
+const uniques = require('../../../util/uniques.js');
+const validObject = require('../../../object/validate.js');
+const zoomDirection = require('../zoom/direction.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates correctly formatted tooltip for Apps
 //-------------------------------------------------------------------
-module.exports = function(params) {
+module.exports = params => {
   if (!('d3po' in params.data)) {
     params.data.d3po = {};
   }
 
-  var vars = params.vars,
-    d = params.data,
-    dataDepth =
-      'd3po' in d && 'depth' in d.d3po ? d.d3po.depth : vars.depth.value,
-    mouse = params.mouseevents ? params.mouseevents : false,
-    arrow = 'arrow' in params ? params.arrow : true,
-    id = fetchValue(vars, d, vars.id.value),
-    tooltip_id = params.id || vars.type.value;
+  const vars = params.vars;
+  const d = params.data;
+
+  const dataDepth =
+    'd3po' in d && 'depth' in d.d3po ? d.d3po.depth : vars.depth.value;
+
+  let mouse = params.mouseevents ? params.mouseevents : false;
+  let arrow = 'arrow' in params ? params.arrow : true;
+  const id = fetchValue(vars, d, vars.id.value);
+  const tooltip_id = params.id || vars.type.value;
 
   if (
     d3.event &&
@@ -35,18 +37,18 @@ module.exports = function(params) {
     (vars.tooltip.html.value || vars.tooltip.value.long) &&
     !('fullscreen' in params)
   ) {
-    var fullscreen = true,
-      length = 'long',
-      footer = vars.footer.value;
+    var fullscreen = true;
+    var length = 'long';
+    var footer = vars.footer.value;
 
     (arrow = false), (mouse = true), (vars.covered = true);
   } else {
-    var align = params.anchor || vars.tooltip.anchor,
-      zoom = zoomDirection(d, vars);
+    var align = params.anchor || vars.tooltip.anchor;
+    const zoom = zoomDirection(d, vars);
     fullscreen = false;
     length = params.length || 'short';
 
-    var text = '';
+    let text = '';
     if (
       !(
         !vars.mouse.click.value ||
@@ -76,13 +78,15 @@ module.exports = function(params) {
 
     footer = text.length
       ? vars.format.value(text, {
-          key: 'footer',
-          vars: vars
-        })
+        key: 'footer',
+        vars: vars
+      })
       : false;
   }
 
-  var x, y, offset;
+  let x;
+  let y;
+  let offset;
   if ('x' in params) {
     x = params.x;
   } else if (vars.types[vars.type.value].tooltip === 'static') {
@@ -129,20 +133,22 @@ module.exports = function(params) {
   }
 
   function make_tooltip(html) {
-    var titleDepth = 'depth' in params ? params.depth : dataDepth;
+    const titleDepth = 'depth' in params ? params.depth : dataDepth;
 
-    var ex = {},
-      children,
-      depth =
-        vars.id.nesting[titleDepth + 1] in d ? titleDepth + 1 : titleDepth,
-      nestKey = vars.id.nesting[depth],
-      nameList = 'merged' in d.d3po ? d.d3po.merged : d[nestKey];
+    let ex = {};
+    let children;
+
+    let depth =
+      vars.id.nesting[titleDepth + 1] in d ? titleDepth + 1 : titleDepth;
+
+    const nestKey = vars.id.nesting[depth];
+    let nameList = 'merged' in d.d3po ? d.d3po.merged : d[nestKey];
 
     if (!(nameList instanceof Array)) {
       nameList = [nameList];
     }
 
-    var dataValue = fetchValue(vars, d, vars.size.value);
+    const dataValue = fetchValue(vars, d, vars.size.value);
 
     if (vars.tooltip.children.value) {
       nameList = nameList.slice(0);
@@ -151,9 +157,9 @@ module.exports = function(params) {
       }
 
       if (vars.size.value && validObject(nameList[0])) {
-        var namesNoValues = [];
-        var namesWithValues = nameList.filter(function(n) {
-          var val = fetchValue(vars, n, vars.size.value);
+        const namesNoValues = [];
+        const namesWithValues = nameList.filter(n => {
+          const val = fetchValue(vars, n, vars.size.value);
           if (val !== null && (!('d3po' in n) || !n.d3po.merged)) {
             return true;
           } else {
@@ -166,40 +172,43 @@ module.exports = function(params) {
         nameList = namesWithValues.concat(namesNoValues);
       }
 
-      var maxChildrenShownInShortMode =
+      const maxChildrenShownInShortMode =
         vars.tooltip.children.value === true ? 3 : vars.tooltip.children.value;
-      var limit =
-          length === 'short' ? maxChildrenShownInShortMode : vars.data.large,
-        listLength = nameList.length,
-        max = d3.min([listLength, limit]);
+
+      const limit =
+        length === 'short' ? maxChildrenShownInShortMode : vars.data.large;
+
+      const listLength = nameList.length;
+      const max = d3.min([listLength, limit]);
 
       children = {
         values: []
       };
-      for (var i = 0; i < max; i++) {
+      for (let i = 0; i < max; i++) {
         if (!nameList.length) {
           break;
         }
 
-        var obj = nameList.shift(),
-          name = fetchText(vars, obj, depth)[0],
-          id = validObject(obj) ? fetchValue(vars, obj, nestKey, depth) : obj;
+        const obj = nameList.shift();
+        const name = fetchText(vars, obj, depth)[0];
+        var id = validObject(obj) ? fetchValue(vars, obj, nestKey, depth) : obj;
 
         if (id !== d[vars.id.nesting[titleDepth]] && name && !children[name]) {
-          var value = validObject(obj)
-              ? fetchValue(vars, obj, vars.size.value, nestKey)
-              : null,
-            color = fetchColor(vars, obj, nestKey);
+          const value = validObject(obj)
+            ? fetchValue(vars, obj, vars.size.value, nestKey)
+            : null;
+
+          const color = fetchColor(vars, obj, nestKey);
 
           children[name] =
             value && !(value instanceof Array)
               ? vars.format.value(value, {
-                  key: vars.size.value,
-                  vars: vars,
-                  data: obj
-                })
+                key: vars.size.value,
+                vars: vars,
+                data: obj
+              })
               : '';
-          var child = {};
+          const child = {};
           child[name] = children[name];
           children.values.push(child);
 
@@ -258,9 +267,9 @@ module.exports = function(params) {
       }
     }
 
-    var active = segments(vars, d, 'active'),
-      temp = segments(vars, d, 'temp'),
-      total = segments(vars, d, 'total');
+    const active = segments(vars, d, 'active');
+    const temp = segments(vars, d, 'temp');
+    const total = segments(vars, d, 'total');
 
     if (typeof active == 'number' && active > 0 && total) {
       ex[getLabel('active')] =
@@ -299,17 +308,19 @@ module.exports = function(params) {
     }
 
     depth = 'depth' in params ? params.depth : dataDepth;
-    var title = params.title || fetchText(vars, d, depth)[0],
-      icon = uniques(
-        d,
-        vars.icon.value,
-        fetchValue,
-        vars,
-        vars.id.nesting[depth]
-      ),
-      tooltip_data = params.titleOnly
-        ? []
-        : fetchData(vars, d, length, ex, children, depth);
+    let title = params.title || fetchText(vars, d, depth)[0];
+
+    let icon = uniques(
+      d,
+      vars.icon.value,
+      fetchValue,
+      vars,
+      vars.id.nesting[depth]
+    );
+
+    const tooltip_data = params.titleOnly
+      ? []
+      : fetchData(vars, d, length, ex, children, depth);
 
     if (icon.length === 1 && typeof icon[0] === 'string') {
       icon = icon[0];
@@ -336,8 +347,8 @@ module.exports = function(params) {
         'd3po' in d && 'merged' in d.d3po
           ? dataDepth - 1
           : 'depth' in params
-          ? params.depth
-          : dataDepth;
+            ? params.depth
+            : dataDepth;
 
       if (depth < 0) {
         depth = 0;
@@ -356,14 +367,14 @@ module.exports = function(params) {
         icon_style = 'default';
       }
 
-      var width = vars.tooltip.small;
+      let width = vars.tooltip.small;
       if (params.width) {
         width = params.width;
       } else if (fullscreen) {
         width = vars.tooltip.large;
       }
 
-      var parent =
+      const parent =
         (!fullscreen && params.length !== 'long') ||
         (fullscreen && vars.tooltip.fullscreen.value)
           ? d3.select('body')
@@ -424,12 +435,12 @@ module.exports = function(params) {
       typeof vars.tooltip.html.value == 'object' &&
       vars.tooltip.html.value.url
     ) {
-      var tooltip_url = vars.tooltip.html.value.url;
+      let tooltip_url = vars.tooltip.html.value.url;
       if (typeof tooltip_url === 'function') {
         tooltip_url = tooltip_url(id);
       }
-      d3.json(tooltip_url, function(data) {
-        var html = vars.tooltip.html.value.callback
+      d3.json(tooltip_url, data => {
+        const html = vars.tooltip.html.value.callback
           ? vars.tooltip.html.value.callback(data)
           : data;
         make_tooltip(html);

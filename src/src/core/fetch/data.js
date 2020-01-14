@@ -1,13 +1,13 @@
-var dataFilter = require('../data/filter.js'),
-  dataNest = require('../data/nest.js'),
-  print = require('../console/print.js'),
-  stringFormat = require('../../string/format.js'),
-  stringList = require('../../string/list.js');
+const dataFilter = require('../data/filter.js');
+const dataNest = require('../data/nest.js');
+const print = require('../console/print.js');
+const stringFormat = require('../../string/format.js');
+const stringList = require('../../string/list.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Fetches specific years of data
 //-------------------------------------------------------------------
-module.exports = function(vars, years, depth) {
+module.exports = (vars, years, depth) => {
   if (!vars.data.value) {
     return [];
   }
@@ -15,7 +15,7 @@ module.exports = function(vars, years, depth) {
   if (depth === undefined) {
     depth = vars.depth.value;
   }
-  var nestLevel = vars.id.nesting[depth];
+  const nestLevel = vars.id.nesting[depth];
 
   if (years && !(years instanceof Array)) {
     years = [years];
@@ -28,17 +28,17 @@ module.exports = function(vars, years, depth) {
   if (!years && 'time' in vars) {
     years = [];
 
-    var key = vars.time.solo.value.length ? 'solo' : 'mute',
-      filterList = vars.time[key].value;
+    const key = vars.time.solo.value.length ? 'solo' : 'mute';
+    const filterList = vars.time[key].value;
 
     if (filterList.length) {
       years = [];
-      for (var yi = 0; yi < filterList.length; yi++) {
-        var y = filterList[yi];
+      for (let yi = 0; yi < filterList.length; yi++) {
+        let y = filterList[yi];
 
         if (typeof y === 'function') {
-          for (var ti = 0; ti < vars.data.time.values.length; ti++) {
-            var ms = vars.data.time.values[ti].getTime();
+          for (let ti = 0; ti < vars.data.time.values.length; ti++) {
+            const ms = vars.data.time.values[ti].getTime();
             if (y(ms)) {
               years.push(ms);
             }
@@ -50,7 +50,7 @@ module.exports = function(vars, years, depth) {
           if (y.length === 4 && parseInt(y) + '' === y) {
             y = y + '/01/01';
           }
-          var d = new Date(y);
+          const d = new Date(y);
           if (d !== 'Invalid Date') {
             // d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
             years.push(d.getTime());
@@ -59,9 +59,9 @@ module.exports = function(vars, years, depth) {
       }
 
       if (key === 'mute') {
-        years = vars.data.time.values.filter(function(t) {
-          return years.indexOf(t.getTime()) < 0;
-        });
+        years = vars.data.time.values.filter(
+          t => years.indexOf(t.getTime()) < 0
+        );
       }
     } else {
       years.push('all');
@@ -72,22 +72,23 @@ module.exports = function(vars, years, depth) {
 
   if (years.indexOf('all') >= 0 && vars.data.time.values.length) {
     years = vars.data.time.values.slice(0);
-    for (var i = 0; i < years.length; i++) {
+    for (let i = 0; i < years.length; i++) {
       years[i] = years[i].getTime();
     }
   }
 
-  var cacheID = [vars.type.value, nestLevel, depth]
-      .concat(vars.data.filters)
-      .concat(years),
-    filter = vars.data.solo.length ? 'solo' : 'mute',
-    cacheKeys = d3.keys(vars.data.cache),
-    vizFilter = vars.types[vars.type.value].filter || undefined;
+  let cacheID = [vars.type.value, nestLevel, depth]
+    .concat(vars.data.filters)
+    .concat(years);
+
+  const filter = vars.data.solo.length ? 'solo' : 'mute';
+  const cacheKeys = d3.keys(vars.data.cache);
+  const vizFilter = vars.types[vars.type.value].filter || undefined;
 
   if (vars.data[filter].length) {
-    for (var di = 0; di < vars.data[filter].length; di++) {
-      var f = vars.data[filter][di];
-      var vals = vars[f][filter].value.slice(0);
+    for (let di = 0; di < vars.data[filter].length; di++) {
+      const f = vars.data[filter][di];
+      const vals = vars[f][filter].value.slice(0);
       vals.unshift(f);
       vals.unshift(filter);
       cacheID = cacheID.concat(vals);
@@ -101,8 +102,8 @@ module.exports = function(vars, years, depth) {
   cacheID = cacheID.join('_');
   vars.data.cacheID = cacheID;
 
-  for (var c = 0; c < cacheKeys.length; c++) {
-    var matchKey = cacheKeys[c]
+  for (let c = 0; c < cacheKeys.length; c++) {
+    const matchKey = cacheKeys[c]
       .split('_')
       .slice(1)
       .join('_');
@@ -115,7 +116,7 @@ module.exports = function(vars, years, depth) {
     }
   }
 
-  var returnData;
+  let returnData;
 
   if (vars.data.cache[cacheID]) {
     if (vars.dev.value) {
@@ -134,12 +135,12 @@ module.exports = function(vars, years, depth) {
 
     return returnData;
   } else {
-    var missing = [];
+    let missing = [];
     returnData = [];
 
     if (vars.data.value && vars.data.value.length) {
-      for (var yz = 0; yz < years.length; yz++) {
-        var year = years[yz];
+      for (let yz = 0; yz < years.length; yz++) {
+        const year = years[yz];
         if (vars.data.nested[year]) {
           returnData = returnData.concat(vars.data.nested[year][nestLevel]);
         } else {
@@ -153,13 +154,11 @@ module.exports = function(vars, years, depth) {
         missing = d3.extent(missing);
       }
 
-      missing = missing.map(function(m) {
-        return vars.data.time.format(new Date(m));
-      });
+      missing = missing.map(m => vars.data.time.format(new Date(m)));
       missing = missing.join(' - ');
 
-      var str = vars.format.locale.value.error.dataYear,
-        and = vars.format.locale.value.ui.and;
+      const str = vars.format.locale.value.error.dataYear;
+      const and = vars.format.locale.value.ui.and;
       missing = stringList(missing, and);
       vars.error.internal = stringFormat(str, missing);
       vars.time.missing = true;
@@ -169,8 +168,8 @@ module.exports = function(vars, years, depth) {
       }
 
       if (years.length > 1) {
-        var separated = false;
-        ['x', 'y', 'x2', 'y2'].forEach(function(a) {
+        let separated = false;
+        ['x', 'y', 'x2', 'y2'].forEach(a => {
           if (
             vars[a].value === vars.time.value &&
             vars[a].scale.value === 'discrete'
@@ -180,7 +179,7 @@ module.exports = function(vars, years, depth) {
         });
 
         if (!separated) {
-          var nested = vars.id.nesting.slice(0, depth + 1);
+          const nested = vars.id.nesting.slice(0, depth + 1);
           returnData = dataNest(vars, returnData, nested);
         }
       }

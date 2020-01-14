@@ -1,6 +1,7 @@
-(function() {
-  module.exports = function(elem, vars, color) {
-    var events, ie;
+(() => {
+  module.exports = (elem, vars, color) => {
+    let events;
+    let ie;
     color = require('./color.js');
     events = require('../../../../client/pointer.js');
     ie = require('../../../../client/ie.js');
@@ -37,7 +38,7 @@
             .call(color, vars);
         }
       })
-      .on(events.click, function(d) {
+      .on(events.click, d => {
         if (vars.focus.value !== false) {
           return vars.self.focus(d[vars.id.value]).draw();
         } else if (vars.focus.callback) {
@@ -45,4 +46,4 @@
         }
       });
   };
-}.call(this));
+}).call(this);

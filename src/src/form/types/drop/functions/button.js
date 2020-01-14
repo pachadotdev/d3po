@@ -1,12 +1,12 @@
-var copy = require('../../../../util/copy.js'),
-  events = require('../../../../client/pointer.js'),
-  form = require('../../../form.js'),
-  print = require('../../../../core/console/print.js');
+const copy = require('../../../../util/copy.js');
+const events = require('../../../../client/pointer.js');
+const form = require('../../../form.js');
+const print = require('../../../../core/console/print.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the main drop button.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (!('button' in vars.container)) {
     if (vars.dev.value) {
       print.time('creating main button');
@@ -25,13 +25,13 @@ module.exports = function(vars) {
   }
 
   if (vars.focus.changed || vars.data.changed || vars.depth.changed) {
-    var depth = vars.depth.value;
+    let depth = vars.depth.value;
 
-    var buttonData = copy(
-      vars.data.value.filter(function(d) {
-        var match = false;
-        for (var i = 0; i < vars.id.nesting.length; i++) {
-          var level = vars.id.nesting[i];
+    let buttonData = copy(
+      vars.data.value.filter(d => {
+        let match = false;
+        for (let i = 0; i < vars.id.nesting.length; i++) {
+          const level = vars.id.nesting[i];
           match = level in d && d[level] === vars.focus.value;
           if (match) {
             depth = i;
@@ -52,7 +52,7 @@ module.exports = function(vars) {
       .depth(depth);
   }
 
-  var hover = vars.hover.value === true ? vars.focus.value : false;
+  const hover = vars.hover.value === true ? vars.focus.value : false;
 
   vars.container.button
     .draw({
@@ -79,12 +79,12 @@ module.exports = function(vars) {
     .width(vars.width.value)
     .draw();
 
-  var button = vars.container.button.container(Object).ui;
+  const button = vars.container.button.container(Object).ui;
 
   vars.margin.top +=
     button.node().offsetHeight || button.node().getBoundingClientRect().height;
 
-  button.on(events.click, function() {
+  button.on(events.click, () => {
     vars.self.open(!vars.open.value).draw();
   });
 };

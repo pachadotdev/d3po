@@ -1,8 +1,8 @@
-var print = require('../../../../core/console/print.js');
+const print = require('../../../../core/console/print.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and populates the dropdown list of items.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     print.time('populating list');
   }

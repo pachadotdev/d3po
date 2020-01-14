@@ -1,6 +1,18 @@
-(function() {
-  module.exports = function(value, self) {
-    var i, j, k, l, len, len1, len2, len3, m, results, side, sides, v;
+(() => {
+  module.exports = (value, self) => {
+    let i;
+    let j;
+    let k;
+    let l;
+    let len;
+    let len1;
+    let len2;
+    let len3;
+    let m;
+    let results;
+    let side;
+    let sides;
+    let v;
     if (typeof value === 'string') {
       value = value.split(' ');
       for (i = j = 0, len = value.length; j < len; i = ++j) {
@@ -57,4 +69,4 @@
     }
     return results;
   };
-}.call(this));
+}).call(this);

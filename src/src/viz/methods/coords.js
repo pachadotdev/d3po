@@ -1,5 +1,6 @@
-(function() {
-  var filter, process;
+(() => {
+  let filter;
+  let process;
 
   filter = require('../../core/methods/filter.js');
 
@@ -50,4 +51,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

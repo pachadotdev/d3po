@@ -1,16 +1,17 @@
-var textColor = require('../../../color/text.js');
+const textColor = require('../../../color/text.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates Centered Server Message
 //------------------------------------------------------------------------------
-module.exports = function(vars, message) {
+module.exports = (vars, message) => {
   message = vars.messages.value ? message : null;
 
-  var size =
+  const size =
     vars.messages.style.value ||
     (message === vars.error.internal ? 'large' : vars.messages.style.backup);
 
-  var font, position;
+  let font;
+  let position;
   if (size === 'large') {
     font = vars.messages;
     position = 'center';
@@ -38,7 +39,7 @@ module.exports = function(vars, message) {
     padding: font.padding + 'px'
   };
 
-  var bg = vars.messages.background.value;
+  let bg = vars.messages.background.value;
   if (!bg) {
     bg = vars.background.value;
     if (bg === 'none' || bg === 'transparent') {
@@ -52,16 +53,14 @@ module.exports = function(vars, message) {
       .style('position', 'absolute')
       .style('background-color', bg)
       .style('text-align', 'center')
-      .style('left', function() {
-        return position == 'center' ? '50%' : '0px';
-      })
-      .style('width', function() {
-        return position == 'center' ? 'auto' : vars.width.value + 'px';
-      })
+      .style('left', () => (position == 'center' ? '50%' : '0px'))
+      .style('width', () =>
+        position == 'center' ? 'auto' : vars.width.value + 'px'
+      )
       .style('margin-left', function() {
         return position == 'center' ? -(this.offsetWidth / 2) + 'px' : '0px';
       })
-      .style('top', function() {
+      .style('top', () => {
         if (position == 'center') {
           return '50%';
         } else if (position == 'top') {
@@ -70,7 +69,7 @@ module.exports = function(vars, message) {
           return 'auto';
         }
       })
-      .style('bottom', function() {
+      .style('bottom', () => {
         if (position == 'bottom') {
           return '0px';
         } else {
@@ -79,7 +78,8 @@ module.exports = function(vars, message) {
       })
       .style('margin-top', function() {
         if (size == 'large') {
-          var height = this.offsetHeight || this.getBoundingClientRect().height;
+          const height =
+            this.offsetHeight || this.getBoundingClientRect().height;
           return -height / 2 + 'px';
         }
         return '0px';
@@ -91,7 +91,7 @@ module.exports = function(vars, message) {
     .selectAll('div#d3po_message')
     .data(['message']);
 
-  var enter = vars.g.message
+  const enter = vars.g.message
     .enter()
     .append('div')
     .attr('id', 'd3po_message')

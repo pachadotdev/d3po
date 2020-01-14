@@ -1,12 +1,14 @@
 // Custom styling and behavior for browser console statements
-(function() {
-  var ie, print, wiki;
+(() => {
+  let ie;
+  let print;
+  let wiki;
 
   ie = require('../../client/ie.js');
 
   wiki = require('./wiki.js');
 
-  print = function(type, message, style) {
+  print = (type, message, style) => {
     style = style || '';
     if (ie || typeof InstallTrigger !== 'undefined') {
       console.log('[ d3po ] ' + message);
@@ -44,7 +46,7 @@
     this('groupCollapsed', message, 'color:#888;');
   };
 
-  print.groupEnd = function() {
+  print.groupEnd = () => {
     if (!ie) {
       console.groupEnd();
     }
@@ -55,18 +57,23 @@
   };
 
   print.stack = function() {
-    var err, line, message, page, splitter, stack, url;
+    let err;
+    let line;
+    let message;
+    let page;
+    let splitter;
+    let stack;
+    let url;
     if (!ie) {
       err = new Error();
       if (err.stack) {
         stack = err.stack.split('\n');
-        stack = stack.filter(function(e) {
-          return (
+        stack = stack.filter(
+          e =>
             e.indexOf('Error') !== 0 &&
             e.indexOf('d3po.js:') < 0 &&
             e.indexOf('d3po.min.js:') < 0
-          );
-        });
+        );
         if (stack.length && stack[0].length) {
           splitter = window.chrome ? 'at ' : '@';
           url = stack[0];
@@ -87,13 +94,13 @@
     }
   };
 
-  print.time = function(message) {
+  print.time = message => {
     if (!ie) {
       console.time(message);
     }
   };
 
-  print.timeEnd = function(message) {
+  print.timeEnd = message => {
     if (!ie) {
       console.timeEnd(message);
     }
@@ -116,4 +123,4 @@
   };
 
   module.exports = print;
-}.call(this));
+}).call(this);

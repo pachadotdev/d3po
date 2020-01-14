@@ -1,5 +1,7 @@
-(function() {
-  var labels, removeTooltip, transform;
+(() => {
+  let labels;
+  let removeTooltip;
+  let transform;
 
   labels = require('./labels.js');
 
@@ -7,18 +9,18 @@
 
   transform = require('./transform.js');
 
-  module.exports = function(vars) {
-    var delay,
-      eventType,
-      limits,
-      scale,
-      translate,
-      xmax,
-      xmin,
-      xoffset,
-      ymax,
-      ymin,
-      yoffset;
+  module.exports = vars => {
+    let delay;
+    let eventType;
+    let limits;
+    let scale;
+    let translate;
+    let xmax;
+    let xmin;
+    let xoffset;
+    let ymax;
+    let ymin;
+    let yoffset;
     eventType = d3.event.sourceEvent ? d3.event.sourceEvent.type : null;
     translate = d3.event.translate;
     scale = d3.event.scale;
@@ -49,9 +51,7 @@
       if (eventType === 'wheel') {
         delay = vars.draw.timing ? 100 : 250;
         clearTimeout(vars.zoom.wheel);
-        vars.zoom.wheel = setTimeout(function() {
-          return labels(vars);
-        }, delay);
+        vars.zoom.wheel = setTimeout(() => labels(vars), delay);
       } else {
         labels(vars);
       }
@@ -62,4 +62,4 @@
       return transform(vars, 0);
     }
   };
-}.call(this));
+}).call(this);

@@ -1,12 +1,12 @@
-(function() {
-  var process;
+(() => {
+  let process;
 
   process = require('../../core/methods/process/margin.js');
 
   module.exports = {
     accepted: [Number, Object, String],
     process: function(value) {
-      var userValue;
+      let userValue;
       if (value === void 0) {
         value = this.value;
       }
@@ -16,4 +16,4 @@
     },
     value: 0
   };
-}.call(this));
+}).call(this);

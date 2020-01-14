@@ -1,25 +1,25 @@
-(function() {
-  var offset;
+(() => {
+  let offset;
 
   offset = require('../geom/offset.js');
 
-  module.exports = function(path) {
-    var angle,
-      i,
-      j,
-      last,
-      len,
-      length,
-      o,
-      obtuse,
-      p,
-      poly,
-      prev,
-      radius,
-      segments,
-      start,
-      step,
-      width;
+  module.exports = path => {
+    let angle;
+    let i;
+    let j;
+    let last;
+    let len;
+    let length;
+    let o;
+    let obtuse;
+    let p;
+    let poly;
+    let prev;
+    let radius;
+    let segments;
+    let start;
+    let step;
+    let width;
     if (!path) {
       return [];
     }
@@ -32,19 +32,13 @@
       p = path[j];
       p = p.split(' ');
       if (p.length === 1) {
-        poly.push(
-          p[0].split(',').map(function(d) {
-            return parseFloat(d);
-          })
-        );
+        poly.push(p[0].split(',').map(d => parseFloat(d)));
       } else {
         prev = poly[poly.length - 1];
         last = p
           .pop()
           .split(',')
-          .map(function(d) {
-            return parseFloat(d);
-          });
+          .map(d => parseFloat(d));
         radius = parseFloat(p.shift().split(',')[0]);
         width = Math.sqrt(
           Math.pow(last[0] - prev[0], 2) + Math.pow(last[1] - prev[1], 2)
@@ -72,4 +66,4 @@
     }
     return poly;
   };
-}.call(this));
+}).call(this);

@@ -1,7 +1,9 @@
 // Mixes 2 colors with optional opacities
-(function() {
-  module.exports = function(c1, c2, o1, o2) {
-    var b, g, r;
+(() => {
+  module.exports = (c1, c2, o1, o2) => {
+    let b;
+    let g;
+    let r;
     if (!o1) {
       o1 = 1;
     }
@@ -15,4 +17,4 @@
     b = (o1 * c1.b + o2 * c2.b - o1 * o2 * c2.b) / (o1 + o2 - o1 * o2);
     return d3.rgb(r, g, b).toString();
   };
-}.call(this));
+}).call(this);

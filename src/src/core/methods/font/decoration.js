@@ -1,6 +1,6 @@
-(function() {
-  module.exports = function(decoration) {
-    var accepted;
+(() => {
+  module.exports = decoration => {
+    let accepted;
     accepted = ['line-through', 'none', 'overline', 'underline'];
     if (decoration === false) {
       accepted.unshift(false);
@@ -13,4 +13,4 @@
       value: decoration
     };
   };
-}.call(this));
+}).call(this);

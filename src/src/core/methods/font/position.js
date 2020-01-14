@@ -1,6 +1,6 @@
-(function() {
-  module.exports = function(position) {
-    var accepted;
+(() => {
+  module.exports = position => {
+    let accepted;
     accepted = ['top', 'middle', 'bottom'];
     if (position === false) {
       accepted.unshift(false);
@@ -22,4 +22,4 @@
       value: position
     };
   };
-}.call(this));
+}).call(this);

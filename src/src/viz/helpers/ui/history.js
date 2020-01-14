@@ -1,6 +1,8 @@
 // Creates "back" button, if applicable
-(function() {
-  var events, lighter, print;
+(() => {
+  let events;
+  let lighter;
+  let print;
 
   events = require('../../../client/pointer.js');
 
@@ -8,21 +10,21 @@
 
   print = require('../../../core/console/print.js');
 
-  module.exports = function(vars) {
-    var button,
-      color,
-      containerPadding,
-      family,
-      left,
-      min_height,
-      padding,
-      size,
-      stripY,
-      style,
-      titleClass,
-      titleGroup,
-      top,
-      weight;
+  module.exports = vars => {
+    let button;
+    let color;
+    let containerPadding;
+    let family;
+    let left;
+    let min_height;
+    let padding;
+    let size;
+    let stripY;
+    let style;
+    let titleClass;
+    let titleGroup;
+    let top;
+    let weight;
     if (!vars.small && vars.history.value && vars.history.states.length > 0) {
       if (vars.dev.value) {
         print.time('drawing back button');
@@ -55,8 +57,8 @@
         titleClass = 'title';
       }
       if (titleClass) {
-        stripY = function(elem) {
-          var y;
+        stripY = elem => {
+          let y;
           y = elem.attr('transform').match(/translate\(([^a-z]+)\)/gi)[0];
           y = y.replace(/([^a-z])\s([^a-z])/gi, '$1,$2');
           y = y.split(',');
@@ -80,8 +82,8 @@
         10
       );
       left = vars.margin.left + size / 2 + containerPadding;
-      style = function(elem) {
-        return elem
+      style = elem =>
+        elem
           .style('position', 'absolute')
           .style('left', left + 'px')
           .style('top', top + 'px')
@@ -89,7 +91,6 @@
           .style('font-family', family)
           .style('font-weight', weight)
           .style('font-size', size + 'px');
-      };
       button
         .on(events.over, function() {
           if (!vars.small && vars.history.states.length > 0) {
@@ -111,9 +112,7 @@
               .style('color', color);
           }
         })
-        .on(events.click, function() {
-          return vars.history.back();
-        })
+        .on(events.click, () => vars.history.back())
         .transition()
         .duration(vars.draw.timing)
         .style('opacity', 1)
@@ -130,4 +129,4 @@
         .remove();
     }
   };
-}.call(this));
+}).call(this);

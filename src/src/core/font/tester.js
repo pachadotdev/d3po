@@ -1,7 +1,9 @@
 // Creates an invisible test element to populate
-(function() {
-  module.exports = function(type) {
-    var attrs, styles, tester;
+(() => {
+  module.exports = type => {
+    let attrs;
+    let styles;
+    let tester;
     if (['div', 'svg'].indexOf(type) < 0) {
       type = 'div';
     }
@@ -16,8 +18,8 @@
       type === 'div'
         ? {}
         : {
-            position: 'absolute'
-          };
+          position: 'absolute'
+        };
     tester = d3
       .select('body')
       .selectAll(type + '.d3po_tester')
@@ -30,4 +32,4 @@
       .attr(attrs);
     return tester;
   };
-}.call(this));
+}).call(this);

@@ -1,9 +1,10 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Object],
     objectAccess: false,
     process: function(value, vars) {
-      var method, setting;
+      let method;
+      let setting;
       for (method in value) {
         setting = value[method];
         if (method in vars.self) {
@@ -14,4 +15,4 @@
     },
     value: {}
   };
-}.call(this));
+}).call(this);

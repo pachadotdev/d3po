@@ -1,5 +1,7 @@
-(function() {
-  var decoration, family, transform;
+(() => {
+  let decoration;
+  let family;
+  let transform;
 
   family = require('../../core/methods/font/family.js');
 
@@ -23,4 +25,4 @@
     position: 'bottom',
     value: false
   };
-}.call(this));
+}).call(this);

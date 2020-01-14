@@ -1,5 +1,9 @@
-(function() {
-  var align, decoration, family, margin, transform;
+(() => {
+  let align;
+  let decoration;
+  let family;
+  let margin;
+  let transform;
 
   family = require('../../core/methods/font/family.js');
 
@@ -17,7 +21,7 @@
     color: {
       primary: {
         process: function(value, vars) {
-          var primary;
+          let primary;
           primary = this.value;
           if (!vars.ui.color.secondary.value) {
             vars.ui.color.secondary.value = d3
@@ -48,7 +52,7 @@
     },
     margin: {
       process: function(value) {
-        var userValue;
+        let userValue;
         if (value === void 0) {
           value = this.value;
         }
@@ -60,7 +64,7 @@
     },
     padding: {
       process: function(value) {
-        var userValue;
+        let userValue;
         if (value === void 0) {
           value = this.value;
         }
@@ -71,4 +75,4 @@
       value: 5
     }
   };
-}.call(this));
+}).call(this);

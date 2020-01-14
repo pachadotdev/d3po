@@ -1,21 +1,21 @@
-var buckets = require('../../util/buckets.js'),
-  fetchValue = require('../fetch/value.js'),
-  print = require('../console/print.js');
+const buckets = require('../../util/buckets.js');
+const fetchValue = require('../fetch/value.js');
+const print = require('../console/print.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Sets color range of data, if applicable
 //-------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     print.time('getting color data range');
   }
 
-  var data_range;
+  let data_range;
   if (vars.color.domain.value) {
     data_range = vars.color.domain.value;
   } else {
     data_range = [];
-    vars.data.pool.forEach(function(d) {
-      var val = parseFloat(fetchValue(vars, d, vars.color.value));
+    vars.data.pool.forEach(d => {
+      const val = parseFloat(fetchValue(vars, d, vars.color.value));
       if (
         typeof val == 'number' &&
         !isNaN(val) &&
@@ -37,7 +37,7 @@ module.exports = function(vars) {
 
     data_range = d3.extent(data_range);
 
-    var color_range;
+    let color_range;
     if (data_range[0] < 0 && data_range[1] > 0) {
       color_range = vars.color.range;
       if (color_range.length == 3) {

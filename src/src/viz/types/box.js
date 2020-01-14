@@ -1,5 +1,10 @@
-(function() {
-  var box, fetchValue, graph, stringFormat, strip, uniques;
+(() => {
+  let box;
+  let fetchValue;
+  let graph;
+  let stringFormat;
+  let strip;
+  let uniques;
 
   fetchValue = require('../../core/fetch/value.js');
 
@@ -11,30 +16,30 @@
 
   uniques = require('../../util/uniques.js');
 
-  box = function(vars) {
-    var botstr,
-      disMargin,
-      discrete,
-      domains,
-      h,
-      iqrstr,
-      maxstr,
-      medians,
-      medstr,
-      mergeData,
-      minstr,
-      mode,
-      noData,
-      oppMargin,
-      opposite,
-      pctstr,
-      qt1str,
-      qt3str,
-      returnData,
-      size,
-      space,
-      topstr,
-      w;
+  box = vars => {
+    let botstr;
+    let disMargin;
+    let discrete;
+    let domains;
+    let h;
+    let iqrstr;
+    let maxstr;
+    let medians;
+    let medstr;
+    let mergeData;
+    let minstr;
+    let mode;
+    let noData;
+    let oppMargin;
+    let opposite;
+    let pctstr;
+    let qt1str;
+    let qt3str;
+    let returnData;
+    let size;
+    let space;
+    let topstr;
+    let w;
     graph(vars, {
       buffer: true
     });
@@ -58,8 +63,10 @@
     if (!(mode instanceof Array)) {
       mode = [mode, mode];
     }
-    mergeData = function(arr) {
-      var key, obj, vals;
+    mergeData = arr => {
+      let key;
+      let obj;
+      let vals;
       obj = {};
       for (key in vars.data.keys) {
         vals = uniques(arr, key, fetchValue, vars);
@@ -80,48 +87,42 @@
     medstr = vars.format.value(vars.format.locale.value.ui.median);
     returnData = [];
     d3.nest()
-      .key(function(d) {
-        return fetchValue(vars, d, vars[discrete].value);
-      })
-      .rollup(function(leaves) {
-        var bottom,
-          bottomLabel,
-          bottomWhisker,
-          boxData,
-          d,
-          diff1,
-          diff2,
-          first,
-          i,
-          iqr,
-          j,
-          key,
-          label,
-          len,
-          len1,
-          median,
-          medianBuffer,
-          medianData,
-          medianHeight,
-          medianText,
-          outliers,
-          scale,
-          second,
-          tooltipData,
-          top,
-          topLabel,
-          topWhisker,
-          val,
-          values,
-          x,
-          y;
+      .key(d => fetchValue(vars, d, vars[discrete].value))
+      .rollup(leaves => {
+        let bottom;
+        let bottomLabel;
+        let bottomWhisker;
+        let boxData;
+        let d;
+        let diff1;
+        let diff2;
+        let first;
+        let i;
+        let iqr;
+        let j;
+        let key;
+        let label;
+        let len;
+        let len1;
+        let median;
+        let medianBuffer;
+        let medianData;
+        let medianHeight;
+        let medianText;
+        let outliers;
+        let scale;
+        let second;
+        let tooltipData;
+        let top;
+        let topLabel;
+        let topWhisker;
+        let val;
+        let values;
+        let x;
+        let y;
         scale = vars[opposite].scale.viz;
-        values = leaves.map(function(d) {
-          return fetchValue(vars, d, vars[opposite].value);
-        });
-        values.sort(function(a, b) {
-          return a - b;
-        });
+        values = leaves.map(d => fetchValue(vars, d, vars[opposite].value));
+        values.sort((a, b) => a - b);
         first = d3.quantile(values, 0.25);
         median = d3.quantile(values, 0.5);
         second = d3.quantile(values, 0.75);
@@ -313,8 +314,8 @@
 
   box.shapes = ['circle', 'square'];
 
-  box.setup = function(vars) {
-    var axis;
+  box.setup = vars => {
+    let axis;
     if (!vars.axes.discrete) {
       axis = vars.time.value === vars.y.value ? 'y' : 'x';
       return vars.self[axis]({
@@ -324,4 +325,4 @@
   };
 
   module.exports = box;
-}.call(this));
+}).call(this);

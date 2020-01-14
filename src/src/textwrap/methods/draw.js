@@ -1,5 +1,6 @@
-(function() {
-  var print, stringFormat;
+(() => {
+  let print;
+  let stringFormat;
 
   print = require('../../core/console/print.js');
 
@@ -8,7 +9,8 @@
   module.exports = {
     accepted: [void 0],
     process: function(value, vars) {
-      var selector, str;
+      let selector;
+      let str;
       if (this.initialized === false) {
         return value;
       }
@@ -29,4 +31,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

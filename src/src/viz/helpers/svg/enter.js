@@ -1,11 +1,11 @@
-var events = require('../../../client/pointer.js'),
-  prefix = require('../../../client/prefix.js'),
-  print = require('../../../core/console/print.js'),
-  touch = require('../../../client/touch.js'),
-  touchEvent = require('../zoom/propagation.js');
+const events = require('../../../client/pointer.js');
+const prefix = require('../../../client/prefix.js');
+const print = require('../../../core/console/print.js');
+const touch = require('../../../client/touch.js');
+const touchEvent = require('../zoom/propagation.js');
 
 // Enter SVG Elements
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     print.time('creating SVG elements');
   }
@@ -57,7 +57,7 @@ module.exports = function(vars) {
     .attr('transform', 'translate(0,' + vars.height.value + ')');
 
   // Enter App Clipping Mask
-  var clipID = 'clipping_' + vars.container.id;
+  const clipID = 'clipping_' + vars.container.id;
   vars.g.clipping = vars.svg.selectAll('#clipping').data(['clipping']);
   vars.g.clipping
     .enter()

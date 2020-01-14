@@ -1,5 +1,7 @@
-(function() {
-  var fetchValue, ie, stringStrip;
+(() => {
+  let fetchValue;
+  let ie;
+  let stringStrip;
 
   fetchValue = require('../../core/fetch/value.js');
 
@@ -12,42 +14,42 @@
     chainable: false,
     data: [],
     process: function(value, vars) {
-      var blob,
-        c,
-        col,
-        columns,
-        csv_data,
-        csv_to_return,
-        d,
-        dataString,
-        i,
-        j,
-        k,
-        l,
-        len,
-        len1,
-        len2,
-        len3,
-        len4,
-        len5,
-        len6,
-        len7,
-        link,
-        m,
-        max_filename_len,
-        n,
-        node,
-        o,
-        p,
-        q,
-        ref,
-        ref1,
-        ref2,
-        row,
-        title,
-        titles,
-        url,
-        val;
+      let blob;
+      let c;
+      let col;
+      let columns;
+      let csv_data;
+      let csv_to_return;
+      let d;
+      let dataString;
+      let i;
+      let j;
+      let k;
+      let l;
+      let len;
+      let len1;
+      let len2;
+      let len3;
+      let len4;
+      let len5;
+      let len6;
+      let len7;
+      let link;
+      let m;
+      let max_filename_len;
+      let n;
+      let node;
+      let o;
+      let p;
+      let q;
+      let ref;
+      let ref1;
+      let ref2;
+      let row;
+      let title;
+      let titles;
+      let url;
+      let val;
       if (vars.returned === void 0) {
         return [];
       }
@@ -159,4 +161,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

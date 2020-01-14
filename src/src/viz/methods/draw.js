@@ -1,5 +1,5 @@
-var print = require('../../core/console/print.js'),
-  stringFormat = require('../../string/format.js');
+const print = require('../../core/console/print.js');
+const stringFormat = require('../../string/format.js');
 
 module.exports = {
   accepted: [undefined, Function],
@@ -15,13 +15,13 @@ module.exports = {
       value = this.value;
     }
 
-    var str;
+    let str;
     if (vars.container.value === false) {
       str = vars.format.locale.value.dev.setContainer;
       print.warning(str, 'container');
     } else if (vars.container.value.empty()) {
       str = vars.format.locale.value.dev.noContainer;
-      var selector = vars.container.selector || '';
+      const selector = vars.container.selector || '';
       print.warning(stringFormat(str, '"' + selector + '"'), 'container');
     } else {
       if (vars.dev.value) {
@@ -32,9 +32,9 @@ module.exports = {
     }
 
     if (typeof value === 'function' && vars.history.chain.length) {
-      var changesObject = {};
-      vars.history.chain.forEach(function(c) {
-        var method = c.method;
+      const changesObject = {};
+      vars.history.chain.forEach(c => {
+        const method = c.method;
         delete c.method;
         changesObject[method] = c;
       });

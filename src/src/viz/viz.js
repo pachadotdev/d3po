@@ -1,5 +1,10 @@
-(function() {
-  var attach, axis, container, flash, getSteps, print;
+(() => {
+  let attach;
+  let axis;
+  let container;
+  let flash;
+  let getSteps;
+  let print;
 
   attach = require('../core/methods/attach.js');
 
@@ -13,8 +18,8 @@
 
   container = require('./helpers/container.js');
 
-  module.exports = function() {
-    var vars;
+  module.exports = () => {
+    let vars;
     vars = {
       g: {
         apps: {}
@@ -39,15 +44,15 @@
         treemap: require('./types/treemap.js')
       }
     };
-    vars.self = function(selection) {
-      selection.each(function() {
-        var lastMessage,
-          nextStep,
-          runFunction,
-          runStep,
-          small_height,
-          small_width,
-          steps;
+    vars.self = selection => {
+      selection.each(() => {
+        let lastMessage;
+        let nextStep;
+        let runFunction;
+        let runStep;
+        let small_height;
+        let small_width;
+        let steps;
         vars.draw.frozen = true;
         vars.error.internal = null;
         if (!('timing' in vars.draw)) {
@@ -63,7 +68,7 @@
         vars.width.viz = vars.width.value;
         vars.height.viz = vars.height.value;
         lastMessage = false;
-        nextStep = function() {
+        nextStep = () => {
           if (steps.length) {
             runStep();
           } else {
@@ -74,10 +79,10 @@
             }
           }
         };
-        runFunction = function(step, name) {
+        runFunction = (step, name) => {
           name = name || 'function';
           if (step[name] instanceof Array) {
-            step[name].forEach(function(f) {
+            step[name].forEach(f => {
               f(vars, nextStep);
             });
           } else {
@@ -89,8 +94,11 @@
             nextStep();
           }
         };
-        runStep = function() {
-          var message, run, same, step;
+        runStep = () => {
+          let message;
+          let run;
+          let same;
+          let step;
           step = steps.shift();
           same = vars.g.message && lastMessage === step.message;
           run = 'check' in step ? step.check : true;
@@ -117,9 +125,7 @@
                 if (vars.error.value) {
                   runFunction(step);
                 } else {
-                  setTimeout(function() {
-                    return runFunction(step);
-                  }, 10);
+                  setTimeout(() => runFunction(step), 10);
                 }
               } else {
                 runFunction(step);
@@ -132,9 +138,7 @@
               if (vars.error.value) {
                 runFunction(step, 'otherwise');
               } else {
-                setTimeout(function() {
-                  return runFunction(step, 'otherwise');
-                }, 10);
+                setTimeout(() => runFunction(step, 'otherwise'), 10);
               }
             } else {
               nextStep();
@@ -207,4 +211,4 @@
     });
     return vars.self;
   };
-}.call(this));
+}).call(this);

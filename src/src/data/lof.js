@@ -1,28 +1,30 @@
 // Finds outliers in n-dim data using the Local Outlier Factor algorithm
-(function() {
-  var kdtree;
+(() => {
+  let kdtree;
 
   kdtree = require('static-kdtree');
 
-  module.exports = function(points, K) {
-    var avg_lrd,
-      i,
-      j,
-      kdists,
-      ldr,
-      ldrs,
-      neighbors,
-      p,
-      reachDist,
-      result,
-      sqDist,
-      tree;
+  module.exports = (points, K) => {
+    let avg_lrd;
+    let i;
+    let j;
+    let kdists;
+    let ldr;
+    let ldrs;
+    let neighbors;
+    let p;
+    let reachDist;
+    let result;
+    let sqDist;
+    let tree;
     if (K == null) {
       K = 10;
     }
     tree = kdtree(points);
-    neighbors = (function() {
-      var k, len, results;
+    neighbors = (() => {
+      let k;
+      let len;
+      let results;
       results = [];
       for (k = 0, len = points.length; k < len; k++) {
         p = points[k];
@@ -30,8 +32,13 @@
       }
       return results;
     })();
-    sqDist = function(i, j) {
-      var A, B, delta, dist, k, ref;
+    sqDist = (i, j) => {
+      let A;
+      let B;
+      let delta;
+      let dist;
+      let k;
+      let ref;
       A = points[i];
       B = points[j];
       dist = 0;
@@ -45,8 +52,10 @@
       }
       return dist;
     };
-    kdists = (function() {
-      var k, ref, results;
+    kdists = (() => {
+      let k;
+      let ref;
+      let results;
       results = [];
       for (
         i = k = 0, ref = points.length;
@@ -57,11 +66,13 @@
       }
       return results;
     })();
-    reachDist = function(i, j) {
-      return Math.max(sqDist(i, j), kdists[j]);
-    };
-    ldr = function(i) {
-      var j, k, len, rDist, ref;
+    reachDist = (i, j) => Math.max(sqDist(i, j), kdists[j]);
+    ldr = i => {
+      let j;
+      let k;
+      let len;
+      let rDist;
+      let ref;
       rDist = 0;
       ref = neighbors[i];
       for (k = 0, len = ref.length; k < len; k++) {
@@ -70,8 +81,10 @@
       }
       return K / rDist;
     };
-    ldrs = (function() {
-      var k, ref, results;
+    ldrs = (() => {
+      let k;
+      let ref;
+      let results;
       results = [];
       for (
         i = k = 0, ref = points.length;
@@ -82,8 +95,13 @@
       }
       return results;
     })();
-    result = (function() {
-      var k, l, len, ref, ref1, results;
+    result = (() => {
+      let k;
+      let l;
+      let len;
+      let ref;
+      let ref1;
+      let results;
       results = [];
       for (
         i = k = 0, ref = points.length;
@@ -101,8 +119,6 @@
       }
       return results;
     })();
-    return result.sort(function(a, b) {
-      return b[1] - a[1];
-    });
+    return result.sort((a, b) => b[1] - a[1]);
   };
-}.call(this));
+}).call(this);

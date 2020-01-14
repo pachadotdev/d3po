@@ -1,20 +1,20 @@
-var print = require('../console/print.js'),
-  stringFormat = require('../../string/format.js');
+const print = require('../console/print.js');
+const stringFormat = require('../../string/format.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Cleans edges list and populates nodes list if needed
 //-------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     var timerString = 'analyzing edges list';
     print.time(timerString);
   }
 
-  var appReqs = vars.types[vars.type.value].requirements;
+  let appReqs = vars.types[vars.type.value].requirements;
   if (!(appReqs instanceof Array)) {
     appReqs = [appReqs];
   }
-  var createNodes = appReqs.indexOf('nodes') >= 0 && !vars.nodes.value;
+  const createNodes = appReqs.indexOf('nodes') >= 0 && !vars.nodes.value;
 
   if (createNodes) {
     vars.nodes.value = [];
@@ -22,9 +22,9 @@ module.exports = function(vars) {
     vars.nodes.changed = true;
   }
 
-  vars.edges.value.forEach(function(e) {
-    ['source', 'target'].forEach(function(dir) {
-      var dirType = typeof e[vars.edges[dir]];
+  vars.edges.value.forEach(e => {
+    ['source', 'target'].forEach(dir => {
+      const dirType = typeof e[vars.edges[dir]];
 
       if (dirType !== 'object') {
         if (
@@ -35,18 +35,18 @@ module.exports = function(vars) {
           e[vars.edges[dir]] = vars.nodes.value[e[vars.edges[dir]]];
         } else {
           if (createNodes && placed.indexOf(e[vars.edges[dir]]) >= 0) {
-            e[vars.edges[dir]] = vars.nodes.value.filter(function(n) {
-              return n[vars.id.value] === e[vars.edges[dir]];
-            })[0];
+            e[vars.edges[dir]] = vars.nodes.value.filter(
+              n => n[vars.id.value] === e[vars.edges[dir]]
+            )[0];
           } else {
-            var obj = {};
+            const obj = {};
             obj[vars.id.value] = e[vars.edges[dir]];
             e[vars.edges[dir]] = obj;
           }
         }
       }
 
-      var newNode = e[vars.edges[dir]];
+      const newNode = e[vars.edges[dir]];
       if (createNodes) {
         if (placed.indexOf(newNode[vars.id.value]) < 0) {
           placed.push(newNode[vars.id.value]);
@@ -66,12 +66,12 @@ module.exports = function(vars) {
     }
   });
 
-  vars.edges.value = vars.edges.value.filter(function(e) {
-    var source = e[vars.edges.source][vars.id.value],
-      target = e[vars.edges.target][vars.id.value];
+  vars.edges.value = vars.edges.value.filter(e => {
+    const source = e[vars.edges.source][vars.id.value];
+    const target = e[vars.edges.target][vars.id.value];
 
     if (source === target) {
-      var str = vars.format.locale.value.dev.sameEdge;
+      const str = vars.format.locale.value.dev.sameEdge;
       print.warning(stringFormat(str, '"' + source + '"'), 'edges');
       return false;
     } else {

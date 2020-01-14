@@ -1,27 +1,27 @@
-var arraySort = require('../../../array/sort.js'),
-  buckets = require('../../../util/buckets.js'),
-  copy = require('../../../util/copy.js'),
-  createTooltip = require('../tooltip/create.js'),
-  dataNest = require('../../../core/data/nest.js'),
-  dataURL = require('../../../util/dataurl.js'),
-  events = require('../../../client/pointer.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
-  fetchColor = require('../../../core/fetch/color.js'),
-  fetchText = require('../../../core/fetch/text.js'),
-  print = require('../../../core/console/print.js'),
-  removeTooltip = require('../../../tooltip/remove.js'),
-  textColor = require('../../../color/text.js'),
-  uniqueValues = require('../../../util/uniques.js'),
-  scroll = require('../../../client/scroll.js'),
-  stringStrip = require('../../../string/strip.js'),
-  textWrap = require('../../../textwrap/textwrap.js'),
-  validObject = require('../../../object/validate.js');
+const arraySort = require('../../../array/sort.js');
+const buckets = require('../../../util/buckets.js');
+const copy = require('../../../util/copy.js');
+const createTooltip = require('../tooltip/create.js');
+const dataNest = require('../../../core/data/nest.js');
+const dataURL = require('../../../util/dataurl.js');
+const events = require('../../../client/pointer.js');
+const fetchValue = require('../../../core/fetch/value.js');
+const fetchColor = require('../../../core/fetch/color.js');
+const fetchText = require('../../../core/fetch/text.js');
+const print = require('../../../core/console/print.js');
+const removeTooltip = require('../../../tooltip/remove.js');
+const textColor = require('../../../color/text.js');
+const uniqueValues = require('../../../util/uniques.js');
+const scroll = require('../../../client/scroll.js');
+const stringStrip = require('../../../string/strip.js');
+const textWrap = require('../../../textwrap/textwrap.js');
+const validObject = require('../../../object/validate.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var key_display = true,
-    square_size = 0;
+module.exports = vars => {
+  let key_display = true;
+  let square_size = 0;
 
   if (
     !vars.error.internal &&
@@ -34,7 +34,7 @@ module.exports = function(vars) {
         print.time('grouping data by colors');
       }
 
-      var data;
+      let data;
       if (
         vars.nodes.value &&
         vars.types[vars.type.value].requirements.indexOf('nodes') >= 0
@@ -42,9 +42,9 @@ module.exports = function(vars) {
         data = copy(vars.nodes.restriced || vars.nodes.value);
         if (vars.data.viz.length) {
           for (var i = 0; i < data.length; i++) {
-            var appData = vars.data.viz.filter(function(a) {
-              return a[vars.id.value] === data[i][vars.id.value];
-            });
+            const appData = vars.data.viz.filter(
+              a => a[vars.id.value] === data[i][vars.id.value]
+            );
             if (appData.length) {
               data[i] = appData[0];
             }
@@ -55,32 +55,26 @@ module.exports = function(vars) {
       }
 
       if (data.length && 'key' in data[0] && 'values' in data[0]) {
-        data = d3.merge(
-          data.map(function(d) {
-            return d.values;
-          })
-        );
+        data = d3.merge(data.map(d => d.values));
       }
 
-      var colorFunction = function(d) {
-          return fetchColor(vars, d, colorDepth);
-        },
-        colorDepth = 0,
-        colorKey = vars.id.value;
+      const colorFunction = d => fetchColor(vars, d, colorDepth);
+      var colorDepth = 0;
+      let colorKey = vars.id.value;
 
-      var colorIndex = vars.id.nesting.indexOf(vars.color.value);
+      const colorIndex = vars.id.nesting.indexOf(vars.color.value);
       if (colorIndex >= 0) {
         colorDepth = colorIndex;
         colorKey = vars.id.nesting[colorIndex];
       } else {
-        for (var n = 0; n <= vars.depth.value; n++) {
+        for (let n = 0; n <= vars.depth.value; n++) {
           colorDepth = n;
           colorKey = vars.id.nesting[n];
 
-          var uniqueIDs = uniqueValues(data, function(d) {
-              return fetchValue(vars, d, colorKey);
-            }),
-            uniqueColors = uniqueValues(data, colorFunction);
+          const uniqueIDs = uniqueValues(data, d =>
+            fetchValue(vars, d, colorKey)
+          );
+          const uniqueColors = uniqueValues(data, colorFunction);
 
           if (
             uniqueIDs.length >= uniqueColors.length &&
@@ -91,7 +85,7 @@ module.exports = function(vars) {
         }
       }
 
-      var legendNesting = [vars.color.value];
+      const legendNesting = [vars.color.value];
       // if (vars.icon.value && vars.legend.icons.value) legendNesting.push(vars.icon.value);
       var colors = dataNest(vars, data, legendNesting, false);
 
@@ -99,7 +93,7 @@ module.exports = function(vars) {
         print.timeEnd('grouping data by color');
       }
 
-      var available_width = vars.width.value;
+      const available_width = vars.width.value;
 
       square_size = vars.legend.size;
 
@@ -138,9 +132,9 @@ module.exports = function(vars) {
         if (typeof vars.legend.order.value === 'function') {
           colors = vars.legend.order.value(colors);
         } else {
-          var order = vars[vars.legend.order.value].value;
+          let order = vars[vars.legend.order.value].value;
 
-          var sort_color = vars.color.value;
+          let sort_color = vars.color.value;
           if (!order) {
             order = vars[vars.color.value].value;
           } else if (vars.legend.order.value !== 'color') {
@@ -183,8 +177,8 @@ module.exports = function(vars) {
           .remove();
 
         function position(group) {
-          group.attr('transform', function(g, i) {
-            var x = start_x + i * (vars.ui.padding + square_size);
+          group.attr('transform', (g, i) => {
+            const x = start_x + i * (vars.ui.padding + square_size);
             return 'translate(' + x + ',' + vars.ui.padding + ')';
           });
         }
@@ -198,14 +192,15 @@ module.exports = function(vars) {
                 .select('text')
                 .remove();
 
-              var icon = uniqueValues(
-                  g,
-                  vars.icon.value,
-                  fetchValue,
-                  vars,
-                  colorKey
-                ),
-                color = fetchColor(vars, g, colorKey);
+              let icon = uniqueValues(
+                g,
+                vars.icon.value,
+                fetchValue,
+                vars,
+                colorKey
+              );
+
+              let color = fetchColor(vars, g, colorKey);
 
               if (
                 vars.legend.icons.value &&
@@ -213,12 +208,13 @@ module.exports = function(vars) {
                 typeof icon[0] === 'string'
               ) {
                 icon = icon[0];
-                var short_url = stringStrip(icon + '_' + color),
-                  iconStyle = vars.icon.style.value,
-                  icon_style,
-                  pattern = vars.defs
-                    .selectAll('pattern#' + short_url)
-                    .data([short_url]);
+                const short_url = stringStrip(icon + '_' + color);
+                const iconStyle = vars.icon.style.value;
+                let icon_style;
+
+                const pattern = vars.defs
+                  .selectAll('pattern#' + short_url)
+                  .data([short_url]);
 
                 if (typeof iconStyle === 'string') {
                   icon_style = vars.icon.style.value;
@@ -245,7 +241,7 @@ module.exports = function(vars) {
                   .attr('width', square_size)
                   .attr('height', square_size);
 
-                var pattern_enter = pattern
+                const pattern_enter = pattern
                   .enter()
                   .append('pattern')
                   .attr('id', short_url)
@@ -264,12 +260,12 @@ module.exports = function(vars) {
                   .attr('xlink:href', icon)
                   .attr('width', square_size)
                   .attr('height', square_size)
-                  .each(function() {
+                  .each(() => {
                     if (
                       icon.indexOf('/') === 0 ||
                       icon.indexOf(window.location.hostname) >= 0
                     ) {
-                      dataURL(icon, function(base64) {
+                      dataURL(icon, base64 => {
                         pattern.select('image').attr('xlink:href', base64);
                       });
                     } else {
@@ -280,7 +276,7 @@ module.exports = function(vars) {
                 return 'url(#' + short_url + ')';
               } else {
                 if (vars.legend.labels.value) {
-                  var names;
+                  let names;
                   if (vars.legend.text.value) {
                     names = [
                       fetchValue(vars, g, vars.legend.text.value, colorDepth)
@@ -294,8 +290,8 @@ module.exports = function(vars) {
                     !(names[0] instanceof Array) &&
                     names[0].length
                   ) {
-                    var text = d3.select(this.parentNode).append('text'),
-                      size = vars.legend.font.size;
+                    const text = d3.select(this.parentNode).append('text');
+                    let size = vars.legend.font.size;
 
                     if (!(size instanceof Array)) {
                       size = [size];
@@ -334,17 +330,15 @@ module.exports = function(vars) {
             });
         }
 
-        var colorInt = {};
-        var keys = vars.g.legend
-          .selectAll('g.d3po_color')
-          .data(colors, function(d) {
-            var c = fetchColor(vars, d, colorKey);
-            if (!(c in colorInt)) {
-              colorInt[c] = -1;
-            }
-            colorInt[c]++;
-            return colorInt[c] + '_' + c;
-          });
+        const colorInt = {};
+        const keys = vars.g.legend.selectAll('g.d3po_color').data(colors, d => {
+          const c = fetchColor(vars, d, colorKey);
+          if (!(c in colorInt)) {
+            colorInt[c] = -1;
+          }
+          colorInt[c]++;
+          return colorInt[c] + '_' + c;
+        });
 
         keys
           .enter()
@@ -378,14 +372,13 @@ module.exports = function(vars) {
             .on(events.over, function(d) {
               d3.select(this).style('cursor', 'pointer');
 
-              var bounds = this.getBoundingClientRect(),
-                x = bounds.left + square_size / 2 + scroll.x(),
-                y = bounds.top + square_size / 2 + scroll.y() + 5;
+              const bounds = this.getBoundingClientRect();
+              const x = bounds.left + square_size / 2 + scroll.x();
+              const y = bounds.top + square_size / 2 + scroll.y() + 5;
+              const id = fetchValue(vars, d, colorKey);
+              const idIndex = vars.id.nesting.indexOf(colorKey);
 
-              var id = fetchValue(vars, d, colorKey),
-                idIndex = vars.id.nesting.indexOf(colorKey);
-
-              var title;
+              let title;
               if (vars.legend.title.value) {
                 title = fetchValue(
                   vars,
@@ -398,30 +391,31 @@ module.exports = function(vars) {
                   idIndex >= 0
                     ? fetchText(vars, d, idIndex)[0]
                     : vars.format.value(
-                        fetchValue(vars, d, vars.color.value, colorKey),
-                        {
-                          key: vars.color.value,
-                          vars: vars,
-                          data: d
-                        }
-                      );
+                      fetchValue(vars, d, vars.color.value, colorKey),
+                      {
+                        key: vars.color.value,
+                        vars: vars,
+                        data: d
+                      }
+                    );
               }
 
-              var html, js;
+              let html;
+              let js;
               if (vars.legend.filters.value && !(id instanceof Array)) {
-                html = "<div style='text-align:center;'>";
-                var loc = vars.format.locale.value;
+                html = '<div style=\'text-align:center;\'>';
+                const loc = vars.format.locale.value;
                 html +=
-                  "<div class='mute'>" +
+                  '<div class=\'mute\'>' +
                   vars.format.value(loc.method.mute) +
                   '</div>';
                 html +=
-                  "<div class='solo'>" +
+                  '<div class=\'solo\'>' +
                   vars.format.value(loc.method.solo) +
                   '</div>';
                 html += '</div>';
-                js = function(tooltip) {
-                  var style = {
+                js = tooltip => {
+                  const style = {
                     border: '1px solid #ccc',
                     display: 'inline-block',
                     margin: '1px 2px',
@@ -433,9 +427,9 @@ module.exports = function(vars) {
                     .on(events.over, function() {
                       d3.select(this).style('cursor', 'pointer');
                     })
-                    .on(events.click, function() {
-                      var mute = vars.id.mute.value;
-                      vars.history.states.push(function() {
+                    .on(events.click, () => {
+                      const mute = vars.id.mute.value;
+                      vars.history.states.push(() => {
                         vars.self
                           .id({
                             mute: mute
@@ -454,9 +448,9 @@ module.exports = function(vars) {
                     .on(events.over, function() {
                       d3.select(this).style('cursor', 'pointer');
                     })
-                    .on(events.click, function() {
-                      var solo = vars.id.solo.value;
-                      vars.history.states.push(function() {
+                    .on(events.click, () => {
+                      const solo = vars.id.solo.value;
+                      vars.history.states.push(() => {
                         vars.self
                           .id({
                             solo: solo
@@ -487,7 +481,7 @@ module.exports = function(vars) {
                 offset: square_size * 0.4
               });
             })
-            .on(events.out, function() {
+            .on(events.out, () => {
               removeTooltip(vars.type.value);
             });
         }
@@ -508,14 +502,14 @@ module.exports = function(vars) {
         .attr('opacity', 0)
         .remove();
 
-      var values = vars.color.valueScale.domain();
+      let values = vars.color.valueScale.domain();
       colors = vars.color.valueScale.range();
 
       if (values.length <= 2) {
         values = buckets(values, 6);
       }
 
-      var scale = vars.g.legend.selectAll('g.d3po_scale').data(['scale']);
+      const scale = vars.g.legend.selectAll('g.d3po_scale').data(['scale']);
 
       scale
         .enter()
@@ -523,9 +517,9 @@ module.exports = function(vars) {
         .attr('class', 'd3po_scale')
         .attr('opacity', 0);
 
-      var heatmapId = vars.container.id + '_legend_heatmap';
+      const heatmapId = vars.container.id + '_legend_heatmap';
 
-      var heatmap = scale.selectAll('#' + heatmapId).data(['heatmap']);
+      const heatmap = scale.selectAll('#' + heatmapId).data(['heatmap']);
 
       heatmap
         .enter()
@@ -537,7 +531,7 @@ module.exports = function(vars) {
         .attr('y2', '0%')
         .attr('spreadMethod', 'pad');
 
-      var stops = heatmap.selectAll('stop').data(d3.range(0, colors.length));
+      const stops = heatmap.selectAll('stop').data(d3.range(0, colors.length));
 
       stops
         .enter()
@@ -545,22 +539,18 @@ module.exports = function(vars) {
         .attr('stop-opacity', 1);
 
       stops
-        .attr('offset', function(i) {
-          return Math.round((i / (colors.length - 1)) * 100) + '%';
-        })
-        .attr('stop-color', function(i) {
-          return colors[i];
-        });
+        .attr('offset', i => Math.round((i / (colors.length - 1)) * 100) + '%')
+        .attr('stop-color', i => colors[i]);
 
       stops.exit().remove();
 
-      var gradient = scale.selectAll('rect#gradient').data(['gradient']);
+      const gradient = scale.selectAll('rect#gradient').data(['gradient']);
 
       gradient
         .enter()
         .append('rect')
         .attr('id', 'gradient')
-        .attr('x', function() {
+        .attr('x', () => {
           if (vars.legend.align == 'middle') {
             return vars.width.value / 2;
           } else if (vars.legend.align == 'end') {
@@ -576,7 +566,7 @@ module.exports = function(vars) {
         .attr('stroke-width', 1)
         .style('fill', 'url(#' + heatmapId + ')');
 
-      var text = scale
+      const text = scale
         .selectAll('text.d3po_tick')
         .data(d3.range(0, values.length));
 
@@ -585,7 +575,7 @@ module.exports = function(vars) {
         .append('text')
         .attr('class', 'd3po_tick')
         .attr('stroke', 'none')
-        .attr('x', function() {
+        .attr('x', () => {
           if (vars.legend.align == 'middle') {
             return vars.width.value / 2;
           } else if (vars.legend.align == 'end') {
@@ -602,7 +592,7 @@ module.exports = function(vars) {
           );
         });
 
-      var label_width = 0;
+      let label_width = 0;
 
       text
         .order()
@@ -611,12 +601,12 @@ module.exports = function(vars) {
         .attr('font-size', vars.legend.font.size + 'px')
         .style('text-anchor', vars.legend.font.align)
         .attr('fill', vars.legend.font.color)
-        .text(function(d) {
-          return vars.format.value(values[d], {
+        .text(d =>
+          vars.format.value(values[d], {
             key: vars.color.value,
             vars: vars
-          });
-        })
+          })
+        )
         .attr('y', function() {
           return (
             this.getBBox().height +
@@ -625,7 +615,7 @@ module.exports = function(vars) {
           );
         })
         .each(function() {
-          var w = Math.ceil(this.getBBox().width);
+          const w = Math.ceil(this.getBBox().width);
           if (w > label_width) {
             label_width = w;
           }
@@ -653,9 +643,7 @@ module.exports = function(vars) {
         text
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function(d) {
-            return start_x + label_width * d;
-          });
+          .attr('x', d => start_x + label_width * d);
 
         text
           .exit()
@@ -664,7 +652,7 @@ module.exports = function(vars) {
           .attr('opacity', 0)
           .remove();
 
-        var ticks = scale
+        const ticks = scale
           .selectAll('rect.d3po_tick')
           .data(d3.range(0, values.length));
 
@@ -672,7 +660,7 @@ module.exports = function(vars) {
           .enter()
           .append('rect')
           .attr('class', 'd3po_tick')
-          .attr('x', function() {
+          .attr('x', () => {
             if (vars.legend.align == 'middle') {
               return vars.width.value / 2;
             } else if (vars.legend.align == 'end') {
@@ -689,8 +677,8 @@ module.exports = function(vars) {
         ticks
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function(d) {
-            var mod = d === 0 ? 1 : 0;
+          .attr('x', d => {
+            const mod = d === 0 ? 1 : 0;
             return start_x + label_width * d - mod;
           })
           .attr('y', vars.ui.padding)
@@ -708,7 +696,7 @@ module.exports = function(vars) {
         gradient
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function() {
+          .attr('x', () => {
             if (vars.legend.align == 'middle') {
               return vars.width.value / 2 - key_width / 2;
             } else if (vars.legend.align == 'end') {
@@ -746,7 +734,7 @@ module.exports = function(vars) {
     if (square_size) {
       var key_height = square_size + vars.ui.padding;
     } else {
-      var key_box = vars.g.legend.node().getBBox();
+      const key_box = vars.g.legend.node().getBBox();
       key_height = key_box.height + key_box.y;
     }
 

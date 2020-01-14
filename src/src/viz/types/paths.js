@@ -1,18 +1,19 @@
-(function() {
-  var fetchValue,
-    shortestPath,
-    uniqueValues,
-    viz,
-    indexOf =
-      [].indexOf ||
-      function(item) {
-        for (var i = 0, l = this.length; i < l; i++) {
-          if (i in this && this[i] === item) {
-            return i;
-          }
+(() => {
+  let fetchValue;
+  let shortestPath;
+  let uniqueValues;
+  let viz;
+
+  const indexOf =
+    [].indexOf ||
+    function(item) {
+      for (let i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) {
+          return i;
         }
-        return -1;
-      };
+      }
+      return -1;
+    };
 
   shortestPath = require('../../network/shortestpath.js');
 
@@ -20,70 +21,70 @@
 
   uniqueValues = require('../../util/uniques.js');
 
-  viz = function(vars) {
-    var base,
-      base1,
-      base2,
-      base3,
-      col,
-      colIndex,
-      columnWidth,
-      columns,
-      edge,
-      edgeInt,
-      edges,
-      i,
-      id,
-      j,
-      k,
-      l,
-      labelSpace,
-      lastDir,
-      lastHop,
-      len,
-      len1,
-      len2,
-      len3,
-      len4,
-      len5,
-      len6,
-      len7,
-      m,
-      maxRadius,
-      minRadius,
-      n,
-      newPath,
-      next,
-      nextDir,
-      nextHop,
-      nextIndex,
-      node,
-      o,
-      p,
-      path,
-      pathInt,
-      pathLookup,
-      paths,
-      prev,
-      prevIndex,
-      q,
-      ref,
-      ref1,
-      ref2,
-      ref3,
-      ref4,
-      ref5,
-      ref6,
-      ref7,
-      rowHeight,
-      rows,
-      size,
-      sizeDomain,
-      val,
-      x,
-      xDiff,
-      y,
-      yDomain;
+  viz = vars => {
+    let base;
+    let base1;
+    let base2;
+    let base3;
+    let col;
+    let colIndex;
+    let columnWidth;
+    let columns;
+    let edge;
+    let edgeInt;
+    let edges;
+    let i;
+    let id;
+    let j;
+    let k;
+    let l;
+    let labelSpace;
+    let lastDir;
+    let lastHop;
+    let len;
+    let len1;
+    let len2;
+    let len3;
+    let len4;
+    let len5;
+    let len6;
+    let len7;
+    let m;
+    let maxRadius;
+    let minRadius;
+    let n;
+    let newPath;
+    let next;
+    let nextDir;
+    let nextHop;
+    let nextIndex;
+    let node;
+    let o;
+    let p;
+    let path;
+    let pathInt;
+    let pathLookup;
+    let paths;
+    let prev;
+    let prevIndex;
+    let q;
+    let ref;
+    let ref1;
+    let ref2;
+    let ref3;
+    let ref4;
+    let ref5;
+    let ref6;
+    let ref7;
+    let rowHeight;
+    let rows;
+    let size;
+    let sizeDomain;
+    let val;
+    let x;
+    let xDiff;
+    let y;
+    let yDomain;
     edges = [];
     pathLookup = {};
     pathLookup[vars.focus.value[0]] = 0;
@@ -100,12 +101,12 @@
       ref1 = path.edges;
       for (edgeInt = k = 0, len1 = ref1.length; k < len1; edgeInt = ++k) {
         edge = ref1[edgeInt];
-        edge[vars.edges.source] = vars.data.viz.filter(function(d) {
-          return edge[vars.edges.source][vars.id.value] === d[vars.id.value];
-        })[0];
-        edge[vars.edges.target] = vars.data.viz.filter(function(d) {
-          return edge[vars.edges.target][vars.id.value] === d[vars.id.value];
-        })[0];
+        edge[vars.edges.source] = vars.data.viz.filter(
+          d => edge[vars.edges.source][vars.id.value] === d[vars.id.value]
+        )[0];
+        edge[vars.edges.target] = vars.data.viz.filter(
+          d => edge[vars.edges.target][vars.id.value] === d[vars.id.value]
+        )[0];
         nextDir =
           edge[vars.edges.source][vars.id.value] === lastHop
             ? 'target'
@@ -195,8 +196,8 @@
       .rangeRound([columnWidth / 2, vars.width.viz - columnWidth / 2]);
     minRadius = 5;
     maxRadius = d3.min([columnWidth, rowHeight - labelSpace]) * 0.4;
-    sizeDomain = d3.extent(vars.data.viz, function(node) {
-      var val;
+    sizeDomain = d3.extent(vars.data.viz, node => {
+      let val;
       val = fetchValue(vars, node, vars.size.value);
       return val || 0;
     });
@@ -286,26 +287,26 @@
     };
   };
 
-  viz.filter = function(vars, data) {
-    var added,
-      d,
-      edge,
-      edges,
-      id,
-      ids,
-      j,
-      k,
-      l,
-      len,
-      len1,
-      len2,
-      obj,
-      path,
-      ref,
-      ref1,
-      returnData,
-      source,
-      target;
+  viz.filter = (vars, data) => {
+    let added;
+    let d;
+    let edge;
+    let edges;
+    let id;
+    let ids;
+    let j;
+    let k;
+    let l;
+    let len;
+    let len1;
+    let len2;
+    let obj;
+    let path;
+    let ref;
+    let ref1;
+    let returnData;
+    let source;
+    let target;
     edges = vars.edges.filtered || vars.edges.value;
     viz.paths = shortestPath(edges, vars.focus.value[0], {
       target: vars.focus.value[1],
@@ -339,9 +340,7 @@
     returnData = [];
     for (l = 0, len2 = ids.length; l < len2; l++) {
       id = ids[l];
-      d = data.filter(function(d) {
-        return d[vars.id.value] === id;
-      });
+      d = data.filter(d => d[vars.id.value] === id);
       if (!d[0]) {
         obj = {
           d3po: {}
@@ -358,12 +357,10 @@
   viz.nesting = false;
 
   viz.requirements = [
-    function(vars) {
-      return {
-        status: vars.focus.value.length === 2,
-        text: vars.format.locale.value.method.focus + ' x 2'
-      };
-    },
+    vars => ({
+      status: vars.focus.value.length === 2,
+      text: vars.format.locale.value.method.focus + ' x 2'
+    }),
     'edges'
   ];
 
@@ -374,4 +371,4 @@
   viz.tooltip = 'static';
 
   module.exports = viz;
-}.call(this));
+}).call(this);

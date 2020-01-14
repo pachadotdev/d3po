@@ -1,16 +1,16 @@
-var prefix = require('../../../../client/prefix.js'),
-  print = require('../../../../core/console/print.js');
+const prefix = require('../../../../client/prefix.js');
+const print = require('../../../../core/console/print.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the search box, if enabled.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     print.time('creating search');
   }
 
-  var data = require('./data.js'),
-    items = require('./items.js'),
-    update = require('./update.js');
+  const data = require('./data.js');
+  const items = require('./items.js');
+  const update = require('./update.js');
 
   vars.container.search = vars.container.selector
     .selectAll('div.d3po_drop_search')
@@ -30,7 +30,7 @@ module.exports = function(vars) {
   }
 
   function inputStyle(elem) {
-    var width =
+    const width =
       vars.width.secondary -
       vars.ui.padding.left * 2 -
       vars.ui.padding.right * 2 +
@@ -86,7 +86,7 @@ module.exports = function(vars) {
   vars.container.search
     .select('input')
     .on('keyup.' + vars.container.id, function() {
-      var term = this.value;
+      const term = this.value;
       if (vars.search.term !== term) {
         vars.search.term = term;
         data(vars);
@@ -97,7 +97,7 @@ module.exports = function(vars) {
 
   vars.container.search.exit().remove();
 
-  var oldDisplay = vars.container.selector.style('display');
+  const oldDisplay = vars.container.selector.style('display');
   vars.container.selector.style('display', 'block');
   vars.search.height = vars.search.enabled
     ? vars.container.search.node().offsetHeight ||

@@ -1,10 +1,16 @@
-(function() {
-  var fontTester;
+(() => {
+  let fontTester;
 
   fontTester = require('../core/font/tester.js');
 
-  module.exports = function(words, style, opts) {
-    var attr, getHeight, getWidth, sizes, spacing, tester, tspans;
+  module.exports = (words, style, opts) => {
+    let attr;
+    let getHeight;
+    let getWidth;
+    let sizes;
+    let spacing;
+    let tester;
+    let tspans;
     if (!opts) {
       opts = {};
     }
@@ -27,19 +33,16 @@
       spacing = parseFloat(style['letter-spacing']);
       delete style['letter-spacing'];
     }
-    getWidth = function(elem) {
-      var add;
+    getWidth = elem => {
+      let add;
       add = 0;
       if (spacing) {
         add = (d3.select(elem).text().length - 1) * spacing;
       }
       return elem.getComputedTextLength() + add;
     };
-    getHeight = function(elem) {
-      return (
-        elem.parentNode.getBBox().height || elem.getBoundingClientRect().height
-      );
-    };
+    getHeight = elem =>
+      elem.parentNode.getBBox().height || elem.getBoundingClientRect().height;
     tspans
       .enter()
       .append('tspan')
@@ -52,7 +55,9 @@
         }
       })
       .each(function(d) {
-        var children, height, width;
+        let children;
+        let height;
+        let width;
         children = d3.select(this).selectAll('tspan');
         if (children.size()) {
           width = [];
@@ -76,4 +81,4 @@
     }
     return sizes;
   };
-}.call(this));
+}).call(this);

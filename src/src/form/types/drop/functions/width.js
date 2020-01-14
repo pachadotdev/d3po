@@ -1,24 +1,25 @@
-var copy = require('../../../../util/copy.js'),
-  fontTester = require('../../../../core/font/tester.js'),
-  form = require('../../../form.js'),
-  print = require('../../../../core/console/print.js'),
-  validObject = require('../../../../object/validate.js');
+const copy = require('../../../../util/copy.js');
+const fontTester = require('../../../../core/font/tester.js');
+const form = require('../../../form.js');
+const print = require('../../../../core/console/print.js');
+const validObject = require('../../../../object/validate.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // If no widths are defined, then this calculates the width needed to fit the
 // longest entry in the list.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var data = [];
-  for (var level in vars.data.nested.all) {
-    var newData = vars.data.nested.all[level],
-      key =
-        validObject(vars.text.nesting) && level in vars.text.nesting
-          ? vars.text.nesting[level][0]
-          : level;
+module.exports = vars => {
+  let data = [];
+  for (const level in vars.data.nested.all) {
+    let newData = vars.data.nested.all[level];
+
+    const key =
+      validObject(vars.text.nesting) && level in vars.text.nesting
+        ? vars.text.nesting[level][0]
+        : level;
 
     if ([vars.id.value, vars.text.value].indexOf(key) < 0) {
       newData = copy(newData);
-      newData.forEach(function(d) {
+      newData.forEach(d => {
         d[vars.text.value || vars.id.value] = d[key];
       });
     }
@@ -26,22 +27,25 @@ module.exports = function(vars) {
   }
 
   function getWidth(type) {
-    var key = type === 'primary' ? 'value' : type,
-      icon =
-        key === 'value'
-          ? vars.icon.drop.value
-          : vars.icon.select.value || vars.icon.drop.value,
-      text =
-        key === 'value'
-          ? vars.text.value
-          : vars.text.secondary.value || vars.text.value,
-      font = key === 'value' ? vars.font : vars.font.secondary;
+    const key = type === 'primary' ? 'value' : type;
+
+    const icon =
+      key === 'value'
+        ? vars.icon.drop.value
+        : vars.icon.select.value || vars.icon.drop.value;
+
+    const text =
+      key === 'value'
+        ? vars.text.value
+        : vars.text.secondary.value || vars.text.value;
+
+    const font = key === 'value' ? vars.font : vars.font.secondary;
 
     if (vars.dev.value) {
       print.time('calculating ' + type + ' width');
     }
 
-    var button = form()
+    const button = form()
       .container(fontTester())
       .data({
         large: 9999,
@@ -71,7 +75,7 @@ module.exports = function(vars) {
       .width(false)
       .draw();
 
-    var w = [];
+    const w = [];
     button
       .selectAll('div.d3po_node')
       .each(function() {
@@ -79,7 +83,7 @@ module.exports = function(vars) {
       })
       .remove();
 
-    var dropWidth = {};
+    const dropWidth = {};
     dropWidth[key] = d3.max(w);
 
     vars.self.width(dropWidth);

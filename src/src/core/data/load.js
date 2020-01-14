@@ -1,13 +1,17 @@
 // Load Data using JSON
-(function() {
-  var print, validObject;
+(() => {
+  let print;
+  let validObject;
 
   print = require('../console/print.js');
 
   validObject = require('../../object/validate.js');
 
-  module.exports = function(vars, key, next) {
-    var consoleMessage, fileType, parser, url;
+  module.exports = (vars, key, next) => {
+    let consoleMessage;
+    let fileType;
+    let parser;
+    let url;
     consoleMessage = vars.dev.value;
     if (consoleMessage) {
       print.time('loading ' + key);
@@ -38,8 +42,9 @@
     } else {
       parser = d3[fileType];
     }
-    return parser(url, function(error, data) {
-      var k, ret;
+    return parser(url, (error, data) => {
+      let k;
+      let ret;
       if (!error && data) {
         if (typeof vars[key].callback === 'function') {
           ret = vars[key].callback(data);
@@ -58,8 +63,8 @@
           vars[key].value = data;
         }
         if (['json'].indexOf(fileType) < 0) {
-          vars[key].value.forEach(function(d) {
-            var results;
+          vars[key].value.forEach(d => {
+            let results;
             results = [];
             for (k in d) {
               if (!isNaN(d[k])) {
@@ -92,4 +97,4 @@
       return next();
     });
   };
-}.call(this));
+}).call(this);

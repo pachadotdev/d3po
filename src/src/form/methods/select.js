@@ -1,9 +1,9 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [String],
     chainable: false,
     process: function(value, vars) {
-      var container;
+      let container;
       container = vars.container.value;
       if (container && value) {
         return container.select(value);
@@ -13,4 +13,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

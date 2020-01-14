@@ -1,8 +1,8 @@
-var shapeStyle = require('./style.js');
+const shapeStyle = require('./style.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter) {
+module.exports = (vars, selection, enter) => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize check scale on enter and exit.
   //----------------------------------------------------------------------------
@@ -14,9 +14,9 @@ module.exports = function(vars, selection, enter) {
   // Change scale of check on update.
   //---------------------------------------------------------------------------
   function update(paths) {
-    paths.attr('transform', function(d) {
-      var smaller_dim = Math.min(d.d3po.width, d.d3po.height);
-      var scale = Math.floor(smaller_dim / 16);
+    paths.attr('transform', d => {
+      const smaller_dim = Math.min(d.d3po.width, d.d3po.height);
+      const scale = Math.floor(smaller_dim / 16);
       return 'scale(' + scale + ')';
     });
   }
@@ -37,9 +37,7 @@ module.exports = function(vars, selection, enter) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // "paths" Update
   //----------------------------------------------------------------------------
-  selection.selectAll('path.d3po_data').data(function(d) {
-    return [d];
-  });
+  selection.selectAll('path.d3po_data').data(d => [d]);
 
   if (vars.draw.timing) {
     selection

@@ -1,5 +1,5 @@
-var d3selection = require('../../util/d3selection.js'),
-  process = require('../../core/methods/process/data.js');
+const d3selection = require('../../util/d3selection.js');
+const process = require('../../core/methods/process/data.js');
 
 module.exports = {
   accepted: [false, Array, Function, String],
@@ -9,7 +9,7 @@ module.exports = {
   },
   element: {
     process: function(value, vars) {
-      var element = false;
+      let element = false;
 
       if (d3selection(value)) {
         element = value;

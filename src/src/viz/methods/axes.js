@@ -1,5 +1,6 @@
-(function() {
-  var process, rendering;
+(() => {
+  let process;
+  let rendering;
 
   process = require('../../core/methods/process/margin.js');
 
@@ -17,7 +18,7 @@
     margin: {
       accepted: [Number, Object, String],
       process: function(value) {
-        var userValue;
+        let userValue;
         if (value === void 0) {
           value = this.value;
         }
@@ -36,4 +37,4 @@
       value: true
     }
   };
-}.call(this));
+}).call(this);

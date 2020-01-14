@@ -1,21 +1,22 @@
-(function() {
-  var bar,
-    buckets,
-    fetchValue,
-    graph,
-    nest,
-    stack,
-    uniques,
-    indexOf =
-      [].indexOf ||
-      function(item) {
-        for (var i = 0, l = this.length; i < l; i++) {
-          if (i in this && this[i] === item) {
-            return i;
-          }
+(() => {
+  let bar;
+  let buckets;
+  let fetchValue;
+  let graph;
+  let nest;
+  let stack;
+  let uniques;
+
+  const indexOf =
+    [].indexOf ||
+    function(item) {
+      for (let i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) {
+          return i;
         }
-        return -1;
-      };
+      }
+      return -1;
+    };
 
   buckets = require('../../util/buckets.js');
 
@@ -29,47 +30,47 @@
 
   uniques = require('../../util/uniques.js');
 
-  bar = function(vars) {
-    var bars,
-      base,
-      cMargin,
-      d,
-      data,
-      discrete,
-      discreteVal,
-      divisions,
-      domains,
-      h,
-      i,
-      ids,
-      j,
-      k,
-      l,
-      len,
-      len1,
-      len2,
-      length,
-      maxBars,
-      maxSize,
-      mod,
-      nested,
-      newSize,
-      oMargin,
-      offset,
-      oppDomain,
-      oppMethod,
-      oppVal,
-      opposite,
-      p,
-      padding,
-      point,
-      ref,
-      ref1,
-      space,
-      value,
-      w,
-      x,
-      zero;
+  bar = vars => {
+    let bars;
+    let base;
+    let cMargin;
+    let d;
+    let data;
+    let discrete;
+    let discreteVal;
+    let divisions;
+    let domains;
+    let h;
+    let i;
+    let ids;
+    let j;
+    let k;
+    let l;
+    let len;
+    let len1;
+    let len2;
+    let length;
+    let maxBars;
+    let maxSize;
+    let mod;
+    let nested;
+    let newSize;
+    let oMargin;
+    let offset;
+    let oppDomain;
+    let oppMethod;
+    let oppVal;
+    let opposite;
+    let p;
+    let padding;
+    let point;
+    let ref;
+    let ref1;
+    let space;
+    let value;
+    let w;
+    let x;
+    let zero;
     discrete = vars.axes.discrete;
     h = discrete === 'x' ? 'height' : 'width';
     w = discrete === 'x' ? 'width' : 'height';
@@ -106,9 +107,7 @@
           ((ref = vars[discrete].value),
           indexOf.call(vars.id.nesting, ref) >= 0)
         ) {
-          divisions = d3.max(nested, function(b) {
-            return b.values.length;
-          });
+          divisions = d3.max(nested, b => b.values.length);
         } else {
           divisions = uniques(nested, vars.id.value, fetchValue, vars).length;
         }
@@ -139,11 +138,7 @@
     }
     if (vars[discrete].persist.position.value && !vars.axes.stacked) {
       ids = uniques(
-        d3.merge(
-          nested.map(function(d) {
-            return d.values;
-          })
-        ),
+        d3.merge(nested.map(d => d.values)),
         vars.id.value,
         fetchValue,
         vars,
@@ -157,9 +152,7 @@
         x.range(buckets(x.range(), ids.length));
       }
     }
-    maxBars = d3.max(nested, function(b) {
-      return b.values.length;
-    });
+    maxBars = d3.max(nested, b => b.values.length);
     for (k = 0, len1 = nested.length; k < len1; k++) {
       p = nested[k];
       if (vars.axes.stacked) {
@@ -240,14 +233,14 @@
     return data;
   };
 
-  bar.filter = function(vars, data) {
-    return nest(vars, data, vars[vars.axes.discrete].value);
-  };
+  bar.filter = (vars, data) => nest(vars, data, vars[vars.axes.discrete].value);
 
   bar.requirements = ['data', 'x', 'y'];
 
-  bar.setup = function(vars) {
-    var axis, size, y;
+  bar.setup = vars => {
+    let axis;
+    let size;
+    let y;
     if (!vars.axes.discrete) {
       axis = vars.time.value === vars.y.value ? 'y' : 'x';
       vars.self[axis]({
@@ -272,4 +265,4 @@
   bar.shapes = ['square'];
 
   module.exports = bar;
-}.call(this));
+}).call(this);

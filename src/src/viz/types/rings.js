@@ -1,28 +1,31 @@
-var arraySort = require('../../array/sort.js'),
-  events = require('../../client/pointer.js'),
-  fetchValue = require('../../core/fetch/value.js'),
-  fetchColor = require('../../core/fetch/color.js'),
-  legible = require('../../color/legible.js'),
-  removeTooltip = require('../../tooltip/remove.js'),
-  smallestGap = require('../../network/smallestgap.js'),
-  textColor = require('../../color/text.js'),
-  uniqueValues = require('../../util/uniques.js');
+const arraySort = require('../../array/sort.js');
+const events = require('../../client/pointer.js');
+const fetchValue = require('../../core/fetch/value.js');
+const fetchColor = require('../../core/fetch/color.js');
+const legible = require('../../color/legible.js');
+const removeTooltip = require('../../tooltip/remove.js');
+const smallestGap = require('../../network/smallestgap.js');
+const textColor = require('../../color/text.js');
+const uniqueValues = require('../../util/uniques.js');
 
-var rings = function(vars) {
-  var radius = d3.min([vars.height.viz, vars.width.viz]) / 2,
-    ring_width =
-      vars.small || !vars.labels.value
-        ? (radius - vars.labels.padding * 2) / 2
-        : radius / 3,
-    primaryRing =
-      vars.small || !vars.labels.value ? ring_width * 1.4 : ring_width,
-    secondaryRing = ring_width * 2,
-    edges = [],
-    nodes = [];
+const rings = vars => {
+  let radius = d3.min([vars.height.viz, vars.width.viz]) / 2;
 
-  var center = vars.data.viz.filter(function(d) {
-    return d[vars.id.value] === vars.focus.value[0];
-  })[0];
+  const ring_width =
+    vars.small || !vars.labels.value
+      ? (radius - vars.labels.padding * 2) / 2
+      : radius / 3;
+
+  const primaryRing =
+    vars.small || !vars.labels.value ? ring_width * 1.4 : ring_width;
+
+  const secondaryRing = ring_width * 2;
+  const edges = [];
+  let nodes = [];
+
+  let center = vars.data.viz.filter(
+    d => d[vars.id.value] === vars.focus.value[0]
+  )[0];
 
   if (!center) {
     center = {
@@ -35,48 +38,43 @@ var rings = function(vars) {
   center.d3po.y = vars.height.viz / 2;
   center.d3po.r = primaryRing * 0.65;
 
-  var primaries = [],
-    claimed = [vars.focus.value[0]];
-  vars.edges
-    .connections(vars.focus.value[0], vars.id.value)
-    .forEach(function(edge) {
-      var c =
-        edge[vars.edges.source][vars.id.value] == vars.focus.value[0]
-          ? edge[vars.edges.target]
-          : edge[vars.edges.source];
-      var n = vars.data.viz.filter(function(d) {
-        return d[vars.id.value] === c[vars.id.value];
-      })[0];
+  let primaries = [];
+  const claimed = [vars.focus.value[0]];
+  vars.edges.connections(vars.focus.value[0], vars.id.value).forEach(edge => {
+    const c =
+      edge[vars.edges.source][vars.id.value] == vars.focus.value[0]
+        ? edge[vars.edges.target]
+        : edge[vars.edges.source];
+    let n = vars.data.viz.filter(d => d[vars.id.value] === c[vars.id.value])[0];
 
-      if (!n) {
-        n = {
-          d3po: {}
-        };
-        n[vars.id.value] = c[vars.id.value];
-      }
+    if (!n) {
+      n = {
+        d3po: {}
+      };
+      n[vars.id.value] = c[vars.id.value];
+    }
 
-      n.d3po.edges = vars.edges
-        .connections(n[vars.id.value], vars.id.value)
-        .filter(function(c) {
-          return (
-            c[vars.edges.source][vars.id.value] != vars.focus.value[0] &&
-            c[vars.edges.target][vars.id.value] != vars.focus.value[0]
-          );
-        });
-      n.d3po.edge = edge;
-      claimed.push(n[vars.id.value]);
-      primaries.push(n);
-    });
+    n.d3po.edges = vars.edges
+      .connections(n[vars.id.value], vars.id.value)
+      .filter(
+        c =>
+          c[vars.edges.source][vars.id.value] != vars.focus.value[0] &&
+          c[vars.edges.target][vars.id.value] != vars.focus.value[0]
+      );
+    n.d3po.edge = edge;
+    claimed.push(n[vars.id.value]);
+    primaries.push(n);
+  });
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Sort primary nodes by children (smallest to largest) and then by sort
   // order.
   //--------------------------------------------------------------------------
-  var sort =
+  const sort =
     vars.order.value || vars.color.value || vars.size.value || vars.id.value;
 
-  primaries.sort(function(a, b) {
-    var lengthdiff = a.d3po.edges.length - b.d3po.edges.length;
+  primaries.sort((a, b) => {
+    const lengthdiff = a.d3po.edges.length - b.d3po.edges.length;
 
     if (lengthdiff) {
       return lengthdiff;
@@ -101,14 +99,15 @@ var rings = function(vars) {
   // Check for similar children and give preference to nodes with less
   // overall children.
   //----------------------------------------------------------------------------
-  var secondaries = [],
-    total = 0;
-  primaries.forEach(function(p) {
-    var primaryId = p[vars.id.value];
+  const secondaries = [];
 
-    p.d3po.edges = p.d3po.edges.filter(function(c) {
-      var source = c[vars.edges.source][vars.id.value],
-        target = c[vars.edges.target][vars.id.value];
+  let total = 0;
+  primaries.forEach(p => {
+    const primaryId = p[vars.id.value];
+
+    p.d3po.edges = p.d3po.edges.filter(c => {
+      const source = c[vars.edges.source][vars.id.value];
+      const target = c[vars.edges.target][vars.id.value];
       return (
         (claimed.indexOf(source) < 0 && target == primaryId) ||
         (claimed.indexOf(target) < 0 && source == primaryId)
@@ -117,10 +116,10 @@ var rings = function(vars) {
 
     total += p.d3po.edges.length || 1;
 
-    p.d3po.edges.forEach(function(c) {
-      var source = c[vars.edges.source],
-        target = c[vars.edges.target];
-      var claim = target[vars.id.value] == primaryId ? source : target;
+    p.d3po.edges.forEach(c => {
+      const source = c[vars.edges.source];
+      const target = c[vars.edges.target];
+      const claim = target[vars.id.value] == primaryId ? source : target;
       claimed.push(claim[vars.id.value]);
     });
   });
@@ -133,18 +132,18 @@ var rings = function(vars) {
     vars
   );
 
-  var offset = 0,
-    radian = Math.PI * 2;
+  let offset = 0;
+  const radian = Math.PI * 2;
 
-  primaries.forEach(function(p, i) {
-    var children = p.d3po.edges.length || 1,
-      space = (radian / total) * children;
+  primaries.forEach((p, i) => {
+    const children = p.d3po.edges.length || 1;
+    const space = (radian / total) * children;
 
     if (i == 0) {
       offset -= space / 2;
     }
 
-    var angle = offset + space / 2;
+    let angle = offset + space / 2;
     angle -= radian / 4;
 
     p.d3po.radians = angle;
@@ -152,15 +151,16 @@ var rings = function(vars) {
     p.d3po.y = vars.height.viz / 2 + primaryRing * Math.sin(angle);
 
     offset += space;
-    p.d3po.edges.sort(function(a, b) {
-      var a1 =
-          a[vars.edges.source][vars.id.value] == p[vars.id.value]
-            ? a[vars.edges.target]
-            : a[vars.edges.source],
-        b1 =
-          b[vars.edges.source][vars.id.value] == p[vars.id.value]
-            ? b[vars.edges.target]
-            : b[vars.edges.source];
+    p.d3po.edges.sort((a, b) => {
+      const a1 =
+        a[vars.edges.source][vars.id.value] == p[vars.id.value]
+          ? a[vars.edges.target]
+          : a[vars.edges.source];
+
+      const b1 =
+        b[vars.edges.source][vars.id.value] == p[vars.id.value]
+          ? b[vars.edges.target]
+          : b[vars.edges.source];
 
       return arraySort(
         [a1, b1],
@@ -171,16 +171,17 @@ var rings = function(vars) {
       );
     });
 
-    p.d3po.edges.forEach(function(edge, i) {
-      var c =
-          edge[vars.edges.source][vars.id.value] == p[vars.id.value]
-            ? edge[vars.edges.target]
-            : edge[vars.edges.source],
-        s = radian / total;
+    p.d3po.edges.forEach((edge, i) => {
+      const c =
+        edge[vars.edges.source][vars.id.value] == p[vars.id.value]
+          ? edge[vars.edges.target]
+          : edge[vars.edges.source];
 
-      var d = vars.data.viz.filter(function(a) {
-        return a[vars.id.value] === c[vars.id.value];
-      })[0];
+      const s = radian / total;
+
+      let d = vars.data.viz.filter(
+        a => a[vars.id.value] === c[vars.id.value]
+      )[0];
 
       if (!d) {
         d = {
@@ -189,7 +190,7 @@ var rings = function(vars) {
         d[vars.id.value] = c[vars.id.value];
       }
 
-      var a = angle - (s * children) / 2 + s / 2 + s * i;
+      const a = angle - (s * children) / 2 + s / 2 + s * i;
       d.d3po.radians = a;
       d.d3po.x = vars.width.viz / 2 + secondaryRing * Math.cos(a);
       d.d3po.y = vars.height.viz / 2 + secondaryRing * Math.sin(a);
@@ -197,16 +198,17 @@ var rings = function(vars) {
     });
   });
 
-  var primaryDistance = smallestGap(primaries, {
-      accessor: function(n) {
-        return [n.d3po.x, n.d3po.y];
-      }
-    }),
-    secondaryDistance = smallestGap(secondaries, {
-      accessor: function(n) {
-        return [n.d3po.x, n.d3po.y];
-      }
-    });
+  let primaryDistance = smallestGap(primaries, {
+    accessor: function(n) {
+      return [n.d3po.x, n.d3po.y];
+    }
+  });
+
+  let secondaryDistance = smallestGap(secondaries, {
+    accessor: function(n) {
+      return [n.d3po.x, n.d3po.y];
+    }
+  });
 
   if (!primaryDistance) {
     primaryDistance = ring_width / 2;
@@ -215,14 +217,14 @@ var rings = function(vars) {
   if (!secondaryDistance) {
     secondaryDistance = ring_width / 4;
   }
-  var primaryMax;
+  let primaryMax;
   if (primaryDistance / 2 - 4 < 8) {
     primaryMax = d3.min([primaryDistance / 2, 8]);
   } else {
     primaryMax = primaryDistance / 2 - 4;
   }
 
-  var secondaryMax;
+  let secondaryMax;
   if (secondaryDistance / 2 - 4 < 4) {
     secondaryMax = d3.min([secondaryDistance / 2, 4]);
   } else {
@@ -243,18 +245,14 @@ var rings = function(vars) {
   primaryMax = Math.floor(primaryMax);
   secondaryMax = Math.floor(secondaryMax);
 
-  var ids = uniqueValues(primaries, vars.id.value, fetchValue, vars);
+  let ids = uniqueValues(primaries, vars.id.value, fetchValue, vars);
   ids = ids.concat(uniqueValues(secondaries, vars.id.value, fetchValue, vars));
   ids.push(vars.focus.value[0]);
 
-  var data = vars.data.viz.filter(function(d) {
-    return ids.indexOf(d[vars.id.value]) >= 0;
-  });
+  const data = vars.data.viz.filter(d => ids.indexOf(d[vars.id.value]) >= 0);
 
   if (vars.size.value) {
-    var domain = d3.extent(data, function(d) {
-      return fetchValue(vars, d, vars.size.value);
-    });
+    const domain = d3.extent(data, d => fetchValue(vars, d, vars.size.value));
 
     if (domain[0] == domain[1]) {
       domain[0] = 0;
@@ -265,7 +263,7 @@ var rings = function(vars) {
       .domain(domain)
       .rangeRound([3, d3.min([primaryMax, secondaryMax])]);
 
-    var val = fetchValue(vars, center, vars.size.value);
+    const val = fetchValue(vars, center, vars.size.value);
     center.d3po.r = radius(val);
   } else {
     radius = d3.scale
@@ -278,97 +276,95 @@ var rings = function(vars) {
     }
   }
 
-  secondaries.forEach(function(s) {
+  secondaries.forEach(s => {
     s.d3po.ring = 2;
-    var val = vars.size.value ? fetchValue(vars, s, vars.size.value) : 2;
+    const val = vars.size.value ? fetchValue(vars, s, vars.size.value) : 2;
     s.d3po.r = radius(val);
   });
 
-  primaries.forEach(function(p) {
+  primaries.forEach(p => {
     p.d3po.ring = 1;
-    var val = vars.size.value ? fetchValue(vars, p, vars.size.value) : 1;
+    const val = vars.size.value ? fetchValue(vars, p, vars.size.value) : 1;
     p.d3po.r = radius(val);
   });
 
   nodes = [center].concat(primaries).concat(secondaries);
 
-  primaries.forEach(function(p) {
-    var check = [vars.edges.source, vars.edges.target],
-      edge = p.d3po.edge;
+  primaries.forEach(p => {
+    const check = [vars.edges.source, vars.edges.target];
+    const edge = p.d3po.edge;
 
-    check.forEach(function(node) {
-      edge[node] = nodes.filter(function(n) {
-        return n[vars.id.value] == edge[node][vars.id.value];
-      })[0];
+    check.forEach(node => {
+      edge[node] = nodes.filter(
+        n => n[vars.id.value] == edge[node][vars.id.value]
+      )[0];
     });
 
     delete edge.d3po;
     edges.push(edge);
 
-    vars.edges
-      .connections(p[vars.id.value], vars.id.value)
-      .forEach(function(edge) {
-        var c =
-          edge[vars.edges.source][vars.id.value] == p[vars.id.value]
-            ? edge[vars.edges.target]
-            : edge[vars.edges.source];
+    vars.edges.connections(p[vars.id.value], vars.id.value).forEach(edge => {
+      const c =
+        edge[vars.edges.source][vars.id.value] == p[vars.id.value]
+          ? edge[vars.edges.target]
+          : edge[vars.edges.source];
 
-        if (c[vars.id.value] != center[vars.id.value]) {
-          var target = secondaries.filter(function(s) {
-            return s[vars.id.value] == c[vars.id.value];
-          })[0];
+      if (c[vars.id.value] != center[vars.id.value]) {
+        let target = secondaries.filter(
+          s => s[vars.id.value] == c[vars.id.value]
+        )[0];
 
-          if (!target) {
-            target = primaries.filter(function(s) {
-              return s[vars.id.value] == c[vars.id.value];
-            })[0];
-          }
-
-          if (target) {
-            edge.d3po = {
-              spline: true,
-              translate: {
-                x: vars.width.viz / 2,
-                y: vars.height.viz / 2
-              }
-            };
-
-            var check = [vars.edges.source, vars.edges.target];
-
-            check.forEach(function(node, i) {
-              edge[node] = nodes.filter(function(n) {
-                return n[vars.id.value] == edge[node][vars.id.value];
-              })[0];
-
-              if (edge[node].d3po.edges === undefined) {
-                edge[node].d3po.edges = {};
-              }
-
-              var oppID =
-                i === 0
-                  ? edge[vars.edges.target][vars.id.value]
-                  : edge[vars.edges.source][vars.id.value];
-
-              if (edge[node][vars.id.value] == p[vars.id.value]) {
-                edge[node].d3po.edges[oppID] = {
-                  angle: p.d3po.radians + Math.PI,
-                  radius: ring_width / 2
-                };
-              } else {
-                edge[node].d3po.edges[oppID] = {
-                  angle: target.d3po.radians,
-                  radius: ring_width / 2
-                };
-              }
-            });
-
-            edges.push(edge);
-          }
+        if (!target) {
+          target = primaries.filter(
+            s => s[vars.id.value] == c[vars.id.value]
+          )[0];
         }
-      });
+
+        if (target) {
+          edge.d3po = {
+            spline: true,
+            translate: {
+              x: vars.width.viz / 2,
+              y: vars.height.viz / 2
+            }
+          };
+
+          const check = [vars.edges.source, vars.edges.target];
+
+          check.forEach((node, i) => {
+            edge[node] = nodes.filter(
+              n => n[vars.id.value] == edge[node][vars.id.value]
+            )[0];
+
+            if (edge[node].d3po.edges === undefined) {
+              edge[node].d3po.edges = {};
+            }
+
+            const oppID =
+              i === 0
+                ? edge[vars.edges.target][vars.id.value]
+                : edge[vars.edges.source][vars.id.value];
+
+            if (edge[node][vars.id.value] == p[vars.id.value]) {
+              edge[node].d3po.edges[oppID] = {
+                angle: p.d3po.radians + Math.PI,
+                radius: ring_width / 2
+              };
+            } else {
+              edge[node].d3po.edges[oppID] = {
+                angle: target.d3po.radians,
+                radius: ring_width / 2
+              };
+            }
+          });
+
+          edges.push(edge);
+        }
+      }
+    });
   });
 
-  var labelColor = false;
+  let labelColor = false;
   if (
     vars.background.value &&
     ['transparent', 'none'].indexOf(vars.background.value) < 0 &&
@@ -377,25 +373,25 @@ var rings = function(vars) {
     labelColor = textColor(vars.background.value);
   }
 
-  nodes.forEach(function(n) {
+  nodes.forEach(n => {
     if (!vars.small && vars.labels.value) {
       if (n[vars.id.value] != vars.focus.value[0]) {
         n.d3po.rotate = n.d3po.radians * (180 / Math.PI);
 
-        var angle = n.d3po.rotate,
-          width = ring_width - vars.labels.padding * 3 - n.d3po.r;
-
-        var buffer, anchor;
+        let angle = n.d3po.rotate;
+        const width = ring_width - vars.labels.padding * 3 - n.d3po.r;
+        let buffer;
+        let anchor;
         if (angle < -90 || angle > 90) {
           angle = angle - 180;
           (buffer = -(n.d3po.r + width / 2 + vars.labels.padding)),
-            (anchor = 'end');
+          (anchor = 'end');
         } else {
           (buffer = n.d3po.r + width / 2 + vars.labels.padding),
-            (anchor = 'start');
+          (anchor = 'start');
         }
 
-        var background = primaries.indexOf(n) >= 0 ? true : false;
+        const background = primaries.indexOf(n) >= 0 ? true : false;
 
         var height = n.d3po.ring == 1 ? primaryDistance : secondaryDistance;
 
@@ -436,11 +432,11 @@ var rings = function(vars) {
   });
 
   vars.mouse.viz = {};
-  vars.mouse.viz[events.click] = function(d) {
+  vars.mouse.viz[events.click] = d => {
     if (d[vars.id.value] != vars.focus.value[0]) {
       removeTooltip(vars.type.value);
-      var old_focus = vars.focus.value[0];
-      vars.history.states.push(function() {
+      const old_focus = vars.focus.value[0];
+      vars.history.states.push(() => {
         vars.self.focus(old_focus).draw();
       });
       vars.self.focus(d[vars.id.value]).draw();
@@ -457,31 +453,30 @@ var rings = function(vars) {
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Visualization Settings and Helper Functions
 //------------------------------------------------------------------------------
-rings.filter = function(vars, data) {
-  var primaries = vars.edges.connections(
-      vars.focus.value[0],
-      vars.id.value,
-      true
-    ),
-    secondaries = [];
+rings.filter = (vars, data) => {
+  const primaries = vars.edges.connections(
+    vars.focus.value[0],
+    vars.id.value,
+    true
+  );
 
-  primaries.forEach(function(p) {
+  let secondaries = [];
+
+  primaries.forEach(p => {
     secondaries = secondaries.concat(
       vars.edges.connections(p[vars.id.value], vars.id.value, true)
     );
   });
 
-  var connections = primaries.concat(secondaries),
-    ids = uniqueValues(connections, vars.id.value, fetchValue, vars),
-    returnData = [];
+  const connections = primaries.concat(secondaries);
+  const ids = uniqueValues(connections, vars.id.value, fetchValue, vars);
+  const returnData = [];
 
-  ids.forEach(function(id) {
-    var d = data.filter(function(d) {
-      return d[vars.id.value] == id;
-    })[0];
+  ids.forEach(id => {
+    const d = data.filter(d => d[vars.id.value] == id)[0];
 
     if (!d) {
-      var obj = {
+      const obj = {
         d3po: {}
       };
       obj[vars.id.value] = id;

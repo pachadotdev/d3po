@@ -1,23 +1,21 @@
-var form = require('../form.js');
+const form = require('../form.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates a set of Toggle Buttons
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (!('buttons' in vars.container)) {
     vars.container.buttons = form()
       .container(vars.container.ui)
       .type('button');
   }
 
-  var dataLength = vars.data.viz.length,
-    buttonWidth = vars.width.value ? vars.width.value / dataLength : false;
+  const dataLength = vars.data.viz.length;
+  const buttonWidth = vars.width.value ? vars.width.value / dataLength : false;
 
-  var toggles = vars.container.ui
+  const toggles = vars.container.ui
     .selectAll('div.d3po_toggle')
-    .data(vars.data.viz, function(d) {
-      return d[vars.id.value];
-    });
+    .data(vars.data.viz, d => d[vars.id.value]);
 
   toggles.exit().remove();
 
@@ -33,7 +31,7 @@ module.exports = function(vars) {
       d.d3po.form = form().container(d3.select(this));
     }
 
-    var id =
+    const id =
       vars.id.nesting.length > vars.depth.value
         ? vars.id.nesting[vars.depth.value + 1]
         : vars.id.value;
@@ -55,7 +53,7 @@ module.exports = function(vars) {
 
     d.d3po.form
       .color(vars.color)
-      .focus(vars.focus.value, function(value) {
+      .focus(vars.focus.value, value => {
         if (value !== vars.focus.value) {
           vars.self.focus(value).draw();
         }
@@ -88,7 +86,7 @@ module.exports = function(vars) {
           .hover(this.value)
           .draw();
       })
-      .on('blur.' + vars.container.id, function() {
+      .on('blur.' + vars.container.id, () => {
         vars.self.hover(false).draw();
       });
   }

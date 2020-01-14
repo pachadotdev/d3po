@@ -1,12 +1,13 @@
 // Creates a Base-64 Data URL from and Image URL
-(function() {
-  module.exports = function(url, callback) {
-    var img;
+(() => {
+  module.exports = (url, callback) => {
+    let img;
     img = new Image();
     img.src = url;
     img.crossOrigin = 'Anonymous';
     img.onload = function() {
-      var canvas, context;
+      let canvas;
+      let context;
       canvas = document.createElement('canvas');
       canvas.width = this.width;
       canvas.height = this.height;
@@ -16,4 +17,4 @@
       canvas = null;
     };
   };
-}.call(this));
+}).call(this);

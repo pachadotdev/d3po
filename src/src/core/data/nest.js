@@ -1,33 +1,29 @@
-var fetchValue = require('../fetch/value.js'),
-  validObject = require('../../object/validate.js'),
-  uniqueValues = require('../../util/uniques.js');
+const fetchValue = require('../fetch/value.js');
+const validObject = require('../../object/validate.js');
+const uniqueValues = require('../../util/uniques.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Nests and groups the data.
 //------------------------------------------------------------------------------
-var dataNest = function(vars, flatData, nestingLevels, discrete) {
+const dataNest = (vars, flatData, nestingLevels, discrete) => {
   if (discrete === undefined) {
     discrete = true;
   }
 
-  var nestedData = d3.nest(),
-    groupedData = [],
-    segments = 'temp' in vars ? ['active', 'temp', 'total'] : [];
+  let nestedData = d3.nest();
+  const groupedData = [];
+  const segments = 'temp' in vars ? ['active', 'temp', 'total'] : [];
 
   if (!nestingLevels.length) {
-    nestedData.key(function() {
-      return true;
-    });
+    nestedData.key(() => true);
   } else {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Loop through each nesting level.
     //----------------------------------------------------------------------------
-    nestingLevels.forEach(function(level) {
+    nestingLevels.forEach(level => {
       //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       // Create a nest key for the current level.
       //--------------------------------------------------------------------------
-      nestedData.key(function(d) {
-        return fetchValue(vars, d, level);
-      });
+      nestedData.key(d => fetchValue(vars, d, level));
     });
   }
 
@@ -37,20 +33,19 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     vars.axes.discrete &&
     (!vars.time || vars[vars.axes.discrete].value !== vars.time.value)
   ) {
-    nestedData.key(function(d) {
-      return fetchValue(vars, d, vars[vars.axes.discrete].value);
-    });
+    nestedData.key(d => fetchValue(vars, d, vars[vars.axes.discrete].value));
   }
 
-  var deepest_is_id =
+  const deepest_is_id =
     nestingLevels.length &&
     vars.id.nesting.indexOf(nestingLevels[nestingLevels.length - 1]) >= 0;
-  var i = nestingLevels.length && deepest_is_id ? nestingLevels.length - 1 : 0;
+  const i =
+    nestingLevels.length && deepest_is_id ? nestingLevels.length - 1 : 0;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If we're at the deepest level, create the rollup function.
   //----------------------------------------------------------------------------
-  nestedData.rollup(function(leaves) {
+  nestedData.rollup(leaves => {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // If there's only 1 leaf, and it's been processed, return it as-is.
     //--------------------------------------------------------------------------
@@ -59,7 +54,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
       return leaves[0];
     }
 
-    leaves = leaves.reduce(function(arr, ll) {
+    leaves = leaves.reduce((arr, ll) => {
       if (ll.values instanceof Array) {
         return arr.concat(ll.values);
       }
@@ -71,20 +66,20 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     // Create the "d3po" object for the return variable, starting with
     // just the current depth.
     //--------------------------------------------------------------------------
-    var returnObj = {
+    const returnObj = {
       d3po: {
         data: {},
         depth: i
       }
     };
 
-    var merged = d3.sum(leaves, function(ll) {
-      return 'd3po' in ll && ll.d3po.merged ? 1 : 0;
-    });
+    const merged = d3.sum(leaves, ll =>
+      'd3po' in ll && ll.d3po.merged ? 1 : 0
+    );
 
     if (merged === leaves.length) {
-      for (var ll = 0; ll < leaves.length; ll++) {
-        var l = leaves[ll];
+      for (let ll = 0; ll < leaves.length; ll++) {
+        const l = leaves[ll];
         if (!returnObj.d3po.merged) {
           returnObj.d3po.merged = [];
         }
@@ -98,20 +93,18 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Create a reference sum for the 3 different "segment" variables.
     //--------------------------------------------------------------------------
-    for (var s = 0; s < segments.length; s++) {
-      var c = segments[s];
-      var segmentAgg =
+    for (let s = 0; s < segments.length; s++) {
+      const c = segments[s];
+      const segmentAgg =
         vars.aggs && vars.aggs.value[key] ? vars.aggs.value[key] : 'sum';
 
       if ('d3po' in leaves[0] && c in leaves[0].d3po) {
-        returnObj.d3po[c] = d3.sum(leaves, function(d) {
-          return d.d3po[c];
-        });
+        returnObj.d3po[c] = d3.sum(leaves, d => d.d3po[c]);
       } else if (typeof segmentAgg === 'function') {
         returnObj.d3po[c] = segmentAgg(leaves);
       } else {
-        returnObj.d3po[c] = d3[segmentAgg](leaves, function(d) {
-          var a = c === 'total' ? 1 : 0;
+        returnObj.d3po[c] = d3[segmentAgg](leaves, d => {
+          let a = c === 'total' ? 1 : 0;
           if (vars[c].value) {
             a = fetchValue(vars, d, vars[c].value);
             if (typeof a !== 'number') {
@@ -130,12 +123,13 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
       if (key in returnObj.d3po.data) {
         returnObj[key] = returnObj.d3po[key];
       } else {
-        var agg =
-            vars.aggs && vars.aggs.value[key] ? vars.aggs.value[key] : 'sum',
-          aggType = typeof agg,
-          keyType = vars.data.keys[key],
-          idKey = vars.id.nesting.indexOf(key) >= 0,
-          timeKey = 'time' in vars && key === vars.time.value;
+        const agg =
+          vars.aggs && vars.aggs.value[key] ? vars.aggs.value[key] : 'sum';
+
+        const aggType = typeof agg;
+        const keyType = vars.data.keys[key];
+        const idKey = vars.id.nesting.indexOf(key) >= 0;
+        const timeKey = 'time' in vars && key === vars.time.value;
 
         if (key in returnObj.d3po.data) {
           returnObj[key] = returnObj.d3po[key];
@@ -150,18 +144,14 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
         ) {
           returnObj[key] = uniqueValues(leaves, key);
         } else if (keyType === 'number' && aggType === 'string' && !idKey) {
-          var vals = leaves.map(function(d) {
-            return d[key];
-          });
-          vals = vals.filter(function(d) {
-            return typeof d === keyType;
-          });
+          let vals = leaves.map(d => d[key]);
+          vals = vals.filter(d => typeof d === keyType);
           if (vals.length) {
             returnObj[key] = d3[agg](vals);
           }
         } else {
-          var testVals = checkVal(leaves, key);
-          var keyValues =
+          const testVals = checkVal(leaves, key);
+          let keyValues =
             testVals.length === 1
               ? testVals[0][key]
               : uniqueValues(testVals, key);
@@ -184,7 +174,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
               returnObj[key] = keyValues;
             }
           } else if (idKey) {
-            var endPoint = vars.id.nesting.indexOf(key) - 1;
+            const endPoint = vars.id.nesting.indexOf(key) - 1;
             if (
               endPoint >= i &&
               (!('endPoint' in returnObj.d3po) || returnObj.d3po.endPoint > i)
@@ -204,8 +194,8 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
       }
     }
 
-    for (var lll = 0; lll < nestingLevels.length; lll++) {
-      var level = nestingLevels[lll];
+    for (let lll = 0; lll < nestingLevels.length; lll++) {
+      const level = nestingLevels[lll];
       if (!(level in returnObj)) {
         returnObj[level] = fetchValue(vars, leaves[0], level);
       }
@@ -216,18 +206,18 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     return returnObj;
   });
 
-  var find_keys = function(obj, depth, keys) {
+  const find_keys = (obj, depth, keys) => {
     if (obj.children) {
       if (vars.data.keys[nestingLevels[depth]] == 'number') {
         obj.key = parseFloat(obj.key);
       }
       keys[nestingLevels[depth]] = obj.key;
       delete obj.key;
-      for (var k in keys) {
+      for (const k in keys) {
         obj[k] = keys[k];
       }
       depth++;
-      obj.children.forEach(function(c) {
+      obj.children.forEach(c => {
         find_keys(c, depth, keys);
       });
     }
@@ -236,7 +226,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
   nestedData = nestedData
     .entries(flatData)
     .map(rename_key_value)
-    .map(function(obj) {
+    .map(obj => {
       find_keys(obj, 0, {});
       return obj;
     });
@@ -244,8 +234,8 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
   return groupedData;
 };
 
-var checkVal = function(leaves, key) {
-  var returnVals = [];
+var checkVal = (leaves, key) => {
+  const returnVals = [];
 
   function run(obj) {
     if (obj instanceof Array) {
@@ -264,12 +254,12 @@ var checkVal = function(leaves, key) {
   return returnVals;
 };
 
-var parseDates = function(dateArray) {
-  var dates = [];
+var parseDates = dateArray => {
+  const dates = [];
 
   function checkDate(arr) {
-    for (var i = 0; i < arr.length; i++) {
-      var d = arr[i];
+    for (let i = 0; i < arr.length; i++) {
+      const d = arr[i];
       if (d) {
         if (d.constructor === Array) {
           checkDate(d);
@@ -296,11 +286,9 @@ var parseDates = function(dateArray) {
   return uniqueValues(dates);
 };
 
-var rename_key_value = function(obj) {
+var rename_key_value = obj => {
   if (obj.values && obj.values.length) {
-    obj.children = obj.values.map(function(obj) {
-      return rename_key_value(obj);
-    });
+    obj.children = obj.values.map(obj => rename_key_value(obj));
     delete obj.values;
     return obj;
   } else if (obj.values) {

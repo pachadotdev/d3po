@@ -1,14 +1,14 @@
 // Sets a method's value
-(function() {
-  var copy,
-    d3selection,
-    mergeObject,
-    print,
-    process,
-    rejected,
-    stringFormat,
-    updateArray,
-    validObject;
+(() => {
+  let copy;
+  let d3selection;
+  let mergeObject;
+  let print;
+  let process;
+  let rejected;
+  let stringFormat;
+  let updateArray;
+  let validObject;
 
   copy = require('../../util/copy.js');
 
@@ -28,21 +28,21 @@
 
   updateArray = require('../../array/update.js');
 
-  module.exports = function(vars, method, object, key, value) {
-    var accepted,
-      c,
-      callback,
-      d3object,
-      hasValue,
-      id,
-      k,
-      longArray,
-      n,
-      parentKey,
-      str,
-      text,
-      typeFunction,
-      valString;
+  module.exports = (vars, method, object, key, value) => {
+    let accepted;
+    let c;
+    let callback;
+    let d3object;
+    let hasValue;
+    let id;
+    let k;
+    let longArray;
+    let n;
+    let parentKey;
+    let str;
+    let text;
+    let typeFunction;
+    let valString;
     if (key === 'value' || !key || key === method) {
       text = '.' + method + '()';
     } else {
@@ -202,4 +202,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

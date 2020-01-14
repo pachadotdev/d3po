@@ -1,4 +1,4 @@
-module.exports = function(elem) {
+module.exports = elem => {
   elem
     .style('position', 'absolute', 'important')
     .style('clip', 'rect(1px 1px 1px 1px)', 'important')

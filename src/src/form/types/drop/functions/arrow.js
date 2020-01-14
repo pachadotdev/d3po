@@ -1,15 +1,15 @@
-var print = require('../../../../core/console/print.js');
+const print = require('../../../../core/console/print.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Toggles the state of the dropdown menu.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     print.time('rotating arrow');
   }
 
-  var offset = vars.icon.drop.value === '&#x276f;' ? 90 : 0;
+  const offset = vars.icon.drop.value === '&#x276f;' ? 90 : 0;
 
-  var rotate;
+  let rotate;
   if (vars.open.value != vars.open.flipped.value) {
     rotate = 180 + offset;
   } else {

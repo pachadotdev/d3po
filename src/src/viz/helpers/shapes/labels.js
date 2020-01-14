@@ -1,26 +1,27 @@
-var fetchText = require('../../../core/fetch/text.js'),
-  fetchValue = require('../../../core/fetch/value.js'),
-  mix = require('../../../color/mix.js'),
-  print = require('../../../core/console/print.js'),
-  segments = require('./segments.js'),
-  shapeColor = require('./color.js'),
-  stringList = require('../../../string/list.js'),
-  textColor = require('../../../color/text.js'),
-  textWrap = require('../../../textwrap/textwrap.js');
+const fetchText = require('../../../core/fetch/text.js');
+const fetchValue = require('../../../core/fetch/value.js');
+const mix = require('../../../color/mix.js');
+const print = require('../../../core/console/print.js');
+const segments = require('./segments.js');
+const shapeColor = require('./color.js');
+const stringList = require('../../../string/list.js');
+const textColor = require('../../../color/text.js');
+const textWrap = require('../../../textwrap/textwrap.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "labels" using svg:text and d3po.textwrap
 //------------------------------------------------------------------------------
-module.exports = function(vars, group) {
-  var scale = vars.types[vars.type.value].zoom
-      ? vars.zoom.behavior.scaleExtent()
-      : [1, 1],
-    selection = vars.g[group].selectAll('g');
+module.exports = (vars, group) => {
+  const scale = vars.types[vars.type.value].zoom
+    ? vars.zoom.behavior.scaleExtent()
+    : [1, 1];
 
-  var opacity = function(elem) {
+  const selection = vars.g[group].selectAll('g');
+
+  const opacity = elem => {
     elem.attr('opacity', function(d) {
       // if (vars.draw.timing) return 1;
-      var size = parseFloat(d3.select(this).attr('font-size'), 10);
+      const size = parseFloat(d3.select(this).attr('font-size'), 10);
       d.visible = size * (vars.zoom.scale / scale[1]) >= 2;
       return d.visible ? 1 : 0;
     });
@@ -29,7 +30,7 @@ module.exports = function(vars, group) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Label Exiting
   //----------------------------------------------------------------------------
-  var remove = function(text) {
+  const remove = text => {
     if (vars.draw.timing) {
       text
         .transition()
@@ -44,35 +45,33 @@ module.exports = function(vars, group) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Label Styling
   //----------------------------------------------------------------------------
-  var style = function(text) {
+  const style = text => {
     text
       .attr('font-weight', vars.labels.font.weight)
       .attr('font-family', vars.labels.font.family.value)
       .attr('stroke', 'none')
-      .attr('pointer-events', function(t) {
-        return t.mouse ? 'auto' : 'none';
-      })
-      .attr('fill', function(t) {
+      .attr('pointer-events', t => (t.mouse ? 'auto' : 'none'))
+      .attr('fill', t => {
         if (t.color) {
           return t.color;
         }
 
-        var color = shapeColor(t.parent, vars),
-          legible = textColor(color),
-          opacity = t.text ? 0 : 1;
+        const color = shapeColor(t.parent, vars);
+        const legible = textColor(color);
+        const opacity = t.text ? 0 : 1;
 
         return mix(color, legible, 0.2, opacity);
       })
       .each(function(t) {
-        var size = t.resize,
-          resize = true;
+        let size = t.resize;
+        let resize = true;
 
         if (!(t.resize instanceof Array)) {
           size = [7, 32 * (scale[1] / scale[0])];
           resize = t.resize;
         }
 
-        var yOffset = vars.labels.valign.value === 'bottom' ? t.share : 0;
+        const yOffset = vars.labels.valign.value === 'bottom' ? t.share : 0;
 
         if (isNaN(t.percentage)) {
           textWrap()
@@ -114,10 +113,10 @@ module.exports = function(vars, group) {
         }
       })
       .attr('transform', function(t) {
-        var translate = d3.select(this).attr('transform') || '';
-        var a = t.angle || 0,
-          x = t.translate && t.translate.x ? t.translate.x : 0,
-          y = t.translate && t.translate.y ? t.translate.y : 0;
+        let translate = d3.select(this).attr('transform') || '';
+        const a = t.angle || 0;
+        const x = t.translate && t.translate.x ? t.translate.x : 0;
+        const y = t.translate && t.translate.y ? t.translate.y : 0;
 
         if (translate.length) {
           translate = translate
@@ -154,18 +153,20 @@ module.exports = function(vars, group) {
     }
 
     selection.each(function(d) {
-      var disabled = d.d3po && 'label' in d.d3po && !d.d3po.label,
-        label = d.d3po_label || null,
-        names = d.d3po.text
-          ? d.d3po.text
-          : label && label.names
+      const disabled = d.d3po && 'label' in d.d3po && !d.d3po.label;
+      const label = d.d3po_label || null;
+
+      let names = d.d3po.text
+        ? d.d3po.text
+        : label && label.names
           ? label.names
           : vars.labels.text.value
-          ? fetchValue(vars, d, vars.labels.text.value)
-          : fetchText(vars, d),
-        group = label && 'group' in label ? label.group : d3.select(this),
-        share_size = 0,
-        fill = vars.types[vars.type.value].fill;
+            ? fetchValue(vars, d, vars.labels.text.value)
+            : fetchText(vars, d);
+
+      const group = label && 'group' in label ? label.group : d3.select(this);
+      const share_size = 0;
+      const fill = vars.types[vars.type.value].fill;
 
       if (!(names instanceof Array)) {
         names = [names];
@@ -175,9 +176,9 @@ module.exports = function(vars, group) {
         if (['line', 'area'].indexOf(vars.shape.value) >= 0) {
           var background = true;
         } else if (d && 'd3po' in d) {
-          var active = segments(vars, d, 'active'),
-            temp = segments(vars, d, 'temp'),
-            total = segments(vars, d, 'total');
+          const active = segments(vars, d, 'active');
+          const temp = segments(vars, d, 'temp');
+          const total = segments(vars, d, 'total');
           background =
             (!temp && !active) || active >= total || (!active && temp >= total);
         }
@@ -189,8 +190,8 @@ module.exports = function(vars, group) {
             vars.labels.resize.value === false
               ? false
               : label && 'resize' in label
-              ? label.resize
-              : true;
+                ? label.resize
+                : true;
 
           label.padding =
             typeof label.padding === 'number'
@@ -204,10 +205,10 @@ module.exports = function(vars, group) {
           label.h * scale[1] - label.padding >= 10 &&
           names.length
         ) {
-          var and = vars.format.locale.value.ui.and,
-            more = vars.format.locale.value.ui.more;
+          const and = vars.format.locale.value.ui.and;
+          const more = vars.format.locale.value.ui.more;
 
-          for (var i = 0; i < names.length; i++) {
+          for (let i = 0; i < names.length; i++) {
             if (names[i] instanceof Array) {
               names[i] = stringList(names[i], and, 3, more);
             }
@@ -218,17 +219,18 @@ module.exports = function(vars, group) {
           label.percentage = d.d3po.share;
           label.parent = d;
 
-          var text = group
-              .selectAll('text#d3po_label_' + d.d3po.id)
-              .data([label], function(t) {
-                if (!t) {
-                  return false;
-                }
-                return t.names;
-              }),
-            fontSize = label.resize
-              ? undefined
-              : vars.labels.font.size * scale[0] + 'px';
+          const text = group
+            .selectAll('text#d3po_label_' + d.d3po.id)
+            .data([label], t => {
+              if (!t) {
+                return false;
+              }
+              return t.names;
+            });
+
+          const fontSize = label.resize
+            ? undefined
+            : vars.labels.font.size * scale[0] + 'px';
 
           if (vars.draw.timing && vars.zoom.scale === 1) {
             text
@@ -289,7 +291,7 @@ module.exports = function(vars, group) {
             if (label.background) {
               var background_data = ['background'];
 
-              var box = text.node().getBBox();
+              const box = text.node().getBBox();
               var bounds = {
                 height: box.height,
                 width: box.width,
@@ -300,7 +302,7 @@ module.exports = function(vars, group) {
               bounds.height += vars.labels.padding * scale[0];
               bounds.x -= (vars.labels.padding * scale[0]) / 2;
               bounds.y -= (vars.labels.padding * scale[0]) / 2;
-              var y = text
+              let y = text
                 .attr('transform')
                 .match(/translate\(([^a-z]+)\)/gi)[0];
               y = y.replace(/([^a-z])\s([^a-z])/gi, '$1,$2');
@@ -315,28 +317,29 @@ module.exports = function(vars, group) {
               bounds = {};
             }
 
-            var bg = group
-                .selectAll('rect#d3po_label_bg_' + d.d3po.id)
-                .data(background_data),
-              bg_opacity =
-                typeof label.background === 'number'
-                  ? label.background
-                  : typeof label.background === 'string'
+            const bg = group
+              .selectAll('rect#d3po_label_bg_' + d.d3po.id)
+              .data(background_data);
+
+            const bg_opacity =
+              typeof label.background === 'number'
+                ? label.background
+                : typeof label.background === 'string'
                   ? 1
                   : 0.6;
 
             function bg_style(elem) {
-              var color =
-                  typeof label.background === 'string'
-                    ? label.background
-                    : vars.background.value === 'none'
+              const color =
+                typeof label.background === 'string'
+                  ? label.background
+                  : vars.background.value === 'none'
                     ? '#ffffff'
-                    : vars.background.value,
-                fill =
-                  typeof label.background === 'string'
-                    ? label.background
-                    : color,
-                transform = text.attr('transform').split(')');
+                    : vars.background.value;
+
+              const fill =
+                typeof label.background === 'string' ? label.background : color;
+
+              let transform = text.attr('transform').split(')');
               transform.pop();
               transform.pop();
               transform.push('');

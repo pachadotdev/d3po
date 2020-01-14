@@ -1,28 +1,28 @@
 // Determines visible time markers and formatting
-(function() {
-  var sizes;
+(() => {
+  let sizes;
 
   sizes = require('../../font/sizes.js');
 
-  module.exports = function(vars, opts) {
-    var f,
-      format,
-      func,
-      getFormat,
-      limit,
-      locale,
-      p,
-      periods,
-      pp,
-      prev,
-      render,
-      small,
-      step,
-      style,
-      time,
-      total,
-      vals,
-      values;
+  module.exports = (vars, opts) => {
+    let f;
+    let format;
+    let func;
+    let getFormat;
+    let limit;
+    let locale;
+    let p;
+    let periods;
+    let pp;
+    let prev;
+    let render;
+    let small;
+    let step;
+    let style;
+    let time;
+    let total;
+    let vals;
+    let values;
     values = opts.values || vars.data.time.ticks;
     style = opts.style || {};
     limit = opts.limit || vars.width.value;
@@ -37,16 +37,15 @@
       time.format = vars.data.time.format;
       time.values = values;
       time.sizes = sizes(
-        values.map(function(v) {
-          return time.format(v);
-        }),
+        values.map(v => time.format(v)),
         style
       );
     } else {
       p = periods.indexOf(step);
       while (p <= periods.indexOf(total)) {
-        vals = values.filter(function(t) {
-          var match, pp;
+        vals = values.filter(t => {
+          let match;
+          let pp;
           if (p === periods.indexOf(step)) {
             return true;
           }
@@ -77,21 +76,15 @@
             format.push([f, func[pp]]);
             pp++;
           }
-          format[format.length - 1][1] = function() {
-            return true;
-          };
+          format[format.length - 1][1] = () => true;
           format = d3.locale(locale).timeFormat.multi(format);
         }
         render = sizes(
-          vals.map(function(v) {
-            return format(v);
-          }),
+          vals.map(v => format(v)),
           style
         );
         if (
-          d3.sum(render, function(r) {
-            return r.width;
-          }) < limit ||
+          d3.sum(render, r => r.width) < limit ||
           p === periods.indexOf(total)
         ) {
           time.format = format;
@@ -104,4 +97,4 @@
     }
     return time;
   };
-}.call(this));
+}).call(this);

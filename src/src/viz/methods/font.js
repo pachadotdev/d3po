@@ -1,5 +1,8 @@
-(function() {
-  var align, decoration, family, transform;
+(() => {
+  let align;
+  let decoration;
+  let family;
+  let transform;
 
   align = require('../../core/methods/font/align.js');
 
@@ -29,4 +32,4 @@
     transform: transform(),
     weight: 400
   };
-}.call(this));
+}).call(this);

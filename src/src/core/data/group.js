@@ -1,12 +1,21 @@
 // Groups data into groups to use with D3 layouts. Helps prevent key name
 // mismatches (parent, child, value, etc).
-(function() {
-  var fetchValue;
+(() => {
+  let fetchValue;
 
   fetchValue = require('../fetch/value.js');
 
-  module.exports = function(vars, data, nesting) {
-    var d, groupedData, i, j, k, len, len1, n, strippedData, val;
+  module.exports = (vars, data, nesting) => {
+    let d;
+    let groupedData;
+    let i;
+    let j;
+    let k;
+    let len;
+    let len1;
+    let n;
+    let strippedData;
+    let val;
     groupedData = d3.nest();
     if (vars.id.grouping.value) {
       if (nesting === void 0) {
@@ -15,11 +24,7 @@
       for (i = j = 0, len = nesting.length; j < len; i = ++j) {
         n = nesting[i];
         if (i < vars.depth.value) {
-          (function(n) {
-            return groupedData.key(function(d) {
-              return fetchValue(vars, d.d3po, n);
-            });
-          })(n);
+          (n => groupedData.key(d => fetchValue(vars, d.d3po, n)))(n);
         }
       }
     }
@@ -40,4 +45,4 @@
     }
     return groupedData.entries(strippedData);
   };
-}.call(this));
+}).call(this);

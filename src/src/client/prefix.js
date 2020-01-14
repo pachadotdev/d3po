@@ -1,9 +1,9 @@
 // Calculates the correct CSS vendor prefix based on the current browser
-(function() {
-  var prefix;
+(() => {
+  let prefix;
 
-  prefix = function() {
-    var val;
+  prefix = () => {
+    let val;
     if ('-webkit-transform' in document.body.style) {
       val = '-webkit-';
     } else if ('-moz-transform' in document.body.style) {
@@ -15,11 +15,9 @@
     } else {
       val = '';
     }
-    prefix = function() {
-      return val;
-    };
+    prefix = () => val;
     return val;
   };
 
   module.exports = prefix;
-}.call(this));
+}).call(this);

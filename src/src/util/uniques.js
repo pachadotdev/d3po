@@ -1,11 +1,25 @@
 // Returns list of unique values
-(function() {
-  var objectValidate, uniques;
+(() => {
+  let objectValidate;
+  let uniques;
 
   objectValidate = require('../object/validate.js');
 
-  uniques = function(data, value, fetch, vars, depth, sorted) {
-    var check, d, i, j, k, len, len1, len2, len3, lookups, m, v, val, vals;
+  uniques = (data, value, fetch, vars, depth, sorted) => {
+    let check;
+    let d;
+    let i;
+    let j;
+    let k;
+    let len;
+    let len1;
+    let len2;
+    let len3;
+    let lookups;
+    let m;
+    let v;
+    let val;
+    let vals;
     if (data === void 0) {
       return [];
     }
@@ -18,8 +32,8 @@
     }
     lookups = [];
     if (value === void 0) {
-      return data.reduce(function(p, c) {
-        var lookup;
+      return data.reduce((p, c) => {
+        let lookup;
         lookup = JSON.stringify(c);
         if (lookups.indexOf(lookup) < 0) {
           if (p.indexOf(c) < 0) {
@@ -31,8 +45,8 @@
       }, []);
     }
     vals = [];
-    check = function(v) {
-      var l;
+    check = v => {
+      let l;
       if (v !== void 0 && v !== null) {
         l = JSON.stringify(v);
         if (lookups.indexOf(l) < 0) {
@@ -66,13 +80,11 @@
       }
     }
     if (sorted) {
-      return vals.sort(function(a, b) {
-        return a - b;
-      });
+      return vals.sort((a, b) => a - b);
     } else {
       return vals;
     }
   };
 
   module.exports = uniques;
-}.call(this));
+}).call(this);

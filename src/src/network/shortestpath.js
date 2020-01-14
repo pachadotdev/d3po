@@ -1,41 +1,42 @@
 // Finds the shortest paths in the graph
-(function() {
-  var Heap, normalize;
+(() => {
+  let Heap;
+  let normalize;
 
   Heap = require('heap');
 
   normalize = require('./normalize.js');
 
-  module.exports = function(edges, source, options) {
-    var K,
-      a,
-      alt,
-      b,
-      directed,
-      distance,
-      edge,
-      endpoint,
-      getPath,
-      heap,
-      i,
-      id,
-      j,
-      len,
-      len1,
-      maxsize,
-      node,
-      nodeid,
-      nodes,
-      path,
-      ref,
-      ref1,
-      ref2,
-      res,
-      result,
-      startpoint,
-      target,
-      u,
-      visited;
+  module.exports = (edges, source, options) => {
+    let K;
+    let a;
+    let alt;
+    let b;
+    let directed;
+    let distance;
+    let edge;
+    let endpoint;
+    let getPath;
+    let heap;
+    let i;
+    let id;
+    let j;
+    let len;
+    let len1;
+    let maxsize;
+    let node;
+    let nodeid;
+    let nodes;
+    let path;
+    let ref;
+    let ref1;
+    let ref2;
+    let res;
+    let result;
+    let startpoint;
+    let target;
+    let u;
+    let visited;
     if (options == null) {
       options = {};
     }
@@ -47,21 +48,19 @@
       }
     }
     (source = options.source),
-      (target = options.target),
-      (directed = options.directed),
-      (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (K = options.K),
-      (nodes = options.nodes);
+    (target = options.target),
+    (directed = options.directed),
+    (distance = options.distance),
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (K = options.K),
+    (nodes = options.nodes);
     for (id in nodes) {
       node = nodes[id];
       node.count = 0;
     }
-    heap = new Heap(function(a, b) {
-      return a.distance - b.distance;
-    });
+    heap = new Heap((a, b) => a.distance - b.distance);
     visited = {};
     if (target == null) {
       visited[source] = true;
@@ -111,7 +110,7 @@
         }
       }
     }
-    getPath = function(path) {
+    getPath = path => {
       edges = [];
       while (path.edge != null) {
         edges.push(path.edge);
@@ -130,4 +129,4 @@
     }
     return result;
   };
-}.call(this));
+}).call(this);

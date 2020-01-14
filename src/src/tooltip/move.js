@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var arrowStyle, scroll;
 
   scroll = require('../client/scroll.js');
 
-  module.exports = function(x, y, id) {
+  module.exports = (x, y, id) => {
     var d, mins, tooltip;
     if (!id) {
       id = 'default';
@@ -82,23 +82,23 @@
     return tooltip;
   };
 
-  arrowStyle = function(arrow) {
-    return arrow
-      .style('bottom', function(d) {
+  arrowStyle = arrow =>
+    arrow
+      .style('bottom', d => {
         if (d.anchor.y !== 'center' && !d.flip) {
           return '-5px';
         } else {
           return 'auto';
         }
       })
-      .style('right', function(d) {
+      .style('right', d => {
         if (d.anchor.y === 'center' && !d.flip) {
           return '-5px';
         } else {
           return 'auto';
         }
       })
-      .style('top', function(d) {
+      .style('top', d => {
         if (d.anchor.y !== 'center' && d.flip) {
           return '-5px';
         } else if (d.anchor.y === 'center') {
@@ -107,7 +107,7 @@
           return 'auto';
         }
       })
-      .style('left', function(d) {
+      .style('left', d => {
         if (d.anchor.y === 'center' && d.flip) {
           return '-5px';
         } else if (d.anchor.y !== 'center') {
@@ -116,7 +116,7 @@
           return 'auto';
         }
       })
-      .style('margin-left', function(d) {
+      .style('margin-left', d => {
         var arrow_x;
         if (d.anchor.y === 'center') {
           return 'auto';
@@ -142,7 +142,7 @@
           return arrow_x + 'px';
         }
       })
-      .style('margin-top', function(d) {
+      .style('margin-top', d => {
         var arrow_y;
         if (d.anchor.y !== 'center') {
           return 'auto';
@@ -170,5 +170,4 @@
           return arrow_y + 'px';
         }
       });
-  };
-}.call(this));
+}).call(this);

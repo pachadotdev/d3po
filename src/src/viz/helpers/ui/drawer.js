@@ -6,7 +6,7 @@ var copy = require('../../../util/copy.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws a UI drawer, if defined.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var enabled = vars.ui.value && vars.ui.value.length,
     position = vars.ui.position.value;
 
@@ -22,7 +22,7 @@ module.exports = function(vars) {
     .attr('id', 'd3po_drawer');
 
   var positionStyles = {};
-  vars.ui.position.accepted.forEach(function(p) {
+  vars.ui.position.accepted.forEach(p => {
     positionStyles[p] = p == position ? vars.margin.bottom + 'px' : 'auto';
   });
 
@@ -35,9 +35,7 @@ module.exports = function(vars) {
 
   var ui = drawer
     .selectAll('div.d3po_drawer_ui')
-    .data(enabled ? vars.ui.value : [], function(d) {
-      return d.method || false;
-    });
+    .data(enabled ? vars.ui.value : [], d => d.method || false);
 
   ui.exit().remove();
 
@@ -61,7 +59,7 @@ module.exports = function(vars) {
 
     if (typeof d.method === 'string' && d.method in vars) {
       focus = vars[d.method].value;
-      callback = function(value) {
+      callback = value => {
         if (value !== vars[d.method].value) {
           vars.self[d.method](value).draw();
         }
@@ -70,7 +68,7 @@ module.exports = function(vars) {
       focus = d.focus || d.value[0];
       if (validObject(focus)) focus = focus[d3.keys(focus)[0]];
       if (typeof d.method === 'function') {
-        callback = function(value) {
+        callback = value => {
           if (value !== focus) {
             focus = value;
             d.focus = value;
@@ -89,7 +87,7 @@ module.exports = function(vars) {
       title = vars.format.locale.value.method[d.method] || d.method;
     }
 
-    d.value.forEach(function(o) {
+    d.value.forEach(o => {
       var obj = {};
 
       if (validObject(o)) {

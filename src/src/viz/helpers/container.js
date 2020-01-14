@@ -1,8 +1,8 @@
 // # If placing into a new container, remove it's contents
 // and check text direction.
 // Also initialized app width and height.
-(function() {
-  module.exports = function(vars) {
+(() => {
+  module.exports = vars => {
     var checkParent, i, len, ref, s;
     vars.container.value.style('position', function() {
       var current, remain;
@@ -21,7 +21,7 @@
     for (i = 0, len = ref.length; i < len; i++) {
       s = ref[i];
       if (!vars[s].value) {
-        checkParent = function(element) {
+        checkParent = element => {
           var elem, val;
           if (
             element.tagName === void 0 ||
@@ -62,4 +62,4 @@
       .style('width', vars.width.value + 'px')
       .style('height', vars.height.value + 'px');
   };
-}.call(this));
+}).call(this);

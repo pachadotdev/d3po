@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var fetchValue,
     shortestPath,
     uniqueValues,
@@ -18,7 +18,7 @@
 
   uniqueValues = require('../../util/uniques.js');
 
-  viz = function(vars) {
+  viz = vars => {
     var base,
       base1,
       base2,
@@ -98,12 +98,12 @@
       ref1 = path.edges;
       for (edgeInt = k = 0, len1 = ref1.length; k < len1; edgeInt = ++k) {
         edge = ref1[edgeInt];
-        edge[vars.edges.source] = vars.data.viz.filter(function(d) {
-          return edge[vars.edges.source][vars.id.value] === d[vars.id.value];
-        })[0];
-        edge[vars.edges.target] = vars.data.viz.filter(function(d) {
-          return edge[vars.edges.target][vars.id.value] === d[vars.id.value];
-        })[0];
+        edge[vars.edges.source] = vars.data.viz.filter(
+          d => edge[vars.edges.source][vars.id.value] === d[vars.id.value]
+        )[0];
+        edge[vars.edges.target] = vars.data.viz.filter(
+          d => edge[vars.edges.target][vars.id.value] === d[vars.id.value]
+        )[0];
         nextDir =
           edge[vars.edges.source][vars.id.value] === lastHop
             ? 'target'
@@ -193,7 +193,7 @@
       .rangeRound([columnWidth / 2, vars.width.viz - columnWidth / 2]);
     minRadius = 5;
     maxRadius = d3.min([columnWidth, rowHeight - labelSpace]) * 0.4;
-    sizeDomain = d3.extent(vars.data.viz, function(node) {
+    sizeDomain = d3.extent(vars.data.viz, node => {
       var val;
       val = fetchValue(vars, node, vars.size.value);
       return val || 0;
@@ -284,7 +284,7 @@
     };
   };
 
-  viz.filter = function(vars, data) {
+  viz.filter = (vars, data) => {
     var added,
       d,
       edge,
@@ -337,9 +337,7 @@
     returnData = [];
     for (l = 0, len2 = ids.length; l < len2; l++) {
       id = ids[l];
-      d = data.filter(function(d) {
-        return d[vars.id.value] === id;
-      });
+      d = data.filter(d => d[vars.id.value] === id);
       if (!d[0]) {
         obj = {
           d3po: {}
@@ -356,12 +354,10 @@
   viz.nesting = false;
 
   viz.requirements = [
-    function(vars) {
-      return {
-        status: vars.focus.value.length === 2,
-        text: vars.format.locale.value.method.focus + ' x 2'
-      };
-    },
+    vars => ({
+      status: vars.focus.value.length === 2,
+      text: vars.format.locale.value.method.focus + ' x 2'
+    }),
     'edges'
   ];
 
@@ -372,4 +368,4 @@
   viz.tooltip = 'static';
 
   module.exports = viz;
-}.call(this));
+}).call(this);

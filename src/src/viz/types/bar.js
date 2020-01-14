@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var bar,
     buckets,
     fetchValue,
@@ -27,7 +27,7 @@
 
   uniques = require('../../util/uniques.js');
 
-  bar = function(vars) {
+  bar = vars => {
     var bars,
       base,
       cMargin,
@@ -104,9 +104,7 @@
           ((ref = vars[discrete].value),
           indexOf.call(vars.id.nesting, ref) >= 0)
         ) {
-          divisions = d3.max(nested, function(b) {
-            return b.values.length;
-          });
+          divisions = d3.max(nested, b => b.values.length);
         } else {
           divisions = uniques(nested, vars.id.value, fetchValue, vars).length;
         }
@@ -137,11 +135,7 @@
     }
     if (vars[discrete].persist.position.value && !vars.axes.stacked) {
       ids = uniques(
-        d3.merge(
-          nested.map(function(d) {
-            return d.values;
-          })
-        ),
+        d3.merge(nested.map(d => d.values)),
         vars.id.value,
         fetchValue,
         vars,
@@ -155,9 +149,7 @@
         x.range(buckets(x.range(), ids.length));
       }
     }
-    maxBars = d3.max(nested, function(b) {
-      return b.values.length;
-    });
+    maxBars = d3.max(nested, b => b.values.length);
     for (k = 0, len1 = nested.length; k < len1; k++) {
       p = nested[k];
       if (vars.axes.stacked) {
@@ -238,13 +230,11 @@
     return data;
   };
 
-  bar.filter = function(vars, data) {
-    return nest(vars, data, vars[vars.axes.discrete].value);
-  };
+  bar.filter = (vars, data) => nest(vars, data, vars[vars.axes.discrete].value);
 
   bar.requirements = ['data', 'x', 'y'];
 
-  bar.setup = function(vars) {
+  bar.setup = vars => {
     var axis, size, y;
     if (!vars.axes.discrete) {
       axis = vars.time.value === vars.y.value ? 'y' : 'x';
@@ -270,4 +260,4 @@
   bar.shapes = ['square'];
 
   module.exports = bar;
-}.call(this));
+}).call(this);

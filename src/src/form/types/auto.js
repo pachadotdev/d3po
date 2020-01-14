@@ -1,7 +1,7 @@
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Determines form type based on data length.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var dataLength = vars.data.value.length;
 
   if (dataLength === 1) {

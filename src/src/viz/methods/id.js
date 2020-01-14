@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var filter;
 
   filter = require('../../core/methods/filter.js');
@@ -15,4 +15,4 @@
     solo: filter(true),
     value: 'id'
   };
-}.call(this));
+}).call(this);

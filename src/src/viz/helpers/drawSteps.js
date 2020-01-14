@@ -24,7 +24,7 @@ var dataFormat = require('../../core/data/format.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculate steps needed to redraw the visualization
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var steps = [],
     appType = vars.type.value,
     locale = vars.format.locale.value,
@@ -35,7 +35,7 @@ module.exports = function(vars) {
   // Check to see if any data needs to be loaded with JSON
   //----------------------------------------------------------------------------
   var urlLoads = ['data', 'attrs', 'coords', 'nodes', 'edges'];
-  urlLoads.forEach(function(u) {
+  urlLoads.forEach(u => {
     if (!vars.error.value && !vars[u].loaded && vars[u].url) {
       steps.push({
         function: function(vars, next) {

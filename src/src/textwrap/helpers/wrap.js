@@ -1,12 +1,12 @@
 // Flows the text into the container
-(function() {
+(() => {
   var flow, fontSizes, resize, wrap;
 
   flow = require('./flow.js');
 
   fontSizes = require('../../font/sizes.js');
 
-  wrap = function(vars) {
+  wrap = vars => {
     var firstChar;
     if (vars.text.phrases.length) {
       vars.text.current = vars.text.phrases.shift() + '';
@@ -26,7 +26,7 @@
 
   module.exports = wrap;
 
-  resize = function(vars) {
+  resize = vars => {
     var addon,
       areaMod,
       areaRatio,
@@ -65,12 +65,10 @@
         parent: vars.container.value
       }
     );
-    maxWidth = d3.max(sizes, function(d) {
-      return d.width;
-    });
+    maxWidth = d3.max(sizes, d => d.width);
     areaMod = 1.165 + (width / height) * 0.11;
     textArea =
-      d3.sum(sizes, function(d) {
+      d3.sum(sizes, d => {
         var h;
         h = vars.container.dy || sizeMax * 1.2;
         return d.width * h;
@@ -99,4 +97,4 @@
       wrap(vars);
     }
   };
-}.call(this));
+}).call(this);

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var fetchValue, ie, stringStrip;
 
   fetchValue = require('../../core/fetch/value.js');
@@ -159,4 +159,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

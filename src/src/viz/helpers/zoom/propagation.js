@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(vars, event) {
+(() => {
+  module.exports = (vars, event) => {
     var enabled, zoom, zoomable, zoomed;
     zoom = vars.zoom;
     if (!event) {
@@ -13,4 +13,4 @@
       event.stopPropagation();
     }
   };
-}.call(this));
+}).call(this);

@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(vars) {
+(() => {
+  module.exports = vars => {
     var diff, elem, height, prev, radius, shape, size, width, x, y;
     elem = vars.container.value;
     prev = elem.node().previousElementSibling;
@@ -89,4 +89,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(vars) {
+(() => {
+  module.exports = vars => {
     var button, checks, color, icons, mouseevents, print, style, updatedButtons;
     print = require('../../../core/console/print.js');
     color = require('./functions/color.js');
@@ -8,9 +8,7 @@
     style = require('./functions/style.js');
     button = vars.container.ui
       .selectAll('div.d3po_node')
-      .data(vars.data.viz, function(d) {
-        return d[vars.id.value];
-      });
+      .data(vars.data.viz, d => d[vars.id.value]);
     if (vars.dev.value) {
       print.time('enter');
     }
@@ -40,19 +38,18 @@
         vars.focus.value,
         vars.hover.previous,
         vars.hover.value
-      ].filter(function(c) {
-        return c;
-      });
-      updatedButtons = button.filter(function(b) {
-        return checks.indexOf(b[vars.id.value]) >= 0;
-      });
+      ].filter(c => c);
+      updatedButtons = button.filter(
+        b => checks.indexOf(b[vars.id.value]) >= 0
+      );
     }
     if (vars.dev.value) {
       print.time('update');
     }
-    updatedButtons.classed('d3po_button_active', function(d) {
-      return vars.focus.value === d[vars.id.value];
-    });
+    updatedButtons.classed(
+      'd3po_button_active',
+      d => vars.focus.value === d[vars.id.value]
+    );
     if (vars.draw.timing) {
       updatedButtons
         .transition()
@@ -68,4 +65,4 @@
     }
     return button.exit().remove();
   };
-}.call(this));
+}).call(this);

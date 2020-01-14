@@ -1,7 +1,7 @@
 var hideElement = require('./hideelement.js');
 
 // Parses an HTML element for data
-module.exports = function(vars) {
+module.exports = vars => {
   var attributes = [
     vars.color.value,
     vars.icon.value,
@@ -17,18 +17,16 @@ module.exports = function(vars) {
   attributes = attributes.concat(vars.id.nesting);
 
   function get_attributes(obj, elem) {
-    [].forEach.call(elem.attributes, function(attr) {
+    [].forEach.call(elem.attributes, attr => {
       if (/^data-/.test(attr.name)) {
         var camelCaseName = attr.name
           .substr(5)
-          .replace(/-(.)/g, function($0, $1) {
-            return $1.toUpperCase();
-          });
+          .replace(/-(.)/g, ($0, $1) => $1.toUpperCase());
         obj[camelCaseName] = attr.value;
       }
     });
 
-    attributes.forEach(function(a) {
+    attributes.forEach(a => {
       if (elem.getAttribute(a) !== null) {
         obj[a] = elem.getAttribute(a);
       }

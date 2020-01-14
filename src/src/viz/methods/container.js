@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var d3selection;
 
   d3selection = require('../../util/d3selection.js');
@@ -26,4 +26,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

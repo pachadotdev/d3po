@@ -1,6 +1,6 @@
 // Finds closest value in array
-(function() {
-  module.exports = function(arr, value) {
+(() => {
+  module.exports = (arr, value) => {
     var closest, i;
     if (value.constructor === String) {
       i = arr.indexOf(value);
@@ -11,11 +11,11 @@
       }
     }
     closest = arr[0];
-    arr.forEach(function(p) {
+    arr.forEach(p => {
       if (Math.abs(value - p) < Math.abs(value - closest)) {
         return (closest = p);
       }
     });
     return closest;
   };
-}.call(this));
+}).call(this);

@@ -19,7 +19,7 @@ var arraySort = require('../../../array/sort.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var key_display = true,
     square_size = 0;
 
@@ -40,9 +40,9 @@ module.exports = function(vars) {
         data = copy(vars.nodes.restriced || vars.nodes.value);
         if (vars.data.viz.length) {
           for (var i = 0; i < data.length; i++) {
-            var appData = vars.data.viz.filter(function(a) {
-              return a[vars.id.value] === data[i][vars.id.value];
-            });
+            var appData = vars.data.viz.filter(
+              a => a[vars.id.value] === data[i][vars.id.value]
+            );
             if (appData.length) {
               data[i] = appData[0];
             }
@@ -53,16 +53,10 @@ module.exports = function(vars) {
       }
 
       if (data.length && 'key' in data[0] && 'values' in data[0]) {
-        data = d3.merge(
-          data.map(function(d) {
-            return d.values;
-          })
-        );
+        data = d3.merge(data.map(d => d.values));
       }
 
-      var colorFunction = function(d) {
-          return fetchColor(vars, d, colorDepth);
-        },
+      var colorFunction = d => fetchColor(vars, d, colorDepth),
         colorDepth = 0,
         colorKey = vars.id.value;
 
@@ -75,9 +69,9 @@ module.exports = function(vars) {
           colorDepth = n;
           colorKey = vars.id.nesting[n];
 
-          var uniqueIDs = uniqueValues(data, function(d) {
-              return fetchValue(vars, d, colorKey);
-            }),
+          var uniqueIDs = uniqueValues(data, d =>
+              fetchValue(vars, d, colorKey)
+            ),
             uniqueColors = uniqueValues(data, colorFunction);
 
           if (
@@ -169,7 +163,7 @@ module.exports = function(vars) {
           .remove();
 
         function position(group) {
-          group.attr('transform', function(g, i) {
+          group.attr('transform', (g, i) => {
             var x = start_x + i * (vars.ui.padding + square_size);
             return 'translate(' + x + ',' + vars.ui.padding + ')';
           });
@@ -250,12 +244,12 @@ module.exports = function(vars) {
                   .attr('xlink:href', icon)
                   .attr('width', square_size)
                   .attr('height', square_size)
-                  .each(function() {
+                  .each(() => {
                     if (
                       icon.indexOf('/') === 0 ||
                       icon.indexOf(window.location.hostname) >= 0
                     ) {
-                      dataURL(icon, function(base64) {
+                      dataURL(icon, base64 => {
                         pattern.select('image').attr('xlink:href', base64);
                       });
                     } else {
@@ -321,14 +315,12 @@ module.exports = function(vars) {
         }
 
         var colorInt = {};
-        var keys = vars.g.legend
-          .selectAll('g.d3po_color')
-          .data(colors, function(d) {
-            var c = fetchColor(vars, d, colorKey);
-            if (!(c in colorInt)) colorInt[c] = -1;
-            colorInt[c]++;
-            return colorInt[c] + '_' + c;
-          });
+        var keys = vars.g.legend.selectAll('g.d3po_color').data(colors, d => {
+          var c = fetchColor(vars, d, colorKey);
+          if (!(c in colorInt)) colorInt[c] = -1;
+          colorInt[c]++;
+          return colorInt[c] + '_' + c;
+        });
 
         keys
           .enter()
@@ -382,29 +374,29 @@ module.exports = function(vars) {
                   idIndex >= 0
                     ? fetchText(vars, d, idIndex)[0]
                     : vars.format.value(
-                      fetchValue(vars, d, vars.color.value, colorKey),
-                      {
-                        key: vars.color.value,
-                        vars: vars,
-                        data: d
-                      }
-                    );
+                        fetchValue(vars, d, vars.color.value, colorKey),
+                        {
+                          key: vars.color.value,
+                          vars: vars,
+                          data: d
+                        }
+                      );
               }
 
               var html, js;
               if (vars.legend.filters.value && !(id instanceof Array)) {
-                html = '<div style=\'text-align:center;\'>';
+                html = "<div style='text-align:center;'>";
                 var loc = vars.format.locale.value;
                 html +=
-                  '<div class=\'mute\'>' +
+                  "<div class='mute'>" +
                   vars.format.value(loc.method.mute) +
                   '</div>';
                 html +=
-                  '<div class=\'solo\'>' +
+                  "<div class='solo'>" +
                   vars.format.value(loc.method.solo) +
                   '</div>';
                 html += '</div>';
-                js = function(tooltip) {
+                js = tooltip => {
                   var style = {
                     border: '1px solid #ccc',
                     display: 'inline-block',
@@ -417,9 +409,9 @@ module.exports = function(vars) {
                     .on(events.over, function() {
                       d3.select(this).style('cursor', 'pointer');
                     })
-                    .on(events.click, function() {
+                    .on(events.click, () => {
                       var mute = vars.id.mute.value;
-                      vars.history.states.push(function() {
+                      vars.history.states.push(() => {
                         vars.self
                           .id({
                             mute: mute
@@ -438,9 +430,9 @@ module.exports = function(vars) {
                     .on(events.over, function() {
                       d3.select(this).style('cursor', 'pointer');
                     })
-                    .on(events.click, function() {
+                    .on(events.click, () => {
                       var solo = vars.id.solo.value;
-                      vars.history.states.push(function() {
+                      vars.history.states.push(() => {
                         vars.self
                           .id({
                             solo: solo
@@ -471,7 +463,7 @@ module.exports = function(vars) {
                 offset: square_size * 0.4
               });
             })
-            .on(events.out, function() {
+            .on(events.out, () => {
               removeTooltip(vars.type.value);
             });
         }
@@ -525,12 +517,8 @@ module.exports = function(vars) {
         .attr('stop-opacity', 1);
 
       stops
-        .attr('offset', function(i) {
-          return Math.round((i / (colors.length - 1)) * 100) + '%';
-        })
-        .attr('stop-color', function(i) {
-          return colors[i];
-        });
+        .attr('offset', i => Math.round((i / (colors.length - 1)) * 100) + '%')
+        .attr('stop-color', i => colors[i]);
 
       stops.exit().remove();
 
@@ -540,7 +528,7 @@ module.exports = function(vars) {
         .enter()
         .append('rect')
         .attr('id', 'gradient')
-        .attr('x', function() {
+        .attr('x', () => {
           if (vars.legend.align == 'middle') {
             return vars.width.value / 2;
           } else if (vars.legend.align == 'end') {
@@ -565,7 +553,7 @@ module.exports = function(vars) {
         .append('text')
         .attr('class', 'd3po_tick')
         .attr('stroke', 'none')
-        .attr('x', function() {
+        .attr('x', () => {
           if (vars.legend.align == 'middle') {
             return vars.width.value / 2;
           } else if (vars.legend.align == 'end') {
@@ -591,12 +579,12 @@ module.exports = function(vars) {
         .attr('font-size', vars.legend.font.size + 'px')
         .style('text-anchor', vars.legend.font.align)
         .attr('fill', vars.legend.font.color)
-        .text(function(d) {
-          return vars.format.value(values[d], {
+        .text(d =>
+          vars.format.value(values[d], {
             key: vars.color.value,
             vars: vars
-          });
-        })
+          })
+        )
         .attr('y', function() {
           return (
             this.getBBox().height +
@@ -631,9 +619,7 @@ module.exports = function(vars) {
         text
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function(d) {
-            return start_x + label_width * d;
-          });
+          .attr('x', d => start_x + label_width * d);
 
         text
           .exit()
@@ -650,7 +636,7 @@ module.exports = function(vars) {
           .enter()
           .append('rect')
           .attr('class', 'd3po_tick')
-          .attr('x', function() {
+          .attr('x', () => {
             if (vars.legend.align == 'middle') {
               return vars.width.value / 2;
             } else if (vars.legend.align == 'end') {
@@ -667,7 +653,7 @@ module.exports = function(vars) {
         ticks
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function(d) {
+          .attr('x', d => {
             var mod = d === 0 ? 1 : 0;
             return start_x + label_width * d - mod;
           })
@@ -686,7 +672,7 @@ module.exports = function(vars) {
         gradient
           .transition()
           .duration(vars.draw.timing)
-          .attr('x', function() {
+          .attr('x', () => {
             if (vars.legend.align == 'middle') {
               return vars.width.value / 2 - key_width / 2;
             } else if (vars.legend.align == 'end') {

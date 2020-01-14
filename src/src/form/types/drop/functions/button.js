@@ -6,7 +6,7 @@ var copy = require('../../../../util/copy.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the main drop button.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (!('button' in vars.container)) {
     if (vars.dev.value) print.time('creating main button');
 
@@ -24,7 +24,7 @@ module.exports = function(vars) {
     var depth = vars.depth.value;
 
     var buttonData = copy(
-      vars.data.value.filter(function(d) {
+      vars.data.value.filter(d => {
         var match = false;
         for (var i = 0; i < vars.id.nesting.length; i++) {
           var level = vars.id.nesting[i];
@@ -80,7 +80,7 @@ module.exports = function(vars) {
   vars.margin.top +=
     button.node().offsetHeight || button.node().getBoundingClientRect().height;
 
-  button.on(events.click, function() {
+  button.on(events.click, () => {
     vars.self.open(!vars.open.value).draw();
   });
 };

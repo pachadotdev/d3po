@@ -2,7 +2,7 @@ var print = require('../../../../core/console/print.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculates scroll position of list.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.open.value) {
     if (vars.dev.value) print.time('calculating height');
 

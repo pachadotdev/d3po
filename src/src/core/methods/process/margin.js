@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(value, self) {
+(() => {
+  module.exports = (value, self) => {
     var i, j, k, l, len, len1, len2, len3, m, results, side, sides, v;
     if (typeof value === 'string') {
       value = value.split(' ');
@@ -57,4 +57,4 @@
     }
     return results;
   };
-}.call(this));
+}).call(this);

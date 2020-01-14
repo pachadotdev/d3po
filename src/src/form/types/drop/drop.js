@@ -1,6 +1,6 @@
 // Creates Dropdown Menu
-(function() {
-  module.exports = function(vars) {
+(() => {
+  module.exports = vars => {
     var button,
       data,
       element,
@@ -37,4 +37,4 @@
     data(vars);
     return update(vars);
   };
-}.call(this));
+}).call(this);

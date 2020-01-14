@@ -1,6 +1,6 @@
 // Flows the text as a foreign element
-(function() {
-  module.exports = function(vars) {
+(() => {
+  module.exports = vars => {
     var anchor, color, family, opacity, text;
     text = vars.container.value;
     family = text.attr('font-family') || text.style('font-family');
@@ -24,4 +24,4 @@
       .style('opacity', opacity)
       .text(vars.text.current);
   };
-}.call(this));
+}).call(this);

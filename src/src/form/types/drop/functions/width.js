@@ -7,7 +7,7 @@ var copy = require('../../../../util/copy.js'),
 // If no widths are defined, then this calculates the width needed to fit the
 // longest entry in the list.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var data = [];
   for (var level in vars.data.nested.all) {
     var newData = vars.data.nested.all[level],
@@ -18,7 +18,7 @@ module.exports = function(vars) {
 
     if ([vars.id.value, vars.text.value].indexOf(key) < 0) {
       newData = copy(newData);
-      newData.forEach(function(d) {
+      newData.forEach(d => {
         d[vars.text.value || vars.id.value] = d[key];
       });
     }

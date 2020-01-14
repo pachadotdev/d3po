@@ -18,7 +18,7 @@ module.exports = {
       return [];
     }
 
-    if (!id){
+    if (!id) {
       id = 'id';
     }
 
@@ -29,7 +29,7 @@ module.exports = {
       return edges;
     }
 
-    var connections = edges.filter(function(edge) {
+    var connections = edges.filter(edge => {
       var match = false;
 
       if (edge[self.source][id] == focus) {

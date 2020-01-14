@@ -14,7 +14,7 @@ var defaultLocale = require('../core/locale/languages/en_US.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Create a Tooltip
 //-------------------------------------------------------------------
-module.exports = function(params) {
+module.exports = params => {
   var default_width = params.fullscreen ? 250 : 200,
     vendor = prefix();
   params.width = params.width || default_width;
@@ -103,7 +103,7 @@ module.exports = function(params) {
       .style('right', '0px')
       .style('bottom', '0px')
       .style('left', '0px')
-      .on(events.click, function() {
+      .on(events.click, () => {
         removeTooltip(params.id);
       });
   }
@@ -202,11 +202,11 @@ module.exports = function(params) {
           .style('cursor', 'auto')
           .style(vendor + 'box-shadow', '0 1px 3px rgba(0, 0, 0, 0.25)');
       })
-      .on(events.click, function() {
+      .on(events.click, () => {
         removeTooltip(params.id);
       });
 
-    d3.select('body').on('keydown.esc_' + params.id, function() {
+    d3.select('body').on('keydown.esc_' + params.id, () => {
       if (d3.event.keyCode === 27) {
         removeTooltip(params.id);
         d3.select('body').on('keydown.esc_' + params.id, null);
@@ -219,7 +219,7 @@ module.exports = function(params) {
   } else if (params.mouseevents !== true) {
     var oldout = d3.select(params.mouseevents).on(events.out);
 
-    var newout = function() {
+    var newout = () => {
       var target = d3.event.toElement || d3.event.relatedTarget;
       var istooltip;
       if (target) {
@@ -243,7 +243,7 @@ module.exports = function(params) {
       }
     };
 
-    var ischild = function(parent, child) {
+    var ischild = (parent, child) => {
       var node = child.parentNode;
       while (node !== null) {
         if (node == parent) {
@@ -344,7 +344,7 @@ module.exports = function(params) {
       val_heights = {};
 
     var last_group = null;
-    params.data.forEach(function(d, i) {
+    params.data.forEach((d, i) => {
       if (d.group) {
         if (last_group != d.group) {
           last_group = d.group;
@@ -377,7 +377,7 @@ module.exports = function(params) {
         .attr('class', 'd3po_tooltip_data_name')
         .style('display', 'inline-block')
         .html(d.name)
-        .on(events.out, function() {
+        .on(events.out, () => {
           d3.event.stopPropagation();
         });
 
@@ -400,7 +400,7 @@ module.exports = function(params) {
         .style('text-align', 'right')
         .style('top', '3px')
         .html(d.value)
-        .on(events.out, function() {
+        .on(events.out, () => {
           d3.event.stopPropagation();
         });
 
@@ -419,7 +419,7 @@ module.exports = function(params) {
           .style(vendor + 'transition', 'height 0.5s')
           .style('width', '85%')
           .text(d.desc)
-          .on(events.out, function() {
+          .on(events.out, () => {
             d3.event.stopPropagation();
           });
 
@@ -452,7 +452,7 @@ module.exports = function(params) {
             d3.select(this).style('background-color', c);
             desc.style('height', dh + 'px');
           })
-          .on(events.out, function() {
+          .on(events.out, () => {
             d3.event.stopPropagation();
           });
 
@@ -463,7 +463,7 @@ module.exports = function(params) {
           desc.style('height', dh + 'px');
         });
 
-        block.on(events.out, function() {
+        block.on(events.out, () => {
           d3.event.stopPropagation();
           close_descriptions();
         });
@@ -505,9 +505,7 @@ module.exports = function(params) {
 
     data_container
       .selectAll('.d3po_tooltip_data_name')
-      .style('min-height', function(d) {
-        return val_heights[d.name] + 'px';
-      });
+      .style('min-height', d => val_heights[d.name] + 'px');
   }
 
   if (params.html && (!params.fullscreen || params.stacked)) {

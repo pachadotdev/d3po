@@ -4,12 +4,12 @@ var child = require('../../../../util/child.js');
 // Recursive function that applies a click event to all parent windows that
 // will close the dropdown if it is open.
 //------------------------------------------------------------------------------
-var windowEvents = function(vars, elem) {
+var windowEvents = (vars, elem) => {
   if (elem === undefined) {
     elem = window;
   }
 
-  d3.select(elem).on('click.' + vars.container.id, function() {
+  d3.select(elem).on('click.' + vars.container.id, () => {
     var element = d3.event.target || d3.event.toElement,
       parent = element.parentNode;
 

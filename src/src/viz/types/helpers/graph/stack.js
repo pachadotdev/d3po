@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var fetchValue;
 
   fetchValue = require('../../../../core/fetch/value.js');
 
-  module.exports = function(vars, data) {
+  module.exports = (vars, data) => {
     var d,
       flip,
       i,
@@ -30,20 +30,15 @@
     offset = scale === 'share' ? 'expand' : 'zero';
     stack = d3.layout
       .stack()
-      .values(function(d) {
-        return d.values || [d];
-      })
+      .values(d => d.values || [d])
       .offset(offset)
-      .x(function(d) {
-        return d.d3po[opposite];
-      })
-      .y(function(d) {
-        return (
+      .x(d => d.d3po[opposite])
+      .y(
+        d =>
           flip -
           vars[stacked].scale.viz(fetchValue(vars, d, vars[stacked].value))
-        );
-      })
-      .out(function(d, y0, y) {
+      )
+      .out((d, y0, y) => {
         if (scale === 'share') {
           d.d3po[stacked + '0'] = (1 - y0) * flip;
           d.d3po[stacked] = d.d3po[stacked + '0'] - y * flip;
@@ -97,4 +92,4 @@
       return positiveData.concat(negativeData);
     }
   };
-}.call(this));
+}).call(this);

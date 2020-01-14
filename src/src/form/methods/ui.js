@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var align, decoration, family, margin, transform;
 
   family = require('../../core/methods/font/family.js');
@@ -71,4 +71,4 @@
       value: 5
     }
   };
-}.call(this));
+}).call(this);

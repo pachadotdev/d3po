@@ -1,5 +1,5 @@
 // Creates custom mouse events based on IE and Touch Devices
-(function() {
+(() => {
   var ie, touch;
 
   ie = require('./ie.js');
@@ -25,4 +25,4 @@
       move: 'mousemove'
     };
   }
-}.call(this));
+}).call(this);

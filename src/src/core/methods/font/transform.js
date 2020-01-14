@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(transform) {
+(() => {
+  module.exports = transform => {
     var accepted;
     accepted = ['capitalize', 'lowercase', 'none', 'uppercase'];
     if (transform === false) {
@@ -13,4 +13,4 @@
       value: transform
     };
   };
-}.call(this));
+}).call(this);

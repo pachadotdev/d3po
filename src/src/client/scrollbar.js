@@ -1,8 +1,8 @@
 // Detects scrollbar width for current browser
-(function() {
+(() => {
   var scrollbar;
 
-  scrollbar = function() {
+  scrollbar = () => {
     var inner, outer, val, w1, w2;
     inner = document.createElement('p');
     inner.style.width = '100%';
@@ -25,11 +25,9 @@
     }
     document.body.removeChild(outer);
     val = w1 - w2;
-    scrollbar = function() {
-      return val;
-    };
+    scrollbar = () => val;
     return val;
   };
 
   module.exports = scrollbar;
-}.call(this));
+}).call(this);

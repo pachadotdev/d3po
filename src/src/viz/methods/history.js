@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean],
     back: function() {
@@ -18,4 +18,4 @@
     states: [],
     value: true
   };
-}.call(this));
+}).call(this);

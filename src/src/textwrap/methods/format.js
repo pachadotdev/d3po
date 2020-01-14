@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var locale, mergeObject;
 
   locale = require('../../core/locale/locale.js');
@@ -37,4 +37,4 @@
     },
     value: 'en_US'
   };
-}.call(this));
+}).call(this);

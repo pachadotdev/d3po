@@ -1,12 +1,12 @@
 // Sorts an array of objects
-(function() {
+(() => {
   var comparator, fetchSort;
 
   comparator = require('./comparator.js');
 
   fetchSort = require('../core/fetch/sort.js');
 
-  module.exports = function(arr, keys, sort, colors, vars, depth) {
+  module.exports = (arr, keys, sort, colors, vars, depth) => {
     var d, data, i, len;
     if (!arr || arr.length <= 1) {
       return arr || [];
@@ -30,9 +30,9 @@
           d.d3po.sortKeys = fetchSort(vars, data, keys, colors, depth);
         }
       }
-      return arr.sort(function(a, b) {
-        return comparator(a, b, keys, sort, colors, vars, depth);
-      });
+      return arr.sort((a, b) =>
+        comparator(a, b, keys, sort, colors, vars, depth)
+      );
     }
   };
-}.call(this));
+}).call(this);

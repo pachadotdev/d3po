@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     dev: {
       accepted:
@@ -225,4 +225,4 @@
       treemap: 'Tree Map'
     }
   };
-}.call(this));
+}).call(this);

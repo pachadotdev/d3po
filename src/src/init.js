@@ -2,7 +2,7 @@
  * @class d3po
  */
 
-(function() {
+(() => {
   var d3po = {};
 
   /**
@@ -225,4 +225,4 @@
   }
 
   module.exports = d3po;
-}.call(this));
+}).call(this);

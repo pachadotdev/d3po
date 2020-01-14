@@ -1,10 +1,10 @@
 // Checks to see if element is inside of another element
-(function() {
+(() => {
   var d3selection;
 
   d3selection = require('./d3selection.js');
 
-  module.exports = function(parent, child) {
+  module.exports = (parent, child) => {
     var node;
     if (!parent || !child) {
       return false;
@@ -24,4 +24,4 @@
     }
     return false;
   };
-}.call(this));
+}).call(this);

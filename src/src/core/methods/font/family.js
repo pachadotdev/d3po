@@ -1,12 +1,12 @@
 // Constructs font family property using the validate function
-(function() {
+(() => {
   var fira, validate;
 
   validate = require('../../../font/validate.js');
 
   fira = ['Fira Sans', 'sans-serif'];
 
-  module.exports = function(family) {
+  module.exports = family => {
     if (family === void 0) {
       family = fira;
     }
@@ -15,4 +15,4 @@
       value: family
     };
   };
-}.call(this));
+}).call(this);

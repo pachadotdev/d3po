@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [false, 'start', 'middle', 'end', 'left', 'center', 'right'],
     process: function(value) {
@@ -11,4 +11,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

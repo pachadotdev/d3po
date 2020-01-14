@@ -1,18 +1,14 @@
 var buckets = require('../../../util/buckets.js'),
   offset = require('../../../geom/offset.js');
 
-module.exports = function(vars) {
+module.exports = vars => {
   var edges = vars.returned.edges || [],
     scale = vars.zoom.behavior.scaleExtent()[0];
 
   if (typeof vars.edges.size.value === 'string') {
-    var strokeDomain = d3.extent(edges, function(e) {
-        return e[vars.edges.size.value];
-      }),
+    var strokeDomain = d3.extent(edges, e => e[vars.edges.size.value]),
       maxSize =
-        d3.min(vars.returned.nodes || [], function(n) {
-          return n.d3po.r;
-        }) *
+        d3.min(vars.returned.nodes || [], n => n.d3po.r) *
         (vars.edges.size.scale * 2);
 
     vars.edges.scale = d3.scale
@@ -25,9 +21,7 @@ module.exports = function(vars) {
         ? vars.edges.size.value
         : vars.edges.size.min;
 
-    vars.edges.scale = function() {
-      return defaultWidth;
-    };
+    vars.edges.scale = () => defaultWidth;
   }
 
   var o = vars.edges.opacity.value;
@@ -35,11 +29,7 @@ module.exports = function(vars) {
 
   if (vars.edges.opacity.changed && o_type === 'string') {
     vars.edges.opacity.scale.value
-      .domain(
-        d3.extent(edges, function(d) {
-          return d[o];
-        })
-      )
+      .domain(d3.extent(edges, d => d[o]))
       .range([vars.edges.opacity.min.value, 1]);
   }
 
@@ -60,18 +50,16 @@ module.exports = function(vars) {
     var marker = vars.edges.arrows.value;
 
     edges
-      .attr('opacity', function(d) {
-        return o_type === 'number'
+      .attr('opacity', d =>
+        o_type === 'number'
           ? o
           : o_type === 'function'
-            ? o(d, vars)
-            : vars.edges.opacity.scale.value(d[o]);
-      })
-      .style('stroke-width', function(e) {
-        return vars.edges.scale(e[vars.edges.size.value]);
-      })
+          ? o(d, vars)
+          : vars.edges.opacity.scale.value(d[o])
+      )
+      .style('stroke-width', e => vars.edges.scale(e[vars.edges.size.value]))
       .style('stroke', vars.edges.color)
-      .attr('marker-start', function(e) {
+      .attr('marker-start', e => {
         var direction = vars.edges.arrows.direction.value;
 
         var d;
@@ -85,7 +73,7 @@ module.exports = function(vars) {
           ? 'url(#d3po_edge_marker_default' + d + ')'
           : 'none';
       })
-      .attr('marker-end', function(e) {
+      .attr('marker-end', e => {
         var direction = vars.edges.arrows.direction.value;
 
         var d;
@@ -107,26 +95,26 @@ module.exports = function(vars) {
   // Positioning of Lines
   //----------------------------------------------------------------------------
   function line(l) {
-    l.attr('x1', function(d) {
-      return d[
-        vars.edges.source
-      ].d3po.edges[d[vars.edges.target][vars.id.value]].x;
-    })
-      .attr('y1', function(d) {
-        return d[
-          vars.edges.source
-        ].d3po.edges[d[vars.edges.target][vars.id.value]].y;
-      })
-      .attr('x2', function(d) {
-        return d[
-          vars.edges.target
-        ].d3po.edges[d[vars.edges.source][vars.id.value]].x;
-      })
-      .attr('y2', function(d) {
-        return d[
-          vars.edges.target
-        ].d3po.edges[d[vars.edges.source][vars.id.value]].y;
-      });
+    l.attr(
+      'x1',
+      d =>
+        d[vars.edges.source].d3po.edges[d[vars.edges.target][vars.id.value]].x
+    )
+      .attr(
+        'y1',
+        d =>
+          d[vars.edges.source].d3po.edges[d[vars.edges.target][vars.id.value]].y
+      )
+      .attr(
+        'x2',
+        d =>
+          d[vars.edges.target].d3po.edges[d[vars.edges.source][vars.id.value]].x
+      )
+      .attr(
+        'y2',
+        d =>
+          d[vars.edges.target].d3po.edges[d[vars.edges.source][vars.id.value]].y
+      );
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -135,9 +123,7 @@ module.exports = function(vars) {
   var curve = d3.svg.line().interpolate(vars.edges.interpolate.value);
 
   function spline(l) {
-    l.attr('d', function(d) {
-      return curve(d.d3po.spline);
-    });
+    l.attr('d', d => curve(d.d3po.spline));
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -230,16 +216,16 @@ module.exports = function(vars) {
   var markerData = vars.edges.arrows.value
     ? typeof vars.edges.size.value == 'string'
       ? [
-        'default_0',
-        'default_1',
-        'default_2',
-        'highlight_0',
-        'highlight_1',
-        'highlight_2',
-        'focus_0',
-        'focus_1',
-        'focus_2'
-      ]
+          'default_0',
+          'default_1',
+          'default_2',
+          'highlight_0',
+          'highlight_1',
+          'highlight_2',
+          'focus_0',
+          'focus_1',
+          'focus_2'
+        ]
       : ['default', 'highlight', 'focus']
     : [];
 
@@ -261,9 +247,9 @@ module.exports = function(vars) {
     .selectAll('.d3po_edge_marker')
     .data(markerData, String);
 
-  var marker_style = function(path) {
+  var marker_style = path => {
     path
-      .attr('d', function(id) {
+      .attr('d', id => {
         var depth = id.split('_');
 
         var m;
@@ -298,7 +284,7 @@ module.exports = function(vars) {
           );
         }
       })
-      .attr('fill', function(d) {
+      .attr('fill', d => {
         var type = d.split('_')[0];
 
         if (type == 'default') {
@@ -339,9 +325,7 @@ module.exports = function(vars) {
   var enter = marker
     .enter()
     .append('marker')
-    .attr('id', function(d) {
-      return 'd3po_edge_marker_' + d;
-    })
+    .attr('id', d => 'd3po_edge_marker_' + d)
     .attr('class', 'd3po_edge_marker')
     .attr('orient', 'auto')
     .attr('markerUnits', 'userSpaceOnUse')
@@ -367,7 +351,7 @@ module.exports = function(vars) {
         : null,
     direction = vars.edges.arrows.direction.value;
 
-  var line_data = edges.filter(function(l) {
+  var line_data = edges.filter(l => {
     if (!l.d3po) l.d3po = {};
 
     l.d3po.id =
@@ -432,11 +416,9 @@ module.exports = function(vars) {
 
   var lines = vars.g.edges
     .selectAll('g.d3po_edge_line')
-    .data(line_data, function(d) {
-      return d.d3po.id;
-    });
+    .data(line_data, d => d.d3po.id);
 
-  var spline_data = edges.filter(function(l) {
+  var spline_data = edges.filter(l => {
     if (l.d3po.spline) {
       var marker;
       if (strokeBuckets) {
@@ -470,9 +452,9 @@ module.exports = function(vars) {
           typeof sourceEdge.angle === 'number'
             ? sourceEdge.angle
             : Math.atan2(
-              source.d3po.y - target.d3po.y,
-              source.d3po.x - target.d3po.x
-            ) * sourceTweak,
+                source.d3po.y - target.d3po.y,
+                source.d3po.x - target.d3po.x
+              ) * sourceTweak,
         sourceOffset = offset(
           sourceAngle,
           source.d3po.r + sourceMod,
@@ -482,9 +464,9 @@ module.exports = function(vars) {
           typeof targetEdge.angle === 'number'
             ? targetEdge.angle
             : Math.atan2(
-              target.d3po.y - source.d3po.y,
-              target.d3po.x - source.d3po.x
-            ) * targetTweak,
+                target.d3po.y - source.d3po.y,
+                target.d3po.x - source.d3po.x
+              ) * targetTweak,
         targetOffset = offset(
           targetAngle,
           target.d3po.r + targetMod,
@@ -560,9 +542,7 @@ module.exports = function(vars) {
 
   var splines = vars.g.edges
     .selectAll('g.d3po_edge_path')
-    .data(spline_data, function(d) {
-      return d.d3po.id;
-    });
+    .data(spline_data, d => d.d3po.id);
 
   if (vars.draw.timing) {
     lines
@@ -595,9 +575,7 @@ module.exports = function(vars) {
 
     lines
       .selectAll('line')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .transition()
       .duration(vars.draw.timing)
       .call(line)
@@ -606,9 +584,7 @@ module.exports = function(vars) {
 
     splines
       .selectAll('path')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .transition()
       .duration(vars.draw.timing)
       .call(spline)
@@ -649,18 +625,14 @@ module.exports = function(vars) {
 
     lines
       .selectAll('line')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .call(line)
       .call(style)
       .call(label);
 
     splines
       .selectAll('path')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .call(spline)
       .call(style)
       .call(label);

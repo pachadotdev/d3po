@@ -10,7 +10,7 @@ var arraySort = require('../array/sort.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Form Element shell
 //------------------------------------------------------------------------------
-module.exports = function() {
+module.exports = () => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize the global variable object.
   //----------------------------------------------------------------------------
@@ -26,7 +26,7 @@ module.exports = function() {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Create the main drawing function.
   //----------------------------------------------------------------------------
-  vars.self = function() {
+  vars.self = () => {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Set timing to 0 if it's the first time running this function or if the
     // data length is longer than the "large" limit
@@ -97,7 +97,7 @@ module.exports = function() {
           print.log('"value" set to "' + vars.focus.value + '"');
       }
 
-      var getLevel = function(d, depth) {
+      var getLevel = (d, depth) => {
         depth =
           typeof depth !== 'number'
             ? vars.id.nesting.length === 1
@@ -146,7 +146,7 @@ module.exports = function() {
 
           var options = vars.data.element.value
             .selectAll('option')
-            .data(optionData, function(d) {
+            .data(optionData, d => {
               var level = d ? getLevel(d) : false;
               return d && level in d ? d[level] : false;
             });
@@ -161,8 +161,8 @@ module.exports = function() {
                 level === vars.id.value
                   ? vars.text.value || vars.id.value
                   : vars.text.nesting !== true && level in vars.text.nesting
-                    ? vars.text.nesting[level]
-                    : level;
+                  ? vars.text.nesting[level]
+                  : level;
 
             for (var k in d) {
               if (typeof d[k] !== 'object') {

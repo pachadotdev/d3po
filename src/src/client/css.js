@@ -1,8 +1,8 @@
 // Checks to see if a stylesheet is loaded
-(function() {
+(() => {
   var sheet;
 
-  sheet = function(name) {
+  sheet = name => {
     var css, i, returnBoolean, tested;
     tested = sheet.tested;
     if (name in tested) {
@@ -24,4 +24,4 @@
   sheet.tested = {};
 
   module.exports = sheet;
-}.call(this));
+}).call(this);

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var arraySort, bubbles, fetchColor, fetchText, fetchValue, groupData, legible;
 
   arraySort = require('../../array/sort.js');
@@ -13,7 +13,7 @@
 
   groupData = require('../../core/data/group.js');
 
-  bubbles = function(vars) {
+  bubbles = vars => {
     var column_height,
       column_width,
       columns,
@@ -75,16 +75,16 @@
       if (typeof userDomainMin === 'number') {
         domainMin = userDomainMin;
       } else {
-        domainMin = d3.min(vars.data.viz, function(d) {
-          return fetchValue(vars, d, vars.size.value, vars.id.value, 'min');
-        });
+        domainMin = d3.min(vars.data.viz, d =>
+          fetchValue(vars, d, vars.size.value, vars.id.value, 'min')
+        );
       }
       if (typeof userDomainMax === 'number') {
         domainMax = userDomainMax;
       } else {
-        domainMax = d3.max(vars.data.viz, function(d) {
-          return fetchValue(vars, d, vars.size.value, vars.id.value);
-        });
+        domainMax = d3.max(vars.data.viz, d =>
+          fetchValue(vars, d, vars.size.value, vars.id.value)
+        );
       }
       domain = [domainMin, domainMax];
     } else {
@@ -103,20 +103,14 @@
       .rangeRound([size_min, size_max]);
     pack = d3.layout
       .pack()
-      .children(function(d) {
-        return d.values;
-      })
+      .children(d => d.values)
       .padding(padding)
-      .radius(function(d) {
-        return size(d);
-      })
+      .radius(d => size(d))
       .size([
         column_width - padding * 2,
         column_height - padding * 2 - labelHeight
       ])
-      .value(function(d) {
-        return d.value;
-      });
+      .value(d => d.value);
     data = [];
     row = 0;
     for (i = j = 0, len = groupedData.length; j < len; i = ++j) {
@@ -146,11 +140,7 @@
         row++;
       }
     }
-    downscale =
-      size_max /
-      d3.max(data, function(d) {
-        return d.d3po.r;
-      });
+    downscale = size_max / d3.max(data, d => d.d3po.r);
     xPadding = pack.size()[0] / 2;
     yPadding = pack.size()[1] / 2;
     for (l = 0, len2 = data.length; l < len2; l++) {
@@ -182,9 +172,7 @@
         delete d.d3po.label;
       }
     }
-    return data.sort(function(a, b) {
-      return a.d3po.depth - b.d3po.depth;
-    });
+    return data.sort((a, b) => a.d3po.depth - b.d3po.depth);
   };
 
   bubbles.fill = true;
@@ -196,4 +184,4 @@
   bubbles.shapes = ['circle', 'donut'];
 
   module.exports = bubbles;
-}.call(this));
+}).call(this);

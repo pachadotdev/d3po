@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var process;
 
   process = require('../../core/methods/process/icon.js');
@@ -51,4 +51,4 @@
     },
     value: 'icon'
   };
-}.call(this));
+}).call(this);

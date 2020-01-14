@@ -1,5 +1,5 @@
 // Given any two objects, this method will merge the two objects together, returning a new third object. The values of the second object always overwrite the first
-(function() {
+(() => {
   var d3selection, validate;
 
   d3selection = require('../util/d3selection.js');
@@ -14,9 +14,9 @@
    * @return {Object}
    */
 
-  module.exports = function(obj1, obj2) {
+  module.exports = (obj1, obj2) => {
     var copyObject, obj3;
-    copyObject = function(obj, ret, shallow) {
+    copyObject = (obj, ret, shallow) => {
       var k, results, v;
       results = [];
       for (k in obj) {
@@ -47,4 +47,4 @@
     }
     return obj3;
   };
-}.call(this));
+}).call(this);

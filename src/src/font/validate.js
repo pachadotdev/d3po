@@ -1,10 +1,10 @@
 // Given a single font or a list of font, determines which can be rendered
-(function() {
+(() => {
   var fontTester, validate;
 
   fontTester = require('../core/font/tester.js');
 
-  validate = function(fontList) {
+  validate = fontList => {
     var completed,
       family,
       font,
@@ -31,16 +31,15 @@
     if (fontString in completed) {
       return completed[fontString];
     }
-    testElement = function(font) {
-      return tester
+    testElement = font =>
+      tester
         .append('span')
         .style('font-family', font)
         .style('font-size', '32px')
         .style('padding', '0px')
         .style('margin', '0px')
         .text('abcdefghiABCDEFGHI_!@#$%^&*()_+1234567890');
-    };
-    testWidth = function(font, control) {
+    testWidth = (font, control) => {
       var elem, width1, width2;
       elem = testElement(font);
       width1 = elem.node().offsetWidth;
@@ -74,4 +73,4 @@
   validate.complete = {};
 
   module.exports = validate;
-}.call(this));
+}).call(this);

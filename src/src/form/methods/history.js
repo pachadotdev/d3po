@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     back: function() {
       if (this.states.length) {
@@ -16,4 +16,4 @@
     },
     states: []
   };
-}.call(this));
+}).call(this);

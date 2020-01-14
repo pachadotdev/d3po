@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var fetchValue;
 
   fetchValue = require('../../../core/fetch/value.js');
 
-  module.exports = function(vars, d, segment) {
+  module.exports = (vars, d, segment) => {
     var ret;
     ret = vars[segment].value;
     if (ret) {
@@ -16,4 +16,4 @@
       return d.d3po[segment];
     }
   };
-}.call(this));
+}).call(this);

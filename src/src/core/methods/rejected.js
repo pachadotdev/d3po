@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var contains, format, list, print;
 
   contains = require('../../array/contains.js');
@@ -9,7 +9,7 @@
 
   print = require('../console/print.js');
 
-  module.exports = function(vars, accepted, value, method, text) {
+  module.exports = (vars, accepted, value, method, text) => {
     var a, allowed, app, i, len, recs, str, val;
     if (typeof accepted === 'function') {
       accepted = accepted(vars);
@@ -55,4 +55,4 @@
     }
     return !allowed;
   };
-}.call(this));
+}).call(this);

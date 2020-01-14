@@ -7,7 +7,7 @@ var dataFilter = require('../data/filter.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Fetches specific years of data
 //-------------------------------------------------------------------
-module.exports = function(vars, years, depth) {
+module.exports = (vars, years, depth) => {
   if (!vars.data.value) return [];
 
   if (depth === undefined) depth = vars.depth.value;
@@ -49,9 +49,9 @@ module.exports = function(vars, years, depth) {
       }
 
       if (key === 'mute') {
-        years = vars.data.time.values.filter(function(t) {
-          return years.indexOf(t.getTime()) < 0;
-        });
+        years = vars.data.time.values.filter(
+          t => years.indexOf(t.getTime()) < 0
+        );
       }
     } else years.push('all');
   } else {
@@ -137,9 +137,7 @@ module.exports = function(vars, years, depth) {
         missing = d3.extent(missing);
       }
 
-      missing = missing.map(function(m) {
-        return vars.data.time.format(new Date(m));
-      });
+      missing = missing.map(m => vars.data.time.format(new Date(m)));
       missing = missing.join(' - ');
 
       var str = vars.format.locale.value.error.dataYear,
@@ -152,7 +150,7 @@ module.exports = function(vars, years, depth) {
 
       if (years.length > 1) {
         var separated = false;
-        ['x', 'y', 'x2', 'y2'].forEach(function(a) {
+        ['x', 'y', 'x2', 'y2'].forEach(a => {
           if (
             vars[a].value === vars.time.value &&
             vars[a].scale.value === 'discrete'

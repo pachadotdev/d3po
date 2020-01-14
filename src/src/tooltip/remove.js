@@ -1,6 +1,6 @@
 // Destroy Tooltips
-(function() {
-  module.exports = function(id) {
+(() => {
+  module.exports = id => {
     if (id) {
       d3.selectAll('div#d3po_tooltip_curtain_' + id).remove();
       return d3.selectAll('div#d3po_tooltip_id_' + id).remove();
@@ -9,4 +9,4 @@
       return d3.selectAll('div.d3po_tooltip').remove();
     }
   };
-}.call(this));
+}).call(this);

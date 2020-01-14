@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var comparator, dataThreshold, groupData, halfdonut;
 
   comparator = require('../../array/comparator.js');
@@ -7,7 +7,7 @@
 
   groupData = require('../../core/data/group.js');
 
-  halfdonut = function(vars) {
+  halfdonut = vars => {
     var d,
       groupedData,
       halfdonutData,
@@ -19,16 +19,10 @@
       returnData;
     halfdonutLayout = d3.layout
       .pie()
-      .value(function(d) {
-        return d.value;
-      })
-      .startAngle(function() {
-        return -90 * (Math.PI / 180);
-      })
-      .endAngle(function() {
-        return 90 * (Math.PI / 180);
-      })
-      .sort(function(a, b) {
+      .value(d => d.value)
+      .startAngle(() => -90 * (Math.PI / 180))
+      .endAngle(() => 90 * (Math.PI / 180))
+      .sort((a, b) => {
         if (vars.order.value) {
           return comparator(
             a.d3po,
@@ -84,9 +78,7 @@
 
   halfdonut.shapes = ['arc'];
 
-  halfdonut.threshold = function(vars) {
-    return (40 * 40) / (vars.width.viz * vars.height.viz);
-  };
+  halfdonut.threshold = vars => (40 * 40) / (vars.width.viz * vars.height.viz);
 
   module.exports = halfdonut;
-}.call(this));
+}).call(this);

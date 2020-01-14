@@ -1,11 +1,11 @@
-(function() {
+(() => {
   var buckets, closest;
 
   buckets = require('../../../../../util/buckets.js');
 
   closest = require('../../../../../util/closest.js');
 
-  module.exports = function(vars, axis, buffer) {
+  module.exports = (vars, axis, buffer) => {
     var add,
       additional,
       allNegative,
@@ -182,9 +182,7 @@
           if (axis.indexOf('y') === 0) {
             domain = domain.slice().reverse();
           }
-          strings = domain.filter(function(d) {
-            return d.constructor === String;
-          });
+          strings = domain.filter(d => d.constructor === String);
           additional = Math.abs(domain[1] - domain[0]) * 0.05 || 1;
           if (!strings.length) {
             domain[0] = domain[0] - additional;
@@ -242,4 +240,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

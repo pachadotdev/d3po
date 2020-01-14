@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var checkObject,
     copy,
     createFunction,
@@ -21,7 +21,7 @@
 
   validObject = require('../../object/validate.js');
 
-  module.exports = function(vars, methods) {
+  module.exports = (vars, methods) => {
     var method, obj, results;
     results = [];
     for (method in methods) {
@@ -33,7 +33,7 @@
     return results;
   };
 
-  initialize = function(vars, obj, method) {
+  initialize = (vars, obj, method) => {
     var o;
     obj.previous = false;
     obj.changed = false;
@@ -60,8 +60,8 @@
     return true;
   };
 
-  createFunction = function(vars, key) {
-    return function(user, callback) {
+  createFunction = (vars, key) =>
+    function(user, callback) {
       var accepted,
         checkFont,
         checkValue,
@@ -100,7 +100,7 @@
           };
         }
         starting = true;
-        checkValue = function(o, a, m, v) {
+        checkValue = (o, a, m, v) => {
           if (validObject(o[m]) && a in o[m]) {
             if (validObject(o[m][a])) {
               if (o[m][a].process) {
@@ -113,7 +113,7 @@
             }
           }
         };
-        checkFont = function(o, a, v) {
+        checkFont = (o, a, v) => {
           var m;
           if (validObject(o)) {
             if (starting) {
@@ -151,9 +151,8 @@
         return vars.self;
       }
     };
-  };
 
-  checkObject = function(vars, method, object, key, value) {
+  checkObject = (vars, method, object, key, value) => {
     var approvedObject, d, objectOnly, passingObject;
     if (
       ['accepted', 'changed', 'initialized', 'previous', 'process'].indexOf(
@@ -180,4 +179,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

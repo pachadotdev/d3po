@@ -1,6 +1,6 @@
 // Returns appropriate text color based off of a given color
-(function() {
-  module.exports = function(color) {
+(() => {
+  module.exports = color => {
     var b, g, r, rgbColor, yiq;
     rgbColor = d3.rgb(color);
     r = rgbColor.r;
@@ -13,4 +13,4 @@
       return '#f7f7f7';
     }
   };
-}.call(this));
+}).call(this);

@@ -1,5 +1,5 @@
 // Default d3po color scale
-(function() {
+(() => {
   module.exports = d3.scale
     .ordinal()
     .range([
@@ -26,4 +26,4 @@
       '#a17cb0',
       '#d1a1bc'
     ]);
-}.call(this));
+}).call(this);

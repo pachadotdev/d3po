@@ -6,12 +6,12 @@ var events = require('../../../client/pointer.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws appropriate titles
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var total_key = vars.size.value
     ? vars.size.value
     : vars.color.type === 'number'
-      ? vars.color.value
-      : false;
+    ? vars.color.value
+    : false;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If there is no data or the title bar is not needed,
@@ -30,16 +30,16 @@ module.exports = function(vars) {
 
     var total_data = vars.data.pool;
     if (vars.focus.value.length) {
-      total_data = vars.data.viz.filter(function(d) {
-        return d[vars.id.value] == vars.focus.value[0];
-      });
+      total_data = vars.data.viz.filter(
+        d => d[vars.id.value] == vars.focus.value[0]
+      );
     }
 
     var agg = vars.aggs.value[total_key] || 'sum';
     if (agg.constructor === Function) {
       total = agg(total_data);
     } else {
-      total_data = total_data.reduce(function(arr, d) {
+      total_data = total_data.reduce((arr, d) => {
         var vals = fetchValue(vars, d, total_key);
         if (vals instanceof Array) arr = arr.concat(vals);
         else arr.push(vals);
@@ -61,7 +61,7 @@ module.exports = function(vars) {
         vars.data.solo.length ||
         vars.focus.value.length
       ) {
-        var overall_total = d3.sum(vars.data.value, function(d) {
+        var overall_total = d3.sum(vars.data.value, d => {
           var match;
           if (vars.time.solo.value.length > 0) {
             match =
@@ -175,39 +175,29 @@ module.exports = function(vars) {
   //----------------------------------------------------------------------------
   function style(title) {
     title
-      .attr('font-size', function(t) {
-        return t.style.font.size;
-      })
-      .attr('fill', function(t) {
-        return t.link ? vars.links.font.color : t.style.font.color;
-      })
-      .attr('font-family', function(t) {
-        return t.link
-          ? vars.links.font.family.value
-          : t.style.font.family.value;
-      })
-      .attr('font-weight', function(t) {
-        return t.link ? vars.links.font.weight : t.style.font.weight;
-      })
-      .style('text-decoration', function(t) {
-        return t.link
+      .attr('font-size', t => t.style.font.size)
+      .attr('fill', t => (t.link ? vars.links.font.color : t.style.font.color))
+      .attr('font-family', t =>
+        t.link ? vars.links.font.family.value : t.style.font.family.value
+      )
+      .attr('font-weight', t =>
+        t.link ? vars.links.font.weight : t.style.font.weight
+      )
+      .style('text-decoration', t =>
+        t.link
           ? vars.links.font.decoration.value
-          : t.style.font.decoration.value;
-      })
-      .style('text-transform', function(t) {
-        return t.link
-          ? vars.links.font.transform.value
-          : t.style.font.transform.value;
-      });
+          : t.style.font.decoration.value
+      )
+      .style('text-transform', t =>
+        t.link ? vars.links.font.transform.value : t.style.font.transform.value
+      );
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Enter Titles
   //----------------------------------------------------------------------------
   if (vars.dev.value) print.time('drawing titles');
-  var titles = vars.svg.selectAll('g.d3po_title').data(title_data, function(t) {
-    return t.type;
-  });
+  var titles = vars.svg.selectAll('g.d3po_title').data(title_data, t => t.type);
 
   var titleWidth =
     vars.title.width || vars.width.value - vars.margin.left - vars.margin.right;
@@ -215,9 +205,7 @@ module.exports = function(vars) {
   titles
     .enter()
     .append('g')
-    .attr('class', function(t) {
-      return 'd3po_title ' + t.type;
-    })
+    .attr('class', t => 'd3po_title ' + t.type)
     .attr('opacity', 0)
     .append('text')
     .attr('stroke', 'none')
@@ -283,7 +271,7 @@ module.exports = function(vars) {
           .call(style);
       }
     })
-    .on(events.click, function(t) {
+    .on(events.click, t => {
       if (t.link) {
         var target = t.link.charAt(0) != '/' ? '_blank' : '_self';
         window.open(t.link, target);

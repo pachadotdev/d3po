@@ -1,10 +1,10 @@
 // Finds outliers in n-dim data using the Local Outlier Factor algorithm
-(function() {
+(() => {
   var kdtree;
 
   kdtree = require('static-kdtree');
 
-  module.exports = function(points, K) {
+  module.exports = (points, K) => {
     var avg_lrd,
       i,
       j,
@@ -21,7 +21,7 @@
       K = 10;
     }
     tree = kdtree(points);
-    neighbors = (function() {
+    neighbors = (() => {
       var k, len, results;
       results = [];
       for (k = 0, len = points.length; k < len; k++) {
@@ -30,7 +30,7 @@
       }
       return results;
     })();
-    sqDist = function(i, j) {
+    sqDist = (i, j) => {
       var A, B, delta, dist, k, ref;
       A = points[i];
       B = points[j];
@@ -45,7 +45,7 @@
       }
       return dist;
     };
-    kdists = (function() {
+    kdists = (() => {
       var k, ref, results;
       results = [];
       for (
@@ -57,10 +57,8 @@
       }
       return results;
     })();
-    reachDist = function(i, j) {
-      return Math.max(sqDist(i, j), kdists[j]);
-    };
-    ldr = function(i) {
+    reachDist = (i, j) => Math.max(sqDist(i, j), kdists[j]);
+    ldr = i => {
       var j, k, len, rDist, ref;
       rDist = 0;
       ref = neighbors[i];
@@ -70,7 +68,7 @@
       }
       return K / rDist;
     };
-    ldrs = (function() {
+    ldrs = (() => {
       var k, ref, results;
       results = [];
       for (
@@ -82,7 +80,7 @@
       }
       return results;
     })();
-    result = (function() {
+    result = (() => {
       var k, l, len, ref, ref1, results;
       results = [];
       for (
@@ -101,8 +99,6 @@
       }
       return results;
     })();
-    return result.sort(function(a, b) {
-      return b[1] - a[1];
-    });
+    return result.sort((a, b) => b[1] - a[1]);
   };
-}.call(this));
+}).call(this);

@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(arr, value) {
+(() => {
+  module.exports = (arr, value) => {
     var constructor;
     if (arr instanceof Array) {
       constructor =
@@ -9,4 +9,4 @@
       return false;
     }
   };
-}.call(this));
+}).call(this);

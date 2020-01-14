@@ -1,7 +1,7 @@
-(function() {
-  module.exports = function(vars, selection, enter, exit) {
+(() => {
+  module.exports = (vars, selection, enter, exit) => {
     var d, data, init, marker, orient, pos, position, size, style;
-    data = function(d) {
+    data = d => {
       if (d.d3po.text) {
         d.d3po_label = {
           w: size,
@@ -19,23 +19,21 @@
       }
       return [d];
     };
-    style = function(line) {
-      return line
+    style = line =>
+      line
         .style('stroke-width', vars.data.stroke.width)
         .style('stroke', '#444')
         .attr('fill', 'none')
         .attr('shape-rendering', vars.shape.rendering.value);
-    };
-    init = function(line) {
-      return line
+    init = line =>
+      line
         .attr('x1', 0)
         .attr('x2', 0)
         .attr('y1', 0)
         .attr('y2', 0);
-    };
-    position = function(line) {
-      return line
-        .attr('x1', function(d) {
+    position = line =>
+      line
+        .attr('x1', d => {
           var offset, w, x;
           if (['top', 'bottom'].indexOf(d.d3po.position) >= 0) {
             return 0;
@@ -46,14 +44,14 @@
             return x + offset;
           }
         })
-        .attr('x2', function(d) {
+        .attr('x2', d => {
           if (['top', 'bottom'].indexOf(d.d3po.position) >= 0) {
             return 0;
           } else {
             return d.d3po.offset || 0;
           }
         })
-        .attr('y1', function(d) {
+        .attr('y1', d => {
           var h, offset, y;
           if (['left', 'right'].indexOf(d.d3po.position) >= 0) {
             return 0;
@@ -64,7 +62,7 @@
             return y + offset;
           }
         })
-        .attr('y2', function(d) {
+        .attr('y2', d => {
           if (['left', 'right'].indexOf(d.d3po.position) >= 0) {
             return 0;
           } else {
@@ -72,7 +70,6 @@
           }
         })
         .attr('marker-start', 'url(#d3po_whisker_marker)');
-    };
     marker = vars.defs.selectAll('#d3po_whisker_marker').data([0]);
     marker
       .enter()
@@ -125,4 +122,4 @@
         .call(position);
     }
   };
-}.call(this));
+}).call(this);

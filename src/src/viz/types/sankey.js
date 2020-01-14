@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var d3sankey, events, removeTooltip, sankey;
 
   d3sankey = require('./sankey.js');
@@ -7,7 +7,7 @@
 
   removeTooltip = require('../../tooltip/remove.js');
 
-  sankey = function(vars) {
+  sankey = vars => {
     var d,
       e,
       edges,
@@ -26,15 +26,16 @@
     focus = vars.focus.value[0];
     padding = vars.data.stroke.width * 2;
     size = vars.size.value.constructor === Number ? vars.size.value : 20;
-    edges = vars.edges.connections(focus, vars.id.value).filter(function(e) {
-      return (
-        e[vars.edges.source][vars.id.value] !== focus ||
-        e[vars.edges.target][vars.id.value] !== focus
+    edges = vars.edges
+      .connections(focus, vars.id.value)
+      .filter(
+        e =>
+          e[vars.edges.source][vars.id.value] !== focus ||
+          e[vars.edges.target][vars.id.value] !== focus
       );
-    });
     nodes = [];
     placed = [];
-    edges = edges.map(function(e) {
+    edges = edges.map(e => {
       var s, t;
       if (e[vars.edges.target][vars.id.value] === focus) {
         s = {
@@ -102,14 +103,12 @@
       };
     }
     vars.mouse.viz = {};
-    vars.mouse.viz[events.click] = function(d) {
+    vars.mouse.viz[events.click] = d => {
       var old_focus;
       if (d[vars.id.value] !== vars.focus.value[0]) {
         removeTooltip(vars.type.value);
         old_focus = vars.focus.value[0];
-        vars.history.states.push(function() {
-          return vars.self.focus(old_focus).draw();
-        });
+        vars.history.states.push(() => vars.self.focus(old_focus).draw());
         return vars.self.focus(d[vars.id.value]).draw();
       }
     };
@@ -124,4 +123,4 @@
   sankey.shapes = ['square'];
 
   module.exports = sankey;
-}.call(this));
+}).call(this);

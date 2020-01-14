@@ -30,7 +30,7 @@ var drawShape = {
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws the appropriate shape based on the data
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var data = vars.returned.nodes || [],
     edges = vars.returned.edges || [];
 
@@ -62,7 +62,7 @@ module.exports = function(vars) {
   // Split the data by each shape type in the data.
   //----------------------------------------------------------------------------
   var shapes = {};
-  data.forEach(function(d) {
+  data.forEach(d => {
     var s = d.d3po && d.d3po.shape ? d.d3po.shape : vars.shape.value;
     if (s in shapeLookup) {
       if (d.d3po) d.d3po.shape = s;
@@ -84,7 +84,7 @@ module.exports = function(vars) {
 
       d.d3po.id += shape;
 
-      ['x', 'y', 'x2', 'y2'].forEach(function(axis) {
+      ['x', 'y', 'x2', 'y2'].forEach(axis => {
         if (vars[axis].scale.value == 'discrete') {
           var val = fetchValue(vars, d, vars[axis].value);
           if (val.constructor === Date) val = val.getTime();
@@ -119,7 +119,7 @@ module.exports = function(vars) {
     }
 
     scale = grow ? scale : 1;
-    g.attr('transform', function(d) {
+    g.attr('transform', d => {
       if (['line', 'area', 'coordinates'].indexOf(shape) < 0) {
         var x = d.d3po.x || 0,
           y = d.d3po.y || 0;
@@ -134,9 +134,7 @@ module.exports = function(vars) {
   // Sets the class name for a group
   //----------------------------------------------------------------------------
   function className(g) {
-    g.attr('id', function(d) {
-      return 'd3po_group_' + d.d3po.id;
-    }).attr('class', function(d) {
+    g.attr('id', d => 'd3po_group_' + d.d3po.id).attr('class', d => {
       var c = vars.class.value
         ? ' ' + fetchValue(vars, d, vars.class.value)
         : '';
@@ -171,7 +169,7 @@ module.exports = function(vars) {
     //--------------------------------------------------------------------------
     var selection = vars.g.data
       .selectAll('g.d3po_' + shape)
-      .data(shapes[shape], function(d) {
+      .data(shapes[shape], d => {
         if (!d.d3po) d.d3po = {};
 
         if (shape === 'coordinates') {
@@ -181,7 +179,7 @@ module.exports = function(vars) {
 
         if (!d.d3po.id) {
           if (d.values) {
-            d.values.forEach(function(v) {
+            d.values.forEach(v => {
               v = id(v);
               v.d3po.shape = 'circle';
             });
@@ -305,7 +303,7 @@ module.exports = function(vars) {
             ? d3.select(this).style('stroke-width')
             : vars.data.stroke.width * 2;
         })
-        .attr('marker-start', function(e) {
+        .attr('marker-start', e => {
           var direction = vars.edges.arrows.direction.value;
 
           var d;
@@ -319,7 +317,7 @@ module.exports = function(vars) {
             ? 'url(#d3po_edge_marker_highlight' + d + ')'
             : 'none';
         })
-        .attr('marker-end', function(e) {
+        .attr('marker-end', e => {
           var direction = vars.edges.arrows.direction.value;
 
           var d;
@@ -418,9 +416,10 @@ module.exports = function(vars) {
             if (d.values && vars.axes.discrete) {
               var index = vars.axes.discrete === 'x' ? 0 : 1,
                 mouse = d3.mouse(vars.container.value.node())[index],
-                positions = uniqueValues(d.values, function(x) {
-                  return x.d3po[vars.axes.discrete];
-                }),
+                positions = uniqueValues(
+                  d.values,
+                  x => x.d3po[vars.axes.discrete]
+                ),
                 match = closest(positions, mouse);
 
               d.d3po_data = d.values[positions.indexOf(match)];
@@ -478,9 +477,10 @@ module.exports = function(vars) {
             if (d.values && vars.axes.discrete) {
               var index = vars.axes.discrete === 'x' ? 0 : 1,
                 mouse = d3.mouse(vars.container.value.node())[index],
-                positions = uniqueValues(d.values, function(x) {
-                  return x.d3po[vars.axes.discrete];
-                }),
+                positions = uniqueValues(
+                  d.values,
+                  x => x.d3po[vars.axes.discrete]
+                ),
                 match = closest(positions, mouse);
 
               d.d3po_data = d.values[positions.indexOf(match)];
@@ -548,7 +548,7 @@ module.exports = function(vars) {
         }
       });
   } else {
-    var mouseEvent = function() {
+    var mouseEvent = () => {
       touchEvent(vars, d3.event);
     };
 
@@ -559,7 +559,7 @@ module.exports = function(vars) {
       .on(events.out, mouseEvent);
   }
 
-  d3.select(window).on('scroll.d3po', function() {
+  d3.select(window).on('scroll.d3po', () => {
     removeTooltip(vars.type.value);
   });
 
@@ -580,9 +580,7 @@ module.exports = function(vars) {
         if (d.values && vars.axes.discrete) {
           var index = vars.axes.discrete === 'x' ? 0 : 1,
             mouse = d3.mouse(vars.container.value.node())[index],
-            positions = uniqueValues(d.values, function(x) {
-              return x.d3po[vars.axes.discrete];
-            }),
+            positions = uniqueValues(d.values, x => x.d3po[vars.axes.discrete]),
             match = closest(positions, mouse);
 
           d.d3po_data = d.values[positions.indexOf(match)];
@@ -606,7 +604,7 @@ module.exports = function(vars) {
           prev_total = vars.title.total.font.color;
 
         if (d.d3po.threshold && d.d3po.merged && vars.zoom.value) {
-          vars.history.states.push(function() {
+          vars.history.states.push(() => {
             vars.self
               .id({
                 solo: previous
@@ -650,7 +648,7 @@ module.exports = function(vars) {
         } else if (depth_delta === 1 && vars.zoom.value) {
           var id = fetchValue(vars, d.d3po_data || d, vars.id.value);
 
-          vars.history.states.push(function() {
+          vars.history.states.push(() => {
             vars.self
               .depth(vars.depth.value - 1)
               .id({

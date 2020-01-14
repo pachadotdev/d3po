@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var fetchValue, stringStrip, uniqueValues;
 
   fetchValue = require('../../../../core/fetch/value.js');
@@ -7,7 +7,7 @@
 
   uniqueValues = require('../../../../util/uniques.js');
 
-  module.exports = function(vars, data, keys) {
+  module.exports = (vars, data, keys) => {
     var discrete, extras, key, opposite, serialized, ticks, timeAxis;
     if (keys === void 0) {
       keys = vars.id.nesting.slice(0, vars.depth.value + 1);
@@ -27,7 +27,7 @@
       ticks = vars.data.time.ticks;
       key = vars.time.solo.value.length ? 'solo' : 'mute';
       if (vars.time[key].value.length) {
-        serialized = vars.time[key].value.slice().map(function(f) {
+        serialized = vars.time[key].value.slice().map(f => {
           if (f.constructor !== Date) {
             f = f + '';
             if (f.length === 4 && parseInt(f) + '' === f) {
@@ -37,7 +37,7 @@
           }
           return +f;
         });
-        ticks = ticks.filter(function(f) {
+        ticks = ticks.filter(f => {
           if (key === 'solo') {
             return serialized.indexOf(+f) >= 0;
           } else {
@@ -52,7 +52,7 @@
     }
     return d3
       .nest()
-      .key(function(d) {
+      .key(d => {
         var id, j, len, return_id, val;
         return_id = 'nesting';
         for (j = 0, len = keys.length; j < len; j++) {
@@ -65,7 +65,7 @@
         }
         return return_id;
       })
-      .rollup(function(leaves) {
+      .rollup(leaves => {
         var availables,
           filler,
           i,
@@ -85,11 +85,7 @@
         }
         if (discrete.zerofill.value) {
           if (discrete.scale.value === 'log') {
-            if (
-              opposite.scale.viz.domain().every(function(d) {
-                return d < 0;
-              })
-            ) {
+            if (opposite.scale.viz.domain().every(d => d < 0)) {
               filler = -1;
             } else {
               filler = 1;
@@ -121,7 +117,7 @@
         if (typeof leaves[0][discrete.value] === 'string') {
           return leaves;
         } else {
-          return leaves.sort(function(a, b) {
+          return leaves.sort((a, b) => {
             var ad, ao, bd, bo, xsort;
             ad = fetchValue(vars, a, discrete.value);
             bd = fetchValue(vars, b, discrete.value);
@@ -137,4 +133,4 @@
       })
       .entries(data);
   };
-}.call(this));
+}).call(this);

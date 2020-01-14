@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var rtl;
 
   rtl = require('../../../client/rtl.js');
 
-  module.exports = function(align) {
+  module.exports = align => {
     var accepted;
     accepted = ['left', 'center', 'right'];
     if (align === false) {
@@ -32,4 +32,4 @@
       value: align
     };
   };
-}.call(this));
+}).call(this);

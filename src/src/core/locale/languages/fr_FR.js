@@ -49,20 +49,20 @@ module.exports = {
   },
   dev: {
     accepted:
-      '{0} n\'est pas une option valide pour {1}, les valeurs possibles sont: {2}.',
-    noChange: '{0} n\'a pas été mis à jour car inchangé.',
+      "{0} n'est pas une option valide pour {1}, les valeurs possibles sont: {2}.",
+    noChange: "{0} n'a pas été mis à jour car inchangé.",
     noContainer: 'impossible de trouver un contenant correspondant à {0}.',
     of: 'de',
     oldStyle: 'les propriétés de {0} ont été imbriquées dans .{1}().',
     sameEdge:
-      'un arc ne peut pas boucler sur lui même. L\'auto-référence est automatiquement éliminée {0}.',
+      "un arc ne peut pas boucler sur lui même. L'auto-référence est automatiquement éliminée {0}.",
     set: '{0} a été mis à jour.',
     setLong: '{0} a été mis à jour à {1}.',
     setContainer: 'merci de choisir un div qui utilise .container()'
   },
   error: {
     accepted:
-      '{0} n\'est pas correct {1} pour {2} visualisations, merci d\'utilisez une des options suivantes: {3}.',
+      "{0} n'est pas correct {1} pour {2} visualisations, merci d'utilisez une des options suivantes: {3}.",
     connections: 'Pas de connections disponibles pour {0}.',
     data: 'Pas de données disponibles',
     dataYear: 'Pas de données disponibles pour {0}.',
@@ -154,7 +154,7 @@ module.exports = {
     expand: 'clic pour agrandir',
     loading: 'chargement ...',
     more: 'plus {0}',
-    moreInfo: 'clic pour plus d\'information',
+    moreInfo: "clic pour plus d'information",
     noResults: 'pas de résultat correspondant à {0}.',
     primary: 'connections primaires',
     share: 'part',
@@ -178,7 +178,7 @@ module.exports = {
     initializing: 'Initialisation {0}',
     loading: 'chargement',
     tooltipReset: 'réinitialisation des bulles',
-    ui: 'rafraichissement de l\'interface'
+    ui: "rafraichissement de l'interface"
   },
   uppercase: [
     'CEO',

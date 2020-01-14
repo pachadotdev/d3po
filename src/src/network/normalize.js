@@ -1,10 +1,10 @@
 // Normalizes the graph input and checks if it is valid
-(function() {
+(() => {
   var print;
 
   print = require('../core/console/print.js');
 
-  module.exports = function(edges, options) {
+  module.exports = (edges, options) => {
     var K,
       a,
       b,
@@ -37,14 +37,14 @@
       target,
       vdebug;
     (source = options.source),
-    (target = options.target),
-    (directed = options.directed),
-    (distance = options.distance),
-    (nodeid = options.nodeid),
-    (startpoint = options.startpoint),
-    (endpoint = options.endpoint),
-    (K = options.K),
-    (vdebug = options.vdebug);
+      (target = options.target),
+      (directed = options.directed),
+      (distance = options.distance),
+      (nodeid = options.nodeid),
+      (startpoint = options.startpoint),
+      (endpoint = options.endpoint),
+      (K = options.K),
+      (vdebug = options.vdebug);
     if (!directed) {
       directed = false;
     }
@@ -52,15 +52,9 @@
       K = 1;
     }
     if (nodeid == null) {
-      nodeid = function(node) {
-        return node;
-      };
+      nodeid = node => node;
     } else if (typeof nodeid === 'string') {
-      nodeid = (function(nodeid) {
-        return function(node) {
-          return node[nodeid];
-        };
-      })(nodeid);
+      nodeid = (nodeid => node => node[nodeid])(nodeid);
     }
     if (source != null && typeof source === 'object') {
       source = nodeid(source);
@@ -69,43 +63,21 @@
       target = nodeid(target);
     }
     if (startpoint == null) {
-      startpoint = function(edge) {
-        return edge.source;
-      };
+      startpoint = edge => edge.source;
     } else if (typeof startpoint === 'string') {
-      startpoint = (function(startpoint) {
-        return function(edge) {
-          return edge[startpoint];
-        };
-      })(startpoint);
+      startpoint = (startpoint => edge => edge[startpoint])(startpoint);
     }
     if (endpoint == null) {
-      endpoint = function(edge) {
-        return edge.target;
-      };
+      endpoint = edge => edge.target;
     } else if (typeof endpoint === 'string') {
-      endpoint = (function(endpoint) {
-        return function(edge) {
-          return edge[endpoint];
-        };
-      })(endpoint);
+      endpoint = (endpoint => edge => edge[endpoint])(endpoint);
     }
     if (distance == null) {
-      distance = function() {
-        return 1;
-      };
+      distance = () => 1;
     } else if (typeof distance === 'number') {
-      distance = (function(distance) {
-        return function() {
-          return distance;
-        };
-      })(distance);
+      distance = (distance => () => distance)(distance);
     } else if (typeof distance === 'string') {
-      distance = (function(distance) {
-        return function(edge) {
-          return edge[distance];
-        };
-      })(distance);
+      distance = (distance => edge => edge[distance])(distance);
     } else if (distance instanceof Array) {
       edge2distance = {};
       for (i = j = 0, len = edges.length; j < len; i = ++j) {
@@ -114,7 +86,7 @@
         b = nodeid(endpoint(edge));
         edge2distance[a + '_' + b] = distance[i];
       }
-      distance = function(edge) {
+      distance = edge => {
         a = nodeid(startpoint(edge));
         b = nodeid(endpoint(edge));
         return edge2distance[a + '_' + b];
@@ -187,4 +159,4 @@
       }
     ];
   };
-}.call(this));
+}).call(this);

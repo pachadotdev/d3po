@@ -1,12 +1,12 @@
 // Process object's value
-(function() {
+(() => {
   var copy, update;
 
   copy = require('../../../util/copy.js');
 
   update = require('../../../array/update.js');
 
-  module.exports = function(vars, object, value) {
+  module.exports = (vars, object, value) => {
     if (object.process === Array) {
       return update(copy(object.value), value);
     } else if (
@@ -20,4 +20,4 @@
       return value;
     }
   };
-}.call(this));
+}).call(this);

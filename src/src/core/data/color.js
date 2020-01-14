@@ -4,7 +4,7 @@ var buckets = require('../../util/buckets.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Sets color range of data, if applicable
 //-------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) print.time('getting color data range');
 
   var data_range;
@@ -12,7 +12,7 @@ module.exports = function(vars) {
     data_range = vars.color.domain.value;
   } else {
     data_range = [];
-    vars.data.pool.forEach(function(d) {
+    vars.data.pool.forEach(d => {
       var val = parseFloat(fetchValue(vars, d, vars.color.value));
       if (typeof val == 'number' && !isNaN(val) && data_range.indexOf(val) < 0)
         data_range.push(val);

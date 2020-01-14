@@ -6,7 +6,7 @@ var events = require('../../../../client/pointer.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and styles the title and back button.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.open.value) {
     if (vars.dev.value) print.time('creating title and back button');
 
@@ -131,7 +131,7 @@ module.exports = function(vars) {
           .style('background-color', color)
           .style('color', textColor(color));
       })
-      .on(events.click, function() {
+      .on(events.click, () => {
         vars.history.back();
       });
 

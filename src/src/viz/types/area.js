@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var area, fetchValue, graph, nest, sort, stack, threshold;
 
   fetchValue = require('../../core/fetch/value.js');
@@ -13,7 +13,7 @@
 
   threshold = require('../../core/data/threshold.js');
 
-  area = function(vars) {
+  area = vars => {
     var d, data, discrete, domains, i, j, len, len1, opposite, point, ref;
     graph(vars, {
       buffer: vars.axes.opposite,
@@ -55,13 +55,12 @@
     return stack(vars, data);
   };
 
-  area.filter = function(vars, data) {
-    return nest(vars, threshold(vars, data, vars[vars.axes.discrete].value));
-  };
+  area.filter = (vars, data) =>
+    nest(vars, threshold(vars, data, vars[vars.axes.discrete].value));
 
   area.requirements = ['data', 'x', 'y'];
 
-  area.setup = function(vars) {
+  area.setup = vars => {
     var axis, size, y;
     if (!vars.axes.discrete) {
       axis = vars.time.value === vars.y.value ? 'y' : 'x';
@@ -99,11 +98,9 @@
 
   area.shapes = ['area'];
 
-  area.threshold = function(vars) {
-    return 20 / vars.height.viz;
-  };
+  area.threshold = vars => 20 / vars.height.viz;
 
   area.tooltip = 'static';
 
   module.exports = area;
-}.call(this));
+}).call(this);

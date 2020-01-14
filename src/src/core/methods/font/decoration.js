@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(decoration) {
+(() => {
+  module.exports = decoration => {
     var accepted;
     accepted = ['line-through', 'none', 'overline', 'underline'];
     if (decoration === false) {
@@ -13,4 +13,4 @@
       value: decoration
     };
   };
-}.call(this));
+}).call(this);

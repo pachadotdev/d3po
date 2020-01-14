@@ -1,16 +1,16 @@
 var print = require('../console/print.js');
 
 // Calculates node positions, if needed for network.
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.type.value === 'network') {
     if (vars.dev.value) {
       var timerString = 'analyzing node positions';
       print.time(timerString);
     }
 
-    var set = vars.nodes.value.filter(function(n) {
-      return typeof n.x === 'number' && typeof n.y === 'number';
-    }).length;
+    var set = vars.nodes.value.filter(
+      n => typeof n.x === 'number' && typeof n.y === 'number'
+    ).length;
 
     if (set === vars.nodes.value.length) {
       vars.nodes.positions = true;
@@ -24,9 +24,7 @@ module.exports = function(vars) {
       var strength = vars.edges.strength.value;
       if (strength) {
         if (typeof strength === 'string') {
-          force.linkStrength(function(e) {
-            return e[strength];
-          });
+          force.linkStrength(e => e[strength]);
         } else {
           force.linkStrength(strength);
         }

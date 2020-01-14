@@ -4,7 +4,7 @@ var fetchValue = require('../fetch/value.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Restricts data based on Solo/Mute filters
 //------------------------------------------------------------------------------
-module.exports = function(vars, data) {
+module.exports = (vars, data) => {
   if (vars.dev.value) print.time('filtering data');
 
   var availableKeys = d3.keys(vars.data.keys || {});
@@ -13,19 +13,19 @@ module.exports = function(vars, data) {
     availableKeys = availableKeys.concat(d3.keys(vars.attrs.keys || {}));
   }
 
-  data = data.filter(function(d) {
+  data = data.filter(d => {
     var val = fetchValue(vars, d, vars.id.value);
     return val !== null;
   });
 
   var typeReqs = vars.types[vars.type.value].requirements || [];
 
-  vars.data.filters.forEach(function(key) {
+  vars.data.filters.forEach(key => {
     if (
       availableKeys.indexOf(vars[key].value) >= 0 &&
       typeReqs.indexOf(key) >= 0
     ) {
-      data = data.filter(function(d) {
+      data = data.filter(d => {
         var val = fetchValue(vars, d, vars[key].value);
 
         if (key === 'y' && vars.y2.value && val === null) {
@@ -47,12 +47,12 @@ module.exports = function(vars, data) {
   var key = vars.data.solo.length ? 'solo' : 'mute';
 
   if (vars.data[key].length) {
-    vars.data[key].forEach(function(v) {
+    vars.data[key].forEach(v => {
       function test_value(val) {
         var arr = vars[v][key].value;
 
         var match = false;
-        arr.forEach(function(f) {
+        arr.forEach(f => {
           if (typeof f === 'function') {
             match = f(val);
           } else if (f === val) {
@@ -70,15 +70,13 @@ module.exports = function(vars, data) {
             nesting = d3.values(nesting);
           }
           for (var n = 0; n < nesting.length; n++) {
-            var new_data = d.filter(function(dd) {
-              return test_value(fetchValue(vars, dd, nesting[n]));
-            });
+            var new_data = d.filter(dd =>
+              test_value(fetchValue(vars, dd, nesting[n]))
+            );
             if (new_data.length) d = new_data;
           }
         } else {
-          d = d.filter(function(dd) {
-            return test_value(fetchValue(vars, dd, vars[v].value));
-          });
+          d = d.filter(dd => test_value(fetchValue(vars, dd, vars[v].value)));
         }
         return d;
       }
@@ -94,7 +92,7 @@ module.exports = function(vars, data) {
 
         if ('edges' in vars && vars.edges.value) {
           if (vars.dev.value) print.time('filtering edges');
-          vars.edges.restricted = vars.edges.value.filter(function(d) {
+          vars.edges.restricted = vars.edges.value.filter(d => {
             var points = filter_data([
               d[vars.edges.source],
               d[vars.edges.target]

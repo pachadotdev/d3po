@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(a, b) {
+(() => {
+  module.exports = (a, b) => {
     var aHSL, bHSL;
     aHSL = d3.hsl(a);
     bHSL = d3.hsl(b);
@@ -11,4 +11,4 @@
       return a - b;
     }
   };
-}.call(this));
+}).call(this);

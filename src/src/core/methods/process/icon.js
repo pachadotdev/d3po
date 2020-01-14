@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var stylesheet;
 
   stylesheet = require('../../../client/css.js');
 
-  module.exports = function(value, vars, method) {
+  module.exports = (value, vars, method) => {
     if (
       value === false ||
       value.indexOf('fa-') < 0 ||
@@ -14,4 +14,4 @@
       return method.fallback;
     }
   };
-}.call(this));
+}).call(this);

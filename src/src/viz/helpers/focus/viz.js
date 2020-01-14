@@ -7,7 +7,7 @@ var ie = require('../../../client/ie.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates focus elements, if available
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   vars.g.edge_focus.selectAll('g').remove();
 
   vars.g.data_focus.selectAll('g').remove();
@@ -48,7 +48,7 @@ module.exports = function(vars) {
             ? d3.select(this).style('stroke-width')
             : vars.data.stroke.width * 2;
         })
-        .attr('marker-start', function(e) {
+        .attr('marker-start', e => {
           var direction = vars.edges.arrows.direction.value;
 
           var d;
@@ -62,7 +62,7 @@ module.exports = function(vars) {
             ? 'url(#d3po_edge_marker_focus' + d + ')'
             : 'none';
         })
-        .attr('marker-end', function(e) {
+        .attr('marker-end', e => {
           var direction = vars.edges.arrows.direction.value;
 
           var d;

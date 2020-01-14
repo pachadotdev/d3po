@@ -1,5 +1,5 @@
 // Sets a method's value
-(function() {
+(() => {
   var copy,
     d3selection,
     mergeObject,
@@ -28,7 +28,7 @@
 
   updateArray = require('../../array/update.js');
 
-  module.exports = function(vars, method, object, key, value) {
+  module.exports = (vars, method, object, key, value) => {
     var accepted,
       c,
       callback,
@@ -202,4 +202,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

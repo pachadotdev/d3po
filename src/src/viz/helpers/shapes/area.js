@@ -5,34 +5,22 @@ var fetchText = require('../../../core/fetch/text.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection, enter) {
+module.exports = (vars, selection, enter) => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // D3 area definition
   //----------------------------------------------------------------------------
   var area = d3.svg
     .area()
-    .x(function(d) {
-      return d.d3po.x;
-    })
-    .y0(function(d) {
-      return d.d3po.y0;
-    })
-    .y1(function(d) {
-      return d.d3po.y;
-    })
+    .x(d => d.d3po.x)
+    .y0(d => d.d3po.y0)
+    .y1(d => d.d3po.y)
     .interpolate(vars.shape.interpolate.value);
 
   var startArea = d3.svg
     .area()
-    .x(function(d) {
-      return d.d3po.x;
-    })
-    .y0(function(d) {
-      return d.d3po.y0;
-    })
-    .y1(function(d) {
-      return d.d3po.y0;
-    })
+    .x(d => d.d3po.x)
+    .y0(d => d.d3po.y0)
+    .y1(d => d.d3po.y0)
     .interpolate(vars.shape.interpolate.value);
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -41,9 +29,7 @@ module.exports = function(vars, selection, enter) {
   enter
     .append('path')
     .attr('class', 'd3po_data')
-    .attr('d', function(d) {
-      return startArea(d.values);
-    })
+    .attr('d', d => startArea(d.values))
     .call(shapeStyle, vars);
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -55,11 +41,9 @@ module.exports = function(vars, selection, enter) {
     'font-family': vars.labels.font.family.value
   };
 
-  selection.selectAll('path.d3po_data').data(function(d) {
+  selection.selectAll('path.d3po_data').data(d => {
     if (vars.labels.value && d.values.length > 1) {
-      var max = d3.max(d.values, function(v) {
-          return v.d3po.y0 - v.d3po.y;
-        }),
+      var max = d3.max(d.values, v => v.d3po.y0 - v.d3po.y),
         lr = false;
 
       if (max > vars.labels.font.size) {
@@ -67,7 +51,7 @@ module.exports = function(vars, selection, enter) {
           bottoms = [],
           names = fetchText(vars, d);
 
-        d.values.forEach(function(v) {
+        d.values.forEach(v => {
           tops.push([v.d3po.x, v.d3po.y]);
           bottoms.push([v.d3po.x, v.d3po.y0]);
         });
@@ -120,16 +104,12 @@ module.exports = function(vars, selection, enter) {
       .selectAll('path.d3po_data')
       .transition()
       .duration(vars.draw.timing)
-      .attr('d', function(d) {
-        return area(d.values);
-      })
+      .attr('d', d => area(d.values))
       .call(shapeStyle, vars);
   } else {
     selection
       .selectAll('path.d3po_data')
-      .attr('d', function(d) {
-        return area(d.values);
-      })
+      .attr('d', d => area(d.values))
       .call(shapeStyle, vars);
   }
 };

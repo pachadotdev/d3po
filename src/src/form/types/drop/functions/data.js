@@ -4,7 +4,7 @@ var stringFormat = require('../../../../string/format.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and populates the dropdown list of items.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.data.url && !vars.data.loaded) {
     var loadingObject = {};
     loadingObject[vars.text.value || vars.id.value] = vars.format.value(
@@ -22,7 +22,7 @@ module.exports = function(vars) {
         vars.id.nesting.length > 1 &&
         vars.depth.value < vars.id.nesting.length - 1
       ) {
-        vars.data.filtered = vars.data.filtered.filter(function(d) {
+        vars.data.filtered = vars.data.filtered.filter(d => {
           if ('endPoint' in d.d3po && d.d3po.endPoint === vars.depth.value) {
             d.d3po.icon = false;
           }
@@ -40,26 +40,22 @@ module.exports = function(vars) {
           vars.keywords.value
         ];
 
-      searchKeys = searchKeys.filter(function(t) {
-        return t;
-      });
-      searchWords = searchWords.filter(function(t) {
-        return t !== '';
-      });
+      searchKeys = searchKeys.filter(t => t);
+      searchWords = searchWords.filter(t => t !== '');
 
       var startMatches = [],
         exactMatches = [],
         softMatches = [],
         searchData = [];
 
-      vars.id.nesting.forEach(function(n) {
+      vars.id.nesting.forEach(n => {
         searchData = searchData.concat(vars.data.nested.all[n]);
       });
 
-      searchData.forEach(function(d) {
+      searchData.forEach(d => {
         var match = false;
 
-        searchKeys.forEach(function(key) {
+        searchKeys.forEach(key => {
           if (!match && key in d && typeof d[key] === 'string') {
             var text = d[key].toLowerCase();
 
@@ -95,7 +91,7 @@ module.exports = function(vars) {
 
       vars.data.filtered = d3.merge([startMatches, exactMatches, softMatches]);
 
-      vars.data.filtered.forEach(function(d, i) {
+      vars.data.filtered.forEach((d, i) => {
         d.d3po_order = i;
       });
 

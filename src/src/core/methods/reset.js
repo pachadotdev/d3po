@@ -1,10 +1,10 @@
 // Resets certain keys in global variables
-(function() {
+(() => {
   var reset, validObject;
 
   validObject = require('../../object/validate.js');
 
-  reset = function(obj, method) {
+  reset = (obj, method) => {
     var o;
     if (obj.changed) {
       obj.changed = false;
@@ -22,4 +22,4 @@
   };
 
   module.exports = reset;
-}.call(this));
+}).call(this);

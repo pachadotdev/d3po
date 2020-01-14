@@ -1,6 +1,6 @@
 // Gives X and Y offset based off angle and shape
-(function() {
-  module.exports = function(radians, distance, shape) {
+(() => {
+  module.exports = (radians, distance, shape) => {
     var adjacentLegLength, coords, diagonal, oppositeLegLength;
     coords = {
       x: 0,
@@ -62,4 +62,4 @@
     }
     return coords;
   };
-}.call(this));
+}).call(this);

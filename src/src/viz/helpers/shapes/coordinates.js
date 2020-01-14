@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var copy,
     distance,
     fetchText,
@@ -24,7 +24,7 @@
 
   labels = {};
 
-  module.exports = function(vars, selection, enter) {
+  module.exports = (vars, selection, enter) => {
     var projection, size_change;
     projection = d3.geo[vars.coords.projection.value]();
     if (projection.center) {
@@ -50,9 +50,7 @@
     }
     enter
       .append('path')
-      .attr('id', function(d) {
-        return d.id;
-      })
+      .attr('id', d => d.id)
       .attr('class', 'd3po_data')
       .attr('d', vars.path)
       .call(shapeStyle, vars);
@@ -76,7 +74,7 @@
       vars.zoom.bounds = null;
       vars.zoom.reset = true;
       vars.zoom.coords = {};
-      return selection.each(function(d) {
+      return selection.each(d => {
         var areaM,
           areas,
           b,
@@ -104,7 +102,7 @@
           areaM = 0;
           largest = copy(d);
           reduced = copy(d);
-          d.geometry.coordinates = d.geometry.coordinates.filter(function(c) {
+          d.geometry.coordinates = d.geometry.coordinates.filter(c => {
             var a;
             reduced.geometry.coordinates = [c];
             a = vars.path.area(reduced);
@@ -126,22 +124,21 @@
             reduced.geometry.coordinates = [c];
             distances.push(distance(vars.path.centroid(reduced), center));
           }
-          dist_values = distances.reduce(function(arr, dist, i) {
+          dist_values = distances.reduce((arr, dist, i) => {
             if (dist) {
               arr.push(areas[i] / dist);
             }
             return arr;
           }, []);
           dist_cutoff = d3.quantile(dist_values, vars.coords.threshold.value);
-          reduced.geometry.coordinates = d.geometry.coordinates.filter(function(
-            c,
-            i
-          ) {
-            var a, dist;
-            dist = distances[i];
-            a = areas[i];
-            return dist === 0 || a / dist >= dist_cutoff;
-          });
+          reduced.geometry.coordinates = d.geometry.coordinates.filter(
+            (c, i) => {
+              var a, dist;
+              dist = distances[i];
+              a = areas[i];
+              return dist === 0 || a / dist >= dist_cutoff;
+            }
+          );
           coords = largest.geometry.coordinates[0];
           if (coords && largest.geometry.type === 'MultiPolygon') {
             coords = coords[0];
@@ -207,9 +204,7 @@
       });
     } else if (!vars.focus.value.length) {
       vars.zoom.viewport = false;
-      return selection.each(function(d) {
-        return (d.d3po_label = labels[d.id]);
-      });
+      return selection.each(d => (d.d3po_label = labels[d.id]));
     }
   };
-}.call(this));
+}).call(this);

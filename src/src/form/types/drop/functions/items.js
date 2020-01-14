@@ -1,5 +1,5 @@
 // Populates item list based on filtered data
-(function() {
+(() => {
   var active, copy, form, print;
 
   active = require('./active.js');
@@ -10,7 +10,7 @@
 
   print = require('../../../../core/console/print.js');
 
-  module.exports = function(vars) {
+  module.exports = vars => {
     var deepest, large, order;
     if (vars.open.value) {
       if (vars.dev.value) {
@@ -32,25 +32,23 @@
       order.value = vars.search.term.length ? 'd3po_order' : vars.order.value;
       deepest = vars.depth.value === vars.id.nesting.length - 1;
       if (vars.focus.changed || vars.container.items.focus() === false) {
-        vars.container.items.focus(vars.focus.value, function(value) {
+        vars.container.items.focus(vars.focus.value, value => {
           var change, data, depth, solo;
-          data = vars.data.filtered.filter(function(f) {
-            return f[vars.id.value] === value;
-          })[0];
+          data = vars.data.filtered.filter(f => f[vars.id.value] === value)[0];
           if (
             vars.depth.value < vars.id.nesting.length - 1 &&
             vars.id.nesting[vars.depth.value + 1] in data
           ) {
             depth = vars.depth.value;
             solo = vars.id.solo.value;
-            vars.history.states.push(function() {
-              return vars.self
+            vars.history.states.push(() =>
+              vars.self
                 .depth(depth)
                 .id({
                   solo: solo
                 })
-                .draw();
-            });
+                .draw()
+            );
             vars.self
               .depth(vars.depth.value + 1)
               .id({
@@ -111,4 +109,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var fontTester;
 
   fontTester = require('../core/font/tester.js');
 
-  module.exports = function(words, style, opts) {
+  module.exports = (words, style, opts) => {
     var attr, getHeight, getWidth, sizes, spacing, tester, tspans;
     if (!opts) {
       opts = {};
@@ -27,7 +27,7 @@
       spacing = parseFloat(style['letter-spacing']);
       delete style['letter-spacing'];
     }
-    getWidth = function(elem) {
+    getWidth = elem => {
       var add;
       add = 0;
       if (spacing) {
@@ -35,11 +35,8 @@
       }
       return elem.getComputedTextLength() + add;
     };
-    getHeight = function(elem) {
-      return (
-        elem.parentNode.getBBox().height || elem.getBoundingClientRect().height
-      );
-    };
+    getHeight = elem =>
+      elem.parentNode.getBBox().height || elem.getBoundingClientRect().height;
     tspans
       .enter()
       .append('tspan')
@@ -76,4 +73,4 @@
     }
     return sizes;
   };
-}.call(this));
+}).call(this);

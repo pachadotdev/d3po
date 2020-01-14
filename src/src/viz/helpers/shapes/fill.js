@@ -5,7 +5,7 @@ var copy = require('../../../util/copy.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection) {
+module.exports = (vars, selection) => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // The position and size of each rectangle on enter and exit.
   //----------------------------------------------------------------------------
@@ -23,33 +23,33 @@ module.exports = function(vars, selection) {
   function update(nodes, mod) {
     if (!mod) mod = 0;
     nodes
-      .attr('x', function(d) {
+      .attr('x', d => {
         var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
         return -w / 2 - mod / 2;
       })
-      .attr('y', function(d) {
+      .attr('y', d => {
         var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
         return -h / 2 - mod / 2;
       })
-      .attr('width', function(d) {
+      .attr('width', d => {
         var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
         return w + mod;
       })
-      .attr('height', function(d) {
+      .attr('height', d => {
         var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
         return h + mod;
       })
-      .attr('rx', function(d) {
+      .attr('rx', d => {
         var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
         var rounded = ['circle'].indexOf(vars.shape.value) >= 0;
         return rounded ? (w + mod) / 2 : 0;
       })
-      .attr('ry', function(d) {
+      .attr('ry', d => {
         var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
         var rounded = ['circle'].indexOf(vars.shape.value) >= 0;
         return rounded ? (h + mod) / 2 : 0;
       })
-      .attr('shape-rendering', function() {
+      .attr('shape-rendering', () => {
         if (['square'].indexOf(vars.shape.value) >= 0) {
           return vars.shape.rendering.value;
         } else {

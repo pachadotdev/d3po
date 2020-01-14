@@ -5,7 +5,7 @@ var arraySort = require('../../array/sort.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Merges data underneath the size threshold
 //-------------------------------------------------------------------
-module.exports = function(vars, rawData, split) {
+module.exports = (vars, rawData, split) => {
   var threshold;
   if (vars.size.threshold.value === false) {
     threshold = 0;
@@ -32,26 +32,22 @@ module.exports = function(vars, rawData, split) {
     var nest = d3.nest();
 
     if (split) {
-      nest.key(function(d) {
-        return fetchValue(vars, d, split);
-      });
+      nest.key(d => fetchValue(vars, d, split));
     }
 
     nest
-      .rollup(function(leaves) {
+      .rollup(leaves => {
         var total = leaves.length;
         if (vars.aggs.value[vars.size.value]) {
           if (typeof vars.aggs.value[vars.size.value] == 'function') {
             total = vars.aggs.value[vars.size.value](leaves);
           } else if (typeof vars.aggs.value[vars.size.value] == 'string') {
-            total = d3[vars.aggs.value[vars.size.value]](leaves, function(l) {
-              return fetchValue(vars, l, vars.size.value);
-            });
+            total = d3[vars.aggs.value[vars.size.value]](leaves, l =>
+              fetchValue(vars, l, vars.size.value)
+            );
           }
         } else {
-          total = d3.sum(leaves, function(l) {
-            return fetchValue(vars, l, vars.size.value);
-          });
+          total = d3.sum(leaves, l => fetchValue(vars, l, vars.size.value));
         }
         var x = split ? fetchValue(vars, leaves[0], split) : 'all';
         largest[x] = total;
@@ -59,7 +55,7 @@ module.exports = function(vars, rawData, split) {
       })
       .entries(rawData);
 
-    rawData.forEach(function(d) {
+    rawData.forEach(d => {
       var id = fetchValue(vars, d, vars.id.value),
         val = fetchValue(vars, d, vars.size.value),
         x = split ? fetchValue(vars, d, split) : 'all',
@@ -76,7 +72,7 @@ module.exports = function(vars, rawData, split) {
       }
     });
 
-    var filteredData = rawData.filter(function(d) {
+    var filteredData = rawData.filter(d => {
       var id = fetchValue(vars, d, vars.id.value),
         allowed = largeEnough.indexOf(id) >= 0;
 
@@ -119,17 +115,15 @@ module.exports = function(vars, rawData, split) {
       }
       var merged = dataNest(vars, removed, levels);
 
-      merged.forEach(function(m) {
+      merged.forEach(m => {
         var parent = vars.id.nesting[vars.depth.value - 1];
         var p_id = fetchValue(vars, m, parent);
         var children = parent
-          ? removed.filter(function(r) {
-            return fetchValue(vars, r, parent) === p_id;
-          })
+          ? removed.filter(r => fetchValue(vars, r, parent) === p_id)
           : removed;
 
         if (children.length > 1) {
-          vars.id.nesting.forEach(function(d, i) {
+          vars.id.nesting.forEach((d, i) => {
             if (vars.depth.value == i) {
               var prev = m[d];
               if (typeof prev === 'string') {
@@ -185,9 +179,9 @@ module.exports = function(vars, rawData, split) {
             textLabel = textLabel.length
               ? textLabel[0].split(' < ')[0]
               : vars.format.value(vars.format.locale.value.ui.values, {
-                key: 'threshold',
-                vars: vars
-              });
+                  key: 'threshold',
+                  vars: vars
+                });
             if ((p_id, labelException.indexOf(p_id) < 0)) {
               textLabel +=
                 ' < ' +

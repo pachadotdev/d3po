@@ -15,7 +15,7 @@ var arraySort = require('../../../array/sort.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates correctly formatted tooltip for Apps
 //-------------------------------------------------------------------
-module.exports = function(params) {
+module.exports = params => {
   if (!('d3po' in params.data)) {
     params.data.d3po = {};
   }
@@ -39,17 +39,12 @@ module.exports = function(params) {
       length = 'long',
       footer = vars.footer.value;
 
-    arrow = false,
-    mouse = true,
-
-    vars.covered = true;
+    (arrow = false), (mouse = true), (vars.covered = true);
   } else {
-    var
-      align = params.anchor || vars.tooltip.anchor,
+    var align = params.anchor || vars.tooltip.anchor,
       zoom = zoomDirection(d, vars);
     fullscreen = false;
     length = params.length || 'short';
-
 
     var text = '';
     if (
@@ -81,13 +76,13 @@ module.exports = function(params) {
 
     footer = text.length
       ? vars.format.value(text, {
-        key: 'footer',
-        vars: vars
-      })
+          key: 'footer',
+          vars: vars
+        })
       : false;
   }
 
-  var x ,y, offset;
+  var x, y, offset;
   if ('x' in params) {
     x = params.x;
   } else if (vars.types[vars.type.value].tooltip === 'static') {
@@ -154,7 +149,7 @@ module.exports = function(params) {
 
       if (vars.size.value && validObject(nameList[0])) {
         var namesNoValues = [];
-        var namesWithValues = nameList.filter(function(n) {
+        var namesWithValues = nameList.filter(n => {
           var val = fetchValue(vars, n, vars.size.value);
           if (val !== null && (!('d3po' in n) || !n.d3po.merged)) {
             return true;
@@ -194,10 +189,10 @@ module.exports = function(params) {
           children[name] =
             value && !(value instanceof Array)
               ? vars.format.value(value, {
-                key: vars.size.value,
-                vars: vars,
-                data: obj
-              })
+                  key: vars.size.value,
+                  vars: vars,
+                  data: obj
+                })
               : '';
           var child = {};
           child[name] = children[name];
@@ -319,9 +314,9 @@ module.exports = function(params) {
       tooltip_data.length > 0 ||
       footer ||
       (!d.d3po_label && length == 'short' && title) ||
-        (d.d3po_label &&
-          (!('visible' in d.d3po_label) ||
-            ('visible' in d.d3po_label && d.d3po_label.visible === false)))
+      (d.d3po_label &&
+        (!('visible' in d.d3po_label) ||
+          ('visible' in d.d3po_label && d.d3po_label.visible === false)))
     ) {
       if (!title) {
         title = vars.format.value(id, {
@@ -334,8 +329,8 @@ module.exports = function(params) {
         'd3po' in d && 'merged' in d.d3po
           ? dataDepth - 1
           : 'depth' in params
-            ? params.depth
-            : dataDepth;
+          ? params.depth
+          : dataDepth;
 
       if (depth < 0) depth = 0;
 
@@ -422,7 +417,7 @@ module.exports = function(params) {
     ) {
       var tooltip_url = vars.tooltip.html.value.url;
       if (typeof tooltip_url === 'function') tooltip_url = tooltip_url(id);
-      d3.json(tooltip_url, function(data) {
+      d3.json(tooltip_url, data => {
         var html = vars.tooltip.html.value.callback
           ? vars.tooltip.html.value.callback(data)
           : data;

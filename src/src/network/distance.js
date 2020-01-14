@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(n1, n2) {
+(() => {
+  module.exports = (n1, n2) => {
     var xx, yy;
     if (!(n1 instanceof Array)) {
       n1 = [n1.x, n1.y];
@@ -11,4 +11,4 @@
     yy = Math.abs(n1[1] - n2[1]);
     return Math.sqrt(xx * xx + yy * yy);
   };
-}.call(this));
+}).call(this);

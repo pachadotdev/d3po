@@ -5,7 +5,7 @@ var dataNest = require('./nest.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Formats raw data by time and nesting
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var timerString;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -27,12 +27,10 @@ module.exports = function(vars) {
       vars
     );
 
-    vars.data.time.values.sort(function(a, b) {
-      return a - b;
-    });
+    vars.data.time.values.sort((a, b) => a - b);
 
     var step = [];
-    vars.data.time.values.forEach(function(y, i) {
+    vars.data.time.values.forEach((y, i) => {
       if (i !== 0) {
         var prev = vars.data.time.values[i - 1];
         step.push(y - prev);
@@ -58,13 +56,11 @@ module.exports = function(vars) {
 
     vars.data.time.periods = periods;
 
-    var getDiff = function(start, end, i) {
+    var getDiff = (start, end, i) => {
       if (!vars.data.time.stepDivider) {
         var arr = conversions.slice(0, i);
         if (arr.length) {
-          vars.data.time.stepDivider = arr.reduce(function(a, b) {
-            return a * b;
-          });
+          vars.data.time.stepDivider = arr.reduce((a, b) => a * b);
         } else {
           vars.data.time.stepDivider = 1;
         }
@@ -74,7 +70,7 @@ module.exports = function(vars) {
     };
 
     var total = vars.data.time.total;
-    periods.forEach(function(p, i) {
+    periods.forEach((p, i) => {
       var c = p === 'Date' ? 28 : conversions[i];
       if (
         !vars.data.time.stepType &&
@@ -97,7 +93,7 @@ module.exports = function(vars) {
       total = total / c;
     });
 
-    vars.data.time.values.forEach(function(y, i) {
+    vars.data.time.values.forEach((y, i) => {
       if (i !== 0) {
         var prev = vars.data.time.values[0];
         vars.data.time.dataSteps.push(
@@ -111,32 +107,18 @@ module.exports = function(vars) {
     var userFormat = vars.time.format.value,
       locale = vars.format.locale.value,
       functions = [
-        function(d) {
-          return d.getMilliseconds();
-        },
-        function(d) {
-          return d.getSeconds();
-        },
-        function(d) {
-          return d.getMinutes();
-        },
-        function(d) {
-          return d.getHours();
-        },
-        function(d) {
-          return d.getDate() != 1;
-        },
-        function(d) {
-          return d.getMonth();
-        },
-        function() {
-          return true;
-        }
+        d => d.getMilliseconds(),
+        d => d.getSeconds(),
+        d => d.getMinutes(),
+        d => d.getHours(),
+        d => d.getDate() != 1,
+        d => d.getMonth(),
+        () => true
       ];
 
     vars.data.time.functions = functions;
 
-    var getFormat = function(s, t, small) {
+    var getFormat = (s, t, small) => {
       if (s === t) {
         return small && locale.timeFormat[s + 'Small']
           ? locale.timeFormat[s + 'Small']
@@ -197,9 +179,7 @@ module.exports = function(vars) {
         .locale(locale.format)
         .timeFormat(getFormat(stepType, totalType));
       if (multi.length > 1) {
-        multi[multi.length - 1][1] = function() {
-          return true;
-        };
+        multi[multi.length - 1][1] = () => true;
         vars.data.time.multiFormat = d3
           .locale(locale.format)
           .timeFormat.multi(multi);
@@ -233,7 +213,7 @@ module.exports = function(vars) {
   vars.data.nested = {};
   if (vars.data.time.values.length === 0) {
     vars.data.nested.all = {};
-    vars.id.nesting.forEach(function(depth, i) {
+    vars.id.nesting.forEach((depth, i) => {
       var nestingDepth = vars.id.nesting.slice(0, i + 1);
       vars.data.nested.all[depth] = dataNest(
         vars,
@@ -242,19 +222,19 @@ module.exports = function(vars) {
       );
     });
   } else {
-    var timeData = vars.data.value.reduce(function(o, d) {
+    var timeData = vars.data.value.reduce((o, d) => {
       var ms = fetchValue(vars, d, vars.time.value).getTime();
       if (!(ms in o)) o[ms] = [];
       o[ms].push(d);
       return o;
     }, {});
 
-    vars.data.time.values.forEach(function(t) {
+    vars.data.time.values.forEach(t => {
       var ms = t.getTime();
 
       vars.data.nested[ms] = {};
 
-      vars.id.nesting.forEach(function(depth, i) {
+      vars.id.nesting.forEach((depth, i) => {
         var nestingDepth = vars.id.nesting.slice(0, i + 1);
         vars.data.nested[ms][depth] = dataNest(
           vars,

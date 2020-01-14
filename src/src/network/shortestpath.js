@@ -1,12 +1,12 @@
 // Finds the shortest paths in the graph
-(function() {
+(() => {
   var Heap, normalize;
 
   Heap = require('heap');
 
   normalize = require('./normalize.js');
 
-  module.exports = function(edges, source, options) {
+  module.exports = (edges, source, options) => {
     var K,
       a,
       alt,
@@ -47,21 +47,19 @@
       }
     }
     (source = options.source),
-    (target = options.target),
-    (directed = options.directed),
-    (distance = options.distance),
-    (nodeid = options.nodeid),
-    (startpoint = options.startpoint),
-    (endpoint = options.endpoint),
-    (K = options.K),
-    (nodes = options.nodes);
+      (target = options.target),
+      (directed = options.directed),
+      (distance = options.distance),
+      (nodeid = options.nodeid),
+      (startpoint = options.startpoint),
+      (endpoint = options.endpoint),
+      (K = options.K),
+      (nodes = options.nodes);
     for (id in nodes) {
       node = nodes[id];
       node.count = 0;
     }
-    heap = new Heap(function(a, b) {
-      return a.distance - b.distance;
-    });
+    heap = new Heap((a, b) => a.distance - b.distance);
     visited = {};
     if (target == null) {
       visited[source] = true;
@@ -111,7 +109,7 @@
         }
       }
     }
-    getPath = function(path) {
+    getPath = path => {
       edges = [];
       while (path.edge != null) {
         edges.push(path.edge);
@@ -130,4 +128,4 @@
     }
     return result;
   };
-}.call(this));
+}).call(this);

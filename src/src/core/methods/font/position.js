@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(position) {
+(() => {
+  module.exports = position => {
     var accepted;
     accepted = ['top', 'middle', 'bottom'];
     if (position === false) {
@@ -22,4 +22,4 @@
       value: position
     };
   };
-}.call(this));
+}).call(this);

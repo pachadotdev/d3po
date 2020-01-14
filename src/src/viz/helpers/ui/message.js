@@ -3,7 +3,7 @@ var textColor = require('../../../color/text.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates Centered Server Message
 //------------------------------------------------------------------------------
-module.exports = function(vars, message) {
+module.exports = (vars, message) => {
   message = vars.messages.value ? message : null;
 
   var size =
@@ -52,16 +52,14 @@ module.exports = function(vars, message) {
       .style('position', 'absolute')
       .style('background-color', bg)
       .style('text-align', 'center')
-      .style('left', function() {
-        return position == 'center' ? '50%' : '0px';
-      })
-      .style('width', function() {
-        return position == 'center' ? 'auto' : vars.width.value + 'px';
-      })
+      .style('left', () => (position == 'center' ? '50%' : '0px'))
+      .style('width', () =>
+        position == 'center' ? 'auto' : vars.width.value + 'px'
+      )
       .style('margin-left', function() {
         return position == 'center' ? -(this.offsetWidth / 2) + 'px' : '0px';
       })
-      .style('top', function() {
+      .style('top', () => {
         if (position == 'center') {
           return '50%';
         } else if (position == 'top') {
@@ -70,7 +68,7 @@ module.exports = function(vars, message) {
           return 'auto';
         }
       })
-      .style('bottom', function() {
+      .style('bottom', () => {
         if (position == 'bottom') {
           return '0px';
         } else {

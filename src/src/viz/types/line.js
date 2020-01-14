@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var fetchValue, graph, line, nest, sort, stack;
 
   fetchValue = require('../../core/fetch/value.js');
@@ -11,7 +11,7 @@
 
   stack = require('./helpers/graph/stack.js');
 
-  line = function(vars) {
+  line = vars => {
     var d, data, domains, i, j, len, len1, point, ref, xval, yval;
     graph(vars, {
       buffer: vars.axes.opposite,
@@ -54,13 +54,11 @@
     }
   };
 
-  line.filter = function(vars, data) {
-    return nest(vars, data);
-  };
+  line.filter = (vars, data) => nest(vars, data);
 
   line.requirements = ['data', 'x', 'y'];
 
-  line.setup = function(vars) {
+  line.setup = vars => {
     var axis;
     if (!vars.axes.discrete) {
       axis = vars.time.value === vars.y.value ? 'y' : 'x';
@@ -75,4 +73,4 @@
   line.tooltip = 'static';
 
   module.exports = line;
-}.call(this));
+}).call(this);

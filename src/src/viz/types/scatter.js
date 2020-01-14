@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var fetchValue, graph, scatter, sort, ticks;
 
   fetchValue = require('../../core/fetch/value.js');
@@ -9,7 +9,7 @@
 
   ticks = require('./helpers/graph/dataticks.js');
 
-  scatter = function(vars) {
+  scatter = vars => {
     var d, domains, i, len, ref;
     graph(vars, {
       buffer: 'size',
@@ -48,7 +48,7 @@
 
   scatter.scale = 1.1;
 
-  scatter.setup = function(vars) {
+  scatter.setup = vars => {
     if (vars.time.value && !vars.axes.discrete) {
       if (vars.time.value === vars.x.value) {
         vars.self.x({
@@ -68,4 +68,4 @@
   scatter.tooltip = 'static';
 
   module.exports = scatter;
-}.call(this));
+}).call(this);

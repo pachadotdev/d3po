@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(g) {
+(() => {
+  module.exports = g => {
     if (!g) {
       g = false;
     }
@@ -14,4 +14,4 @@
       value: []
     };
   };
-}.call(this));
+}).call(this);

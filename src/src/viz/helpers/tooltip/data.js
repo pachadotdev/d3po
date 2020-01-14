@@ -10,8 +10,8 @@ var copy = require('../../../util/copy.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates a data object for the Tooltip
 //------------------------------------------------------------------------------
-module.exports = function(vars, id, length, extras, children, depth) {
-  var other_length,extra_data, a;
+module.exports = (vars, id, length, extras, children, depth) => {
+  var other_length, extra_data, a;
   if (vars.small) {
     return [];
   }
@@ -102,7 +102,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
         h = tooltip_highlights.indexOf(key) >= 0;
 
       if (value instanceof Array) {
-        value.forEach(function(v) {
+        value.forEach(v => {
           vars.format.value(v, {
             key: key,
             vars: vars,
@@ -147,7 +147,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
 
   if (vars.id.nesting.length && depth < vars.id.nesting.length - 1) {
     a = copy(a);
-    vars.id.nesting.forEach(function(n, i) {
+    vars.id.nesting.forEach((n, i) => {
       if (i > depth && a[n]) delete a[n];
     });
   }
@@ -162,7 +162,6 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   if (vars.tooltip.value.long && typeof vars.tooltip.value.long == 'object') {
-
     for (group in vars.tooltip.value.long) {
       for (i = extras.length; i > 0; i--) {
         var e = extras[i - 1];
@@ -181,7 +180,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
   }
 
   for (group in a) {
-    a[group].forEach(function(t) {
+    a[group].forEach(t => {
       format_key(t, group);
     });
   }
@@ -190,7 +189,7 @@ module.exports = function(vars, id, length, extras, children, depth) {
     var title = vars.format.locale.value.ui.including,
       colors = children.d3po_colors;
 
-    children.values.forEach(function(child) {
+    children.values.forEach(child => {
       var name = d3.keys(child)[0];
       tooltip_data.push({
         group: vars.format.value(title),
@@ -218,10 +217,10 @@ module.exports = function(vars, id, length, extras, children, depth) {
     );
 
     if (connections.length) {
-      connections.forEach(function(conn) {
-        var c = vars.data.viz.filter(function(d) {
-          return d[vars.id.value] === conn[vars.id.value];
-        });
+      connections.forEach(conn => {
+        var c = vars.data.viz.filter(
+          d => d[vars.id.value] === conn[vars.id.value]
+        );
 
         c = c.length ? c[0] : conn;
 
@@ -242,9 +241,9 @@ module.exports = function(vars, id, length, extras, children, depth) {
           'top: 0px',
           prefix() + 'border-radius: ' + radius + 'px'
         ];
-        var node = '<div style=\'' + styles.join('; ') + ';\'></div>';
+        var node = "<div style='" + styles.join('; ') + ";'></div>";
 
-        var nodeClick = function() {
+        var nodeClick = () => {
           vars.self.focus([c[vars.id.value]]).draw();
         };
 
@@ -253,11 +252,11 @@ module.exports = function(vars, id, length, extras, children, depth) {
           highlight: false,
           link: nodeClick,
           name:
-            '<div id=\'d3potooltipfocuslink_' +
+            "<div id='d3potooltipfocuslink_" +
             c[vars.id.value] +
-            '\' class=\'d3po_tooltip_focus_link\' style=\'position:relative;padding-left:' +
+            "' class='d3po_tooltip_focus_link' style='position:relative;padding-left:" +
             size * 1.5 +
-            'px;\'>' +
+            "px;'>" +
             node +
             name +
             '</div>'

@@ -1,5 +1,5 @@
 // Get Key Types from Data
-(function() {
+(() => {
   var print,
     validObject,
     indexOf =
@@ -15,14 +15,14 @@
 
   validObject = require('../../object/validate.js');
 
-  module.exports = function(vars, type) {
+  module.exports = (vars, type) => {
     var get_keys, k, kk, lengthMatch, ref, ref1, timerString, v, vv;
     timerString = type + ' key analysis';
     if (vars.dev.value) {
       print.time(timerString);
     }
     vars[type].keys = {};
-    get_keys = function(arr) {
+    get_keys = arr => {
       var a, i, k, len, results, results1, v;
       if (arr instanceof Array) {
         results = [];
@@ -73,4 +73,4 @@
       return print.time(timerString);
     }
   };
-}.call(this));
+}).call(this);

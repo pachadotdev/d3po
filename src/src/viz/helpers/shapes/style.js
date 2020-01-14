@@ -1,5 +1,5 @@
 // Fill style for all shapes
-(function() {
+(() => {
   var color, ie, value;
 
   color = require('./color.js');
@@ -8,16 +8,16 @@
 
   value = require('../../../core/fetch/value.js');
 
-  module.exports = function(nodes, vars) {
-    return nodes
-      .attr('fill', function(d) {
+  module.exports = (nodes, vars) =>
+    nodes
+      .attr('fill', d => {
         if (d.d3po && d.d3po.spline) {
           return 'none';
         } else {
           return color(d, vars);
         }
       })
-      .style('stroke', function(d) {
+      .style('stroke', d => {
         var c;
         if (d.d3po && d.d3po.stroke) {
           return d.d3po.stroke;
@@ -26,7 +26,7 @@
           return d3.rgb(c).darker(0.6);
         }
       })
-      .style('stroke-width', function(d) {
+      .style('stroke-width', d => {
         var v;
         if (ie && vars.types[vars.type.value].zoom) {
           return 0;
@@ -44,5 +44,4 @@
       })
       .attr('opacity', vars.data.opacity)
       .attr('vector-effect', 'non-scaling-stroke');
-  };
-}.call(this));
+}).call(this);

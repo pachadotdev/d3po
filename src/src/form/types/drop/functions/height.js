@@ -2,7 +2,7 @@
 // Calculates the height and orientation of the dropdown list, based on
 // available screen space.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   var height = vars.height.secondary,
     button = vars.container.button
       .container()

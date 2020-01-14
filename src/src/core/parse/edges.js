@@ -4,7 +4,7 @@ var print = require('../console/print.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Cleans edges list and populates nodes list if needed
 //-------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) {
     var timerString = 'analyzing edges list';
     print.time(timerString);
@@ -20,8 +20,8 @@ module.exports = function(vars) {
     vars.nodes.changed = true;
   }
 
-  vars.edges.value.forEach(function(e) {
-    ['source', 'target'].forEach(function(dir) {
+  vars.edges.value.forEach(e => {
+    ['source', 'target'].forEach(dir => {
       var dirType = typeof e[vars.edges[dir]];
 
       if (dirType !== 'object') {
@@ -33,9 +33,9 @@ module.exports = function(vars) {
           e[vars.edges[dir]] = vars.nodes.value[e[vars.edges[dir]]];
         } else {
           if (createNodes && placed.indexOf(e[vars.edges[dir]]) >= 0) {
-            e[vars.edges[dir]] = vars.nodes.value.filter(function(n) {
-              return n[vars.id.value] === e[vars.edges[dir]];
-            })[0];
+            e[vars.edges[dir]] = vars.nodes.value.filter(
+              n => n[vars.id.value] === e[vars.edges[dir]]
+            )[0];
           } else {
             var obj = {};
             obj[vars.id.value] = e[vars.edges[dir]];
@@ -64,7 +64,7 @@ module.exports = function(vars) {
     }
   });
 
-  vars.edges.value = vars.edges.value.filter(function(e) {
+  vars.edges.value = vars.edges.value.filter(e => {
     var source = e[vars.edges.source][vars.id.value],
       target = e[vars.edges.target][vars.id.value];
 

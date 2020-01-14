@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var process;
 
   process = require('../../core/methods/process/data.js');
@@ -17,4 +17,4 @@
     process: process,
     value: false
   };
-}.call(this));
+}).call(this);

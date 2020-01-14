@@ -1,10 +1,10 @@
 // Formats numbers to look "pretty"
-(function() {
+(() => {
   var defaultLocale;
 
   defaultLocale = require('../core/locale/languages/en_US.js');
 
-  module.exports = function(number, opts) {
+  module.exports = (number, opts) => {
     var affixes,
       format,
       key,
@@ -94,4 +94,4 @@
       return ret;
     }
   };
-}.call(this));
+}).call(this);

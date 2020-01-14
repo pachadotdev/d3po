@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var labels, removeTooltip, transform;
 
   labels = require('./labels.js');
@@ -7,7 +7,7 @@
 
   transform = require('./transform.js');
 
-  module.exports = function(vars) {
+  module.exports = vars => {
     var delay,
       eventType,
       limits,
@@ -49,9 +49,7 @@
       if (eventType === 'wheel') {
         delay = vars.draw.timing ? 100 : 250;
         clearTimeout(vars.zoom.wheel);
-        vars.zoom.wheel = setTimeout(function() {
-          return labels(vars);
-        }, delay);
+        vars.zoom.wheel = setTimeout(() => labels(vars), delay);
       } else {
         labels(vars);
       }
@@ -62,4 +60,4 @@
       return transform(vars, 0);
     }
   };
-}.call(this));
+}).call(this);

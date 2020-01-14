@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var fetchColor, fetchText, fetchValue;
 
   fetchValue = require('./value.js');
@@ -7,7 +7,7 @@
 
   fetchText = require('./text.js');
 
-  module.exports = function(vars, d, keys, colors, depth) {
+  module.exports = (vars, d, keys, colors, depth) => {
     var agg, i, key, len, obj, value;
     if (!(keys instanceof Array)) {
       keys = [keys];
@@ -38,9 +38,7 @@
         ) {
           value = fetchValue(
             vars,
-            d.values.map(function(dd) {
-              return dd.d3po;
-            }),
+            d.values.map(dd => dd.d3po),
             key,
             depth
           );
@@ -69,4 +67,4 @@
     }
     return obj;
   };
-}.call(this));
+}).call(this);

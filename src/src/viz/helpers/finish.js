@@ -14,10 +14,10 @@ var mouse = require('./zoom/mouse.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Finalize Visualization
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   // Highlight focus nodes/edges
   if (vars.draw.first) {
-    setTimeout(function() {
+    setTimeout(() => {
       focusViz(vars);
     }, vars.draw.timing);
   } else {
@@ -85,7 +85,7 @@ module.exports = function(vars) {
       // if (vars.draw.timing || (!vars.types[vars.type.value].zoom && !vars.draw.timing)) {
       shapeLabels(vars, 'data');
       if (vars.edges.label && !vars.edges.path) {
-        setTimeout(function() {
+        setTimeout(() => {
           shapeLabels(vars, 'edges');
         }, vars.draw.timing + 200);
       }
@@ -96,7 +96,7 @@ module.exports = function(vars) {
       vars.zoom.value &&
       vars.draw.timing
     ) {
-      setTimeout(function() {
+      setTimeout(() => {
         labels(vars);
       }, vars.draw.timing);
     }
@@ -145,8 +145,8 @@ module.exports = function(vars) {
         : vars.focus.value.length &&
           vars.types[vars.type.value].zoom &&
           vars.zoom.value
-          ? 1 - vars.tooltip.curtain.opacity
-          : 1;
+        ? 1 - vars.tooltip.curtain.opacity
+        : 1;
 
     var timing = vars.draw.timing;
 
@@ -183,7 +183,7 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Unfreeze controls and apply zoom behavior, if applicable
   //----------------------------------------------------------------------------
-  setTimeout(function() {
+  setTimeout(() => {
     methodReset(vars);
 
     if (vars.types[vars.type.value].zoom && vars.zoom.value) {

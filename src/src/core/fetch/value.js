@@ -1,5 +1,5 @@
 // Finds a given variable by searching through the data and attrs
-(function() {
+(() => {
   var cacheInit,
     checkAttrs,
     checkData,
@@ -15,7 +15,7 @@
 
   uniqueValues = require('../../util/uniques.js');
 
-  find = function(vars, node, variable, depth) {
+  find = (vars, node, variable, depth) => {
     var cache, nodeObject, returned, val;
     nodeObject = validObject(node);
     if (typeof variable === 'function' && nodeObject) {
@@ -67,7 +67,7 @@
     return val;
   };
 
-  checkData = function(vars, node, variable, depth) {
+  checkData = (vars, node, variable, depth) => {
     var val;
     if (vars.data.viz instanceof Array && variable in vars.data.keys) {
       val = uniqueValues(filterArray(vars.data.viz, node, depth), variable);
@@ -79,7 +79,7 @@
     }
   };
 
-  checkAttrs = function(vars, node, variable, depth) {
+  checkAttrs = (vars, node, variable, depth) => {
     var attrList, n, val, vals;
     if ('attrs' in vars && vars.attrs.value && variable in vars.attrs.keys) {
       if (validObject(vars.attrs.value) && depth in vars.attrs.value) {
@@ -94,7 +94,7 @@
         }
       } else if (node instanceof Array) {
         attrList = [
-          (function() {
+          (() => {
             var j, len, results;
             if (n in attrList) {
               results = [];
@@ -119,19 +119,15 @@
     return null;
   };
 
-  filterArray = function(arr, node, depth) {
+  filterArray = (arr, node, depth) => {
     if (node instanceof Array) {
-      return arr.filter(function(d) {
-        return node.indexOf(d[depth]) >= 0;
-      });
+      return arr.filter(d => node.indexOf(d[depth]) >= 0);
     } else {
-      return arr.filter(function(d) {
-        return d[depth] === node;
-      });
+      return arr.filter(d => d[depth] === node);
     }
   };
 
-  cacheInit = function(node, cache, vars) {
+  cacheInit = (node, cache, vars) => {
     if (!('d3po' in node)) {
       node.d3po = {};
     }
@@ -148,7 +144,7 @@
     return node;
   };
 
-  valueParse = function(vars, node, depth, variable, val) {
+  valueParse = (vars, node, depth, variable, val) => {
     var cache, d, i, j, len, timeVar, v;
     if (val === null) {
       return val;
@@ -185,7 +181,7 @@
     return val;
   };
 
-  fetchArray = function(vars, arr, variable, depth) {
+  fetchArray = (vars, arr, variable, depth) => {
     var item, j, len, v, val;
     val = [];
     for (j = 0, len = arr.length; j < len; j++) {
@@ -207,7 +203,7 @@
     }
   };
 
-  fetch = function(vars, node, variable, depth) {
+  fetch = (vars, node, variable, depth) => {
     var nodeObject, val;
     if (!variable) {
       return null;
@@ -233,4 +229,4 @@
   };
 
   module.exports = fetch;
-}.call(this));
+}).call(this);

@@ -3,7 +3,7 @@ var form = require('../form.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates a set of Toggle Buttons
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (!('buttons' in vars.container)) {
     vars.container.buttons = form()
       .container(vars.container.ui)
@@ -15,9 +15,7 @@ module.exports = function(vars) {
 
   var toggles = vars.container.ui
     .selectAll('div.d3po_toggle')
-    .data(vars.data.viz, function(d) {
-      return d[vars.id.value];
-    });
+    .data(vars.data.viz, d => d[vars.id.value]);
 
   toggles.exit().remove();
 
@@ -55,7 +53,7 @@ module.exports = function(vars) {
 
     d.d3po.form
       .color(vars.color)
-      .focus(vars.focus.value, function(value) {
+      .focus(vars.focus.value, value => {
         if (value !== vars.focus.value) {
           vars.self.focus(value).draw();
         }
@@ -88,7 +86,7 @@ module.exports = function(vars) {
           .hover(this.value)
           .draw();
       })
-      .on('blur.' + vars.container.id, function() {
+      .on('blur.' + vars.container.id, () => {
         vars.self.hover(false).draw();
       });
   }

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     active: 'Visualizations#active',
     aggs: 'Visualizations#aggs',
@@ -60,4 +60,4 @@
     y: 'Visualizations#y',
     zoom: 'Visualizations#zoom'
   };
-}.call(this));
+}).call(this);

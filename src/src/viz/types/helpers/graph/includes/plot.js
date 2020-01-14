@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var buckets,
     buffer,
     createAxis,
@@ -22,7 +22,7 @@
 
   timeDetect = require('../../../../../core/data/time.js');
 
-  module.exports = function(vars, opts) {
+  module.exports = (vars, opts) => {
     var axes,
       axis,
       axisStyle,
@@ -62,7 +62,7 @@
           if (vars[axis].value === vars.time.value) {
             ticks = vars.time.solo.value;
             if (ticks.length) {
-              ticks = ticks.map(function(d) {
+              ticks = ticks.map(d => {
                 if (d.constructor !== Date) {
                   d = d + '';
                   if (d.length === 4 && parseInt(d) + '' === d) {
@@ -94,11 +94,9 @@
               ticks = vars[axis.slice(0, 1)].scale.ticks;
               vars[axis].ticks.values = otherScale
                 .ticks(ticks)
-                .map(function(t) {
-                  return parseFloat(
-                    d3.format('.5f')(scale.invert(otherScale(t)))
-                  );
-                });
+                .map(t =>
+                  parseFloat(d3.format('.5f')(scale.invert(otherScale(t))))
+                );
             } else {
               vars[axis].ticks.values = vars[axis].scale.viz.ticks(
                 vars[axis].scale.ticks
@@ -158,13 +156,12 @@
           vars[axis].ticks.visible = vars[axis].ticks.labels.value;
         } else if (vars[axis].scale.value === 'log') {
           ticks = vars[axis].ticks.values;
-          tens = ticks.filter(function(t) {
-            return (
+          tens = ticks.filter(
+            t =>
               Math.abs(t)
                 .toString()
                 .charAt(0) === '1'
-            );
-          });
+          );
           if (tens.length < 3) {
             vars[axis].ticks.visible = ticks;
           } else {
@@ -174,7 +171,7 @@
           vars[axis].ticks.visible = vars[axis].ticks.values;
         }
         if (vars[axis].value === vars.time.value) {
-          vars[axis].ticks.visible = vars[axis].ticks.visible.map(function(d) {
+          vars[axis].ticks.visible = vars[axis].ticks.visible.map(d => {
             if (d.constructor === Number && ('' + d).length > 4) {
               return d;
             }
@@ -206,7 +203,7 @@
     }
   };
 
-  labelPadding = function(vars) {
+  labelPadding = vars => {
     var axis,
       j,
       k,
@@ -259,41 +256,35 @@
         };
         yValues = vars[axis].ticks.visible;
         if (vars[axis].scale.value === 'log') {
-          yText = yValues.map(function(d) {
-            return formatPower(d);
-          });
+          yText = yValues.map(d => formatPower(d));
         } else if (vars[axis].scale.value === 'share') {
-          yText = yValues.map(function(d) {
-            return vars.format.value(d * 100, {
+          yText = yValues.map(d =>
+            vars.format.value(d * 100, {
               key: 'share',
               vars: vars,
               output: axis
-            });
-          });
+            })
+          );
         } else if (vars[axis].value === vars.time.value) {
-          yText = yValues.map(function(d) {
-            return vars[axis].ticks.format(new Date(d));
-          });
+          yText = yValues.map(d => vars[axis].ticks.format(new Date(d)));
         } else {
           if (typeof yValues[0] === 'string') {
-            yValues = vars[axis].scale.viz.domain().filter(function(d) {
-              return d.indexOf('d3po_buffer_') !== 0;
-            });
+            yValues = vars[axis].scale.viz
+              .domain()
+              .filter(d => d.indexOf('d3po_buffer_') !== 0);
           }
-          yText = yValues.map(function(d) {
-            return vars.format.value(d, {
+          yText = yValues.map(d =>
+            vars.format.value(d, {
               key: vars[axis].value,
               vars: vars,
               labels: vars[axis].affixes.value,
               output: axis
-            });
-          });
+            })
+          );
         }
         if (vars[axis].ticks.labels.value) {
           vars[axis].ticks.hidden = false;
-          yAxisWidth = d3.max(fontSizes(yText, yAttrs), function(d) {
-            return d.width;
-          });
+          yAxisWidth = d3.max(fontSizes(yText, yAttrs), d => d.width);
           if (yAxisWidth) {
             yAxisWidth = Math.ceil(yAxisWidth + vars.labels.padding);
             vars.axes.margin.viz[margin] += yAxisWidth;
@@ -341,43 +332,35 @@
           };
           xValues = vars[axis].ticks.visible;
           if (vars[axis].scale.value === 'log') {
-            xText = xValues.map(function(d) {
-              return formatPower(d);
-            });
+            xText = xValues.map(d => formatPower(d));
           } else if (vars[axis].scale.value === 'share') {
-            xText = xValues.map(function(d) {
-              return vars.format.value(d * 100, {
+            xText = xValues.map(d =>
+              vars.format.value(d * 100, {
                 key: 'share',
                 vars: vars,
                 output: axis
-              });
-            });
+              })
+            );
           } else if (vars[axis].value === vars.time.value) {
-            xText = xValues.map(function(d) {
-              return vars[axis].ticks.format(new Date(d));
-            });
+            xText = xValues.map(d => vars[axis].ticks.format(new Date(d)));
           } else {
             if (typeof xValues[0] === 'string') {
-              xValues = vars[axis].scale.viz.domain().filter(function(d) {
-                return d.indexOf('d3po_buffer_') !== 0;
-              });
+              xValues = vars[axis].scale.viz
+                .domain()
+                .filter(d => d.indexOf('d3po_buffer_') !== 0);
             }
-            xText = xValues.map(function(d) {
-              return vars.format.value(d, {
+            xText = xValues.map(d =>
+              vars.format.value(d, {
                 key: vars[axis].value,
                 vars: vars,
                 labels: vars[axis].affixes.value,
                 output: axis
-              });
-            });
+              })
+            );
           }
           xSizes = fontSizes(xText, xAttrs);
-          xAxisWidth = d3.max(xSizes, function(d) {
-            return d.width;
-          });
-          xAxisHeight = d3.max(xSizes, function(d) {
-            return d.height;
-          });
+          xAxisWidth = d3.max(xSizes, d => d.width);
+          xAxisHeight = d3.max(xSizes, d => d.height);
           if (xValues.length === 1) {
             xMaxWidth = vars.axes.width;
           } else {
@@ -397,12 +380,8 @@
                   .draw();
               }
             });
-            xAxisWidth = d3.max(xSizes, function(d) {
-              return d.width;
-            });
-            xAxisHeight = d3.max(xSizes, function(d) {
-              return d.height;
-            });
+            xAxisWidth = d3.max(xSizes, d => d.width);
+            xAxisHeight = d3.max(xSizes, d => d.height);
           } else {
             vars[axis].ticks.wrap = false;
           }
@@ -419,12 +398,8 @@
                   .draw();
               }
             });
-            xAxisHeight = d3.max(xSizes, function(d) {
-              return d.width;
-            });
-            xAxisWidth = d3.max(xSizes, function(d) {
-              return d.height;
-            });
+            xAxisHeight = d3.max(xSizes, d => d.width);
+            xAxisWidth = d3.max(xSizes, d => d.height);
             vars[axis].ticks.rotate = -90;
           } else {
             xAxisWidth = 0;
@@ -486,15 +461,15 @@
     }
   };
 
-  createAxis = function(vars, axis) {
-    return d3.svg
+  createAxis = (vars, axis) =>
+    d3.svg
       .axis()
       .tickSize(vars[axis].ticks.size)
       .tickPadding(5)
       .orient(vars[axis].orient.value)
       .scale(vars[axis].scale.viz)
       .tickValues(vars[axis].ticks.values)
-      .tickFormat(function(d) {
+      .tickFormat(d => {
         var c, scale;
         if (vars[axis].ticks.hidden) {
           return null;
@@ -525,11 +500,10 @@
           return null;
         }
       });
-  };
 
   superscript = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 
-  formatPower = function(d) {
+  formatPower = d => {
     var n, p, t;
     p = Math.round(Math.log(Math.abs(d)) / Math.LN10);
     t = Math.abs(d)
@@ -540,9 +514,7 @@
       ' ' +
       (p + '')
         .split('')
-        .map(function(c) {
-          return superscript[c];
-        })
+        .map(c => superscript[c])
         .join('');
     if (t !== '1') {
       n = t + ' x ' + n;
@@ -553,4 +525,4 @@
       return n;
     }
   };
-}.call(this));
+}).call(this);

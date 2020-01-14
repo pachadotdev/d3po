@@ -3,32 +3,28 @@ var smallestGap = require('../../network/smallestgap.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Network
 //------------------------------------------------------------------------------
-var network = function(vars) {
+var network = vars => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Use filtered lists if they are available
   //----------------------------------------------------------------------------
   var nodes = vars.nodes.restricted || vars.nodes.value,
     edges = vars.edges.restricted || vars.edges.value || [];
 
-  var x_range = d3.extent(nodes, function(n) {
-      return n.x;
-    }),
-    y_range = d3.extent(nodes, function(n) {
-      return n.y;
-    });
+  var x_range = d3.extent(nodes, n => n.x),
+    y_range = d3.extent(nodes, n => n.y);
 
   var val_range = [1, 1];
   if (typeof vars.size.value === 'number') {
     val_range = [vars.size.value, vars.size.value];
   } else if (vars.size.value) {
-    val_range = d3.extent(nodes, function(d) {
+    val_range = d3.extent(nodes, d => {
       var val = fetchValue(vars, d, vars.size.value);
       return val === 0 ? null : val;
     });
   }
   if (typeof val_range[0] == 'undefined') val_range = [1, 1];
 
-  var max_size ,min_size ;
+  var max_size, min_size;
   if (typeof vars.size.value === 'number') {
     max_size = vars.size.value;
     min_size = vars.size.value;
@@ -85,10 +81,8 @@ var network = function(vars) {
   //----------------------------------------------------------------------------
   var data = [],
     lookup = {};
-  nodes.forEach(function(n) {
-    var d = vars.data.viz.filter(function(a) {
-      return a[vars.id.value] == n[vars.id.value];
-    })[0];
+  nodes.forEach(n => {
+    var d = vars.data.viz.filter(a => a[vars.id.value] == n[vars.id.value])[0];
 
     var obj = d || {};
 
@@ -108,11 +102,9 @@ var network = function(vars) {
     data.push(obj);
   });
 
-  data.sort(function(a, b) {
-    return b.d3po.r - a.d3po.r;
-  });
+  data.sort((a, b) => b.d3po.r - a.d3po.r);
 
-  edges.forEach(function(l) {
+  edges.forEach(l => {
     if (l.d3po) {
       delete l.d3po.spline;
     }

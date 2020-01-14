@@ -2,12 +2,12 @@
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
 
-(function() {
+(() => {
   var normalize;
 
   normalize = require('./normalize.js');
 
-  module.exports = function(edges, options) {
+  module.exports = (edges, options) => {
     var a,
       b,
       cid,
@@ -149,7 +149,7 @@
       delete linksMap[maxa];
       iter++;
     }
-    commSizes = (function() {
+    commSizes = (() => {
       var results;
       results = [];
       for (cid in communities) {
@@ -158,10 +158,8 @@
       }
       return results;
     })();
-    commSizes.sort(function(a, b) {
-      return b[1] - a[1];
-    });
-    result = (function() {
+    commSizes.sort((a, b) => b[1] - a[1]);
+    result = (() => {
       var l, len2, results;
       results = [];
       for (l = 0, len2 = commSizes.length; l < len2; l++) {
@@ -172,4 +170,4 @@
     })();
     return [result, events];
   };
-}.call(this));
+}).call(this);

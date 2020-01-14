@@ -7,7 +7,7 @@ var items = require('./items.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Redraws only the drop down list.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If the menu is open, set the container element's z-index to '9999'.
   //----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ module.exports = function(vars) {
   } else {
     vars.container.ui
       .style('margin', vars.ui.margin.css)
-      .style('z-index', function() {
+      .style('z-index', () => {
         if (vars.open.value) {
           return 9999;
         } else {
@@ -66,17 +66,17 @@ module.exports = function(vars) {
   function position(elem) {
     var flipped = vars.open.flipped.value;
     elem
-      .style('top', function() {
-        return flipped ? 'auto' : vars.margin.top - vars.ui.border + 'px';
-      })
-      .style('bottom', function() {
-        return flipped ? vars.margin.top + vars.ui.border + 'px' : 'auto';
-      });
+      .style('top', () =>
+        flipped ? 'auto' : vars.margin.top - vars.ui.border + 'px'
+      )
+      .style('bottom', () =>
+        flipped ? vars.margin.top + vars.ui.border + 'px' : 'auto'
+      );
   }
 
   function update(elem) {
     elem
-      .style('left', function() {
+      .style('left', () => {
         if (vars.font.align.value === 'left') {
           return vars.margin.left + 'px';
         } else if (vars.font.align.value === 'center') {
@@ -89,15 +89,13 @@ module.exports = function(vars) {
           return 'auto';
         }
       })
-      .style('right', function() {
-        return vars.font.align.value === 'right' ? '0px' : 'auto';
-      })
+      .style('right', () =>
+        vars.font.align.value === 'right' ? '0px' : 'auto'
+      )
       .style('height', vars.container.listHeight + 'px')
       .style('padding', vars.ui.border + 'px')
       .style('background-color', vars.ui.color.secondary.value)
-      .style('z-index', function() {
-        return vars.open.value ? '9999' : '-1';
-      })
+      .style('z-index', () => (vars.open.value ? '9999' : '-1'))
       .style('width', vars.width.secondary - vars.ui.border * 2 + 'px')
       .style('opacity', vars.open.value ? 1 : 0)
       .call(position);

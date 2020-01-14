@@ -1,5 +1,5 @@
-(function() {
-  module.exports = function(rendering) {
+(() => {
+  module.exports = rendering => {
     var accepted;
     accepted = ['auto', 'optimizeSpeed', 'crispEdges', 'geometricPrecision'];
     if (!(accepted.indexOf(rendering) >= 0)) {
@@ -10,4 +10,4 @@
       value: rendering
     };
   };
-}.call(this));
+}).call(this);

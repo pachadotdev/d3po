@@ -1,12 +1,12 @@
 // Load Data using JSON
-(function() {
+(() => {
   var print, validObject;
 
   print = require('../console/print.js');
 
   validObject = require('../../object/validate.js');
 
-  module.exports = function(vars, key, next) {
+  module.exports = (vars, key, next) => {
     var consoleMessage, fileType, parser, url;
     consoleMessage = vars.dev.value;
     if (consoleMessage) {
@@ -38,7 +38,7 @@
     } else {
       parser = d3[fileType];
     }
-    return parser(url, function(error, data) {
+    return parser(url, (error, data) => {
       var k, ret;
       if (!error && data) {
         if (typeof vars[key].callback === 'function') {
@@ -58,7 +58,7 @@
           vars[key].value = data;
         }
         if (['json'].indexOf(fileType) < 0) {
-          vars[key].value.forEach(function(d) {
+          vars[key].value.forEach(d => {
             var results;
             results = [];
             for (k in d) {
@@ -92,4 +92,4 @@
       return next();
     });
   };
-}.call(this));
+}).call(this);

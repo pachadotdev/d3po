@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean],
     click: {
@@ -19,4 +19,4 @@
     },
     value: true
   };
-}.call(this));
+}).call(this);

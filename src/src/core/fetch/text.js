@@ -5,7 +5,7 @@ var fetchValue = require('./value.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Get array of available text values
 //------------------------------------------------------------------------------
-module.exports = function(vars, obj, depth) {
+module.exports = (vars, obj, depth) => {
   if (typeof depth !== 'number') depth = vars.depth.value;
 
   var key = vars.id.nesting[depth],
@@ -47,30 +47,27 @@ module.exports = function(vars, obj, depth) {
       obj = [obj];
     }
 
-    textKeys.forEach(function(t) {
+    textKeys.forEach(t => {
       var name = uniques(obj, t, fetchValue, vars, key);
 
       if (name.length) {
         if (name.length > 1) {
-          name = name.filter(function(n) {
-            return (
+          name = name.filter(
+            n =>
               n instanceof Array ||
               (typeof n === 'string' && n.indexOf(' < ') < 0)
-            );
-          });
+          );
         }
-        name = name.map(function(n) {
+        name = name.map(n => {
           if (n instanceof Array) {
-            n = n.filter(function(nn) {
-              return nn;
-            });
-            return n.map(function(nn) {
-              return vars.format.value(nn.toString(), {
+            n = n.filter(nn => nn);
+            return n.map(nn =>
+              vars.format.value(nn.toString(), {
                 vars: vars,
                 data: formatObj,
                 key: t
-              });
-            });
+              })
+            );
           } else if (n) {
             return vars.format.value(n.toString(), {
               vars: vars,

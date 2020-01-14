@@ -1,5 +1,5 @@
 // Returns the correct fill color for a node
-(function() {
+(() => {
   var fetchColor, lighter, segments;
 
   fetchColor = require('../../../core/fetch/color.js');
@@ -8,7 +8,7 @@
 
   segments = require('./segments.js');
 
-  module.exports = function(d, vars, stroke) {
+  module.exports = (d, vars, stroke) => {
     var active, shape, temp, total;
     shape = d.d3po.shape || vars.shape.value;
     if (vars.shape.value === 'line' && shape !== 'circle') {
@@ -44,4 +44,4 @@
       return lighter(fetchColor(vars, d), 0.75);
     }
   };
-}.call(this));
+}).call(this);

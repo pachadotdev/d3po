@@ -1,7 +1,7 @@
 // Assigns behavior to the user's keyboard for navigation
-(function() {
-  module.exports = function(vars) {
-    return d3.select(window).on('keydown.' + vars.container.id, function() {
+(() => {
+  module.exports = vars =>
+    d3.select(window).on('keydown.' + vars.container.id, () => {
       var d,
         data,
         depth,
@@ -67,23 +67,22 @@
             .draw();
         } else if (key === 13) {
           if (typeof vars.hover.value !== 'boolean') {
-            data = vars.data.filtered.filter(function(f) {
-              return f[vars.id.value] === vars.hover.value;
-            })[0];
+            data = vars.data.filtered.filter(
+              f => f[vars.id.value] === vars.hover.value
+            )[0];
             depth = vars.depth.value;
             if (
               depth < vars.id.nesting.length - 1 &&
               vars.id.nesting[depth + 1] in data
             ) {
               solo = vars.id.solo.value;
-              hist = function() {
-                return vars.self
+              hist = () =>
+                vars.self
                   .depth(depth)
                   .id({
                     solo: solo
                   })
                   .draw();
-              };
               vars.history.states.push(hist);
               return vars.self
                 .depth(vars.depth.value + 1)
@@ -115,5 +114,4 @@
         }
       }
     });
-  };
-}.call(this));
+}).call(this);

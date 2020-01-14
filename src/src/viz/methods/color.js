@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var filter, scale;
 
   filter = require('../../core/methods/filter.js');
@@ -44,4 +44,4 @@
     secondary: '#e5b3bb',
     value: false
   };
-}.call(this));
+}).call(this);

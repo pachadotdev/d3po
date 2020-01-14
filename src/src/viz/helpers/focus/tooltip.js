@@ -1,5 +1,5 @@
 // Creates focus tooltip, if applicable
-(function() {
+(() => {
   var createTooltip, fetchValue, print, removeTooltip;
 
   createTooltip = require('../tooltip/create.js');
@@ -10,7 +10,7 @@
 
   removeTooltip = require('../../../tooltip/remove.js');
 
-  module.exports = function(vars) {
+  module.exports = vars => {
     var data, focus, offset;
     focus = vars.focus;
     if (
@@ -23,9 +23,9 @@
       if (vars.dev.value) {
         print.time('drawing focus tooltip');
       }
-      data = vars.data.pool.filter(function(d) {
-        return fetchValue(vars, d, vars.id.value) === focus.value[0];
-      });
+      data = vars.data.pool.filter(
+        d => fetchValue(vars, d, vars.id.value) === focus.value[0]
+      );
       if (data.length >= 1) {
         data = data[0];
       } else {
@@ -56,4 +56,4 @@
       removeTooltip('visualization_focus');
     }
   };
-}.call(this));
+}).call(this);

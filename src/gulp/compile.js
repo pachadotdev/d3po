@@ -1,5 +1,15 @@
-(function() {
-  var browserify, chmod, error, gulp, mergeStream, notify, rename, source, streamify, timer, uglify;
+((() => {
+  var browserify;
+  var chmod;
+  var error;
+  var gulp;
+  var mergeStream;
+  var notify;
+  var rename;
+  var source;
+  var streamify;
+  var timer;
+  var uglify;
 
   browserify = require("browserify");
 
@@ -23,8 +33,9 @@
 
   chmod = require("gulp-chmod");
 
-  gulp.task("compile", function() {
-    var full, normal;
+  gulp.task("compile", () => {
+    var full;
+    var normal;
     normal = browserify(["./src/init.js"]).bundle().on("error", notify.onError(error)).pipe(source("d3po.js")).pipe(chmod(0o644)).pipe(gulp.dest("./")).pipe(rename("d3po.min.js")).pipe(streamify(uglify())).pipe(chmod(0o644)).pipe(gulp.dest("./")).on("error", notify.onError(error));
     full = browserify(["./src/libs.js", "./src/init.js"]).bundle().on("error", notify.onError(error)).pipe(source("d3po.full.js")).pipe(chmod(0o644)).pipe(gulp.dest("./")).pipe(rename("d3po.full.min.js")).pipe(streamify(uglify())).pipe(chmod(0o644)).pipe(gulp.dest("./")).pipe(timer("Total Build Time")).pipe(notify({
       title: "d3po",
@@ -32,5 +43,4 @@
     })).on("error", notify.onError(error));
     return mergeStream(normal, full);
   });
-
-}).call(this);
+})).call(this);

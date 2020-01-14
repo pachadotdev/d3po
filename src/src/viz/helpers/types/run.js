@@ -1,9 +1,9 @@
-(function() {
+(() => {
   var print;
 
   print = require('../../../core/console/print.js');
 
-  module.exports = function(vars) {
+  module.exports = vars => {
     var app,
       d,
       dataRequired,
@@ -58,4 +58,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

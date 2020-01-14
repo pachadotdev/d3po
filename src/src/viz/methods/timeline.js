@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean],
     align: 'middle',
@@ -47,4 +47,4 @@
     },
     value: true
   };
-}.call(this));
+}).call(this);

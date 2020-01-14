@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var filter;
 
   filter = require('../../core/methods/filter.js');
@@ -13,4 +13,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

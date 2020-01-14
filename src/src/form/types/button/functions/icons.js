@@ -1,7 +1,7 @@
 var prefix = require('../../../../client/prefix.js'),
   rtl = require('../../../../client/rtl.js');
 
-module.exports = function(elem, vars) {
+module.exports = (elem, vars) => {
   var reversed =
     (vars.font.align.value === 'right' && !rtl) ||
     (rtl && vars.font.align.value === 'right');
@@ -26,27 +26,23 @@ module.exports = function(elem, vars) {
     var items = d3
       .select(this)
       .selectAll('div.d3po_button_element')
-      .data(children, function(c) {
-        return c;
-      });
+      .data(children, c => c);
 
     items
       .enter()
       .append('div')
-      .style('display', function(c) {
-        return c === 'label' ? 'block' : 'absolute';
-      });
+      .style('display', c => (c === 'label' ? 'block' : 'absolute'));
 
     items
       .order()
-      .attr('class', function(c) {
+      .attr('class', c => {
         var extra = '';
         if (c === 'selected' && iconGraphic.indexOf('fa-') === 0) {
           extra = ' fa ' + iconGraphic;
         }
         return 'd3po_button_element d3po_button_' + c + extra;
       })
-      .html(function(c) {
+      .html(c => {
         if (c === 'label') {
           var k =
             vars.text.value &&
@@ -60,26 +56,24 @@ module.exports = function(elem, vars) {
           ? iconGraphic
           : '';
       })
-      .style('background-image', function(c) {
+      .style('background-image', c => {
         if (c === 'icon') {
-          return 'url(\'' + d[vars.icon.value] + '\')';
+          return "url('" + d[vars.icon.value] + "')";
         }
         return 'none';
       })
-      .style('background-color', function(c) {
+      .style('background-color', c => {
         if (c === 'icon' && d.style === 'knockout') {
           return d[vars.color.value] || vars.ui.color.primary.value;
         }
         return 'transparent';
       })
       .style('background-size', '100%')
-      .style('text-align', function(c) {
-        return c === 'label' ? vars.font.align.value : 'center';
-      })
-      .style('position', function(c) {
-        return c == 'label' ? 'static' : 'absolute';
-      })
-      .style('width', function(c) {
+      .style('text-align', c =>
+        c === 'label' ? vars.font.align.value : 'center'
+      )
+      .style('position', c => (c == 'label' ? 'static' : 'absolute'))
+      .style('width', c => {
         if (c === 'label') {
           return 'auto';
         }
@@ -94,7 +88,7 @@ module.exports = function(elem, vars) {
         }
         return buffer + 'px';
       })
-      .style('height', function(c) {
+      .style('height', c => {
         if (c === 'icon') {
           return buffer + 'px';
         }
@@ -114,33 +108,29 @@ module.exports = function(elem, vars) {
         }
         return -h / 2 + 'px';
       })
-      .style('top', function(c) {
-        return c === 'label' ? 'auto' : '50%';
-      })
-      .style('left', function(c) {
+      .style('top', c => (c === 'label' ? 'auto' : '50%'))
+      .style('left', c => {
         if ((c === 'icon' && !reversed) || (c === 'selected' && reversed)) {
           return vars.ui.padding.left + 'px';
         }
         return 'auto';
       })
-      .style('right', function(c) {
+      .style('right', c => {
         if ((c === 'icon' && reversed) || (c === 'selected' && !reversed)) {
           return vars.ui.padding.right + 'px';
         }
         return 'auto';
       })
-      .style(prefix() + 'transition', function(c) {
-        return c === 'selected' ? vars.draw.timing / 1000 + 's' : 'none';
-      })
-      .style(prefix() + 'transform', function(c) {
+      .style(prefix() + 'transition', c =>
+        c === 'selected' ? vars.draw.timing / 1000 + 's' : 'none'
+      )
+      .style(prefix() + 'transform', c => {
         var degree = c === 'selected' ? vars.icon.select.rotate : 'none';
         return typeof degree === 'string'
           ? degree
           : 'rotate(' + degree + 'deg)';
       })
-      .style('opacity', function(c) {
-        return c === 'selected' ? vars.icon.select.opacity : 1;
-      });
+      .style('opacity', c => (c === 'selected' ? vars.icon.select.opacity : 1));
 
     items.exit().remove();
 

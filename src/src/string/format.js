@@ -8,7 +8,7 @@ module.exports = function() {
   str.unkeyed_index = 0;
   return str.replace(
     /\{(\w*)\}/g,
-    function(match, key) {
+    ((match, key) => {
       if (key === '') {
         key = str.unkeyed_index;
         str.unkeyed_index++;
@@ -26,6 +26,6 @@ module.exports = function() {
         }
         return match;
       }
-    }.bind(str)
+    }).bind(str)
   );
 };

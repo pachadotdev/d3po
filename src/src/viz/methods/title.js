@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var decoration, family, stringStrip, transform;
 
   decoration = require('../../core/methods/font/decoration.js');
@@ -70,4 +70,4 @@
     width: false,
     value: false
   };
-}.call(this));
+}).call(this);

@@ -5,7 +5,7 @@ var events = require('../../../client/pointer.js'),
   touchEvent = require('../zoom/propagation.js');
 
 // Enter SVG Elements
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) print.time('creating SVG elements');
 
   // Enter SVG

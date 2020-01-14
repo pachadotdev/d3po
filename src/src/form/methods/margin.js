@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var process;
 
   process = require('../../core/methods/process/margin.js');
@@ -16,4 +16,4 @@
     },
     value: 0
   };
-}.call(this));
+}).call(this);

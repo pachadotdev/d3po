@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: function(vars) {
       return d3.keys(vars.types);
@@ -11,4 +11,4 @@
     },
     value: 'treemap'
   };
-}.call(this));
+}).call(this);

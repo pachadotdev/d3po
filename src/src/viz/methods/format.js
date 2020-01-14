@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var formatNumber, locale, mergeObject, titleCase;
 
   formatNumber = require('../../number/format.js');
@@ -75,4 +75,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

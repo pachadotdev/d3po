@@ -1,10 +1,10 @@
 // Determines visible time markers and formatting
-(function() {
+(() => {
   var sizes;
 
   sizes = require('../../font/sizes.js');
 
-  module.exports = function(vars, opts) {
+  module.exports = (vars, opts) => {
     var f,
       format,
       func,
@@ -37,15 +37,13 @@
       time.format = vars.data.time.format;
       time.values = values;
       time.sizes = sizes(
-        values.map(function(v) {
-          return time.format(v);
-        }),
+        values.map(v => time.format(v)),
         style
       );
     } else {
       p = periods.indexOf(step);
       while (p <= periods.indexOf(total)) {
-        vals = values.filter(function(t) {
+        vals = values.filter(t => {
           var match, pp;
           if (p === periods.indexOf(step)) {
             return true;
@@ -77,21 +75,15 @@
             format.push([f, func[pp]]);
             pp++;
           }
-          format[format.length - 1][1] = function() {
-            return true;
-          };
+          format[format.length - 1][1] = () => true;
           format = d3.locale(locale).timeFormat.multi(format);
         }
         render = sizes(
-          vals.map(function(v) {
-            return format(v);
-          }),
+          vals.map(v => format(v)),
           style
         );
         if (
-          d3.sum(render, function(r) {
-            return r.width;
-          }) < limit ||
+          d3.sum(render, r => r.width) < limit ||
           p === periods.indexOf(total)
         ) {
           time.format = format;
@@ -104,4 +96,4 @@
     }
     return time;
   };
-}.call(this));
+}).call(this);

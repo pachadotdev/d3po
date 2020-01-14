@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean],
     value: false,
@@ -9,7 +9,7 @@
         return false;
       }
       resize = null;
-      resizeEnd = function() {
+      resizeEnd = () => {
         var height, mainNode, width;
         mainNode = vars.container.value
           .node()
@@ -24,14 +24,12 @@
       };
       d3.select(window).on(
         'resize.' + vars.container.id,
-        (function(_this) {
-          return function() {
-            clearTimeout(resize);
-            return (resize = setTimeout(resizeEnd, _this.timeout));
-          };
+        (_this => () => {
+          clearTimeout(resize);
+          return (resize = setTimeout(resizeEnd, _this.timeout));
         })(this)
       );
       return value;
     }
   };
-}.call(this));
+}).call(this);

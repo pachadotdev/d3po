@@ -1,10 +1,10 @@
 // Flows the text into tspans
-(function() {
+(() => {
   var rtl;
 
   rtl = require('../../client/rtl.js');
 
-  module.exports = function(vars) {
+  module.exports = vars => {
     var anchor,
       dy,
       ellipsis,
@@ -36,7 +36,7 @@
       xOffset,
       y,
       yOffset;
-    newLine = function(first) {
+    newLine = first => {
       var tspan;
       if (!reverse || first) {
         tspan = vars.container.value.append('tspan');
@@ -88,7 +88,7 @@
       .style('font-size', fontSize + 'px')
       .attr('x', vars.container.x)
       .attr('y', vars.container.y);
-    truncate = function() {
+    truncate = () => {
       textBox.remove();
       if (reverse) {
         line++;
@@ -102,7 +102,7 @@
         return ellipsis();
       }
     };
-    lineWidth = function() {
+    lineWidth = () => {
       var b;
       if (vars.shape.value === 'circle') {
         b = (line - 1) * dy + yOffset;
@@ -114,7 +114,7 @@
         return width;
       }
     };
-    ellipsis = function() {
+    ellipsis = () => {
       var lastChar, lastWord;
       if (words && words.length) {
         lastWord = words.pop();
@@ -137,7 +137,7 @@
         return truncate();
       }
     };
-    placeWord = function(word) {
+    placeWord = word => {
       var current, i, joiner, next_char;
       current = textBox.text();
       next_char = '';
@@ -195,7 +195,7 @@
     start = 1;
     line = null;
     lines = null;
-    wrap = function() {
+    wrap = () => {
       var i, j, len, next_char, unsafe, word;
       vars.container.value.text('').html('');
       words = vars.text.words.slice();
@@ -276,4 +276,4 @@
     rotate = 'rotate(' + vars.rotate.value + ', ' + rx + ', ' + ry + ')';
     return vars.container.value.attr('transform', rotate + translate);
   };
-}.call(this));
+}).call(this);

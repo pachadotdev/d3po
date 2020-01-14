@@ -1,6 +1,6 @@
 // Creates a Base-64 Data URL from and Image URL
-(function() {
-  module.exports = function(url, callback) {
+(() => {
+  module.exports = (url, callback) => {
     var img;
     img = new Image();
     img.src = url;
@@ -16,4 +16,4 @@
       canvas = null;
     };
   };
-}.call(this));
+}).call(this);

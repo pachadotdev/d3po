@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var buckets,
     fetchText,
     fetchValue,
@@ -22,7 +22,7 @@
 
   uniques = require('../../util/uniques.js');
 
-  radar = function(vars) {
+  radar = vars => {
     var a,
       a2,
       anchor,
@@ -75,7 +75,7 @@
     data = vars.data.viz;
     nextDepth = vars.depth.value + 1;
     nextLevel = vars.id.nesting[nextDepth];
-    children = (function() {
+    children = (() => {
       var j, len, results;
       results = [];
       for (j = 0, len = data.length; j < len; j++) {
@@ -84,7 +84,7 @@
       }
       return results;
     })();
-    total = (function() {
+    total = (() => {
       var j, len, results;
       results = [];
       for (j = 0, len = data.length; j < len; j++) {
@@ -98,7 +98,7 @@
     maxRadius = d3.min([vars.width.viz, vars.height.viz]) / 2;
     labelHeight = 0;
     labelWidth = 0;
-    labels = (function() {
+    labels = (() => {
       var j, len, results;
       results = [];
       for (j = 0, len = children.length; j < len; j++) {
@@ -127,19 +127,17 @@
             .draw();
         }
       });
-      labelWidth = d3.max(sizes, function(d) {
-        return d.width;
-      });
+      labelWidth = d3.max(sizes, d => d.width);
       maxRadius -= labelWidth;
       maxRadius -= vars.labels.padding * 2;
     }
-    maxData = (function() {
+    maxData = (() => {
       var j, len, results;
       results = [];
       for (j = 0, len = children.length; j < len; j++) {
         c = children[j];
         results.push(
-          (function() {
+          (() => {
             var k, len1, results1;
             results1 = [];
             for (k = 0, len1 = c.length; k < len1; k++) {
@@ -157,7 +155,7 @@
       .linear()
       .domain([0, maxData])
       .range([0, maxRadius]);
-    ids = (function() {
+    ids = (() => {
       var j, len, results;
       results = [];
       for (j = 0, len = children.length; j < len; j++) {
@@ -203,12 +201,10 @@
     }
     rings = vars.group
       .selectAll('.d3po_radar_rings')
-      .data(ringData, function(d, i) {
-        return i;
-      });
-    ringStyle = function(ring) {
-      return ring
-        .attr('fill', function(d, i) {
+      .data(ringData, (d, i) => i);
+    ringStyle = ring =>
+      ring
+        .attr('fill', (d, i) => {
           if (i === 0) {
             return vars.axes.background.color;
           } else {
@@ -218,7 +214,6 @@
         .attr('cx', vars.width.viz / 2 + vars.margin.top)
         .attr('cy', vars.height.viz / 2 + vars.margin.left)
         .attr('stroke', vars.x.grid.value ? vars.x.grid.color : 'transparent');
-    };
     rings
       .enter()
       .append('circle')
@@ -229,9 +224,7 @@
       .transition()
       .duration(vars.draw.timing)
       .call(ringStyle)
-      .attr('r', function(d) {
-        return d;
-      });
+      .attr('r', d => d);
     rings
       .exit()
       .transition()
@@ -286,11 +279,9 @@
       );
     text = labelGroup
       .selectAll('.d3po_radar_labels')
-      .data(vars.labels.value ? labelData : [], function(d, i) {
-        return i;
-      });
-    labelStyle = function(label) {
-      return label
+      .data(vars.labels.value ? labelData : [], (d, i) => i);
+    labelStyle = label =>
+      label
         .attr(textStyle)
         .each(function(l) {
           return textwrap()
@@ -316,7 +307,6 @@
           }
           return 'rotate(' + t.angle + ')' + translate;
         });
-    };
     text.call(labelStyle);
     text
       .enter()
@@ -335,15 +325,12 @@
       .remove();
     grid = vars.group
       .selectAll('.d3po_radar_lines')
-      .data(labelData, function(d, i) {
-        return i;
-      });
-    gridStyle = function(grid) {
-      return grid
+      .data(labelData, (d, i) => i);
+    gridStyle = grid =>
+      grid
         .attr('stroke', vars.x.grid.color)
         .attr('x1', vars.width.viz / 2 + vars.margin.left)
         .attr('y1', vars.height.viz / 2 + vars.margin.top);
-    };
     grid
       .enter()
       .append('line')
@@ -355,12 +342,8 @@
       .transition()
       .duration(vars.draw.timing)
       .call(gridStyle)
-      .attr('x2', function(d) {
-        return vars.width.viz / 2 + vars.margin.left + d.offset.x;
-      })
-      .attr('y2', function(d) {
-        return vars.height.viz / 2 + vars.margin.top + d.offset.y;
-      });
+      .attr('x2', d => vars.width.viz / 2 + vars.margin.left + d.offset.x)
+      .attr('y2', d => vars.height.viz / 2 + vars.margin.top + d.offset.y);
     grid
       .exit()
       .transition()
@@ -378,4 +361,4 @@
   radar.shapes = ['radial'];
 
   module.exports = radar;
-}.call(this));
+}).call(this);

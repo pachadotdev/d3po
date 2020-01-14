@@ -4,7 +4,7 @@ var fetchValue = require('../fetch/value.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Nests and groups the data.
 //------------------------------------------------------------------------------
-var dataNest = function(vars, flatData, nestingLevels, discrete) {
+var dataNest = (vars, flatData, nestingLevels, discrete) => {
   if (discrete === undefined) discrete = true;
 
   var nestedData = d3.nest(),
@@ -12,20 +12,16 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     segments = 'temp' in vars ? ['active', 'temp', 'total'] : [];
 
   if (!nestingLevels.length) {
-    nestedData.key(function() {
-      return true;
-    });
+    nestedData.key(() => true);
   } else {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Loop through each nesting level.
     //----------------------------------------------------------------------------
-    nestingLevels.forEach(function(level) {
+    nestingLevels.forEach(level => {
       //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       // Create a nest key for the current level.
       //--------------------------------------------------------------------------
-      nestedData.key(function(d) {
-        return fetchValue(vars, d, level);
-      });
+      nestedData.key(d => fetchValue(vars, d, level));
     });
   }
 
@@ -35,9 +31,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     vars.axes.discrete &&
     (!vars.time || vars[vars.axes.discrete].value !== vars.time.value)
   ) {
-    nestedData.key(function(d) {
-      return fetchValue(vars, d, vars[vars.axes.discrete].value);
-    });
+    nestedData.key(d => fetchValue(vars, d, vars[vars.axes.discrete].value));
   }
 
   var deepest_is_id =
@@ -48,7 +42,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If we're at the deepest level, create the rollup function.
   //----------------------------------------------------------------------------
-  nestedData.rollup(function(leaves) {
+  nestedData.rollup(leaves => {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // If there's only 1 leaf, and it's been processed, return it as-is.
     //--------------------------------------------------------------------------
@@ -57,7 +51,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
       return leaves[0];
     }
 
-    leaves = leaves.reduce(function(arr, ll) {
+    leaves = leaves.reduce((arr, ll) => {
       if (ll.values instanceof Array) {
         return arr.concat(ll.values);
       }
@@ -76,9 +70,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
       }
     };
 
-    var merged = d3.sum(leaves, function(ll) {
-      return 'd3po' in ll && ll.d3po.merged ? 1 : 0;
-    });
+    var merged = d3.sum(leaves, ll => ('d3po' in ll && ll.d3po.merged ? 1 : 0));
 
     if (merged === leaves.length) {
       for (var ll = 0; ll < leaves.length; ll++) {
@@ -98,13 +90,11 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
         vars.aggs && vars.aggs.value[key] ? vars.aggs.value[key] : 'sum';
 
       if ('d3po' in leaves[0] && c in leaves[0].d3po) {
-        returnObj.d3po[c] = d3.sum(leaves, function(d) {
-          return d.d3po[c];
-        });
+        returnObj.d3po[c] = d3.sum(leaves, d => d.d3po[c]);
       } else if (typeof segmentAgg === 'function') {
         returnObj.d3po[c] = segmentAgg(leaves);
       } else {
-        returnObj.d3po[c] = d3[segmentAgg](leaves, function(d) {
+        returnObj.d3po[c] = d3[segmentAgg](leaves, d => {
           var a = c === 'total' ? 1 : 0;
           if (vars[c].value) {
             a = fetchValue(vars, d, vars[c].value);
@@ -142,12 +132,8 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
         ) {
           returnObj[key] = uniqueValues(leaves, key);
         } else if (keyType === 'number' && aggType === 'string' && !idKey) {
-          var vals = leaves.map(function(d) {
-            return d[key];
-          });
-          vals = vals.filter(function(d) {
-            return typeof d === keyType;
-          });
+          var vals = leaves.map(d => d[key]);
+          vals = vals.filter(d => typeof d === keyType);
           if (vals.length) returnObj[key] = d3[agg](vals);
         } else {
           var testVals = checkVal(leaves, key);
@@ -206,7 +192,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
     return returnObj;
   });
 
-  var find_keys = function(obj, depth, keys) {
+  var find_keys = (obj, depth, keys) => {
     if (obj.children) {
       if (vars.data.keys[nestingLevels[depth]] == 'number') {
         obj.key = parseFloat(obj.key);
@@ -217,7 +203,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
         obj[k] = keys[k];
       }
       depth++;
-      obj.children.forEach(function(c) {
+      obj.children.forEach(c => {
         find_keys(c, depth, keys);
       });
     }
@@ -226,7 +212,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
   nestedData = nestedData
     .entries(flatData)
     .map(rename_key_value)
-    .map(function(obj) {
+    .map(obj => {
       find_keys(obj, 0, {});
       return obj;
     });
@@ -234,7 +220,7 @@ var dataNest = function(vars, flatData, nestingLevels, discrete) {
   return groupedData;
 };
 
-var checkVal = function(leaves, key) {
+var checkVal = (leaves, key) => {
   var returnVals = [];
 
   function run(obj) {
@@ -254,7 +240,7 @@ var checkVal = function(leaves, key) {
   return returnVals;
 };
 
-var parseDates = function(dateArray) {
+var parseDates = dateArray => {
   var dates = [];
 
   function checkDate(arr) {
@@ -286,11 +272,9 @@ var parseDates = function(dateArray) {
   return uniqueValues(dates);
 };
 
-var rename_key_value = function(obj) {
+var rename_key_value = obj => {
   if (obj.values && obj.values.length) {
-    obj.children = obj.values.map(function(obj) {
-      return rename_key_value(obj);
-    });
+    obj.children = obj.values.map(obj => rename_key_value(obj));
     delete obj.values;
     return obj;
   } else if (obj.values) {

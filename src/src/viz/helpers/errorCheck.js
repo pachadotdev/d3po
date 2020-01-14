@@ -7,7 +7,7 @@ var fetchText = require('../../core/fetch/text.js'),
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Miscellaneous Error Checks
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.dev.value) print.time('checking for errors');
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -21,7 +21,7 @@ module.exports = function(vars) {
   }
 
   var missing = [];
-  reqs.forEach(function(r) {
+  reqs.forEach(r => {
     if (typeof r === 'string') {
       if (!vars[r].value || !vars[r].value.length) missing.push('"' + r + '"');
     } else if (typeof r === 'function') {
@@ -42,10 +42,10 @@ module.exports = function(vars) {
     missing = stringList(missing, and);
     vars.error.internal = stringFormat(str, app, missing);
   } else if (missing.length === 1) {
-    str = vars.format.locale.value.error.method,
-    app =
-      vars.format.locale.value.visualization[vars.type.value] ||
-      vars.type.value;
+    (str = vars.format.locale.value.error.method),
+      (app =
+        vars.format.locale.value.visualization[vars.type.value] ||
+        vars.type.value);
     vars.error.internal = stringFormat(str, app, missing[0]);
   }
 
@@ -76,7 +76,7 @@ module.exports = function(vars) {
     reqs = reqs.concat(vars.types[vars.type.value].libs);
   }
   missing = [];
-  reqs.forEach(function(r) {
+  reqs.forEach(r => {
     if (!window[r]) missing.push('"' + r + '"');
   });
 

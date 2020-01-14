@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var decoration, family, transform;
 
   decoration = require('../../core/methods/font/decoration.js');
@@ -28,4 +28,4 @@
     },
     value: true
   };
-}.call(this));
+}).call(this);

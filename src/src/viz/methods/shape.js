@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var rendering;
 
   rendering = require('../../core/methods/rendering.js');
@@ -33,4 +33,4 @@
     rendering: rendering(),
     value: false
   };
-}.call(this));
+}).call(this);

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var arraySort,
     axisRange,
     buckets,
@@ -26,7 +26,7 @@
 
   uniques = require('../../../../../util/uniques.js');
 
-  module.exports = function(vars, opts) {
+  module.exports = (vars, opts) => {
     var axes,
       axis,
       changed,
@@ -112,7 +112,7 @@
     }
   };
 
-  dataChange = function(vars) {
+  dataChange = vars => {
     var axis, changed, check, i, j, k, l, len, len1, len2, ref, sub, subs;
     changed =
       !vars.time.fixed.value &&
@@ -161,7 +161,7 @@
     return changed;
   };
 
-  getData = function(vars) {
+  getData = vars => {
     var d, depths;
     if (!vars.time.fixed.value) {
       return vars.data.viz;
@@ -169,7 +169,7 @@
       depths = d3.range(0, vars.id.nesting.length);
       return d3.merge(
         d3.merge([
-          (function() {
+          (() => {
             var i, len, results;
             results = [];
             for (i = 0, len = depths.length; i < len; i++) {
@@ -183,7 +183,7 @@
     }
   };
 
-  axisRange = function(vars, axis, zero) {
+  axisRange = (vars, axis, zero) => {
     var agg,
       aggType,
       allNegative,
@@ -232,12 +232,10 @@
       }
       axisSums = d3
         .nest()
-        .key(function(d) {
-          return fetchValue(vars, d, vars[oppAxis].value);
-        })
-        .rollup(function(leaves) {
+        .key(d => fetchValue(vars, d, vars[oppAxis].value))
+        .rollup(leaves => {
           var negatives, positives;
-          positives = d3.sum(leaves, function(d) {
+          positives = d3.sum(leaves, d => {
             var val;
             val = fetchValue(vars, d, vars[axis].value);
             if (val > 0) {
@@ -246,7 +244,7 @@
               return 0;
             }
           });
-          negatives = d3.sum(leaves, function(d) {
+          negatives = d3.sum(leaves, d => {
             var val;
             val = fetchValue(vars, d, vars[axis].value);
             if (val < 0) {
@@ -258,15 +256,11 @@
           return [negatives, positives];
         })
         .entries(splitData);
-      values = d3.merge(
-        axisSums.map(function(d) {
-          return d.values;
-        })
-      );
+      values = d3.merge(axisSums.map(d => d.values));
       return d3.extent(values);
     } else if (vars[axis].value === vars.time.value) {
       if (vars.time.solo.value.length) {
-        return d3.extent(vars.time.solo.value).map(function(v) {
+        return d3.extent(vars.time.solo.value).map(v => {
           if (v.constructor !== Date) {
             v = v + '';
             if (v.length === 4 && parseInt(v) + '' === v) {
@@ -292,9 +286,7 @@
           values.push(val);
         }
       }
-      values = values.filter(function(d) {
-        return d !== null;
-      });
+      values = values.filter(d => d !== null);
       if (axis === vars.axes.discrete) {
         if (vars.order.value === true) {
           sortKey = vars[oppAxis].value;
@@ -305,7 +297,7 @@
           sort = vars.order.sort.value;
           agg = vars.order.agg.value || vars.aggs.value[sortKey] || 'max';
           aggType = typeof agg;
-          counts = values.reduce(function(obj, val) {
+          counts = values.reduce((obj, val) => {
             obj[val] = [];
             return obj;
           }, {});
@@ -333,24 +325,18 @@
             }
           }
           counts = arraySort(d3.entries(counts), 'value', sort);
-          counts = counts.reduce(function(arr, v) {
+          counts = counts.reduce((arr, v) => {
             arr.push(v.key);
             return arr;
           }, []);
           return counts;
         } else if (values[0].constructor === String) {
-          return uniques(values).sort(function(a, b) {
-            return '' + a.localeCompare('' + b);
-          });
+          return uniques(values).sort((a, b) => '' + a.localeCompare('' + b));
         } else {
-          return uniques(values).sort(function(a, b) {
-            return a - b;
-          });
+          return uniques(values).sort((a, b) => a - b);
         }
       } else {
-        values.sort(function(a, b) {
-          return a - b;
-        });
+        values.sort((a, b) => a - b);
         if (vars[axis].scale.value === 'log') {
           if (values[0] === 0) {
             values[0] = 1;
@@ -360,12 +346,8 @@
           }
         }
         if (zero) {
-          allPositive = values.every(function(v) {
-            return v > 0;
-          });
-          allNegative = values.every(function(v) {
-            return v < 0;
-          });
+          allPositive = values.every(v => v > 0);
+          allNegative = values.every(v => v < 0);
           if (allPositive || allNegative) {
             min = allPositive ? 1 : -1;
             values.push(vars[axis].scale.value === 'log' ? min : 0);
@@ -376,7 +358,7 @@
     }
   };
 
-  getScale = function(vars, axis, range) {
+  getScale = (vars, axis, range) => {
     var rangeArray, rangeMax, retScale, scaleType, t;
     rangeMax = axis.indexOf('x') === 0 ? vars.width.viz : vars.height.viz;
     scaleType = vars[axis].scale.value;
@@ -403,7 +385,7 @@
     return retScale;
   };
 
-  sizeScale = function(vars, value) {
+  sizeScale = (vars, value) => {
     var domain, max, min;
     if (value === true) {
       value = 'size';
@@ -427,7 +409,7 @@
       if (vars.dev.value) {
         print.time('calculating buffer scale');
       }
-      domain = d3.extent(vars.axes.dataset, function(d) {
+      domain = d3.extent(vars.axes.dataset, d => {
         var val;
         val = fetchValue(vars, d, value);
         if (!val) {
@@ -445,4 +427,4 @@
       return vars.size.scale.value.domain(domain).rangeRound([min, max]);
     }
   };
-}.call(this));
+}).call(this);

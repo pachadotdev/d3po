@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var box, fetchValue, graph, stringFormat, strip, uniques;
 
   fetchValue = require('../../core/fetch/value.js');
@@ -11,7 +11,7 @@
 
   uniques = require('../../util/uniques.js');
 
-  box = function(vars) {
+  box = vars => {
     var botstr,
       disMargin,
       discrete,
@@ -58,7 +58,7 @@
     if (!(mode instanceof Array)) {
       mode = [mode, mode];
     }
-    mergeData = function(arr) {
+    mergeData = arr => {
       var key, obj, vals;
       obj = {};
       for (key in vars.data.keys) {
@@ -80,10 +80,8 @@
     medstr = vars.format.value(vars.format.locale.value.ui.median);
     returnData = [];
     d3.nest()
-      .key(function(d) {
-        return fetchValue(vars, d, vars[discrete].value);
-      })
-      .rollup(function(leaves) {
+      .key(d => fetchValue(vars, d, vars[discrete].value))
+      .rollup(leaves => {
         var bottom,
           bottomLabel,
           bottomWhisker,
@@ -116,12 +114,8 @@
           x,
           y;
         scale = vars[opposite].scale.viz;
-        values = leaves.map(function(d) {
-          return fetchValue(vars, d, vars[opposite].value);
-        });
-        values.sort(function(a, b) {
-          return a - b;
-        });
+        values = leaves.map(d => fetchValue(vars, d, vars[opposite].value));
+        values.sort((a, b) => a - b);
         first = d3.quantile(values, 0.25);
         median = d3.quantile(values, 0.5);
         second = d3.quantile(values, 0.75);
@@ -313,7 +307,7 @@
 
   box.shapes = ['circle', 'square'];
 
-  box.setup = function(vars) {
+  box.setup = vars => {
     var axis;
     if (!vars.axes.discrete) {
       axis = vars.time.value === vars.y.value ? 'y' : 'x';
@@ -324,4 +318,4 @@
   };
 
   module.exports = box;
-}.call(this));
+}).call(this);

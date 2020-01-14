@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var angles, largestRect, path2poly, shapeStyle;
 
   shapeStyle = require('./style.js');
@@ -12,23 +12,15 @@
     end: {}
   };
 
-  module.exports = function(vars, selection, enter, exit) {
+  module.exports = (vars, selection, enter, exit) => {
     var arc, arcTween, data, newarc;
     arc = d3.svg
       .arc()
-      .innerRadius(function(d) {
-        return d.d3po.r_inner;
-      })
-      .outerRadius(function(d) {
-        return d.d3po.r_outer;
-      })
-      .startAngle(function(d) {
-        return d.d3po.startAngle;
-      })
-      .endAngle(function(d) {
-        return d.d3po.endAngle;
-      });
-    data = function(d) {
+      .innerRadius(d => d.d3po.r_inner)
+      .outerRadius(d => d.d3po.r_outer)
+      .startAngle(d => d.d3po.startAngle)
+      .endAngle(d => d.d3po.endAngle);
+    data = d => {
       var poly, rect;
       if (vars.labels.value) {
         if (d.d3po.label) {
@@ -57,13 +49,9 @@
     if (vars.draw.timing) {
       newarc = d3.svg
         .arc()
-        .innerRadius(function(d) {
-          return d.d3po.r_inner;
-        })
-        .outerRadius(function(d) {
-          return d.d3po.r_outer;
-        })
-        .startAngle(function(d) {
+        .innerRadius(d => d.d3po.r_inner)
+        .outerRadius(d => d.d3po.r_outer)
+        .startAngle(d => {
           if (angles.start[d.d3po.id] === void 0) {
             angles.start[d.d3po.id] = 0;
           }
@@ -72,7 +60,7 @@
           }
           return angles.start[d.d3po.id];
         })
-        .endAngle(function(d) {
+        .endAngle(d => {
           if (angles.end[d.d3po.id] === void 0) {
             angles.end[d.d3po.id] = 0;
           }
@@ -81,8 +69,8 @@
           }
           return angles.end[d.d3po.id];
         });
-      arcTween = function(arcs, newAngle) {
-        return arcs.attrTween('d', function(d) {
+      arcTween = (arcs, newAngle) =>
+        arcs.attrTween('d', d => {
           var e, interpolateE, interpolateS, s;
           if (newAngle === void 0) {
             s = d.d3po.startAngle;
@@ -93,13 +81,12 @@
           }
           interpolateS = d3.interpolate(angles.start[d.d3po.id], s);
           interpolateE = d3.interpolate(angles.end[d.d3po.id], e);
-          return function(t) {
+          return t => {
             angles.start[d.d3po.id] = interpolateS(t);
             angles.end[d.d3po.id] = interpolateE(t);
             return newarc(d);
           };
         });
-      };
       enter
         .append('path')
         .attr('class', 'd3po_data')
@@ -126,4 +113,4 @@
         .attr('d', arc);
     }
   };
-}.call(this));
+}).call(this);

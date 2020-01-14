@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var closest,
     css,
     events,
@@ -27,7 +27,7 @@
 
   playInterval = false;
 
-  module.exports = function(vars) {
+  module.exports = vars => {
     var availableWidth,
       background,
       brush,
@@ -95,9 +95,7 @@
         'font-size': vars.ui.font.size + 'px',
         'text-anchor': 'middle'
       };
-      years = vars.data.time.ticks.map(function(d) {
-        return new Date(d);
-      });
+      years = vars.data.time.ticks.map(d => new Date(d));
       timeReturn = timeDetect(vars, {
         values: years,
         style: textStyle
@@ -121,17 +119,8 @@
         init = d3.extent(years);
       }
       year_ticks = years.slice();
-      yearHeight = d3.max(
-        timeReturn.sizes.map(function(t) {
-          return t.height;
-        })
-      );
-      labelWidth =
-        ~~d3.max(
-          timeReturn.sizes.map(function(t) {
-            return t.width;
-          })
-        ) + 1;
+      yearHeight = d3.max(timeReturn.sizes.map(t => t.height));
+      labelWidth = ~~d3.max(timeReturn.sizes.map(t => t.width)) + 1;
       labelWidth += vars.ui.padding * 2;
       timelineHeight =
         vars.timeline.height.value || yearHeight + vars.ui.padding * 2;
@@ -158,9 +147,7 @@
           }
           tickStep++;
         }
-        visible = visible.filter(function(t, i) {
-          return i % tickStep === 0;
-        });
+        visible = visible.filter((t, i) => i % tickStep === 0);
       } else {
         timelineOffset = 0;
         min = new Date(years[0]);
@@ -191,7 +178,7 @@
       if (tallEnough && vars.timeline.play.value) {
         start_x += (playbackWidth + vars.ui.padding) / 2;
       }
-      stopPlayback = function() {
+      stopPlayback = () => {
         clearInterval(playInterval);
         playInterval = false;
         return playIcon.call(playIconChar, 'icon');
@@ -239,17 +226,15 @@
           return d3.select(this).call(brush.extent(extent));
         }
       };
-      setYears = function() {
+      setYears = () => {
         var newYears;
         if (max_index - min_index === years.length - timelineOffset) {
           newYears = [];
         } else {
-          newYears = yearMS.filter(function(t, i) {
-            return i >= min_index && i < max_index + timelineOffset;
-          });
-          newYears = newYears.map(function(t) {
-            return new Date(t);
-          });
+          newYears = yearMS.filter(
+            (t, i) => i >= min_index && i < max_index + timelineOffset
+          );
+          newYears = newYears.map(t => new Date(t));
         }
         playUpdate();
         return vars.self
@@ -258,7 +243,7 @@
           })
           .draw();
       };
-      brushend = function() {
+      brushend = () => {
         var change, old_max, old_min, solo;
         if (d3.event.sourceEvent !== null) {
           if (vars.time.solo.value.length) {
@@ -277,8 +262,8 @@
       playButton = vars.g.timeline
         .selectAll('rect.d3po_timeline_play')
         .data(tallEnough && vars.timeline.play.value ? [0] : []);
-      playStyle = function(btn) {
-        return btn
+      playStyle = btn =>
+        btn
           .attr('width', playbackWidth + 1)
           .attr('height', timelineHeight + 1)
           .attr('fill', vars.ui.color.primary.value)
@@ -286,7 +271,6 @@
           .attr('stroke-width', 1)
           .attr('x', start_x - playbackWidth - 1 - vars.ui.padding)
           .attr('y', vars.ui.padding);
-      };
       playButton
         .enter()
         .append('rect')
@@ -307,7 +291,7 @@
       playIcon = vars.g.timeline
         .selectAll('text.d3po_timeline_playIcon')
         .data(tallEnough && vars.timeline.play.value ? [0] : []);
-      playIconChar = function(text, char) {
+      playIconChar = (text, char) => {
         var font;
         char = vars.timeline.play[char];
         if (css('font-awesome')) {
@@ -319,7 +303,7 @@
         }
         return text.style('font-family', font).text(char);
       };
-      playIconStyle = function(text) {
+      playIconStyle = text => {
         var y;
         y = timelineHeight / 2 + vars.ui.padding + 1;
         return text
@@ -349,7 +333,7 @@
         .duration(vars.draw.timing)
         .attr('opacity', 0)
         .remove();
-      playUpdate = function() {
+      playUpdate = () => {
         if (max_index - min_index === years.length - timelineOffset) {
           playButton
             .on(events.hover, null)
@@ -369,7 +353,7 @@
             .on(events.out, function() {
               return d3.select(this).style('cursor', 'auto');
             })
-            .on(events.click, function() {
+            .on(events.click, () => {
               if (playInterval) {
                 return stopPlayback();
               } else {
@@ -382,7 +366,7 @@
                   max_index++;
                 }
                 setYears();
-                return (playInterval = setInterval(function() {
+                return (playInterval = setInterval(() => {
                   if (max_index === years.length - timelineOffset) {
                     return stopPlayback();
                   } else {
@@ -403,7 +387,7 @@
         }
       };
       playUpdate();
-      textFill = function(d) {
+      textFill = d => {
         var color, less, opacity;
         less = timelineOffset ? d <= brushExtent[1] : d < brushExtent[1];
         if (d >= brushExtent[0] && less) {
@@ -473,9 +457,7 @@
         .enter()
         .append('g')
         .attr('id', 'labels');
-      text = labels.selectAll('text').data(years, function(d, i) {
-        return i;
-      });
+      text = labels.selectAll('text').data(years, (d, i) => i);
       text
         .enter()
         .append('text')
@@ -490,14 +472,14 @@
       text
         .order()
         .attr(textStyle)
-        .text(function(d) {
+        .text(d => {
           if (visible.indexOf(+d) >= 0) {
             return timeFormat(d);
           } else {
             return '';
           }
         })
-        .attr('opacity', function(d, i) {
+        .attr('opacity', (d, i) => {
           if (vars.data.time.dataSteps.indexOf(i) >= 0) {
             return 1;
           } else {
@@ -505,7 +487,7 @@
           }
         })
         .attr('fill', textFill)
-        .attr('transform', function(d) {
+        .attr('transform', d => {
           var dx, dy;
           dx = start_x + x(d);
           if (!timelineOffset) {
@@ -549,9 +531,7 @@
             .axis()
             .scale(x)
             .orient('top')
-            .ticks(function() {
-              return year_ticks;
-            })
+            .ticks(() => year_ticks)
             .tickFormat('')
             .tickSize(-timelineHeight)
             .tickPadding(0)
@@ -559,7 +539,7 @@
         .selectAll('line')
         .attr('stroke-width', 1)
         .attr('shape-rendering', 'crispEdges')
-        .attr('stroke', function(d) {
+        .attr('stroke', d => {
           if (visible.indexOf(+d) >= 0) {
             return tickColor;
           } else {
@@ -661,4 +641,4 @@
         .attr('transform', 'translate(0,' + vars.height.value + ')');
     }
   };
-}.call(this));
+}).call(this);

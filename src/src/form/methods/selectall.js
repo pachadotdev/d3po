@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [String],
     chainable: false,
@@ -13,4 +13,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

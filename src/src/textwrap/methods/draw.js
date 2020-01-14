@@ -1,4 +1,4 @@
-(function() {
+(() => {
   var print, stringFormat;
 
   print = require('../../core/console/print.js');
@@ -29,4 +29,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

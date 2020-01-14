@@ -1,10 +1,10 @@
 // Finds the best regression model that fits the data using Bayesian Information Criteria
-(function() {
+(() => {
   var numeric;
 
   numeric = require('numeric');
 
-  module.exports = function(data, options) {
+  module.exports = (data, options) => {
     var N,
       X,
       Xfulltr,
@@ -38,7 +38,7 @@
     N = data.length;
     prevBIC = Number.MAX_VALUE;
     bestResult = null;
-    Xfulltr = (function() {
+    Xfulltr = (() => {
       var l, ref, results;
       results = [];
       for (
@@ -47,7 +47,7 @@
         degree = 1 <= ref ? ++l : --l
       ) {
         results.push(
-          (function() {
+          (() => {
             var len, m, results1;
             results1 = [];
             for (m = 0, len = data.length; m < len; m++) {
@@ -60,7 +60,7 @@
       }
       return results;
     })();
-    y = (function() {
+    y = (() => {
       var l, len, results;
       results = [];
       for (l = 0, len = data.length; l < len; l++) {
@@ -75,7 +75,7 @@
       i = 0 <= ref ? ++l : --l
     ) {
       Xtr = [
-        (function() {
+        (() => {
           var m, ref1, results;
           results = [];
           for (
@@ -121,4 +121,4 @@
     }
     return bestResult;
   };
-}.call(this));
+}).call(this);

@@ -1,6 +1,6 @@
-(function() {
-  module.exports = function(arr, value) {
-    var constructor;
+(() => {
+  module.exports = (arr, value) => {
+    let constructor;
     if (arr instanceof Array) {
       constructor =
         value === void 0 || value === null ? value : value.constructor;
@@ -9,4 +9,4 @@
       return false;
     }
   };
-}.call(this));
+}).call(this);

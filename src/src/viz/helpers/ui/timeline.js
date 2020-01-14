@@ -1,13 +1,13 @@
-(function() {
-  var closest,
-    css,
-    events,
-    mix,
-    playInterval,
-    prefix,
-    print,
-    textColor,
-    timeDetect;
+(() => {
+  let closest;
+  let css;
+  let events;
+  let mix;
+  let playInterval;
+  let prefix;
+  let print;
+  let textColor;
+  let timeDetect;
 
   closest = require('../../../util/closest.js');
 
@@ -27,58 +27,58 @@
 
   playInterval = false;
 
-  module.exports = function(vars) {
-    var availableWidth,
-      background,
-      brush,
-      brushExtent,
-      brush_group,
-      brushed,
-      brushend,
-      d,
-      end,
-      handles,
-      i,
-      init,
-      j,
-      labelWidth,
-      labels,
-      len,
-      max_index,
-      min,
-      min_index,
-      oldWidth,
-      playButton,
-      playIcon,
-      playIconChar,
-      playIconStyle,
-      playStyle,
-      playUpdate,
-      playbackWidth,
-      setYears,
-      start,
-      start_x,
-      step,
-      stopPlayback,
-      tallEnough,
-      text,
-      textFill,
-      textStyle,
-      tickColor,
-      tickStep,
-      ticks,
-      timeFormat,
-      timeReturn,
-      timelineBox,
-      timelineHeight,
-      timelineOffset,
-      timelineWidth,
-      visible,
-      x,
-      yearHeight,
-      yearMS,
-      year_ticks,
-      years;
+  module.exports = vars => {
+    let availableWidth;
+    let background;
+    let brush;
+    let brushExtent;
+    let brush_group;
+    let brushed;
+    let brushend;
+    let d;
+    let end;
+    let handles;
+    let i;
+    let init;
+    let j;
+    let labelWidth;
+    let labels;
+    let len;
+    let max_index;
+    let min;
+    let min_index;
+    let oldWidth;
+    let playButton;
+    let playIcon;
+    let playIconChar;
+    let playIconStyle;
+    let playStyle;
+    let playUpdate;
+    let playbackWidth;
+    let setYears;
+    let start;
+    let start_x;
+    let step;
+    let stopPlayback;
+    let tallEnough;
+    let text;
+    let textFill;
+    let textStyle;
+    let tickColor;
+    let tickStep;
+    let ticks;
+    let timeFormat;
+    let timeReturn;
+    let timelineBox;
+    let timelineHeight;
+    let timelineOffset;
+    let timelineWidth;
+    let visible;
+    let x;
+    let yearHeight;
+    let yearMS;
+    let year_ticks;
+    let years;
     if (
       vars.timeline.value &&
       (!vars.error.internal || !vars.data.missing) &&
@@ -95,9 +95,7 @@
         'font-size': vars.ui.font.size + 'px',
         'text-anchor': 'middle'
       };
-      years = vars.data.time.ticks.map(function(d) {
-        return new Date(d);
-      });
+      years = vars.data.time.ticks.map(d => new Date(d));
       timeReturn = timeDetect(vars, {
         values: years,
         style: textStyle
@@ -121,17 +119,8 @@
         init = d3.extent(years);
       }
       year_ticks = years.slice();
-      yearHeight = d3.max(
-        timeReturn.sizes.map(function(t) {
-          return t.height;
-        })
-      );
-      labelWidth =
-        ~~d3.max(
-          timeReturn.sizes.map(function(t) {
-            return t.width;
-          })
-        ) + 1;
+      yearHeight = d3.max(timeReturn.sizes.map(t => t.height));
+      labelWidth = ~~d3.max(timeReturn.sizes.map(t => t.width)) + 1;
       labelWidth += vars.ui.padding * 2;
       timelineHeight =
         vars.timeline.height.value || yearHeight + vars.ui.padding * 2;
@@ -158,9 +147,7 @@
           }
           tickStep++;
         }
-        visible = visible.filter(function(t, i) {
-          return i % tickStep === 0;
-        });
+        visible = visible.filter((t, i) => i % tickStep === 0);
       } else {
         timelineOffset = 0;
         min = new Date(years[0]);
@@ -191,13 +178,15 @@
       if (tallEnough && vars.timeline.play.value) {
         start_x += (playbackWidth + vars.ui.padding) / 2;
       }
-      stopPlayback = function() {
+      stopPlayback = () => {
         clearInterval(playInterval);
         playInterval = false;
         return playIcon.call(playIconChar, 'icon');
       };
       brushed = function() {
-        var extent, max_val, min_val;
+        let extent;
+        let max_val;
+        let min_val;
         if (d3.event.sourceEvent !== null) {
           if (playInterval) {
             stopPlayback();
@@ -239,17 +228,15 @@
           return d3.select(this).call(brush.extent(extent));
         }
       };
-      setYears = function() {
-        var newYears;
+      setYears = () => {
+        let newYears;
         if (max_index - min_index === years.length - timelineOffset) {
           newYears = [];
         } else {
-          newYears = yearMS.filter(function(t, i) {
-            return i >= min_index && i < max_index + timelineOffset;
-          });
-          newYears = newYears.map(function(t) {
-            return new Date(t);
-          });
+          newYears = yearMS.filter(
+            (t, i) => i >= min_index && i < max_index + timelineOffset
+          );
+          newYears = newYears.map(t => new Date(t));
         }
         playUpdate();
         return vars.self
@@ -258,8 +245,11 @@
           })
           .draw();
       };
-      brushend = function() {
-        var change, old_max, old_min, solo;
+      brushend = () => {
+        let change;
+        let old_max;
+        let old_min;
+        let solo;
         if (d3.event.sourceEvent !== null) {
           if (vars.time.solo.value.length) {
             solo = d3.extent(vars.time.solo.value);
@@ -277,8 +267,8 @@
       playButton = vars.g.timeline
         .selectAll('rect.d3po_timeline_play')
         .data(tallEnough && vars.timeline.play.value ? [0] : []);
-      playStyle = function(btn) {
-        return btn
+      playStyle = btn =>
+        btn
           .attr('width', playbackWidth + 1)
           .attr('height', timelineHeight + 1)
           .attr('fill', vars.ui.color.primary.value)
@@ -286,7 +276,6 @@
           .attr('stroke-width', 1)
           .attr('x', start_x - playbackWidth - 1 - vars.ui.padding)
           .attr('y', vars.ui.padding);
-      };
       playButton
         .enter()
         .append('rect')
@@ -307,8 +296,8 @@
       playIcon = vars.g.timeline
         .selectAll('text.d3po_timeline_playIcon')
         .data(tallEnough && vars.timeline.play.value ? [0] : []);
-      playIconChar = function(text, char) {
-        var font;
+      playIconChar = (text, char) => {
+        let font;
         char = vars.timeline.play[char];
         if (css('font-awesome')) {
           char = char.awesome;
@@ -319,8 +308,8 @@
         }
         return text.style('font-family', font).text(char);
       };
-      playIconStyle = function(text) {
-        var y;
+      playIconStyle = text => {
+        let y;
         y = timelineHeight / 2 + vars.ui.padding + 1;
         return text
           .attr('fill', textColor(vars.ui.color.primary.value))
@@ -349,7 +338,7 @@
         .duration(vars.draw.timing)
         .attr('opacity', 0)
         .remove();
-      playUpdate = function() {
+      playUpdate = () => {
         if (max_index - min_index === years.length - timelineOffset) {
           playButton
             .on(events.hover, null)
@@ -369,7 +358,7 @@
             .on(events.out, function() {
               return d3.select(this).style('cursor', 'auto');
             })
-            .on(events.click, function() {
+            .on(events.click, () => {
               if (playInterval) {
                 return stopPlayback();
               } else {
@@ -382,7 +371,7 @@
                   max_index++;
                 }
                 setYears();
-                return (playInterval = setInterval(function() {
+                return (playInterval = setInterval(() => {
                   if (max_index === years.length - timelineOffset) {
                     return stopPlayback();
                   } else {
@@ -403,8 +392,10 @@
         }
       };
       playUpdate();
-      textFill = function(d) {
-        var color, less, opacity;
+      textFill = d => {
+        let color;
+        let less;
+        let opacity;
         less = timelineOffset ? d <= brushExtent[1] : d < brushExtent[1];
         if (d >= brushExtent[0] && less) {
           opacity = 1;
@@ -473,9 +464,7 @@
         .enter()
         .append('g')
         .attr('id', 'labels');
-      text = labels.selectAll('text').data(years, function(d, i) {
-        return i;
-      });
+      text = labels.selectAll('text').data(years, (d, i) => i);
       text
         .enter()
         .append('text')
@@ -490,14 +479,14 @@
       text
         .order()
         .attr(textStyle)
-        .text(function(d) {
+        .text(d => {
           if (visible.indexOf(+d) >= 0) {
             return timeFormat(d);
           } else {
             return '';
           }
         })
-        .attr('opacity', function(d, i) {
+        .attr('opacity', (d, i) => {
           if (vars.data.time.dataSteps.indexOf(i) >= 0) {
             return 1;
           } else {
@@ -505,8 +494,9 @@
           }
         })
         .attr('fill', textFill)
-        .attr('transform', function(d) {
-          var dx, dy;
+        .attr('transform', d => {
+          let dx;
+          let dy;
           dx = start_x + x(d);
           if (!timelineOffset) {
             dx += labelWidth / 2;
@@ -549,9 +539,7 @@
             .axis()
             .scale(x)
             .orient('top')
-            .ticks(function() {
-              return year_ticks;
-            })
+            .ticks(() => year_ticks)
             .tickFormat('')
             .tickSize(-timelineHeight)
             .tickPadding(0)
@@ -559,7 +547,7 @@
         .selectAll('line')
         .attr('stroke-width', 1)
         .attr('shape-rendering', 'crispEdges')
-        .attr('stroke', function(d) {
+        .attr('stroke', d => {
           if (visible.indexOf(+d) >= 0) {
             return tickColor;
           } else {
@@ -582,7 +570,7 @@
         .attr('height', timelineHeight)
         .attr('shape-rendering', 'crispEdges')
         .on(events.move, function() {
-          var c;
+          let c;
           c = vars.timeline.hover.value;
           if (['grab', 'grabbing'].indexOf(c) >= 0) {
             c = prefix() + c;
@@ -596,7 +584,7 @@
         .attr('fill', vars.ui.color.secondary.value)
         .attr('shape-rendering', 'crispEdges')
         .on(events.move, function() {
-          var c;
+          let c;
           c = vars.timeline.hover.value;
           if (['grab', 'grabbing'].indexOf(c) >= 0) {
             c = prefix() + c;
@@ -615,7 +603,7 @@
         handles
           .attr('fill', vars.timeline.handles.color)
           .attr('transform', function() {
-            var mod;
+            let mod;
             if (this.parentNode.className.baseVal === 'resize e') {
               mod = -vars.timeline.handles.size;
             } else {
@@ -661,4 +649,4 @@
         .attr('transform', 'translate(0,' + vars.height.value + ')');
     }
   };
-}.call(this));
+}).call(this);

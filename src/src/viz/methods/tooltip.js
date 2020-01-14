@@ -1,5 +1,6 @@
-(function() {
-  var family, transform;
+(() => {
+  let family;
+  let transform;
 
   family = require('../../core/methods/font/family.js');
 
@@ -64,4 +65,4 @@
     },
     value: true
   };
-}.call(this));
+}).call(this);

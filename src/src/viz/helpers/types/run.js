@@ -1,19 +1,19 @@
-(function() {
-  var print;
+(() => {
+  let print;
 
   print = require('../../../core/console/print.js');
 
-  module.exports = function(vars) {
-    var app,
-      d,
-      dataRequired,
-      drawable,
-      i,
-      len,
-      ref,
-      requirements,
-      returned,
-      visualization;
+  module.exports = vars => {
+    let app;
+    let d;
+    let dataRequired;
+    let drawable;
+    let i;
+    let len;
+    let ref;
+    let requirements;
+    let returned;
+    let visualization;
     vars.group = vars.g.apps[vars.type.value];
     vars.mouse.viz = false;
     vars.edges.path = false;
@@ -58,4 +58,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

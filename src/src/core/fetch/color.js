@@ -1,12 +1,12 @@
 // Finds an object's color and returns random if it cannot be found
-(function() {
-  var fetchValue,
-    getColor,
-    getRandom,
-    randomColor,
-    uniques,
-    validColor,
-    validObject;
+(() => {
+  let fetchValue;
+  let getColor;
+  let getRandom;
+  let randomColor;
+  let uniques;
+  let validColor;
+  let validObject;
 
   fetchValue = require('./value.js');
 
@@ -18,8 +18,13 @@
 
   uniques = require('../../util/uniques.js');
 
-  module.exports = function(vars, id, level) {
-    var color, colorLevel, colors, i, obj, value;
+  module.exports = (vars, id, level) => {
+    let color;
+    let colorLevel;
+    let colors;
+    let i;
+    let obj;
+    let value;
     obj = validObject(id);
     if (obj && 'd3po' in id && 'color' in id.d3po) {
       return id.d3po.color;
@@ -58,7 +63,7 @@
     }
   };
 
-  getColor = function(vars, id, color, level) {
+  getColor = (vars, id, color, level) => {
     if (!color) {
       if (vars.color.value && typeof vars.color.valueScale === 'function') {
         return vars.color.valueScale(0);
@@ -75,7 +80,7 @@
     }
   };
 
-  getRandom = function(vars, c, level) {
+  getRandom = (vars, c, level) => {
     if (validObject(c)) {
       c = fetchValue(vars, c, level);
     }
@@ -84,4 +89,4 @@
     }
     return randomColor(c, vars.color.scale.value);
   };
-}.call(this));
+}).call(this);

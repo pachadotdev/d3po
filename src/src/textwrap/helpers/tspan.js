@@ -1,43 +1,43 @@
 // Flows the text into tspans
-(function() {
-  var rtl;
+(() => {
+  let rtl;
 
   rtl = require('../../client/rtl.js');
 
-  module.exports = function(vars) {
-    var anchor,
-      dy,
-      ellipsis,
-      fontSize,
-      h,
-      height,
-      line,
-      lineWidth,
-      lines,
-      mirror,
-      newLine,
-      placeWord,
-      progress,
-      reverse,
-      rmod,
-      rotate,
-      rx,
-      ry,
-      space,
-      start,
-      textBox,
-      translate,
-      truncate,
-      valign,
-      width,
-      words,
-      wrap,
-      x,
-      xOffset,
-      y,
-      yOffset;
-    newLine = function(first) {
-      var tspan;
+  module.exports = vars => {
+    let anchor;
+    let dy;
+    let ellipsis;
+    let fontSize;
+    let h;
+    let height;
+    let line;
+    let lineWidth;
+    let lines;
+    let mirror;
+    let newLine;
+    let placeWord;
+    let progress;
+    let reverse;
+    let rmod;
+    let rotate;
+    let rx;
+    let ry;
+    let space;
+    let start;
+    let textBox;
+    let translate;
+    let truncate;
+    let valign;
+    let width;
+    let words;
+    let wrap;
+    let x;
+    let xOffset;
+    let y;
+    let yOffset;
+    newLine = first => {
+      let tspan;
       if (!reverse || first) {
         tspan = vars.container.value.append('tspan');
       } else {
@@ -88,7 +88,7 @@
       .style('font-size', fontSize + 'px')
       .attr('x', vars.container.x)
       .attr('y', vars.container.y);
-    truncate = function() {
+    truncate = () => {
       textBox.remove();
       if (reverse) {
         line++;
@@ -102,8 +102,8 @@
         return ellipsis();
       }
     };
-    lineWidth = function() {
-      var b;
+    lineWidth = () => {
+      let b;
       if (vars.shape.value === 'circle') {
         b = (line - 1) * dy + yOffset;
         if (b > height / 2) {
@@ -114,8 +114,9 @@
         return width;
       }
     };
-    ellipsis = function() {
-      var lastChar, lastWord;
+    ellipsis = () => {
+      let lastChar;
+      let lastWord;
       if (words && words.length) {
         lastWord = words.pop();
         lastChar = lastWord.charAt(lastWord.length - 1);
@@ -137,8 +138,11 @@
         return truncate();
       }
     };
-    placeWord = function(word) {
-      var current, i, joiner, next_char;
+    placeWord = word => {
+      let current;
+      let i;
+      let joiner;
+      let next_char;
       current = textBox.text();
       next_char = '';
       if (reverse) {
@@ -195,8 +199,13 @@
     start = 1;
     line = null;
     lines = null;
-    wrap = function() {
-      var i, j, len, next_char, unsafe, word;
+    wrap = () => {
+      let i;
+      let j;
+      let len;
+      let next_char;
+      let unsafe;
+      let word;
       vars.container.value.text('').html('');
       words = vars.text.words.slice();
       if (reverse) {
@@ -276,4 +285,4 @@
     rotate = 'rotate(' + vars.rotate.value + ', ' + rx + ', ' + ry + ')';
     return vars.container.value.attr('transform', rotate + translate);
   };
-}.call(this));
+}).call(this);

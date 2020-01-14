@@ -1,12 +1,12 @@
-var dataNest = require('./nest.js'),
-  fetchValue = require('../fetch/value.js'),
-  print = require('../console/print.js'),
-  uniques = require('../../util/uniques.js');
+const dataNest = require('./nest.js');
+const fetchValue = require('../fetch/value.js');
+const print = require('../console/print.js');
+const uniques = require('../../util/uniques.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Formats raw data by time and nesting
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var timerString;
+module.exports = vars => {
+  let timerString;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Gets all unique time values
@@ -27,14 +27,12 @@ module.exports = function(vars) {
       vars
     );
 
-    vars.data.time.values.sort(function(a, b) {
-      return a - b;
-    });
+    vars.data.time.values.sort((a, b) => a - b);
 
-    var step = [];
-    vars.data.time.values.forEach(function(y, i) {
+    let step = [];
+    vars.data.time.values.forEach((y, i) => {
       if (i !== 0) {
-        var prev = vars.data.time.values[i - 1];
+        const prev = vars.data.time.values[i - 1];
         step.push(y - prev);
         if (i === vars.data.time.values.length - 1) {
           vars.data.time.total = y - vars.data.time.values[0];
@@ -45,26 +43,25 @@ module.exports = function(vars) {
     step = d3.min(step);
     vars.data.time.step = step;
 
-    var periods = [
-        'Milliseconds',
-        'Seconds',
-        'Minutes',
-        'Hours',
-        'Date',
-        'Month',
-        'FullYear'
-      ],
-      conversions = [1000, 60, 60, 24, 30, 12, 1];
+    const periods = [
+      'Milliseconds',
+      'Seconds',
+      'Minutes',
+      'Hours',
+      'Date',
+      'Month',
+      'FullYear'
+    ];
+
+    const conversions = [1000, 60, 60, 24, 30, 12, 1];
 
     vars.data.time.periods = periods;
 
-    var getDiff = function(start, end, i) {
+    const getDiff = (start, end, i) => {
       if (!vars.data.time.stepDivider) {
-        var arr = conversions.slice(0, i);
+        const arr = conversions.slice(0, i);
         if (arr.length) {
-          vars.data.time.stepDivider = arr.reduce(function(a, b) {
-            return a * b;
-          });
+          vars.data.time.stepDivider = arr.reduce((a, b) => a * b);
         } else {
           vars.data.time.stepDivider = 1;
         }
@@ -73,16 +70,16 @@ module.exports = function(vars) {
       return Math.round(Math.floor(end - start) / vars.data.time.stepDivider);
     };
 
-    var total = vars.data.time.total;
-    periods.forEach(function(p, i) {
-      var c = p === 'Date' ? 28 : conversions[i];
+    let total = vars.data.time.total;
+    periods.forEach((p, i) => {
+      const c = p === 'Date' ? 28 : conversions[i];
       if (
         !vars.data.time.stepType &&
         (i === periods.length - 1 || Math.round(step) < c)
       ) {
         vars.data.time.stepType = p;
-        var start = vars.data.time.values[0],
-          end = vars.data.time.values[vars.data.time.values.length - 1];
+        const start = vars.data.time.values[0];
+        const end = vars.data.time.values[vars.data.time.values.length - 1];
         vars.data.time.stepIntervals = getDiff(start, end, i);
       }
 
@@ -97,9 +94,9 @@ module.exports = function(vars) {
       total = total / c;
     });
 
-    vars.data.time.values.forEach(function(y, i) {
+    vars.data.time.values.forEach((y, i) => {
       if (i !== 0) {
-        var prev = vars.data.time.values[0];
+        const prev = vars.data.time.values[0];
         vars.data.time.dataSteps.push(
           getDiff(prev, y, periods.indexOf(vars.data.time.stepType))
         );
@@ -108,35 +105,22 @@ module.exports = function(vars) {
       }
     });
 
-    var userFormat = vars.time.format.value,
-      locale = vars.format.locale.value,
-      functions = [
-        function(d) {
-          return d.getMilliseconds();
-        },
-        function(d) {
-          return d.getSeconds();
-        },
-        function(d) {
-          return d.getMinutes();
-        },
-        function(d) {
-          return d.getHours();
-        },
-        function(d) {
-          return d.getDate() != 1;
-        },
-        function(d) {
-          return d.getMonth();
-        },
-        function() {
-          return true;
-        }
-      ];
+    const userFormat = vars.time.format.value;
+    const locale = vars.format.locale.value;
+
+    const functions = [
+      d => d.getMilliseconds(),
+      d => d.getSeconds(),
+      d => d.getMinutes(),
+      d => d.getHours(),
+      d => d.getDate() != 1,
+      d => d.getMonth(),
+      () => true
+    ];
 
     vars.data.time.functions = functions;
 
-    var getFormat = function(s, t, small) {
+    const getFormat = (s, t, small) => {
       if (s === t) {
         return small && locale.timeFormat[s + 'Small']
           ? locale.timeFormat[s + 'Small']
@@ -145,7 +129,7 @@ module.exports = function(vars) {
         if (periods.indexOf(s) >= 4 || periods.indexOf(t) <= 3) {
           return locale.timeFormat[t + '-' + s];
         } else {
-          var format;
+          let format;
 
           if (t === 'Date') {
             format = locale.timeFormat[t];
@@ -176,20 +160,20 @@ module.exports = function(vars) {
       }
       vars.data.time.multiFormat = vars.data.time.format;
     } else {
-      var stepType = vars.data.time.stepType,
-        totalType = vars.data.time.totalType;
+      const stepType = vars.data.time.stepType;
+      const totalType = vars.data.time.totalType;
 
-      var multi = [];
+      const multi = [];
 
       for (
-        var p = periods.indexOf(stepType);
+        let p = periods.indexOf(stepType);
         p <= periods.indexOf(totalType);
         p++
       ) {
-        var prev =
+        const prev =
           p - 1 < periods.indexOf(stepType) ? periods[p] : periods[p - 1];
-        var small = periods[p] === prev && stepType !== totalType;
-        var format = getFormat(prev, periods[p], small);
+        const small = periods[p] === prev && stepType !== totalType;
+        const format = getFormat(prev, periods[p], small);
         multi.push([format, functions[p]]);
       }
 
@@ -197,9 +181,7 @@ module.exports = function(vars) {
         .locale(locale.format)
         .timeFormat(getFormat(stepType, totalType));
       if (multi.length > 1) {
-        multi[multi.length - 1][1] = function() {
-          return true;
-        };
+        multi[multi.length - 1][1] = () => true;
         vars.data.time.multiFormat = d3
           .locale(locale.format)
           .timeFormat.multi(multi);
@@ -209,17 +191,21 @@ module.exports = function(vars) {
     }
 
     vars.data.time.ticks = [];
-    var min = d3.min(vars.data.time.values);
-    var max = d3.max(vars.data.time.values);
-    for (var s = 0; s <= vars.data.time.stepIntervals; s++) {
-      var m = new Date(min);
+    const min = d3.min(vars.data.time.values);
+    const max = d3.max(vars.data.time.values);
+    for (let s = 0; s <= vars.data.time.stepIntervals; s++) {
+      const m = new Date(min);
       m['set' + vars.data.time.stepType](
         m['get' + vars.data.time.stepType]() + s
       );
-      if (m <= max) vars.data.time.ticks.push(m);
+      if (m <= max) {
+        vars.data.time.ticks.push(m);
+      }
     }
 
-    if (vars.dev.value) print.timeEnd(timerString);
+    if (vars.dev.value) {
+      print.timeEnd(timerString);
+    }
   }
 
   if (vars.dev.value) {
@@ -233,8 +219,8 @@ module.exports = function(vars) {
   vars.data.nested = {};
   if (vars.data.time.values.length === 0) {
     vars.data.nested.all = {};
-    vars.id.nesting.forEach(function(depth, i) {
-      var nestingDepth = vars.id.nesting.slice(0, i + 1);
+    vars.id.nesting.forEach((depth, i) => {
+      const nestingDepth = vars.id.nesting.slice(0, i + 1);
       vars.data.nested.all[depth] = dataNest(
         vars,
         vars.data.value,
@@ -242,20 +228,22 @@ module.exports = function(vars) {
       );
     });
   } else {
-    var timeData = vars.data.value.reduce(function(o, d) {
-      var ms = fetchValue(vars, d, vars.time.value).getTime();
-      if (!(ms in o)) o[ms] = [];
+    const timeData = vars.data.value.reduce((o, d) => {
+      const ms = fetchValue(vars, d, vars.time.value).getTime();
+      if (!(ms in o)) {
+        o[ms] = [];
+      }
       o[ms].push(d);
       return o;
     }, {});
 
-    vars.data.time.values.forEach(function(t) {
-      var ms = t.getTime();
+    vars.data.time.values.forEach(t => {
+      const ms = t.getTime();
 
       vars.data.nested[ms] = {};
 
-      vars.id.nesting.forEach(function(depth, i) {
-        var nestingDepth = vars.id.nesting.slice(0, i + 1);
+      vars.id.nesting.forEach((depth, i) => {
+        const nestingDepth = vars.id.nesting.slice(0, i + 1);
         vars.data.nested[ms][depth] = dataNest(
           vars,
           timeData[ms],
@@ -265,5 +253,7 @@ module.exports = function(vars) {
     });
   }
 
-  if (vars.dev.value) print.timeEnd(timerString);
+  if (vars.dev.value) {
+    print.timeEnd(timerString);
+  }
 };

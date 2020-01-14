@@ -1,12 +1,12 @@
-var stringFormat = require('../../../../string/format.js'),
-  stringStrip = require('../../../../string/strip.js');
+const stringFormat = require('../../../../string/format.js');
+const stringStrip = require('../../../../string/strip.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates and populates the dropdown list of items.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.data.url && !vars.data.loaded) {
-    var loadingObject = {};
+    const loadingObject = {};
     loadingObject[vars.text.value || vars.id.value] = vars.format.value(
       vars.format.locale.value.ui.loading
     );
@@ -22,7 +22,7 @@ module.exports = function(vars) {
         vars.id.nesting.length > 1 &&
         vars.depth.value < vars.id.nesting.length - 1
       ) {
-        vars.data.filtered = vars.data.filtered.filter(function(d) {
+        vars.data.filtered = vars.data.filtered.filter(d => {
           if ('endPoint' in d.d3po && d.d3po.endPoint === vars.depth.value) {
             d.d3po.icon = false;
           }
@@ -32,36 +32,33 @@ module.exports = function(vars) {
         vars.data.lastFilter = 'depth';
       }
     } else {
-      var searchWords = stringStrip(vars.search.term).split('_'),
-        searchKeys = [
-          vars.id.value,
-          vars.text.value,
-          vars.alt.value,
-          vars.keywords.value
-        ];
+      let searchWords = stringStrip(vars.search.term).split('_');
 
-      searchKeys = searchKeys.filter(function(t) {
-        return t;
-      });
-      searchWords = searchWords.filter(function(t) {
-        return t !== '';
-      });
+      let searchKeys = [
+        vars.id.value,
+        vars.text.value,
+        vars.alt.value,
+        vars.keywords.value
+      ];
 
-      var startMatches = [],
-        exactMatches = [],
-        softMatches = [],
-        searchData = [];
+      searchKeys = searchKeys.filter(t => t);
+      searchWords = searchWords.filter(t => t !== '');
 
-      vars.id.nesting.forEach(function(n) {
+      const startMatches = [];
+      const exactMatches = [];
+      const softMatches = [];
+      let searchData = [];
+
+      vars.id.nesting.forEach(n => {
         searchData = searchData.concat(vars.data.nested.all[n]);
       });
 
-      searchData.forEach(function(d) {
-        var match = false;
+      searchData.forEach(d => {
+        let match = false;
 
-        searchKeys.forEach(function(key) {
+        searchKeys.forEach(key => {
           if (!match && key in d && typeof d[key] === 'string') {
-            var text = d[key].toLowerCase();
+            const text = d[key].toLowerCase();
 
             if (
               [vars.text.value, vars.id.value].indexOf(key) >= 0 &&
@@ -73,11 +70,11 @@ module.exports = function(vars) {
               exactMatches.push(d);
               match = true;
             } else {
-              var texts = stringStrip(text).split('_');
+              const texts = stringStrip(text).split('_');
 
-              for (var t in texts) {
+              for (const t in texts) {
                 if (!match) {
-                  for (var s in searchWords) {
+                  for (const s in searchWords) {
                     if (texts[t].indexOf(searchWords[s]) === 0) {
                       softMatches.push(d);
                       match = true;
@@ -95,7 +92,7 @@ module.exports = function(vars) {
 
       vars.data.filtered = d3.merge([startMatches, exactMatches, softMatches]);
 
-      vars.data.filtered.forEach(function(d, i) {
+      vars.data.filtered.forEach((d, i) => {
         d.d3po_order = i;
       });
 
@@ -103,8 +100,8 @@ module.exports = function(vars) {
       vars.data.lastFilter = 'search';
 
       if (vars.data.filtered.length === 0) {
-        var noData = {},
-          str = vars.format.value(vars.format.locale.value.ui.noResults);
+        const noData = {};
+        const str = vars.format.value(vars.format.locale.value.ui.noResults);
         noData[vars.text.value || vars.id.value] = stringFormat(
           str,
           '"' + vars.search.term + '"'

@@ -1,42 +1,40 @@
-var print = require('../console/print.js');
+const print = require('../console/print.js');
 
 // Calculates node positions, if needed for network.
-module.exports = function(vars) {
+module.exports = vars => {
   if (vars.type.value === 'network') {
     if (vars.dev.value) {
       var timerString = 'analyzing node positions';
       print.time(timerString);
     }
 
-    var set = vars.nodes.value.filter(function(n) {
-      return typeof n.x === 'number' && typeof n.y === 'number';
-    }).length;
+    const set = vars.nodes.value.filter(
+      n => typeof n.x === 'number' && typeof n.y === 'number'
+    ).length;
 
     if (set === vars.nodes.value.length) {
       vars.nodes.positions = true;
     } else {
-      var force = d3.layout
+      const force = d3.layout
         .force()
         .size([vars.width.viz, vars.height.viz])
         .nodes(vars.nodes.value)
         .links(vars.edges.value);
 
-      var strength = vars.edges.strength.value;
+      const strength = vars.edges.strength.value;
       if (strength) {
         if (typeof strength === 'string') {
-          force.linkStrength(function(e) {
-            return e[strength];
-          });
+          force.linkStrength(e => e[strength]);
         } else {
           force.linkStrength(strength);
         }
       }
 
-      var iterations = 50,
-        threshold = 0.01;
+      const iterations = 50;
+      const threshold = 0.01;
 
       force.start(); // Defaults to alpha = 0.1
-      for (var i = iterations; i > 0; --i) {
+      for (let i = iterations; i > 0; --i) {
         force.tick();
         if (force.alpha() < threshold) {
           break;
@@ -47,6 +45,8 @@ module.exports = function(vars) {
       vars.nodes.positions = true;
     }
 
-    if (vars.dev.value) print.timeEnd(timerString);
+    if (vars.dev.value) {
+      print.timeEnd(timerString);
+    }
   }
 };

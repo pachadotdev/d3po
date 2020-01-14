@@ -1,12 +1,12 @@
-(function() {
-  var buckets,
-    fetchText,
-    fetchValue,
-    fontSizes,
-    offset,
-    radar,
-    textwrap,
-    uniques;
+(() => {
+  let buckets;
+  let fetchText;
+  let fetchValue;
+  let fontSizes;
+  let offset;
+  let radar;
+  let textwrap;
+  let uniques;
 
   fetchText = require('../../core/fetch/text.js');
 
@@ -22,61 +22,63 @@
 
   uniques = require('../../util/uniques.js');
 
-  radar = function(vars) {
-    var a,
-      a2,
-      anchor,
-      angle,
-      buffer,
-      c,
-      children,
-      d,
-      data,
-      first,
-      grid,
-      gridStyle,
-      i,
-      idIndex,
-      ids,
-      intervals,
-      j,
-      k,
-      l,
-      labelData,
-      labelGroup,
-      labelHeight,
-      labelIndex,
-      labelStyle,
-      labelWidth,
-      labels,
-      len,
-      len1,
-      len2,
-      len3,
-      m,
-      maxData,
-      maxRadius,
-      n,
-      nextDepth,
-      nextLevel,
-      o,
-      ov,
-      radius,
-      ref,
-      ref1,
-      ringData,
-      ringStyle,
-      rings,
-      second,
-      sizes,
-      text,
-      textStyle,
-      total;
+  radar = vars => {
+    let a;
+    let a2;
+    let anchor;
+    let angle;
+    let buffer;
+    let c;
+    let children;
+    let d;
+    let data;
+    let first;
+    let grid;
+    let gridStyle;
+    let i;
+    let idIndex;
+    let ids;
+    let intervals;
+    let j;
+    let k;
+    let l;
+    let labelData;
+    let labelGroup;
+    let labelHeight;
+    let labelIndex;
+    let labelStyle;
+    let labelWidth;
+    let labels;
+    let len;
+    let len1;
+    let len2;
+    let len3;
+    let m;
+    let maxData;
+    let maxRadius;
+    let n;
+    let nextDepth;
+    let nextLevel;
+    let o;
+    let ov;
+    let radius;
+    let ref;
+    let ref1;
+    let ringData;
+    let ringStyle;
+    let rings;
+    let second;
+    let sizes;
+    let text;
+    let textStyle;
+    let total;
     data = vars.data.viz;
     nextDepth = vars.depth.value + 1;
     nextLevel = vars.id.nesting[nextDepth];
-    children = (function() {
-      var j, len, results;
+    children = (() => {
+      let j;
+      let len;
+      let results;
       results = [];
       for (j = 0, len = data.length; j < len; j++) {
         d = data[j];
@@ -84,8 +86,10 @@
       }
       return results;
     })();
-    total = (function() {
-      var j, len, results;
+    total = (() => {
+      let j;
+      let len;
+      let results;
       results = [];
       for (j = 0, len = data.length; j < len; j++) {
         d = data[j];
@@ -98,8 +102,10 @@
     maxRadius = d3.min([vars.width.viz, vars.height.viz]) / 2;
     labelHeight = 0;
     labelWidth = 0;
-    labels = (function() {
-      var j, len, results;
+    labels = (() => {
+      let j;
+      let len;
+      let results;
       results = [];
       for (j = 0, len = children.length; j < len; j++) {
         c = children[j];
@@ -127,20 +133,22 @@
             .draw();
         }
       });
-      labelWidth = d3.max(sizes, function(d) {
-        return d.width;
-      });
+      labelWidth = d3.max(sizes, d => d.width);
       maxRadius -= labelWidth;
       maxRadius -= vars.labels.padding * 2;
     }
-    maxData = (function() {
-      var j, len, results;
+    maxData = (() => {
+      let j;
+      let len;
+      let results;
       results = [];
       for (j = 0, len = children.length; j < len; j++) {
         c = children[j];
         results.push(
-          (function() {
-            var k, len1, results1;
+          (() => {
+            let k;
+            let len1;
+            let results1;
             results1 = [];
             for (k = 0, len1 = c.length; k < len1; k++) {
               d = c[k];
@@ -157,8 +165,10 @@
       .linear()
       .domain([0, maxData])
       .range([0, maxRadius]);
-    ids = (function() {
-      var j, len, results;
+    ids = (() => {
+      let j;
+      let len;
+      let results;
       results = [];
       for (j = 0, len = children.length; j < len; j++) {
         c = children[j];
@@ -203,12 +213,10 @@
     }
     rings = vars.group
       .selectAll('.d3po_radar_rings')
-      .data(ringData, function(d, i) {
-        return i;
-      });
-    ringStyle = function(ring) {
-      return ring
-        .attr('fill', function(d, i) {
+      .data(ringData, (d, i) => i);
+    ringStyle = ring =>
+      ring
+        .attr('fill', (d, i) => {
           if (i === 0) {
             return vars.axes.background.color;
           } else {
@@ -218,7 +226,6 @@
         .attr('cx', vars.width.viz / 2 + vars.margin.top)
         .attr('cy', vars.height.viz / 2 + vars.margin.left)
         .attr('stroke', vars.x.grid.value ? vars.x.grid.color : 'transparent');
-    };
     rings
       .enter()
       .append('circle')
@@ -229,9 +236,7 @@
       .transition()
       .duration(vars.draw.timing)
       .call(ringStyle)
-      .attr('r', function(d) {
-        return d;
-      });
+      .attr('r', d => d);
     rings
       .exit()
       .transition()
@@ -286,11 +291,9 @@
       );
     text = labelGroup
       .selectAll('.d3po_radar_labels')
-      .data(vars.labels.value ? labelData : [], function(d, i) {
-        return i;
-      });
-    labelStyle = function(label) {
-      return label
+      .data(vars.labels.value ? labelData : [], (d, i) => i);
+    labelStyle = label =>
+      label
         .attr(textStyle)
         .each(function(l) {
           return textwrap()
@@ -306,7 +309,7 @@
             .draw();
         })
         .attr('transform', function(t) {
-          var translate;
+          let translate;
           translate = d3.select(this).attr('transform') || '';
           if (translate.length) {
             translate = translate
@@ -316,7 +319,6 @@
           }
           return 'rotate(' + t.angle + ')' + translate;
         });
-    };
     text.call(labelStyle);
     text
       .enter()
@@ -335,15 +337,12 @@
       .remove();
     grid = vars.group
       .selectAll('.d3po_radar_lines')
-      .data(labelData, function(d, i) {
-        return i;
-      });
-    gridStyle = function(grid) {
-      return grid
+      .data(labelData, (d, i) => i);
+    gridStyle = grid =>
+      grid
         .attr('stroke', vars.x.grid.color)
         .attr('x1', vars.width.viz / 2 + vars.margin.left)
         .attr('y1', vars.height.viz / 2 + vars.margin.top);
-    };
     grid
       .enter()
       .append('line')
@@ -355,12 +354,8 @@
       .transition()
       .duration(vars.draw.timing)
       .call(gridStyle)
-      .attr('x2', function(d) {
-        return vars.width.viz / 2 + vars.margin.left + d.offset.x;
-      })
-      .attr('y2', function(d) {
-        return vars.height.viz / 2 + vars.margin.top + d.offset.y;
-      });
+      .attr('x2', d => vars.width.viz / 2 + vars.margin.left + d.offset.x)
+      .attr('y2', d => vars.height.viz / 2 + vars.margin.top + d.offset.y);
     grid
       .exit()
       .transition()
@@ -378,4 +373,4 @@
   radar.shapes = ['radial'];
 
   module.exports = radar;
-}.call(this));
+}).call(this);

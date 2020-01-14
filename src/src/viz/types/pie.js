@@ -1,5 +1,8 @@
-(function() {
-  var comparator, dataThreshold, groupData, pie;
+(() => {
+  let comparator;
+  let dataThreshold;
+  let groupData;
+  let pie;
 
   comparator = require('../../array/comparator.js');
 
@@ -7,14 +10,20 @@
 
   groupData = require('../../core/data/group.js');
 
-  pie = function(vars) {
-    var d, groupedData, i, item, len, pieData, pieLayout, radius, returnData;
+  pie = vars => {
+    let d;
+    let groupedData;
+    let i;
+    let item;
+    let len;
+    let pieData;
+    let pieLayout;
+    let radius;
+    let returnData;
     pieLayout = d3.layout
       .pie()
-      .value(function(d) {
-        return d.value;
-      })
-      .sort(function(a, b) {
+      .value(d => d.value)
+      .sort((a, b) => {
         if (vars.order.value) {
           return comparator(
             a.d3po,
@@ -70,9 +79,7 @@
 
   pie.shapes = ['arc'];
 
-  pie.threshold = function(vars) {
-    return (40 * 40) / (vars.width.viz * vars.height.viz);
-  };
+  pie.threshold = vars => (40 * 40) / (vars.width.viz * vars.height.viz);
 
   module.exports = pie;
-}.call(this));
+}).call(this);

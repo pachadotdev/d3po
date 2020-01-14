@@ -1,6 +1,6 @@
-(function() {
-  module.exports = function(rendering) {
-    var accepted;
+(() => {
+  module.exports = rendering => {
+    let accepted;
     accepted = ['auto', 'optimizeSpeed', 'crispEdges', 'geometricPrecision'];
     if (!(accepted.indexOf(rendering) >= 0)) {
       rendering = 'crispEdges';
@@ -10,4 +10,4 @@
       value: rendering
     };
   };
-}.call(this));
+}).call(this);

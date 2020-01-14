@@ -1,43 +1,44 @@
-(function() {
-  var buckets, closest;
+(() => {
+  let buckets;
+  let closest;
 
   buckets = require('../../../../../util/buckets.js');
 
   closest = require('../../../../../util/closest.js');
 
-  module.exports = function(vars, axis, buffer) {
-    var add,
-      additional,
-      allNegative,
-      allPositive,
-      closestTime,
-      copy,
-      d,
-      diff,
-      difference,
-      domain,
-      domainCompare,
-      domainHigh,
-      domainLow,
-      i,
-      lowerDiff,
-      lowerMod,
-      lowerScale,
-      lowerValue,
-      maxSize,
-      opp,
-      orig_domain,
-      range,
-      rangeMax,
-      second,
-      strings,
-      testScale,
-      timeIndex,
-      upperDiff,
-      upperMod,
-      upperScale,
-      upperValue,
-      zero;
+  module.exports = (vars, axis, buffer) => {
+    let add;
+    let additional;
+    let allNegative;
+    let allPositive;
+    let closestTime;
+    let copy;
+    let d;
+    let diff;
+    let difference;
+    let domain;
+    let domainCompare;
+    let domainHigh;
+    let domainLow;
+    let i;
+    let lowerDiff;
+    let lowerMod;
+    let lowerScale;
+    let lowerValue;
+    let maxSize;
+    let opp;
+    let orig_domain;
+    let range;
+    let rangeMax;
+    let second;
+    let strings;
+    let testScale;
+    let timeIndex;
+    let upperDiff;
+    let upperMod;
+    let upperScale;
+    let upperValue;
+    let zero;
     if (
       vars[axis].scale.value !== 'share' &&
       !vars[axis].range.value &&
@@ -182,9 +183,7 @@
           if (axis.indexOf('y') === 0) {
             domain = domain.slice().reverse();
           }
-          strings = domain.filter(function(d) {
-            return d.constructor === String;
-          });
+          strings = domain.filter(d => d.constructor === String);
           additional = Math.abs(domain[1] - domain[0]) * 0.05 || 1;
           if (!strings.length) {
             domain[0] = domain[0] - additional;
@@ -242,4 +241,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

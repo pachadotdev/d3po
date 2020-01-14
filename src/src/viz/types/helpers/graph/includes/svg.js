@@ -1,5 +1,7 @@
-(function() {
-  var mix, textwrap, validObject;
+(() => {
+  let mix;
+  let textwrap;
+  let validObject;
 
   mix = require('../../../../../color/mix.js');
 
@@ -7,68 +9,68 @@
 
   validObject = require('../../../../../object/validate.js');
 
-  module.exports = function(vars) {
-    var affixes,
-      alignMap,
-      axis,
-      axisData,
-      axisGroup,
-      axisLabel,
-      bg,
-      bgStyle,
-      d,
-      domain,
-      domains,
-      getFontStyle,
-      grid,
-      gridData,
-      groupEnter,
-      j,
-      k,
-      l,
-      label,
-      labelData,
-      labelStyle,
-      len,
-      len1,
-      len2,
-      len3,
-      len4,
-      line,
-      lineData,
-      lineFont,
-      lineGroup,
-      lineRects,
-      lineStyle,
-      lines,
-      linetexts,
-      m,
-      mirror,
-      n,
-      opp,
-      plane,
-      planeTrans,
-      position,
-      realData,
-      rectData,
-      rectStyle,
-      ref,
-      ref1,
-      ref2,
-      ref3,
-      rotated,
-      sep,
-      style,
-      textData,
-      textPad,
-      textPos,
-      tickFont,
-      tickPosition,
-      tickStyle,
-      userLines,
-      valid,
-      xStyle,
-      yStyle;
+  module.exports = vars => {
+    let affixes;
+    let alignMap;
+    let axis;
+    let axisData;
+    let axisGroup;
+    let axisLabel;
+    let bg;
+    let bgStyle;
+    let d;
+    let domain;
+    let domains;
+    let getFontStyle;
+    let grid;
+    let gridData;
+    let groupEnter;
+    let j;
+    let k;
+    let l;
+    let label;
+    let labelData;
+    let labelStyle;
+    let len;
+    let len1;
+    let len2;
+    let len3;
+    let len4;
+    let line;
+    let lineData;
+    let lineFont;
+    let lineGroup;
+    let lineRects;
+    let lineStyle;
+    let lines;
+    let linetexts;
+    let m;
+    let mirror;
+    let n;
+    let opp;
+    let plane;
+    let planeTrans;
+    let position;
+    let realData;
+    let rectData;
+    let rectStyle;
+    let ref;
+    let ref1;
+    let ref2;
+    let ref3;
+    let rotated;
+    let sep;
+    let style;
+    let textData;
+    let textPad;
+    let textPos;
+    let tickFont;
+    let tickPosition;
+    let tickStyle;
+    let userLines;
+    let valid;
+    let xStyle;
+    let yStyle;
     domains = vars.x.domain.viz.concat(vars.y.domain.viz);
     if (domains.indexOf(void 0) >= 0) {
       return null;
@@ -87,45 +89,46 @@
       right: 'end'
     };
     axisData = vars.small ? [] : [0];
-    tickPosition = function(tick, axis) {
-      return tick
-        .attr('x1', function(d) {
+    tickPosition = (tick, axis) =>
+      tick
+        .attr('x1', d => {
           if (axis.indexOf('x') === 0) {
             return vars.x.scale.viz(d);
           } else {
             return 0;
           }
         })
-        .attr('x2', function(d) {
+        .attr('x2', d => {
           if (axis.indexOf('x') === 0) {
             return vars.x.scale.viz(d);
           } else {
             return vars.axes.width;
           }
         })
-        .attr('y1', function(d) {
+        .attr('y1', d => {
           if (axis.indexOf('y') === 0) {
             return vars.y.scale.viz(d);
           } else {
             return 0;
           }
         })
-        .attr('y2', function(d) {
+        .attr('y2', d => {
           if (axis.indexOf('y') === 0) {
             return vars.y.scale.viz(d);
           } else {
             return vars.axes.height;
           }
         });
-    };
-    tickStyle = function(tick, axis, grid) {
-      var color, log, visibles;
+    tickStyle = (tick, axis, grid) => {
+      let color;
+      let log;
+      let visibles;
       color = grid ? vars[axis].grid.color : vars[axis].ticks.color;
       log = vars[axis].scale.value === 'log';
       visibles = vars[axis].ticks.visible || [];
       return tick
-        .attr('stroke', function(d) {
-          var visible;
+        .attr('stroke', d => {
+          let visible;
           if (d === 0) {
             return vars[axis].axis.color;
           }
@@ -152,8 +155,8 @@
         .attr('stroke-width', vars[axis].ticks.width)
         .attr('shape-rendering', vars[axis].ticks.rendering.value);
     };
-    getFontStyle = function(axis, val, style) {
-      var type;
+    getFontStyle = (axis, val, style) => {
+      let type;
       type = val === 0 ? 'axis' : 'ticks';
       val = vars[axis][type].font[style];
       if (val && (val.length || typeof val === 'number')) {
@@ -162,16 +165,14 @@
         return vars[axis].ticks.font[style];
       }
     };
-    tickFont = function(tick, axis) {
-      var log;
+    tickFont = (tick, axis) => {
+      let log;
       log = vars[axis].scale.value === 'log';
       return tick
-        .attr('font-size', function(d) {
-          return getFontStyle(axis, d, 'size') + 'px';
-        })
+        .attr('font-size', d => getFontStyle(axis, d, 'size') + 'px')
         .attr('stroke', 'none')
-        .attr('fill', function(d) {
-          var color;
+        .attr('fill', d => {
+          let color;
           color = getFontStyle(axis, d, 'color');
           if (
             !log ||
@@ -184,58 +185,37 @@
             return mix(color, vars.background.value, 0.4, 1);
           }
         })
-        .attr('font-family', function(d) {
-          return getFontStyle(axis, d, 'family').value;
-        })
-        .attr('font-weight', function(d) {
-          return getFontStyle(axis, d, 'weight');
-        })
-        .style('text-transform', function(d) {
-          return getFontStyle(axis, d, 'transform').value;
-        })
-        .style('letter-spacing', function(d) {
-          return getFontStyle(axis, d, 'spacing') + 'px';
-        });
+        .attr('font-family', d => getFontStyle(axis, d, 'family').value)
+        .attr('font-weight', d => getFontStyle(axis, d, 'weight'))
+        .style('text-transform', d => getFontStyle(axis, d, 'transform').value)
+        .style('letter-spacing', d => getFontStyle(axis, d, 'spacing') + 'px');
     };
-    lineStyle = function(line, axis) {
-      var max, opp;
+    lineStyle = (line, axis) => {
+      let max;
+      let opp;
       max = axis.indexOf('x') === 0 ? 'height' : 'width';
       opp = axis.indexOf('x') === 0 ? 'y' : 'x';
       return line
         .attr(opp + '1', 0)
         .attr(opp + '2', vars.axes[max])
-        .attr(axis + '1', function(d) {
-          return d.coords.line;
-        })
-        .attr(axis + '2', function(d) {
-          return d.coords.line;
-        })
-        .attr('stroke', function(d) {
-          return d.color || vars[axis].lines.color;
-        })
+        .attr(axis + '1', d => d.coords.line)
+        .attr(axis + '2', d => d.coords.line)
+        .attr('stroke', d => d.color || vars[axis].lines.color)
         .attr('stroke-width', vars[axis].lines.width)
         .attr('shape-rendering', vars[axis].lines.rendering.value)
         .attr('stroke-dasharray', vars[axis].lines.dasharray.value);
     };
-    lineFont = function(text, axis) {
-      var opp;
+    lineFont = (text, axis) => {
+      let opp;
       opp = axis.indexOf('x') === 0 ? 'y' : 'x';
       return text
-        .attr(opp, function(d) {
-          return d.coords.text[opp] + 'px';
-        })
-        .attr(axis, function(d) {
-          return d.coords.text[axis] + 'px';
-        })
+        .attr(opp, d => d.coords.text[opp] + 'px')
+        .attr(axis, d => d.coords.text[axis] + 'px')
         .attr('dy', vars[axis].lines.font.position.value)
         .attr('text-anchor', alignMap[vars[axis].lines.font.align.value])
-        .attr('transform', function(d) {
-          return d.transform;
-        })
+        .attr('transform', d => d.transform)
         .attr('font-size', vars[axis].lines.font.size + 'px')
-        .attr('fill', function(d) {
-          return d.color || vars[axis].lines.color;
-        })
+        .attr('fill', d => d.color || vars[axis].lines.color)
         .attr('font-family', vars[axis].lines.font.family.value)
         .attr('font-weight', vars[axis].lines.font.weight);
     };
@@ -279,29 +259,31 @@
     mirror
       .transition()
       .duration(vars.draw.timing)
-      .attr('opacity', function() {
+      .attr('opacity', () => {
         if (vars.axes.mirror.value) {
           return 1;
         } else {
           return 0;
         }
       })
-      .attr('d', function() {
-        var h, w;
+      .attr('d', () => {
+        let h;
+        let w;
         w = bgStyle.width;
         h = bgStyle.height;
         return 'M ' + w + ' ' + h + ' L 0 ' + h + ' L ' + w + ' 0 Z';
       });
     rotated = vars.x.ticks.rotate !== 0;
-    xStyle = function(group, axis) {
-      var groups, offset;
+    xStyle = (group, axis) => {
+      let groups;
+      let offset;
       offset = axis === 'x' ? vars.axes.height : 0;
       groups = group
         .attr('transform', 'translate(0,' + offset + ')')
         .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
         .selectAll('g.tick');
       groups.selectAll('line').attr('y2', function(d) {
-        var y2;
+        let y2;
         if (d.constructor === Date) {
           d = +d;
         }
@@ -322,9 +304,7 @@
         .each(function(d) {
           d3.select(this)
             .attr('dy', '0px')
-            .attr('font-size', function(d) {
-              return getFontStyle(axis, d, 'size') + 'px';
-            });
+            .attr('font-size', d => getFontStyle(axis, d, 'size') + 'px');
           if (d.constructor === Date) {
             d = +d;
           }
@@ -350,15 +330,16 @@
           }
         });
     };
-    yStyle = function(group, axis) {
-      var groups, offset;
+    yStyle = (group, axis) => {
+      let groups;
+      let offset;
       offset = axis === 'y2' ? vars.axes.width : 0;
       groups = group
         .attr('transform', 'translate(' + offset + ', 0)')
         .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
         .selectAll('g.tick');
       groups.selectAll('line').attr('y2', function(d) {
-        var y2;
+        let y2;
         if (d.constructor === Date) {
           d = +d;
         }
@@ -405,8 +386,8 @@
         .attr('opacity', 0)
         .remove();
     }
-    labelStyle = function(label, axis) {
-      return label
+    labelStyle = (label, axis) =>
+      label
         .attr(
           'x',
           axis.indexOf('x') === 0
@@ -434,7 +415,6 @@
         .attr('dominant-baseline', 'central')
         .style('text-transform', vars[axis].label.font.transform.value)
         .style('letter-spacing', vars[axis].label.font.spacing + 'px');
-    };
     ref1 = ['x', 'y'];
     for (k = 0, len1 = ref1.length; k < len1; k++) {
       axis = ref1[k];
@@ -452,7 +432,7 @@
         }
       }
       if (vars[axis].value === vars.time.value) {
-        gridData = gridData.map(function(d) {
+        gridData = gridData.map(d => {
           d += '';
           if (d.length === 4 && parseInt(d) + '' === d) {
             d += '/01/01';
@@ -465,7 +445,7 @@
         .enter()
         .append('g')
         .attr('id', 'd3po_graph_' + axis + 'grid');
-      lines = grid.selectAll('line').data(gridData, function(d) {
+      lines = grid.selectAll('line').data(gridData, d => {
         if (d.constructor === Date) {
           return d.getTime();
         } else {
@@ -625,9 +605,7 @@
         }
         lines = lineGroup
           .selectAll('line.d3po_graph_' + axis + 'line')
-          .data(lineData, function(d) {
-            return d.position;
-          });
+          .data(lineData, d => d.position);
         lines
           .enter()
           .append('line')
@@ -647,15 +625,13 @@
           .remove();
         linetexts = lineGroup
           .selectAll('text.d3po_graph_' + axis + 'line_text')
-          .data(textData, function(d) {
-            return d.position;
-          });
+          .data(textData, d => d.position);
         linetexts
           .enter()
           .append('text')
           .attr('class', 'd3po_graph_' + axis + 'line_text')
-          .attr('id', function(d) {
-            var id;
+          .attr('id', d => {
+            let id;
             id = d.position + '';
             id = id.replace('-', 'neg');
             id = id.replace('.', 'p');
@@ -664,9 +640,7 @@
           .attr('opacity', 0)
           .call(lineFont, axis);
         linetexts
-          .text(function(d) {
-            return d.text;
-          })
+          .text(d => d.text)
           .transition()
           .duration(vars.draw.timing)
           .attr('opacity', 1)
@@ -677,10 +651,10 @@
           .duration(vars.draw.timing)
           .attr('opacity', 0)
           .remove();
-        rectStyle = function(rect) {
-          var getText;
-          getText = function(d) {
-            var id;
+        rectStyle = rect => {
+          let getText;
+          getText = d => {
+            let id;
             id = d.position + '';
             id = id.replace('-', 'neg');
             id = id.replace('.', 'p');
@@ -690,21 +664,11 @@
               .getBBox();
           };
           return rect
-            .attr('x', function(d) {
-              return getText(d).x - d.padding;
-            })
-            .attr('y', function(d) {
-              return getText(d).y - d.padding;
-            })
-            .attr('transform', function(d) {
-              return d.transform;
-            })
-            .attr('width', function(d) {
-              return getText(d).width + d.padding * 2;
-            })
-            .attr('height', function(d) {
-              return getText(d).height + d.padding * 2;
-            })
+            .attr('x', d => getText(d).x - d.padding)
+            .attr('y', d => getText(d).y - d.padding)
+            .attr('transform', d => d.transform)
+            .attr('width', d => getText(d).width + d.padding * 2)
+            .attr('height', d => getText(d).height + d.padding * 2)
             .attr(
               'fill',
               vars.axes.background.color !== 'transparent'
@@ -715,9 +679,7 @@
         rectData = vars[axis].lines.font.background.value ? textData : [];
         lineRects = lineGroup
           .selectAll('rect.d3po_graph_' + axis + 'line_rect')
-          .data(rectData, function(d) {
-            return d.position;
-          });
+          .data(rectData, d => d.position);
         lineRects
           .enter()
           .insert('rect', 'text.d3po_graph_' + axis + 'line_text')
@@ -745,4 +707,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

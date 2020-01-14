@@ -1,5 +1,8 @@
-(function() {
-  var formatNumber, locale, mergeObject, titleCase;
+(() => {
+  let formatNumber;
+  let locale;
+  let mergeObject;
+  let titleCase;
 
   formatNumber = require('../../number/format.js');
 
@@ -21,7 +24,8 @@
         return d3.keys(locale);
       },
       process: function(value) {
-        var defaultLocale, returnObject;
+        let defaultLocale;
+        let returnObject;
         defaultLocale = 'en_US';
         returnObject = locale[defaultLocale];
         if (value !== defaultLocale) {
@@ -53,7 +57,9 @@
       value: false
     },
     value: function(value, opts) {
-      var f, v, vars;
+      let f;
+      let v;
+      let vars;
       if (!opts) {
         opts = {};
       }
@@ -72,4 +78,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

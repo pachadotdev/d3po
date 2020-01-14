@@ -33,6 +33,10 @@ module.exports = {
       'error',
       'always'
     ],
-    'no-inner-declarations': 'off'
+    'no-inner-declarations': 'off',
+    'curly': [
+      'error',
+      'all'
+    ]
   }
 };

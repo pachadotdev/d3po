@@ -1,8 +1,17 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [false, Number, String],
     process: function(value, vars) {
-      var d, element, elementTag, elementType, i, j, k, len, len1, ref;
+      let d;
+      let element;
+      let elementTag;
+      let elementType;
+      let i;
+      let j;
+      let k;
+      let len;
+      let len1;
+      let ref;
       element = vars.data.element.value;
       if (element && ['string', 'number'].indexOf(typeof value) >= 0) {
         elementTag = element.node().tagName.toLowerCase();
@@ -26,4 +35,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

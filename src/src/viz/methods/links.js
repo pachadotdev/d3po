@@ -1,5 +1,7 @@
-(function() {
-  var decoration, family, transform;
+(() => {
+  let decoration;
+  let family;
+  let transform;
 
   decoration = require('../../core/methods/font/decoration.js');
 
@@ -23,4 +25,4 @@
       weight: 400
     }
   };
-}.call(this));
+}).call(this);

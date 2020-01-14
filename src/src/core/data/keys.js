@@ -1,29 +1,46 @@
 // Get Key Types from Data
-(function() {
-  var print,
-    validObject,
-    indexOf =
-      [].indexOf ||
-      function(item) {
-        for (var i = 0, l = this.length; i < l; i++) {
-          if (i in this && this[i] === item) return i;
+(() => {
+  let print;
+  let validObject;
+
+  const indexOf =
+    [].indexOf ||
+    function(item) {
+      for (let i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) {
+          return i;
         }
-        return -1;
-      };
+      }
+      return -1;
+    };
 
   print = require('../console/print.js');
 
   validObject = require('../../object/validate.js');
 
-  module.exports = function(vars, type) {
-    var get_keys, k, kk, lengthMatch, ref, ref1, timerString, v, vv;
+  module.exports = (vars, type) => {
+    let get_keys;
+    let k;
+    let kk;
+    let lengthMatch;
+    let ref;
+    let ref1;
+    let timerString;
+    let v;
+    let vv;
     timerString = type + ' key analysis';
     if (vars.dev.value) {
       print.time(timerString);
     }
     vars[type].keys = {};
-    get_keys = function(arr) {
-      var a, i, k, len, results, results1, v;
+    get_keys = arr => {
+      let a;
+      let i;
+      let k;
+      let len;
+      let results;
+      let results1;
+      let v;
       if (arr instanceof Array) {
         results = [];
         for (i = 0, len = arr.length; i < len; i++) {
@@ -73,4 +90,4 @@
       return print.time(timerString);
     }
   };
-}.call(this));
+}).call(this);

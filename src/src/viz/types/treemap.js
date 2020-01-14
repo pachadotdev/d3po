@@ -1,5 +1,8 @@
-(function() {
-  var dataThreshold, groupData, mergeObject, treemap;
+(() => {
+  let dataThreshold;
+  let groupData;
+  let mergeObject;
+  let treemap;
 
   dataThreshold = require('../../core/data/threshold.js');
 
@@ -7,20 +10,24 @@
 
   mergeObject = require('../../object/merge.js');
 
-  treemap = function(vars) {
-    var d, data, groupedData, i, len, returnData, root;
+  treemap = vars => {
+    let d;
+    let data;
+    let groupedData;
+    let i;
+    let len;
+    let returnData;
+    let root;
     groupedData = groupData(vars, vars.data.viz);
     data = d3.layout
       .treemap()
       .mode(vars.type.mode.value)
       .round(true)
       .size([vars.width.viz, vars.height.viz])
-      .children(function(d) {
-        return d.values;
-      })
+      .children(d => d.values)
       .padding(vars.data.padding.value)
-      .sort(function(a, b) {
-        var sizeDiff;
+      .sort((a, b) => {
+        let sizeDiff;
         sizeDiff = a.value - b.value;
         if (sizeDiff === 0) {
           return a.id < b.id;
@@ -32,9 +39,7 @@
         name: 'root',
         values: groupedData
       })
-      .filter(function(d) {
-        return !d.values && d.area;
-      });
+      .filter(d => !d.values && d.area);
     if (data.length) {
       root = data[0];
       while (root.parent) {
@@ -64,9 +69,7 @@
 
   treemap.shapes = ['square'];
 
-  treemap.threshold = function(vars) {
-    return (40 * 40) / (vars.width.viz * vars.height.viz);
-  };
+  treemap.threshold = vars => (40 * 40) / (vars.width.viz * vars.height.viz);
 
   module.exports = treemap;
-}.call(this));
+}).call(this);

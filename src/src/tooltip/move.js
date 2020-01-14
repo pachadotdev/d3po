@@ -1,10 +1,13 @@
-(function() {
-  var arrowStyle, scroll;
+(() => {
+  let arrowStyle;
+  let scroll;
 
   scroll = require('../client/scroll.js');
 
-  module.exports = function(x, y, id) {
-    var d, mins, tooltip;
+  module.exports = (x, y, id) => {
+    let d;
+    let mins;
+    let tooltip;
     if (!id) {
       id = 'default';
     }
@@ -82,23 +85,23 @@
     return tooltip;
   };
 
-  arrowStyle = function(arrow) {
-    return arrow
-      .style('bottom', function(d) {
+  arrowStyle = arrow =>
+    arrow
+      .style('bottom', d => {
         if (d.anchor.y !== 'center' && !d.flip) {
           return '-5px';
         } else {
           return 'auto';
         }
       })
-      .style('right', function(d) {
+      .style('right', d => {
         if (d.anchor.y === 'center' && !d.flip) {
           return '-5px';
         } else {
           return 'auto';
         }
       })
-      .style('top', function(d) {
+      .style('top', d => {
         if (d.anchor.y !== 'center' && d.flip) {
           return '-5px';
         } else if (d.anchor.y === 'center') {
@@ -107,7 +110,7 @@
           return 'auto';
         }
       })
-      .style('left', function(d) {
+      .style('left', d => {
         if (d.anchor.y === 'center' && d.flip) {
           return '-5px';
         } else if (d.anchor.y !== 'center') {
@@ -116,8 +119,8 @@
           return 'auto';
         }
       })
-      .style('margin-left', function(d) {
-        var arrow_x;
+      .style('margin-left', d => {
+        let arrow_x;
         if (d.anchor.y === 'center') {
           return 'auto';
         } else {
@@ -142,8 +145,8 @@
           return arrow_x + 'px';
         }
       })
-      .style('margin-top', function(d) {
-        var arrow_y;
+      .style('margin-top', d => {
+        let arrow_y;
         if (d.anchor.y !== 'center') {
           return 'auto';
         } else {
@@ -170,5 +173,4 @@
           return arrow_y + 'px';
         }
       });
-  };
-}.call(this));
+}).call(this);

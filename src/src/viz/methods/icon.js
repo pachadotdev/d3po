@@ -1,5 +1,5 @@
-(function() {
-  var process;
+(() => {
+  let process;
 
   process = require('../../core/methods/process/icon.js');
 
@@ -19,4 +19,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

@@ -1,7 +1,9 @@
 // Tests if a string is a valid color
-(function() {
-  module.exports = function(color) {
-    var blackColors, testColor, userBlack;
+(() => {
+  module.exports = color => {
+    let blackColors;
+    let testColor;
+    let userBlack;
     color = color + '';
     color = color.replace(RegExp(' ', 'g'), '');
     if (color.indexOf('rgb') === 0) {
@@ -20,4 +22,4 @@
     userBlack = blackColors.indexOf(color) >= 0;
     return testColor !== '#000000' || userBlack;
   };
-}.call(this));
+}).call(this);

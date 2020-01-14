@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [false, Function, String],
     sort: {
@@ -7,4 +7,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

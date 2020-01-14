@@ -1,5 +1,8 @@
-(function() {
-  var axes, draw, mouse, plot;
+(() => {
+  let axes;
+  let draw;
+  let mouse;
+  let plot;
 
   axes = require('./includes/axes.js');
 
@@ -9,7 +12,7 @@
 
   plot = require('./includes/plot.js');
 
-  module.exports = function(vars, opts) {
+  module.exports = (vars, opts) => {
     if (opts === void 0) {
       opts = {};
     }
@@ -18,4 +21,4 @@
     draw(vars, opts);
     vars.mouse.viz = opts.mouse === true ? mouse : false;
   };
-}.call(this));
+}).call(this);

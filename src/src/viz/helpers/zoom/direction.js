@@ -1,6 +1,8 @@
-(function() {
-  module.exports = function(data, vars) {
-    var depth, max_depth, nextDepth;
+(() => {
+  module.exports = (data, vars) => {
+    let depth;
+    let max_depth;
+    let nextDepth;
     max_depth = vars.id.nesting.length - 1;
     depth = vars.depth.value;
     nextDepth = vars.id.nesting[depth + 1];
@@ -21,4 +23,4 @@
       return 0;
     }
   };
-}.call(this));
+}).call(this);

@@ -1,13 +1,16 @@
 // Flows the text into the container
-(function() {
-  var flow, fontSizes, resize, wrap;
+(() => {
+  let flow;
+  let fontSizes;
+  let resize;
+  let wrap;
 
   flow = require('./flow.js');
 
   fontSizes = require('../../font/sizes.js');
 
-  wrap = function(vars) {
-    var firstChar;
+  wrap = vars => {
+    let firstChar;
     if (vars.text.phrases.length) {
       vars.text.current = vars.text.phrases.shift() + '';
       vars.text.words = vars.text.current.match(vars.text.split['break']);
@@ -26,24 +29,24 @@
 
   module.exports = wrap;
 
-  resize = function(vars) {
-    var addon,
-      areaMod,
-      areaRatio,
-      boxArea,
-      height,
-      heightMax,
-      i,
-      lineWidth,
-      maxWidth,
-      mirror,
-      sizeMax,
-      sizeRatio,
-      sizes,
-      textArea,
-      width,
-      widthRatio,
-      words;
+  resize = vars => {
+    let addon;
+    let areaMod;
+    let areaRatio;
+    let boxArea;
+    let height;
+    let heightMax;
+    let i;
+    let lineWidth;
+    let maxWidth;
+    let mirror;
+    let sizeMax;
+    let sizeRatio;
+    let sizes;
+    let textArea;
+    let width;
+    let widthRatio;
+    let words;
     words = [];
     i = 0;
     while (i < vars.text.words.length) {
@@ -65,13 +68,11 @@
         parent: vars.container.value
       }
     );
-    maxWidth = d3.max(sizes, function(d) {
-      return d.width;
-    });
+    maxWidth = d3.max(sizes, d => d.width);
     areaMod = 1.165 + (width / height) * 0.11;
     textArea =
-      d3.sum(sizes, function(d) {
-        var h;
+      d3.sum(sizes, d => {
+        let h;
         h = vars.container.dy || sizeMax * 1.2;
         return d.width * h;
       }) * areaMod;
@@ -99,4 +100,4 @@
       wrap(vars);
     }
   };
-}.call(this));
+}).call(this);

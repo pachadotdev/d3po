@@ -1,5 +1,6 @@
-(function() {
-  var locale, mergeObject;
+(() => {
+  let locale;
+  let mergeObject;
 
   locale = require('../../core/locale/locale.js');
 
@@ -12,7 +13,8 @@
         return d3.keys(locale);
       },
       process: function(value) {
-        var defaultLocale, returnObject;
+        let defaultLocale;
+        let returnObject;
         defaultLocale = 'en_US';
         returnObject = locale[defaultLocale];
         if (value !== defaultLocale) {
@@ -37,4 +39,4 @@
     },
     value: 'en_US'
   };
-}.call(this));
+}).call(this);

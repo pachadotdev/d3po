@@ -1,34 +1,34 @@
 // Finds the best regression model that fits the data using Bayesian Information Criteria
-(function() {
-  var numeric;
+(() => {
+  let numeric;
 
   numeric = require('numeric');
 
-  module.exports = function(data, options) {
-    var N,
-      X,
-      Xfulltr,
-      Xtr,
-      bestResult,
-      beta_hat,
-      bic,
-      degree,
-      degrees,
-      i,
-      j,
-      k,
-      l,
-      loglike,
-      m,
-      point,
-      prevBIC,
-      ref,
-      ref1,
-      residual,
-      sigma2,
-      sse,
-      y,
-      y_hat;
+  module.exports = (data, options) => {
+    let N;
+    let X;
+    let Xfulltr;
+    let Xtr;
+    let bestResult;
+    let beta_hat;
+    let bic;
+    let degree;
+    let degrees;
+    let i;
+    let j;
+    let k;
+    let l;
+    let loglike;
+    let m;
+    let point;
+    let prevBIC;
+    let ref;
+    let ref1;
+    let residual;
+    let sigma2;
+    let sse;
+    let y;
+    let y_hat;
     if (options == null) {
       options = {};
     }
@@ -38,8 +38,10 @@
     N = data.length;
     prevBIC = Number.MAX_VALUE;
     bestResult = null;
-    Xfulltr = (function() {
-      var l, ref, results;
+    Xfulltr = (() => {
+      let l;
+      let ref;
+      let results;
       results = [];
       for (
         degree = l = 1, ref = options.maxDegree + 1;
@@ -47,8 +49,10 @@
         degree = 1 <= ref ? ++l : --l
       ) {
         results.push(
-          (function() {
-            var len, m, results1;
+          (() => {
+            let len;
+            let m;
+            let results1;
             results1 = [];
             for (m = 0, len = data.length; m < len; m++) {
               point = data[m];
@@ -60,8 +64,10 @@
       }
       return results;
     })();
-    y = (function() {
-      var l, len, results;
+    y = (() => {
+      let l;
+      let len;
+      let results;
       results = [];
       for (l = 0, len = data.length; l < len; l++) {
         point = data[l];
@@ -75,8 +81,10 @@
       i = 0 <= ref ? ++l : --l
     ) {
       Xtr = [
-        (function() {
-          var m, ref1, results;
+        (() => {
+          let m;
+          let ref1;
+          let results;
           results = [];
           for (
             m = 0, ref1 = N;
@@ -121,4 +129,4 @@
     }
     return bestResult;
   };
-}.call(this));
+}).call(this);

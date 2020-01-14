@@ -1,8 +1,8 @@
-var hideElement = require('./hideelement.js');
+const hideElement = require('./hideelement.js');
 
 // Parses an HTML element for data
-module.exports = function(vars) {
-  var attributes = [
+module.exports = vars => {
+  let attributes = [
     vars.color.value,
     vars.icon.value,
     vars.keywords.value,
@@ -17,18 +17,16 @@ module.exports = function(vars) {
   attributes = attributes.concat(vars.id.nesting);
 
   function get_attributes(obj, elem) {
-    [].forEach.call(elem.attributes, function(attr) {
+    [].forEach.call(elem.attributes, attr => {
       if (/^data-/.test(attr.name)) {
-        var camelCaseName = attr.name
+        const camelCaseName = attr.name
           .substr(5)
-          .replace(/-(.)/g, function($0, $1) {
-            return $1.toUpperCase();
-          });
+          .replace(/-(.)/g, ($0, $1) => $1.toUpperCase());
         obj[camelCaseName] = attr.value;
       }
     });
 
-    attributes.forEach(function(a) {
+    attributes.forEach(a => {
       if (elem.getAttribute(a) !== null) {
         obj[a] = elem.getAttribute(a);
       }
@@ -39,12 +37,12 @@ module.exports = function(vars) {
     element: vars.data.value
   });
 
-  var elementTag = vars.data.element.value.node().tagName.toLowerCase(),
-    elementType = vars.data.element.value.attr('type'),
-    elementData = [];
+  const elementTag = vars.data.element.value.node().tagName.toLowerCase();
+  const elementType = vars.data.element.value.attr('type');
+  const elementData = [];
 
   if (elementTag === 'select') {
-    var elementID = vars.data.element.value.node().id;
+    const elementID = vars.data.element.value.node().id;
     if (elementID) {
       vars.self.container({
         id: elementID
@@ -52,7 +50,7 @@ module.exports = function(vars) {
     }
 
     vars.data.element.value.selectAll('option').each(function(o, i) {
-      var data_obj = {};
+      const data_obj = {};
 
       data_obj.text = d3.select(this).text();
 
@@ -62,7 +60,7 @@ module.exports = function(vars) {
 
       if (this.selected) {
         for (i = vars.id.nesting.length - 1; i >= 0; i--) {
-          var level = vars.id.nesting[i];
+          const level = vars.id.nesting[i];
           if (level in data_obj) {
             vars.self.focus(data_obj[level]);
             break;
@@ -71,7 +69,7 @@ module.exports = function(vars) {
       }
     });
   } else if (elementTag === 'input' && elementType === 'radio') {
-    var elementName = vars.data.element.value.node().getAttribute('name');
+    const elementName = vars.data.element.value.node().getAttribute('name');
     if (elementName) {
       vars.self.container({
         id: elementName
@@ -79,14 +77,14 @@ module.exports = function(vars) {
     }
 
     vars.data.element.value.each(function() {
-      var data_obj = {};
+      const data_obj = {};
 
       get_attributes(data_obj, this);
 
-      var id = data_obj[vars.id.value] || this.id || false;
+      const id = data_obj[vars.id.value] || this.id || false;
 
       if (id && isNaN(parseFloat(id))) {
-        var label = d3.select('label[for=' + id + ']');
+        const label = d3.select('label[for=' + id + ']');
 
         if (!label.empty()) {
           data_obj.text = label.html();
@@ -113,13 +111,13 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If a <legend> element exists, use it as the title.
   //----------------------------------------------------------------------------
-  var elementLegend = d3.select('legend[for=' + vars.container.id + ']');
+  const elementLegend = d3.select('legend[for=' + vars.container.id + ']');
   if (!elementLegend.empty()) {
     vars.self.title(elementLegend.html());
     elementLegend.call(hideElement);
   }
 
-  var containerTag = vars.container.value
+  const containerTag = vars.container.value
     ? vars.container.value.node().tagName.toLowerCase()
     : false;
 

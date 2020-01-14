@@ -1,7 +1,7 @@
 // Lightens a color
-(function() {
-  module.exports = function(color, increment) {
-    var c;
+(() => {
+  module.exports = (color, increment) => {
+    let c;
     if (increment === void 0) {
       increment = 0.5;
     }
@@ -11,4 +11,4 @@
     c.s -= increment;
     return c.toString();
   };
-}.call(this));
+}).call(this);

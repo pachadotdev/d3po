@@ -1,12 +1,14 @@
-var events = require('../../../client/pointer.js'),
-  prefix = require('../../../client/prefix.js'),
-  print = require('../../../core/console/print.js'),
-  touch = require('../../../client/touch.js'),
-  touchEvent = require('../zoom/propagation.js');
+const events = require('../../../client/pointer.js');
+const prefix = require('../../../client/prefix.js');
+const print = require('../../../core/console/print.js');
+const touch = require('../../../client/touch.js');
+const touchEvent = require('../zoom/propagation.js');
 
 // Enter SVG Elements
-module.exports = function(vars) {
-  if (vars.dev.value) print.time('creating SVG elements');
+module.exports = vars => {
+  if (vars.dev.value) {
+    print.time('creating SVG elements');
+  }
 
   // Enter SVG
   vars.svg = vars.container.value.selectAll('svg#d3po').data([0]);
@@ -55,7 +57,7 @@ module.exports = function(vars) {
     .attr('transform', 'translate(0,' + vars.height.value + ')');
 
   // Enter App Clipping Mask
-  var clipID = 'clipping_' + vars.container.id;
+  const clipID = 'clipping_' + vars.container.id;
   vars.g.clipping = vars.svg.selectAll('#clipping').data(['clipping']);
   vars.g.clipping
     .enter()
@@ -107,7 +109,9 @@ module.exports = function(vars) {
 
   vars.g.overlay
     .on(events.move, function() {
-      if (touch) touchEvent(vars, d3.event);
+      if (touch) {
+        touchEvent(vars, d3.event);
+      }
 
       if (
         vars.types[vars.type.value].zoom &&
@@ -120,7 +124,9 @@ module.exports = function(vars) {
       }
     })
     .on(events.up, function() {
-      if (touch) touchEvent(vars, d3.event);
+      if (touch) {
+        touchEvent(vars, d3.event);
+      }
 
       if (
         vars.types[vars.type.value].zoom &&
@@ -133,7 +139,9 @@ module.exports = function(vars) {
       }
     })
     .on(events.down, function() {
-      if (touch) touchEvent(vars, d3.event);
+      if (touch) {
+        touchEvent(vars, d3.event);
+      }
 
       if (
         vars.types[vars.type.value].zoom &&
@@ -201,5 +209,7 @@ module.exports = function(vars) {
   vars.defs = vars.svg.selectAll('defs').data(['defs']);
   vars.defs.enter().append('defs');
 
-  if (vars.dev.value) print.timeEnd('creating SVG elements');
+  if (vars.dev.value) {
+    print.timeEnd('creating SVG elements');
+  }
 };

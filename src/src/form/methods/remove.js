@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [void 0, Function],
     process: function(value, vars) {
@@ -9,4 +9,4 @@
     },
     value: void 0
   };
-}.call(this));
+}).call(this);

@@ -1,6 +1,7 @@
-(function() {
-  module.exports = function(a, b) {
-    var aHSL, bHSL;
+(() => {
+  module.exports = (a, b) => {
+    let aHSL;
+    let bHSL;
     aHSL = d3.hsl(a);
     bHSL = d3.hsl(b);
     a = aHSL.s === 0 ? 361 : aHSL.h;
@@ -11,4 +12,4 @@
       return a - b;
     }
   };
-}.call(this));
+}).call(this);

@@ -1,11 +1,11 @@
-var copy = require('../../../util/copy.js'),
-  fetchColor = require('../../../core/fetch/color.js'),
-  segments = require('./segments.js'),
-  shapeStyle = require('./style.js');
+const copy = require('../../../util/copy.js');
+const fetchColor = require('../../../core/fetch/color.js');
+const segments = require('./segments.js');
+const shapeStyle = require('./style.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "square" and "circle" shapes using svg:rect
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection) {
+module.exports = (vars, selection) => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // The position and size of each rectangle on enter and exit.
   //----------------------------------------------------------------------------
@@ -21,35 +21,37 @@ module.exports = function(vars, selection) {
   // The position and size of each rectangle on update.
   //----------------------------------------------------------------------------
   function update(nodes, mod) {
-    if (!mod) mod = 0;
+    if (!mod) {
+      mod = 0;
+    }
     nodes
-      .attr('x', function(d) {
-        var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
+      .attr('x', d => {
+        const w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
         return -w / 2 - mod / 2;
       })
-      .attr('y', function(d) {
-        var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
+      .attr('y', d => {
+        const h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
         return -h / 2 - mod / 2;
       })
-      .attr('width', function(d) {
-        var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
+      .attr('width', d => {
+        const w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
         return w + mod;
       })
-      .attr('height', function(d) {
-        var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
+      .attr('height', d => {
+        const h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
         return h + mod;
       })
-      .attr('rx', function(d) {
-        var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
-        var rounded = ['circle'].indexOf(vars.shape.value) >= 0;
+      .attr('rx', d => {
+        const w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
+        const rounded = ['circle'].indexOf(vars.shape.value) >= 0;
         return rounded ? (w + mod) / 2 : 0;
       })
-      .attr('ry', function(d) {
-        var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
-        var rounded = ['circle'].indexOf(vars.shape.value) >= 0;
+      .attr('ry', d => {
+        const h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
+        const rounded = ['circle'].indexOf(vars.shape.value) >= 0;
         return rounded ? (h + mod) / 2 : 0;
       })
-      .attr('shape-rendering', function() {
+      .attr('shape-rendering', () => {
         if (['square'].indexOf(vars.shape.value) >= 0) {
           return vars.shape.rendering.value;
         } else {
@@ -62,14 +64,13 @@ module.exports = function(vars, selection) {
   // Check each data point for active and temp data
   //----------------------------------------------------------------------------
   selection.each(function(d) {
-    var active = segments(vars, d, 'active'),
-      temp = segments(vars, d, 'temp'),
-      total = segments(vars, d, 'total'),
-      group = d3.select(this),
-      color = fetchColor(vars, d);
-
-    var fill_data = [],
-      hatch_data = [];
+    const active = segments(vars, d, 'active');
+    const temp = segments(vars, d, 'temp');
+    const total = segments(vars, d, 'total');
+    const group = d3.select(this);
+    const color = fetchColor(vars, d);
+    const fill_data = [];
+    let hatch_data = [];
 
     if (total && vars.types[vars.type.value].fill) {
       if (temp) {
@@ -92,7 +93,7 @@ module.exports = function(vars, selection) {
         .attr('shape-rendering', vars.shape.rendering.value);
     }
 
-    var pattern = vars.defs
+    const pattern = vars.defs
       .selectAll('pattern#d3po_hatch_' + d.d3po.id)
       .data(hatch_data);
 
@@ -114,7 +115,7 @@ module.exports = function(vars, selection) {
       pattern.selectAll('line').style('stroke', color);
     }
 
-    var pattern_enter = pattern
+    const pattern_enter = pattern
       .enter()
       .append('pattern')
       .attr('id', 'd3po_hatch_' + d.d3po.id)
@@ -158,9 +159,9 @@ module.exports = function(vars, selection) {
       .attr('y2', '1')
       .call(hatch_lines);
 
-    var clip_data = fill_data.length ? [d] : [];
+    const clip_data = fill_data.length ? [d] : [];
 
-    var clip = group.selectAll('#d3po_clip_' + d.d3po.id).data(clip_data);
+    const clip = group.selectAll('#d3po_clip_' + d.d3po.id).data(clip_data);
 
     clip
       .enter()
@@ -188,7 +189,7 @@ module.exports = function(vars, selection) {
       clip.exit().remove();
     }
 
-    var fills = group.selectAll('path.d3po_fill').data(fill_data);
+    const fills = group.selectAll('path.d3po_fill').data(fill_data);
 
     fills
       .transition()

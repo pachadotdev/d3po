@@ -1,11 +1,11 @@
-(function() {
-  var rendering;
+(() => {
+  let rendering;
 
   rendering = require('../../core/methods/rendering.js');
 
   module.exports = {
     accepted: function(vars) {
-      var list;
+      let list;
       list = vars.types[vars.type.value].shapes;
       if (list && !(list instanceof Array)) {
         list = [list];
@@ -33,4 +33,4 @@
     rendering: rendering(),
     value: false
   };
-}.call(this));
+}).call(this);

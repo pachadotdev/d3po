@@ -1,22 +1,22 @@
 // Returns a subgraph of distance K away from the source node
-(function() {
-  var normalize;
+(() => {
+  let normalize;
 
   normalize = require('./normalize.js');
 
-  module.exports = function(edges, source, options) {
-    var K,
-      dfs,
-      directed,
-      distance,
-      edge,
-      endpoint,
-      id,
-      nodeid,
-      nodes,
-      ref,
-      startpoint,
-      visited;
+  module.exports = (edges, source, options) => {
+    let K;
+    let dfs;
+    let directed;
+    let distance;
+    let edge;
+    let endpoint;
+    let id;
+    let nodeid;
+    let nodes;
+    let ref;
+    let startpoint;
+    let visited;
     if (options == null) {
       options = {};
     }
@@ -37,8 +37,16 @@
     (nodes = options.nodes);
     visited = {};
     visited[source] = true;
-    dfs = function(origin, curr_distance) {
-      var a, b, edge, i, len, new_distance, ref1, ref2, results;
+    dfs = (origin, curr_distance) => {
+      let a;
+      let b;
+      let edge;
+      let i;
+      let len;
+      let new_distance;
+      let ref1;
+      let ref2;
+      let results;
       ref1 = nodes[origin].outedges;
       results = [];
       for (i = 0, len = ref1.length; i < len; i++) {
@@ -64,16 +72,18 @@
     };
     dfs(source, 0);
     return {
-      nodes: (function() {
-        var results;
+      nodes: (() => {
+        let results;
         results = [];
         for (id in visited) {
           results.push(nodes[id].node);
         }
         return results;
       })(),
-      edges: (function() {
-        var i, len, results;
+      edges: (() => {
+        let i;
+        let len;
+        let results;
         results = [];
         for (i = 0, len = edges.length; i < len; i++) {
           edge = edges[i];
@@ -88,4 +98,4 @@
       })()
     };
   };
-}.call(this));
+}).call(this);

@@ -1,22 +1,22 @@
 // Formats numbers to look "pretty"
-(function() {
-  var defaultLocale;
+(() => {
+  let defaultLocale;
 
   defaultLocale = require('../core/locale/languages/en_US.js');
 
-  module.exports = function(number, opts) {
-    var affixes,
-      format,
-      key,
-      labels,
-      length,
-      locale,
-      ret,
-      sigs,
-      symbol,
-      time,
-      vars,
-      zeros;
+  module.exports = (number, opts) => {
+    let affixes;
+    let format;
+    let key;
+    let labels;
+    let length;
+    let locale;
+    let ret;
+    let sigs;
+    let symbol;
+    let time;
+    let vars;
+    let zeros;
     if (number === void 0 || number === null || number === false) {
       return '';
     }
@@ -94,4 +94,4 @@
       return ret;
     }
   };
-}.call(this));
+}).call(this);

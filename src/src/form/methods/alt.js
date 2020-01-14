@@ -1,5 +1,5 @@
-(function() {
-  var filter;
+(() => {
+  let filter;
 
   filter = require('../../core/methods/filter.js');
 
@@ -9,4 +9,4 @@
     solo: filter(true),
     value: 'alt'
   };
-}.call(this));
+}).call(this);

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [false, Array, Number, String],
     html: {
@@ -6,7 +6,7 @@
       value: false
     },
     init: function() {
-      var s;
+      let s;
       s = this.split.value;
       this.split['break'] = new RegExp(
         '[^\\s\\' + s.join('\\') + ']+\\' + s.join('?\\') + '?',
@@ -26,4 +26,4 @@
       value: ['-', '/', ';', ':', '&']
     }
   };
-}.call(this));
+}).call(this);

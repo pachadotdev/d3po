@@ -1,18 +1,20 @@
-var copy = require('../../../util/copy.js'),
-  form = require('../../../form/form.js'),
-  print = require('../../../core/console/print.js'),
-  validObject = require('../../../object/validate.js');
+const copy = require('../../../util/copy.js');
+const form = require('../../../form/form.js');
+const print = require('../../../core/console/print.js');
+const validObject = require('../../../object/validate.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws a UI drawer, if defined.
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var enabled = vars.ui.value && vars.ui.value.length,
-    position = vars.ui.position.value;
+module.exports = vars => {
+  const enabled = vars.ui.value && vars.ui.value.length;
+  const position = vars.ui.position.value;
 
-  if (vars.dev.value && enabled) print.time('drawing custom UI elements');
+  if (vars.dev.value && enabled) {
+    print.time('drawing custom UI elements');
+  }
 
-  var drawer = vars.container.value
+  const drawer = vars.container.value
     .selectAll('div#d3po_drawer')
     .data(['d3po_drawer']);
 
@@ -21,8 +23,8 @@ module.exports = function(vars) {
     .append('div')
     .attr('id', 'd3po_drawer');
 
-  var positionStyles = {};
-  vars.ui.position.accepted.forEach(function(p) {
+  const positionStyles = {};
+  vars.ui.position.accepted.forEach(p => {
     positionStyles[p] = p == position ? vars.margin.bottom + 'px' : 'auto';
   });
 
@@ -33,11 +35,9 @@ module.exports = function(vars) {
     .style('height', 'auto')
     .style(positionStyles);
 
-  var ui = drawer
+  const ui = drawer
     .selectAll('div.d3po_drawer_ui')
-    .data(enabled ? vars.ui.value : [], function(d) {
-      return d.method || false;
-    });
+    .data(enabled ? vars.ui.value : [], d => d.method || false);
 
   ui.exit().remove();
 
@@ -57,20 +57,23 @@ module.exports = function(vars) {
         .text('text');
     }
 
-    var focus, callback;
+    let focus;
+    let callback;
 
     if (typeof d.method === 'string' && d.method in vars) {
       focus = vars[d.method].value;
-      callback = function(value) {
+      callback = value => {
         if (value !== vars[d.method].value) {
           vars.self[d.method](value).draw();
         }
       };
     } else {
       focus = d.focus || d.value[0];
-      if (validObject(focus)) focus = focus[d3.keys(focus)[0]];
+      if (validObject(focus)) {
+        focus = focus[d3.keys(focus)[0]];
+      }
       if (typeof d.method === 'function') {
-        callback = function(value) {
+        callback = value => {
           if (value !== focus) {
             focus = value;
             d.focus = value;
@@ -80,8 +83,8 @@ module.exports = function(vars) {
       }
     }
 
-    var data = [],
-      title;
+    const data = [];
+    let title;
 
     if (d.label) {
       title = d.label;
@@ -89,8 +92,8 @@ module.exports = function(vars) {
       title = vars.format.locale.value.method[d.method] || d.method;
     }
 
-    d.value.forEach(function(o) {
-      var obj = {};
+    d.value.forEach(o => {
+      const obj = {};
 
       if (validObject(o)) {
         obj.id = o[d3.keys(o)[0]];
@@ -103,7 +106,7 @@ module.exports = function(vars) {
       data.push(obj);
     });
 
-    var font = copy(vars.ui.font);
+    const font = copy(vars.ui.font);
     font.align = copy(vars.font.align);
     font.secondary = copy(font);
 
@@ -135,12 +138,14 @@ module.exports = function(vars) {
       .draw();
   });
 
-  var drawerHeight =
+  const drawerHeight =
     drawer.node().offsetHeight || drawer.node().getBoundingClientRect().height;
 
   if (drawerHeight) {
     vars.margin[position] += drawerHeight;
   }
 
-  if (vars.dev.value && enabled) print.timeEnd('drawing custom UI elements');
+  if (vars.dev.value && enabled) {
+    print.timeEnd('drawing custom UI elements');
+  }
 };

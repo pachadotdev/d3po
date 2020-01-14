@@ -1,6 +1,6 @@
 // Updates an array, either overwriting it with a new array, removing an entry
-(function() {
-  module.exports = function(arr, x) {
+(() => {
+  module.exports = (arr, x) => {
     if (x === void 0) {
       return arr;
     }
@@ -20,4 +20,4 @@
     }
     return arr;
   };
-}.call(this));
+}).call(this);

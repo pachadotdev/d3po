@@ -1,12 +1,13 @@
 // Defines button color
-(function() {
-  module.exports = function(elem, vars) {
-    var legible, textColor;
+(() => {
+  module.exports = (elem, vars) => {
+    let legible;
+    let textColor;
     legible = require('../../../../color/legible.js');
     textColor = require('../../../../color/text.js');
     return elem
-      .style('background-color', function(d) {
-        var color;
+      .style('background-color', d => {
+        let color;
         if (vars.focus.value === d[vars.id.value]) {
           color = vars.ui.color.secondary.value;
         } else {
@@ -20,8 +21,11 @@
         }
         return color;
       })
-      .style('color', function(d) {
-        var bg, color, image, opacity;
+      .style('color', d => {
+        let bg;
+        let color;
+        let image;
+        let opacity;
         if (vars.focus.value === d[vars.id.value]) {
           opacity = 0.75;
         } else {
@@ -59,4 +63,4 @@
       })
       .style('border-color', vars.ui.color.secondary.value);
   };
-}.call(this));
+}).call(this);

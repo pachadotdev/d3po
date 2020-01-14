@@ -1,4 +1,4 @@
-var process = require('../../core/methods/process/data.js');
+const process = require('../../core/methods/process/data.js');
 
 module.exports = {
   accepted: [false, Array, Function, String],
@@ -12,25 +12,25 @@ module.exports = {
   },
   color: '#d0d0d0',
   connections: function(focus, id, objects) {
-    var self = this;
+    const self = this;
 
     if (!self.value) {
       return [];
     }
 
-    if (!id){
+    if (!id) {
       id = 'id';
     }
 
-    var edges = self.restricted || self.value,
-      targets = [];
+    const edges = self.restricted || self.value;
+    const targets = [];
 
     if (!focus) {
       return edges;
     }
 
-    var connections = edges.filter(function(edge) {
-      var match = false;
+    const connections = edges.filter(edge => {
+      let match = false;
 
       if (edge[self.source][id] == focus) {
         match = true;

@@ -1,13 +1,14 @@
 // Converts an array of strings into a string list using commas and "and"
-(function() {
-  var format, locale;
+(() => {
+  let format;
+  let locale;
 
   format = require('./format.js');
 
   locale = require('../core/locale/languages/en_US.js').ui;
 
-  module.exports = function(list, andText, max, moreText) {
-    var amount;
+  module.exports = (list, andText, max, moreText) => {
+    let amount;
     if (!(list instanceof Array)) {
       return list;
     } else {
@@ -33,4 +34,4 @@
       return list.join(', ');
     }
   };
-}.call(this));
+}).call(this);

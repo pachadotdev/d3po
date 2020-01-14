@@ -1,7 +1,7 @@
 // Function to process data by url or element
-(function() {
-  module.exports = function(value, vars, method) {
-    var elem;
+(() => {
+  module.exports = (value, vars, method) => {
+    let elem;
     if (vars.history) {
       vars.history.reset();
     }
@@ -22,4 +22,4 @@
       return value;
     }
   };
-}.call(this));
+}).call(this);

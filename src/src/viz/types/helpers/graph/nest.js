@@ -1,5 +1,7 @@
-(function() {
-  var fetchValue, stringStrip, uniqueValues;
+(() => {
+  let fetchValue;
+  let stringStrip;
+  let uniqueValues;
 
   fetchValue = require('../../../../core/fetch/value.js');
 
@@ -7,8 +9,14 @@
 
   uniqueValues = require('../../../../util/uniques.js');
 
-  module.exports = function(vars, data, keys) {
-    var discrete, extras, key, opposite, serialized, ticks, timeAxis;
+  module.exports = (vars, data, keys) => {
+    let discrete;
+    let extras;
+    let key;
+    let opposite;
+    let serialized;
+    let ticks;
+    let timeAxis;
     if (keys === void 0) {
       keys = vars.id.nesting.slice(0, vars.depth.value + 1);
     } else if (keys.constructor !== Array) {
@@ -27,7 +35,7 @@
       ticks = vars.data.time.ticks;
       key = vars.time.solo.value.length ? 'solo' : 'mute';
       if (vars.time[key].value.length) {
-        serialized = vars.time[key].value.slice().map(function(f) {
+        serialized = vars.time[key].value.slice().map(f => {
           if (f.constructor !== Date) {
             f = f + '';
             if (f.length === 4 && parseInt(f) + '' === f) {
@@ -37,7 +45,7 @@
           }
           return +f;
         });
-        ticks = ticks.filter(function(f) {
+        ticks = ticks.filter(f => {
           if (key === 'solo') {
             return serialized.indexOf(+f) >= 0;
           } else {
@@ -52,8 +60,12 @@
     }
     return d3
       .nest()
-      .key(function(d) {
-        var id, j, len, return_id, val;
+      .key(d => {
+        let id;
+        let j;
+        let len;
+        let return_id;
+        let val;
         return_id = 'nesting';
         for (j = 0, len = keys.length; j < len; j++) {
           id = keys[j];
@@ -65,19 +77,19 @@
         }
         return return_id;
       })
-      .rollup(function(leaves) {
-        var availables,
-          filler,
-          i,
-          j,
-          k,
-          len,
-          len1,
-          obj,
-          ref,
-          tester,
-          tick,
-          timeVar;
+      .rollup(leaves => {
+        let availables;
+        let filler;
+        let i;
+        let j;
+        let k;
+        let len;
+        let len1;
+        let obj;
+        let ref;
+        let tester;
+        let tick;
+        let timeVar;
         availables = uniqueValues(leaves, discrete.value, fetchValue, vars);
         timeVar = availables.length && availables[0].constructor === Date;
         if (timeVar) {
@@ -85,11 +97,7 @@
         }
         if (discrete.zerofill.value) {
           if (discrete.scale.value === 'log') {
-            if (
-              opposite.scale.viz.domain().every(function(d) {
-                return d < 0;
-              })
-            ) {
+            if (opposite.scale.viz.domain().every(d => d < 0)) {
               filler = -1;
             } else {
               filler = 1;
@@ -121,8 +129,12 @@
         if (typeof leaves[0][discrete.value] === 'string') {
           return leaves;
         } else {
-          return leaves.sort(function(a, b) {
-            var ad, ao, bd, bo, xsort;
+          return leaves.sort((a, b) => {
+            let ad;
+            let ao;
+            let bd;
+            let bo;
+            let xsort;
             ad = fetchValue(vars, a, discrete.value);
             bd = fetchValue(vars, b, discrete.value);
             xsort = ad - bd;
@@ -137,4 +149,4 @@
       })
       .entries(data);
   };
-}.call(this));
+}).call(this);

@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     back: function() {
       if (this.states.length) {
@@ -7,7 +7,7 @@
     },
     chain: [],
     reset: function() {
-      var results;
+      let results;
       results = [];
       while (this.states.length) {
         results.push(this.states.pop()());
@@ -16,4 +16,4 @@
     },
     states: []
   };
-}.call(this));
+}).call(this);

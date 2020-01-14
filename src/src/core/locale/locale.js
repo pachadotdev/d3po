@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     ar_SA: require('./languages/ar_SA.js'),
     de_DE: require('./languages/de_DE.js'),
@@ -13,4 +13,4 @@
     zh_TR: require('./languages/tr_TR.js'),
     zh_CN: require('./languages/zh_CN.js')
   };
-}.call(this));
+}).call(this);

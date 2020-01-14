@@ -1,11 +1,16 @@
 // # If placing into a new container, remove it's contents
 // and check text direction.
 // Also initialized app width and height.
-(function() {
-  module.exports = function(vars) {
-    var checkParent, i, len, ref, s;
+(() => {
+  module.exports = vars => {
+    let checkParent;
+    let i;
+    let len;
+    let ref;
+    let s;
     vars.container.value.style('position', function() {
-      var current, remain;
+      let current;
+      let remain;
       current = d3.select(this).style('position');
       remain = ['absolute', 'fixed'].indexOf(current) >= 0;
       if (remain) {
@@ -21,8 +26,9 @@
     for (i = 0, len = ref.length; i < len; i++) {
       s = ref[i];
       if (!vars[s].value) {
-        checkParent = function(element) {
-          var elem, val;
+        checkParent = element => {
+          let elem;
+          let val;
           if (
             element.tagName === void 0 ||
             ['BODY', 'HTML'].indexOf(element.tagName) >= 0
@@ -62,4 +68,4 @@
       .style('width', vars.width.value + 'px')
       .style('height', vars.height.value + 'px');
   };
-}.call(this));
+}).call(this);

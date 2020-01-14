@@ -1,33 +1,41 @@
 // Returns distances of all objects in array
-(function() {
-  var distance;
+(() => {
+  let distance;
 
   distance = require('./distance.js');
 
-  module.exports = function(arr, opts) {
-    var distances, quad;
+  module.exports = (arr, opts) => {
+    let distances;
+    let quad;
     if (!opts) {
       opts = {};
     }
     distances = [];
     quad = d3.geom
       .quadtree()
-      .x(function(d) {
+      .x(d => {
         if (opts.accessor) {
           return opts.accessor(d)[0];
         } else {
           return d[0];
         }
       })
-      .y(function(d) {
+      .y(d => {
         if (opts.accessor) {
           return opts.accessor(d)[1];
         } else {
           return d[1];
         }
       });
-    quad(arr).visit(function(node) {
-      var i, j, len, len1, n1, n2, ref, ref1;
+    quad(arr).visit(node => {
+      let i;
+      let j;
+      let len;
+      let len1;
+      let n1;
+      let n2;
+      let ref;
+      let ref1;
       if (!node.leaf) {
         ref = node.nodes;
         for (i = 0, len = ref.length; i < len; i++) {
@@ -50,11 +58,9 @@
       return false;
     });
     if (opts.all) {
-      return distances.sort(function(aa, bb) {
-        return aa - bb;
-      });
+      return distances.sort((aa, bb) => aa - bb);
     } else {
       return d3.min(distances);
     }
   };
-}.call(this));
+}).call(this);

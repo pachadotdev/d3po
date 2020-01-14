@@ -1,6 +1,9 @@
-(function() {
-  module.exports = function(vars, event) {
-    var enabled, zoom, zoomable, zoomed;
+(() => {
+  module.exports = (vars, event) => {
+    let enabled;
+    let zoom;
+    let zoomable;
+    let zoomed;
     zoom = vars.zoom;
     if (!event) {
       event = d3.event;
@@ -13,4 +16,4 @@
       event.stopPropagation();
     }
   };
-}.call(this));
+}).call(this);

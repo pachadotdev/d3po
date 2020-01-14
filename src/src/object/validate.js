@@ -8,8 +8,6 @@
  * @return {Boolean}
  */
 
-(function() {
-  module.exports = function(obj) {
-    return obj && obj.constructor === Object;
-  };
-}.call(this));
+(() => {
+  module.exports = obj => obj && obj.constructor === Object;
+}).call(this);

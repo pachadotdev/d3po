@@ -1,5 +1,8 @@
-(function() {
-  var align, decoration, family, transform;
+(() => {
+  let align;
+  let decoration;
+  let family;
+  let transform;
 
   family = require('../../core/methods/font/family.js');
 
@@ -16,7 +19,7 @@
     color: {
       primary: {
         process: function(value, vars) {
-          var primary;
+          let primary;
           primary = this.value;
           if (!vars.ui.color.secondary.value) {
             vars.ui.color.secondary.value = d3
@@ -53,4 +56,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

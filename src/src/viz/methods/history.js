@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean],
     back: function() {
@@ -8,7 +8,7 @@
     },
     chain: [],
     reset: function() {
-      var results;
+      let results;
       results = [];
       while (this.states.length) {
         results.push(this.states.pop()());
@@ -18,4 +18,4 @@
     states: [],
     value: true
   };
-}.call(this));
+}).call(this);

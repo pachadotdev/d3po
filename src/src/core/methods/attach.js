@@ -1,13 +1,13 @@
-(function() {
-  var checkObject,
-    copy,
-    createFunction,
-    initialize,
-    print,
-    process,
-    setMethod,
-    stringFormat,
-    validObject;
+(() => {
+  let checkObject;
+  let copy;
+  let createFunction;
+  let initialize;
+  let print;
+  let process;
+  let setMethod;
+  let stringFormat;
+  let validObject;
 
   copy = require('../../util/copy.js');
 
@@ -21,8 +21,10 @@
 
   validObject = require('../../object/validate.js');
 
-  module.exports = function(vars, methods) {
-    var method, obj, results;
+  module.exports = (vars, methods) => {
+    let method;
+    let obj;
+    let results;
     results = [];
     for (method in methods) {
       obj = methods[method];
@@ -33,8 +35,8 @@
     return results;
   };
 
-  initialize = function(vars, obj, method) {
-    var o;
+  initialize = (vars, obj, method) => {
+    let o;
     obj.previous = false;
     obj.changed = false;
     obj.initialized = false;
@@ -60,16 +62,16 @@
     return true;
   };
 
-  createFunction = function(vars, key) {
-    return function(user, callback) {
-      var accepted,
-        checkFont,
-        checkValue,
-        fontAttr,
-        fontAttrValue,
-        s,
-        starting,
-        str;
+  createFunction = (vars, key) =>
+    function(user, callback) {
+      let accepted;
+      let checkFont;
+      let checkValue;
+      let fontAttr;
+      let fontAttrValue;
+      let s;
+      let starting;
+      let str;
       accepted = 'accepted' in vars[key] ? vars[key].accepted : null;
       if (typeof accepted === 'function') {
         accepted = accepted(vars);
@@ -100,7 +102,7 @@
           };
         }
         starting = true;
-        checkValue = function(o, a, m, v) {
+        checkValue = (o, a, m, v) => {
           if (validObject(o[m]) && a in o[m]) {
             if (validObject(o[m][a])) {
               if (o[m][a].process) {
@@ -113,8 +115,8 @@
             }
           }
         };
-        checkFont = function(o, a, v) {
-          var m;
+        checkFont = (o, a, v) => {
+          let m;
           if (validObject(o)) {
             if (starting) {
               for (m in o) {
@@ -151,10 +153,12 @@
         return vars.self;
       }
     };
-  };
 
-  checkObject = function(vars, method, object, key, value) {
-    var approvedObject, d, objectOnly, passingObject;
+  checkObject = (vars, method, object, key, value) => {
+    let approvedObject;
+    let d;
+    let objectOnly;
+    let passingObject;
     if (
       ['accepted', 'changed', 'initialized', 'previous', 'process'].indexOf(
         key
@@ -180,4 +184,4 @@
       }
     }
   };
-}.call(this));
+}).call(this);

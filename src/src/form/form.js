@@ -1,20 +1,20 @@
-var arraySort = require('../array/sort.js'),
-  attach = require('../core/methods/attach.js'),
-  dataFormat = require('../core/data/format.js'),
-  dataKeys = require('../core/data/keys.js'),
-  dataLoad = require('../core/data/load.js'),
-  fetchData = require('../core/fetch/data.js'),
-  ie = require('../client/ie.js'),
-  methodReset = require('../core/methods/reset.js'),
-  print = require('../core/console/print.js');
+const arraySort = require('../array/sort.js');
+const attach = require('../core/methods/attach.js');
+const dataFormat = require('../core/data/format.js');
+const dataKeys = require('../core/data/keys.js');
+const dataLoad = require('../core/data/load.js');
+const fetchData = require('../core/fetch/data.js');
+const ie = require('../client/ie.js');
+const methodReset = require('../core/methods/reset.js');
+const print = require('../core/console/print.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Form Element shell
 //------------------------------------------------------------------------------
-module.exports = function() {
+module.exports = () => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Initialize the global variable object.
   //----------------------------------------------------------------------------
-  var vars = {
+  const vars = {
     types: {
       auto: require('./types/auto.js'),
       button: require('./types/button/button.js'),
@@ -26,12 +26,12 @@ module.exports = function() {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Create the main drawing function.
   //----------------------------------------------------------------------------
-  vars.self = function() {
+  vars.self = () => {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Set timing to 0 if it's the first time running this function or if the
     // data length is longer than the "large" limit
     //--------------------------------------------------------------------------
-    var large =
+    const large =
       vars.data.value instanceof Array &&
       vars.data.value.length > vars.data.large;
 
@@ -41,7 +41,9 @@ module.exports = function() {
     // Create/update the UI element
     //--------------------------------------------------------------------------
     if (vars.data.value instanceof Array) {
-      if (vars.dev.value) print.group('drawing "' + vars.type.value + '"');
+      if (vars.dev.value) {
+        print.group('drawing "' + vars.type.value + '"');
+      }
 
       //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       // Analyze new data, if changed.
@@ -77,34 +79,39 @@ module.exports = function() {
         vars.focus.value === false &&
         ['auto', 'button'].indexOf(vars.type.value) < 0
       ) {
-        var element = vars.data.element.value;
+        const element = vars.data.element.value;
 
         if (element && element.node().tagName.toLowerCase() === 'select') {
-          var i = element.property('selectedIndex');
+          let i = element.property('selectedIndex');
           i = i < 0 ? 0 : i;
-          var option = element.selectAll('option')[0][i],
-            val =
-              option.getAttribute('data-' + vars.id.value) ||
-              option.getAttribute(vars.id.value);
-          if (val) vars.focus.value = val;
+          const option = element.selectAll('option')[0][i];
+
+          const val =
+            option.getAttribute('data-' + vars.id.value) ||
+            option.getAttribute(vars.id.value);
+
+          if (val) {
+            vars.focus.value = val;
+          }
         }
 
         if (vars.focus.value === false && vars.data.viz.length) {
           vars.focus.value = vars.data.viz[0][vars.id.value];
         }
 
-        if (vars.dev.value && vars.focus.value !== false)
+        if (vars.dev.value && vars.focus.value !== false) {
           print.log('"value" set to "' + vars.focus.value + '"');
+        }
       }
 
-      var getLevel = function(d, depth) {
+      const getLevel = (d, depth) => {
         depth =
           typeof depth !== 'number'
             ? vars.id.nesting.length === 1
               ? 0
               : vars.id.nesting.length - 1
             : depth;
-        var level = vars.id.nesting[depth];
+        const level = vars.id.nesting[depth];
 
         if (depth > 0 && (!(level in d) || d[level] instanceof Array)) {
           return getLevel(d, depth - 1);
@@ -123,10 +130,14 @@ module.exports = function() {
         if (vars.search.value === 'auto') {
           if (vars.data.viz.length > 10) {
             vars.search.enabled = true;
-            if (vars.dev.value) print.log('Search enabled.');
+            if (vars.dev.value) {
+              print.log('Search enabled.');
+            }
           } else {
             vars.search.enabled = false;
-            if (vars.dev.value) print.log('Search disabled.');
+            if (vars.dev.value) {
+              print.log('Search disabled.');
+            }
           }
         } else {
           vars.search.enabled = vars.search.value;
@@ -135,19 +146,19 @@ module.exports = function() {
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // Update OPTION elements with the new data.
         //----------------------------------------------------------------------
-        var elementTag = vars.data.element.value
+        const elementTag = vars.data.element.value
           ? vars.data.element.value.node().tagName.toLowerCase()
           : '';
         if (vars.data.element.value && elementTag === 'select') {
-          var optionData = [];
-          for (var level in vars.data.nested.all) {
+          let optionData = [];
+          for (const level in vars.data.nested.all) {
             optionData = optionData.concat(vars.data.nested.all[level]);
           }
 
-          var options = vars.data.element.value
+          const options = vars.data.element.value
             .selectAll('option')
-            .data(optionData, function(d) {
-              var level = d ? getLevel(d) : false;
+            .data(optionData, d => {
+              const level = d ? getLevel(d) : false;
               return d && level in d ? d[level] : false;
             });
 
@@ -156,15 +167,16 @@ module.exports = function() {
           options.enter().append('option');
 
           options.each(function(d) {
-            var level = getLevel(d),
-              textKey =
-                level === vars.id.value
-                  ? vars.text.value || vars.id.value
-                  : vars.text.nesting !== true && level in vars.text.nesting
-                    ? vars.text.nesting[level]
-                    : level;
+            const level = getLevel(d);
 
-            for (var k in d) {
+            const textKey =
+              level === vars.id.value
+                ? vars.text.value || vars.id.value
+                : vars.text.nesting !== true && level in vars.text.nesting
+                  ? vars.text.nesting[level]
+                  : level;
+
+            for (const k in d) {
               if (typeof d[k] !== 'object') {
                 if (k === textKey) {
                   d3.select(this).html(d[k]);
@@ -186,7 +198,7 @@ module.exports = function() {
           });
         }
       } else if (vars.focus.changed && vars.data.element.value) {
-        var tag = vars.data.element.value.node().tagName.toLowerCase();
+        let tag = vars.data.element.value.node().tagName.toLowerCase();
         if (tag === 'select') {
           vars.data.element.value.selectAll('option').each(function(d) {
             if (d[getLevel(d)] === vars.focus.value) {
@@ -221,7 +233,7 @@ module.exports = function() {
           //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           // Create container DIV for UI element
           //----------------------------------------------------------------------
-          var before = vars.data.element.value
+          let before = vars.data.element.value
             ? vars.data.element.value[0][0]
             : null;
 
@@ -229,7 +241,7 @@ module.exports = function() {
             if (before.id) {
               before = '#' + before.id;
             } else {
-              var id = before.getAttribute(vars.id.value)
+              const id = before.getAttribute(vars.id.value)
                 ? vars.id.value
                 : 'data-' + vars.id.value;
 
@@ -263,7 +275,7 @@ module.exports = function() {
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // Create title, if available.
         //------------------------------------------------------------------------
-        var title = vars.container.ui
+        const title = vars.container.ui
           .selectAll('div.d3po_title')
           .data(vars.title.value ? [vars.title.value] : []);
 
@@ -292,10 +304,14 @@ module.exports = function() {
       // Call specific UI element type, if there is data.
       //------------------------------------------------------------------------
       if (vars.data.value.length) {
-        var app = vars.format.locale.value.visualization[vars.type.value];
-        if (vars.dev.value) print.time('drawing ' + app);
+        const app = vars.format.locale.value.visualization[vars.type.value];
+        if (vars.dev.value) {
+          print.time('drawing ' + app);
+        }
         vars.types[vars.type.value](vars);
-        if (vars.dev.value) print.timeEnd('drawing ' + app);
+        if (vars.dev.value) {
+          print.timeEnd('drawing ' + app);
+        }
       } else if (vars.data.url && (!vars.data.loaded || vars.data.stream)) {
         dataLoad(vars, 'data', vars.self.draw);
       }
@@ -303,7 +319,9 @@ module.exports = function() {
       //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       // Initialization complete
       //------------------------------------------------------------------------
-      if (vars.dev.value) print.timeEnd('total draw time');
+      if (vars.dev.value) {
+        print.timeEnd('total draw time');
+      }
       methodReset(vars);
     }
   };

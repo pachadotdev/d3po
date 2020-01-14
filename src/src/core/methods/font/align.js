@@ -1,10 +1,10 @@
-(function() {
-  var rtl;
+(() => {
+  let rtl;
 
   rtl = require('../../../client/rtl.js');
 
-  module.exports = function(align) {
-    var accepted;
+  module.exports = align => {
+    let accepted;
     accepted = ['left', 'center', 'right'];
     if (align === false) {
       accepted.unshift(false);
@@ -32,4 +32,4 @@
       value: align
     };
   };
-}.call(this));
+}).call(this);

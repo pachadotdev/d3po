@@ -1,4 +1,4 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean, Function, String],
     agg: {
@@ -11,4 +11,4 @@
     },
     value: false
   };
-}.call(this));
+}).call(this);

@@ -1,16 +1,19 @@
-(function() {
+(() => {
   module.exports = {
     accepted: [Boolean],
     value: false,
     timeout: 400,
     process: function(value, vars) {
-      var resize, resizeEnd;
+      let resize;
+      let resizeEnd;
       if (!value) {
         return false;
       }
       resize = null;
-      resizeEnd = function() {
-        var height, mainNode, width;
+      resizeEnd = () => {
+        let height;
+        let mainNode;
+        let width;
         mainNode = vars.container.value
           .node()
           .parentNode.getBoundingClientRect();
@@ -24,14 +27,12 @@
       };
       d3.select(window).on(
         'resize.' + vars.container.id,
-        (function(_this) {
-          return function() {
-            clearTimeout(resize);
-            return (resize = setTimeout(resizeEnd, _this.timeout));
-          };
+        (_this => () => {
+          clearTimeout(resize);
+          return (resize = setTimeout(resizeEnd, _this.timeout));
         })(this)
       );
       return value;
     }
   };
-}.call(this));
+}).call(this);

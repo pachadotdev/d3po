@@ -1,25 +1,21 @@
-var copy = require('../../../util/copy.js'),
-  closest = require('../../../util/closest.js'),
-  events = require('../../../client/pointer.js'),
-  shapeStyle = require('./style.js'),
-  fetchValue = require('../../../core/fetch/value.js');
+const copy = require('../../../util/copy.js');
+const closest = require('../../../util/closest.js');
+const events = require('../../../client/pointer.js');
+const shapeStyle = require('./style.js');
+const fetchValue = require('../../../core/fetch/value.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Draws "line" shapes using svg:line
 //------------------------------------------------------------------------------
-module.exports = function(vars, selection) {
+module.exports = (vars, selection) => {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // The D3 line function that determines what variables to use for x and y
   // positioning, as well as line interpolation defined by the user.
   //----------------------------------------------------------------------------
-  var line = d3.svg
+  const line = d3.svg
     .line()
-    .x(function(d) {
-      return d.d3po.x;
-    })
-    .y(function(d) {
-      return d.d3po.y;
-    })
+    .x(d => d.d3po.x)
+    .y(d => d.d3po.y)
     .interpolate(vars.shape.interpolate.value);
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -30,38 +26,48 @@ module.exports = function(vars, selection) {
   // point on the line.
   //----------------------------------------------------------------------------
 
-  var stroke = vars.size.value || vars.data.stroke.width,
-    discrete = vars[vars.axes.discrete],
-    hitarea = function(l) {
-      var s = stroke;
-      if (s.constructor !== Number) {
-        var v = fetchValue(vars, l, stroke);
-        if (v && v.length) s = d3.max(v);
-        else s = vars.data.stroke.width;
-      }
-      return s < 15 ? 15 : s;
-    };
+  const stroke = vars.size.value || vars.data.stroke.width;
 
-  var ticks = discrete.ticks.values.map(function(d) {
-    if (d.constructor === Date) return d.getTime();
-    else return d;
+  const discrete = vars[vars.axes.discrete];
+
+  const hitarea = l => {
+    let s = stroke;
+    if (s.constructor !== Number) {
+      const v = fetchValue(vars, l, stroke);
+      if (v && v.length) {
+        s = d3.max(v);
+      } else {
+        s = vars.data.stroke.width;
+      }
+    }
+    return s < 15 ? 15 : s;
+  };
+
+  const ticks = discrete.ticks.values.map(d => {
+    if (d.constructor === Date) {
+      return d.getTime();
+    } else {
+      return d;
+    }
   });
 
   selection.each(function(d) {
-    var lastIndex = false,
-      segments = [],
-      nodes = [],
-      temp = copy(d),
-      group = d3.select(this);
+    let lastIndex = false;
+    const segments = [];
+    const nodes = [];
+    let temp = copy(d);
+    const group = d3.select(this);
 
     temp.values = [];
     temp.segment_key = temp.key;
-    d.values.forEach(function(v, i, arr) {
-      var k = fetchValue(vars, v, discrete.value);
+    d.values.forEach((v, i, arr) => {
+      let k = fetchValue(vars, v, discrete.value);
 
-      if (k.constructor === Date) k = k.getTime();
+      if (k.constructor === Date) {
+        k = k.getTime();
+      }
 
-      var index = ticks.indexOf(closest(ticks, k));
+      const index = ticks.indexOf(closest(ticks, k));
 
       if (lastIndex === false || lastIndex === index - 1) {
         temp.values.push(v);
@@ -90,8 +96,10 @@ module.exports = function(vars, selection) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Bind segment data to "paths"
     //--------------------------------------------------------------------------
-    var paths = group.selectAll('path.d3po_line').data(segments, function(d) {
-      if (!d.d3po) d.d3po = {};
+    const paths = group.selectAll('path.d3po_line').data(segments, d => {
+      if (!d.d3po) {
+        d.d3po = {};
+      }
       d.d3po.shape = 'line';
       return d.segment_key;
     });
@@ -99,8 +107,10 @@ module.exports = function(vars, selection) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Bind node data to "rects"
     //--------------------------------------------------------------------------
-    var rects = group.selectAll('rect.d3po_anchor').data(nodes, function(d) {
-      if (!d.d3po) d.d3po = {};
+    const rects = group.selectAll('rect.d3po_anchor').data(nodes, d => {
+      if (!d.d3po) {
+        d.d3po = {};
+      }
       d.d3po.r = stroke;
       return d.d3po.id;
     });
@@ -119,9 +129,7 @@ module.exports = function(vars, selection) {
       paths
         .transition()
         .duration(vars.draw.timing)
-        .attr('d', function(d) {
-          return line(d.values);
-        })
+        .attr('d', d => line(d.values))
         .call(shapeStyle, vars);
 
       paths
@@ -129,9 +137,7 @@ module.exports = function(vars, selection) {
         .append('path')
         .attr('class', 'd3po_line')
         .style('stroke-linecap', 'round')
-        .attr('d', function(d) {
-          return line(d.values);
-        })
+        .attr('d', d => line(d.values))
         .call(shapeStyle, vars)
         .attr('opacity', 0)
         .transition()
@@ -142,9 +148,7 @@ module.exports = function(vars, selection) {
         .enter()
         .append('rect')
         .attr('class', 'd3po_anchor')
-        .attr('id', function(d) {
-          return d.d3po.id;
-        })
+        .attr('id', d => d.d3po.id)
         .call(init)
         .call(shapeStyle, vars);
 
@@ -169,19 +173,13 @@ module.exports = function(vars, selection) {
         .attr('class', 'd3po_line')
         .style('stroke-linecap', 'round');
 
-      paths
-        .attr('d', function(d) {
-          return line(d.values);
-        })
-        .call(shapeStyle, vars);
+      paths.attr('d', d => line(d.values)).call(shapeStyle, vars);
 
       rects
         .enter()
         .append('rect')
         .attr('class', 'd3po_anchor')
-        .attr('id', function(d) {
-          return d.d3po.id;
-        });
+        .attr('id', d => d.d3po.id);
 
       rects.exit().remove();
 
@@ -191,9 +189,9 @@ module.exports = function(vars, selection) {
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Create mouse event lines
     //--------------------------------------------------------------------------
-    var mouse = group.selectAll('path.d3po_mouse').data(segments, function(d) {
-      return d.segment_key;
-    });
+    const mouse = group
+      .selectAll('path.d3po_mouse')
+      .data(segments, d => d.segment_key);
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Mouse "paths" Enter
@@ -202,9 +200,7 @@ module.exports = function(vars, selection) {
       .enter()
       .append('path')
       .attr('class', 'd3po_mouse')
-      .attr('d', function(l) {
-        return line(l.values);
-      })
+      .attr('d', l => line(l.values))
       .style('stroke', 'black')
       .style('stroke-width', hitarea)
       .style('fill', 'none')
@@ -216,28 +212,24 @@ module.exports = function(vars, selection) {
     //--------------------------------------------------------------------------
     mouse
       .on(events.over, function() {
-        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.over.value)
+        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.over.value) {
           mouseStyle(vars, this, stroke, 2);
+        }
       })
       .on(events.out, function() {
-        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.out.value)
+        if (!vars.draw.frozen && vars.mouse.value && vars.mouse.out.value) {
           mouseStyle(vars, this, stroke, 0);
+        }
       });
 
     if (vars.draw.timing) {
       mouse
         .transition()
         .duration(vars.draw.timing)
-        .attr('d', function(l) {
-          return line(l.values);
-        })
+        .attr('d', l => line(l.values))
         .style('stroke-width', hitarea);
     } else {
-      mouse
-        .attr('d', function(l) {
-          return line(l.values);
-        })
-        .style('stroke-width', hitarea);
+      mouse.attr('d', l => line(l.values)).style('stroke-width', hitarea);
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -251,12 +243,8 @@ module.exports = function(vars, selection) {
 // The position and size of each anchor point on enter and exit.
 //----------------------------------------------------------------------------
 function init(n) {
-  n.attr('x', function(d) {
-    return d.d3po.x;
-  })
-    .attr('y', function(d) {
-      return d.d3po.y;
-    })
+  n.attr('x', d => d.d3po.x)
+    .attr('y', d => d.d3po.y)
     .attr('width', 0)
     .attr('height', 0);
 }
@@ -265,49 +253,56 @@ function init(n) {
 // The position and size of each anchor point on update.
 //----------------------------------------------------------------------------
 function update(n, mod) {
-  if (mod === undefined) mod = 0;
+  if (mod === undefined) {
+    mod = 0;
+  }
 
-  n.attr('x', function(d) {
-    var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
+  n.attr('x', d => {
+    const w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
     return d.d3po.x - (w / 2 + mod / 2);
   })
-    .attr('y', function(d) {
-      var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
+    .attr('y', d => {
+      const h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
       return d.d3po.y - (h / 2 + mod / 2);
     })
-    .attr('width', function(d) {
-      var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
+    .attr('width', d => {
+      const w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
       return w + mod;
     })
-    .attr('height', function(d) {
-      var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
+    .attr('height', d => {
+      const h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
       return h + mod;
     })
-    .attr('rx', function(d) {
-      var w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
+    .attr('rx', d => {
+      const w = d.d3po.r ? d.d3po.r * 2 : d.d3po.width;
       return (w + mod) / 2;
     })
-    .attr('ry', function(d) {
-      var h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
+    .attr('ry', d => {
+      const h = d.d3po.r ? d.d3po.r * 2 : d.d3po.height;
       return (h + mod) / 2;
     });
 }
 
 function mouseStyle(vars, elem, stroke, mod) {
-  var timing = vars.draw.timing ? vars.timing.mouseevents : 0;
-  if (mod === undefined) mod = 0;
+  const timing = vars.draw.timing ? vars.timing.mouseevents : 0;
+  if (mod === undefined) {
+    mod = 0;
+  }
 
   if (timing) {
     d3.select(elem.parentNode)
       .selectAll('path.d3po_line')
       .transition()
       .duration(timing)
-      .style('stroke-width', function(l) {
-        var s = stroke;
+      .style('stroke-width', l => {
+        let s = stroke;
         if (s.constructor !== Number) {
-          var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          const v = fetchValue(vars, l, stroke);
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s + mod;
       });
@@ -316,12 +311,15 @@ function mouseStyle(vars, elem, stroke, mod) {
       .selectAll('rect')
       .transition()
       .duration(timing)
-      .style('stroke-width', function(l) {
-        var s = stroke;
+      .style('stroke-width', l => {
+        let s = stroke;
         if (s.constructor !== Number) {
-          var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          const v = fetchValue(vars, l, stroke);
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s;
       })
@@ -329,24 +327,30 @@ function mouseStyle(vars, elem, stroke, mod) {
   } else {
     d3.select(elem.parentNode)
       .selectAll('path.d3po_line')
-      .style('stroke-width', function(l) {
-        var s = stroke;
+      .style('stroke-width', l => {
+        let s = stroke;
         if (s.constructor !== Number) {
-          var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          const v = fetchValue(vars, l, stroke);
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s + mod;
       });
 
     d3.select(elem.parentNode)
       .selectAll('rect')
-      .style('stroke-width', function(l) {
-        var s = stroke;
+      .style('stroke-width', l => {
+        let s = stroke;
         if (s.constructor !== Number) {
-          var v = fetchValue(vars, l, stroke);
-          if (v && v.length) s = d3.max(v);
-          else s = vars.data.stroke.width;
+          const v = fetchValue(vars, l, stroke);
+          if (v && v.length) {
+            s = d3.max(v);
+          } else {
+            s = vars.data.stroke.width;
+          }
         }
         return s;
       })

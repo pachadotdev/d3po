@@ -1,45 +1,36 @@
-var buckets = require('../../../util/buckets.js'),
-  offset = require('../../../geom/offset.js');
+const buckets = require('../../../util/buckets.js');
+const offset = require('../../../geom/offset.js');
 
-module.exports = function(vars) {
-  var edges = vars.returned.edges || [],
-    scale = vars.zoom.behavior.scaleExtent()[0];
+module.exports = vars => {
+  const edges = vars.returned.edges || [];
+  const scale = vars.zoom.behavior.scaleExtent()[0];
 
   if (typeof vars.edges.size.value === 'string') {
-    var strokeDomain = d3.extent(edges, function(e) {
-        return e[vars.edges.size.value];
-      }),
-      maxSize =
-        d3.min(vars.returned.nodes || [], function(n) {
-          return n.d3po.r;
-        }) *
-        (vars.edges.size.scale * 2);
+    const strokeDomain = d3.extent(edges, e => e[vars.edges.size.value]);
+
+    const maxSize =
+      d3.min(vars.returned.nodes || [], n => n.d3po.r) *
+      (vars.edges.size.scale * 2);
 
     vars.edges.scale = d3.scale
       .sqrt()
       .domain(strokeDomain)
       .range([vars.edges.size.min, maxSize * scale]);
   } else {
-    var defaultWidth =
+    const defaultWidth =
       typeof vars.edges.size.value == 'number'
         ? vars.edges.size.value
         : vars.edges.size.min;
 
-    vars.edges.scale = function() {
-      return defaultWidth;
-    };
+    vars.edges.scale = () => defaultWidth;
   }
 
-  var o = vars.edges.opacity.value;
-  var o_type = typeof o;
+  const o = vars.edges.opacity.value;
+  const o_type = typeof o;
 
   if (vars.edges.opacity.changed && o_type === 'string') {
     vars.edges.opacity.scale.value
-      .domain(
-        d3.extent(edges, function(d) {
-          return d[o];
-        })
-      )
+      .domain(d3.extent(edges, d => d[o]))
       .range([vars.edges.opacity.min.value, 1]);
   }
 
@@ -57,24 +48,22 @@ module.exports = function(vars) {
   // Styling of Lines
   //----------------------------------------------------------------------------
   function style(edges) {
-    var marker = vars.edges.arrows.value;
+    const marker = vars.edges.arrows.value;
 
     edges
-      .attr('opacity', function(d) {
-        return o_type === 'number'
+      .attr('opacity', d =>
+        o_type === 'number'
           ? o
           : o_type === 'function'
             ? o(d, vars)
-            : vars.edges.opacity.scale.value(d[o]);
-      })
-      .style('stroke-width', function(e) {
-        return vars.edges.scale(e[vars.edges.size.value]);
-      })
+            : vars.edges.opacity.scale.value(d[o])
+      )
+      .style('stroke-width', e => vars.edges.scale(e[vars.edges.size.value]))
       .style('stroke', vars.edges.color)
-      .attr('marker-start', function(e) {
-        var direction = vars.edges.arrows.direction.value;
+      .attr('marker-start', e => {
+        const direction = vars.edges.arrows.direction.value;
 
-        var d;
+        let d;
         if ('bucket' in e.d3po) {
           d = '_' + e.d3po.bucket;
         } else {
@@ -85,10 +74,10 @@ module.exports = function(vars) {
           ? 'url(#d3po_edge_marker_default' + d + ')'
           : 'none';
       })
-      .attr('marker-end', function(e) {
-        var direction = vars.edges.arrows.direction.value;
+      .attr('marker-end', e => {
+        const direction = vars.edges.arrows.direction.value;
 
-        var d;
+        let d;
         if ('bucket' in e.d3po) {
           d = '_' + e.d3po.bucket;
         } else {
@@ -107,37 +96,35 @@ module.exports = function(vars) {
   // Positioning of Lines
   //----------------------------------------------------------------------------
   function line(l) {
-    l.attr('x1', function(d) {
-      return d[
-        vars.edges.source
-      ].d3po.edges[d[vars.edges.target][vars.id.value]].x;
-    })
-      .attr('y1', function(d) {
-        return d[
-          vars.edges.source
-        ].d3po.edges[d[vars.edges.target][vars.id.value]].y;
-      })
-      .attr('x2', function(d) {
-        return d[
-          vars.edges.target
-        ].d3po.edges[d[vars.edges.source][vars.id.value]].x;
-      })
-      .attr('y2', function(d) {
-        return d[
-          vars.edges.target
-        ].d3po.edges[d[vars.edges.source][vars.id.value]].y;
-      });
+    l.attr(
+      'x1',
+      d =>
+        d[vars.edges.source].d3po.edges[d[vars.edges.target][vars.id.value]].x
+    )
+      .attr(
+        'y1',
+        d =>
+          d[vars.edges.source].d3po.edges[d[vars.edges.target][vars.id.value]].y
+      )
+      .attr(
+        'x2',
+        d =>
+          d[vars.edges.target].d3po.edges[d[vars.edges.source][vars.id.value]].x
+      )
+      .attr(
+        'y2',
+        d =>
+          d[vars.edges.target].d3po.edges[d[vars.edges.source][vars.id.value]].y
+      );
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Positioning of Splines
   //----------------------------------------------------------------------------
-  var curve = d3.svg.line().interpolate(vars.edges.interpolate.value);
+  const curve = d3.svg.line().interpolate(vars.edges.interpolate.value);
 
   function spline(l) {
-    l.attr('d', function(d) {
-      return curve(d.d3po.spline);
-    });
+    l.attr('d', d => curve(d.d3po.spline));
   }
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -152,28 +139,31 @@ module.exports = function(vars) {
       d[vars.edges.label]
     ) {
       if ('spline' in d.d3po) {
-        var length = this.getTotalLength(),
-          center = this.getPointAtLength(length / 2),
-          prev = this.getPointAtLength(length / 2 - length * 0.1),
-          next = this.getPointAtLength(length / 2 + length * 0.1),
-          radians = Math.atan2(next.y - prev.y, next.x - prev.x),
-          angle = radians * (180 / Math.PI),
-          width = length * 0.8,
-          x = center.x,
-          y = center.y;
+        var length = this.getTotalLength();
+        var center = this.getPointAtLength(length / 2);
+        const prev = this.getPointAtLength(length / 2 - length * 0.1);
+        const next = this.getPointAtLength(length / 2 + length * 0.1);
+        var radians = Math.atan2(next.y - prev.y, next.x - prev.x);
+        var angle = radians * (180 / Math.PI);
+        var width = length * 0.8;
+        var x = center.x;
+        var y = center.y;
       } else {
-        var source = d[vars.edges.source],
-          target = d[vars.edges.target],
-          start = {
-            x: source.d3po.edges[target[vars.id.value]].x,
-            y: source.d3po.edges[target[vars.id.value]].y
-          },
-          end = {
-            x: target.d3po.edges[source[vars.id.value]].x,
-            y: target.d3po.edges[source[vars.id.value]].y
-          },
-          xdiff = end.x - start.x,
-          ydiff = end.y - start.y;
+        const source = d[vars.edges.source];
+        const target = d[vars.edges.target];
+
+        const start = {
+          x: source.d3po.edges[target[vars.id.value]].x,
+          y: source.d3po.edges[target[vars.id.value]].y
+        };
+
+        const end = {
+          x: target.d3po.edges[source[vars.id.value]].x,
+          y: target.d3po.edges[source[vars.id.value]].y
+        };
+
+        const xdiff = end.x - start.x;
+        const ydiff = end.y - start.y;
         center = {
           x: end.x - xdiff / 2,
           y: end.y - ydiff / 2
@@ -188,7 +178,7 @@ module.exports = function(vars) {
 
       width += vars.labels.padding * 2;
 
-      var m = 0;
+      let m = 0;
       if (vars.edges.arrows.value) {
         m =
           typeof vars.edges.arrows.value === 'number'
@@ -227,7 +217,7 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Enter/update/exit the Arrow Marker
   //----------------------------------------------------------------------------
-  var markerData = vars.edges.arrows.value
+  const markerData = vars.edges.arrows.value
     ? typeof vars.edges.size.value == 'string'
       ? [
         'default_0',
@@ -244,29 +234,29 @@ module.exports = function(vars) {
     : [];
 
   if (typeof vars.edges.size.value == 'string') {
-    var b = buckets(vars.edges.scale.range(), 4),
-      markerSize = [];
-    for (var i = 0; i < 3; i++) {
+    const b = buckets(vars.edges.scale.range(), 4);
+    var markerSize = [];
+    for (let i = 0; i < 3; i++) {
       markerSize.push(b[i + 1] + (b[1] - b[0]) * (i + 2) * 2);
     }
   } else {
-    var m =
+    const m =
       typeof vars.edges.arrows.value === 'number' ? vars.edges.arrows.value : 8;
 
     markerSize =
       typeof vars.edges.size.value === 'number' ? vars.edges.size.value / m : m;
   }
 
-  var marker = vars.defs
+  const marker = vars.defs
     .selectAll('.d3po_edge_marker')
     .data(markerData, String);
 
-  var marker_style = function(path) {
+  const marker_style = path => {
     path
-      .attr('d', function(id) {
-        var depth = id.split('_');
+      .attr('d', id => {
+        let depth = id.split('_');
 
-        var m;
+        let m;
         if (depth.length == 2 && vars.edges.scale) {
           depth = parseInt(depth[1]);
           m = markerSize[depth];
@@ -298,8 +288,8 @@ module.exports = function(vars) {
           );
         }
       })
-      .attr('fill', function(d) {
-        var type = d.split('_')[0];
+      .attr('fill', d => {
+        const type = d.split('_')[0];
 
         if (type == 'default') {
           return vars.edges.color;
@@ -335,13 +325,11 @@ module.exports = function(vars) {
       .call(marker_style);
   }
 
-  var opacity = vars.draw.timing ? 0 : 1;
-  var enter = marker
+  const opacity = vars.draw.timing ? 0 : 1;
+  const enter = marker
     .enter()
     .append('marker')
-    .attr('id', function(d) {
-      return 'd3po_edge_marker_' + d;
-    })
+    .attr('id', d => 'd3po_edge_marker_' + d)
     .attr('class', 'd3po_edge_marker')
     .attr('orient', 'auto')
     .attr('markerUnits', 'userSpaceOnUse')
@@ -361,14 +349,17 @@ module.exports = function(vars) {
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Bind "edges" data to lines in the "edges" group
   //----------------------------------------------------------------------------
-  var strokeBuckets =
-      typeof vars.edges.size.value == 'string'
-        ? buckets(vars.edges.scale.domain(), 4)
-        : null,
-    direction = vars.edges.arrows.direction.value;
+  const strokeBuckets =
+    typeof vars.edges.size.value == 'string'
+      ? buckets(vars.edges.scale.domain(), 4)
+      : null;
 
-  var line_data = edges.filter(function(l) {
-    if (!l.d3po) l.d3po = {};
+  const direction = vars.edges.arrows.direction.value;
+
+  const line_data = edges.filter(l => {
+    if (!l.d3po) {
+      l.d3po = {};
+    }
 
     l.d3po.id =
       'edge_' +
@@ -377,9 +368,9 @@ module.exports = function(vars) {
       l[vars.edges.target][vars.id.value];
 
     if (l.d3po.spline !== true) {
-      var marker;
+      let marker;
       if (strokeBuckets) {
-        var size = l[vars.edges.size.value];
+        const size = l[vars.edges.size.value];
         l.d3po.bucket =
           size < strokeBuckets[1] ? 0 : size < strokeBuckets[2] ? 1 : 2;
         marker = (markerSize[l.d3po.bucket] * 0.85) / scale;
@@ -388,37 +379,47 @@ module.exports = function(vars) {
         marker = (markerSize * 0.85) / scale;
       }
 
-      var source = l[vars.edges.source],
-        target = l[vars.edges.target];
+      const source = l[vars.edges.source];
+      const target = l[vars.edges.target];
 
-      if (!source.d3po || !target.d3po) return false;
+      if (!source.d3po || !target.d3po) {
+        return false;
+      }
 
-      var sourceAngle = Math.atan2(
-          source.d3po.y - target.d3po.y,
-          source.d3po.x - target.d3po.x
-        ),
-        targetAngle = Math.atan2(
-          target.d3po.y - source.d3po.y,
-          target.d3po.x - source.d3po.x
-        ),
-        sourceRadius =
-          direction == 'source' && vars.edges.arrows.value
-            ? source.d3po.r + marker
-            : source.d3po.r,
-        targetRadius =
-          direction == 'target' && vars.edges.arrows.value
-            ? target.d3po.r + marker
-            : target.d3po.r,
-        sourceOffset = offset(sourceAngle, sourceRadius, vars.shape.value),
-        targetOffset = offset(targetAngle, targetRadius, vars.shape.value);
+      const sourceAngle = Math.atan2(
+        source.d3po.y - target.d3po.y,
+        source.d3po.x - target.d3po.x
+      );
 
-      if (!('edges' in source.d3po)) source.d3po.edges = {};
+      const targetAngle = Math.atan2(
+        target.d3po.y - source.d3po.y,
+        target.d3po.x - source.d3po.x
+      );
+
+      const sourceRadius =
+        direction == 'source' && vars.edges.arrows.value
+          ? source.d3po.r + marker
+          : source.d3po.r;
+
+      const targetRadius =
+        direction == 'target' && vars.edges.arrows.value
+          ? target.d3po.r + marker
+          : target.d3po.r;
+
+      const sourceOffset = offset(sourceAngle, sourceRadius, vars.shape.value);
+      const targetOffset = offset(targetAngle, targetRadius, vars.shape.value);
+
+      if (!('edges' in source.d3po)) {
+        source.d3po.edges = {};
+      }
       source.d3po.edges[target[vars.id.value]] = {
         x: source.d3po.x - sourceOffset.x,
         y: source.d3po.y - sourceOffset.y
       };
 
-      if (!('edges' in target.d3po)) target.d3po.edges = {};
+      if (!('edges' in target.d3po)) {
+        target.d3po.edges = {};
+      }
       target.d3po.edges[source[vars.id.value]] = {
         x: target.d3po.x - targetOffset.x,
         y: target.d3po.y - targetOffset.y
@@ -430,17 +431,15 @@ module.exports = function(vars) {
     return false;
   });
 
-  var lines = vars.g.edges
+  const lines = vars.g.edges
     .selectAll('g.d3po_edge_line')
-    .data(line_data, function(d) {
-      return d.d3po.id;
-    });
+    .data(line_data, d => d.d3po.id);
 
-  var spline_data = edges.filter(function(l) {
+  const spline_data = edges.filter(l => {
     if (l.d3po.spline) {
-      var marker;
+      let marker;
       if (strokeBuckets) {
-        var size = l[vars.edges.size.value];
+        const size = l[vars.edges.size.value];
         l.d3po.bucket =
           size < strokeBuckets[1] ? 0 : size < strokeBuckets[2] ? 1 : 2;
         marker = (markerSize[l.d3po.bucket] * 0.85) / scale;
@@ -449,92 +448,116 @@ module.exports = function(vars) {
         marker = (markerSize * 0.85) / scale;
       }
 
-      var source = l[vars.edges.source],
-        target = l[vars.edges.target],
-        sourceEdge = source.d3po.edges
-          ? source.d3po.edges[target[vars.id.value]] || {}
-          : {},
-        targetEdge = target.d3po.edges
-          ? target.d3po.edges[source[vars.id.value]] || {}
-          : {},
-        sourceMod =
-          vars.edges.arrows.value && direction == 'source' ? marker : 0,
-        targetMod =
-          vars.edges.arrows.value && direction == 'target' ? marker : 0,
-        angleTweak = 0.1,
-        sourceTweak =
-          source.d3po.x > target.d3po.x ? 1 - angleTweak : 1 + angleTweak,
-        targetTweak =
-          source.d3po.x > target.d3po.x ? 1 + angleTweak : 1 - angleTweak,
-        sourceAngle =
-          typeof sourceEdge.angle === 'number'
-            ? sourceEdge.angle
-            : Math.atan2(
-              source.d3po.y - target.d3po.y,
-              source.d3po.x - target.d3po.x
-            ) * sourceTweak,
-        sourceOffset = offset(
-          sourceAngle,
-          source.d3po.r + sourceMod,
-          vars.shape.value
-        ),
-        targetAngle =
-          typeof targetEdge.angle === 'number'
-            ? targetEdge.angle
-            : Math.atan2(
-              target.d3po.y - source.d3po.y,
-              target.d3po.x - source.d3po.x
-            ) * targetTweak,
-        targetOffset = offset(
-          targetAngle,
-          target.d3po.r + targetMod,
-          vars.shape.value
-        ),
-        start = [
-          source.d3po.x - sourceOffset.x,
-          source.d3po.y - sourceOffset.y
-        ],
-        startOffset = sourceEdge.offset
-          ? offset(sourceAngle, sourceEdge.offset)
-          : false,
-        startPoint = startOffset
-          ? [start[0] - startOffset.x, start[1] - startOffset.y]
-          : start,
-        end = [target.d3po.x - targetOffset.x, target.d3po.y - targetOffset.y],
-        endOffset = targetEdge.offset
-          ? offset(targetAngle, targetEdge.offset)
-          : false,
-        endPoint = endOffset
-          ? [end[0] - endOffset.x, end[1] - endOffset.y]
-          : end,
-        xd = endPoint[0] - startPoint[0],
-        yd = endPoint[1] - startPoint[1],
-        sourceDistance =
-          typeof sourceEdge.radius === 'number'
-            ? sourceEdge.radius
-            : Math.sqrt(xd * xd + yd * yd) / 4,
-        targetDistance =
-          typeof targetEdge.radius === 'number'
-            ? targetEdge.radius
-            : Math.sqrt(xd * xd + yd * yd) / 4,
-        startAnchor = offset(
-          sourceAngle,
-          sourceDistance - source.d3po.r - sourceMod * 2
-        ),
-        endAnchor = offset(
-          targetAngle,
-          targetDistance - target.d3po.r - targetMod * 2
-        );
+      const source = l[vars.edges.source];
+      const target = l[vars.edges.target];
 
-      l.d3po.spline = [start, end];
-      var testAngle = Math.abs(
-          Math.atan2(
+      const sourceEdge = source.d3po.edges
+        ? source.d3po.edges[target[vars.id.value]] || {}
+        : {};
+
+      const targetEdge = target.d3po.edges
+        ? target.d3po.edges[source[vars.id.value]] || {}
+        : {};
+
+      const sourceMod =
+        vars.edges.arrows.value && direction == 'source' ? marker : 0;
+
+      const targetMod =
+        vars.edges.arrows.value && direction == 'target' ? marker : 0;
+
+      const angleTweak = 0.1;
+
+      const sourceTweak =
+        source.d3po.x > target.d3po.x ? 1 - angleTweak : 1 + angleTweak;
+
+      const targetTweak =
+        source.d3po.x > target.d3po.x ? 1 + angleTweak : 1 - angleTweak;
+
+      const sourceAngle =
+        typeof sourceEdge.angle === 'number'
+          ? sourceEdge.angle
+          : Math.atan2(
             source.d3po.y - target.d3po.y,
             source.d3po.x - target.d3po.x
-          )
-        ).toFixed(5),
-        testStart = Math.abs(sourceAngle).toFixed(5),
-        testEnd = Math.abs(targetAngle - Math.PI).toFixed(5);
+          ) * sourceTweak;
+
+      const sourceOffset = offset(
+        sourceAngle,
+        source.d3po.r + sourceMod,
+        vars.shape.value
+      );
+
+      const targetAngle =
+        typeof targetEdge.angle === 'number'
+          ? targetEdge.angle
+          : Math.atan2(
+            target.d3po.y - source.d3po.y,
+            target.d3po.x - source.d3po.x
+          ) * targetTweak;
+
+      const targetOffset = offset(
+        targetAngle,
+        target.d3po.r + targetMod,
+        vars.shape.value
+      );
+
+      const start = [
+        source.d3po.x - sourceOffset.x,
+        source.d3po.y - sourceOffset.y
+      ];
+
+      const startOffset = sourceEdge.offset
+        ? offset(sourceAngle, sourceEdge.offset)
+        : false;
+
+      const startPoint = startOffset
+        ? [start[0] - startOffset.x, start[1] - startOffset.y]
+        : start;
+
+      const end = [
+        target.d3po.x - targetOffset.x,
+        target.d3po.y - targetOffset.y
+      ];
+
+      const endOffset = targetEdge.offset
+        ? offset(targetAngle, targetEdge.offset)
+        : false;
+
+      const endPoint = endOffset
+        ? [end[0] - endOffset.x, end[1] - endOffset.y]
+        : end;
+
+      const xd = endPoint[0] - startPoint[0];
+      const yd = endPoint[1] - startPoint[1];
+
+      const sourceDistance =
+        typeof sourceEdge.radius === 'number'
+          ? sourceEdge.radius
+          : Math.sqrt(xd * xd + yd * yd) / 4;
+
+      const targetDistance =
+        typeof targetEdge.radius === 'number'
+          ? targetEdge.radius
+          : Math.sqrt(xd * xd + yd * yd) / 4;
+
+      const startAnchor = offset(
+        sourceAngle,
+        sourceDistance - source.d3po.r - sourceMod * 2
+      );
+
+      const endAnchor = offset(
+        targetAngle,
+        targetDistance - target.d3po.r - targetMod * 2
+      );
+
+      l.d3po.spline = [start, end];
+
+      const testAngle = Math.abs(
+        Math.atan2(source.d3po.y - target.d3po.y, source.d3po.x - target.d3po.x)
+      ).toFixed(5);
+
+      const testStart = Math.abs(sourceAngle).toFixed(5);
+      const testEnd = Math.abs(targetAngle - Math.PI).toFixed(5);
 
       if (
         testStart !== testEnd ||
@@ -547,9 +570,12 @@ module.exports = function(vars) {
           [endPoint[0] - endAnchor.x, endPoint[1] - endAnchor.y]
         );
 
-        if (startOffset) l.d3po.spline.splice(1, 0, startPoint);
-        if (endOffset)
+        if (startOffset) {
+          l.d3po.spline.splice(1, 0, startPoint);
+        }
+        if (endOffset) {
           l.d3po.spline.splice(l.d3po.spline.length - 1, 0, endPoint);
+        }
       }
 
       return true;
@@ -558,11 +584,9 @@ module.exports = function(vars) {
     return false;
   });
 
-  var splines = vars.g.edges
+  const splines = vars.g.edges
     .selectAll('g.d3po_edge_path')
-    .data(spline_data, function(d) {
-      return d.d3po.id;
-    });
+    .data(spline_data, d => d.d3po.id);
 
   if (vars.draw.timing) {
     lines
@@ -595,9 +619,7 @@ module.exports = function(vars) {
 
     lines
       .selectAll('line')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .transition()
       .duration(vars.draw.timing)
       .call(line)
@@ -606,9 +628,7 @@ module.exports = function(vars) {
 
     splines
       .selectAll('path')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .transition()
       .duration(vars.draw.timing)
       .call(spline)
@@ -649,18 +669,14 @@ module.exports = function(vars) {
 
     lines
       .selectAll('line')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .call(line)
       .call(style)
       .call(label);
 
     splines
       .selectAll('path')
-      .data(function(d) {
-        return [d];
-      })
+      .data(d => [d])
       .call(spline)
       .call(style)
       .call(label);

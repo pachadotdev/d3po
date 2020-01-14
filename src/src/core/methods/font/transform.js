@@ -1,6 +1,6 @@
-(function() {
-  module.exports = function(transform) {
-    var accepted;
+(() => {
+  module.exports = transform => {
+    let accepted;
     accepted = ['capitalize', 'lowercase', 'none', 'uppercase'];
     if (transform === false) {
       accepted.unshift(false);
@@ -13,4 +13,4 @@
       value: transform
     };
   };
-}.call(this));
+}).call(this);

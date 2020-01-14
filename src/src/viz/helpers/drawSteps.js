@@ -1,41 +1,41 @@
-var dataFormat = require('../../core/data/format.js'),
-  dataColor = require('../../core/data/color.js'),
-  dataKeys = require('../../core/data/keys.js'),
-  dataLoad = require('../../core/data/load.js'),
-  drawDrawer = require('./ui/drawer.js'),
-  drawLegend = require('./ui/legend.js'),
-  drawTimeline = require('./ui/timeline.js'),
-  errorCheck = require('./errorCheck.js'),
-  fetchData = require('../../core/fetch/data.js'),
-  finish = require('./finish.js'),
-  focusTooltip = require('./focus/tooltip.js'),
-  history = require('./ui/history.js'),
-  parseEdges = require('../../core/parse/edges.js'),
-  parseNodes = require('../../core/parse/nodes.js'),
-  print = require('../../core/console/print.js'),
-  removeTooltip = require('../../tooltip/remove.js'),
-  runType = require('./types/run.js'),
-  shapes = require('./shapes/draw.js'),
-  stringFormat = require('../../string/format.js'),
-  svgSetup = require('./svg/enter.js'),
-  svgUpdate = require('./svg/update.js'),
-  titles = require('./ui/titles.js'),
-  validObject = require('../../object/validate.js');
+const dataFormat = require('../../core/data/format.js');
+const dataColor = require('../../core/data/color.js');
+const dataKeys = require('../../core/data/keys.js');
+const dataLoad = require('../../core/data/load.js');
+const drawDrawer = require('./ui/drawer.js');
+const drawLegend = require('./ui/legend.js');
+const drawTimeline = require('./ui/timeline.js');
+const errorCheck = require('./errorCheck.js');
+const fetchData = require('../../core/fetch/data.js');
+const finish = require('./finish.js');
+const focusTooltip = require('./focus/tooltip.js');
+const history = require('./ui/history.js');
+const parseEdges = require('../../core/parse/edges.js');
+const parseNodes = require('../../core/parse/nodes.js');
+const print = require('../../core/console/print.js');
+const removeTooltip = require('../../tooltip/remove.js');
+const runType = require('./types/run.js');
+const shapes = require('./shapes/draw.js');
+const stringFormat = require('../../string/format.js');
+const svgSetup = require('./svg/enter.js');
+const svgUpdate = require('./svg/update.js');
+const titles = require('./ui/titles.js');
+const validObject = require('../../object/validate.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Calculate steps needed to redraw the visualization
 //------------------------------------------------------------------------------
-module.exports = function(vars) {
-  var steps = [],
-    appType = vars.type.value,
-    locale = vars.format.locale.value,
-    uiMessage = locale.message.ui,
-    drawMessage = locale.message.draw;
+module.exports = vars => {
+  const steps = [];
+  const appType = vars.type.value;
+  const locale = vars.format.locale.value;
+  const uiMessage = locale.message.ui;
+  const drawMessage = locale.message.draw;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // Check to see if any data needs to be loaded with JSON
   //----------------------------------------------------------------------------
-  var urlLoads = ['data', 'attrs', 'coords', 'nodes', 'edges'];
-  urlLoads.forEach(function(u) {
+  const urlLoads = ['data', 'attrs', 'coords', 'nodes', 'edges'];
+  urlLoads.forEach(u => {
     if (!vars.error.value && !vars[u].loaded && vars[u].url) {
       steps.push({
         function: function(vars, next) {
@@ -48,13 +48,15 @@ module.exports = function(vars) {
   });
 
   if (vars.draw.update) {
-    var appName = locale.visualization[appType] || appType,
-      appSetup = vars.types[appType].setup || false,
-      appReqs = vars.types[appType].requirements || [],
-      appMessage = stringFormat(locale.message.initializing, appName),
-      dataMessage = locale.message.data;
+    let appName = locale.visualization[appType] || appType;
+    const appSetup = vars.types[appType].setup || false;
+    let appReqs = vars.types[appType].requirements || [];
+    const appMessage = stringFormat(locale.message.initializing, appName);
+    const dataMessage = locale.message.data;
 
-    if (!(appReqs instanceof Array)) appReqs = [appReqs];
+    if (!(appReqs instanceof Array)) {
+      appReqs = [appReqs];
+    }
     appName = appName.toLowerCase();
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -70,7 +72,9 @@ module.exports = function(vars) {
 
           appSetup(vars);
 
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
         },
         message: appMessage
       });
@@ -102,7 +106,9 @@ module.exports = function(vars) {
             .attr('id', appType)
             .attr('opacity', 0);
 
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
         },
         message: appMessage
       });
@@ -161,7 +167,7 @@ module.exports = function(vars) {
           vars.color.type = false;
 
           if (vars.color.value) {
-            var colorKey = vars.color.value;
+            let colorKey = vars.color.value;
 
             if (validObject(colorKey)) {
               if (colorKey[vars.id.value]) {
@@ -180,7 +186,9 @@ module.exports = function(vars) {
             vars.color.type = vars.data.keys[vars.id.value];
           }
 
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
         }
       },
       message: dataMessage
@@ -238,19 +246,25 @@ module.exports = function(vars) {
     if (!vars.error.value) {
       steps.push({
         function: function(vars) {
-          var year = vars.time.fixed.value ? ['all'] : null;
+          const year = vars.time.fixed.value ? ['all'] : null;
           if (vars.dev.value) {
             var timerString = year ? 'fetching pool data' : 'fetching data';
             print.time(timerString);
           }
           vars.data.pool = fetchData(vars, year);
-          if (vars.dev.value) print.timeEnd(timerString);
+          if (vars.dev.value) {
+            print.timeEnd(timerString);
+          }
           if (!year) {
             vars.data.viz = vars.data.pool;
           } else {
-            if (vars.dev.value) print.time('fetching data for current year');
+            if (vars.dev.value) {
+              print.time('fetching data for current year');
+            }
             vars.data.viz = fetchData(vars);
-            if (vars.dev.value) print.timeEnd('fetching data for current year');
+            if (vars.dev.value) {
+              print.timeEnd('fetching data for current year');
+            }
           }
 
           vars.draw.timing =
@@ -293,7 +307,9 @@ module.exports = function(vars) {
         removeTooltip(vars.type.previous);
       }
       removeTooltip(appType);
-      if (vars.dev.value) print.timeEnd(str);
+      if (vars.dev.value) {
+        print.timeEnd(str);
+      }
     },
     message: uiMessage
   });
@@ -316,9 +332,11 @@ module.exports = function(vars) {
           drawTimeline(vars);
           drawLegend(vars);
         } else {
-          if (vars.dev.value) print.time('calculating margins');
+          if (vars.dev.value) {
+            print.time('calculating margins');
+          }
 
-          var drawer =
+          const drawer =
             vars.container.value.select('div#d3po_drawer').node()
               .offsetHeight ||
             vars.container.value
@@ -326,17 +344,19 @@ module.exports = function(vars) {
               .node()
               .getBoundingClientRect().height;
 
-          var timeline = vars.g.timeline.node().getBBox();
+          let timeline = vars.g.timeline.node().getBBox();
           timeline = vars.timeline.value
             ? timeline.height + vars.ui.padding
             : 0;
 
-          var legend = vars.g.legend.node().getBBox();
+          let legend = vars.g.legend.node().getBBox();
           legend = vars.legend.value ? legend.height + vars.ui.padding : 0;
 
           vars.margin.bottom += drawer + timeline + legend;
 
-          if (vars.dev.value) print.timeEnd('calculating margins');
+          if (vars.dev.value) {
+            print.timeEnd('calculating margins');
+          }
         }
       }
 

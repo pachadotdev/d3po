@@ -6,8 +6,8 @@ treemap_data <- tibble(
   id = c("alpha", "beta", "gamma", "delta", "eta"),
   value = c(29, 10, 2, 29, 25),
   icon = c(
-    rep("https://datausa.io/static/images/attrs/thing_apple.png", 3),
-    rep("https://datausa.io/static/images/attrs/thing_fish.png", 2)
+    rep("thing_apple.png", 3),
+    rep("thing_fish.png", 2)
   ),
   color = c(rep("cornflowerblue", 3), rep("firebrick", 2))
 )

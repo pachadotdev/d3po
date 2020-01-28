@@ -29755,6 +29755,7 @@ const scroll = require('../../../../client/scroll');
 const stringStrip = require('../../../../string/strip');
 const textWrap = require('../../../../textwrap/textwrap');
 const validObject = require('../../../../object/validate');
+
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
 //------------------------------------------------------------------------------

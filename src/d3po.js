@@ -23698,7 +23698,7 @@ const dataColor = require('../../core/data/color.js');
 const dataKeys = require('../../core/data/keys.js');
 const dataLoad = require('../../core/data/load.js');
 const drawDrawer = require('./ui/drawer.js');
-const drawLegend = require('./ui/legend.js');
+const drawLegend = require('./ui/legend');
 const drawTimeline = require('./ui/timeline.js');
 const errorCheck = require('./errorCheck.js');
 const fetchData = require('../../core/fetch/data.js');
@@ -24089,7 +24089,7 @@ module.exports = vars => {
   return steps;
 };
 
-},{"../../core/console/print.js":47,"../../core/data/color.js":49,"../../core/data/format.js":51,"../../core/data/keys.js":53,"../../core/data/load.js":54,"../../core/fetch/data.js":59,"../../core/parse/edges.js":92,"../../core/parse/nodes.js":95,"../../object/validate.js":169,"../../string/format.js":170,"../../tooltip/remove.js":200,"./errorCheck.js":210,"./finish.js":211,"./focus/tooltip.js":212,"./shapes/draw.js":219,"./svg/enter.js":230,"./svg/update.js":231,"./types/run.js":234,"./ui/drawer.js":235,"./ui/history.js":236,"./ui/legend.js":237,"./ui/timeline.js":239,"./ui/titles.js":240}],210:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/data/color.js":49,"../../core/data/format.js":51,"../../core/data/keys.js":53,"../../core/data/load.js":54,"../../core/fetch/data.js":59,"../../core/parse/edges.js":92,"../../core/parse/nodes.js":95,"../../object/validate.js":169,"../../string/format.js":170,"../../tooltip/remove.js":200,"./errorCheck.js":210,"./finish.js":211,"./focus/tooltip.js":212,"./shapes/draw.js":219,"./svg/enter.js":230,"./svg/update.js":231,"./types/run.js":234,"./ui/drawer.js":235,"./ui/history.js":236,"./ui/legend":237,"./ui/timeline.js":239,"./ui/titles.js":240}],210:[function(require,module,exports){
 const fetchText = require('../../core/fetch/text.js');
 const print = require('../../core/console/print.js');
 const rejected = require('../../core/methods/rejected.js');
@@ -29737,24 +29737,24 @@ module.exports = vars => {
 }).call(this);
 
 },{"../../../client/pointer.js":33,"../../../color/lighter.js":40,"../../../core/console/print.js":47}],237:[function(require,module,exports){
-const arraySort = require('../../../array/sort.js');
-const buckets = require('../../../util/buckets.js');
-const copy = require('../../../util/copy.js');
-const createTooltip = require('../tooltip/create.js');
-const dataNest = require('../../../core/data/nest.js');
-const dataURL = require('../../../util/dataurl.js');
-const events = require('../../../client/pointer.js');
-const fetchValue = require('../../../core/fetch/value.js');
-const fetchColor = require('../../../core/fetch/color.js');
-const fetchText = require('../../../core/fetch/text.js');
-const print = require('../../../core/console/print.js');
-const removeTooltip = require('../../../tooltip/remove.js');
-const textColor = require('../../../color/text.js');
-const uniqueValues = require('../../../util/uniques.js');
-const scroll = require('../../../client/scroll.js');
-const stringStrip = require('../../../string/strip.js');
-const textWrap = require('../../../textwrap/textwrap.js');
-const validObject = require('../../../object/validate.js');
+const arraySort = require('../../../../array/sort');
+const buckets = require('../../../../util/buckets');
+const copy = require('../../../../util/copy');
+const createTooltip = require('../../tooltip/create');
+const dataNest = require('../../../../core/data/nest');
+const dataURL = require('../../../../util/dataurl');
+const events = require('../../../../client/pointer');
+const fetchValue = require('../../../../core/fetch/value');
+const fetchColor = require('../../../../core/fetch/color');
+const fetchText = require('../../../../core/fetch/text');
+const print = require('../../../../core/console/print');
+const removeTooltip = require('../../../../tooltip/remove');
+const textColor = require('../../../../color/text');
+const uniqueValues = require('../../../../util/uniques');
+const scroll = require('../../../../client/scroll');
+const stringStrip = require('../../../../string/strip');
+const textWrap = require('../../../../textwrap/textwrap');
+const validObject = require('../../../../object/validate');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
 //------------------------------------------------------------------------------
@@ -30509,7 +30509,7 @@ module.exports = vars => {
   }
 };
 
-},{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":55,"../../../core/fetch/color.js":58,"../../../core/fetch/text.js":61,"../../../core/fetch/value.js":62,"../../../object/validate.js":169,"../../../string/strip.js":172,"../../../textwrap/textwrap.js":197,"../../../tooltip/remove.js":200,"../../../util/buckets.js":201,"../../../util/copy.js":204,"../../../util/dataurl.js":206,"../../../util/uniques.js":207,"../tooltip/create.js":232}],238:[function(require,module,exports){
+},{"../../../../array/sort":29,"../../../../client/pointer":33,"../../../../client/scroll":36,"../../../../color/text":45,"../../../../core/console/print":47,"../../../../core/data/nest":55,"../../../../core/fetch/color":58,"../../../../core/fetch/text":61,"../../../../core/fetch/value":62,"../../../../object/validate":169,"../../../../string/strip":172,"../../../../textwrap/textwrap":197,"../../../../tooltip/remove":200,"../../../../util/buckets":201,"../../../../util/copy":204,"../../../../util/dataurl":206,"../../../../util/uniques":207,"../../tooltip/create":232}],238:[function(require,module,exports){
 const textColor = require('../../../color/text.js');
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

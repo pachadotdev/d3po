@@ -1,21 +1,18 @@
 (() => {
-  const validObject = require('../../../../../../object/validate.js');
   const tickPosition = require('./tickPosition');
   const tickStyle = require('./tickStyle');
   const xStyle = require('./xStyle');
   const yStyle = require('./yStyle');
+  const userLines = require('./userLines');
 
   module.exports = vars => {
     let affixes;
-    let alignMap;
     let axis;
     let axisData;
     let axisGroup;
     let axisLabel;
     let bg;
     let bgStyle;
-    let d;
-    let domain;
     let domains;
     let grid;
     let gridData;
@@ -29,38 +26,18 @@
     let len;
     let len1;
     let len2;
-    let len3;
-    let len4;
-    let line;
-    let lineData;
-    let lineFont;
-    let lineGroup;
-    let lineRects;
-    let lineStyle;
     let lines;
-    let linetexts;
-    let m;
     let mirror;
-    let n;
     let opp;
     let plane;
     let planeTrans;
-    let position;
     let realData;
-    let rectData;
-    let rectStyle;
     let ref;
     let ref1;
     let ref2;
-    let ref3;
     let rotated;
     let sep;
     let style;
-    let textData;
-    let textPad;
-    let textPos;
-    let userLines;
-    let valid;
     domains = vars.x.domain.viz.concat(vars.y.domain.viz);
     if (domains.indexOf(void 0) >= 0) {
       return null;
@@ -73,41 +50,7 @@
       'stroke-width': vars.axes.background.stroke.width,
       'shape-rendering': vars.axes.background.rendering.value
     };
-    alignMap = {
-      left: 'start',
-      center: 'middle',
-      right: 'end'
-    };
     axisData = vars.small ? [] : [0];
-    lineStyle = (line, axis) => {
-      let max;
-      let opp;
-      max = axis.indexOf('x') === 0 ? 'height' : 'width';
-      opp = axis.indexOf('x') === 0 ? 'y' : 'x';
-      return line
-        .attr(opp + '1', 0)
-        .attr(opp + '2', vars.axes[max])
-        .attr(axis + '1', d => d.coords.line)
-        .attr(axis + '2', d => d.coords.line)
-        .attr('stroke', d => d.color || vars[axis].lines.color)
-        .attr('stroke-width', vars[axis].lines.width)
-        .attr('shape-rendering', vars[axis].lines.rendering.value)
-        .attr('stroke-dasharray', vars[axis].lines.dasharray.value);
-    };
-    lineFont = (text, axis) => {
-      let opp;
-      opp = axis.indexOf('x') === 0 ? 'y' : 'x';
-      return text
-        .attr(opp, d => d.coords.text[opp] + 'px')
-        .attr(axis, d => d.coords.text[axis] + 'px')
-        .attr('dy', vars[axis].lines.font.position.value)
-        .attr('text-anchor', alignMap[vars[axis].lines.font.align.value])
-        .attr('transform', d => d.transform)
-        .attr('font-size', vars[axis].lines.font.size + 'px')
-        .attr('fill', d => d.color || vars[axis].lines.color)
-        .attr('font-family', vars[axis].lines.font.family.value)
-        .attr('font-weight', vars[axis].lines.font.weight);
-    };
     planeTrans =
       'translate(' +
       vars.axes.margin.viz.left +
@@ -327,195 +270,6 @@
         .attr('opacity', 0)
         .remove();
     }
-    ref3 = ['x', 'y', 'x2', 'y2'];
-    for (m = 0, len3 = ref3.length; m < len3; m++) {
-      axis = ref3[m];
-      if (vars[axis].value) {
-        lineGroup = plane
-          .selectAll('g#d3po_graph_' + axis + '_userlines')
-          .data([0]);
-        lineGroup
-          .enter()
-          .append('g')
-          .attr('id', 'd3po_graph_' + axis + '_userlines');
-        domain = vars[axis].scale.viz.domain();
-        if (axis.indexOf('y') === 0) {
-          domain = domain.slice().reverse();
-        }
-        textData = [];
-        lineData = [];
-        userLines = vars[axis].lines.value || [];
-        for (n = 0, len4 = userLines.length; n < len4; n++) {
-          line = userLines[n];
-          d = validObject(line) ? line.position : line;
-          if (axis === vars.axes.discrete) {
-            valid = domain.indexOf(d) >= 0;
-          } else {
-            valid = d >= domain[0] && d <= domain[1];
-          }
-          if (valid) {
-            d = !validObject(line)
-              ? {
-                position: d
-              }
-              : line;
-            d.coords = {
-              line: vars[axis].scale.viz(d.position)
-            };
-            lineData.push(d);
-            if (d.text) {
-              d.axis = axis;
-              d.padding = vars[axis].lines.font.padding.value * 0.5;
-              d.align = vars[axis].lines.font.align.value;
-              position = vars[axis].lines.font.position.text;
-              textPad = position === 'middle' ? 0 : d.padding * 2;
-              if (position === 'top') {
-                textPad = -textPad;
-              }
-              if (axis.indexOf('x') === 0) {
-                textPos =
-                  d.align === 'left'
-                    ? vars.axes.height
-                    : d.align === 'center'
-                      ? vars.axes.height / 2
-                      : 0;
-                if (d.align === 'left') {
-                  textPos -= d.padding * 2;
-                }
-                if (d.align === 'right') {
-                  textPos += d.padding * 2;
-                }
-              } else {
-                textPos =
-                  d.align === 'left'
-                    ? 0
-                    : d.align === 'center'
-                      ? vars.axes.width / 2
-                      : vars.axes.width;
-                if (d.align === 'right') {
-                  textPos -= d.padding * 2;
-                }
-                if (d.align === 'left') {
-                  textPos += d.padding * 2;
-                }
-              }
-              d.coords.text = {};
-              d.coords.text[axis.indexOf('x') === 0 ? 'y' : 'x'] = textPos;
-              d.coords.text[axis] = vars[axis].scale.viz(d.position) + textPad;
-              d.transform =
-                axis.indexOf('x') === 0
-                  ? 'rotate(-90,' +
-                    d.coords.text.x +
-                    ',' +
-                    d.coords.text.y +
-                    ')'
-                  : null;
-              textData.push(d);
-            }
-          }
-        }
-        lines = lineGroup
-          .selectAll('line.d3po_graph_' + axis + 'line')
-          .data(lineData, d => d.position);
-        lines
-          .enter()
-          .append('line')
-          .attr('class', 'd3po_graph_' + axis + 'line')
-          .attr('opacity', 0)
-          .call(lineStyle, axis);
-        lines
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 1)
-          .call(lineStyle, axis);
-        lines
-          .exit()
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 0)
-          .remove();
-        linetexts = lineGroup
-          .selectAll('text.d3po_graph_' + axis + 'line_text')
-          .data(textData, d => d.position);
-        linetexts
-          .enter()
-          .append('text')
-          .attr('class', 'd3po_graph_' + axis + 'line_text')
-          .attr('id', d => {
-            let id;
-            id = d.position + '';
-            id = id.replace('-', 'neg');
-            id = id.replace('.', 'p');
-            return 'd3po_graph_' + axis + 'line_text_' + id;
-          })
-          .attr('opacity', 0)
-          .call(lineFont, axis);
-        linetexts
-          .text(d => d.text)
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 1)
-          .call(lineFont, axis);
-        linetexts
-          .exit()
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 0)
-          .remove();
-        rectStyle = rect => {
-          let getText;
-          getText = d => {
-            let id;
-            id = d.position + '';
-            id = id.replace('-', 'neg');
-            id = id.replace('.', 'p');
-            return plane
-              .select('text#d3po_graph_' + d.axis + 'line_text_' + id)
-              .node()
-              .getBBox();
-          };
-          return rect
-            .attr('x', d => getText(d).x - d.padding)
-            .attr('y', d => getText(d).y - d.padding)
-            .attr('transform', d => d.transform)
-            .attr('width', d => getText(d).width + d.padding * 2)
-            .attr('height', d => getText(d).height + d.padding * 2)
-            .attr(
-              'fill',
-              vars.axes.background.color !== 'transparent'
-                ? vars.axes.background.color
-                : 'white'
-            );
-        };
-        rectData = vars[axis].lines.font.background.value ? textData : [];
-        lineRects = lineGroup
-          .selectAll('rect.d3po_graph_' + axis + 'line_rect')
-          .data(rectData, d => d.position);
-        lineRects
-          .enter()
-          .insert('rect', 'text.d3po_graph_' + axis + 'line_text')
-          .attr('class', 'd3po_graph_' + axis + 'line_rect')
-          .attr('pointer-events', 'none')
-          .attr('opacity', 0)
-          .call(rectStyle);
-        lineRects
-          .transition()
-          .delay(vars.draw.timing)
-          .each('end', function() {
-            return d3
-              .select(this)
-              .transition()
-              .duration(vars.draw.timing)
-              .attr('opacity', 1)
-              .call(rectStyle);
-          });
-        lineRects
-          .exit()
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 0)
-          .remove();
-      }
-    }
+    userLines(vars, plane);
   };
 }).call(this);

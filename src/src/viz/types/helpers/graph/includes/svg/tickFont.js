@@ -23,7 +23,14 @@ const tickFont = (tick, axis, vars) => {
     })
     .attr('font-family', d => getFontStyle(axis, d, 'family', vars).value)
     .attr('font-weight', d => getFontStyle(axis, d, 'weight', vars))
-    .style('text-transform', d => getFontStyle(axis, d, 'transform', vars).value)
-    .style('letter-spacing', d => getFontStyle(axis, d, 'spacing', vars) + 'px', vars);
+    .style(
+      'text-transform',
+      d => getFontStyle(axis, d, 'transform', vars).value
+    )
+    .style(
+      'letter-spacing',
+      d => getFontStyle(axis, d, 'spacing', vars) + 'px',
+      vars
+    );
 };
 module.exports = tickFont;

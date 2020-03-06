@@ -159,10 +159,10 @@ module.exports = (vars, group) => {
       let names = d.d3po.text
         ? d.d3po.text
         : label && label.names
-          ? label.names
-          : vars.labels.text.value
-            ? fetchValue(vars, d, vars.labels.text.value)
-            : fetchText(vars, d);
+        ? label.names
+        : vars.labels.text.value
+        ? fetchValue(vars, d, vars.labels.text.value)
+        : fetchText(vars, d);
 
       const group = label && 'group' in label ? label.group : d3.select(this);
       const share_size = 0;
@@ -190,8 +190,8 @@ module.exports = (vars, group) => {
             vars.labels.resize.value === false
               ? false
               : label && 'resize' in label
-                ? label.resize
-                : true;
+              ? label.resize
+              : true;
 
           label.padding =
             typeof label.padding === 'number'
@@ -325,16 +325,16 @@ module.exports = (vars, group) => {
               typeof label.background === 'number'
                 ? label.background
                 : typeof label.background === 'string'
-                  ? 1
-                  : 0.6;
+                ? 1
+                : 0.6;
 
             function bg_style(elem) {
               const color =
                 typeof label.background === 'string'
                   ? label.background
                   : vars.background.value === 'none'
-                    ? '#ffffff'
-                    : vars.background.value;
+                  ? '#ffffff'
+                  : vars.background.value;
 
               const fill =
                 typeof label.background === 'string' ? label.background : color;

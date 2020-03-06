@@ -156,8 +156,8 @@ module.exports = vars => {
         : vars.focus.value.length &&
           vars.types[vars.type.value].zoom &&
           vars.zoom.value
-          ? 1 - vars.tooltip.curtain.opacity
-          : 1;
+        ? 1 - vars.tooltip.curtain.opacity
+        : 1;
 
     const timing = vars.draw.timing;
 

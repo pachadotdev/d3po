@@ -385,10 +385,10 @@ const rings = vars => {
         if (angle < -90 || angle > 90) {
           angle = angle - 180;
           (buffer = -(n.d3po.r + width / 2 + vars.labels.padding)),
-          (anchor = 'end');
+            (anchor = 'end');
         } else {
           (buffer = n.d3po.r + width / 2 + vars.labels.padding),
-          (anchor = 'start');
+            (anchor = 'start');
         }
 
         const background = primaries.indexOf(n) >= 0 ? true : false;

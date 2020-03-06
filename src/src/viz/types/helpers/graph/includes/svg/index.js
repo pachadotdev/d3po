@@ -155,10 +155,10 @@
                 vars[axis].label.height / 2 -
                 vars[axis].label.padding
             : axis === 'y2'
-              ? vars.width.viz -
+            ? vars.width.viz -
               vars[axis].label.height / 2 -
               vars[axis].label.padding
-              : vars[axis].label.height / 2 + vars[axis].label.padding
+            : vars[axis].label.height / 2 + vars[axis].label.padding
         )
         .attr('transform', axis.indexOf('y') === 0 ? 'rotate(-90)' : null)
         .attr('font-family', vars[axis].label.font.family.value)

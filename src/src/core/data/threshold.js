@@ -185,9 +185,9 @@ module.exports = (vars, rawData, split) => {
             textLabel = textLabel.length
               ? textLabel[0].split(' < ')[0]
               : vars.format.value(vars.format.locale.value.ui.values, {
-                key: 'threshold',
-                vars: vars
-              });
+                  key: 'threshold',
+                  vars: vars
+                });
             if ((p_id, labelException.indexOf(p_id) < 0)) {
               textLabel +=
                 ' < ' +

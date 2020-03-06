@@ -5,7 +5,13 @@ const scroll = require('../../../../client/scroll');
 const fetchValue = require('../../../../core/fetch/value');
 const createTooltip = require('../../tooltip/create');
 
-module.exports = function legendTooltip (keys, vars, square_size, colorKey, colorDepth) {
+module.exports = function legendTooltip(
+  keys,
+  vars,
+  square_size,
+  colorKey,
+  colorDepth
+) {
   keys
     .on(events.over, function(d) {
       d3.select(this).style('cursor', 'pointer');
@@ -18,24 +24,19 @@ module.exports = function legendTooltip (keys, vars, square_size, colorKey, colo
 
       let title;
       if (vars.legend.title.value) {
-        title = fetchValue(
-          vars,
-          d,
-          vars.legend.title.value,
-          colorDepth
-        );
+        title = fetchValue(vars, d, vars.legend.title.value, colorDepth);
       } else {
         title =
-                  idIndex >= 0
-                    ? fetchText(vars, d, idIndex)[0]
-                    : vars.format.value(
-                      fetchValue(vars, d, vars.color.value, colorKey),
-                      {
-                        key: vars.color.value,
-                        vars: vars,
-                        data: d
-                      }
-                    );
+          idIndex >= 0
+            ? fetchText(vars, d, idIndex)[0]
+            : vars.format.value(
+              fetchValue(vars, d, vars.color.value, colorKey),
+              {
+                key: vars.color.value,
+                vars: vars,
+                data: d
+              }
+            );
       }
 
       let html;
@@ -44,13 +45,9 @@ module.exports = function legendTooltip (keys, vars, square_size, colorKey, colo
         html = '<div style=\'text-align:center;\'>';
         const loc = vars.format.locale.value;
         html +=
-                  '<div class=\'mute\'>' +
-                  vars.format.value(loc.method.mute) +
-                  '</div>';
+          '<div class=\'mute\'>' + vars.format.value(loc.method.mute) + '</div>';
         html +=
-                  '<div class=\'solo\'>' +
-                  vars.format.value(loc.method.solo) +
-                  '</div>';
+          '<div class=\'solo\'>' + vars.format.value(loc.method.solo) + '</div>';
         html += '</div>';
         js = tooltip => {
           const style = {

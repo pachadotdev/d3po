@@ -20731,7 +20731,7 @@ module.exports = vars => {
   module.exports = d3po;
 }).call(this);
 
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":327}],161:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":336}],161:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -29788,15 +29788,10 @@ module.exports = function groupByColors(vars) {
       colorDepth = n;
       colorKey = vars.id.nesting[n];
 
-      const uniqueIDs = uniqueValues(data, d =>
-        fetchValue(vars, d, colorKey)
-      );
+      const uniqueIDs = uniqueValues(data, d => fetchValue(vars, d, colorKey));
       const uniqueColors = uniqueValues(data, colorFunction);
 
-      if (
-        uniqueIDs.length >= uniqueColors.length &&
-        uniqueColors.length > 1
-      ) {
+      if (uniqueIDs.length >= uniqueColors.length && uniqueColors.length > 1) {
         break;
       }
     }
@@ -29947,14 +29942,13 @@ module.exports = function groupByColors(vars) {
     }
   }
 
-  return {square_size, key_display, colors, key_width, start_x};
+  return { square_size, key_display, colors, key_width, start_x };
 };
 
 },{"../../../../array/sort":29,"../../../../core/data/nest":55,"../../../../core/fetch/color":58,"../../../../core/fetch/value":62,"../../../../util/copy":204,"../../../../util/uniques":207,"./legendTooltip":239,"./styleRect":240}],238:[function(require,module,exports){
 const buckets = require('../../../../util/buckets');
 const print = require('../../../../core/console/print');
 const groupByColors = require('./groupByColors');
-
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
@@ -29975,7 +29969,7 @@ module.exports = vars => {
     if (!vars.color.valueScale) {
       const result = groupByColors(vars);
       square_size = result.square_size;
-      if(result.key_display === false){
+      if (result.key_display === false) {
         key_display = false;
       }
       colors = result.colors;
@@ -30269,7 +30263,13 @@ const scroll = require('../../../../client/scroll');
 const fetchValue = require('../../../../core/fetch/value');
 const createTooltip = require('../../tooltip/create');
 
-module.exports = function legendTooltip (keys, vars, square_size, colorKey, colorDepth) {
+module.exports = function legendTooltip(
+  keys,
+  vars,
+  square_size,
+  colorKey,
+  colorDepth
+) {
   keys
     .on(events.over, function(d) {
       d3.select(this).style('cursor', 'pointer');
@@ -30282,24 +30282,19 @@ module.exports = function legendTooltip (keys, vars, square_size, colorKey, colo
 
       let title;
       if (vars.legend.title.value) {
-        title = fetchValue(
-          vars,
-          d,
-          vars.legend.title.value,
-          colorDepth
-        );
+        title = fetchValue(vars, d, vars.legend.title.value, colorDepth);
       } else {
         title =
-                  idIndex >= 0
-                    ? fetchText(vars, d, idIndex)[0]
-                    : vars.format.value(
-                      fetchValue(vars, d, vars.color.value, colorKey),
-                      {
-                        key: vars.color.value,
-                        vars: vars,
-                        data: d
-                      }
-                    );
+          idIndex >= 0
+            ? fetchText(vars, d, idIndex)[0]
+            : vars.format.value(
+              fetchValue(vars, d, vars.color.value, colorKey),
+              {
+                key: vars.color.value,
+                vars: vars,
+                data: d
+              }
+            );
       }
 
       let html;
@@ -30308,13 +30303,9 @@ module.exports = function legendTooltip (keys, vars, square_size, colorKey, colo
         html = '<div style=\'text-align:center;\'>';
         const loc = vars.format.locale.value;
         html +=
-                  '<div class=\'mute\'>' +
-                  vars.format.value(loc.method.mute) +
-                  '</div>';
+          '<div class=\'mute\'>' + vars.format.value(loc.method.mute) + '</div>';
         html +=
-                  '<div class=\'solo\'>' +
-                  vars.format.value(loc.method.solo) +
-                  '</div>';
+          '<div class=\'solo\'>' + vars.format.value(loc.method.solo) + '</div>';
         html += '</div>';
         js = tooltip => {
           const style = {
@@ -33933,7 +33924,7 @@ module.exports = {
   module.exports = area;
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":316,"./helpers/graph/stack.js":317}],303:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":325,"./helpers/graph/stack.js":326}],303:[function(require,module,exports){
 (() => {
   let bar;
   let buckets;
@@ -34203,7 +34194,7 @@ module.exports = {
   module.exports = bar;
 }).call(this);
 
-},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":316,"./helpers/graph/stack.js":317}],304:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":325,"./helpers/graph/stack.js":326}],304:[function(require,module,exports){
 (() => {
   let box;
   let fetchValue;
@@ -35076,7 +35067,7 @@ module.exports = {
 
   axes = require('./includes/axes.js');
 
-  draw = require('./includes/svg.js');
+  draw = require('./includes/svg');
 
   mouse = require('./includes/mouse.js');
 
@@ -35093,7 +35084,7 @@ module.exports = {
   };
 }).call(this);
 
-},{"./includes/axes.js":311,"./includes/mouse.js":313,"./includes/plot.js":314,"./includes/svg.js":315}],311:[function(require,module,exports){
+},{"./includes/axes.js":311,"./includes/mouse.js":313,"./includes/plot.js":314,"./includes/svg":316}],311:[function(require,module,exports){
 (() => {
   let arraySort;
   let axisRange;
@@ -36682,30 +36673,35 @@ module.exports = {
 }).call(this);
 
 },{"../../../../../core/data/time.js":57,"../../../../../core/fetch/value.js":62,"../../../../../font/sizes.js":99,"../../../../../textwrap/textwrap.js":197,"../../../../../util/buckets.js":201,"./buffer.js":312}],315:[function(require,module,exports){
+const getFontStyle = (axis, val, style, vars) => {
+  let type;
+  type = val === 0 ? 'axis' : 'ticks';
+  val = vars[axis][type].font[style];
+  if (val && (val.length || typeof val === 'number')) {
+    return val;
+  } else {
+    return vars[axis].ticks.font[style];
+  }
+};
+module.exports = getFontStyle;
+
+},{}],316:[function(require,module,exports){
 (() => {
-  let mix;
-  let textwrap;
-  let validObject;
-
-  mix = require('../../../../../color/mix.js');
-
-  textwrap = require('../../../../../textwrap/textwrap.js');
-
-  validObject = require('../../../../../object/validate.js');
+  const tickPosition = require('./tickPosition');
+  const tickStyle = require('./tickStyle');
+  const xStyle = require('./xStyle');
+  const yStyle = require('./yStyle');
+  const userLines = require('./userLines');
 
   module.exports = vars => {
     let affixes;
-    let alignMap;
     let axis;
     let axisData;
     let axisGroup;
     let axisLabel;
     let bg;
     let bgStyle;
-    let d;
-    let domain;
     let domains;
-    let getFontStyle;
     let grid;
     let gridData;
     let groupEnter;
@@ -36718,43 +36714,18 @@ module.exports = {
     let len;
     let len1;
     let len2;
-    let len3;
-    let len4;
-    let line;
-    let lineData;
-    let lineFont;
-    let lineGroup;
-    let lineRects;
-    let lineStyle;
     let lines;
-    let linetexts;
-    let m;
     let mirror;
-    let n;
     let opp;
     let plane;
     let planeTrans;
-    let position;
     let realData;
-    let rectData;
-    let rectStyle;
     let ref;
     let ref1;
     let ref2;
-    let ref3;
     let rotated;
     let sep;
     let style;
-    let textData;
-    let textPad;
-    let textPos;
-    let tickFont;
-    let tickPosition;
-    let tickStyle;
-    let userLines;
-    let valid;
-    let xStyle;
-    let yStyle;
     domains = vars.x.domain.viz.concat(vars.y.domain.viz);
     if (domains.indexOf(void 0) >= 0) {
       return null;
@@ -36767,142 +36738,7 @@ module.exports = {
       'stroke-width': vars.axes.background.stroke.width,
       'shape-rendering': vars.axes.background.rendering.value
     };
-    alignMap = {
-      left: 'start',
-      center: 'middle',
-      right: 'end'
-    };
     axisData = vars.small ? [] : [0];
-    tickPosition = (tick, axis) =>
-      tick
-        .attr('x1', d => {
-          if (axis.indexOf('x') === 0) {
-            return vars.x.scale.viz(d);
-          } else {
-            return 0;
-          }
-        })
-        .attr('x2', d => {
-          if (axis.indexOf('x') === 0) {
-            return vars.x.scale.viz(d);
-          } else {
-            return vars.axes.width;
-          }
-        })
-        .attr('y1', d => {
-          if (axis.indexOf('y') === 0) {
-            return vars.y.scale.viz(d);
-          } else {
-            return 0;
-          }
-        })
-        .attr('y2', d => {
-          if (axis.indexOf('y') === 0) {
-            return vars.y.scale.viz(d);
-          } else {
-            return vars.axes.height;
-          }
-        });
-    tickStyle = (tick, axis, grid) => {
-      let color;
-      let log;
-      let visibles;
-      color = grid ? vars[axis].grid.color : vars[axis].ticks.color;
-      log = vars[axis].scale.value === 'log';
-      visibles = vars[axis].ticks.visible || [];
-      return tick
-        .attr('stroke', d => {
-          let visible;
-          if (d === 0) {
-            return vars[axis].axis.color;
-          }
-          if (d.constructor === Date) {
-            d = +d;
-          }
-          visible = visibles.indexOf(d) >= 0;
-          if (
-            visible &&
-            (!log ||
-              Math.abs(d)
-                .toString()
-                .charAt(0) === '1')
-          ) {
-            return color;
-          } else if (grid && vars.axes.background.color !== 'transparent') {
-            return mix(color, vars.axes.background.color, 0.4, 1);
-          } else if (vars.background.value !== 'transparent') {
-            return mix(color, vars.background.value, 0.4, 1);
-          } else {
-            return mix(color, 'white', 0.4, 1);
-          }
-        })
-        .attr('stroke-width', vars[axis].ticks.width)
-        .attr('shape-rendering', vars[axis].ticks.rendering.value);
-    };
-    getFontStyle = (axis, val, style) => {
-      let type;
-      type = val === 0 ? 'axis' : 'ticks';
-      val = vars[axis][type].font[style];
-      if (val && (val.length || typeof val === 'number')) {
-        return val;
-      } else {
-        return vars[axis].ticks.font[style];
-      }
-    };
-    tickFont = (tick, axis) => {
-      let log;
-      log = vars[axis].scale.value === 'log';
-      return tick
-        .attr('font-size', d => getFontStyle(axis, d, 'size') + 'px')
-        .attr('stroke', 'none')
-        .attr('fill', d => {
-          let color;
-          color = getFontStyle(axis, d, 'color');
-          if (
-            !log ||
-            Math.abs(d)
-              .toString()
-              .charAt(0) === '1'
-          ) {
-            return color;
-          } else {
-            return mix(color, vars.background.value, 0.4, 1);
-          }
-        })
-        .attr('font-family', d => getFontStyle(axis, d, 'family').value)
-        .attr('font-weight', d => getFontStyle(axis, d, 'weight'))
-        .style('text-transform', d => getFontStyle(axis, d, 'transform').value)
-        .style('letter-spacing', d => getFontStyle(axis, d, 'spacing') + 'px');
-    };
-    lineStyle = (line, axis) => {
-      let max;
-      let opp;
-      max = axis.indexOf('x') === 0 ? 'height' : 'width';
-      opp = axis.indexOf('x') === 0 ? 'y' : 'x';
-      return line
-        .attr(opp + '1', 0)
-        .attr(opp + '2', vars.axes[max])
-        .attr(axis + '1', d => d.coords.line)
-        .attr(axis + '2', d => d.coords.line)
-        .attr('stroke', d => d.color || vars[axis].lines.color)
-        .attr('stroke-width', vars[axis].lines.width)
-        .attr('shape-rendering', vars[axis].lines.rendering.value)
-        .attr('stroke-dasharray', vars[axis].lines.dasharray.value);
-    };
-    lineFont = (text, axis) => {
-      let opp;
-      opp = axis.indexOf('x') === 0 ? 'y' : 'x';
-      return text
-        .attr(opp, d => d.coords.text[opp] + 'px')
-        .attr(axis, d => d.coords.text[axis] + 'px')
-        .attr('dy', vars[axis].lines.font.position.value)
-        .attr('text-anchor', alignMap[vars[axis].lines.font.align.value])
-        .attr('transform', d => d.transform)
-        .attr('font-size', vars[axis].lines.font.size + 'px')
-        .attr('fill', d => d.color || vars[axis].lines.color)
-        .attr('font-family', vars[axis].lines.font.family.value)
-        .attr('font-weight', vars[axis].lines.font.weight);
-    };
     planeTrans =
       'translate(' +
       vars.axes.margin.viz.left +
@@ -36958,88 +36794,10 @@ module.exports = {
         return 'M ' + w + ' ' + h + ' L 0 ' + h + ' L ' + w + ' 0 Z';
       });
     rotated = vars.x.ticks.rotate !== 0;
-    xStyle = (group, axis) => {
-      let groups;
-      let offset;
-      offset = axis === 'x' ? vars.axes.height : 0;
-      groups = group
-        .attr('transform', 'translate(0,' + offset + ')')
-        .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
-        .selectAll('g.tick');
-      groups.selectAll('line').attr('y2', function(d) {
-        let y2;
-        if (d.constructor === Date) {
-          d = +d;
-        }
-        y2 = d3.select(this).attr('y2');
-        if (vars[axis].ticks.visible.indexOf(d) >= 0) {
-          return y2;
-        } else {
-          return y2 / 2;
-        }
-      });
-      return groups
-        .select('text')
-        .style(
-          'text-anchor',
-          rotated && axis === 'x' ? 'end' : rotated ? 'start' : 'middle'
-        )
-        .call(tickFont, axis)
-        .each(function(d) {
-          d3.select(this)
-            .attr('dy', '0px')
-            .attr('font-size', d => getFontStyle(axis, d, 'size') + 'px');
-          if (d.constructor === Date) {
-            d = +d;
-          }
-          if (
-            !vars[axis].ticks.hidden &&
-            vars[axis].ticks.visible.indexOf(d) >= 0
-          ) {
-            return textwrap()
-              .container(d3.select(this))
-              .rotate(vars[axis].ticks.rotate)
-              .align(rotated ? 'end' : 'center')
-              .valign(rotated ? 'middle' : axis === 'x' ? 'top' : 'bottom')
-              .width(vars[axis].ticks.maxWidth + 2)
-              .height(vars[axis].ticks.maxHeight)
-              .padding(0)
-              .x(-vars[axis].ticks.maxWidth / 2)
-              .y(
-                axis === 'x2'
-                  ? -(vars[axis].ticks.maxHeight + vars.labels.padding * 2)
-                  : 0
-              )
-              .draw();
-          }
-        });
-    };
-    yStyle = (group, axis) => {
-      let groups;
-      let offset;
-      offset = axis === 'y2' ? vars.axes.width : 0;
-      groups = group
-        .attr('transform', 'translate(' + offset + ', 0)')
-        .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
-        .selectAll('g.tick');
-      groups.selectAll('line').attr('y2', function(d) {
-        let y2;
-        if (d.constructor === Date) {
-          d = +d;
-        }
-        y2 = d3.select(this).attr('y2');
-        if (vars.x.ticks.visible.indexOf(d) >= 0) {
-          return y2;
-        } else {
-          return y2 / 2;
-        }
-      });
-      return groups.select('text').call(tickFont, axis);
-    };
     ref = ['x', 'x2', 'y', 'y2'];
     for (j = 0, len = ref.length; j < len; j++) {
       axis = ref[j];
-      style = axis.indexOf('x') === 0 ? xStyle : yStyle;
+      style = axis.indexOf('x') === 0 ? xStyle(vars, rotated) : yStyle(vars);
       realData = axisData.length && vars[axis].value ? [0] : [];
       axisGroup = plane
         .selectAll('g#d3po_graph_' + axis + 'ticks')
@@ -37052,7 +36810,7 @@ module.exports = {
         .selectAll('line')
         .transition()
         .duration(vars.draw.timing)
-        .call(tickStyle, axis);
+        .call(tickStyle, axis, false, vars);
       groupEnter = axisGroup
         .enter()
         .append('g')
@@ -37062,7 +36820,7 @@ module.exports = {
         .selectAll('path')
         .attr('fill', 'none')
         .attr('stroke', 'none');
-      groupEnter.selectAll('line').call(tickStyle, axis);
+      groupEnter.selectAll('line').call(tickStyle, axis, false, vars);
       axisGroup
         .exit()
         .transition()
@@ -37139,14 +36897,14 @@ module.exports = {
       lines
         .transition()
         .duration(vars.draw.timing)
-        .call(tickPosition, axis)
-        .call(tickStyle, axis, true);
+        .call(tickPosition, axis, vars)
+        .call(tickStyle, axis, true, vars);
       lines
         .enter()
         .append('line')
         .style('opacity', 0)
-        .call(tickPosition, axis)
-        .call(tickStyle, axis, true)
+        .call(tickPosition, axis, vars)
+        .call(tickStyle, axis, true, vars)
         .transition()
         .duration(vars.draw.timing)
         .delay(vars.draw.timing / 2)
@@ -37200,200 +36958,451 @@ module.exports = {
         .attr('opacity', 0)
         .remove();
     }
-    ref3 = ['x', 'y', 'x2', 'y2'];
-    for (m = 0, len3 = ref3.length; m < len3; m++) {
-      axis = ref3[m];
-      if (vars[axis].value) {
-        lineGroup = plane
-          .selectAll('g#d3po_graph_' + axis + '_userlines')
-          .data([0]);
-        lineGroup
-          .enter()
-          .append('g')
-          .attr('id', 'd3po_graph_' + axis + '_userlines');
-        domain = vars[axis].scale.viz.domain();
-        if (axis.indexOf('y') === 0) {
-          domain = domain.slice().reverse();
-        }
-        textData = [];
-        lineData = [];
-        userLines = vars[axis].lines.value || [];
-        for (n = 0, len4 = userLines.length; n < len4; n++) {
-          line = userLines[n];
-          d = validObject(line) ? line.position : line;
-          if (axis === vars.axes.discrete) {
-            valid = domain.indexOf(d) >= 0;
-          } else {
-            valid = d >= domain[0] && d <= domain[1];
-          }
-          if (valid) {
-            d = !validObject(line)
-              ? {
-                position: d
-              }
-              : line;
-            d.coords = {
-              line: vars[axis].scale.viz(d.position)
-            };
-            lineData.push(d);
-            if (d.text) {
-              d.axis = axis;
-              d.padding = vars[axis].lines.font.padding.value * 0.5;
-              d.align = vars[axis].lines.font.align.value;
-              position = vars[axis].lines.font.position.text;
-              textPad = position === 'middle' ? 0 : d.padding * 2;
-              if (position === 'top') {
-                textPad = -textPad;
-              }
-              if (axis.indexOf('x') === 0) {
-                textPos =
-                  d.align === 'left'
-                    ? vars.axes.height
-                    : d.align === 'center'
-                      ? vars.axes.height / 2
-                      : 0;
-                if (d.align === 'left') {
-                  textPos -= d.padding * 2;
-                }
-                if (d.align === 'right') {
-                  textPos += d.padding * 2;
-                }
-              } else {
-                textPos =
-                  d.align === 'left'
-                    ? 0
-                    : d.align === 'center'
-                      ? vars.axes.width / 2
-                      : vars.axes.width;
-                if (d.align === 'right') {
-                  textPos -= d.padding * 2;
-                }
-                if (d.align === 'left') {
-                  textPos += d.padding * 2;
-                }
-              }
-              d.coords.text = {};
-              d.coords.text[axis.indexOf('x') === 0 ? 'y' : 'x'] = textPos;
-              d.coords.text[axis] = vars[axis].scale.viz(d.position) + textPad;
-              d.transform =
-                axis.indexOf('x') === 0
-                  ? 'rotate(-90,' +
-                    d.coords.text.x +
-                    ',' +
-                    d.coords.text.y +
-                    ')'
-                  : null;
-              textData.push(d);
-            }
-          }
-        }
-        lines = lineGroup
-          .selectAll('line.d3po_graph_' + axis + 'line')
-          .data(lineData, d => d.position);
-        lines
-          .enter()
-          .append('line')
-          .attr('class', 'd3po_graph_' + axis + 'line')
-          .attr('opacity', 0)
-          .call(lineStyle, axis);
-        lines
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 1)
-          .call(lineStyle, axis);
-        lines
-          .exit()
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 0)
-          .remove();
-        linetexts = lineGroup
-          .selectAll('text.d3po_graph_' + axis + 'line_text')
-          .data(textData, d => d.position);
-        linetexts
-          .enter()
-          .append('text')
-          .attr('class', 'd3po_graph_' + axis + 'line_text')
-          .attr('id', d => {
-            let id;
-            id = d.position + '';
-            id = id.replace('-', 'neg');
-            id = id.replace('.', 'p');
-            return 'd3po_graph_' + axis + 'line_text_' + id;
-          })
-          .attr('opacity', 0)
-          .call(lineFont, axis);
-        linetexts
-          .text(d => d.text)
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 1)
-          .call(lineFont, axis);
-        linetexts
-          .exit()
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 0)
-          .remove();
-        rectStyle = rect => {
-          let getText;
-          getText = d => {
-            let id;
-            id = d.position + '';
-            id = id.replace('-', 'neg');
-            id = id.replace('.', 'p');
-            return plane
-              .select('text#d3po_graph_' + d.axis + 'line_text_' + id)
-              .node()
-              .getBBox();
-          };
-          return rect
-            .attr('x', d => getText(d).x - d.padding)
-            .attr('y', d => getText(d).y - d.padding)
-            .attr('transform', d => d.transform)
-            .attr('width', d => getText(d).width + d.padding * 2)
-            .attr('height', d => getText(d).height + d.padding * 2)
-            .attr(
-              'fill',
-              vars.axes.background.color !== 'transparent'
-                ? vars.axes.background.color
-                : 'white'
-            );
-        };
-        rectData = vars[axis].lines.font.background.value ? textData : [];
-        lineRects = lineGroup
-          .selectAll('rect.d3po_graph_' + axis + 'line_rect')
-          .data(rectData, d => d.position);
-        lineRects
-          .enter()
-          .insert('rect', 'text.d3po_graph_' + axis + 'line_text')
-          .attr('class', 'd3po_graph_' + axis + 'line_rect')
-          .attr('pointer-events', 'none')
-          .attr('opacity', 0)
-          .call(rectStyle);
-        lineRects
-          .transition()
-          .delay(vars.draw.timing)
-          .each('end', function() {
-            return d3
-              .select(this)
-              .transition()
-              .duration(vars.draw.timing)
-              .attr('opacity', 1)
-              .call(rectStyle);
-          });
-        lineRects
-          .exit()
-          .transition()
-          .duration(vars.draw.timing)
-          .attr('opacity', 0)
-          .remove();
-      }
-    }
+    userLines(vars, plane);
   };
 }).call(this);
 
-},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":169,"../../../../../textwrap/textwrap.js":197}],316:[function(require,module,exports){
+},{"./tickPosition":320,"./tickStyle":321,"./userLines":322,"./xStyle":323,"./yStyle":324}],317:[function(require,module,exports){
+const alignMap = {
+  left: 'start',
+  center: 'middle',
+  right: 'end'
+};
+const lineFont = (text, axis, vars) => {
+  let opp;
+  opp = axis.indexOf('x') === 0 ? 'y' : 'x';
+  return text
+    .attr(opp, d => d.coords.text[opp] + 'px')
+    .attr(axis, d => d.coords.text[axis] + 'px')
+    .attr('dy', vars[axis].lines.font.position.value)
+    .attr('text-anchor', alignMap[vars[axis].lines.font.align.value])
+    .attr('transform', d => d.transform)
+    .attr('font-size', vars[axis].lines.font.size + 'px')
+    .attr('fill', d => d.color || vars[axis].lines.color)
+    .attr('font-family', vars[axis].lines.font.family.value)
+    .attr('font-weight', vars[axis].lines.font.weight);
+};
+module.exports = lineFont;
+
+},{}],318:[function(require,module,exports){
+const lineStyle = (line, axis, vars) => {
+  let max;
+  let opp;
+  max = axis.indexOf('x') === 0 ? 'height' : 'width';
+  opp = axis.indexOf('x') === 0 ? 'y' : 'x';
+  return line
+    .attr(opp + '1', 0)
+    .attr(opp + '2', vars.axes[max])
+    .attr(axis + '1', d => d.coords.line)
+    .attr(axis + '2', d => d.coords.line)
+    .attr('stroke', d => d.color || vars[axis].lines.color)
+    .attr('stroke-width', vars[axis].lines.width)
+    .attr('shape-rendering', vars[axis].lines.rendering.value)
+    .attr('stroke-dasharray', vars[axis].lines.dasharray.value);
+};
+module.exports = lineStyle;
+
+},{}],319:[function(require,module,exports){
+const mix = require('../../../../../../color/mix.js');
+const getFontStyle = require('./getFontStyle');
+
+const tickFont = (tick, axis, vars) => {
+  let log;
+  log = vars[axis].scale.value === 'log';
+  return tick
+    .attr('font-size', d => getFontStyle(axis, d, 'size', vars) + 'px')
+    .attr('stroke', 'none')
+    .attr('fill', d => {
+      let color;
+      color = getFontStyle(axis, d, 'color', vars);
+      if (
+        !log ||
+        Math.abs(d)
+          .toString()
+          .charAt(0) === '1'
+      ) {
+        return color;
+      } else {
+        return mix(color, vars.background.value, 0.4, 1);
+      }
+    })
+    .attr('font-family', d => getFontStyle(axis, d, 'family', vars).value)
+    .attr('font-weight', d => getFontStyle(axis, d, 'weight', vars))
+    .style(
+      'text-transform',
+      d => getFontStyle(axis, d, 'transform', vars).value
+    )
+    .style(
+      'letter-spacing',
+      d => getFontStyle(axis, d, 'spacing', vars) + 'px',
+      vars
+    );
+};
+module.exports = tickFont;
+
+},{"../../../../../../color/mix.js":41,"./getFontStyle":315}],320:[function(require,module,exports){
+const tickPosition = (tick, axis, vars) =>
+  tick
+    .attr('x1', d => {
+      if (axis.indexOf('x') === 0) {
+        return vars.x.scale.viz(d);
+      } else {
+        return 0;
+      }
+    })
+    .attr('x2', d => {
+      if (axis.indexOf('x') === 0) {
+        return vars.x.scale.viz(d);
+      } else {
+        return vars.axes.width;
+      }
+    })
+    .attr('y1', d => {
+      if (axis.indexOf('y') === 0) {
+        return vars.y.scale.viz(d);
+      } else {
+        return 0;
+      }
+    })
+    .attr('y2', d => {
+      if (axis.indexOf('y') === 0) {
+        return vars.y.scale.viz(d);
+      } else {
+        return vars.axes.height;
+      }
+    });
+module.exports = tickPosition;
+
+},{}],321:[function(require,module,exports){
+const mix = require('../../../../../../color/mix.js');
+
+const tickStyle = (tick, axis, grid, vars) => {
+  let color;
+  let log;
+  let visibles;
+  color = grid ? vars[axis].grid.color : vars[axis].ticks.color;
+  log = vars[axis].scale.value === 'log';
+  visibles = vars[axis].ticks.visible || [];
+  return tick
+    .attr('stroke', d => {
+      let visible;
+      if (d === 0) {
+        return vars[axis].axis.color;
+      }
+      if (d.constructor === Date) {
+        d = +d;
+      }
+      visible = visibles.indexOf(d) >= 0;
+      if (
+        visible &&
+        (!log ||
+          Math.abs(d)
+            .toString()
+            .charAt(0) === '1')
+      ) {
+        return color;
+      } else if (grid && vars.axes.background.color !== 'transparent') {
+        return mix(color, vars.axes.background.color, 0.4, 1);
+      } else if (vars.background.value !== 'transparent') {
+        return mix(color, vars.background.value, 0.4, 1);
+      } else {
+        return mix(color, 'white', 0.4, 1);
+      }
+    })
+    .attr('stroke-width', vars[axis].ticks.width)
+    .attr('shape-rendering', vars[axis].ticks.rendering.value);
+};
+module.exports = tickStyle;
+
+},{"../../../../../../color/mix.js":41}],322:[function(require,module,exports){
+const validObject = require('../../../../../../object/validate.js');
+const lineStyle = require('./lineStyle');
+const lineFont = require('./lineFont');
+
+const ref3 = ['x', 'y', 'x2', 'y2'];
+
+const userLines = (vars, plane) => {
+  for (let m = 0, len3 = ref3.length; m < len3; m++) {
+    const axis = ref3[m];
+    if (vars[axis].value) {
+      const lineGroup = plane
+        .selectAll('g#d3po_graph_' + axis + '_userlines')
+        .data([0]);
+      lineGroup
+        .enter()
+        .append('g')
+        .attr('id', 'd3po_graph_' + axis + '_userlines');
+      let domain = vars[axis].scale.viz.domain();
+      if (axis.indexOf('y') === 0) {
+        domain = domain.slice().reverse();
+      }
+      const textData = [];
+      const lineData = [];
+      const userLines = vars[axis].lines.value || [];
+      for (let n = 0, len4 = userLines.length; n < len4; n++) {
+        const line = userLines[n];
+        let d = validObject(line) ? line.position : line;
+        let valid;
+        if (axis === vars.axes.discrete) {
+          valid = domain.indexOf(d) >= 0;
+        } else {
+          valid = d >= domain[0] && d <= domain[1];
+        }
+        if (valid) {
+          d = !validObject(line)
+            ? {
+              position: d
+            }
+            : line;
+          d.coords = {
+            line: vars[axis].scale.viz(d.position)
+          };
+          lineData.push(d);
+          if (d.text) {
+            d.axis = axis;
+            d.padding = vars[axis].lines.font.padding.value * 0.5;
+            d.align = vars[axis].lines.font.align.value;
+            const position = vars[axis].lines.font.position.text;
+            let textPad = position === 'middle' ? 0 : d.padding * 2;
+            if (position === 'top') {
+              textPad = -textPad;
+            }
+            let textPos;
+            if (axis.indexOf('x') === 0) {
+              textPos =
+                d.align === 'left'
+                  ? vars.axes.height
+                  : d.align === 'center'
+                    ? vars.axes.height / 2
+                    : 0;
+              if (d.align === 'left') {
+                textPos -= d.padding * 2;
+              }
+              if (d.align === 'right') {
+                textPos += d.padding * 2;
+              }
+            } else {
+              textPos =
+                d.align === 'left'
+                  ? 0
+                  : d.align === 'center'
+                    ? vars.axes.width / 2
+                    : vars.axes.width;
+              if (d.align === 'right') {
+                textPos -= d.padding * 2;
+              }
+              if (d.align === 'left') {
+                textPos += d.padding * 2;
+              }
+            }
+            d.coords.text = {};
+            d.coords.text[axis.indexOf('x') === 0 ? 'y' : 'x'] = textPos;
+            d.coords.text[axis] = vars[axis].scale.viz(d.position) + textPad;
+            d.transform =
+              axis.indexOf('x') === 0
+                ? 'rotate(-90,' + d.coords.text.x + ',' + d.coords.text.y + ')'
+                : null;
+            textData.push(d);
+          }
+        }
+      }
+      const lines = lineGroup
+        .selectAll('line.d3po_graph_' + axis + 'line')
+        .data(lineData, d => d.position);
+      lines
+        .enter()
+        .append('line')
+        .attr('class', 'd3po_graph_' + axis + 'line')
+        .attr('opacity', 0)
+        .call(lineStyle, axis, vars);
+      lines
+        .transition()
+        .duration(vars.draw.timing)
+        .attr('opacity', 1)
+        .call(lineStyle, axis, vars);
+      lines
+        .exit()
+        .transition()
+        .duration(vars.draw.timing)
+        .attr('opacity', 0)
+        .remove();
+      const linetexts = lineGroup
+        .selectAll('text.d3po_graph_' + axis + 'line_text')
+        .data(textData, d => d.position);
+      linetexts
+        .enter()
+        .append('text')
+        .attr('class', 'd3po_graph_' + axis + 'line_text')
+        .attr('id', d => {
+          let id;
+          id = d.position + '';
+          id = id.replace('-', 'neg');
+          id = id.replace('.', 'p');
+          return 'd3po_graph_' + axis + 'line_text_' + id;
+        })
+        .attr('opacity', 0)
+        .call(lineFont, axis, vars);
+      linetexts
+        .text(d => d.text)
+        .transition()
+        .duration(vars.draw.timing)
+        .attr('opacity', 1)
+        .call(lineFont, axis, vars);
+      linetexts
+        .exit()
+        .transition()
+        .duration(vars.draw.timing)
+        .attr('opacity', 0)
+        .remove();
+      const rectStyle = rect => {
+        let getText;
+        getText = d => {
+          let id;
+          id = d.position + '';
+          id = id.replace('-', 'neg');
+          id = id.replace('.', 'p');
+          return plane
+            .select('text#d3po_graph_' + d.axis + 'line_text_' + id)
+            .node()
+            .getBBox();
+        };
+        return rect
+          .attr('x', d => getText(d).x - d.padding)
+          .attr('y', d => getText(d).y - d.padding)
+          .attr('transform', d => d.transform)
+          .attr('width', d => getText(d).width + d.padding * 2)
+          .attr('height', d => getText(d).height + d.padding * 2)
+          .attr(
+            'fill',
+            vars.axes.background.color !== 'transparent'
+              ? vars.axes.background.color
+              : 'white'
+          );
+      };
+      const rectData = vars[axis].lines.font.background.value ? textData : [];
+      const lineRects = lineGroup
+        .selectAll('rect.d3po_graph_' + axis + 'line_rect')
+        .data(rectData, d => d.position);
+      lineRects
+        .enter()
+        .insert('rect', 'text.d3po_graph_' + axis + 'line_text')
+        .attr('class', 'd3po_graph_' + axis + 'line_rect')
+        .attr('pointer-events', 'none')
+        .attr('opacity', 0)
+        .call(rectStyle);
+      lineRects
+        .transition()
+        .delay(vars.draw.timing)
+        .each('end', function() {
+          return d3
+            .select(this)
+            .transition()
+            .duration(vars.draw.timing)
+            .attr('opacity', 1)
+            .call(rectStyle);
+        });
+      lineRects
+        .exit()
+        .transition()
+        .duration(vars.draw.timing)
+        .attr('opacity', 0)
+        .remove();
+    }
+  }
+};
+module.exports = userLines;
+
+},{"../../../../../../object/validate.js":169,"./lineFont":317,"./lineStyle":318}],323:[function(require,module,exports){
+const textwrap = require('../../../../../../textwrap/textwrap.js');
+const tickFont = require('./tickFont');
+const getFontStyle = require('./getFontStyle');
+
+const xStyle = (vars, rotated) => (group, axis) => {
+  let groups;
+  let offset;
+  offset = axis === 'x' ? vars.axes.height : 0;
+  groups = group
+    .attr('transform', 'translate(0,' + offset + ')')
+    .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
+    .selectAll('g.tick');
+  groups.selectAll('line').attr('y2', function(d) {
+    let y2;
+    if (d.constructor === Date) {
+      d = +d;
+    }
+    y2 = d3.select(this).attr('y2');
+    if (vars[axis].ticks.visible.indexOf(d) >= 0) {
+      return y2;
+    } else {
+      return y2 / 2;
+    }
+  });
+  return groups
+    .select('text')
+    .style(
+      'text-anchor',
+      rotated && axis === 'x' ? 'end' : rotated ? 'start' : 'middle'
+    )
+    .call(tickFont, axis, vars)
+    .each(function(d) {
+      d3.select(this)
+        .attr('dy', '0px')
+        .attr('font-size', d => getFontStyle(axis, d, 'size', vars) + 'px');
+      if (d.constructor === Date) {
+        d = +d;
+      }
+      if (
+        !vars[axis].ticks.hidden &&
+        vars[axis].ticks.visible.indexOf(d) >= 0
+      ) {
+        return textwrap()
+          .container(d3.select(this))
+          .rotate(vars[axis].ticks.rotate)
+          .align(rotated ? 'end' : 'center')
+          .valign(rotated ? 'middle' : axis === 'x' ? 'top' : 'bottom')
+          .width(vars[axis].ticks.maxWidth + 2)
+          .height(vars[axis].ticks.maxHeight)
+          .padding(0)
+          .x(-vars[axis].ticks.maxWidth / 2)
+          .y(
+            axis === 'x2'
+              ? -(vars[axis].ticks.maxHeight + vars.labels.padding * 2)
+              : 0
+          )
+          .draw();
+      }
+    });
+};
+module.exports = xStyle;
+
+},{"../../../../../../textwrap/textwrap.js":197,"./getFontStyle":315,"./tickFont":319}],324:[function(require,module,exports){
+const tickFont = require('./tickFont');
+
+const yStyle = vars => (group, axis) => {
+  let groups;
+  let offset;
+  offset = axis === 'y2' ? vars.axes.width : 0;
+  groups = group
+    .attr('transform', 'translate(' + offset + ', 0)')
+    .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
+    .selectAll('g.tick');
+  groups.selectAll('line').attr('y2', function(d) {
+    let y2;
+    if (d.constructor === Date) {
+      d = +d;
+    }
+    y2 = d3.select(this).attr('y2');
+    if (vars.x.ticks.visible.indexOf(d) >= 0) {
+      return y2;
+    } else {
+      return y2 / 2;
+    }
+  });
+  return groups.select('text').call(tickFont, axis, vars);
+};
+module.exports = yStyle;
+
+},{"./tickFont":319}],325:[function(require,module,exports){
 (() => {
   let fetchValue;
   let stringStrip;
@@ -37547,7 +37556,7 @@ module.exports = {
   };
 }).call(this);
 
-},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],317:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],326:[function(require,module,exports){
 (() => {
   let fetchValue;
 
@@ -37644,7 +37653,7 @@ module.exports = {
   };
 }).call(this);
 
-},{"../../../../core/fetch/value.js":62}],318:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62}],327:[function(require,module,exports){
 (() => {
   let fetchValue;
   let graph;
@@ -37737,7 +37746,7 @@ module.exports = {
   module.exports = line;
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":316,"./helpers/graph/stack.js":317}],319:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":325,"./helpers/graph/stack.js":326}],328:[function(require,module,exports){
 const smallestGap = require('../../network/smallestgap.js');
 const fetchValue = require('../../core/fetch/value.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -37895,7 +37904,7 @@ network.zoom = true;
 
 module.exports = network;
 
-},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],320:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],329:[function(require,module,exports){
 (() => {
   let fetchValue;
   let shortestPath;
@@ -38271,7 +38280,7 @@ module.exports = network;
   module.exports = viz;
 }).call(this);
 
-},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],321:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],330:[function(require,module,exports){
 (() => {
   let comparator;
   let dataThreshold;
@@ -38358,7 +38367,7 @@ module.exports = network;
   module.exports = pie;
 }).call(this);
 
-},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],322:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],331:[function(require,module,exports){
 (() => {
   let buckets;
   let fetchText;
@@ -38736,7 +38745,7 @@ module.exports = network;
   module.exports = radar;
 }).call(this);
 
-},{"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],323:[function(require,module,exports){
+},{"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],332:[function(require,module,exports){
 const arraySort = require('../../array/sort.js');
 const events = require('../../client/pointer.js');
 const fetchValue = require('../../core/fetch/value.js');
@@ -39235,7 +39244,7 @@ rings.tooltip = 'static';
 
 module.exports = rings;
 
-},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],324:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],333:[function(require,module,exports){
 (() => {
   let d3sankey;
   let events;
@@ -39367,7 +39376,7 @@ module.exports = rings;
   module.exports = sankey;
 }).call(this);
 
-},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"./sankey.js":324}],325:[function(require,module,exports){
+},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"./sankey.js":333}],334:[function(require,module,exports){
 (() => {
   let fetchValue;
   let graph;
@@ -39448,7 +39457,7 @@ module.exports = rings;
   module.exports = scatter;
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":309,"./helpers/graph/draw.js":310}],326:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":309,"./helpers/graph/draw.js":310}],335:[function(require,module,exports){
 (() => {
   let dataThreshold;
   let groupData;
@@ -39525,7 +39534,7 @@ module.exports = rings;
   module.exports = treemap;
 }).call(this);
 
-},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],327:[function(require,module,exports){
+},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],336:[function(require,module,exports){
 (() => {
   let attach;
   let axis;
@@ -39741,4 +39750,4 @@ module.exports = rings;
   };
 }).call(this);
 
-},{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":241,"./methods/active.js":250,"./methods/aggs.js":251,"./methods/attrs.js":252,"./methods/axes.js":253,"./methods/background.js":254,"./methods/class.js":255,"./methods/color.js":256,"./methods/cols.js":257,"./methods/config.js":258,"./methods/container.js":259,"./methods/coords.js":260,"./methods/csv.js":261,"./methods/data.js":262,"./methods/depth.js":263,"./methods/descs.js":264,"./methods/dev.js":265,"./methods/draw.js":266,"./methods/edges.js":267,"./methods/error.js":268,"./methods/focus.js":269,"./methods/font.js":270,"./methods/footer.js":271,"./methods/format.js":272,"./methods/height.js":273,"./methods/helpers/axis.js":274,"./methods/history.js":275,"./methods/icon.js":276,"./methods/id.js":277,"./methods/labels.js":278,"./methods/legend.js":279,"./methods/links.js":280,"./methods/margin.js":281,"./methods/messages.js":282,"./methods/mouse.js":283,"./methods/nodes.js":284,"./methods/order.js":285,"./methods/resize.js":286,"./methods/shape.js":287,"./methods/size.js":288,"./methods/style.js":289,"./methods/temp.js":290,"./methods/text.js":291,"./methods/time.js":292,"./methods/timeline.js":293,"./methods/timing.js":294,"./methods/title.js":295,"./methods/tooltip.js":296,"./methods/total.js":297,"./methods/type.js":298,"./methods/ui.js":299,"./methods/width.js":300,"./methods/zoom.js":301,"./types/area.js":302,"./types/bar.js":303,"./types/box.js":304,"./types/bubbles.js":305,"./types/donut.js":306,"./types/geomap.js":307,"./types/halfdonut.js":308,"./types/line.js":318,"./types/network.js":319,"./types/paths.js":320,"./types/pie.js":321,"./types/radar.js":322,"./types/rings.js":323,"./types/sankey.js":324,"./types/scatter.js":325,"./types/treemap.js":326}]},{},[160]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":241,"./methods/active.js":250,"./methods/aggs.js":251,"./methods/attrs.js":252,"./methods/axes.js":253,"./methods/background.js":254,"./methods/class.js":255,"./methods/color.js":256,"./methods/cols.js":257,"./methods/config.js":258,"./methods/container.js":259,"./methods/coords.js":260,"./methods/csv.js":261,"./methods/data.js":262,"./methods/depth.js":263,"./methods/descs.js":264,"./methods/dev.js":265,"./methods/draw.js":266,"./methods/edges.js":267,"./methods/error.js":268,"./methods/focus.js":269,"./methods/font.js":270,"./methods/footer.js":271,"./methods/format.js":272,"./methods/height.js":273,"./methods/helpers/axis.js":274,"./methods/history.js":275,"./methods/icon.js":276,"./methods/id.js":277,"./methods/labels.js":278,"./methods/legend.js":279,"./methods/links.js":280,"./methods/margin.js":281,"./methods/messages.js":282,"./methods/mouse.js":283,"./methods/nodes.js":284,"./methods/order.js":285,"./methods/resize.js":286,"./methods/shape.js":287,"./methods/size.js":288,"./methods/style.js":289,"./methods/temp.js":290,"./methods/text.js":291,"./methods/time.js":292,"./methods/timeline.js":293,"./methods/timing.js":294,"./methods/title.js":295,"./methods/tooltip.js":296,"./methods/total.js":297,"./methods/type.js":298,"./methods/ui.js":299,"./methods/width.js":300,"./methods/zoom.js":301,"./types/area.js":302,"./types/bar.js":303,"./types/box.js":304,"./types/bubbles.js":305,"./types/donut.js":306,"./types/geomap.js":307,"./types/halfdonut.js":308,"./types/line.js":327,"./types/network.js":328,"./types/paths.js":329,"./types/pie.js":330,"./types/radar.js":331,"./types/rings.js":332,"./types/sankey.js":333,"./types/scatter.js":334,"./types/treemap.js":335}]},{},[160]);

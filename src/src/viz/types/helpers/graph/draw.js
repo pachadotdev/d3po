@@ -6,7 +6,7 @@
 
   axes = require('./includes/axes.js');
 
-  draw = require('./includes/svg.js');
+  draw = require('./includes/svg');
 
   mouse = require('./includes/mouse.js');
 

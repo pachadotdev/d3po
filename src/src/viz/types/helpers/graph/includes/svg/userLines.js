@@ -34,8 +34,8 @@ const userLines = (vars, plane) => {
         if (valid) {
           d = !validObject(line)
             ? {
-                position: d
-              }
+              position: d
+            }
             : line;
           d.coords = {
             line: vars[axis].scale.viz(d.position)
@@ -56,8 +56,8 @@ const userLines = (vars, plane) => {
                 d.align === 'left'
                   ? vars.axes.height
                   : d.align === 'center'
-                  ? vars.axes.height / 2
-                  : 0;
+                    ? vars.axes.height / 2
+                    : 0;
               if (d.align === 'left') {
                 textPos -= d.padding * 2;
               }
@@ -69,8 +69,8 @@ const userLines = (vars, plane) => {
                 d.align === 'left'
                   ? 0
                   : d.align === 'center'
-                  ? vars.axes.width / 2
-                  : vars.axes.width;
+                    ? vars.axes.width / 2
+                    : vars.axes.width;
               if (d.align === 'right') {
                 textPos -= d.padding * 2;
               }

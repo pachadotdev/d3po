@@ -58,7 +58,7 @@ module.exports = (elem, vars) => {
       })
       .style('background-image', c => {
         if (c === 'icon') {
-          return "url('" + d[vars.icon.value] + "')";
+          return 'url(\'' + d[vars.icon.value] + '\')';
         }
         return 'none';
       })

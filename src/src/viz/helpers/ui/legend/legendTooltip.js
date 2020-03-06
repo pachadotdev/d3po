@@ -30,24 +30,24 @@ module.exports = function legendTooltip(
           idIndex >= 0
             ? fetchText(vars, d, idIndex)[0]
             : vars.format.value(
-                fetchValue(vars, d, vars.color.value, colorKey),
-                {
-                  key: vars.color.value,
-                  vars: vars,
-                  data: d
-                }
-              );
+              fetchValue(vars, d, vars.color.value, colorKey),
+              {
+                key: vars.color.value,
+                vars: vars,
+                data: d
+              }
+            );
       }
 
       let html;
       let js;
       if (vars.legend.filters.value && !(id instanceof Array)) {
-        html = "<div style='text-align:center;'>";
+        html = '<div style=\'text-align:center;\'>';
         const loc = vars.format.locale.value;
         html +=
-          "<div class='mute'>" + vars.format.value(loc.method.mute) + '</div>';
+          '<div class=\'mute\'>' + vars.format.value(loc.method.mute) + '</div>';
         html +=
-          "<div class='solo'>" + vars.format.value(loc.method.solo) + '</div>';
+          '<div class=\'solo\'>' + vars.format.value(loc.method.solo) + '</div>';
         html += '</div>';
         js = tooltip => {
           const style = {

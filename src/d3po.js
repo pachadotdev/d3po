@@ -10413,13 +10413,13 @@ module.exports = {
     return window.pageYOffset !== undefined
       ? window.pageYOffset
       : (document.documentElement || document.body.parentNode || document.body)
-          .scrollTop;
+        .scrollTop;
   },
   x: function() {
     return window.pageXOffset !== undefined
       ? window.pageXOffset
       : (document.documentElement || document.body.parentNode || document.body)
-          .scrollLeft;
+        .scrollLeft;
   }
 };
 
@@ -12033,9 +12033,9 @@ module.exports = (vars, rawData, split) => {
             textLabel = textLabel.length
               ? textLabel[0].split(' < ')[0]
               : vars.format.value(vars.format.locale.value.ui.values, {
-                  key: 'threshold',
-                  vars: vars
-                });
+                key: 'threshold',
+                vars: vars
+              });
             if ((p_id, labelException.indexOf(p_id) < 0)) {
               textLabel +=
                 ' < ' +
@@ -12936,8 +12936,8 @@ module.exports = (vars, obj, depth) => {
       type === 'div'
         ? {}
         : {
-            position: 'absolute'
-          };
+          position: 'absolute'
+        };
     tester = d3
       .select('body')
       .selectAll(type + '.d3po_tester')
@@ -13736,20 +13736,20 @@ module.exports = {
   },
   dev: {
     accepted:
-      "{0} n'est pas une option valide pour {1}, les valeurs possibles sont: {2}.",
-    noChange: "{0} n'a pas été mis à jour car inchangé.",
+      '{0} n\'est pas une option valide pour {1}, les valeurs possibles sont: {2}.',
+    noChange: '{0} n\'a pas été mis à jour car inchangé.',
     noContainer: 'impossible de trouver un contenant correspondant à {0}.',
     of: 'de',
     oldStyle: 'les propriétés de {0} ont été imbriquées dans .{1}().',
     sameEdge:
-      "un arc ne peut pas boucler sur lui même. L'auto-référence est automatiquement éliminée {0}.",
+      'un arc ne peut pas boucler sur lui même. L\'auto-référence est automatiquement éliminée {0}.',
     set: '{0} a été mis à jour.',
     setLong: '{0} a été mis à jour à {1}.',
     setContainer: 'merci de choisir un div qui utilise .container()'
   },
   error: {
     accepted:
-      "{0} n'est pas correct {1} pour {2} visualisations, merci d'utilisez une des options suivantes: {3}.",
+      '{0} n\'est pas correct {1} pour {2} visualisations, merci d\'utilisez une des options suivantes: {3}.',
     connections: 'Pas de connections disponibles pour {0}.',
     data: 'Pas de données disponibles',
     dataYear: 'Pas de données disponibles pour {0}.',
@@ -13841,7 +13841,7 @@ module.exports = {
     expand: 'clic pour agrandir',
     loading: 'chargement ...',
     more: 'plus {0}',
-    moreInfo: "clic pour plus d'information",
+    moreInfo: 'clic pour plus d\'information',
     noResults: 'pas de résultat correspondant à {0}.',
     primary: 'connections primaires',
     share: 'part',
@@ -13865,7 +13865,7 @@ module.exports = {
     initializing: 'Initialisation {0}',
     loading: 'chargement',
     tooltipReset: 'réinitialisation des bulles',
-    ui: "rafraichissement de l'interface"
+    ui: 'rafraichissement de l\'interface'
   },
   uppercase: [
     'CEO',
@@ -14963,7 +14963,7 @@ module.exports = {
   },
   uppercase: [
     'CEO',
-    "CEO'lar",
+    'CEO\'lar',
     'CFO',
     'CFO',
     'CNC',
@@ -16884,8 +16884,8 @@ module.exports = () => {
               level === vars.id.value
                 ? vars.text.value || vars.id.value
                 : vars.text.nesting !== true && level in vars.text.nesting
-                ? vars.text.nesting[level]
-                : level;
+                  ? vars.text.nesting[level]
+                  : level;
 
             for (const k in d) {
               if (typeof d[k] !== 'object') {
@@ -18074,7 +18074,7 @@ module.exports = (elem, vars) => {
       })
       .style('background-image', c => {
         if (c === 'icon') {
-          return "url('" + d[vars.icon.value] + "')";
+          return 'url(\'' + d[vars.icon.value] + '\')';
         }
         return 'none';
       })
@@ -19964,8 +19964,8 @@ module.exports = vars => {
     (ref2 = d3.extent(poly, d => d[0])), (minx = ref2[0]), (maxx = ref2[1]);
     (ref3 = d3.extent(poly, d => d[1])), (miny = ref3[0]), (maxy = ref3[1]);
     (ref4 = [maxx - minx, maxy - miny]),
-      (boxWidth = ref4[0]),
-      (boxHeight = ref4[1]);
+    (boxWidth = ref4[0]),
+    (boxHeight = ref4[1]);
     widthStep = Math.min(boxWidth, boxHeight) / 50;
     if (origins == null) {
       origins = [];
@@ -20002,11 +20002,11 @@ module.exports = vars => {
       for (i = k = 0, len1 = origins.length; k < len1; i = ++k) {
         origOrigin = origins[i];
         (ref5 = intersectPoints(poly, origOrigin, angleRad)),
-          (p1W = ref5[0]),
-          (p2W = ref5[1]);
+        (p1W = ref5[0]),
+        (p2W = ref5[1]);
         (ref6 = intersectPoints(poly, origOrigin, angleRad + Math.PI / 2)),
-          (p1H = ref6[0]),
-          (p2H = ref6[1]);
+        (p1H = ref6[0]),
+        (p2H = ref6[1]);
         modifOrigins = [];
         if (p1W != null && p2W != null) {
           modifOrigins.push([(p1W[0] + p2W[0]) / 2, (p1W[1] + p2W[1]) / 2]);
@@ -20035,8 +20035,8 @@ module.exports = vars => {
             });
           }
           (ref7 = intersectPoints(poly, origin, angleRad)),
-            (p1W = ref7[0]),
-            (p2W = ref7[1]);
+          (p1W = ref7[0]),
+          (p2W = ref7[1]);
           if (p1W === null || p2W === null) {
             continue;
           }
@@ -20046,8 +20046,8 @@ module.exports = vars => {
           );
           maxWidth = 2 * Math.sqrt(minSqDistW);
           (ref8 = intersectPoints(poly, origin, angleRad + Math.PI / 2)),
-            (p1H = ref8[0]),
-            (p2H = ref8[1]);
+          (p1H = ref8[0]),
+          (p2H = ref8[1]);
           if (p1H === null || p2H === null) {
             continue;
           }
@@ -20965,14 +20965,14 @@ module.exports = vars => {
     let target;
     let vdebug;
     (source = options.source),
-      (target = options.target),
-      (directed = options.directed),
-      (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (K = options.K),
-      (vdebug = options.vdebug);
+    (target = options.target),
+    (directed = options.directed),
+    (distance = options.distance),
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (K = options.K),
+    (vdebug = options.vdebug);
     if (!directed) {
       directed = false;
     }
@@ -21140,14 +21140,14 @@ module.exports = vars => {
       }
     }
     (source = options.source),
-      (target = options.target),
-      (directed = options.directed),
-      (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (K = options.K),
-      (nodes = options.nodes);
+    (target = options.target),
+    (directed = options.directed),
+    (distance = options.distance),
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (K = options.K),
+    (nodes = options.nodes);
     for (id in nodes) {
       node = nodes[id];
       node.count = 0;
@@ -21322,13 +21322,13 @@ module.exports = vars => {
       }
     }
     (source = options.source),
-      (directed = options.directed),
-      (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (K = options.K),
-      (nodes = options.nodes);
+    (directed = options.directed),
+    (distance = options.distance),
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (K = options.K),
+    (nodes = options.nodes);
     visited = {};
     visited[source] = true;
     dfs = (origin, curr_distance) => {
@@ -24145,7 +24145,7 @@ module.exports = vars => {
     vars.error.internal = stringFormat(str, app, missing);
   } else if (missing.length === 1) {
     (str = vars.format.locale.value.error.method),
-      (app =
+    (app =
         vars.format.locale.value.visualization[vars.type.value] ||
         vars.type.value);
     vars.error.internal = stringFormat(str, app, missing[0]);
@@ -24390,8 +24390,8 @@ module.exports = vars => {
         : vars.focus.value.length &&
           vars.types[vars.type.value].zoom &&
           vars.zoom.value
-        ? 1 - vars.tooltip.curtain.opacity
-        : 1;
+          ? 1 - vars.tooltip.curtain.opacity
+          : 1;
 
     const timing = vars.draw.timing;
 
@@ -26086,8 +26086,8 @@ module.exports = vars => {
         o_type === 'number'
           ? o
           : o_type === 'function'
-          ? o(d, vars)
-          : vars.edges.opacity.scale.value(d[o])
+            ? o(d, vars)
+            : vars.edges.opacity.scale.value(d[o])
       )
       .style('stroke-width', e => vars.edges.scale(e[vars.edges.size.value]))
       .style('stroke', vars.edges.color)
@@ -26251,16 +26251,16 @@ module.exports = vars => {
   const markerData = vars.edges.arrows.value
     ? typeof vars.edges.size.value == 'string'
       ? [
-          'default_0',
-          'default_1',
-          'default_2',
-          'highlight_0',
-          'highlight_1',
-          'highlight_2',
-          'focus_0',
-          'focus_1',
-          'focus_2'
-        ]
+        'default_0',
+        'default_1',
+        'default_2',
+        'highlight_0',
+        'highlight_1',
+        'highlight_2',
+        'focus_0',
+        'focus_1',
+        'focus_2'
+      ]
       : ['default', 'highlight', 'focus']
     : [];
 
@@ -26508,9 +26508,9 @@ module.exports = vars => {
         typeof sourceEdge.angle === 'number'
           ? sourceEdge.angle
           : Math.atan2(
-              source.d3po.y - target.d3po.y,
-              source.d3po.x - target.d3po.x
-            ) * sourceTweak;
+            source.d3po.y - target.d3po.y,
+            source.d3po.x - target.d3po.x
+          ) * sourceTweak;
 
       const sourceOffset = offset(
         sourceAngle,
@@ -26522,9 +26522,9 @@ module.exports = vars => {
         typeof targetEdge.angle === 'number'
           ? targetEdge.angle
           : Math.atan2(
-              target.d3po.y - source.d3po.y,
-              target.d3po.x - source.d3po.x
-            ) * targetTweak;
+            target.d3po.y - source.d3po.y,
+            target.d3po.x - source.d3po.x
+          ) * targetTweak;
 
       const targetOffset = offset(
         targetAngle,
@@ -27115,10 +27115,10 @@ module.exports = (vars, group) => {
       let names = d.d3po.text
         ? d.d3po.text
         : label && label.names
-        ? label.names
-        : vars.labels.text.value
-        ? fetchValue(vars, d, vars.labels.text.value)
-        : fetchText(vars, d);
+          ? label.names
+          : vars.labels.text.value
+            ? fetchValue(vars, d, vars.labels.text.value)
+            : fetchText(vars, d);
 
       const group = label && 'group' in label ? label.group : d3.select(this);
       const share_size = 0;
@@ -27146,8 +27146,8 @@ module.exports = (vars, group) => {
             vars.labels.resize.value === false
               ? false
               : label && 'resize' in label
-              ? label.resize
-              : true;
+                ? label.resize
+                : true;
 
           label.padding =
             typeof label.padding === 'number'
@@ -27281,16 +27281,16 @@ module.exports = (vars, group) => {
               typeof label.background === 'number'
                 ? label.background
                 : typeof label.background === 'string'
-                ? 1
-                : 0.6;
+                  ? 1
+                  : 0.6;
 
             function bg_style(elem) {
               const color =
                 typeof label.background === 'string'
                   ? label.background
                   : vars.background.value === 'none'
-                  ? '#ffffff'
-                  : vars.background.value;
+                    ? '#ffffff'
+                    : vars.background.value;
 
               const fill =
                 typeof label.background === 'string' ? label.background : color;
@@ -28718,9 +28718,9 @@ module.exports = params => {
 
     footer = text.length
       ? vars.format.value(text, {
-          key: 'footer',
-          vars: vars
-        })
+        key: 'footer',
+        vars: vars
+      })
       : false;
   }
 
@@ -28843,10 +28843,10 @@ module.exports = params => {
           children[name] =
             value && !(value instanceof Array)
               ? vars.format.value(value, {
-                  key: vars.size.value,
-                  vars: vars,
-                  data: obj
-                })
+                key: vars.size.value,
+                vars: vars,
+                data: obj
+              })
               : '';
           const child = {};
           child[name] = children[name];
@@ -28987,8 +28987,8 @@ module.exports = params => {
         'd3po' in d && 'merged' in d.d3po
           ? dataDepth - 1
           : 'depth' in params
-          ? params.depth
-          : dataDepth;
+            ? params.depth
+            : dataDepth;
 
       if (depth < 0) {
         depth = 0;
@@ -29359,7 +29359,7 @@ module.exports = (vars, id, length, extras, children, depth) => {
           'top: 0px',
           prefix() + 'border-radius: ' + radius + 'px'
         ];
-        const node = "<div style='" + styles.join('; ') + ";'></div>";
+        const node = '<div style=\'' + styles.join('; ') + ';\'></div>';
 
         const nodeClick = () => {
           vars.self.focus([c[vars.id.value]]).draw();
@@ -29370,11 +29370,11 @@ module.exports = (vars, id, length, extras, children, depth) => {
           highlight: false,
           link: nodeClick,
           name:
-            "<div id='d3potooltipfocuslink_" +
+            '<div id=\'d3potooltipfocuslink_' +
             c[vars.id.value] +
-            "' class='d3po_tooltip_focus_link' style='position:relative;padding-left:" +
+            '\' class=\'d3po_tooltip_focus_link\' style=\'position:relative;padding-left:' +
             size * 1.5 +
-            "px;'>" +
+            'px;\'>' +
             node +
             name +
             '</div>'
@@ -30288,24 +30288,24 @@ module.exports = function legendTooltip(
           idIndex >= 0
             ? fetchText(vars, d, idIndex)[0]
             : vars.format.value(
-                fetchValue(vars, d, vars.color.value, colorKey),
-                {
-                  key: vars.color.value,
-                  vars: vars,
-                  data: d
-                }
-              );
+              fetchValue(vars, d, vars.color.value, colorKey),
+              {
+                key: vars.color.value,
+                vars: vars,
+                data: d
+              }
+            );
       }
 
       let html;
       let js;
       if (vars.legend.filters.value && !(id instanceof Array)) {
-        html = "<div style='text-align:center;'>";
+        html = '<div style=\'text-align:center;\'>';
         const loc = vars.format.locale.value;
         html +=
-          "<div class='mute'>" + vars.format.value(loc.method.mute) + '</div>';
+          '<div class=\'mute\'>' + vars.format.value(loc.method.mute) + '</div>';
         html +=
-          "<div class='solo'>" + vars.format.value(loc.method.solo) + '</div>';
+          '<div class=\'solo\'>' + vars.format.value(loc.method.solo) + '</div>';
         html += '</div>';
         js = tooltip => {
           const style = {
@@ -31317,8 +31317,8 @@ module.exports = vars => {
   const total_key = vars.size.value
     ? vars.size.value
     : vars.color.type === 'number'
-    ? vars.color.value
-    : false;
+      ? vars.color.value
+      : false;
 
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // If there is no data or the title bar is not needed,
@@ -36843,10 +36843,10 @@ module.exports = getFontStyle;
                 vars[axis].label.height / 2 -
                 vars[axis].label.padding
             : axis === 'y2'
-            ? vars.width.viz -
+              ? vars.width.viz -
               vars[axis].label.height / 2 -
               vars[axis].label.padding
-            : vars[axis].label.height / 2 + vars[axis].label.padding
+              : vars[axis].label.height / 2 + vars[axis].label.padding
         )
         .attr('transform', axis.indexOf('y') === 0 ? 'rotate(-90)' : null)
         .attr('font-family', vars[axis].label.font.family.value)
@@ -37151,8 +37151,8 @@ const userLines = (vars, plane) => {
         if (valid) {
           d = !validObject(line)
             ? {
-                position: d
-              }
+              position: d
+            }
             : line;
           d.coords = {
             line: vars[axis].scale.viz(d.position)
@@ -37173,8 +37173,8 @@ const userLines = (vars, plane) => {
                 d.align === 'left'
                   ? vars.axes.height
                   : d.align === 'center'
-                  ? vars.axes.height / 2
-                  : 0;
+                    ? vars.axes.height / 2
+                    : 0;
               if (d.align === 'left') {
                 textPos -= d.padding * 2;
               }
@@ -37186,8 +37186,8 @@ const userLines = (vars, plane) => {
                 d.align === 'left'
                   ? 0
                   : d.align === 'center'
-                  ? vars.axes.width / 2
-                  : vars.axes.width;
+                    ? vars.axes.width / 2
+                    : vars.axes.width;
               if (d.align === 'right') {
                 textPos -= d.padding * 2;
               }
@@ -39133,10 +39133,10 @@ const rings = vars => {
         if (angle < -90 || angle > 90) {
           angle = angle - 180;
           (buffer = -(n.d3po.r + width / 2 + vars.labels.padding)),
-            (anchor = 'end');
+          (anchor = 'end');
         } else {
           (buffer = n.d3po.r + width / 2 + vars.labels.padding),
-            (anchor = 'start');
+          (anchor = 'start');
         }
 
         const background = primaries.indexOf(n) >= 0 ? true : false;

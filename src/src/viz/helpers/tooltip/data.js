@@ -263,7 +263,7 @@ module.exports = (vars, id, length, extras, children, depth) => {
           'top: 0px',
           prefix() + 'border-radius: ' + radius + 'px'
         ];
-        const node = "<div style='" + styles.join('; ') + ";'></div>";
+        const node = '<div style=\'' + styles.join('; ') + ';\'></div>';
 
         const nodeClick = () => {
           vars.self.focus([c[vars.id.value]]).draw();
@@ -274,11 +274,11 @@ module.exports = (vars, id, length, extras, children, depth) => {
           highlight: false,
           link: nodeClick,
           name:
-            "<div id='d3potooltipfocuslink_" +
+            '<div id=\'d3potooltipfocuslink_' +
             c[vars.id.value] +
-            "' class='d3po_tooltip_focus_link' style='position:relative;padding-left:" +
+            '\' class=\'d3po_tooltip_focus_link\' style=\'position:relative;padding-left:' +
             size * 1.5 +
-            "px;'>" +
+            'px;\'>' +
             node +
             name +
             '</div>'

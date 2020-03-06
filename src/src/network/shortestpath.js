@@ -48,14 +48,14 @@
       }
     }
     (source = options.source),
-      (target = options.target),
-      (directed = options.directed),
-      (distance = options.distance),
-      (nodeid = options.nodeid),
-      (startpoint = options.startpoint),
-      (endpoint = options.endpoint),
-      (K = options.K),
-      (nodes = options.nodes);
+    (target = options.target),
+    (directed = options.directed),
+    (distance = options.distance),
+    (nodeid = options.nodeid),
+    (startpoint = options.startpoint),
+    (endpoint = options.endpoint),
+    (K = options.K),
+    (nodes = options.nodes);
     for (id in nodes) {
       node = nodes[id];
       node.count = 0;

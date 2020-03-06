@@ -53,7 +53,7 @@ module.exports = vars => {
     vars.error.internal = stringFormat(str, app, missing);
   } else if (missing.length === 1) {
     (str = vars.format.locale.value.error.method),
-      (app =
+    (app =
         vars.format.locale.value.visualization[vars.type.value] ||
         vars.type.value);
     vars.error.internal = stringFormat(str, app, missing[0]);

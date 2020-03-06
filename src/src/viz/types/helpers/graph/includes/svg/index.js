@@ -1,9 +1,10 @@
 (() => {
-  const mix = require('../../../../../../color/mix.js');
   const textwrap = require('../../../../../../textwrap/textwrap.js');
   const validObject = require('../../../../../../object/validate.js');
   const tickPosition = require('./tickPosition');
   const tickStyle = require('./tickStyle');
+  const tickFont = require('./tickFont');
+  const getFontStyle = require('./getFontStyle');
 
   module.exports = vars => {
     let affixes;
@@ -17,7 +18,6 @@
     let d;
     let domain;
     let domains;
-    let getFontStyle;
     let grid;
     let gridData;
     let groupEnter;
@@ -60,7 +60,6 @@
     let textData;
     let textPad;
     let textPos;
-    let tickFont;
     let userLines;
     let valid;
     let xStyle;
@@ -83,41 +82,6 @@
       right: 'end'
     };
     axisData = vars.small ? [] : [0];
-    getFontStyle = (axis, val, style) => {
-      let type;
-      type = val === 0 ? 'axis' : 'ticks';
-      val = vars[axis][type].font[style];
-      if (val && (val.length || typeof val === 'number')) {
-        return val;
-      } else {
-        return vars[axis].ticks.font[style];
-      }
-    };
-    tickFont = (tick, axis) => {
-      let log;
-      log = vars[axis].scale.value === 'log';
-      return tick
-        .attr('font-size', d => getFontStyle(axis, d, 'size') + 'px')
-        .attr('stroke', 'none')
-        .attr('fill', d => {
-          let color;
-          color = getFontStyle(axis, d, 'color');
-          if (
-            !log ||
-            Math.abs(d)
-              .toString()
-              .charAt(0) === '1'
-          ) {
-            return color;
-          } else {
-            return mix(color, vars.background.value, 0.4, 1);
-          }
-        })
-        .attr('font-family', d => getFontStyle(axis, d, 'family').value)
-        .attr('font-weight', d => getFontStyle(axis, d, 'weight'))
-        .style('text-transform', d => getFontStyle(axis, d, 'transform').value)
-        .style('letter-spacing', d => getFontStyle(axis, d, 'spacing') + 'px');
-    };
     lineStyle = (line, axis) => {
       let max;
       let opp;
@@ -228,11 +192,11 @@
           'text-anchor',
           rotated && axis === 'x' ? 'end' : rotated ? 'start' : 'middle'
         )
-        .call(tickFont, axis)
+        .call(tickFont, axis, vars)
         .each(function(d) {
           d3.select(this)
             .attr('dy', '0px')
-            .attr('font-size', d => getFontStyle(axis, d, 'size') + 'px');
+            .attr('font-size', d => getFontStyle(axis, d, 'size', vars) + 'px');
           if (d.constructor === Date) {
             d = +d;
           }
@@ -278,7 +242,7 @@
           return y2 / 2;
         }
       });
-      return groups.select('text').call(tickFont, axis);
+      return groups.select('text').call(tickFont, axis, vars);
     };
     ref = ['x', 'x2', 'y', 'y2'];
     for (j = 0, len = ref.length; j < len; j++) {

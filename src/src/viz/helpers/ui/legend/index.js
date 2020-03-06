@@ -2,7 +2,6 @@ const buckets = require('../../../../util/buckets');
 const print = require('../../../../core/console/print');
 const groupByColors = require('./groupByColors');
 
-
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
 //------------------------------------------------------------------------------
@@ -22,7 +21,7 @@ module.exports = vars => {
     if (!vars.color.valueScale) {
       const result = groupByColors(vars);
       square_size = result.square_size;
-      if(result.key_display === false){
+      if (result.key_display === false) {
         key_display = false;
       }
       colors = result.colors;

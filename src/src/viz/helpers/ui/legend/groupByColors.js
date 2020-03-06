@@ -49,15 +49,10 @@ module.exports = function groupByColors(vars) {
       colorDepth = n;
       colorKey = vars.id.nesting[n];
 
-      const uniqueIDs = uniqueValues(data, d =>
-        fetchValue(vars, d, colorKey)
-      );
+      const uniqueIDs = uniqueValues(data, d => fetchValue(vars, d, colorKey));
       const uniqueColors = uniqueValues(data, colorFunction);
 
-      if (
-        uniqueIDs.length >= uniqueColors.length &&
-        uniqueColors.length > 1
-      ) {
+      if (uniqueIDs.length >= uniqueColors.length && uniqueColors.length > 1) {
         break;
       }
     }
@@ -208,5 +203,5 @@ module.exports = function groupByColors(vars) {
     }
   }
 
-  return {square_size, key_display, colors, key_width, start_x};
+  return { square_size, key_display, colors, key_width, start_x };
 };

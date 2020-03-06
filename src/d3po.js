@@ -20731,7 +20731,7 @@ module.exports = vars => {
   module.exports = d3po;
 }).call(this);
 
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":328}],161:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./data/bestregression.js":96,"./data/lof.js":97,"./data/mad.js":98,"./font/sizes.js":99,"./font/validate.js":100,"./form/form.js":101,"./geom/largestrectangle.js":157,"./geom/offset.js":158,"./geom/path2poly.js":159,"./network/cluster.js":161,"./network/distance.js":162,"./network/normalize.js":163,"./network/shortestpath.js":164,"./network/smallestgap.js":165,"./network/subgraph.js":166,"./number/format.js":167,"./object/merge.js":168,"./object/validate.js":169,"./string/format.js":170,"./string/list.js":171,"./string/strip.js":172,"./string/title.js":173,"./textwrap/textwrap.js":197,"./tooltip/create.js":198,"./tooltip/move.js":199,"./tooltip/remove.js":200,"./util/buckets.js":201,"./util/child.js":202,"./util/closest.js":203,"./util/copy.js":204,"./util/d3selection.js":205,"./util/dataurl.js":206,"./util/uniques.js":207,"./viz/viz.js":329}],161:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -29788,15 +29788,10 @@ module.exports = function groupByColors(vars) {
       colorDepth = n;
       colorKey = vars.id.nesting[n];
 
-      const uniqueIDs = uniqueValues(data, d =>
-        fetchValue(vars, d, colorKey)
-      );
+      const uniqueIDs = uniqueValues(data, d => fetchValue(vars, d, colorKey));
       const uniqueColors = uniqueValues(data, colorFunction);
 
-      if (
-        uniqueIDs.length >= uniqueColors.length &&
-        uniqueColors.length > 1
-      ) {
+      if (uniqueIDs.length >= uniqueColors.length && uniqueColors.length > 1) {
         break;
       }
     }
@@ -29947,14 +29942,13 @@ module.exports = function groupByColors(vars) {
     }
   }
 
-  return {square_size, key_display, colors, key_width, start_x};
+  return { square_size, key_display, colors, key_width, start_x };
 };
 
 },{"../../../../array/sort":29,"../../../../core/data/nest":55,"../../../../core/fetch/color":58,"../../../../core/fetch/value":62,"../../../../util/copy":204,"../../../../util/uniques":207,"./legendTooltip":239,"./styleRect":240}],238:[function(require,module,exports){
 const buckets = require('../../../../util/buckets');
 const print = require('../../../../core/console/print');
 const groupByColors = require('./groupByColors');
-
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // Creates color key
@@ -29975,7 +29969,7 @@ module.exports = vars => {
     if (!vars.color.valueScale) {
       const result = groupByColors(vars);
       square_size = result.square_size;
-      if(result.key_display === false){
+      if (result.key_display === false) {
         key_display = false;
       }
       colors = result.colors;
@@ -30269,7 +30263,13 @@ const scroll = require('../../../../client/scroll');
 const fetchValue = require('../../../../core/fetch/value');
 const createTooltip = require('../../tooltip/create');
 
-module.exports = function legendTooltip (keys, vars, square_size, colorKey, colorDepth) {
+module.exports = function legendTooltip(
+  keys,
+  vars,
+  square_size,
+  colorKey,
+  colorDepth
+) {
   keys
     .on(events.over, function(d) {
       d3.select(this).style('cursor', 'pointer');
@@ -30282,24 +30282,19 @@ module.exports = function legendTooltip (keys, vars, square_size, colorKey, colo
 
       let title;
       if (vars.legend.title.value) {
-        title = fetchValue(
-          vars,
-          d,
-          vars.legend.title.value,
-          colorDepth
-        );
+        title = fetchValue(vars, d, vars.legend.title.value, colorDepth);
       } else {
         title =
-                  idIndex >= 0
-                    ? fetchText(vars, d, idIndex)[0]
-                    : vars.format.value(
-                      fetchValue(vars, d, vars.color.value, colorKey),
-                      {
-                        key: vars.color.value,
-                        vars: vars,
-                        data: d
-                      }
-                    );
+          idIndex >= 0
+            ? fetchText(vars, d, idIndex)[0]
+            : vars.format.value(
+              fetchValue(vars, d, vars.color.value, colorKey),
+              {
+                key: vars.color.value,
+                vars: vars,
+                data: d
+              }
+            );
       }
 
       let html;
@@ -30308,13 +30303,9 @@ module.exports = function legendTooltip (keys, vars, square_size, colorKey, colo
         html = '<div style=\'text-align:center;\'>';
         const loc = vars.format.locale.value;
         html +=
-                  '<div class=\'mute\'>' +
-                  vars.format.value(loc.method.mute) +
-                  '</div>';
+          '<div class=\'mute\'>' + vars.format.value(loc.method.mute) + '</div>';
         html +=
-                  '<div class=\'solo\'>' +
-                  vars.format.value(loc.method.solo) +
-                  '</div>';
+          '<div class=\'solo\'>' + vars.format.value(loc.method.solo) + '</div>';
         html += '</div>';
         js = tooltip => {
           const style = {
@@ -33933,7 +33924,7 @@ module.exports = {
   module.exports = area;
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":317,"./helpers/graph/stack.js":318}],303:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":56,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],303:[function(require,module,exports){
 (() => {
   let bar;
   let buckets;
@@ -34203,7 +34194,7 @@ module.exports = {
   module.exports = bar;
 }).call(this);
 
-},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":317,"./helpers/graph/stack.js":318}],304:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../util/buckets.js":201,"../../util/uniques.js":207,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],304:[function(require,module,exports){
 (() => {
   let box;
   let fetchValue;
@@ -36687,6 +36678,7 @@ module.exports = {
   const textwrap = require('../../../../../../textwrap/textwrap.js');
   const validObject = require('../../../../../../object/validate.js');
   const tickPosition = require('./tickPosition');
+  const tickStyle = require('./tickStyle');
 
   module.exports = vars => {
     let affixes;
@@ -36744,7 +36736,6 @@ module.exports = {
     let textPad;
     let textPos;
     let tickFont;
-    let tickStyle;
     let userLines;
     let valid;
     let xStyle;
@@ -36767,42 +36758,6 @@ module.exports = {
       right: 'end'
     };
     axisData = vars.small ? [] : [0];
-    tickStyle = (tick, axis, grid) => {
-      let color;
-      let log;
-      let visibles;
-      color = grid ? vars[axis].grid.color : vars[axis].ticks.color;
-      log = vars[axis].scale.value === 'log';
-      visibles = vars[axis].ticks.visible || [];
-      return tick
-        .attr('stroke', d => {
-          let visible;
-          if (d === 0) {
-            return vars[axis].axis.color;
-          }
-          if (d.constructor === Date) {
-            d = +d;
-          }
-          visible = visibles.indexOf(d) >= 0;
-          if (
-            visible &&
-            (!log ||
-              Math.abs(d)
-                .toString()
-                .charAt(0) === '1')
-          ) {
-            return color;
-          } else if (grid && vars.axes.background.color !== 'transparent') {
-            return mix(color, vars.axes.background.color, 0.4, 1);
-          } else if (vars.background.value !== 'transparent') {
-            return mix(color, vars.background.value, 0.4, 1);
-          } else {
-            return mix(color, 'white', 0.4, 1);
-          }
-        })
-        .attr('stroke-width', vars[axis].ticks.width)
-        .attr('shape-rendering', vars[axis].ticks.rendering.value);
-    };
     getFontStyle = (axis, val, style) => {
       let type;
       type = val === 0 ? 'axis' : 'ticks';
@@ -37016,7 +36971,7 @@ module.exports = {
         .selectAll('line')
         .transition()
         .duration(vars.draw.timing)
-        .call(tickStyle, axis);
+        .call(tickStyle, axis, false, vars);
       groupEnter = axisGroup
         .enter()
         .append('g')
@@ -37026,7 +36981,7 @@ module.exports = {
         .selectAll('path')
         .attr('fill', 'none')
         .attr('stroke', 'none');
-      groupEnter.selectAll('line').call(tickStyle, axis);
+      groupEnter.selectAll('line').call(tickStyle, axis, false, vars);
       axisGroup
         .exit()
         .transition()
@@ -37104,13 +37059,13 @@ module.exports = {
         .transition()
         .duration(vars.draw.timing)
         .call(tickPosition, axis, vars)
-        .call(tickStyle, axis, true);
+        .call(tickStyle, axis, true, vars);
       lines
         .enter()
         .append('line')
         .style('opacity', 0)
         .call(tickPosition, axis, vars)
-        .call(tickStyle, axis, true)
+        .call(tickStyle, axis, true, vars)
         .transition()
         .duration(vars.draw.timing)
         .delay(vars.draw.timing / 2)
@@ -37357,7 +37312,7 @@ module.exports = {
   };
 }).call(this);
 
-},{"../../../../../../color/mix.js":41,"../../../../../../object/validate.js":169,"../../../../../../textwrap/textwrap.js":197,"./tickPosition":316}],316:[function(require,module,exports){
+},{"../../../../../../color/mix.js":41,"../../../../../../object/validate.js":169,"../../../../../../textwrap/textwrap.js":197,"./tickPosition":316,"./tickStyle":317}],316:[function(require,module,exports){
 const tickPosition = (tick, axis, vars) =>
   tick
     .attr('x1', d => {
@@ -37391,6 +37346,47 @@ const tickPosition = (tick, axis, vars) =>
 module.exports = tickPosition;
 
 },{}],317:[function(require,module,exports){
+const mix = require('../../../../../../color/mix.js');
+
+const tickStyle = (tick, axis, grid, vars) => {
+  let color;
+  let log;
+  let visibles;
+  color = grid ? vars[axis].grid.color : vars[axis].ticks.color;
+  log = vars[axis].scale.value === 'log';
+  visibles = vars[axis].ticks.visible || [];
+  return tick
+    .attr('stroke', d => {
+      let visible;
+      if (d === 0) {
+        return vars[axis].axis.color;
+      }
+      if (d.constructor === Date) {
+        d = +d;
+      }
+      visible = visibles.indexOf(d) >= 0;
+      if (
+        visible &&
+        (!log ||
+          Math.abs(d)
+            .toString()
+            .charAt(0) === '1')
+      ) {
+        return color;
+      } else if (grid && vars.axes.background.color !== 'transparent') {
+        return mix(color, vars.axes.background.color, 0.4, 1);
+      } else if (vars.background.value !== 'transparent') {
+        return mix(color, vars.background.value, 0.4, 1);
+      } else {
+        return mix(color, 'white', 0.4, 1);
+      }
+    })
+    .attr('stroke-width', vars[axis].ticks.width)
+    .attr('shape-rendering', vars[axis].ticks.rendering.value);
+};
+module.exports = tickStyle;
+
+},{"../../../../../../color/mix.js":41}],318:[function(require,module,exports){
 (() => {
   let fetchValue;
   let stringStrip;
@@ -37544,7 +37540,7 @@ module.exports = tickPosition;
   };
 }).call(this);
 
-},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],318:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62,"../../../../string/strip.js":172,"../../../../util/uniques.js":207}],319:[function(require,module,exports){
 (() => {
   let fetchValue;
 
@@ -37641,7 +37637,7 @@ module.exports = tickPosition;
   };
 }).call(this);
 
-},{"../../../../core/fetch/value.js":62}],319:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":62}],320:[function(require,module,exports){
 (() => {
   let fetchValue;
   let graph;
@@ -37734,7 +37730,7 @@ module.exports = tickPosition;
   module.exports = line;
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":317,"./helpers/graph/stack.js":318}],320:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/draw.js":310,"./helpers/graph/nest.js":318,"./helpers/graph/stack.js":319}],321:[function(require,module,exports){
 const smallestGap = require('../../network/smallestgap.js');
 const fetchValue = require('../../core/fetch/value.js');
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -37892,7 +37888,7 @@ network.zoom = true;
 
 module.exports = network;
 
-},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],321:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/smallestgap.js":165}],322:[function(require,module,exports){
 (() => {
   let fetchValue;
   let shortestPath;
@@ -38268,7 +38264,7 @@ module.exports = network;
   module.exports = viz;
 }).call(this);
 
-},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],322:[function(require,module,exports){
+},{"../../core/fetch/value.js":62,"../../network/shortestpath.js":164,"../../util/uniques.js":207}],323:[function(require,module,exports){
 (() => {
   let comparator;
   let dataThreshold;
@@ -38355,7 +38351,7 @@ module.exports = network;
   module.exports = pie;
 }).call(this);
 
-},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],323:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":52,"../../core/data/threshold.js":56}],324:[function(require,module,exports){
 (() => {
   let buckets;
   let fetchText;
@@ -38733,7 +38729,7 @@ module.exports = network;
   module.exports = radar;
 }).call(this);
 
-},{"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],324:[function(require,module,exports){
+},{"../../core/fetch/text.js":61,"../../core/fetch/value.js":62,"../../font/sizes.js":99,"../../geom/offset.js":158,"../../textwrap/textwrap.js":197,"../../util/buckets.js":201,"../../util/uniques.js":207}],325:[function(require,module,exports){
 const arraySort = require('../../array/sort.js');
 const events = require('../../client/pointer.js');
 const fetchValue = require('../../core/fetch/value.js');
@@ -39232,7 +39228,7 @@ rings.tooltip = 'static';
 
 module.exports = rings;
 
-},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],325:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../client/pointer.js":33,"../../color/legible.js":39,"../../color/text.js":45,"../../core/fetch/color.js":58,"../../core/fetch/value.js":62,"../../network/smallestgap.js":165,"../../tooltip/remove.js":200,"../../util/uniques.js":207}],326:[function(require,module,exports){
 (() => {
   let d3sankey;
   let events;
@@ -39364,7 +39360,7 @@ module.exports = rings;
   module.exports = sankey;
 }).call(this);
 
-},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"./sankey.js":325}],326:[function(require,module,exports){
+},{"../../client/pointer.js":33,"../../tooltip/remove.js":200,"./sankey.js":326}],327:[function(require,module,exports){
 (() => {
   let fetchValue;
   let graph;
@@ -39445,7 +39441,7 @@ module.exports = rings;
   module.exports = scatter;
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":309,"./helpers/graph/draw.js":310}],327:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":62,"./helpers/graph/dataticks.js":309,"./helpers/graph/draw.js":310}],328:[function(require,module,exports){
 (() => {
   let dataThreshold;
   let groupData;
@@ -39522,7 +39518,7 @@ module.exports = rings;
   module.exports = treemap;
 }).call(this);
 
-},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],328:[function(require,module,exports){
+},{"../../core/data/group.js":52,"../../core/data/threshold.js":56,"../../object/merge.js":168}],329:[function(require,module,exports){
 (() => {
   let attach;
   let axis;
@@ -39738,4 +39734,4 @@ module.exports = rings;
   };
 }).call(this);
 
-},{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":241,"./methods/active.js":250,"./methods/aggs.js":251,"./methods/attrs.js":252,"./methods/axes.js":253,"./methods/background.js":254,"./methods/class.js":255,"./methods/color.js":256,"./methods/cols.js":257,"./methods/config.js":258,"./methods/container.js":259,"./methods/coords.js":260,"./methods/csv.js":261,"./methods/data.js":262,"./methods/depth.js":263,"./methods/descs.js":264,"./methods/dev.js":265,"./methods/draw.js":266,"./methods/edges.js":267,"./methods/error.js":268,"./methods/focus.js":269,"./methods/font.js":270,"./methods/footer.js":271,"./methods/format.js":272,"./methods/height.js":273,"./methods/helpers/axis.js":274,"./methods/history.js":275,"./methods/icon.js":276,"./methods/id.js":277,"./methods/labels.js":278,"./methods/legend.js":279,"./methods/links.js":280,"./methods/margin.js":281,"./methods/messages.js":282,"./methods/mouse.js":283,"./methods/nodes.js":284,"./methods/order.js":285,"./methods/resize.js":286,"./methods/shape.js":287,"./methods/size.js":288,"./methods/style.js":289,"./methods/temp.js":290,"./methods/text.js":291,"./methods/time.js":292,"./methods/timeline.js":293,"./methods/timing.js":294,"./methods/title.js":295,"./methods/tooltip.js":296,"./methods/total.js":297,"./methods/type.js":298,"./methods/ui.js":299,"./methods/width.js":300,"./methods/zoom.js":301,"./types/area.js":302,"./types/bar.js":303,"./types/box.js":304,"./types/bubbles.js":305,"./types/donut.js":306,"./types/geomap.js":307,"./types/halfdonut.js":308,"./types/line.js":319,"./types/network.js":320,"./types/paths.js":321,"./types/pie.js":322,"./types/radar.js":323,"./types/rings.js":324,"./types/sankey.js":325,"./types/scatter.js":326,"./types/treemap.js":327}]},{},[160]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":77,"./helpers/container.js":208,"./helpers/drawSteps.js":209,"./helpers/ui/message.js":241,"./methods/active.js":250,"./methods/aggs.js":251,"./methods/attrs.js":252,"./methods/axes.js":253,"./methods/background.js":254,"./methods/class.js":255,"./methods/color.js":256,"./methods/cols.js":257,"./methods/config.js":258,"./methods/container.js":259,"./methods/coords.js":260,"./methods/csv.js":261,"./methods/data.js":262,"./methods/depth.js":263,"./methods/descs.js":264,"./methods/dev.js":265,"./methods/draw.js":266,"./methods/edges.js":267,"./methods/error.js":268,"./methods/focus.js":269,"./methods/font.js":270,"./methods/footer.js":271,"./methods/format.js":272,"./methods/height.js":273,"./methods/helpers/axis.js":274,"./methods/history.js":275,"./methods/icon.js":276,"./methods/id.js":277,"./methods/labels.js":278,"./methods/legend.js":279,"./methods/links.js":280,"./methods/margin.js":281,"./methods/messages.js":282,"./methods/mouse.js":283,"./methods/nodes.js":284,"./methods/order.js":285,"./methods/resize.js":286,"./methods/shape.js":287,"./methods/size.js":288,"./methods/style.js":289,"./methods/temp.js":290,"./methods/text.js":291,"./methods/time.js":292,"./methods/timeline.js":293,"./methods/timing.js":294,"./methods/title.js":295,"./methods/tooltip.js":296,"./methods/total.js":297,"./methods/type.js":298,"./methods/ui.js":299,"./methods/width.js":300,"./methods/zoom.js":301,"./types/area.js":302,"./types/bar.js":303,"./types/box.js":304,"./types/bubbles.js":305,"./types/donut.js":306,"./types/geomap.js":307,"./types/halfdonut.js":308,"./types/line.js":320,"./types/network.js":321,"./types/paths.js":322,"./types/pie.js":323,"./types/radar.js":324,"./types/rings.js":325,"./types/sankey.js":326,"./types/scatter.js":327,"./types/treemap.js":328}]},{},[160]);

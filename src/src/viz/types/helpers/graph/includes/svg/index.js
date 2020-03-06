@@ -1,10 +1,9 @@
 (() => {
-  const textwrap = require('../../../../../../textwrap/textwrap.js');
   const validObject = require('../../../../../../object/validate.js');
   const tickPosition = require('./tickPosition');
   const tickStyle = require('./tickStyle');
-  const tickFont = require('./tickFont');
-  const getFontStyle = require('./getFontStyle');
+  const xStyle = require('./xStyle');
+  const yStyle = require('./yStyle');
 
   module.exports = vars => {
     let affixes;
@@ -62,8 +61,6 @@
     let textPos;
     let userLines;
     let valid;
-    let xStyle;
-    let yStyle;
     domains = vars.x.domain.viz.concat(vars.y.domain.viz);
     if (domains.indexOf(void 0) >= 0) {
       return null;
@@ -166,88 +163,10 @@
         return 'M ' + w + ' ' + h + ' L 0 ' + h + ' L ' + w + ' 0 Z';
       });
     rotated = vars.x.ticks.rotate !== 0;
-    xStyle = (group, axis) => {
-      let groups;
-      let offset;
-      offset = axis === 'x' ? vars.axes.height : 0;
-      groups = group
-        .attr('transform', 'translate(0,' + offset + ')')
-        .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
-        .selectAll('g.tick');
-      groups.selectAll('line').attr('y2', function(d) {
-        let y2;
-        if (d.constructor === Date) {
-          d = +d;
-        }
-        y2 = d3.select(this).attr('y2');
-        if (vars[axis].ticks.visible.indexOf(d) >= 0) {
-          return y2;
-        } else {
-          return y2 / 2;
-        }
-      });
-      return groups
-        .select('text')
-        .style(
-          'text-anchor',
-          rotated && axis === 'x' ? 'end' : rotated ? 'start' : 'middle'
-        )
-        .call(tickFont, axis, vars)
-        .each(function(d) {
-          d3.select(this)
-            .attr('dy', '0px')
-            .attr('font-size', d => getFontStyle(axis, d, 'size', vars) + 'px');
-          if (d.constructor === Date) {
-            d = +d;
-          }
-          if (
-            !vars[axis].ticks.hidden &&
-            vars[axis].ticks.visible.indexOf(d) >= 0
-          ) {
-            return textwrap()
-              .container(d3.select(this))
-              .rotate(vars[axis].ticks.rotate)
-              .align(rotated ? 'end' : 'center')
-              .valign(rotated ? 'middle' : axis === 'x' ? 'top' : 'bottom')
-              .width(vars[axis].ticks.maxWidth + 2)
-              .height(vars[axis].ticks.maxHeight)
-              .padding(0)
-              .x(-vars[axis].ticks.maxWidth / 2)
-              .y(
-                axis === 'x2'
-                  ? -(vars[axis].ticks.maxHeight + vars.labels.padding * 2)
-                  : 0
-              )
-              .draw();
-          }
-        });
-    };
-    yStyle = (group, axis) => {
-      let groups;
-      let offset;
-      offset = axis === 'y2' ? vars.axes.width : 0;
-      groups = group
-        .attr('transform', 'translate(' + offset + ', 0)')
-        .call(vars[axis].axis.svg.scale(vars[axis].scale.viz))
-        .selectAll('g.tick');
-      groups.selectAll('line').attr('y2', function(d) {
-        let y2;
-        if (d.constructor === Date) {
-          d = +d;
-        }
-        y2 = d3.select(this).attr('y2');
-        if (vars.x.ticks.visible.indexOf(d) >= 0) {
-          return y2;
-        } else {
-          return y2 / 2;
-        }
-      });
-      return groups.select('text').call(tickFont, axis, vars);
-    };
     ref = ['x', 'x2', 'y', 'y2'];
     for (j = 0, len = ref.length; j < len; j++) {
       axis = ref[j];
-      style = axis.indexOf('x') === 0 ? xStyle : yStyle;
+      style = axis.indexOf('x') === 0 ? xStyle(vars, rotated) : yStyle(vars);
       realData = axisData.length && vars[axis].value ? [0] : [];
       axisGroup = plane
         .selectAll('g#d3po_graph_' + axis + 'ticks')

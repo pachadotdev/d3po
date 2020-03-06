@@ -1,13 +1,8 @@
 (() => {
-  let mix;
-  let textwrap;
-  let validObject;
-
-  mix = require('../../../../../color/mix.js');
-
-  textwrap = require('../../../../../textwrap/textwrap.js');
-
-  validObject = require('../../../../../object/validate.js');
+  const mix = require('../../../../../../color/mix.js');
+  const textwrap = require('../../../../../../textwrap/textwrap.js');
+  const validObject = require('../../../../../../object/validate.js');
+  const tickPosition = require('./tickPosition');
 
   module.exports = vars => {
     let affixes;
@@ -65,7 +60,6 @@
     let textPad;
     let textPos;
     let tickFont;
-    let tickPosition;
     let tickStyle;
     let userLines;
     let valid;
@@ -89,36 +83,6 @@
       right: 'end'
     };
     axisData = vars.small ? [] : [0];
-    tickPosition = (tick, axis) =>
-      tick
-        .attr('x1', d => {
-          if (axis.indexOf('x') === 0) {
-            return vars.x.scale.viz(d);
-          } else {
-            return 0;
-          }
-        })
-        .attr('x2', d => {
-          if (axis.indexOf('x') === 0) {
-            return vars.x.scale.viz(d);
-          } else {
-            return vars.axes.width;
-          }
-        })
-        .attr('y1', d => {
-          if (axis.indexOf('y') === 0) {
-            return vars.y.scale.viz(d);
-          } else {
-            return 0;
-          }
-        })
-        .attr('y2', d => {
-          if (axis.indexOf('y') === 0) {
-            return vars.y.scale.viz(d);
-          } else {
-            return vars.axes.height;
-          }
-        });
     tickStyle = (tick, axis, grid) => {
       let color;
       let log;
@@ -455,13 +419,13 @@
       lines
         .transition()
         .duration(vars.draw.timing)
-        .call(tickPosition, axis)
+        .call(tickPosition, axis, vars)
         .call(tickStyle, axis, true);
       lines
         .enter()
         .append('line')
         .style('opacity', 0)
-        .call(tickPosition, axis)
+        .call(tickPosition, axis, vars)
         .call(tickStyle, axis, true)
         .transition()
         .duration(vars.draw.timing)

@@ -45,7 +45,7 @@
   },
   "homepage": "http://www.d3po.org",
   "dependencies": {
-    "acorn": "^6.3.0",
+    "acorn": "^6.4.1",
     "d3": "^5.10.0",
     "gulp-uglify-es": "^1.0.4",
     "heap": "^0.2.6",

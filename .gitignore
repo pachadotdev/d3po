@@ -18,7 +18,7 @@ src_d3_50/d3po.js
 src_d3_50/d3po.min.js
 src_d3_50/d3.min.js
 src_d3_50/*.html
-src_V2
+src_v2
 
 # Vim
 *.swp

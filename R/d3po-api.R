@@ -5,7 +5,7 @@ d3po_type <- function(d3p, type = NULL) {
 }
 
 #' @export
-d3po_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
+d3po_data <- function(d3p, data = NULL, sum = NULL, nodes = NULL, edges = NULL, coords = NULL, text = NULL) {
   stopifnot(
     is.null(data) | is.data.frame(data),
     is.null(nodes) | is.data.frame(nodes),
@@ -16,14 +16,14 @@ d3po_data <- function(d3p, data = NULL, size = NULL, nodes = NULL, edges = NULL,
   d3p$x[["data"]] <- data
   d3p$x[["edges"]] <- edges
   d3p$x[["nodes"]] <- nodes
-  d3p$x[["size"]] <- size
+  d3p$x[["sum"]] <- sum
   d3p$x[["text"]] <- text
   d3p
 }
 
 #' @export
-d3po_id <- function(d3p, id = NULL) {
-  d3p$x[["id"]] <- id
+d3po_group_by <- function(d3p, group_by = NULL) {
+  d3p$x[["group_by"]] <- group_by
   d3p
 }
 

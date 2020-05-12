@@ -14,16 +14,15 @@ HTMLWidgets.widget({
 
         document.getElementById(el.id).innerHTML = "";
 
-        //var data = HTMLWidgets.dataframeToD3(x.data) || false;
         var edges = HTMLWidgets.dataframeToD3(x.edges) || false;
         var nodes = HTMLWidgets.dataframeToD3(x.nodes) || false;
     
         window.x = x;
         window.el = el;
     
-        chart = new d3po.viz();
-    
         // visualization method
+        
+        var chart;
         
         switch (x.type) {
           case "bar":
@@ -69,7 +68,7 @@ HTMLWidgets.widget({
             chart.type("stacked");
             break;
           case "treemap":
-            chart.type("treemap");
+            chart = new d3po.Treemap();
             break;
           default:
             chart = null;
@@ -78,11 +77,11 @@ HTMLWidgets.widget({
         // common arguments
         chart.data(x.data);
         
-        if (x.id) {
-          chart.id(x.id); // id means "group by" in d3po 1
+        if (x.group_by) {
+          chart.group_by(x.group_by);
         }
-        if (x.size) {
-          chart.size(x.size);
+        if (x.sum) {
+          chart.sum(x.sum);
         }
     
         // treemap specific arguments
@@ -102,12 +101,12 @@ HTMLWidgets.widget({
         }
     
         // network arguments
-        if (edges) {
-          chart.edges(edges);
-        }
-        if (nodes) {
-          chart.nodes(nodes);
-        }
+        // if (edges) {
+        //   chart.edges(edges);
+        // }
+        // if (nodes) {
+        //  chart.nodes(nodes);
+        // }
         
         // geomap arguments
         if (x.coords) {
@@ -152,11 +151,11 @@ HTMLWidgets.widget({
           chart.background(x.background);
         }
         
-        chart.container("#" + el.id);
+        // chart.container("#" + el.id);
     
         setTimeout(function() {
-          chart.resize(true);
-          chart.draw();
+          // chart.resize(true);
+          chart.render();
         }, 10);
 
       },

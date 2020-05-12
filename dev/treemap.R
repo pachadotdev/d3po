@@ -13,7 +13,6 @@ treemap_data <- tibble(
 )
 
 d3po() %>%
-  d3po_type("treemap") %>%
   d3po_data(data = treemap_data, size = "value") %>%
   d3po_id(c("parent", "id")) %>%
   d3po_depth(1) %>%

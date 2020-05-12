@@ -25,17 +25,14 @@ HTMLWidgets.widget({
         var chart;
         
         switch (x.type) {
+          case "area":
+            chart = new d3po.AreaPlot();
+            break;
           case "bar":
             chart = new d3po.BarChart();
             break;
           case "box":
             chart = new d3po.BoxWhisker();
-            break;
-          case "bubbles":
-            chart = new d3po.Pack();
-            break;
-          case "donut":
-            chart = new d3po.Donut();
             break;
           case "geomap":
             chart = new d3po.Geomap();
@@ -45,18 +42,6 @@ HTMLWidgets.widget({
             break;
           case "network":
             chart = new d3po.Network();
-            break;
-          case "pie":
-            chart = new d3po.Pie();
-            break;
-          case "radar":
-            chart.type("radar");
-            break;
-          case "rings":
-            chart.type("rings");
-            break;
-          case "sankey":
-            chart.type("sankey");
             break;
           case "scatter":
             chart = new d3po.Plot();

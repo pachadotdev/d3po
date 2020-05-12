@@ -1,10 +1,3 @@
-/*
-  d3po v0.1.0
-  An Open Source alternative to highcharter package. Based on D3, C3 and D3plus.
-  Copyright (c) 2020 Pacha
-  @license GPL-3
-*/
-
 (function (factory) {
 	typeof define === 'function' && define.amd ? define(factory) :
 	factory();
@@ -20000,7 +19993,7 @@
         * | missing | #cccccc | Used in the [assign](#assign) function when the value passed is `null` or `undefined`. |
         * | off | #b22200 | Used in the [assign](#assign) function when the value passed is `false`. |
         * | on | #224f20 | Used in the [assign](#assign) function when the value passed is `true`. |
-        * | scale | "#bf3251", "#5c57d9", "#d6c650", "#406662", "#872a41", "#1c26b3", "#d05555", "#549e95", "#993f7b", "#dc8e7a", "#ede788", "#7485aa", "#4d6fd0", "#635b56", "#7454a6", "#a8c380", "#8abdb6", "#74c0e2", "#bcd8af", "#a1aafb", "#a17cb0", "#d1a1bc" | An ordinal scale used in the [assign](#assign) function for non-valid color strings and numbers. |
+        * | scale | #b22200, #eace3f, #282f6b, #b35c1e, #224f20, #5f487c, #759143, #419391, #993c88, #e89c89, #ffee8d, #afd5e8, #f7ba77, #a5c697, #c5b5e5, #d1d392, #bbefd0, #e099cf | An ordinal scale used in the [assign](#assign) function for non-valid color strings and numbers. |
   */
 
   var defaults = {
@@ -20010,7 +20003,7 @@
     off: "#b22200",
     on: "#224f20",
     scale: ordinal().range(["#bf3251", "#5c57d9", "#d6c650", "#406662", "#872a41", "#1c26b3", "#d05555", "#549e95", "#993f7b", "#dc8e7a", "#ede788", "#7485aa", "#4d6fd0", "#635b56", "#7454a6", "#a8c380", "#8abdb6", "#74c0e2", "#bcd8af", "#a1aafb", "#a17cb0", "#d1a1bc"])
-  };
+	};
   /**
       Returns a color based on a key, whether it is present in a user supplied object or in the default object.
       @returns {String}
@@ -22910,7 +22903,7 @@
       };
 
       _this._fontColor = constant$3("black");
-      _this._fontFamily = constant$3(["Fira Sans", "Roboto", "Helvetica Neue", "Helvetica", "sans-serif"]);
+      _this._fontFamily = constant$3(["Roboto", "Helvetica Neue", "HelveticaNeue", "Helvetica", "Arial", "sans-serif"]);
       _this._fontMax = constant$3(50);
       _this._fontMin = constant$3(8);
       _this._fontOpacity = constant$3(1);
@@ -23267,7 +23260,7 @@
       /**
           @memberof TextBox
           @desc Defines the font-family to be used. The value passed can be either a *String* name of a font, a comma-separated list of font-family fallbacks, an *Array* of fallbacks, or a *Function* that returns either a *String* or an *Array*. If supplying multiple fallback fonts, the [fontExists](#fontExists) function will be used to determine the first available font on the client's machine.
-          @param {Array|Function|String} [*value* = ["Fira Sans", "Roboto", "Helvetica Neue", "Helvetica", "sans-serif"]]
+          @param {Array|Function|String} [*value* = ["Roboto", "Helvetica Neue", "HelveticaNeue", "Helvetica", "Arial", "sans-serif"]]
           @chainable
       */
 
@@ -37007,7 +37000,7 @@
 
       _this = _possibleConstructorReturn$f(this, _getPrototypeOf$f(Button).call(this));
       _this._buttonStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px",
         "margin": "0 5px"
       };
@@ -37217,12 +37210,12 @@
 
       _this = _possibleConstructorReturn$g(this, _getPrototypeOf$g(Radio).call(this));
       _this._labelStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px",
         "padding-right": "5px"
       };
       _this._legendStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px",
         "padding-right": "5px"
       };
@@ -37508,20 +37501,20 @@
 
       _this = _possibleConstructorReturn$h(this, _getPrototypeOf$h(Select).call(this));
       _this._labelStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px",
         "margin-right": "5px"
       };
       _this._options = [];
       _this._optionStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px"
       };
       _this._selectStyle = {
         "background": "#fafafa",
         "border": "1px solid #ccc",
         "border-radius": "0",
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px",
         "outline": "0",
         "padding": "3px 5px 4px"
@@ -43205,7 +43198,7 @@
       _this._background = constant$3("rgba(255, 255, 255, 1)");
       _this._body = accessor("body", "");
       _this._bodyStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "12px",
         "font-weight": "400",
         "z-index": "1"
@@ -43216,7 +43209,7 @@
       _this._data = [];
       _this._footer = accessor("footer", "");
       _this._footerStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "12px",
         "font-weight": "400",
         "z-index": "1"
@@ -43244,20 +43237,20 @@
       };
       _this._tbody = [];
       _this._tbodyStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "12px",
         "text-align": "center"
       };
       _this._thead = [];
       _this._theadStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "12px",
         "font-weight": "600",
         "text-align": "center"
       };
       _this._title = accessor("title", "");
       _this._titleStyle = {
-        "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
         "font-size": "14px",
         "font-weight": "600"
       };
@@ -43517,7 +43510,7 @@
           @param {Object} [*value*]
           @example <caption>default styles</caption>
       {
-      "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+      "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
       "font-size": "12px",
       "font-weight": "400"
       }
@@ -43593,7 +43586,7 @@
           @param {Object} [*value*]
           @example <caption>default styles</caption>
       {
-      "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+      "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
       "font-size": "12px",
       "font-weight": "400"
       }
@@ -43712,7 +43705,7 @@
           @param {Object} [*value*]
           @example <caption>default styles</caption>
       {
-      "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+      "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
       "font-size": "12px",
       "font-weight": "600",
       "text-align": "center"
@@ -43741,7 +43734,7 @@
           @param {Object} [*value*]
           @example <caption>default styles</caption>
       {
-      "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+      "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
       "font-size": "12px",
       "font-weight": "600",
       "text-align": "center"
@@ -43774,7 +43767,7 @@
           @param {Object} [*value*]
           @example <caption>default styles</caption>
       {
-      "font-family": "'Fira Sans', 'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', sans-serif",
+      "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
       "font-size": "14px",
       "font-weight": "600",
       "padding-bottom": "5px"
@@ -46430,7 +46423,7 @@
               this.renderer.renderBorders(calculateBorders(borders, bounds, borderPoints, radius));
 
               if (container.node.checked) {
-                this.renderer.font(new Color('#424242'), 'normal', 'normal', 'bold', size - 3 + "px", 'Fira Sans');
+                this.renderer.font(new Color('#424242'), 'normal', 'normal', 'bold', size - 3 + "px", 'arial');
                 this.renderer.text("\u2714", bounds.left + size / 6, bounds.top + size - 1);
               }
             }, this);
@@ -56330,7 +56323,7 @@
       _this._legendTooltip = {};
 
       _this._loadingHTML = function () {
-        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Fira Sans', 'Roboto', 'Helvetica Neue', Helvetica, sans-serif;\">\n      <strong>".concat(_this._translate("Loading Visualization"), "</strong>\n      <sub style=\"bottom: 0; display: block; line-height: 1; margin-top: 5px;\"><a href=\"https://d3po.org\" target=\"_blank\">").concat(_this._translate("Powered by d3po"), "</a></sub>\n    </div>");
+        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;\">\n      <strong>".concat(_this._translate("Loading Visualization"), "</strong>\n      <sub style=\"bottom: 0; display: block; line-height: 1; margin-top: 5px;\"><a href=\"https://d3po.org\" target=\"_blank\">").concat(_this._translate("Powered by d3po"), "</a></sub>\n    </div>");
       };
 
       _this._loadingMessage = true;
@@ -56347,7 +56340,7 @@
       };
 
       _this._noDataHTML = function () {
-        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Fira Sans', 'Roboto', 'Helvetica Neue', Helvetica, sans-serif;\">\n      <strong>".concat(_this._translate("No Data Available"), "</strong>\n    </div>");
+        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;\">\n      <strong>".concat(_this._translate("No Data Available"), "</strong>\n    </div>");
       };
 
       _this._noDataMessage = true;
@@ -56468,7 +56461,7 @@
         "border": "1px solid rgba(0, 0, 0, 0.75)",
         "color": "rgba(0, 0, 0, 0.75)",
         "display": "block",
-        "font": "900 15px/21px 'Fira Sans', 'Roboto', 'Helvetica Neue', 'Helvetica', sans-serif",
+        "font": "900 15px/21px 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
         "height": "20px",
         "margin": "5px",
         "opacity": 0.75,
@@ -58706,376 +58699,6 @@
     return Geomap;
   }(Viz);
 
-  function _typeof$s(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$s = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$s = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$s(obj);
-  }
-
-  function _classCallCheck$r(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties$n(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass$n(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$n(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$n(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _possibleConstructorReturn$o(self, call) {
-    if (call && (_typeof$s(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$o(self);
-  }
-
-  function _assertThisInitialized$o(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _get$8(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$8 = Reflect.get;
-    } else {
-      _get$8 = function _get(target, property, receiver) {
-        var base = _superPropBase$8(target, property);
-
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
-    }
-
-    return _get$8(target, property, receiver || target);
-  }
-
-  function _superPropBase$8(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$o(object);
-      if (object === null) break;
-    }
-
-    return object;
-  }
-
-  function _getPrototypeOf$o(o) {
-    _getPrototypeOf$o = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$o(o);
-  }
-
-  function _inherits$o(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$o(subClass, superClass);
-  }
-
-  function _setPrototypeOf$o(o, p) {
-    _setPrototypeOf$o = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$o(o, p);
-  }
-  /**
-      @class Pie
-      @extends Viz
-      @desc Uses the [d3 pie layout](https://github.com/d3/d3-shape#pies) to creates SVG arcs based on an array of data.
-  */
-
-  var Pie = /*#__PURE__*/function (_Viz) {
-    _inherits$o(Pie, _Viz);
-    /**
-        @memberof Pie
-        @desc Invoked when creating a new class instance, and sets any default parameters.
-        @private
-    */
-
-
-    function Pie() {
-      var _this;
-
-      _classCallCheck$r(this, Pie);
-
-      _this = _possibleConstructorReturn$o(this, _getPrototypeOf$o(Pie).call(this));
-      _this._shapeConfig = assign(_this._shapeConfig, {
-        ariaLabel: function ariaLabel(d, i) {
-          return _this._pieData ? "".concat(++_this._pieData[i].index, ". ").concat(_this._drawLabel(d, i), ", ").concat(_this._value(d, i), ".") : "";
-        },
-        Path: {
-          labelConfig: {
-            fontResize: true
-          }
-        }
-      });
-      _this._innerRadius = 0;
-
-      _this._legendSort = function (a, b) {
-        return _this._value(b) - _this._value(a);
-      };
-
-      _this._padPixel = 0;
-      _this._pie = pie();
-
-      _this._sort = function (a, b) {
-        return _this._value(b) - _this._value(a);
-      };
-
-      _this._value = accessor("value");
-      return _this;
-    }
-    /**
-        Extends the draw behavior of the abstract Viz class.
-        @private
-    */
-
-
-    _createClass$n(Pie, [{
-      key: "_draw",
-      value: function _draw(callback) {
-        var _this2 = this;
-
-        _get$8(_getPrototypeOf$o(Pie.prototype), "_draw", this).call(this, callback);
-
-        var height = this._height - this._margin.top - this._margin.bottom,
-            width = this._width - this._margin.left - this._margin.right;
-        var outerRadius = min([width, height]) / 2;
-
-        var pieData = this._pieData = this._pie.padAngle(this._padAngle || this._padPixel / outerRadius).sort(this._sort).value(this._value)(this._filteredData);
-
-        pieData.forEach(function (d, i) {
-          d.__d3po__ = true;
-          d.i = i;
-        });
-        var arcData = arc().innerRadius(this._innerRadius).outerRadius(outerRadius);
-        var transform = "translate(".concat(width / 2 + this._margin.left, ", ").concat(height / 2 + this._margin.top, ")");
-
-        this._shapes.push(new Path$1().data(pieData).d(arcData).select(elem("g.d3po-Pie", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).config({
-          id: function id(d) {
-            return _this2._ids(d).join("-");
-          },
-          x: 0,
-          y: 0
-        }).label(this._drawLabel).config(configPrep.bind(this)(this._shapeConfig, "shape", "Path")).render());
-
-        return this;
-      }
-      /**
-          @memberof Pie
-          @desc If *value* is specified, sets the inner radius accessor to the specified function or number and returns the current class instance. If *value* is not specified, returns the current inner radius accessor.
-          @param {Function|Number} [*value*]
-      */
-
-    }, {
-      key: "innerRadius",
-      value: function innerRadius(_) {
-        return arguments.length ? (this._innerRadius = _, this) : this._innerRadius;
-      }
-      /**
-          @memberof Pie
-          @desc If *value* is specified, sets the arc padding to the specified radian value and returns the current class instance. If *value* is not specified, returns the current radian padding.
-          @param {Number} [*value*]
-      */
-
-    }, {
-      key: "padAngle",
-      value: function padAngle(_) {
-        return arguments.length ? (this._padAngle = _, this) : this._padAngle;
-      }
-      /**
-          @memberof Pie
-          @desc If *value* is specified, sets the arc padding to the specified pixel value and returns the current class instance. If *value* is not specified, returns the current pixel padding.
-          @param {Number} [*value*]
-      */
-
-    }, {
-      key: "padPixel",
-      value: function padPixel(_) {
-        return arguments.length ? (this._padPixel = _, this) : this._padPixel;
-      }
-      /**
-          @memberof Pie
-          @desc If *comparator* is specified, sets the sort order for the pie slices using the specified comparator function. If *comparator* is not specified, returns the current sort order, which defaults to descending order by the associated input data's numeric value attribute.
-          @param {Array} [*comparator*]
-          @example
-      function comparator(a, b) {
-      return b.value - a.value;
-      }
-      */
-
-    }, {
-      key: "sort",
-      value: function sort(_) {
-        return arguments.length ? (this._sort = _, this) : this._sort;
-      }
-      /**
-          @memberof Pie
-          @desc If *value* is specified, sets the value accessor to the specified function or number and returns the current class instance. If *value* is not specified, returns the current value accessor.
-          @param {Function|String} *value*
-          @example
-      function value(d) {
-      return d.value;
-      }
-      */
-
-    }, {
-      key: "value",
-      value: function value(_) {
-        return arguments.length ? (this._value = typeof _ === "function" ? _ : accessor(_), this) : this._value;
-      }
-    }]);
-
-    return Pie;
-  }(Viz);
-
-  function _typeof$t(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$t = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$t = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$t(obj);
-  }
-
-  function _classCallCheck$s(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _possibleConstructorReturn$p(self, call) {
-    if (call && (_typeof$t(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$p(self);
-  }
-
-  function _assertThisInitialized$p(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _getPrototypeOf$p(o) {
-    _getPrototypeOf$p = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$p(o);
-  }
-
-  function _inherits$p(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$p(subClass, superClass);
-  }
-
-  function _setPrototypeOf$p(o, p) {
-    _setPrototypeOf$p = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$p(o, p);
-  }
-  /**
-      @class Donut
-      @extends Pie
-      @desc Extends the Pie visualization to create a donut chart.
-  */
-
-  var Donut = /*#__PURE__*/function (_Pie) {
-    _inherits$p(Donut, _Pie);
-    /**
-        @memberof Donut
-        @desc Invoked when creating a new class instance, and sets any default parameters.
-        @private
-    */
-
-
-    function Donut() {
-      var _this;
-
-      _classCallCheck$s(this, Donut);
-
-      _this = _possibleConstructorReturn$p(this, _getPrototypeOf$p(Donut).call(this));
-
-      _this._innerRadius = function () {
-        return min([_this._width - _this._margin.left - _this._margin.right, _this._height - _this._margin.top - _this._margin.bottom]) / 4;
-      };
-
-      _this._padPixel = 2;
-      return _this;
-    }
-
-    return Donut;
-  }(Pie);
-
   function count(node) {
     var sum = 0,
         children = node.children,
@@ -59321,285 +58944,6 @@
     copy: node_copy
   };
 
-  var slice$3 = Array.prototype.slice;
-  function shuffle(array) {
-    var m = array.length,
-        t,
-        i;
-
-    while (m) {
-      i = Math.random() * m-- | 0;
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-
-    return array;
-  }
-
-  function enclose (circles) {
-    var i = 0,
-        n = (circles = shuffle(slice$3.call(circles))).length,
-        B = [],
-        p,
-        e;
-
-    while (i < n) {
-      p = circles[i];
-      if (e && enclosesWeak(e, p)) ++i;else e = encloseBasis(B = extendBasis(B, p)), i = 0;
-    }
-
-    return e;
-  }
-
-  function extendBasis(B, p) {
-    var i, j;
-    if (enclosesWeakAll(p, B)) return [p]; // If we get here then B must have at least one element.
-
-    for (i = 0; i < B.length; ++i) {
-      if (enclosesNot(p, B[i]) && enclosesWeakAll(encloseBasis2(B[i], p), B)) {
-        return [B[i], p];
-      }
-    } // If we get here then B must have at least two elements.
-
-
-    for (i = 0; i < B.length - 1; ++i) {
-      for (j = i + 1; j < B.length; ++j) {
-        if (enclosesNot(encloseBasis2(B[i], B[j]), p) && enclosesNot(encloseBasis2(B[i], p), B[j]) && enclosesNot(encloseBasis2(B[j], p), B[i]) && enclosesWeakAll(encloseBasis3(B[i], B[j], p), B)) {
-          return [B[i], B[j], p];
-        }
-      }
-    } // If we get here then something is very wrong.
-
-
-    throw new Error();
-  }
-
-  function enclosesNot(a, b) {
-    var dr = a.r - b.r,
-        dx = b.x - a.x,
-        dy = b.y - a.y;
-    return dr < 0 || dr * dr < dx * dx + dy * dy;
-  }
-
-  function enclosesWeak(a, b) {
-    var dr = a.r - b.r + 1e-6,
-        dx = b.x - a.x,
-        dy = b.y - a.y;
-    return dr > 0 && dr * dr > dx * dx + dy * dy;
-  }
-
-  function enclosesWeakAll(a, B) {
-    for (var i = 0; i < B.length; ++i) {
-      if (!enclosesWeak(a, B[i])) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function encloseBasis(B) {
-    switch (B.length) {
-      case 1:
-        return encloseBasis1(B[0]);
-
-      case 2:
-        return encloseBasis2(B[0], B[1]);
-
-      case 3:
-        return encloseBasis3(B[0], B[1], B[2]);
-    }
-  }
-
-  function encloseBasis1(a) {
-    return {
-      x: a.x,
-      y: a.y,
-      r: a.r
-    };
-  }
-
-  function encloseBasis2(a, b) {
-    var x1 = a.x,
-        y1 = a.y,
-        r1 = a.r,
-        x2 = b.x,
-        y2 = b.y,
-        r2 = b.r,
-        x21 = x2 - x1,
-        y21 = y2 - y1,
-        r21 = r2 - r1,
-        l = Math.sqrt(x21 * x21 + y21 * y21);
-    return {
-      x: (x1 + x2 + x21 / l * r21) / 2,
-      y: (y1 + y2 + y21 / l * r21) / 2,
-      r: (l + r1 + r2) / 2
-    };
-  }
-
-  function encloseBasis3(a, b, c) {
-    var x1 = a.x,
-        y1 = a.y,
-        r1 = a.r,
-        x2 = b.x,
-        y2 = b.y,
-        r2 = b.r,
-        x3 = c.x,
-        y3 = c.y,
-        r3 = c.r,
-        a2 = x1 - x2,
-        a3 = x1 - x3,
-        b2 = y1 - y2,
-        b3 = y1 - y3,
-        c2 = r2 - r1,
-        c3 = r3 - r1,
-        d1 = x1 * x1 + y1 * y1 - r1 * r1,
-        d2 = d1 - x2 * x2 - y2 * y2 + r2 * r2,
-        d3 = d1 - x3 * x3 - y3 * y3 + r3 * r3,
-        ab = a3 * b2 - a2 * b3,
-        xa = (b2 * d3 - b3 * d2) / (ab * 2) - x1,
-        xb = (b3 * c2 - b2 * c3) / ab,
-        ya = (a3 * d2 - a2 * d3) / (ab * 2) - y1,
-        yb = (a2 * c3 - a3 * c2) / ab,
-        A = xb * xb + yb * yb - 1,
-        B = 2 * (r1 + xa * xb + ya * yb),
-        C = xa * xa + ya * ya - r1 * r1,
-        r = -(A ? (B + Math.sqrt(B * B - 4 * A * C)) / (2 * A) : C / B);
-    return {
-      x: x1 + xa + xb * r,
-      y: y1 + ya + yb * r,
-      r: r
-    };
-  }
-
-  function place(b, a, c) {
-    var dx = b.x - a.x,
-        x,
-        a2,
-        dy = b.y - a.y,
-        y,
-        b2,
-        d2 = dx * dx + dy * dy;
-
-    if (d2) {
-      a2 = a.r + c.r, a2 *= a2;
-      b2 = b.r + c.r, b2 *= b2;
-
-      if (a2 > b2) {
-        x = (d2 + b2 - a2) / (2 * d2);
-        y = Math.sqrt(Math.max(0, b2 / d2 - x * x));
-        c.x = b.x - x * dx - y * dy;
-        c.y = b.y - x * dy + y * dx;
-      } else {
-        x = (d2 + a2 - b2) / (2 * d2);
-        y = Math.sqrt(Math.max(0, a2 / d2 - x * x));
-        c.x = a.x + x * dx - y * dy;
-        c.y = a.y + x * dy + y * dx;
-      }
-    } else {
-      c.x = a.x + c.r;
-      c.y = a.y;
-    }
-  }
-
-  function intersects(a, b) {
-    var dr = a.r + b.r - 1e-6,
-        dx = b.x - a.x,
-        dy = b.y - a.y;
-    return dr > 0 && dr * dr > dx * dx + dy * dy;
-  }
-
-  function score(node) {
-    var a = node._,
-        b = node.next._,
-        ab = a.r + b.r,
-        dx = (a.x * b.r + b.x * a.r) / ab,
-        dy = (a.y * b.r + b.y * a.r) / ab;
-    return dx * dx + dy * dy;
-  }
-
-  function Node$3(circle) {
-    this._ = circle;
-    this.next = null;
-    this.previous = null;
-  }
-
-  function packEnclose(circles) {
-    if (!(n = circles.length)) return 0;
-    var a, b, c, n, aa, ca, i, j, k, sj, sk; // Place the first circle.
-
-    a = circles[0], a.x = 0, a.y = 0;
-    if (!(n > 1)) return a.r; // Place the second circle.
-
-    b = circles[1], a.x = -b.r, b.x = a.r, b.y = 0;
-    if (!(n > 2)) return a.r + b.r; // Place the third circle.
-
-    place(b, a, c = circles[2]); // Initialize the front-chain using the first three circles a, b and c.
-
-    a = new Node$3(a), b = new Node$3(b), c = new Node$3(c);
-    a.next = c.previous = b;
-    b.next = a.previous = c;
-    c.next = b.previous = a; // Attempt to place each remaining circle…
-
-    pack: for (i = 3; i < n; ++i) {
-      place(a._, b._, c = circles[i]), c = new Node$3(c); // Find the closest intersecting circle on the front-chain, if any.
-      // “Closeness” is determined by linear distance along the front-chain.
-      // “Ahead” or “behind” is likewise determined by linear distance.
-
-      j = b.next, k = a.previous, sj = b._.r, sk = a._.r;
-
-      do {
-        if (sj <= sk) {
-          if (intersects(j._, c._)) {
-            b = j, a.next = b, b.previous = a, --i;
-            continue pack;
-          }
-
-          sj += j._.r, j = j.next;
-        } else {
-          if (intersects(k._, c._)) {
-            a = k, a.next = b, b.previous = a, --i;
-            continue pack;
-          }
-
-          sk += k._.r, k = k.previous;
-        }
-      } while (j !== k.next); // Success! Insert the new circle c between a and b.
-
-
-      c.previous = a, c.next = b, a.next = b.previous = b = c; // Compute the new closest circle pair to the centroid.
-
-      aa = score(a);
-
-      while ((c = c.next) !== b) {
-        if ((ca = score(c)) < aa) {
-          a = c, aa = ca;
-        }
-      }
-
-      b = a.next;
-    } // Compute the enclosing circle of the front chain.
-
-
-    a = [b._], c = b;
-
-    while ((c = c.next) !== b) {
-      a.push(c._);
-    }
-
-    c = enclose(a); // Translate the circles to put the enclosing circle around the origin.
-
-    for (i = 0; i < n; ++i) {
-      a = circles[i], a.x -= c.x, a.y -= c.y;
-    }
-
-    return c.r;
-  }
-
-  function optional(f) {
-    return f == null ? null : required(f);
-  }
   function required(f) {
     if (typeof f !== "function") throw new Error();
     return f;
@@ -59611,83 +58955,6 @@
   function constant$9 (x) {
     return function () {
       return x;
-    };
-  }
-
-  function defaultRadius(d) {
-    return Math.sqrt(d.value);
-  }
-
-  function pack () {
-    var radius = null,
-        dx = 1,
-        dy = 1,
-        padding = constantZero;
-
-    function pack(root) {
-      root.x = dx / 2, root.y = dy / 2;
-
-      if (radius) {
-        root.eachBefore(radiusLeaf(radius)).eachAfter(packChildren(padding, 0.5)).eachBefore(translateChild(1));
-      } else {
-        root.eachBefore(radiusLeaf(defaultRadius)).eachAfter(packChildren(constantZero, 1)).eachAfter(packChildren(padding, root.r / Math.min(dx, dy))).eachBefore(translateChild(Math.min(dx, dy) / (2 * root.r)));
-      }
-
-      return root;
-    }
-
-    pack.radius = function (x) {
-      return arguments.length ? (radius = optional(x), pack) : radius;
-    };
-
-    pack.size = function (x) {
-      return arguments.length ? (dx = +x[0], dy = +x[1], pack) : [dx, dy];
-    };
-
-    pack.padding = function (x) {
-      return arguments.length ? (padding = typeof x === "function" ? x : constant$9(+x), pack) : padding;
-    };
-
-    return pack;
-  }
-
-  function radiusLeaf(radius) {
-    return function (node) {
-      if (!node.children) {
-        node.r = Math.max(0, +radius(node) || 0);
-      }
-    };
-  }
-
-  function packChildren(padding, k) {
-    return function (node) {
-      if (children = node.children) {
-        var children,
-            i,
-            n = children.length,
-            r = padding(node) * k || 0,
-            e;
-        if (r) for (i = 0; i < n; ++i) {
-          children[i].r += r;
-        }
-        e = packEnclose(children);
-        if (r) for (i = 0; i < n; ++i) {
-          children[i].r -= r;
-        }
-        node.r = e + r;
-      }
-    };
-  }
-
-  function translateChild(k) {
-    return function (node) {
-      var parent = node.parent;
-      node.r *= k;
-
-      if (parent) {
-        node.x = parent.x + k * node.x;
-        node.y = parent.y + k * node.y;
-      }
     };
   }
 
@@ -60133,363 +59400,6 @@
     return treemap;
   }
 
-  function _typeof$u(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$u = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$u = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$u(obj);
-  }
-
-  function _toConsumableArray$2(arr) {
-    return _arrayWithoutHoles$2(arr) || _iterableToArray$2(arr) || _nonIterableSpread$2();
-  }
-
-  function _nonIterableSpread$2() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
-  }
-
-  function _iterableToArray$2(iter) {
-    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-  }
-
-  function _arrayWithoutHoles$2(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-        arr2[i] = arr[i];
-      }
-
-      return arr2;
-    }
-  }
-
-  function _classCallCheck$t(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties$o(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass$o(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$o(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$o(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _possibleConstructorReturn$q(self, call) {
-    if (call && (_typeof$u(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$q(self);
-  }
-
-  function _assertThisInitialized$q(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _get$9(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$9 = Reflect.get;
-    } else {
-      _get$9 = function _get(target, property, receiver) {
-        var base = _superPropBase$9(target, property);
-
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
-    }
-
-    return _get$9(target, property, receiver || target);
-  }
-
-  function _superPropBase$9(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$q(object);
-      if (object === null) break;
-    }
-
-    return object;
-  }
-
-  function _getPrototypeOf$q(o) {
-    _getPrototypeOf$q = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$q(o);
-  }
-
-  function _inherits$q(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$q(subClass, superClass);
-  }
-
-  function _setPrototypeOf$q(o, p) {
-    _setPrototypeOf$q = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$q(o, p);
-  }
-
-  var recursionCircles = function recursionCircles(d) {
-    var arr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-    if (d.values) {
-      d.values.forEach(function (h) {
-        arr.push(h);
-        recursionCircles(h, arr);
-      });
-    } else {
-      arr.push(d);
-    }
-
-    return arr;
-  };
-  /**
-      @class Pack
-      @extends Viz
-      @desc Uses the [d3 pack layout](https://github.com/d3/d3-hierarchy#pack) to creates Circle Packing chart based on an array of data.
-  */
-
-
-  var Pack = /*#__PURE__*/function (_Viz) {
-    _inherits$q(Pack, _Viz);
-    /**
-        @memberof Pack
-        @desc Invoked when creating a new class instance, and sets any default parameters.
-        @private
-    */
-
-
-    function Pack() {
-      var _this;
-
-      _classCallCheck$t(this, Pack);
-
-      _this = _possibleConstructorReturn$q(this, _getPrototypeOf$q(Pack).call(this));
-      _this._layoutPadding = 1;
-
-      _this._on.mouseenter = function () {};
-
-      var defaultMouseMoveLegend = _this._on["mousemove.legend"];
-
-      _this._on["mousemove.legend"] = function (d, i) {
-        defaultMouseMoveLegend(d, i);
-
-        var ids = _this._ids(d, i);
-
-        var hoverData = recursionCircles(d);
-
-        _this.hover(function (h) {
-          var hover = Object.keys(h).filter(function (key) {
-            return key !== "value";
-          }).every(function (key) {
-            return d[key] && d[key].includes(h[key]);
-          });
-          if (hover) hoverData.push(h);else if (ids.includes(h.key)) hoverData.push.apply(hoverData, _toConsumableArray$2(recursionCircles(h, [h])));
-          return hoverData.includes(h);
-        });
-      };
-
-      var defaultMouseMoveShape = _this._on["mousemove.shape"];
-
-      _this._on["mousemove.shape"] = function (d, i) {
-        if (d.__d3poTooltip__) defaultMouseMoveShape(d, i);
-
-        _this.hover(function (h) {
-          return recursionCircles(d, [d]).includes(h);
-        });
-      };
-
-      _this._pack = pack();
-      _this._packOpacity = constant$3(0.25);
-      _this._shape = constant$3("Circle");
-      _this._shapeConfig = assign(_this._shapeConfig, {
-        Circle: {
-          label: function label(d) {
-            return d.parent && !d.children ? d.id : false;
-          },
-          labelConfig: {
-            fontResize: true
-          },
-          opacity: function opacity(d) {
-            return d.__d3poOpacity__;
-          }
-        }
-      });
-
-      _this._sort = function (a, b) {
-        return b.value - a.value;
-      };
-
-      _this._sum = accessor("value");
-      return _this;
-    }
-    /**
-        Extends the draw behavior of the abstract Viz class.
-        @private
-    */
-
-
-    _createClass$o(Pack, [{
-      key: "_draw",
-      value: function _draw(callback) {
-        var _this2 = this;
-
-        _get$9(_getPrototypeOf$q(Pack.prototype), "_draw", this).call(this, callback);
-
-        var height = this._height - this._margin.top - this._margin.bottom,
-            width = this._width - this._margin.left - this._margin.right;
-        var diameter = Math.min(height, width);
-        var transform = "translate(".concat((width - diameter) / 2, ", ").concat((height - diameter) / 2, ")");
-        var nestedData = nest();
-
-        for (var i = 0; i <= this._drawDepth; i++) {
-          nestedData.key(this._groupBy[i]);
-        }
-
-        nestedData = nestedData.entries(this._filteredData);
-
-        var packData = this._pack.padding(this._layoutPadding).size([diameter, diameter])(hierarchy({
-          key: nestedData.key,
-          values: nestedData
-        }, function (d) {
-          return d.values;
-        }).sum(this._sum).sort(this._sort)).descendants();
-
-        packData.forEach(function (d, i) {
-          d.__d3po__ = true;
-          d.i = i;
-          d.id = d.parent ? d.parent.data.key : null;
-          d.data.__d3poOpacity__ = d.height ? _this2._packOpacity(d.data, i) : 1;
-          d.data.__d3poTooltip__ = !d.height ? true : false;
-        });
-
-        this._shapes.push(new Circle().data(packData).select(elem("g.d3po-Pack", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).config(configPrep.bind(this)(this._shapeConfig, "shape", "Circle")).render());
-
-        return this;
-      }
-      /**
-          @memberof Pack
-          @desc If *value* is specified, sets the hover method to the specified function and returns the current class instance.
-          @param {Function} [*value*]
-          @chainable
-       */
-
-    }, {
-      key: "hover",
-      value: function hover(_) {
-        this._hover = _;
-
-        this._shapes.forEach(function (s) {
-          return s.hover(_);
-        });
-
-        if (this._legend) this._legendClass.hover(_);
-        return this;
-      }
-      /**
-          @memberof Pack
-          @desc If *value* is specified, sets the opacity accessor to the specified function or number and returns the current class instance. If *value* is not specified, returns the current pack opacity accessor.
-          @param {Function|Number} [*value*]
-      */
-
-    }, {
-      key: "layoutPadding",
-      value: function layoutPadding(_) {
-        return arguments.length ? (this._layoutPadding = _, this) : this._layoutPadding;
-      }
-      /**
-          @memberof Pack
-          @desc If *value* is specified, sets the padding accessor to the specified function or number and returns the current class instance. If *value* is not specified, returns the current pack opacity accessor.
-          @param {Function|Number} [*value*]
-      */
-
-    }, {
-      key: "packOpacity",
-      value: function packOpacity(_) {
-        return arguments.length ? (this._packOpacity = typeof _ === "function" ? _ : constant$3(_), this) : this._packOpacity;
-      }
-      /**
-          @memberof Pack
-          @desc If *comparator* is specified, sets the sort order for the pack using the specified comparator function. If *comparator* is not specified, returns the current group sort order, which defaults to descending order by the associated input data's numeric value attribute.
-          @param {Array} [*comparator*]
-          @example
-      function comparator(a, b) {
-      return b.value - a.value;
-      }
-      */
-
-    }, {
-      key: "sort",
-      value: function sort(_) {
-        return arguments.length ? (this._sort = _, this) : this._sort;
-      }
-      /**
-          @memberof Pack
-          @desc If *value* is specified, sets the sum accessor to the specified function or number and returns the current class instance. If *value* is not specified, returns the current sum accessor.
-          @param {Function|Number} [*value*]
-          @example
-      function sum(d) {
-      return d.sum;
-      }
-      */
-
-    }, {
-      key: "sum",
-      value: function sum(_) {
-        return arguments.length ? (this._sum = typeof _ === "function" ? _ : accessor(_), this) : this._sum;
-      }
-    }]);
-
-    return Pack;
-  }(Viz);
-
   /**
       @function nest
       @summary Extends the base behavior of d3.nest to allow for multiple depth levels.
@@ -60524,18 +59434,18 @@
     });
   }
 
-  function _typeof$v(obj) {
+  function _typeof$s(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$v = function _typeof$1(obj) {
+      _typeof$s = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$v = function _typeof$1(obj) {
+      _typeof$s = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$v(obj);
+    return _typeof$s(obj);
   }
 
   function _defineProperty$4(obj, key, value) {
@@ -60553,13 +59463,13 @@
     return obj;
   }
 
-  function _classCallCheck$u(instance, Constructor) {
+  function _classCallCheck$r(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties$p(target, props) {
+  function _defineProperties$n(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -60569,21 +59479,21 @@
     }
   }
 
-  function _createClass$p(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$p(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$p(Constructor, staticProps);
+  function _createClass$n(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$n(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties$n(Constructor, staticProps);
     return Constructor;
   }
 
-  function _possibleConstructorReturn$r(self, call) {
-    if (call && (_typeof$v(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$o(self, call) {
+    if (call && (_typeof$s(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$r(self);
+    return _assertThisInitialized$o(self);
   }
 
-  function _assertThisInitialized$r(self) {
+  function _assertThisInitialized$o(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -60591,12 +59501,12 @@
     return self;
   }
 
-  function _get$a(target, property, receiver) {
+  function _get$8(target, property, receiver) {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$a = Reflect.get;
+      _get$8 = Reflect.get;
     } else {
-      _get$a = function _get(target, property, receiver) {
-        var base = _superPropBase$a(target, property);
+      _get$8 = function _get(target, property, receiver) {
+        var base = _superPropBase$8(target, property);
 
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -60609,26 +59519,26 @@
       };
     }
 
-    return _get$a(target, property, receiver || target);
+    return _get$8(target, property, receiver || target);
   }
 
-  function _superPropBase$a(object, property) {
+  function _superPropBase$8(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$r(object);
+      object = _getPrototypeOf$o(object);
       if (object === null) break;
     }
 
     return object;
   }
 
-  function _getPrototypeOf$r(o) {
-    _getPrototypeOf$r = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$o(o) {
+    _getPrototypeOf$o = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$r(o);
+    return _getPrototypeOf$o(o);
   }
 
-  function _inherits$r(subClass, superClass) {
+  function _inherits$o(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -60640,16 +59550,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$r(subClass, superClass);
+    if (superClass) _setPrototypeOf$o(subClass, superClass);
   }
 
-  function _setPrototypeOf$r(o, p) {
-    _setPrototypeOf$r = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$o(o, p) {
+    _setPrototypeOf$o = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$r(o, p);
+    return _setPrototypeOf$o(o, p);
   }
   /**
       @class Tree
@@ -60658,7 +59568,7 @@
   */
 
   var Tree = /*#__PURE__*/function (_Viz) {
-    _inherits$r(Tree, _Viz);
+    _inherits$o(Tree, _Viz);
     /**
         @memberof Tree
         @desc Invoked when creating a new class instance, and sets any default parameters.
@@ -60669,9 +59579,9 @@
     function Tree() {
       var _this;
 
-      _classCallCheck$u(this, Tree);
+      _classCallCheck$r(this, Tree);
 
-      _this = _possibleConstructorReturn$r(this, _getPrototypeOf$r(Tree).call(this));
+      _this = _possibleConstructorReturn$o(this, _getPrototypeOf$o(Tree).call(this));
       _this._orient = "vertical";
 
       _this._separation = function (a, b) {
@@ -60704,12 +59614,12 @@
     */
 
 
-    _createClass$p(Tree, [{
+    _createClass$n(Tree, [{
       key: "_draw",
       value: function _draw(callback) {
         var _this2 = this;
 
-        _get$a(_getPrototypeOf$r(Tree.prototype), "_draw", this).call(this, callback);
+        _get$8(_getPrototypeOf$o(Tree.prototype), "_draw", this).call(this, callback);
 
         var height = this._orient === "vertical" ? this._height - this._margin.top - this._margin.bottom : this._width - this._margin.left - this._margin.right,
             left = this._orient === "vertical" ? "left" : "top",
@@ -60876,27 +59786,27 @@
     return Tree;
   }(Viz);
 
-  function _typeof$w(obj) {
+  function _typeof$t(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$w = function _typeof$1(obj) {
+      _typeof$t = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$w = function _typeof$1(obj) {
+      _typeof$t = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$w(obj);
+    return _typeof$t(obj);
   }
 
-  function _classCallCheck$v(instance, Constructor) {
+  function _classCallCheck$s(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties$q(target, props) {
+  function _defineProperties$o(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -60906,21 +59816,21 @@
     }
   }
 
-  function _createClass$q(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$q(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$q(Constructor, staticProps);
+  function _createClass$o(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$o(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties$o(Constructor, staticProps);
     return Constructor;
   }
 
-  function _possibleConstructorReturn$s(self, call) {
-    if (call && (_typeof$w(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$p(self, call) {
+    if (call && (_typeof$t(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$s(self);
+    return _assertThisInitialized$p(self);
   }
 
-  function _assertThisInitialized$s(self) {
+  function _assertThisInitialized$p(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -60928,12 +59838,12 @@
     return self;
   }
 
-  function _get$b(target, property, receiver) {
+  function _get$9(target, property, receiver) {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$b = Reflect.get;
+      _get$9 = Reflect.get;
     } else {
-      _get$b = function _get(target, property, receiver) {
-        var base = _superPropBase$b(target, property);
+      _get$9 = function _get(target, property, receiver) {
+        var base = _superPropBase$9(target, property);
 
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -60946,26 +59856,26 @@
       };
     }
 
-    return _get$b(target, property, receiver || target);
+    return _get$9(target, property, receiver || target);
   }
 
-  function _superPropBase$b(object, property) {
+  function _superPropBase$9(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$s(object);
+      object = _getPrototypeOf$p(object);
       if (object === null) break;
     }
 
     return object;
   }
 
-  function _getPrototypeOf$s(o) {
-    _getPrototypeOf$s = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$p(o) {
+    _getPrototypeOf$p = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$s(o);
+    return _getPrototypeOf$p(o);
   }
 
-  function _inherits$s(subClass, superClass) {
+  function _inherits$p(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -60977,16 +59887,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$s(subClass, superClass);
+    if (superClass) _setPrototypeOf$p(subClass, superClass);
   }
 
-  function _setPrototypeOf$s(o, p) {
-    _setPrototypeOf$s = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$p(o, p) {
+    _setPrototypeOf$p = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$s(o, p);
+    return _setPrototypeOf$p(o, p);
   }
   /**
       @class Treemap
@@ -60995,7 +59905,7 @@
   */
 
   var Treemap = /*#__PURE__*/function (_Viz) {
-    _inherits$s(Treemap, _Viz);
+    _inherits$p(Treemap, _Viz);
     /**
       @memberof Treemap
       @desc Invoked when creating a new class instance, and sets any default parameters.
@@ -61006,9 +59916,9 @@
     function Treemap() {
       var _this;
 
-      _classCallCheck$v(this, Treemap);
+      _classCallCheck$s(this, Treemap);
 
-      _this = _possibleConstructorReturn$s(this, _getPrototypeOf$s(Treemap).call(this));
+      _this = _possibleConstructorReturn$p(this, _getPrototypeOf$p(Treemap).call(this));
       _this._layoutPadding = 1;
 
       _this._legendSort = function (a, b) {
@@ -61062,12 +59972,12 @@
     */
 
 
-    _createClass$q(Treemap, [{
+    _createClass$o(Treemap, [{
       key: "_draw",
       value: function _draw(callback) {
         var _this2 = this;
 
-        _get$b(_getPrototypeOf$s(Treemap.prototype), "_draw", this).call(this, callback);
+        _get$9(_getPrototypeOf$p(Treemap.prototype), "_draw", this).call(this, callback);
 
         var nestedData = nest();
 
@@ -62130,27 +61040,27 @@
     return force;
   }
 
-  function _typeof$x(obj) {
+  function _typeof$u(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$x = function _typeof$1(obj) {
+      _typeof$u = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$x = function _typeof$1(obj) {
+      _typeof$u = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$x(obj);
+    return _typeof$u(obj);
   }
 
-  function _classCallCheck$w(instance, Constructor) {
+  function _classCallCheck$t(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties$r(target, props) {
+  function _defineProperties$p(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -62160,21 +61070,21 @@
     }
   }
 
-  function _createClass$r(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$r(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$r(Constructor, staticProps);
+  function _createClass$p(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$p(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties$p(Constructor, staticProps);
     return Constructor;
   }
 
-  function _possibleConstructorReturn$t(self, call) {
-    if (call && (_typeof$x(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$q(self, call) {
+    if (call && (_typeof$u(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$t(self);
+    return _assertThisInitialized$q(self);
   }
 
-  function _assertThisInitialized$t(self) {
+  function _assertThisInitialized$q(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -62182,12 +61092,12 @@
     return self;
   }
 
-  function _get$c(target, property, receiver) {
+  function _get$a(target, property, receiver) {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$c = Reflect.get;
+      _get$a = Reflect.get;
     } else {
-      _get$c = function _get(target, property, receiver) {
-        var base = _superPropBase$c(target, property);
+      _get$a = function _get(target, property, receiver) {
+        var base = _superPropBase$a(target, property);
 
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -62200,26 +61110,26 @@
       };
     }
 
-    return _get$c(target, property, receiver || target);
+    return _get$a(target, property, receiver || target);
   }
 
-  function _superPropBase$c(object, property) {
+  function _superPropBase$a(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$t(object);
+      object = _getPrototypeOf$q(object);
       if (object === null) break;
     }
 
     return object;
   }
 
-  function _getPrototypeOf$t(o) {
-    _getPrototypeOf$t = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$q(o) {
+    _getPrototypeOf$q = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$t(o);
+    return _getPrototypeOf$q(o);
   }
 
-  function _inherits$t(subClass, superClass) {
+  function _inherits$q(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -62231,16 +61141,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$t(subClass, superClass);
+    if (superClass) _setPrototypeOf$q(subClass, superClass);
   }
 
-  function _setPrototypeOf$t(o, p) {
-    _setPrototypeOf$t = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$q(o, p) {
+    _setPrototypeOf$q = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$t(o, p);
+    return _setPrototypeOf$q(o, p);
   }
   /**
       @class Network
@@ -62249,7 +61159,7 @@
   */
 
   var Network = /*#__PURE__*/function (_Viz) {
-    _inherits$t(Network, _Viz);
+    _inherits$q(Network, _Viz);
     /**
         @memberof Network
         @desc Invoked when creating a new class instance, and sets any default parameters.
@@ -62260,9 +61170,9 @@
     function Network() {
       var _this;
 
-      _classCallCheck$w(this, Network);
+      _classCallCheck$t(this, Network);
 
-      _this = _possibleConstructorReturn$t(this, _getPrototypeOf$t(Network).call(this));
+      _this = _possibleConstructorReturn$q(this, _getPrototypeOf$q(Network).call(this));
       _this._links = [];
       _this._linkSize = constant$3(1);
       _this._linkSizeMin = 1;
@@ -62274,12 +61184,12 @@
         _this._tooltipClass.data([]).render();
 
         if (_this._hover && _this._drawDepth >= _this._groupBy.length - 1) {
-          var id = "".concat(_this._nodegroupBy && _this._nodegroupBy[_this._drawDepth](d, i) ? _this._nodegroupBy[_this._drawDepth](d, i) : _this._id(d, i));
+          var id = "".concat(_this._nodeGroupBy && _this._nodeGroupBy[_this._drawDepth](d, i) ? _this._nodeGroupBy[_this._drawDepth](d, i) : _this._id(d, i));
 
           if (_this._focus && _this._focus === id) {
             _this.active(false);
 
-            _this._on.mouseenter.bind(_assertThisInitialized$t(_this))(d, i);
+            _this._on.mouseenter.bind(_assertThisInitialized$q(_this))(d, i);
 
             _this._focus = undefined;
 
@@ -62369,9 +61279,9 @@
             _this._zoomToBounds([[xDomain[0], yDomain[0]], [xDomain[1], yDomain[1]]]);
           }
 
-          _this._on.mouseenter.bind(_assertThisInitialized$t(_this))(d, i);
+          _this._on.mouseenter.bind(_assertThisInitialized$q(_this))(d, i);
 
-          _this._on["mousemove.legend"].bind(_assertThisInitialized$t(_this))(d, i);
+          _this._on["mousemove.legend"].bind(_assertThisInitialized$q(_this))(d, i);
         }
       };
 
@@ -62385,7 +61295,7 @@
 
       _this._on["mousemove.shape"] = function (d, i) {
         defaultMouseMove(d, i);
-        var id = "".concat(_this._nodegroupBy && _this._nodegroupBy[_this._drawDepth](d, i) ? _this._nodegroupBy[_this._drawDepth](d, i) : _this._id(d, i)),
+        var id = "".concat(_this._nodeGroupBy && _this._nodeGroupBy[_this._drawDepth](d, i) ? _this._nodeGroupBy[_this._drawDepth](d, i) : _this._id(d, i)),
             links = _this._linkLookup[id],
             node = _this._nodeLookup[id];
         var filterIds = [id];
@@ -62437,12 +61347,12 @@
     */
 
 
-    _createClass$r(Network, [{
+    _createClass$p(Network, [{
       key: "_draw",
       value: function _draw(callback) {
         var _this2 = this;
 
-        _get$c(_getPrototypeOf$t(Network.prototype), "_draw", this).call(this, callback);
+        _get$a(_getPrototypeOf$q(Network.prototype), "_draw", this).call(this, callback);
 
         var height = this._height - this._margin.top - this._margin.bottom,
             transform = "translate(".concat(this._margin.left, ", ").concat(this._margin.top, ")"),
@@ -62455,7 +61365,7 @@
         }, {});
 
         var nodes = this._nodes.reduce(function (obj, d, i) {
-          obj[_this2._nodegroupBy ? _this2._nodegroupBy[_this2._drawDepth](d, i) : d.id] = d;
+          obj[_this2._nodeGroupBy ? _this2._nodeGroupBy[_this2._drawDepth](d, i) : d.id] = d;
           return obj;
         }, {});
 
@@ -62486,7 +61396,7 @@
         });
 
         var links = this._links.map(function (l) {
-          var referenceType = _typeof$x(l.source);
+          var referenceType = _typeof$u(l.source);
 
           return {
             size: _this2._linkSize(l),
@@ -62766,13 +61676,13 @@
       */
 
     }, {
-      key: "nodegroupBy",
-      value: function nodegroupBy(_) {
+      key: "nodeGroupBy",
+      value: function nodeGroupBy(_) {
         var _this3 = this;
 
-        if (!arguments.length) return this._nodegroupBy;
+        if (!arguments.length) return this._nodeGroupBy;
         if (!(_ instanceof Array)) _ = [_];
-        return this._nodegroupBy = _.map(function (k) {
+        return this._nodeGroupBy = _.map(function (k) {
           if (typeof k === "function") return k;else {
             if (!_this3._aggs[k]) {
               _this3._aggs[k] = function (a) {
@@ -62900,1591 +61810,6 @@
     }]);
 
     return Network;
-  }(Viz);
-
-  function _typeof$y(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$y = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$y = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$y(obj);
-  }
-
-  function _classCallCheck$x(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties$s(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass$s(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$s(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$s(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _possibleConstructorReturn$u(self, call) {
-    if (call && (_typeof$y(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$u(self);
-  }
-
-  function _assertThisInitialized$u(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _get$d(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$d = Reflect.get;
-    } else {
-      _get$d = function _get(target, property, receiver) {
-        var base = _superPropBase$d(target, property);
-
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
-    }
-
-    return _get$d(target, property, receiver || target);
-  }
-
-  function _superPropBase$d(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$u(object);
-      if (object === null) break;
-    }
-
-    return object;
-  }
-
-  function _getPrototypeOf$u(o) {
-    _getPrototypeOf$u = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$u(o);
-  }
-
-  function _inherits$u(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$u(subClass, superClass);
-  }
-
-  function _setPrototypeOf$u(o, p) {
-    _setPrototypeOf$u = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$u(o, p);
-  }
-  /**
-      @class Rings
-      @extends external:Viz
-      @desc Creates a ring visualization based on a defined set of nodes and edges. [Click here](http://d3po.org/examples/d3po-network/simple-rings/) for help getting started using the Rings class.
-  */
-
-  var Rings = /*#__PURE__*/function (_Viz) {
-    _inherits$u(Rings, _Viz);
-    /**
-        @memberof Rings
-        @desc Invoked when creating a new class instance, and sets any default parameters.
-        @private
-    */
-
-
-    function Rings() {
-      var _this;
-
-      _classCallCheck$x(this, Rings);
-
-      _this = _possibleConstructorReturn$u(this, _getPrototypeOf$u(Rings).call(this));
-      _this._links = [];
-      _this._linkSize = constant$3(1);
-      _this._linkSizeMin = 1;
-      _this._linkSizeScale = "sqrt";
-      _this._noDataMessage = false;
-      _this._nodes = [];
-
-      _this._on.mouseenter = function () {};
-
-      _this._on["mouseleave.shape"] = function () {
-        _this.hover(false);
-      };
-
-      var defaultMouseMove = _this._on["mousemove.shape"];
-
-      _this._on["mousemove.shape"] = function (d, i) {
-        defaultMouseMove(d, i);
-
-        if (_this._focus && _this._focus === d.id) {
-          _this.hover(false);
-
-          _this._on.mouseenter.bind(_assertThisInitialized$u(_this))(d, i);
-
-          _this._focus = undefined;
-        } else {
-          var id = _this._nodegroupBy && _this._nodegroupBy[_this._drawDepth](d, i) ? _this._nodegroupBy[_this._drawDepth](d, i) : _this._id(d, i),
-              links = _this._linkLookup[id],
-              node = _this._nodeLookup[id];
-          var filterIds = [node.id];
-          var xDomain = [node.x - node.r, node.x + node.r],
-              yDomain = [node.y - node.r, node.y + node.r];
-          links.forEach(function (l) {
-            filterIds.push(l.id);
-            if (l.x - l.r < xDomain[0]) xDomain[0] = l.x - l.r;
-            if (l.x + l.r > xDomain[1]) xDomain[1] = l.x + l.r;
-            if (l.y - l.r < yDomain[0]) yDomain[0] = l.y - l.r;
-            if (l.y + l.r > yDomain[1]) yDomain[1] = l.y + l.r;
-          });
-
-          _this.hover(function (h, x) {
-            if (h.source && h.target) return h.source.id === node.id || h.target.id === node.id;else return filterIds.includes(_this._ids(h, x)[_this._drawDepth]);
-          });
-        }
-      };
-
-      _this._on["click.shape"] = function (d) {
-        _this._center = d.id;
-
-        _this._draw();
-      };
-
-      _this._sizeMin = 5;
-      _this._sizeScale = "sqrt";
-      _this._shape = constant$3("Circle");
-      _this._shapeConfig = assign(_this._shapeConfig, {
-        ariaLabel: function ariaLabel(d, i) {
-          var validSize = _this._size ? ", ".concat(_this._size(d, i)) : "";
-          return "".concat(_this._drawLabel(d, i)).concat(validSize, ".");
-        },
-        labelConfig: {
-          duration: 0,
-          fontMin: 1,
-          fontResize: true,
-          labelPadding: 0,
-          textAnchor: "middle",
-          verticalAlign: "middle"
-        },
-        Path: {
-          fill: "none",
-          label: false,
-          stroke: "#eee",
-          strokeWidth: 1
-        }
-      });
-      return _this;
-    }
-    /**
-        Extends the draw behavior of the abstract Viz class.
-        @private
-    */
-
-
-    _createClass$s(Rings, [{
-      key: "_draw",
-      value: function _draw(callback) {
-        var _this2 = this;
-
-        _get$d(_getPrototypeOf$u(Rings.prototype), "_draw", this).call(this, callback);
-
-        var data = this._filteredData.reduce(function (obj, d, i) {
-          obj[_this2._id(d, i)] = d;
-          return obj;
-        }, {});
-
-        var nodes = this._nodes;
-
-        if (!this._nodes.length && this._links.length) {
-          var nodeIds = Array.from(new Set(this._links.reduce(function (ids, link) {
-            return ids.concat([link.source, link.target]);
-          }, [])));
-          nodes = nodeIds.map(function (node) {
-            return _typeof$y(node) === "object" ? node : {
-              id: node
-            };
-          });
-        }
-
-        nodes = nodes.reduce(function (obj, d, i) {
-          obj[_this2._nodegroupBy ? _this2._nodegroupBy[_this2._drawDepth](d, i) : _this2._id(d, i)] = d;
-          return obj;
-        }, {});
-        nodes = Array.from(new Set(Object.keys(data).concat(Object.keys(nodes)))).map(function (id, i) {
-          var d = data[id],
-              n = nodes[id];
-          if (n === undefined) return false;
-          return {
-            __d3po__: true,
-            data: d || n,
-            i: i,
-            id: id,
-            node: n,
-            shape: d !== undefined && _this2._shape(d) !== undefined ? _this2._shape(d) : _this2._shape(n)
-          };
-        }).filter(function (n) {
-          return n;
-        });
-        var nodeLookup = this._nodeLookup = nodes.reduce(function (obj, d) {
-          obj[d.id] = d;
-          return obj;
-        }, {});
-
-        var links = this._links.map(function (link) {
-          var check = ["source", "target"];
-          var edge = check.reduce(function (result, check) {
-            result[check] = typeof link[check] === "number" ? nodes[link[check]] : nodeLookup[link[check].id || link[check]];
-            return result;
-          }, {});
-          edge.size = _this2._linkSize(link);
-          return edge;
-        });
-
-        var linkMap = links.reduce(function (map, link) {
-          if (!map[link.source.id]) {
-            map[link.source.id] = [];
-          }
-
-          map[link.source.id].push(link);
-
-          if (!map[link.target.id]) {
-            map[link.target.id] = [];
-          }
-
-          map[link.target.id].push(link);
-          return map;
-        }, {});
-        var height = this._height - this._margin.top - this._margin.bottom,
-            transform = "translate(".concat(this._margin.left, ", ").concat(this._margin.top, ")"),
-            transition = this._transition,
-            width = this._width - this._margin.left - this._margin.right;
-        var edges = [],
-            radius = min([height, width]) / 2,
-            ringWidth = radius / 3;
-        var primaryRing = ringWidth,
-            secondaryRing = ringWidth * 2;
-        var center = nodeLookup[this._center];
-        center.x = width / 2;
-        center.y = height / 2;
-        center.r = this._sizeMin ? max([this._sizeMin, primaryRing * .65]) : this._sizeMax ? min([this._sizeMax, primaryRing * .65]) : primaryRing * .65;
-        var claimed = [center],
-            primaries = [];
-
-        linkMap[this._center].forEach(function (edge) {
-          var node = edge.source.id === _this2._center ? edge.target : edge.source;
-          node.edges = linkMap[node.id].filter(function (link) {
-            return link.source.id !== _this2._center || link.target.id !== _this2._center;
-          });
-          node.edge = edge;
-          claimed.push(node);
-          primaries.push(node);
-        });
-
-        primaries.sort(function (a, b) {
-          return a.edges.length - b.edges.length;
-        });
-        var secondaries = [];
-        var totalEndNodes = 0;
-        primaries.forEach(function (p) {
-          var primaryId = p.id;
-          p.edges = p.edges.filter(function (edge) {
-            return !claimed.includes(edge.source) && edge.target.id === primaryId || !claimed.includes(edge.target) && edge.source.id === primaryId;
-          });
-          totalEndNodes += p.edges.length || 1;
-          p.edges.forEach(function (edge) {
-            var source = edge.source,
-                target = edge.target;
-            var claim = target.id === primaryId ? source : target;
-            claimed.push(claim);
-          });
-        });
-        var tau = Math.PI * 2;
-        var offset = 0;
-        primaries.forEach(function (p, i) {
-          var children = p.edges.length || 1;
-          var space = tau / totalEndNodes * children;
-
-          if (i === 0) {
-            offset -= space / 2;
-          }
-
-          var angle = offset + space / 2 - tau / 4;
-          p.radians = angle;
-          p.x = width / 2 + primaryRing * Math.cos(angle);
-          p.y = height / 2 + primaryRing * Math.sin(angle);
-          offset += space;
-          p.edges.forEach(function (edge, i) {
-            var node = edge.source.id === p.id ? edge.target : edge.source;
-            var s = tau / totalEndNodes;
-            var a = angle - s * children / 2 + s / 2 + s * i;
-            node.radians = a;
-            node.x = width / 2 + secondaryRing * Math.cos(a);
-            node.y = height / 2 + secondaryRing * Math.sin(a);
-            secondaries.push(node);
-          });
-        });
-        var primaryDistance = ringWidth / 2;
-        var secondaryDistance = ringWidth / 4;
-        var primaryMax = primaryDistance / 2 - 4;
-
-        if (primaryDistance / 2 - 4 < 8) {
-          primaryMax = min([primaryDistance / 2, 8]);
-        }
-
-        var secondaryMax = secondaryDistance / 2 - 4;
-
-        if (secondaryDistance / 2 - 4 < 4) {
-          secondaryMax = min([secondaryDistance / 2, 4]);
-        }
-
-        if (secondaryMax > ringWidth / 10) {
-          secondaryMax = ringWidth / 10;
-        }
-
-        if (secondaryMax > primaryMax && secondaryMax > 10) {
-          secondaryMax = primaryMax * .75;
-        }
-
-        if (primaryMax > secondaryMax * 1.5) {
-          primaryMax = secondaryMax * 1.5;
-        }
-
-        primaryMax = Math.floor(primaryMax);
-        secondaryMax = Math.floor(secondaryMax);
-        var radiusFn;
-
-        if (this._size) {
-          var domain = extent(data, function (d) {
-            return d.size;
-          });
-
-          if (domain[0] === domain[1]) {
-            domain[0] = 0;
-          }
-
-          radiusFn = linear$1().domain(domain).rangeRound([3, min([primaryMax, secondaryMax])]);
-          var val = center.size;
-          center.r = radiusFn(val);
-        } else {
-          radiusFn = linear$1().domain([1, 2]).rangeRound([primaryMax, secondaryMax]);
-        }
-
-        secondaries.forEach(function (s) {
-          s.ring = 2;
-          var val = _this2._size ? s.size : 2;
-          s.r = _this2._sizeMin ? max([_this2._sizeMin, radiusFn(val)]) : _this2._sizeMax ? min([_this2._sizeMax, radiusFn(val)]) : radiusFn(val);
-        });
-        primaries.forEach(function (p) {
-          p.ring = 1;
-          var val = _this2._size ? p.size : 1;
-          p.r = _this2._sizeMin ? max([_this2._sizeMin, radiusFn(val)]) : _this2._sizeMax ? min([_this2._sizeMax, radiusFn(val)]) : radiusFn(val);
-        });
-        nodes = [center].concat(primaries).concat(secondaries);
-        primaries.forEach(function (p) {
-          var check = ["source", "target"];
-          var edge = p.edge;
-          check.forEach(function (node) {
-            edge[node] = nodes.find(function (n) {
-              return n.id === edge[node].id;
-            });
-          });
-          edges.push(edge);
-          linkMap[p.id].forEach(function (edge) {
-            var node = edge.source.id === p.id ? edge.target : edge.source;
-
-            if (node.id !== center.id) {
-              var target = secondaries.find(function (s) {
-                return s.id === node.id;
-              });
-
-              if (!target) {
-                target = primaries.find(function (s) {
-                  return s.id === node.id;
-                });
-              }
-
-              if (target) {
-                edge.spline = true;
-                var centerX = width / 2;
-                var centerY = height / 2;
-                var middleRing = primaryRing + (secondaryRing - primaryRing) * 0.5;
-                var _check = ["source", "target"];
-
-                _check.forEach(function (node, i) {
-                  edge["".concat(node, "X")] = edge[node].x + Math.cos(edge[node].ring === 2 ? edge[node].radians + Math.PI : edge[node].radians) * edge[node].r;
-                  edge["".concat(node, "Y")] = edge[node].y + Math.sin(edge[node].ring === 2 ? edge[node].radians + Math.PI : edge[node].radians) * edge[node].r;
-                  edge["".concat(node, "BisectX")] = centerX + middleRing * Math.cos(edge[node].radians);
-                  edge["".concat(node, "BisectY")] = centerY + middleRing * Math.sin(edge[node].radians);
-                  edge[node] = nodes.find(function (n) {
-                    return n.id === edge[node].id;
-                  });
-                  if (edge[node].edges === undefined) edge[node].edges = {};
-                  var oppId = i === 0 ? edge.target.id : edge.source.id;
-
-                  if (edge[node].id === p.id) {
-                    edge[node].edges[oppId] = {
-                      angle: p.radians + Math.PI,
-                      radius: ringWidth / 2
-                    };
-                  } else {
-                    edge[node].edges[oppId] = {
-                      angle: target.radians,
-                      radius: ringWidth / 2
-                    };
-                  }
-                });
-
-                edges.push(edge);
-              }
-            }
-          });
-        });
-        nodes.forEach(function (node) {
-          if (node.id !== _this2._center) {
-            var fontSize = _this2._shapeConfig.labelConfig.fontSize && _this2._shapeConfig.labelConfig.fontSize(node) || 11;
-            var lineHeight = fontSize * 1.4;
-
-            var _height = lineHeight * 2;
-
-            var padding = 5;
-
-            var _width = ringWidth - node.r;
-
-            var angle = node.radians * (180 / Math.PI);
-            var x = node.r + padding;
-            var textAnchor = "start";
-
-            if (angle < -90 || angle > 90) {
-              x = -node.r - _width - padding;
-              textAnchor = "end";
-              angle += 180;
-            }
-
-            node.labelBounds = {
-              x: x,
-              y: -lineHeight / 2,
-              width: _width,
-              height: _height
-            };
-            node.rotate = angle;
-            node.textAnchor = textAnchor;
-          } else {
-            node.labelBounds = {
-              x: -primaryRing / 2,
-              y: -primaryRing / 2,
-              width: primaryRing,
-              height: primaryRing
-            };
-          }
-        });
-        this._linkLookup = links.reduce(function (obj, d) {
-          if (!obj[d.source.id]) obj[d.source.id] = [];
-          obj[d.source.id].push(d.target);
-          if (!obj[d.target.id]) obj[d.target.id] = [];
-          obj[d.target.id].push(d.source);
-          return obj;
-        }, {});
-        var strokeExtent = extent(links, function (d) {
-          return d.size;
-        });
-
-        if (strokeExtent[0] !== strokeExtent[1]) {
-          var _radius = min(nodes, function (d) {
-            return d.r;
-          });
-
-          var strokeScale = scales["scale".concat(this._linkSizeScale.charAt(0).toUpperCase()).concat(this._linkSizeScale.slice(1))]().domain(strokeExtent).range([this._linkSizeMin, _radius]);
-          links.forEach(function (link) {
-            link.size = strokeScale(link.size);
-          });
-        }
-
-        var linkConfig = configPrep.bind(this)(this._shapeConfig, "edge", "Path");
-        delete linkConfig.on;
-
-        this._shapes.push(new Path$1().config(linkConfig).strokeWidth(function (d) {
-          return d.size;
-        }).id(function (d) {
-          return "".concat(d.source.id, "_").concat(d.target.id);
-        }).d(function (d) {
-          return d.spline ? "M".concat(d.sourceX, ",").concat(d.sourceY, "C").concat(d.sourceBisectX, ",").concat(d.sourceBisectY, " ").concat(d.targetBisectX, ",").concat(d.targetBisectY, " ").concat(d.targetX, ",").concat(d.targetY) : "M".concat(d.source.x, ",").concat(d.source.y, " ").concat(d.target.x, ",").concat(d.target.y);
-        }).data(edges).select(elem("g.d3po-rings-links", {
-          parent: this._select,
-          transition: transition,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).render());
-
-        var that = this;
-        var shapeConfig = {
-          label: function label(d) {
-            return nodes.length <= _this2._dataCutoff || _this2._hover && _this2._hover(d) || _this2._active && _this2._active(d) ? _this2._drawLabel(d.data || d.node, d.i) : false;
-          },
-          labelBounds: function labelBounds(d) {
-            return d.labelBounds;
-          },
-          labelConfig: {
-            fontColor: function fontColor(d) {
-              return d.id === _this2._center ? configPrep.bind(that)(that._shapeConfig, "shape", d.key).labelConfig.fontColor(d) : colorLegible(configPrep.bind(that)(that._shapeConfig, "shape", d.key).fill(d));
-            },
-            fontResize: function fontResize(d) {
-              return d.id === _this2._center;
-            },
-            padding: 0,
-            textAnchor: function textAnchor(d) {
-              return nodeLookup[d.id].textAnchor || configPrep.bind(that)(that._shapeConfig, "shape", d.key).labelConfig.textAnchor;
-            },
-            verticalAlign: function verticalAlign(d) {
-              return d.id === _this2._center ? "middle" : "top";
-            }
-          },
-          rotate: function rotate(d) {
-            return nodeLookup[d.id].rotate || 0;
-          },
-          select: elem("g.d3po-rings-nodes", {
-            parent: this._select,
-            transition: transition,
-            enter: {
-              transform: transform
-            },
-            update: {
-              transform: transform
-            }
-          }).node()
-        };
-        nest().key(function (d) {
-          return d.shape;
-        }).entries(nodes).forEach(function (d) {
-          _this2._shapes.push(new shapes$2[d.key]().config(configPrep.bind(_this2)(_this2._shapeConfig, "shape", d.key)).config(shapeConfig).data(d.values).render());
-        });
-        return this;
-      }
-      /**
-       @memberof Rings
-       @desc Sets the center node to be the node with the given id.
-       @param {String}
-       @chainable
-       */
-
-    }, {
-      key: "center",
-      value: function center(_) {
-        return arguments.length ? (this._center = _, this) : this._center;
-      }
-      /**
-          @memberof Rings
-          @desc If *value* is specified, sets the hover method to the specified function and returns the current class instance.
-          @param {Function} [*value*]
-          @chainable
-       */
-
-    }, {
-      key: "hover",
-      value: function hover(_) {
-        this._hover = _;
-
-        this._shapes.forEach(function (s) {
-          return s.hover(_);
-        });
-
-        if (this._legend) this._legendClass.hover(_);
-        return this;
-      }
-      /**
-          @memberof Rings
-          @desc A predefined *Array* of edges that connect each object passed to the [node](#Rings.node) method. The `source` and `target` keys in each link need to map to the nodes in one of three ways:
-      1. The index of the node in the nodes array (as in [this](http://d3po.org/examples/d3po-network/getting-started/) example).
-      2. The actual node *Object* itself.
-      3. A *String* value matching the `id` of the node.
-      The value passed should either be an *Array* of data or a *String* representing a filepath or URL to be loaded. An optional formatting function can be passed as a second argument to this method. This custom function will be passed the data that has been loaded, as long as there are no errors. This function should return the final links *Array*.
-          @param {Array|String} *links* = []
-          @param {Function} [*formatter*]
-          @chainable
-      */
-
-    }, {
-      key: "links",
-      value: function links(_, f) {
-        if (arguments.length) {
-          var prev = this._queue.find(function (q) {
-            return q[3] === "links";
-          });
-
-          var d = [load.bind(this), _, f, "links"];
-          if (prev) this._queue[this._queue.indexOf(prev)] = d;else this._queue.push(d);
-          return this;
-        }
-
-        return this._links;
-      }
-      /**
-          @memberof Network
-          @desc Defines the thickness of the links connecting each node. The value provided can be either a pixel Number to be used for all links, or an accessor function that returns a specific data value to be used in an automatically calculated linear scale.
-          @param {Function|Name} [*value* = 1]
-          @chainable
-      */
-
-    }, {
-      key: "linkSize",
-      value: function linkSize(_) {
-        return arguments.length ? (this._linkSize = typeof _ === "function" ? _ : constant$3(_), this) : this._linkSize;
-      }
-      /**
-          @memberof Network
-          @desc Defines the minimum pixel stroke width used in link sizing.
-          @param {Number} [*value* = 2]
-          @chainable
-      */
-
-    }, {
-      key: "linkSizeMin",
-      value: function linkSizeMin(_) {
-        return arguments.length ? (this._linkSizeMin = _, this) : this._linkSizeMin;
-      }
-      /**
-          @memberof Network
-          @desc Sets the specific type of [continuous d3-scale](https://github.com/d3/d3-scale#continuous-scales) used when calculating the pixel size of links in the network.
-          @param {String} [*value* = "sqrt"]
-          @chainable
-      */
-
-    }, {
-      key: "linkSizeScale",
-      value: function linkSizeScale(_) {
-        return arguments.length ? (this._linkSizeScale = _, this) : this._linkSizeScale;
-      }
-      /**
-          @memberof Rings
-          @desc If *value* is specified, sets the node group accessor(s) to the specified string, function, or array of values and returns the current class instance. This method overrides the default .groupBy() function from being used with the data passed to .nodes(). If *value* is not specified, returns the current node group accessor.
-          @param {String|Function|Array} [*value* = undefined]
-          @chainable
-      */
-
-    }, {
-      key: "nodegroupBy",
-      value: function nodegroupBy(_) {
-        var _this3 = this;
-
-        if (!arguments.length) return this._nodegroupBy;
-        if (!(_ instanceof Array)) _ = [_];
-        return this._nodegroupBy = _.map(function (k) {
-          if (typeof k === "function") return k;else {
-            if (!_this3._aggs[k]) {
-              _this3._aggs[k] = function (a) {
-                var v = Array.from(new Set(a));
-                return v.length === 1 ? v[0] : v;
-              };
-            }
-
-            return accessor(k);
-          }
-        }), this;
-      }
-      /**
-          @memberof Rings
-          @desc The list of nodes to be used for drawing the rings network. The value passed should either be an *Array* of data or a *String* representing a filepath or URL to be loaded.
-      Additionally, a custom formatting function can be passed as a second argument to this method. This custom function will be passed the data that has been loaded, as long as there are no errors. This function should return the final node *Array*.
-          @param {Array|String} *nodes* = []
-          @param {Function} [*formatter*]
-          @chainable
-      */
-
-    }, {
-      key: "nodes",
-      value: function nodes(_, f) {
-        if (arguments.length) {
-          var prev = this._queue.find(function (q) {
-            return q[3] === "nodes";
-          });
-
-          var d = [load.bind(this), _, f, "nodes"];
-          if (prev) this._queue[this._queue.indexOf(prev)] = d;else this._queue.push(d);
-          return this;
-        }
-
-        return this._nodes;
-      }
-      /**
-          @memberof Rings
-          @desc If *value* is specified, sets the size accessor to the specified function or data key and returns the current class instance. If *value* is not specified, returns the current size accessor.
-          @param {Function|String} [*value*]
-          @chainable
-      */
-
-    }, {
-      key: "size",
-      value: function size(_) {
-        return arguments.length ? (this._size = typeof _ === "function" || !_ ? _ : accessor(_), this) : this._size;
-      }
-      /**
-          @memberof Rings
-          @desc If *value* is specified, sets the size scale maximum to the specified number and returns the current class instance. If *value* is not specified, returns the current size scale maximum. By default, the maximum size is determined by half the distance of the two closest nodes.
-          @param {Number} [*value*]
-          @chainable
-      */
-
-    }, {
-      key: "sizeMax",
-      value: function sizeMax(_) {
-        return arguments.length ? (this._sizeMax = _, this) : this._sizeMax;
-      }
-      /**
-          @memberof Rings
-          @desc If *value* is specified, sets the size scale minimum to the specified number and returns the current class instance. If *value* is not specified, returns the current size scale minimum.
-          @param {Number} [*value* = 5]
-          @chainable
-      */
-
-    }, {
-      key: "sizeMin",
-      value: function sizeMin(_) {
-        return arguments.length ? (this._sizeMin = _, this) : this._sizeMin;
-      }
-      /**
-          @memberof Rings
-          @desc If *value* is specified, sets the size scale to the specified string and returns the current class instance. If *value* is not specified, returns the current size scale.
-          @param {String} [*value* = "sqrt"]
-          @chainable
-      */
-
-    }, {
-      key: "sizeScale",
-      value: function sizeScale(_) {
-        return arguments.length ? (this._sizeScale = _, this) : this._sizeScale;
-      }
-    }]);
-
-    return Rings;
-  }(Viz);
-
-  function targetDepth(d) {
-    return d.target.depth;
-  }
-
-  function left(node) {
-    return node.depth;
-  }
-  function right(node, n) {
-    return n - 1 - node.height;
-  }
-  function justify(node, n) {
-    return node.sourceLinks.length ? node.depth : n - 1;
-  }
-  function center(node) {
-    return node.targetLinks.length ? node.depth : node.sourceLinks.length ? min(node.sourceLinks, targetDepth) - 1 : 0;
-  }
-
-  function constant$b(x) {
-    return function () {
-      return x;
-    };
-  }
-
-  function ascendingSourceBreadth(a, b) {
-    return ascendingBreadth(a.source, b.source) || a.index - b.index;
-  }
-
-  function ascendingTargetBreadth(a, b) {
-    return ascendingBreadth(a.target, b.target) || a.index - b.index;
-  }
-
-  function ascendingBreadth(a, b) {
-    return a.y0 - b.y0;
-  }
-
-  function value(d) {
-    return d.value;
-  }
-
-  function nodeCenter(node) {
-    return (node.y0 + node.y1) / 2;
-  }
-
-  function weightedSource(link) {
-    return nodeCenter(link.source) * link.value;
-  }
-
-  function weightedTarget(link) {
-    return nodeCenter(link.target) * link.value;
-  }
-
-  function defaultId(d) {
-    return d.index;
-  }
-
-  function defaultNodes(graph) {
-    return graph.nodes;
-  }
-
-  function defaultLinks(graph) {
-    return graph.links;
-  }
-
-  function find$2(nodeById, id) {
-    var node = nodeById.get(id);
-    if (!node) throw new Error("missing: " + id);
-    return node;
-  }
-
-  function sankey () {
-    var x0 = 0,
-        y0 = 0,
-        x1 = 1,
-        y1 = 1,
-        // extent
-    dx = 24,
-        // nodeWidth
-    py = 8,
-        // nodePadding
-    id = defaultId,
-        align = justify,
-        nodes = defaultNodes,
-        links = defaultLinks,
-        iterations = 32;
-
-    function sankey() {
-      var graph = {
-        nodes: nodes.apply(null, arguments),
-        links: links.apply(null, arguments)
-      };
-      computeNodeLinks(graph);
-      computeNodeValues(graph);
-      computeNodeDepths(graph);
-      computeNodeBreadths(graph);
-      computeLinkBreadths(graph);
-      return graph;
-    }
-
-    sankey.update = function (graph) {
-      computeLinkBreadths(graph);
-      return graph;
-    };
-
-    sankey.nodeId = function (_) {
-      return arguments.length ? (id = typeof _ === "function" ? _ : constant$b(_), sankey) : id;
-    };
-
-    sankey.nodeAlign = function (_) {
-      return arguments.length ? (align = typeof _ === "function" ? _ : constant$b(_), sankey) : align;
-    };
-
-    sankey.nodeWidth = function (_) {
-      return arguments.length ? (dx = +_, sankey) : dx;
-    };
-
-    sankey.nodePadding = function (_) {
-      return arguments.length ? (py = +_, sankey) : py;
-    };
-
-    sankey.nodes = function (_) {
-      return arguments.length ? (nodes = typeof _ === "function" ? _ : constant$b(_), sankey) : nodes;
-    };
-
-    sankey.links = function (_) {
-      return arguments.length ? (links = typeof _ === "function" ? _ : constant$b(_), sankey) : links;
-    };
-
-    sankey.size = function (_) {
-      return arguments.length ? (x0 = y0 = 0, x1 = +_[0], y1 = +_[1], sankey) : [x1 - x0, y1 - y0];
-    };
-
-    sankey.extent = function (_) {
-      return arguments.length ? (x0 = +_[0][0], x1 = +_[1][0], y0 = +_[0][1], y1 = +_[1][1], sankey) : [[x0, y0], [x1, y1]];
-    };
-
-    sankey.iterations = function (_) {
-      return arguments.length ? (iterations = +_, sankey) : iterations;
-    }; // Populate the sourceLinks and targetLinks for each node.
-    // Also, if the source and target are not objects, assume they are indices.
-
-
-    function computeNodeLinks(graph) {
-      graph.nodes.forEach(function (node, i) {
-        node.index = i;
-        node.sourceLinks = [];
-        node.targetLinks = [];
-      });
-      var nodeById = map(graph.nodes, id);
-      graph.links.forEach(function (link, i) {
-        link.index = i;
-        var source = link.source,
-            target = link.target;
-        if (_typeof(source) !== "object") source = link.source = find$2(nodeById, source);
-        if (_typeof(target) !== "object") target = link.target = find$2(nodeById, target);
-        source.sourceLinks.push(link);
-        target.targetLinks.push(link);
-      });
-    } // Compute the value (size) of each node by summing the associated links.
-
-
-    function computeNodeValues(graph) {
-      graph.nodes.forEach(function (node) {
-        node.value = Math.max(sum(node.sourceLinks, value), sum(node.targetLinks, value));
-      });
-    } // Iteratively assign the depth (x-position) for each node.
-    // Nodes are assigned the maximum depth of incoming neighbors plus one;
-    // nodes with no incoming links are assigned depth zero, while
-    // nodes with no outgoing links are assigned the maximum depth.
-
-
-    function computeNodeDepths(graph) {
-      var nodes, next, x;
-
-      for (nodes = graph.nodes, next = [], x = 0; nodes.length; ++x, nodes = next, next = []) {
-        nodes.forEach(function (node) {
-          node.depth = x;
-          node.sourceLinks.forEach(function (link) {
-            if (next.indexOf(link.target) < 0) {
-              next.push(link.target);
-            }
-          });
-        });
-      }
-
-      for (nodes = graph.nodes, next = [], x = 0; nodes.length; ++x, nodes = next, next = []) {
-        nodes.forEach(function (node) {
-          node.height = x;
-          node.targetLinks.forEach(function (link) {
-            if (next.indexOf(link.source) < 0) {
-              next.push(link.source);
-            }
-          });
-        });
-      }
-
-      var kx = (x1 - x0 - dx) / (x - 1);
-      graph.nodes.forEach(function (node) {
-        node.x1 = (node.x0 = x0 + Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x)))) * kx) + dx;
-      });
-    }
-
-    function computeNodeBreadths(graph) {
-      var columns = nest().key(function (d) {
-        return d.x0;
-      }).sortKeys(ascending).entries(graph.nodes).map(function (d) {
-        return d.values;
-      }); //
-
-      initializeNodeBreadth();
-      resolveCollisions();
-
-      for (var alpha = 1, n = iterations; n > 0; --n) {
-        relaxRightToLeft(alpha *= 0.99);
-        resolveCollisions();
-        relaxLeftToRight(alpha);
-        resolveCollisions();
-      }
-
-      function initializeNodeBreadth() {
-        var ky = min(columns, function (nodes) {
-          return (y1 - y0 - (nodes.length - 1) * py) / sum(nodes, value);
-        });
-        columns.forEach(function (nodes) {
-          nodes.forEach(function (node, i) {
-            node.y1 = (node.y0 = i) + node.value * ky;
-          });
-        });
-        graph.links.forEach(function (link) {
-          link.width = link.value * ky;
-        });
-      }
-
-      function relaxLeftToRight(alpha) {
-        columns.forEach(function (nodes) {
-          nodes.forEach(function (node) {
-            if (node.targetLinks.length) {
-              var dy = (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
-              node.y0 += dy, node.y1 += dy;
-            }
-          });
-        });
-      }
-
-      function relaxRightToLeft(alpha) {
-        columns.slice().reverse().forEach(function (nodes) {
-          nodes.forEach(function (node) {
-            if (node.sourceLinks.length) {
-              var dy = (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
-              node.y0 += dy, node.y1 += dy;
-            }
-          });
-        });
-      }
-
-      function resolveCollisions() {
-        columns.forEach(function (nodes) {
-          var node,
-              dy,
-              y = y0,
-              n = nodes.length,
-              i; // Push any overlapping nodes down.
-
-          nodes.sort(ascendingBreadth);
-
-          for (i = 0; i < n; ++i) {
-            node = nodes[i];
-            dy = y - node.y0;
-            if (dy > 0) node.y0 += dy, node.y1 += dy;
-            y = node.y1 + py;
-          } // If the bottommost node goes outside the bounds, push it back up.
-
-
-          dy = y - py - y1;
-
-          if (dy > 0) {
-            y = node.y0 -= dy, node.y1 -= dy; // Push any overlapping nodes back up.
-
-            for (i = n - 2; i >= 0; --i) {
-              node = nodes[i];
-              dy = node.y1 + py - y;
-              if (dy > 0) node.y0 -= dy, node.y1 -= dy;
-              y = node.y0;
-            }
-          }
-        });
-      }
-    }
-
-    function computeLinkBreadths(graph) {
-      graph.nodes.forEach(function (node) {
-        node.sourceLinks.sort(ascendingTargetBreadth);
-        node.targetLinks.sort(ascendingSourceBreadth);
-      });
-      graph.nodes.forEach(function (node) {
-        var y0 = node.y0,
-            y1 = y0;
-        node.sourceLinks.forEach(function (link) {
-          link.y0 = y0 + link.width / 2, y0 += link.width;
-        });
-        node.targetLinks.forEach(function (link) {
-          link.y1 = y1 + link.width / 2, y1 += link.width;
-        });
-      });
-    }
-
-    return sankey;
-  }
-
-  function horizontalSource(d) {
-    return [d.source.x1, d.y0];
-  }
-
-  function horizontalTarget(d) {
-    return [d.target.x0, d.y1];
-  }
-
-  function sankeyLinkHorizontal () {
-    return linkHorizontal().source(horizontalSource).target(horizontalTarget);
-  }
-
-  function _typeof$z(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$z = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$z = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$z(obj);
-  }
-
-  function _classCallCheck$y(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties$t(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass$t(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$t(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$t(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _possibleConstructorReturn$v(self, call) {
-    if (call && (_typeof$z(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$v(self);
-  }
-
-  function _assertThisInitialized$v(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _get$e(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$e = Reflect.get;
-    } else {
-      _get$e = function _get(target, property, receiver) {
-        var base = _superPropBase$e(target, property);
-
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
-    }
-
-    return _get$e(target, property, receiver || target);
-  }
-
-  function _superPropBase$e(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$v(object);
-      if (object === null) break;
-    }
-
-    return object;
-  }
-
-  function _getPrototypeOf$v(o) {
-    _getPrototypeOf$v = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$v(o);
-  }
-
-  function _inherits$v(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$v(subClass, superClass);
-  }
-
-  function _setPrototypeOf$v(o, p) {
-    _setPrototypeOf$v = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$v(o, p);
-  }
-  var sankeyAligns = {
-    center: center,
-    justify: justify,
-    left: left,
-    right: right
-  };
-  /**
-      @class Sankey
-      @extends external:Viz
-      @desc Creates a sankey visualization based on a defined set of nodes and links. [Click here](http://d3po.org/examples/d3po-network/sankey-diagram/) for help getting started using the Sankey class.
-  */
-
-  var Sankey = /*#__PURE__*/function (_Viz) {
-    _inherits$v(Sankey, _Viz);
-    /**
-        @memberof Sankey
-        @desc Invoked when creating a new class instance, and sets any default parameters.
-        @private
-    */
-
-
-    function Sankey() {
-      var _this;
-
-      _classCallCheck$y(this, Sankey);
-
-      _this = _possibleConstructorReturn$v(this, _getPrototypeOf$v(Sankey).call(this));
-      _this._nodeId = accessor("id");
-      _this._links = accessor("links");
-      _this._linksSource = "source";
-      _this._linksTarget = "target";
-      _this._noDataMessage = false;
-      _this._nodes = accessor("nodes");
-      _this._nodeAlign = sankeyAligns.justify;
-      _this._nodePadding = 8;
-      _this._nodeWidth = 30;
-
-      _this._on.mouseenter = function () {};
-
-      _this._on["mouseleave.shape"] = function () {
-        _this.hover(false);
-      };
-
-      var defaultMouseMove = _this._on["mousemove.shape"];
-
-      _this._on["mousemove.shape"] = function (d, i) {
-        defaultMouseMove(d, i);
-
-        if (_this._focus && _this._focus === d.id) {
-          _this.hover(false);
-
-          _this._on.mouseenter.bind(_assertThisInitialized$v(_this))(d, i);
-
-          _this._focus = undefined;
-        } else {
-          var id = _this._nodeId(d, i),
-              node = _this._nodeLookup[id],
-              nodeLookup = Object.keys(_this._nodeLookup).reduce(function (all, item) {
-            all[_this._nodeLookup[item]] = !isNaN(item) ? parseInt(item, 10) : item;
-            return all;
-          }, {});
-
-          var links = _this._linkLookup[node];
-          var filterIds = [id];
-          links.forEach(function (l) {
-            filterIds.push(nodeLookup[l]);
-          });
-
-          _this.hover(function (h, x) {
-            if (h.source && h.target) {
-              return h.source.id === id || h.target.id === id;
-            } else {
-              return filterIds.includes(_this._nodeId(h, x));
-            }
-          });
-        }
-      };
-
-      _this._path = sankeyLinkHorizontal();
-      _this._sankey = sankey();
-      _this._shape = constant$3("Rect");
-      _this._shapeConfig = assign(_this._shapeConfig, {
-        Path: {
-          fill: "none",
-          hoverStyle: {
-            "stroke-width": function strokeWidth(d) {
-              return Math.max(1, Math.abs(d.source.y1 - d.source.y0) * (d.value / d.source.value) - 2);
-            }
-          },
-          label: false,
-          stroke: "#DBDBDB",
-          strokeOpacity: 0.5,
-          strokeWidth: function strokeWidth(d) {
-            return Math.max(1, Math.abs(d.source.y1 - d.source.y0) * (d.value / d.source.value) - 2);
-          }
-        },
-        Rect: {}
-      });
-      _this._value = constant$3(1);
-      return _this;
-    }
-    /**
-        Extends the draw behavior of the abstract Viz class.
-        @private
-    */
-
-
-    _createClass$t(Sankey, [{
-      key: "_draw",
-      value: function _draw(callback) {
-        var _this2 = this;
-
-        _get$e(_getPrototypeOf$v(Sankey.prototype), "_draw", this).call(this, callback);
-
-        var height = this._height - this._margin.top - this._margin.bottom,
-            width = this._width - this._margin.left - this._margin.right;
-
-        var _nodes = Array.isArray(this._nodes) ? this._nodes : this._links.reduce(function (all, d) {
-          if (!all.includes(d[_this2._linksSource])) all.push(d[_this2._linksSource]);
-          if (!all.includes(d[_this2._linksTarget])) all.push(d[_this2._linksTarget]);
-          return all;
-        }, []).map(function (id) {
-          return {
-            id: id
-          };
-        });
-
-        var nodes = _nodes.map(function (n, i) {
-          return {
-            __d3po__: true,
-            data: n,
-            i: i,
-            id: _this2._nodeId(n, i),
-            node: n,
-            shape: "Rect"
-          };
-        });
-
-        var nodeLookup = this._nodeLookup = nodes.reduce(function (obj, d, i) {
-          obj[d.id] = i;
-          return obj;
-        }, {});
-
-        var links = this._links.map(function (link, i) {
-          var check = [_this2._linksSource, _this2._linksTarget];
-          var linkLookup = check.reduce(function (result, item) {
-            result[item] = nodeLookup[link[item]];
-            return result;
-          }, {});
-          return {
-            source: linkLookup[_this2._linksSource],
-            target: linkLookup[_this2._linksTarget],
-            value: _this2._value(link, i)
-          };
-        });
-
-        this._linkLookup = links.reduce(function (obj, d) {
-          if (!obj[d.source]) obj[d.source] = [];
-          obj[d.source].push(d.target);
-          if (!obj[d.target]) obj[d.target] = [];
-          obj[d.target].push(d.source);
-          return obj;
-        }, {});
-        var transform = "translate(".concat(this._margin.left, ", ").concat(this._margin.top, ")");
-
-        this._sankey.nodeAlign(this._nodeAlign).nodePadding(this._nodePadding).nodeWidth(this._nodeWidth).nodes(nodes).links(links).size([width, height])();
-
-        this._shapes.push(new Path$1().config(this._shapeConfig.Path).data(links).d(this._path).select(elem("g.d3po-Links", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).render());
-
-        nest().key(function (d) {
-          return d.shape;
-        }).entries(nodes).forEach(function (d) {
-          _this2._shapes.push(new shapes$2[d.key]().data(d.values).height(function (d) {
-            return d.y1 - d.y0;
-          }).width(function (d) {
-            return d.x1 - d.x0;
-          }).x(function (d) {
-            return (d.x1 + d.x0) / 2;
-          }).y(function (d) {
-            return (d.y1 + d.y0) / 2;
-          }).select(elem("g.d3po-sankey-nodes", {
-            parent: _this2._select,
-            enter: {
-              transform: transform
-            },
-            update: {
-              transform: transform
-            }
-          }).node()).config(configPrep.bind(_this2)(_this2._shapeConfig, "shape", d.key)).render());
-        });
-        return this;
-      }
-      /**
-          @memberof Sankey
-          @desc If *value* is specified, sets the hover method to the specified function and returns the current class instance.
-          @param {Function} [*value*]
-          @chainable
-       */
-
-    }, {
-      key: "hover",
-      value: function hover(_) {
-        this._hover = _;
-
-        this._shapes.forEach(function (s) {
-          return s.hover(_);
-        });
-
-        if (this._legend) this._legendClass.hover(_);
-        return this;
-      }
-      /**
-          @memberof Sankey
-          @desc A predefined *Array* of edges that connect each object passed to the [node](#Sankey.node) method. The `source` and `target` keys in each link need to map to the nodes in one of one way:
-      1. A *String* value matching the `id` of the node.
-      The value passed should be an *Array* of data. An optional formatting function can be passed as a second argument to this method. This custom function will be passed the data that has been loaded, as long as there are no errors. This function should return the final links *Array*.
-          @param {Array} *links* = []
-          @chainable
-      */
-
-    }, {
-      key: "links",
-      value: function links(_, f) {
-        if (arguments.length) {
-          var prev = this._queue.find(function (q) {
-            return q[3] === "links";
-          });
-
-          var d = [load.bind(this), _, f, "links"];
-          if (prev) this._queue[this._queue.indexOf(prev)] = d;else this._queue.push(d);
-          return this;
-        }
-
-        return this._links;
-      }
-      /**
-          @memberof Sankey
-          @desc The key inside of each link Object that references the source node.
-          @param {String} [*value* = "source"]
-          @chainable
-      */
-
-    }, {
-      key: "linksSource",
-      value: function linksSource(_) {
-        return arguments.length ? (this._linksSource = _, this) : this._linksSource;
-      }
-      /**
-          @memberof Sankey
-          @desc The key inside of each link Object that references the target node.
-          @param {String} [*value* = "target"]
-          @chainable
-      */
-
-    }, {
-      key: "linksTarget",
-      value: function linksTarget(_) {
-        return arguments.length ? (this._linksTarget = _, this) : this._linksTarget;
-      }
-      /**
-          @memberof Sankey
-          @desc Sets the nodeAlign property of the sankey layout, which can either be "left", "right", "center", or "justify".
-          @param {Function|String} [*value* = "justify"]
-          @chainable
-      */
-
-    }, {
-      key: "nodeAlign",
-      value: function nodeAlign(_) {
-        return arguments.length ? (this._nodeAlign = typeof _ === "function" ? _ : sankeyAligns[_], this) : this._nodeAlign;
-      }
-      /**
-          @memberof Sankey
-          @desc If *value* is specified, sets the node id accessor(s) to the specified array of values and returns the current class instance. If *value* is not specified, returns the current node group accessor.
-          @param {String} [*value* = "id"]
-          @chainable
-      */
-
-    }, {
-      key: "nodeId",
-      value: function nodeId(_) {
-        return arguments.length ? (this._nodeId = typeof _ === "function" ? _ : accessor(_), this) : this._nodeId;
-      }
-      /**
-          @memberof Sankey
-          @desc The list of nodes to be used for drawing the network. The value passed must be an *Array* of data.
-      Additionally, a custom formatting function can be passed as a second argument to this method. This custom function will be passed the data that has been loaded, as long as there are no errors. This function should return the final node *Array*.
-          @param {Array} *nodes* = []
-          @chainable
-      */
-
-    }, {
-      key: "nodes",
-      value: function nodes(_, f) {
-        if (arguments.length) {
-          var prev = this._queue.find(function (q) {
-            return q[3] === "nodes";
-          });
-
-          var d = [load.bind(this), _, f, "nodes"];
-          if (prev) this._queue[this._queue.indexOf(prev)] = d;else this._queue.push(d);
-          return this;
-        }
-
-        return this._nodes;
-      }
-      /**
-          @memberof Sankey
-          @desc If *value* is specified, sets the padding of the node and returns the current class instance. If *value* is not specified, returns the current nodePadding. By default, the nodePadding size is 8.
-          @param {Number} [*value* = 8]
-          @chainable
-      */
-
-    }, {
-      key: "nodePadding",
-      value: function nodePadding(_) {
-        return arguments.length ? (this._nodePadding = _, this) : this._nodePadding;
-      }
-      /**
-          @memberof Sankey
-          @desc If *value* is specified, sets the width of the node and returns the current class instance. If *value* is not specified, returns the current nodeWidth. By default, the nodeWidth size is 30.
-          @param {Number} [*value* = 30]
-          @chainable
-      */
-
-    }, {
-      key: "nodeWidth",
-      value: function nodeWidth(_) {
-        return arguments.length ? (this._nodeWidth = _, this) : this._nodeWidth;
-      }
-      /**
-          @memberof Sankey
-          @desc If *value* is specified, sets the width of the links and returns the current class instance. If *value* is not specified, returns the current value accessor.
-          @param {Function|Number} *value*
-          @example
-      function value(d) {
-      return d.value;
-      }
-      */
-
-    }, {
-      key: "value",
-      value: function value(_) {
-        return arguments.length ? (this._value = typeof _ === "function" ? _ : accessor(_), this) : this._value;
-      }
-    }]);
-
-    return Sankey;
   }(Viz);
 
   /**
@@ -64790,18 +62115,18 @@
     return [x, y];
   }
 
-  function _typeof$A(obj) {
+  function _typeof$v(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$A = function _typeof$1(obj) {
+      _typeof$v = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$A = function _typeof$1(obj) {
+      _typeof$v = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$A(obj);
+    return _typeof$v(obj);
   }
 
   function _defineProperty$5(obj, key, value) {
@@ -64819,13 +62144,13 @@
     return obj;
   }
 
-  function _classCallCheck$z(instance, Constructor) {
+  function _classCallCheck$u(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties$u(target, props) {
+  function _defineProperties$q(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -64835,21 +62160,21 @@
     }
   }
 
-  function _createClass$u(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$u(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$u(Constructor, staticProps);
+  function _createClass$q(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$q(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties$q(Constructor, staticProps);
     return Constructor;
   }
 
-  function _possibleConstructorReturn$w(self, call) {
-    if (call && (_typeof$A(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$r(self, call) {
+    if (call && (_typeof$v(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$w(self);
+    return _assertThisInitialized$r(self);
   }
 
-  function _assertThisInitialized$w(self) {
+  function _assertThisInitialized$r(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -64857,12 +62182,12 @@
     return self;
   }
 
-  function _get$f(target, property, receiver) {
+  function _get$b(target, property, receiver) {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$f = Reflect.get;
+      _get$b = Reflect.get;
     } else {
-      _get$f = function _get(target, property, receiver) {
-        var base = _superPropBase$f(target, property);
+      _get$b = function _get(target, property, receiver) {
+        var base = _superPropBase$b(target, property);
 
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -64875,26 +62200,26 @@
       };
     }
 
-    return _get$f(target, property, receiver || target);
+    return _get$b(target, property, receiver || target);
   }
 
-  function _superPropBase$f(object, property) {
+  function _superPropBase$b(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$w(object);
+      object = _getPrototypeOf$r(object);
       if (object === null) break;
     }
 
     return object;
   }
 
-  function _getPrototypeOf$w(o) {
-    _getPrototypeOf$w = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$r(o) {
+    _getPrototypeOf$r = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$w(o);
+    return _getPrototypeOf$r(o);
   }
 
-  function _inherits$w(subClass, superClass) {
+  function _inherits$r(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -64906,16 +62231,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$w(subClass, superClass);
+    if (superClass) _setPrototypeOf$r(subClass, superClass);
   }
 
-  function _setPrototypeOf$w(o, p) {
-    _setPrototypeOf$w = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$r(o, p) {
+    _setPrototypeOf$r = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$w(o, p);
+    return _setPrototypeOf$r(o, p);
   }
   /**
       @desc Logic for determining default sizes of shapes using the sizeScaleD3 internal function.
@@ -64999,7 +62324,7 @@
 
 
   var Plot = /*#__PURE__*/function (_Viz) {
-    _inherits$w(Plot, _Viz);
+    _inherits$r(Plot, _Viz);
     /**
         @memberof Plot
         @desc Invoked when creating a new class instance, and sets any default parameters.
@@ -65010,9 +62335,9 @@
     function Plot() {
       var _this;
 
-      _classCallCheck$z(this, Plot);
+      _classCallCheck$u(this, Plot);
 
-      _this = _possibleConstructorReturn$w(this, _getPrototypeOf$w(Plot).call(this));
+      _this = _possibleConstructorReturn$r(this, _getPrototypeOf$r(Plot).call(this));
       _this._annotations = [];
       _this._backgroundConfig = {
         duration: 0,
@@ -65063,7 +62388,7 @@
           }
         },
         Circle: {
-          r: defaultSize.bind(_assertThisInitialized$w(_this))
+          r: defaultSize.bind(_assertThisInitialized$r(_this))
         },
         Line: {
           fill: constant$3("none"),
@@ -65075,10 +62400,10 @@
         },
         Rect: {
           height: function height(d) {
-            return defaultSize.bind(_assertThisInitialized$w(_this))(d) * 2;
+            return defaultSize.bind(_assertThisInitialized$r(_this))(d) * 2;
           },
           width: function width(d) {
-            return defaultSize.bind(_assertThisInitialized$w(_this))(d) * 2;
+            return defaultSize.bind(_assertThisInitialized$r(_this))(d) * 2;
           }
         }
       });
@@ -65132,7 +62457,7 @@
     */
 
 
-    _createClass$u(Plot, [{
+    _createClass$q(Plot, [{
       key: "_draw",
       value: function _draw(callback) {
         var _this2 = this;
@@ -65404,7 +62729,7 @@
           xScale = "Time";
         } else if (this._discrete === "x") {
           xDomain = Array.from(new Set(data.filter(function (d) {
-            return ["number", "string"].includes(_typeof$A(d.x));
+            return ["number", "string"].includes(_typeof$v(d.x));
           }).sort(function (a, b) {
             return _this2._xSort ? _this2._xSort(a.data, b.data) : a.x - b.x;
           }).map(function (d) {
@@ -65423,7 +62748,7 @@
           x2Scale = "Time";
         } else if (this._discrete === "x") {
           x2Domain = Array.from(new Set(data.filter(function (d) {
-            return ["number", "string"].includes(_typeof$A(d.x2));
+            return ["number", "string"].includes(_typeof$v(d.x2));
           }).sort(function (a, b) {
             return _this2._x2Sort ? _this2._x2Sort(a.data, b.data) : a.x2 - b.x2;
           }).map(function (d) {
@@ -65446,7 +62771,7 @@
           yScale = "Time";
         } else if (this._discrete === "y") {
           yDomain = Array.from(new Set(data.filter(function (d) {
-            return ["number", "string"].includes(_typeof$A(d.y));
+            return ["number", "string"].includes(_typeof$v(d.y));
           }).sort(function (a, b) {
             return _this2._ySort ? _this2._ySort(a.data, b.data) : a.y - b.y;
           }).map(function (d) {
@@ -65454,7 +62779,7 @@
           })));
           yScale = "Point";
           y2Domain = Array.from(new Set(data.filter(function (d) {
-            return ["number", "string"].includes(_typeof$A(d.y2));
+            return ["number", "string"].includes(_typeof$v(d.y2));
           }).sort(function (a, b) {
             return _this2._y2Sort ? _this2._y2Sort(a.data, b.data) : a.y2 - b.y2;
           }).map(function (d) {
@@ -65677,7 +63002,7 @@
         this._padding.bottom += xHeight;
         this._padding.top += x2Height + topOffset;
 
-        _get$f(_getPrototypeOf$w(Plot.prototype), "_draw", this).call(this, callback);
+        _get$b(_getPrototypeOf$r(Plot.prototype), "_draw", this).call(this, callback);
 
         var horizontalMargin = this._margin.left + this._margin.right;
         var verticalMargin = this._margin.top + this._margin.bottom;
@@ -66495,35 +63820,35 @@
     return Plot;
   }(Viz);
 
-  function _typeof$B(obj) {
+  function _typeof$w(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$B = function _typeof$1(obj) {
+      _typeof$w = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$B = function _typeof$1(obj) {
+      _typeof$w = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$B(obj);
+    return _typeof$w(obj);
   }
 
-  function _classCallCheck$A(instance, Constructor) {
+  function _classCallCheck$v(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _possibleConstructorReturn$x(self, call) {
-    if (call && (_typeof$B(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$s(self, call) {
+    if (call && (_typeof$w(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$x(self);
+    return _assertThisInitialized$s(self);
   }
 
-  function _assertThisInitialized$x(self) {
+  function _assertThisInitialized$s(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -66531,14 +63856,14 @@
     return self;
   }
 
-  function _getPrototypeOf$x(o) {
-    _getPrototypeOf$x = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$s(o) {
+    _getPrototypeOf$s = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$x(o);
+    return _getPrototypeOf$s(o);
   }
 
-  function _inherits$x(subClass, superClass) {
+  function _inherits$s(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -66550,16 +63875,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$x(subClass, superClass);
+    if (superClass) _setPrototypeOf$s(subClass, superClass);
   }
 
-  function _setPrototypeOf$x(o, p) {
-    _setPrototypeOf$x = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$s(o, p) {
+    _setPrototypeOf$s = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$x(o, p);
+    return _setPrototypeOf$s(o, p);
   }
   /**
       @class AreaPlot
@@ -66573,7 +63898,7 @@
   */
 
   var AreaPlot = /*#__PURE__*/function (_Plot) {
-    _inherits$x(AreaPlot, _Plot);
+    _inherits$s(AreaPlot, _Plot);
     /**
         @memberof AreaPlot
         @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Plot.
@@ -66584,9 +63909,9 @@
     function AreaPlot() {
       var _this;
 
-      _classCallCheck$A(this, AreaPlot);
+      _classCallCheck$v(this, AreaPlot);
 
-      _this = _possibleConstructorReturn$x(this, _getPrototypeOf$x(AreaPlot).call(this));
+      _this = _possibleConstructorReturn$s(this, _getPrototypeOf$s(AreaPlot).call(this));
       _this._baseline = 0;
       _this._discrete = "x";
       _this._shape = constant$3("Area");
@@ -66599,35 +63924,35 @@
     return AreaPlot;
   }(Plot);
 
-  function _typeof$C(obj) {
+  function _typeof$x(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$C = function _typeof$1(obj) {
+      _typeof$x = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$C = function _typeof$1(obj) {
+      _typeof$x = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$C(obj);
+    return _typeof$x(obj);
   }
 
-  function _classCallCheck$B(instance, Constructor) {
+  function _classCallCheck$w(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _possibleConstructorReturn$y(self, call) {
-    if (call && (_typeof$C(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$t(self, call) {
+    if (call && (_typeof$x(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$y(self);
+    return _assertThisInitialized$t(self);
   }
 
-  function _assertThisInitialized$y(self) {
+  function _assertThisInitialized$t(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -66635,14 +63960,14 @@
     return self;
   }
 
-  function _getPrototypeOf$y(o) {
-    _getPrototypeOf$y = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$t(o) {
+    _getPrototypeOf$t = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$y(o);
+    return _getPrototypeOf$t(o);
   }
 
-  function _inherits$y(subClass, superClass) {
+  function _inherits$t(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -66654,16 +63979,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$y(subClass, superClass);
+    if (superClass) _setPrototypeOf$t(subClass, superClass);
   }
 
-  function _setPrototypeOf$y(o, p) {
-    _setPrototypeOf$y = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$t(o, p) {
+    _setPrototypeOf$t = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$y(o, p);
+    return _setPrototypeOf$t(o, p);
   }
   /**
       @class BarChart
@@ -66677,7 +64002,7 @@
   */
 
   var BarChart = /*#__PURE__*/function (_Plot) {
-    _inherits$y(BarChart, _Plot);
+    _inherits$t(BarChart, _Plot);
     /**
         @memberof BarChart
         @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Plot.
@@ -66688,9 +64013,9 @@
     function BarChart() {
       var _this;
 
-      _classCallCheck$B(this, BarChart);
+      _classCallCheck$w(this, BarChart);
 
-      _this = _possibleConstructorReturn$y(this, _getPrototypeOf$y(BarChart).call(this));
+      _this = _possibleConstructorReturn$t(this, _getPrototypeOf$t(BarChart).call(this));
       _this._baseline = 0;
       _this._discrete = "x";
       _this._shape = constant$3("Bar");
@@ -66703,35 +64028,35 @@
     return BarChart;
   }(Plot);
 
-  function _typeof$D(obj) {
+  function _typeof$y(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$D = function _typeof$1(obj) {
+      _typeof$y = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$D = function _typeof$1(obj) {
+      _typeof$y = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$D(obj);
+    return _typeof$y(obj);
   }
 
-  function _classCallCheck$C(instance, Constructor) {
+  function _classCallCheck$x(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _possibleConstructorReturn$z(self, call) {
-    if (call && (_typeof$D(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$u(self, call) {
+    if (call && (_typeof$y(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$z(self);
+    return _assertThisInitialized$u(self);
   }
 
-  function _assertThisInitialized$z(self) {
+  function _assertThisInitialized$u(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -66739,14 +64064,14 @@
     return self;
   }
 
-  function _getPrototypeOf$z(o) {
-    _getPrototypeOf$z = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$u(o) {
+    _getPrototypeOf$u = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$z(o);
+    return _getPrototypeOf$u(o);
   }
 
-  function _inherits$z(subClass, superClass) {
+  function _inherits$u(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -66758,16 +64083,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$z(subClass, superClass);
+    if (superClass) _setPrototypeOf$u(subClass, superClass);
   }
 
-  function _setPrototypeOf$z(o, p) {
-    _setPrototypeOf$z = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$u(o, p) {
+    _setPrototypeOf$u = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$z(o, p);
+    return _setPrototypeOf$u(o, p);
   }
   /**
       @class BoxWhisker
@@ -66780,7 +64105,7 @@
   */
 
   var BoxWhisker = /*#__PURE__*/function (_Plot) {
-    _inherits$z(BoxWhisker, _Plot);
+    _inherits$u(BoxWhisker, _Plot);
     /**
         @memberof BoxWhisker
         @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Plot.
@@ -66791,9 +64116,9 @@
     function BoxWhisker() {
       var _this;
 
-      _classCallCheck$C(this, BoxWhisker);
+      _classCallCheck$x(this, BoxWhisker);
 
-      _this = _possibleConstructorReturn$z(this, _getPrototypeOf$z(BoxWhisker).call(this));
+      _this = _possibleConstructorReturn$u(this, _getPrototypeOf$u(BoxWhisker).call(this));
       _this._discrete = "x";
       _this._shape = constant$3("Box");
 
@@ -66821,35 +64146,35 @@
     return BoxWhisker;
   }(Plot);
 
-  function _typeof$E(obj) {
+  function _typeof$z(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$E = function _typeof$1(obj) {
+      _typeof$z = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$E = function _typeof$1(obj) {
+      _typeof$z = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$E(obj);
+    return _typeof$z(obj);
   }
 
-  function _classCallCheck$D(instance, Constructor) {
+  function _classCallCheck$y(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _possibleConstructorReturn$A(self, call) {
-    if (call && (_typeof$E(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$v(self, call) {
+    if (call && (_typeof$z(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$A(self);
+    return _assertThisInitialized$v(self);
   }
 
-  function _assertThisInitialized$A(self) {
+  function _assertThisInitialized$v(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -66857,14 +64182,14 @@
     return self;
   }
 
-  function _getPrototypeOf$A(o) {
-    _getPrototypeOf$A = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$v(o) {
+    _getPrototypeOf$v = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$A(o);
+    return _getPrototypeOf$v(o);
   }
 
-  function _inherits$A(subClass, superClass) {
+  function _inherits$v(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -66876,180 +64201,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$A(subClass, superClass);
+    if (superClass) _setPrototypeOf$v(subClass, superClass);
   }
 
-  function _setPrototypeOf$A(o, p) {
-    _setPrototypeOf$A = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$v(o, p) {
+    _setPrototypeOf$v = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$A(o, p);
-  }
-  /**
-      @class BumpChart
-      @extends Plot
-      @desc Creates a bump chart based on an array of data.
-      @example <caption>the equivalent of calling:</caption>
-  new d3po.Plot()
-    .discrete("x")
-    .shape("Line")
-    .x("x")
-    .y2(d => this._y(d))
-    .yConfig({
-      tickFormat: val => {
-        const data = this._formattedData;
-        const xDomain = this._xDomain;
-        const startData = data.filter(d => d.x === xDomain[0]);
-        const d = startData.find(d => d.y === val);
-        return this._drawLabel(d, d.i);
-       }
-     })
-    .y2Config({
-      tickFormat: val => {
-        const data = this._formattedData;
-        const xDomain = this._xDomain;
-        const endData = data.filter(d => d.x === xDomain[xDomain.length - 1]);
-        const d = endData.find(d => d.y === val);
-        return this._drawLabel(d, d.i);
-       }
-     })
-    .ySort((a, b) => b.y - a.y)
-    .y2Sort((a, b) => b.y - a.y)
-  */
-
-  var BumpChart = /*#__PURE__*/function (_Plot) {
-    _inherits$A(BumpChart, _Plot);
-    /**
-        @memberof BumpChart
-        @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Plot.
-        @private
-    */
-
-
-    function BumpChart() {
-      var _this;
-
-      _classCallCheck$D(this, BumpChart);
-
-      _this = _possibleConstructorReturn$A(this, _getPrototypeOf$A(BumpChart).call(this));
-      _this._discrete = "x";
-      _this._shape = constant$3("Line");
-
-      _this.x("x");
-
-      _this.y2(function (d) {
-        return _this._y(d);
-      });
-
-      _this.yConfig({
-        tickFormat: function tickFormat(val) {
-          var data = _this._formattedData;
-          var xMin = data[0].x instanceof Date ? data[0].x.getTime() : data[0].x;
-          var startData = data.filter(function (d) {
-            return (d.x instanceof Date ? d.x.getTime() : d.x) === xMin;
-          });
-          var d = startData.find(function (d) {
-            return d.y === val;
-          });
-          return d ? _this._drawLabel(d, d.i) : "";
-        }
-      });
-
-      _this.y2Config({
-        tickFormat: function tickFormat(val) {
-          var data = _this._formattedData;
-          var xMax = data[data.length - 1].x instanceof Date ? data[data.length - 1].x.getTime() : data[data.length - 1].x;
-          var endData = data.filter(function (d) {
-            return (d.x instanceof Date ? d.x.getTime() : d.x) === xMax;
-          });
-          var d = endData.find(function (d) {
-            return d.y === val;
-          });
-          return d ? _this._drawLabel(d, d.i) : "";
-        }
-      });
-
-      _this.ySort(function (a, b) {
-        return _this._y(b) - _this._y(a);
-      });
-
-      _this.y2Sort(function (a, b) {
-        return _this._y(b) - _this._y(a);
-      });
-
-      return _this;
-    }
-
-    return BumpChart;
-  }(Plot);
-
-  function _typeof$F(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$F = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$F = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$F(obj);
-  }
-
-  function _classCallCheck$E(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _possibleConstructorReturn$B(self, call) {
-    if (call && (_typeof$F(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$B(self);
-  }
-
-  function _assertThisInitialized$B(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _getPrototypeOf$B(o) {
-    _getPrototypeOf$B = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$B(o);
-  }
-
-  function _inherits$B(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$B(subClass, superClass);
-  }
-
-  function _setPrototypeOf$B(o, p) {
-    _setPrototypeOf$B = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$B(o, p);
+    return _setPrototypeOf$v(o, p);
   }
   /**
       @class LinePlot
@@ -67062,7 +64223,7 @@
   */
 
   var LinePlot = /*#__PURE__*/function (_Plot) {
-    _inherits$B(LinePlot, _Plot);
+    _inherits$v(LinePlot, _Plot);
     /**
         @memberof LinePlot
         @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Plot.
@@ -67073,9 +64234,9 @@
     function LinePlot() {
       var _this;
 
-      _classCallCheck$E(this, LinePlot);
+      _classCallCheck$y(this, LinePlot);
 
-      _this = _possibleConstructorReturn$B(this, _getPrototypeOf$B(LinePlot).call(this));
+      _this = _possibleConstructorReturn$v(this, _getPrototypeOf$v(LinePlot).call(this));
       _this._shape = constant$3("Line");
       return _this;
     }
@@ -67083,51 +64244,35 @@
     return LinePlot;
   }(Plot);
 
-  function _typeof$G(obj) {
+  function _typeof$A(obj) {
     if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$G = function _typeof$1(obj) {
+      _typeof$A = function _typeof$1(obj) {
         return _typeof(obj);
       };
     } else {
-      _typeof$G = function _typeof$1(obj) {
+      _typeof$A = function _typeof$1(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
       };
     }
 
-    return _typeof$G(obj);
+    return _typeof$A(obj);
   }
 
-  function _classCallCheck$F(instance, Constructor) {
+  function _classCallCheck$z(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties$v(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass$v(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$v(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$v(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _possibleConstructorReturn$C(self, call) {
-    if (call && (_typeof$G(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn$w(self, call) {
+    if (call && (_typeof$A(call) === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$C(self);
+    return _assertThisInitialized$w(self);
   }
 
-  function _assertThisInitialized$C(self) {
+  function _assertThisInitialized$w(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -67135,44 +64280,14 @@
     return self;
   }
 
-  function _get$g(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$g = Reflect.get;
-    } else {
-      _get$g = function _get(target, property, receiver) {
-        var base = _superPropBase$g(target, property);
-
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
-    }
-
-    return _get$g(target, property, receiver || target);
-  }
-
-  function _superPropBase$g(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$C(object);
-      if (object === null) break;
-    }
-
-    return object;
-  }
-
-  function _getPrototypeOf$C(o) {
-    _getPrototypeOf$C = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$w(o) {
+    _getPrototypeOf$w = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$C(o);
+    return _getPrototypeOf$w(o);
   }
 
-  function _inherits$C(subClass, superClass) {
+  function _inherits$w(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -67184,373 +64299,16 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$C(subClass, superClass);
+    if (superClass) _setPrototypeOf$w(subClass, superClass);
   }
 
-  function _setPrototypeOf$C(o, p) {
-    _setPrototypeOf$C = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$w(o, p) {
+    _setPrototypeOf$w = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$C(o, p);
-  }
-  var tau$3 = Math.PI * 2;
-  /**
-      @class Radar
-      @extends Viz
-      @desc Creates a radar visualization based on an array of data.
-  */
-
-  var Radar = /*#__PURE__*/function (_Viz) {
-    _inherits$C(Radar, _Viz);
-    /**
-        @memberof Radar
-        @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Viz.
-        @private
-    */
-
-
-    function Radar() {
-      var _this;
-
-      _classCallCheck$F(this, Radar);
-
-      _this = _possibleConstructorReturn$C(this, _getPrototypeOf$C(Radar).call(this));
-      _this._axisConfig = {
-        shapeConfig: {
-          fill: constant$3("none"),
-          labelConfig: {
-            fontColor: "#000",
-            padding: 0,
-            textAnchor: function textAnchor(d, i, x) {
-              return x.textAnchor;
-            },
-            verticalAlign: "middle"
-          },
-          stroke: "#ccc",
-          strokeWidth: constant$3(1)
-        }
-      };
-      _this._discrete = "metric";
-      _this._levels = 6;
-      _this._metric = accessor("metric");
-      _this._outerPadding = 100;
-      _this._shape = constant$3("Path");
-      _this._value = accessor("value");
-      return _this;
-    }
-    /**
-        Extends the draw behavior of the abstract Viz class.
-        @private
-    */
-
-
-    _createClass$v(Radar, [{
-      key: "_draw",
-      value: function _draw(callback) {
-        var _this2 = this;
-
-        _get$g(_getPrototypeOf$C(Radar.prototype), "_draw", this).call(this, callback);
-
-        var height = this._height - this._margin.top - this._margin.bottom,
-            width = this._width - this._margin.left - this._margin.right;
-
-        var radius = min([height, width]) / 2 - this._outerPadding,
-            transform = "translate(".concat(width / 2, ", ").concat(height / 2, ")");
-
-        var nestedAxisData = nest().key(this._metric).entries(this._filteredData),
-            nestedGroupData = nest().key(this._id).key(this._metric).entries(this._filteredData);
-        var maxValue = max(nestedGroupData.map(function (h) {
-          return h.values.map(function (d) {
-            return sum(d.values, function (x, i) {
-              return _this2._value(x, i);
-            });
-          });
-        }).flat());
-        var circularAxis = Array.from(Array(this._levels).keys()).map(function (d) {
-          return {
-            id: d,
-            r: radius * ((d + 1) / _this2._levels)
-          };
-        });
-        var circleConfig = configPrep.bind(this)(this._axisConfig.shapeConfig, "shape", "Circle");
-        delete circleConfig.label;
-        new Circle().data(circularAxis).select(elem("g.d3po-Radar-radial-circles", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).config(circleConfig).render();
-        var totalAxis = nestedAxisData.length;
-        var polarAxis = nestedAxisData.map(function (d, i) {
-          var width = _this2._outerPadding;
-          var fontSize = _this2._shapeConfig.labelConfig.fontSize && _this2._shapeConfig.labelConfig.fontSize(d, i) || 11;
-          var lineHeight = fontSize * 1.4;
-          var height = lineHeight * 2;
-          var padding = 10,
-              quadrant = parseInt(360 - 360 / totalAxis * i / 90, 10) % 4 + 1,
-              radians = tau$3 / totalAxis * i;
-          var angle = 360 / totalAxis * i;
-          var textAnchor = "start";
-          var x = padding;
-
-          if (quadrant === 2 || quadrant === 3) {
-            x = -width - padding;
-            textAnchor = "end";
-            angle += 180;
-          }
-
-          var labelBounds = {
-            x: x,
-            y: -height / 2,
-            width: width,
-            height: height
-          };
-          return {
-            __d3po__: true,
-            data: objectMerge(d.values),
-            i: i,
-            id: d.key,
-            angle: angle,
-            textAnchor: textAnchor,
-            labelBounds: labelBounds,
-            rotateAnchor: [-x, height / 2],
-            x: radius * Math.cos(radians),
-            y: radius * Math.sin(radians)
-          };
-        }).sort(function (a, b) {
-          return a.key - b.key;
-        });
-        new Rect().data(polarAxis).rotate(function (d) {
-          return d.angle || 0;
-        }).width(0).height(0).x(function (d) {
-          return d.x;
-        }).y(function (d) {
-          return d.y;
-        }).label(function (d) {
-          return d.id;
-        }).labelBounds(function (d) {
-          return d.labelBounds;
-        }).labelConfig(this._axisConfig.shapeConfig.labelConfig).select(elem("g.d3po-Radar-text", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).render();
-        new Path$1().data(polarAxis).d(function (d) {
-          return "M".concat(0, ",", 0, " ", -d.x, ",").concat(-d.y);
-        }).select(elem("g.d3po-Radar-axis", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).config(configPrep.bind(this)(this._axisConfig.shapeConfig, "shape", "Path")).render();
-        var groupData = nestedGroupData.map(function (h) {
-          var q = h.values.map(function (d, i) {
-            var value = sum(d.values, function (x, i) {
-              return _this2._value(x, i);
-            });
-            var r = value / maxValue * radius,
-                radians = tau$3 / totalAxis * i;
-            return {
-              x: r * Math.cos(radians),
-              y: r * Math.sin(radians)
-            };
-          });
-          var d = "M ".concat(q[0].x, " ").concat(q[0].y, " ").concat(q.map(function (l) {
-            return "L ".concat(l.x, " ").concat(l.y);
-          }).join(" "), " L ").concat(q[0].x, " ").concat(q[0].y);
-          return {
-            arr: h.values.map(function (d) {
-              return objectMerge(d.values);
-            }),
-            id: h.key,
-            points: q,
-            d: d,
-            __d3po__: true,
-            data: objectMerge(h.values.map(function (d) {
-              return objectMerge(d.values);
-            }))
-          };
-        });
-        var pathConfig = configPrep.bind(this)(this._shapeConfig, "shape", "Path");
-        var events = Object.keys(pathConfig.on);
-        pathConfig.on = {};
-
-        var _loop = function _loop(e) {
-          var event = events[e];
-
-          pathConfig.on[event] = function (d, i) {
-            var x = d.points.map(function (p) {
-              return p.x + width / 2;
-            });
-            var y = d.points.map(function (p) {
-              return p.y + height / 2;
-            });
-            var cursor = mouse(_this2._select.node());
-            var xDist = x.map(function (p) {
-              return Math.abs(p - cursor[0]);
-            });
-            var yDist = y.map(function (p) {
-              return Math.abs(p - cursor[1]);
-            });
-            var dists = xDist.map(function (d, i) {
-              return d + yDist[i];
-            });
-
-            _this2._on[event].bind(_this2)(d.arr[dists.indexOf(min(dists))], i);
-          };
-        };
-
-        for (var e = 0; e < events.length; e++) {
-          _loop(e);
-        }
-
-        this._shapes.push(new Path$1().data(groupData).d(function (d) {
-          return d.d;
-        }).select(elem("g.d3po-Radar-items", {
-          parent: this._select,
-          enter: {
-            transform: transform
-          },
-          update: {
-            transform: transform
-          }
-        }).node()).config(pathConfig).render());
-
-        return this;
-      }
-      /**
-          @memberof Radar
-          @desc Sets the config method used for the radial spokes, circles, and labels.
-          @param {Object} *value*
-          @chainable
-      */
-
-    }, {
-      key: "axisConfig",
-      value: function axisConfig(_) {
-        return arguments.length ? (this._axisConfig = assign(this._axisConfig, _), this) : this._axisConfig;
-      }
-      /**
-          @memberof Radar
-          @desc Defines the value used as axis. If *value* is specified, sets the accessor to the specified metric function. If *value* is not specified, returns the current metric accessor.
-          @param {Function|String} *value*
-          @chainable
-      */
-
-    }, {
-      key: "metric",
-      value: function metric(_) {
-        return arguments.length ? (this._metric = typeof _ === "function" ? _ : accessor(_), this) : this._metric;
-      }
-      /**
-          @memberof Radar
-          @desc Determines how much pixel spaces to give the outer labels.
-          @param {Number} [*value* = 100]
-          @chainable
-      */
-
-    }, {
-      key: "outerPadding",
-      value: function outerPadding(_) {
-        return arguments.length ? (this._outerPadding = _, this) : this._outerPadding;
-      }
-      /**
-          @memberof Radar
-          @desc If *value* is specified, sets the value accessor to the specified function or number and returns the current class instance. If *value* is not specified, returns the current value accessor.
-          @param {Function|String} *value*
-          @example
-      function value(d) {
-      return d.value;
-      }
-      */
-
-    }, {
-      key: "value",
-      value: function value(_) {
-        return arguments.length ? (this._value = typeof _ === "function" ? _ : accessor(_), this) : this._value;
-      }
-    }]);
-
-    return Radar;
-  }(Viz);
-
-  function _typeof$H(obj) {
-    if (typeof Symbol === "function" && _typeof(Symbol.iterator) === "symbol") {
-      _typeof$H = function _typeof$1(obj) {
-        return _typeof(obj);
-      };
-    } else {
-      _typeof$H = function _typeof$1(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof(obj);
-      };
-    }
-
-    return _typeof$H(obj);
-  }
-
-  function _classCallCheck$G(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _possibleConstructorReturn$D(self, call) {
-    if (call && (_typeof$H(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized$D(self);
-  }
-
-  function _assertThisInitialized$D(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _getPrototypeOf$D(o) {
-    _getPrototypeOf$D = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf$D(o);
-  }
-
-  function _inherits$D(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf$D(subClass, superClass);
-  }
-
-  function _setPrototypeOf$D(o, p) {
-    _setPrototypeOf$D = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf$D(o, p);
+    return _setPrototypeOf$w(o, p);
   }
   /**
       @class StackedArea
@@ -67562,7 +64320,7 @@
   */
 
   var StackedArea = /*#__PURE__*/function (_AreaPlot) {
-    _inherits$D(StackedArea, _AreaPlot);
+    _inherits$w(StackedArea, _AreaPlot);
     /**
         @memberof StackedArea
         @desc Invoked when creating a new class instance, and overrides any default parameters inherited from Plot.
@@ -67573,9 +64331,9 @@
     function StackedArea() {
       var _this;
 
-      _classCallCheck$G(this, StackedArea);
+      _classCallCheck$z(this, StackedArea);
 
-      _this = _possibleConstructorReturn$D(this, _getPrototypeOf$D(StackedArea).call(this));
+      _this = _possibleConstructorReturn$w(this, _getPrototypeOf$w(StackedArea).call(this));
       _this._stacked = true;
       return _this;
     }
@@ -67595,25 +64353,18 @@
   exports.BaseClass = BaseClass;
   exports.Box = Box;
   exports.BoxWhisker = BoxWhisker;
-  exports.BumpChart = BumpChart;
   exports.Circle = Circle;
   exports.ColorScale = ColorScale;
-  exports.Donut = Donut;
   exports.Geomap = Geomap;
   exports.Image = Image$1;
   exports.Legend = Legend;
   exports.Line = Line;
   exports.LinePlot = LinePlot;
   exports.Network = Network;
-  exports.Pack = Pack;
   exports.Path = Path$1;
-  exports.Pie = Pie;
   exports.Plot = Plot;
   exports.RESET = RESET;
-  exports.Radar = Radar;
   exports.Rect = Rect;
-  exports.Rings = Rings;
-  exports.Sankey = Sankey;
   exports.Shape = Shape;
   exports.StackedArea = StackedArea;
   exports.TextBox = TextBox;

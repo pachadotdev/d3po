@@ -232,6 +232,37 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+#' Area plot
+#' 
+#' @export 
+po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_area")
+
+#' @export
+#' @method po_area d3po
+po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "area"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$x <- daes_to_opts(daes, "x")
+  d3po$x$y <- daes_to_opts(daes, "y")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  
+  # see js file to understand
+  d3po$x$d3convert <- FALSE 
+  
+  return(d3po)
+}
+
 #' Bar plot
 #' 
 #' @export 

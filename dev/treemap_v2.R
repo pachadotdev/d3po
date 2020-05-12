@@ -26,7 +26,7 @@ treemap_data <- tibble(
 
 # can't group by parent and id, as in lines 20-26
 d3po(treemap_data) %>%
-  po_treemap(daes(sum = value, group_by = id, color = color)) %>% 
+  po_treemap(daes(sum = value, group_by = id)) %>% 
   po_title("wrongly aligned title")
 
 d3po(treemap_data) %>%

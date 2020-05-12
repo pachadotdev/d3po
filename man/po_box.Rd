@@ -5,7 +5,11 @@
 \title{Boxplot}
 \usage{
 po_box(d3po, ..., data = NULL, inherit_daes = TRUE)
+
+po_box(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
 \description{
 Boxplot
+
+Box and Whisker plot
 }

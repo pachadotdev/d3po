@@ -1,30 +1,22 @@
-library(d3po)
 library(dplyr)
+library(d3po)
 
 box_data <- tibble(
-  year = rep(c(1991,1992), 8),
-  name = c(rep("alpha", 2), rep("alpha2", 2),
-           rep("beta", 2), rep("beta2", 2),
-           rep("gamma", 2), rep("gamma2", 2),
-           rep("delta", 2), rep("delta2", 2)),
-  value = c(15,34,17,65,10,10,40,38,5,10,20,34,50,
-            43,17,35)
+  id = c(rep("a",5), rep("b",3)),
+  value = c(200,100,10,5,99,70,500,12)
 )
 
-d3po() %>%
-  d3po_type("box") %>%
-  d3po_data(data = box_data) %>%
-  d3po_id("name") %>%
-  d3po_axis(x = "year", y = "value") %>%
-  d3po_title(
-    list(
-      value = "This is a title",
-      sub = "This is a subtitle"
-    )
-  ) %>%
-  d3po_footer(
-    list(
-      link = "https://www.duckduckgo.com",
-      value = "Click here to search DuckDuckGo"
-    )
-  )
+# d3po(box_data) %>% 
+#   po_box(daes(x = year, y = value, group = name)) %>% 
+#   po_title("INITIAL HERE")
+
+# d3po() %>%
+#   d3po_type("box") %>%
+#   d3po_data(data = box_data) %>% 
+#   d3po_axis(x = "id", y = "value") %>% 
+#   d3po_group_by(c("id", "value"))
+
+# here I need to group by id AND value
+d3po(box_data) %>%
+  po_box(daes(x = id, y = value, group_by = value)) %>% 
+  po_title("wrongly aligned title")

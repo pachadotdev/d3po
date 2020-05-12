@@ -94,11 +94,11 @@ HTMLWidgets.widget({
         }
     
         // bar/line chart
-        if (x.xaxis) {
-          chart.x(x.xaxis);
+        if (x.x) {
+          chart.x(x.x);
         }
-        if (x.yaxis) {
-          chart.y(x.yaxis);
+        if (x.y) {
+          chart.y(x.y);
         }
     
         // network arguments

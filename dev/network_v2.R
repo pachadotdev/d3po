@@ -17,6 +17,6 @@ links <- tibble(
   target = 3:1 - 1
 )
 
-d3po(data) %>%
-  po_network(links, nodes) %>%
+d3po(data = data, links = links, nodes = nodes) %>%
+  po_network(daes(sum = value)) %>%
   po_title("wrongly aligned title")

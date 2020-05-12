@@ -13,9 +13,6 @@ HTMLWidgets.widget({
       renderValue: function(x) {
 
         document.getElementById(el.id).innerHTML = "";
-
-        var links = HTMLWidgets.dataframeToD3(x.links) || false;
-        var nodes = HTMLWidgets.dataframeToD3(x.nodes) || false;
     
         window.x = x;
         window.el = el;
@@ -34,14 +31,8 @@ HTMLWidgets.widget({
           case "box":
             chart = new d3po.BoxWhisker();
             break;
-          case "geomap":
-            chart = new d3po.Geomap();
-            break;
           case "line":
             chart = new d3po.LinePlot();
-            break;
-          case "network":
-            chart = new d3po.Network();
             break;
           case "scatter":
             chart = new d3po.Plot();
@@ -66,18 +57,6 @@ HTMLWidgets.widget({
           chart.sum(x.sum);
         }
     
-        // treemap specific arguments
-        if (x.legend) {
-          chart.legend(x.legend);
-        }
-        if (x.icon) {
-          chart.shapeConfig({
-            backgroundImage: function(x) { return x.icon; },
-            height: 25,
-            width: 25
-          });
-        }
-    
         // bar/line chart
         if (x.x) {
           chart.x(x.x);
@@ -86,57 +65,16 @@ HTMLWidgets.widget({
           chart.y(x.y);
         }
     
-        // network arguments
-        if (x.links) {
-          chart.links(x.links);
-        }
-        if (x.nodes) {
-          chart.nodes(x.nodes);
-        }
-        
-        // geomap arguments
-        if (x.coords) {
-          chart.coords(x.coords);
-        }
-        if (x.text) {
-          chart.text(x.text);
-        }
-        
-        // rings arguments
-        if (x.focus) {
-          chart.focus(x.focus);
-        }
-    
         // title, subtitle and footer
         if (x.title) {
           chart.title(x.title);
-        }
-        if (x.footer) {
-          chart.footer(x.footer);
         }
         
         // aesthetic parameters
         if (x.color) {
           chart.color(x.color);
         }
-        if (x.depth) {
-          chart.depth(x.depth);
-        }
-        if (x.font) {
-          chart.font(x.font);
-        }
-        if (x.labels) {
-          chart.labels(x.labels);
-        }
-        if (x.tooltipConfig) {
-          chart.tooltipConfig(x.tooltipConfig);
-        }
         
-        // background
-        if (x.background) {
-          chart.background(x.background);
-        }
-    
         setTimeout(function() {
           // chart.resize(true);
           chart.render();
@@ -144,11 +82,6 @@ HTMLWidgets.widget({
 
       },
 
-      resize: function(width, height) {
-
-        // TODO: code to re-render the widget with a new size
-
-      },
       getChart: function(){
         return chart;
       }

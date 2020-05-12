@@ -29,7 +29,7 @@ HTMLWidgets.widget({
             chart = new d3po.BarChart();
             break;
           case "box":
-            chart.type("box");
+            chart = new d3po.BoxWhisker();
             break;
           case "bubbles":
             chart = new d3po.Pack();

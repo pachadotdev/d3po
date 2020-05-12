@@ -26,28 +26,28 @@ HTMLWidgets.widget({
         
         switch (x.type) {
           case "bar":
-            chart = new d3plus.BarChart();
+            chart = new d3po.BarChart();
             break;
           case "box":
             chart.type("box");
             break;
           case "bubbles":
-            chart = new d3plus.Pack();
+            chart = new d3po.Pack();
             break;
           case "donut":
-            chart = new d3plus.Donut();
+            chart = new d3po.Donut();
             break;
           case "geomap":
-            chart = new d3plus.Geomap();
+            chart = new d3po.Geomap();
             break;
           case "line":
-            chart = new d3plus.LinePlot();
+            chart = new d3po.LinePlot();
             break;
           case "network":
-            chart = new d3plus.Network();
+            chart = new d3po.Network();
             break;
           case "pie":
-            chart = new d3plus.Pie();
+            chart = new d3po.Pie();
             break;
           case "radar":
             chart.type("radar");
@@ -59,10 +59,10 @@ HTMLWidgets.widget({
             chart.type("sankey");
             break;
           case "scatter":
-            chart = new d3plus.Plot();
+            chart = new d3po.Plot();
             break;
           case "stacked":
-            chart = new d3plus.StackedArea();
+            chart = new d3po.StackedArea();
             break;
           case "treemap":
             chart = new d3po.Treemap();

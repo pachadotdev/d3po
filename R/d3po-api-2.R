@@ -294,6 +294,36 @@ po_stacked_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+#' Network plot
+#' 
+#' @export 
+po_network <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_network")
+
+#' @export
+#' @method po_network d3po
+po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "network"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$links <- daes_to_opts(daes, "links")
+  d3po$x$nodes <- daes_to_opts(daes, "nodes")
+  
+  # see js file to understand
+  d3po$x$d3convert <- FALSE 
+  
+  return(d3po)
+}
+
 #' Bar plot
 #' 
 #' @export 

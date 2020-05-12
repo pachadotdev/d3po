@@ -14,7 +14,7 @@ HTMLWidgets.widget({
 
         document.getElementById(el.id).innerHTML = "";
 
-        var edges = HTMLWidgets.dataframeToD3(x.edges) || false;
+        var links = HTMLWidgets.dataframeToD3(x.links) || false;
         var nodes = HTMLWidgets.dataframeToD3(x.nodes) || false;
     
         window.x = x;
@@ -87,12 +87,12 @@ HTMLWidgets.widget({
         }
     
         // network arguments
-        // if (edges) {
-        //   chart.edges(edges);
-        // }
-        // if (nodes) {
-        //  chart.nodes(nodes);
-        // }
+        if (links) {
+          chart.links(links);
+        }
+        if (nodes) {
+          chart.nodes(nodes);
+        }
         
         // geomap arguments
         if (x.coords) {

@@ -201,6 +201,69 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+#' Treemap plot
+#' 
+#' @export 
+po_treemap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_treemap")
+
+#' @export
+#' @method po_treemap d3po
+po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "treemap"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$sum <- daes_to_opts(daes, "sum")
+  d3po$x$group_by <- daes_to_opts(daes, "groupBy")
+  d3po$x$color <- daes_to_opts(daes, "color")
+  
+  # see js file to understand
+  d3po$x$d3convert <- FALSE 
+  
+  return(d3po)
+}
+
+#' Bar plot
+#' 
+#' @export 
+po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
+
+#' @export
+#' @method po_bar d3po
+po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "bar"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$x <- daes_to_opts(daes, "x")
+  d3po$x$y <- daes_to_opts(daes, "y")
+  d3po$x$id <- daes_to_opts(daes, "id")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  
+  # see js file to understand
+  d3po$x$d3convert <- FALSE 
+  
+  return(d3po)
+}
+
 #' Title
 #' 
 #' @export 

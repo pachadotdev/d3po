@@ -6,6 +6,10 @@ box_data <- tibble(
   value = c(200,100,10,5,99,70,500,12)
 )
 
+# d3po(box_data) %>% 
+#   po_box(daes(x = year, y = value, group = name)) %>% 
+#   po_title("INITIAL HERE")
+
 d3po() %>%
   d3po_type("box") %>%
   d3po_data(data = box_data) %>% 

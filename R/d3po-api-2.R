@@ -1,11 +1,11 @@
 #' Aesthetics
-#' 
+#'
 #' Aesthetics of the chart.
-#' 
+#'
 #' @param x,y,... List of name value pairs giving aesthetics to map to
 #'  variables. The names for x and y aesthetics are typically omitted because
 #'  they are so common; all other aspects must be named.
-#' 
+#'
 #' @export
 daes <- function(lat, lon, ...) {
   exprs <- rlang::enquos(lat = lat, lon = lon, ..., .ignore_empty = "all")
@@ -14,10 +14,11 @@ daes <- function(lat, lon, ...) {
 }
 
 # construct aesthetics for re-use
-.construct_aesthetics <- function(aes, cl = NULL){
+.construct_aesthetics <- function(aes, cl = NULL) {
   class <- "daes"
-  if(!is.null(cl))
+  if (!is.null(cl)) {
     class <- append(class, cl)
+  }
   structure(aes, class = c(class, class(aes)))
 }
 
@@ -84,31 +85,33 @@ print.uneval <- function(x, ...) {
 }
 
 # is aesthetic?
-is_daes <- function(x, cl = "daes"){
+is_daes <- function(x, cl = "daes") {
   aes <- FALSE
-  if(inherits(x, cl))
+  if (inherits(x, cl)) {
     aes <- TRUE
+  }
   return(aes)
 }
 
 # retrieve aesthetics
-get_daes <- function(...){
-  aes <- list(...) %>% 
-    purrr::keep(is_daes) 
+get_daes <- function(...) {
+  aes <- list(...) %>%
+    purrr::keep(is_daes)
 
-  if(length(aes))
+  if (length(aes)) {
     aes[[1]]
-  else
+  } else {
     list()
+  }
 }
 
 # mutate aesthetics
-mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE){
-
-  if(is.null(aes) && isTRUE(inherit))
+mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE) {
+  if (is.null(aes) && isTRUE(inherit)) {
     return(main_aes)
+  }
 
-  if(isTRUE(inherit)){
+  if (isTRUE(inherit)) {
     # aes overrides main_aes
     main_aes <- main_aes[!names(main_aes) %in% names(aes)]
     combined <- append(aes, main_aes)
@@ -119,9 +122,9 @@ mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE){
 }
 
 # combine mappings into main
-combine_daes <- function(main_daes, daes, inherit_daes = TRUE){
-  if(inherit_daes){
-    for(i in 1:length(daes)){
+combine_daes <- function(main_daes, daes, inherit_daes = TRUE) {
+  if (inherit_daes) {
+    for (i in 1:length(daes)) {
       c <- names(daes)[[i]]
       main_daes[[c]] <- daes[[i]]
     }
@@ -132,37 +135,42 @@ combine_daes <- function(main_daes, daes, inherit_daes = TRUE){
 }
 
 # conver to name for selection
-daes_to_columns <- function(daes){
-  purrr::keep(daes, function(x){
+daes_to_columns <- function(daes) {
+  purrr::keep(daes, function(x) {
     !rlang::is_bare_atomic(x)
-  }) %>% 
-    purrr::map(rlang::as_label) %>% 
-    unname() %>% 
+  }) %>%
+    purrr::map(rlang::as_label) %>%
+    unname() %>%
     unlist()
 }
 
 # coordinate to JSON options
-daes_to_opts <- function(daes, var){
-  if(rlang::is_null(daes[[var]]))
+daes_to_opts <- function(daes, var) {
+  if (rlang::is_null(daes[[var]])) {
     return(NULL)
-  if(rlang::is_bare_atomic(daes[[var]]))
+  }
+  if (rlang::is_bare_atomic(daes[[var]])) {
     return(daes[[var]])
+  }
   rlang::as_label(daes[[var]])
 }
 
 # internal function
-.get_data <- function(x, y){
-  if(!is.null(y))
+.get_data <- function(x, y) {
+  if (!is.null(y)) {
     return(y)
+  }
   return(x)
 }
 
 # internal check with assertthat
-has_daes <- function(x){
-  if(is.null(x))
+has_daes <- function(x) {
+  if (is.null(x)) {
     return(FALSE)
-  if(!length(x))
+  }
+  if (!length(x)) {
     return(FALSE)
+  }
   return(TRUE)
 }
 
@@ -171,13 +179,13 @@ assertthat::on_failure(has_daes) <- function(call, env) {
 }
 
 #' Boxplot
-#' 
-#' @export 
+#'
+#' @export
 po_box <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_box")
 
 #' @export
 #' @method po_box d3po
-po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 
   # defaults
   d3po$x$type <- "box"
@@ -196,214 +204,206 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$id <- daes_to_opts(daes, "group")
 
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
+  d3po$x$d3convert <- FALSE
 
   return(d3po)
 }
 
 #' Treemap plot
-#' 
-#' @export 
+#'
+#' @export
 po_treemap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_treemap")
 
 #' @export
 #' @method po_treemap d3po
-po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
-  
+po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+
   # defaults
   d3po$x$type <- "treemap"
-  
+
   data <- .get_data(d3po$x$tempdata, data)
-  
+
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  
+
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$sum <- daes_to_opts(daes, "sum")
   d3po$x$group_by <- daes_to_opts(daes, "groupBy")
   d3po$x$color <- daes_to_opts(daes, "color")
-  
+
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
-  
+  d3po$x$d3convert <- FALSE
+
   return(d3po)
 }
 
 #' Area plot
-#' 
-#' @export 
+#'
+#' @export
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_area")
 
 #' @export
 #' @method po_area d3po
-po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
-  
+po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+
   # defaults
   d3po$x$type <- "area"
-  
+
   data <- .get_data(d3po$x$tempdata, data)
-  
+
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  
+
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
-  
+
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
-  
+  d3po$x$d3convert <- FALSE
+
   return(d3po)
 }
 
 #' Stacked Area plot
-#' 
-#' @export 
+#'
+#' @export
 po_stacked_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_stacked_area")
 
 #' @export
 #' @method po_stacked_area d3po
-po_stacked_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
-  
+po_stacked_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+
   # defaults
   d3po$x$type <- "stacked"
-  
+
   data <- .get_data(d3po$x$tempdata, data)
-  
+
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  
+
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
-  
+
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
-  
+  d3po$x$d3convert <- FALSE
+
   return(d3po)
 }
 
 #' Network plot
-#' 
-#' @export 
-po_network <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_network")
+#'
+#' @export
+po_network <- function(d3po, ..., data = NULL, links = NULL, nodes = NULL, inherit_daes = TRUE) UseMethod("po_network")
 
 #' @export
 #' @method po_network d3po
-po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
-  
+po_network.d3po <- function(d3po, ..., data = NULL, links = NULL, nodes = NULL, inherit_daes = TRUE) {
+
   # defaults
   d3po$x$type <- "network"
-  
-  data <- .get_data(d3po$x$tempdata, data)
-  
-  # extract & process coordinates
-  daes <- get_daes(...)
-  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
-  columns <- daes_to_columns(daes)
-  
-  d3po$x$data <- dplyr::select(data, columns)
-  d3po$x$links <- daes_to_opts(daes, "links")
-  d3po$x$nodes <- daes_to_opts(daes, "nodes")
-  
+
+  d3po$x$data <- data
+  d3po$x$links <- links
+  d3po$x$nodes <- nodes
+
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
-  
+  d3po$x$d3convert <- FALSE
+
   return(d3po)
 }
 
 #' Bar plot
-#' 
-#' @export 
+#'
+#' @export
 po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
 
 #' @export
 #' @method po_bar d3po
-po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
-  
+po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+
   # defaults
   d3po$x$type <- "bar"
-  
+
   data <- .get_data(d3po$x$tempdata, data)
-  
+
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  
+
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$id <- daes_to_opts(daes, "id")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
-  
+
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
-  
+  d3po$x$d3convert <- FALSE
+
   return(d3po)
 }
 
 #' Box and Whisker plot
-#' 
-#' @export 
+#'
+#' @export
 po_box <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_box")
 
 #' @export
 #' @method po_box d3po
-po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
-  
+po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+
   # defaults
   d3po$x$type <- "box"
-  
+
   data <- .get_data(d3po$x$tempdata, data)
-  
+
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  
+
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
-  
+
   # see js file to understand
-  d3po$x$d3convert <- FALSE 
-  
+  d3po$x$d3convert <- FALSE
+
   return(d3po)
 }
 
 #' Title
-#' 
-#' @export 
+#'
+#' @export
 po_title <- function(d3po, title) UseMethod("po_title")
 
-#' @export 
+#' @export
 #' @method po_title d3po
-po_title.d3po <- function(d3po, title){
+po_title.d3po <- function(d3po, title) {
   assertthat::assert_that(!missing(title), msg = "Missing `title`")
 
   d3po$x$title <- title
   return(d3po)
 }
 
-#' @export 
+#' @export
 #' @method po_title d3proxy
-po_title.d3proxy <- function(d3po, title){
+po_title.d3proxy <- function(d3po, title) {
   assertthat::assert_that(!missing(title), msg = "Missing `title`")
 
   msg <- list(id = d3po$id, msg = list(title = title))

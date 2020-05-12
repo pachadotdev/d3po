@@ -2,8 +2,8 @@ library(dplyr)
 library(d3po)
 
 bar_data <- tibble(
-  aaa = c("a","b"),
-  id = c("a","b"),
+  aaa = c("a", "b"),
+  id = c("a", "b"),
   x = 1:2,
   y = 1:2
 )
@@ -14,15 +14,15 @@ bar_data <- tibble(
 
 # ok
 d3po(bar_data) %>%
-  po_bar(daes(x = x, y = y, group_by = aaa)) %>% 
+  po_bar(daes(x = x, y = y, group_by = aaa)) %>%
   po_title("wrongly aligned title")
 
 # broken
 d3po(bar_data) %>%
-  po_bar(daes(x = x, y = y, id = aaa)) %>% 
+  po_bar(daes(x = x, y = y, id = aaa)) %>%
   po_title("wrongly aligned title")
 
 # also ok
 d3po(bar_data) %>%
-  po_bar(daes(x = x, y = y, id = id)) %>% 
+  po_bar(daes(x = x, y = y, id = id)) %>%
   po_title("wrongly aligned title")

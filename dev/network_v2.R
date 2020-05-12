@@ -2,8 +2,8 @@ library(dplyr)
 library(d3po)
 
 data <- tibble(
-    id = letters[1:3],
-    value = c(10,20,30)
+  id = letters[1:3],
+  value = c(10, 20, 30)
 )
 
 nodes <- tibble(
@@ -18,5 +18,5 @@ links <- tibble(
 )
 
 d3po(data) %>%
-  po_network(daes(links = links, nodes = nodes)) %>% 
+  po_network(links, nodes) %>%
   po_title("wrongly aligned title")

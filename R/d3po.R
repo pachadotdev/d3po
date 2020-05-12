@@ -16,9 +16,15 @@
 #'   y = c(7, 25, 13, 7, 8, 13)
 #' )
 #'
-#' d3po() %>% d3po_data(dta) %>% d3po_type("bar")
-#' d3po() %>% d3po_data(dta) %>% d3po_type("hbar")
-#' d3po() %>% d3po_data(dta) %>% d3po_type("area")
+#' d3po() %>%
+#'   d3po_data(dta) %>%
+#'   d3po_type("bar")
+#' d3po() %>%
+#'   d3po_data(dta) %>%
+#'   d3po_type("hbar")
+#' d3po() %>%
+#'   d3po_data(dta) %>%
+#'   d3po_type("area")
 #' @export
 d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL) {
   x <- list(tempdata = data)
@@ -36,9 +42,9 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
 }
 
 # remove tempdata
-# this is important to make sure we don't share 
+# this is important to make sure we don't share
 # sensitive data points => only serialize what the user explicitely wants
-.render_d3po <- function(d3po){
+.render_d3po <- function(d3po) {
   d3po$x$tempdata <- NULL
   d3po$x$data <- purrr::transpose(d3po$x$data)
   return(d3po)
@@ -57,7 +63,7 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
-#' @param id Id of 
+#' @param id Id of
 #
 #' @name d3po-shiny
 #'
@@ -77,10 +83,9 @@ render_d3po <- function(expr, env = parent.frame(), quoted = FALSE) {
 
 #' @rdname d3po-shiny
 #' @export
-d3po_proxy <- function(id, session = shiny::getDefaultReactiveDomain()){
-  
+d3po_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
   proxy <- list(id = id, session = session)
   class(proxy) <- "d3proxy"
-  
+
   return(proxy)
 }

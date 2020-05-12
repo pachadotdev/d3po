@@ -15,8 +15,8 @@ network_edges <- tibble(
 
 network_nodes <- tibble(
   name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
-  x = c(1,2,1,3,2.5,2),
-  y = c(1,1,2,2,1.5,2)
+  x = c(1, 2, 1, 3, 2.5, 2),
+  y = c(1, 1, 2, 2, 1.5, 2)
 )
 
 d3po() %>%

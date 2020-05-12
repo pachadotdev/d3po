@@ -29,9 +29,15 @@ dta <- data.frame(
   y = c(7, 25, 13, 7, 8, 13)
 )
 
-d3po() \%>\% d3po_data(dta) \%>\% d3po_type("bar")
-d3po() \%>\% d3po_data(dta) \%>\% d3po_type("hbar")
-d3po() \%>\% d3po_data(dta) \%>\% d3po_type("area")
+d3po() \%>\%
+  d3po_data(dta) \%>\%
+  d3po_type("bar")
+d3po() \%>\%
+  d3po_data(dta) \%>\%
+  d3po_type("hbar")
+d3po() \%>\%
+  d3po_data(dta) \%>\%
+  d3po_type("area")
 }
 \author{
 Mauricio Vargas

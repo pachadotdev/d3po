@@ -82,17 +82,21 @@ server <- function(input, output) {
   )
 
   box_data <- tibble(
-    year = rep(c(1991,1992), 8),
-    name = c(rep("alpha", 2), rep("alpha2", 2),
-             rep("beta", 2), rep("beta2", 2),
-             rep("gamma", 2), rep("gamma2", 2),
-             rep("delta", 2), rep("delta2", 2)),
-    value = c(15,34,17,65,10,10,40,38,5,10,20,34,50,
-              43,17,35)
+    year = rep(c(1991, 1992), 8),
+    name = c(
+      rep("alpha", 2), rep("alpha2", 2),
+      rep("beta", 2), rep("beta2", 2),
+      rep("gamma", 2), rep("gamma2", 2),
+      rep("delta", 2), rep("delta2", 2)
+    ),
+    value = c(
+      15, 34, 17, 65, 10, 10, 40, 38, 5, 10, 20, 34, 50,
+      43, 17, 35
+    )
   )
 
   bubbles_data <- tibble(
-    value = c(100,70,40,15,5,1),
+    value = c(100, 70, 40, 15, 5, 1),
     name = c("alpha", "beta", "gamma", "delta", "epsilon", "zeta"),
     group = c("group 1", rep("group 2", 3), rep("group 1", 2))
   )
@@ -121,8 +125,8 @@ server <- function(input, output) {
 
   network_nodes <- tibble(
     name = c("alpha", "beta", "gamma", "theta", "zeta", "epsilon"),
-    x = c(1,2,1,3,2.5,2),
-    y = c(1,1,2,2,1.5,2)
+    x = c(1, 2, 1, 3, 2.5, 2),
+    y = c(1, 1, 2, 2, 1.5, 2)
   )
 
   pie_data <- tibble(
@@ -150,11 +154,11 @@ server <- function(input, output) {
   sankey_data <- tibble(
     id = c("alpha", "beta", "gamma"),
     color = c("firebrick", "cornflowerblue", "khaki"),
-    val = c(100,200,300)
+    val = c(100, 200, 300)
   )
 
   sankey_edges <- tibble(
-    strength = c(2,1,1,3),
+    strength = c(2, 1, 1, 3),
     source = c(0, 1, 2, 2),
     target = c(2, 2, 0, 1)
   )
@@ -172,8 +176,8 @@ server <- function(input, output) {
 
   stacked_data <- tibble(
     id = c(rep("alpha", 3), rep("beta", 3)),
-    ab1 = c(4,5,6,4,5,6),
-    ab2 = c(7,25,13,17,8,13),
+    ab1 = c(4, 5, 6, 4, 5, 6),
+    ab2 = c(7, 25, 13, 17, 8, 13),
     color = c(rep("cornflowerblue", 3), rep("firebrick", 3))
   )
 

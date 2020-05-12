@@ -4,7 +4,14 @@
 \alias{po_network}
 \title{Network plot}
 \usage{
-po_network(d3po, ..., data = NULL, inherit_daes = TRUE)
+po_network(
+  d3po,
+  ...,
+  data = NULL,
+  links = NULL,
+  nodes = NULL,
+  inherit_daes = TRUE
+)
 }
 \description{
 Network plot

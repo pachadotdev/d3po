@@ -87,11 +87,11 @@ HTMLWidgets.widget({
         }
     
         // network arguments
-        if (links) {
-          chart.links(links);
+        if (x.links) {
+          chart.links(x.links);
         }
-        if (nodes) {
-          chart.nodes(nodes);
+        if (x.nodes) {
+          chart.nodes(x.nodes);
         }
         
         // geomap arguments

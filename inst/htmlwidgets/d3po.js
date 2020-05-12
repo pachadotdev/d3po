@@ -26,31 +26,28 @@ HTMLWidgets.widget({
         
         switch (x.type) {
           case "bar":
-            chart.type("bar");
+            chart = new d3plus.BarChart();
             break;
           case "box":
             chart.type("box");
             break;
           case "bubbles":
-            chart.type("bubbles");
+            chart = new d3plus.Pack();
             break;
           case "donut":
-            chart.type("donut");
+            chart = new d3plus.Donut();
             break;
           case "geomap":
-            chart.type("geomap");
-            break;
-          case "halfdonut":
-            chart.type("halfdonut");
+            chart = new d3plus.Geomap();
             break;
           case "line":
-            chart.type("line");
+            chart = new d3plus.LinePlot();
             break;
           case "network":
-            chart.type("network");
+            chart = new d3plus.Network();
             break;
           case "pie":
-            chart.type("pie");
+            chart = new d3plus.Pie();
             break;
           case "radar":
             chart.type("radar");
@@ -62,10 +59,10 @@ HTMLWidgets.widget({
             chart.type("sankey");
             break;
           case "scatter":
-            chart.type("scatter");
+            chart = new d3plus.Plot();
             break;
           case "stacked":
-            chart.type("stacked");
+            chart = new d3plus.StackedArea();
             break;
           case "treemap":
             chart = new d3po.Treemap();
@@ -78,7 +75,7 @@ HTMLWidgets.widget({
         chart.data(x.data);
         
         if (x.group_by) {
-          chart.group_by(x.group_by);
+          chart.groupBy(x.group_by);
         }
         if (x.sum) {
           chart.sum(x.sum);
@@ -89,7 +86,11 @@ HTMLWidgets.widget({
           chart.legend(x.legend);
         }
         if (x.icon) {
-          chart.icon(x.icon);
+          chart.shapeConfig({
+            backgroundImage: function(x) { return x.icon; },
+            height: 25,
+            width: 25
+          });
         }
     
         // bar/line chart
@@ -150,8 +151,6 @@ HTMLWidgets.widget({
         if (x.background) {
           chart.background(x.background);
         }
-        
-        // chart.container("#" + el.id);
     
         setTimeout(function() {
           // chart.resize(true);

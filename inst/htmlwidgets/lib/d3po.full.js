@@ -1,6 +1,6 @@
 /*
   d3po v0.1.0
-  An Open Source alternative to highcharter package. Based on D3, C3 and d3po.
+  An Open Source alternative to highcharter package. Based on D3, C3 and D3plus.
   Copyright (c) 2020 Pacha
   @license GPL-3
 */
@@ -55600,8 +55600,8 @@
   function clickShape (d, i) {
     this._select.style("cursor", "auto");
 
-    if (this._drawDepth < this._group_by.length - 1) {
-      var filterGroup = this._group_by[this._drawDepth],
+    if (this._drawDepth < this._groupBy.length - 1) {
+      var filterGroup = this._groupBy[this._drawDepth],
           filterId = filterGroup(d, i);
       this.hover(false);
       if (this._tooltip) this._tooltipClass.data([]).render();
@@ -55796,7 +55796,7 @@
 
       var position = event$1.touches ? [event$1.touches[0].clientX, event$1.touches[0].clientY] : [event$1.clientX, event$1.clientY];
 
-      this._tooltipClass.data([x || d]).footer(this._drawDepth < this._group_by.length - 1 ? this._translate("Click to Expand") : false).title(this._drawLabel).position(position).config(configPrep.bind(this)(this._tooltipConfig)).render();
+      this._tooltipClass.data([x || d]).footer(this._drawDepth < this._groupBy.length - 1 ? this._translate("Click to Expand") : false).title(this._drawLabel).position(position).config(configPrep.bind(this)(this._tooltipConfig)).render();
     }
   }
 
@@ -56273,7 +56273,7 @@
       _this._cache = true;
 
       _this._color = function (d, i) {
-        return _this._group_by[0](d, i);
+        return _this._groupBy[0](d, i);
       };
 
       _this._colorScaleClass = new ColorScale();
@@ -56305,7 +56305,7 @@
       _this._hiddenColor = constant$3("#aaa");
       _this._hiddenOpacity = constant$3(0.5);
       _this._history = [];
-      _this._group_by = [accessor("id")];
+      _this._groupBy = [accessor("id")];
       _this._legend = true;
       _this._legendClass = new Legend();
       _this._legendConfig = {
@@ -56504,13 +56504,13 @@
       value: function _preDraw() {
         var _this2 = this;
 
-        var that = this; // based on the group_by, determine the draw depth and current depth id
+        var that = this; // based on the groupBy, determine the draw depth and current depth id
 
-        this._drawDepth = this._depth !== void 0 ? this._depth : this._group_by.length - 1;
-        this._id = this._group_by[this._drawDepth];
+        this._drawDepth = this._depth !== void 0 ? this._depth : this._groupBy.length - 1;
+        this._id = this._groupBy[this._drawDepth];
 
         this._ids = function (d, i) {
-          return _this2._group_by.map(function (g) {
+          return _this2._groupBy.map(function (g) {
             return !d || d.__d3po__ && !d.data ? undefined : g(d.__d3po__ ? d.data : d, d.__d3po__ ? d.i : i);
           }).filter(function (g) {
             return g !== undefined && g !== null;
@@ -56570,7 +56570,7 @@
           var dataNest = nest();
 
           for (var _i = 0; _i <= this._drawDepth; _i++) {
-            dataNest.key(this._group_by[_i]);
+            dataNest.key(this._groupBy[_i]);
           }
 
           if (this._discrete && "_".concat(this._discrete) in this) dataNest.key(this["_".concat(this._discrete)]);
@@ -57096,7 +57096,7 @@
       }
       /**
           @memberof Viz
-          @desc If *value* is specified, sets the depth to the specified number and returns the current class instance. The *value* should correspond with an index in the [group_by](#group_by) array.
+          @desc If *value* is specified, sets the depth to the specified number and returns the current class instance. The *value* should correspond with an index in the [groupBy](#groupBy) array.
           @param {Number} [*value*]
           @chainable
       */
@@ -57238,13 +57238,13 @@
       */
 
     }, {
-      key: "group_by",
-      value: function group_by(_) {
+      key: "groupBy",
+      value: function groupBy(_) {
         var _this4 = this;
 
-        if (!arguments.length) return this._group_by;
+        if (!arguments.length) return this._groupBy;
         if (!(_ instanceof Array)) _ = [_];
-        return this._group_by = _.map(function (k) {
+        return this._groupBy = _.map(function (k) {
           if (typeof k === "function") return k;else {
             if (!_this4._aggs[k]) {
               _this4._aggs[k] = function (a) {
@@ -60382,7 +60382,7 @@
         var nestedData = nest();
 
         for (var i = 0; i <= this._drawDepth; i++) {
-          nestedData.key(this._group_by[i]);
+          nestedData.key(this._groupBy[i]);
         }
 
         nestedData = nestedData.entries(this._filteredData);
@@ -60719,11 +60719,11 @@
 
         var treeData = this._treeData = this._tree.separation(this._separation).size([width, height])(hierarchy({
           key: "root",
-          values: nest$1(this._filteredData, this._group_by.slice(0, this._drawDepth + 1))
+          values: nest$1(this._filteredData, this._groupBy.slice(0, this._drawDepth + 1))
         }, function (d) {
           return d.key && d.values ? d.values : null;
         }).sort(this._sort)).descendants().filter(function (d) {
-          return d.depth <= _this2._group_by.length && d.parent;
+          return d.depth <= _this2._groupBy.length && d.parent;
         });
         /**
             Merges the values of a given nest branch.
@@ -60753,7 +60753,7 @@
         var yExtent = extent(treeData, function (d) {
           return d.y;
         });
-        this._labelHeight = min([this._orient === "vertical" ? 50 : 100, (yExtent[1] - rBufferRoot - rBufferEnd) / (this._group_by.length + 1)]);
+        this._labelHeight = min([this._orient === "vertical" ? 50 : 100, (yExtent[1] - rBufferRoot - rBufferEnd) / (this._groupBy.length + 1)]);
         this._labelWidths = nest$1(treeData, function (d) {
           return d.depth;
         }).map(function (d) {
@@ -60812,7 +60812,7 @@
           },
           labelConfig: {
             textAnchor: function textAnchor(d) {
-              return _this2._orient === "vertical" ? "middle" : d.data.children && d.data.depth !== _this2._group_by.length ? "end" : "start";
+              return _this2._orient === "vertical" ? "middle" : d.data.children && d.data.depth !== _this2._groupBy.length ? "end" : "start";
             },
             verticalAlign: function verticalAlign(d) {
               return _this2._orient === "vertical" ? d.data.depth === 1 ? "bottom" : "top" : "middle";
@@ -60824,8 +60824,8 @@
             return {
               width: _this2._orient === "vertical" ? w : s.r * 2 + w,
               height: _this2._orient === "horizontal" ? h : s.r * 2 + h,
-              x: _this2._orient === "vertical" ? -w / 2 : d.children && d.depth !== _this2._group_by.length ? -(s.r + w) : -s.r,
-              y: _this2._orient === "horizontal" ? -h / 2 : d.children && d.depth !== _this2._group_by.length ? -(s.r + _this2._labelHeight) : -s.r
+              x: _this2._orient === "vertical" ? -w / 2 : d.children && d.depth !== _this2._groupBy.length ? -(s.r + w) : -s.r,
+              y: _this2._orient === "horizontal" ? -h / 2 : d.children && d.depth !== _this2._groupBy.length ? -(s.r + _this2._labelHeight) : -s.r
             };
           },
           labelBounds: function labelBounds(d, i, s) {
@@ -60837,7 +60837,7 @@
                 width = _this2._orient === "vertical" ? "width" : "height",
                 x = _this2._orient === "vertical" ? "x" : "y",
                 y = _this2._orient === "vertical" ? "y" : "x";
-            return _ref = {}, _defineProperty$4(_ref, width, w), _defineProperty$4(_ref, height, h), _defineProperty$4(_ref, x, -w / 2), _defineProperty$4(_ref, y, d.children && d.depth !== _this2._group_by.length ? -(s.r + h) : s.r), _ref;
+            return _ref = {}, _defineProperty$4(_ref, width, w), _defineProperty$4(_ref, height, h), _defineProperty$4(_ref, x, -w / 2), _defineProperty$4(_ref, y, d.children && d.depth !== _this2._groupBy.length ? -(s.r + h) : s.r), _ref;
           }
         }).render());
 
@@ -61072,7 +61072,7 @@
         var nestedData = nest();
 
         for (var i = 0; i <= this._drawDepth; i++) {
-          nestedData.key(this._group_by[i]);
+          nestedData.key(this._groupBy[i]);
         }
 
         nestedData = nestedData.entries(this._filteredData);
@@ -61191,7 +61191,7 @@
       value: function _thresholdFunction(data, tree) {
         var aggs = this._aggs;
         var drawDepth = this._drawDepth;
-        var group_by = this._group_by;
+        var groupBy = this._groupBy;
         var threshold = this._threshold;
         var thresholdKey = this._thresholdKey;
 
@@ -61221,7 +61221,7 @@
 
         function thresholdByDepth(finalDataset, totalSum, currentDataset, branch, depth) {
           if (depth >= drawDepth) return;
-          var currentAccesor = group_by[depth];
+          var currentAccesor = groupBy[depth];
           var nextDataset = currentDataset.filter(function (item) {
             return currentAccesor(item) === branch.key;
           });
@@ -62273,8 +62273,8 @@
       _this._on["click.shape"] = function (d, i) {
         _this._tooltipClass.data([]).render();
 
-        if (_this._hover && _this._drawDepth >= _this._group_by.length - 1) {
-          var id = "".concat(_this._nodegroup_by && _this._nodegroup_by[_this._drawDepth](d, i) ? _this._nodegroup_by[_this._drawDepth](d, i) : _this._id(d, i));
+        if (_this._hover && _this._drawDepth >= _this._groupBy.length - 1) {
+          var id = "".concat(_this._nodegroupBy && _this._nodegroupBy[_this._drawDepth](d, i) ? _this._nodegroupBy[_this._drawDepth](d, i) : _this._id(d, i));
 
           if (_this._focus && _this._focus === id) {
             _this.active(false);
@@ -62325,7 +62325,7 @@
 
         id = id[id.length - 1];
 
-        if (_this._hover && _this._drawDepth >= _this._group_by.length - 1) {
+        if (_this._hover && _this._drawDepth >= _this._groupBy.length - 1) {
           if (_this._focus && _this._focus === ids) {
             _this.active(false);
 
@@ -62385,7 +62385,7 @@
 
       _this._on["mousemove.shape"] = function (d, i) {
         defaultMouseMove(d, i);
-        var id = "".concat(_this._nodegroup_by && _this._nodegroup_by[_this._drawDepth](d, i) ? _this._nodegroup_by[_this._drawDepth](d, i) : _this._id(d, i)),
+        var id = "".concat(_this._nodegroupBy && _this._nodegroupBy[_this._drawDepth](d, i) ? _this._nodegroupBy[_this._drawDepth](d, i) : _this._id(d, i)),
             links = _this._linkLookup[id],
             node = _this._nodeLookup[id];
         var filterIds = [id];
@@ -62455,7 +62455,7 @@
         }, {});
 
         var nodes = this._nodes.reduce(function (obj, d, i) {
-          obj[_this2._nodegroup_by ? _this2._nodegroup_by[_this2._drawDepth](d, i) : d.id] = d;
+          obj[_this2._nodegroupBy ? _this2._nodegroupBy[_this2._drawDepth](d, i) : d.id] = d;
           return obj;
         }, {});
 
@@ -62760,19 +62760,19 @@
       }
       /**
           @memberof Network
-          @desc If *value* is specified, sets the node group accessor(s) to the specified string, function, or array of values and returns the current class instance. This method overrides the default .group_by() function from being used with the data passed to .nodes(). If *value* is not specified, returns the current node group accessor.
+          @desc If *value* is specified, sets the node group accessor(s) to the specified string, function, or array of values and returns the current class instance. This method overrides the default .groupBy() function from being used with the data passed to .nodes(). If *value* is not specified, returns the current node group accessor.
           @param {String|Function|Array} [*value* = undefined]
           @chainable
       */
 
     }, {
-      key: "nodegroup_by",
-      value: function nodegroup_by(_) {
+      key: "nodegroupBy",
+      value: function nodegroupBy(_) {
         var _this3 = this;
 
-        if (!arguments.length) return this._nodegroup_by;
+        if (!arguments.length) return this._nodegroupBy;
         if (!(_ instanceof Array)) _ = [_];
-        return this._nodegroup_by = _.map(function (k) {
+        return this._nodegroupBy = _.map(function (k) {
           if (typeof k === "function") return k;else {
             if (!_this3._aggs[k]) {
               _this3._aggs[k] = function (a) {
@@ -63060,7 +63060,7 @@
 
           _this._focus = undefined;
         } else {
-          var id = _this._nodegroup_by && _this._nodegroup_by[_this._drawDepth](d, i) ? _this._nodegroup_by[_this._drawDepth](d, i) : _this._id(d, i),
+          var id = _this._nodegroupBy && _this._nodegroupBy[_this._drawDepth](d, i) ? _this._nodegroupBy[_this._drawDepth](d, i) : _this._id(d, i),
               links = _this._linkLookup[id],
               node = _this._nodeLookup[id];
           var filterIds = [node.id];
@@ -63143,7 +63143,7 @@
         }
 
         nodes = nodes.reduce(function (obj, d, i) {
-          obj[_this2._nodegroup_by ? _this2._nodegroup_by[_this2._drawDepth](d, i) : _this2._id(d, i)] = d;
+          obj[_this2._nodegroupBy ? _this2._nodegroupBy[_this2._drawDepth](d, i) : _this2._id(d, i)] = d;
           return obj;
         }, {});
         nodes = Array.from(new Set(Object.keys(data).concat(Object.keys(nodes)))).map(function (id, i) {
@@ -63595,19 +63595,19 @@
       }
       /**
           @memberof Rings
-          @desc If *value* is specified, sets the node group accessor(s) to the specified string, function, or array of values and returns the current class instance. This method overrides the default .group_by() function from being used with the data passed to .nodes(). If *value* is not specified, returns the current node group accessor.
+          @desc If *value* is specified, sets the node group accessor(s) to the specified string, function, or array of values and returns the current class instance. This method overrides the default .groupBy() function from being used with the data passed to .nodes(). If *value* is not specified, returns the current node group accessor.
           @param {String|Function|Array} [*value* = undefined]
           @chainable
       */
 
     }, {
-      key: "nodegroup_by",
-      value: function nodegroup_by(_) {
+      key: "nodegroupBy",
+      value: function nodegroupBy(_) {
         var _this3 = this;
 
-        if (!arguments.length) return this._nodegroup_by;
+        if (!arguments.length) return this._nodegroupBy;
         if (!(_ instanceof Array)) _ = [_];
-        return this._nodegroup_by = _.map(function (k) {
+        return this._nodegroupBy = _.map(function (k) {
           if (typeof k === "function") return k;else {
             if (!_this3._aggs[k]) {
               _this3._aggs[k] = function (a) {
@@ -65140,7 +65140,7 @@
         if (!this._filteredData.length) return this;
 
         var stackGroup = function stackGroup(d, i) {
-          return _this2._stacked ? "".concat(_this2._group_by.length > 1 ? _this2._ids(d, i).slice(0, -1).join("_") : "group") : "".concat(_this2._ids(d, i).join("_"));
+          return _this2._stacked ? "".concat(_this2._groupBy.length > 1 ? _this2._ids(d, i).slice(0, -1).join("_") : "group") : "".concat(_this2._ids(d, i).join("_"));
         };
 
         var data = this._filteredData.map(function (d, i) {

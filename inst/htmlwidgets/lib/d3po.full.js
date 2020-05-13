@@ -18294,10 +18294,9 @@
     "Click to Reset": "Clic para Restablecer",
     "Download": "Descargar",
     "Loading Visualization": "Cargando Visualización",
-    "No Data Available": "Datos No Disponibles",
-    "Powered by d3po": "Funciona con d3po",
+    "No Data Available": "No Hay Datos Disponibles",
     "Share": "Porcentaje",
-    "Shift+Click to Hide": "Mayús+Clic para Ocultar",
+    "Shift+Click to Hide": "Shift+Clic para Ocultar",
     "Total": "Total",
     "Values": "Valores"
   };
@@ -22903,7 +22902,7 @@
       };
 
       _this._fontColor = constant$3("black");
-      _this._fontFamily = constant$3(["Roboto", "Helvetica Neue", "HelveticaNeue", "Helvetica", "Arial", "sans-serif"]);
+      _this._fontFamily = constant$3(['Fira Sans', 'Roboto', 'Helvetica', 'sans-serif']);
       _this._fontMax = constant$3(50);
       _this._fontMin = constant$3(8);
       _this._fontOpacity = constant$3(1);
@@ -37000,7 +36999,7 @@
 
       _this = _possibleConstructorReturn$f(this, _getPrototypeOf$f(Button).call(this));
       _this._buttonStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px",
         "margin": "0 5px"
       };
@@ -37210,12 +37209,12 @@
 
       _this = _possibleConstructorReturn$g(this, _getPrototypeOf$g(Radio).call(this));
       _this._labelStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px",
         "padding-right": "5px"
       };
       _this._legendStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px",
         "padding-right": "5px"
       };
@@ -37501,20 +37500,20 @@
 
       _this = _possibleConstructorReturn$h(this, _getPrototypeOf$h(Select).call(this));
       _this._labelStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px",
         "margin-right": "5px"
       };
       _this._options = [];
       _this._optionStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px"
       };
       _this._selectStyle = {
         "background": "#fafafa",
         "border": "1px solid #ccc",
         "border-radius": "0",
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px",
         "outline": "0",
         "padding": "3px 5px 4px"
@@ -43198,7 +43197,7 @@
       _this._background = constant$3("rgba(255, 255, 255, 1)");
       _this._body = accessor("body", "");
       _this._bodyStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "12px",
         "font-weight": "400",
         "z-index": "1"
@@ -43209,7 +43208,7 @@
       _this._data = [];
       _this._footer = accessor("footer", "");
       _this._footerStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "12px",
         "font-weight": "400",
         "z-index": "1"
@@ -43237,20 +43236,20 @@
       };
       _this._tbody = [];
       _this._tbodyStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "12px",
         "text-align": "center"
       };
       _this._thead = [];
       _this._theadStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "12px",
         "font-weight": "600",
         "text-align": "center"
       };
       _this._title = accessor("title", "");
       _this._titleStyle = {
-        "font-family": "'Roboto', 'Helvetica Neue', 'HelveticaNeue', 'Helvetica', 'Arial', sans-serif",
+        "font-family": "'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "font-size": "14px",
         "font-weight": "600"
       };
@@ -56323,7 +56322,7 @@
       _this._legendTooltip = {};
 
       _this._loadingHTML = function () {
-        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;\">\n      <strong>".concat(_this._translate("Loading Visualization"), "</strong>\n      <sub style=\"bottom: 0; display: block; line-height: 1; margin-top: 5px;\"><a href=\"https://d3po.org\" target=\"_blank\">").concat(_this._translate("Powered by d3po"), "</a></sub>\n    </div>");
+        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Fira Sans', 'Roboto', 'Helvetica', sans-serif;\">\n      <strong>".concat(_this._translate("Loading Visualization"), "</strong></div>");
       };
 
       _this._loadingMessage = true;
@@ -56340,7 +56339,7 @@
       };
 
       _this._noDataHTML = function () {
-        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;\">\n      <strong>".concat(_this._translate("No Data Available"), "</strong>\n    </div>");
+        return "\n    <div style=\"left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%); font-family: 'Fira Sans', 'Roboto', 'Helvetica', sans-serif;\">\n      <strong>".concat(_this._translate("No Data Available"), "</strong>\n    </div>");
       };
 
       _this._noDataMessage = true;
@@ -56461,7 +56460,7 @@
         "border": "1px solid rgba(0, 0, 0, 0.75)",
         "color": "rgba(0, 0, 0, 0.75)",
         "display": "block",
-        "font": "900 15px/21px 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+        "font": "900 15px/21px 'Fira Sans', 'Roboto', 'Helvetica', sans-serif",
         "height": "20px",
         "margin": "5px",
         "opacity": 0.75,

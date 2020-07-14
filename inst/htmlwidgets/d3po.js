@@ -19,8 +19,6 @@ HTMLWidgets.widget({
     
         // visualization method
         
-        var chart;
-        
         switch (x.type) {
           case "area":
             chart = new d3po.AreaPlot();

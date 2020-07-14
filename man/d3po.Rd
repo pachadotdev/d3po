@@ -3,7 +3,7 @@
 \docType{package}
 \name{d3po}
 \alias{d3po}
-\title{An `htmlwidget` interface to the
+\title{An \code{htmlwidget} interface to the
 d3po javascript chart library}
 \usage{
 d3po(data = NULL, width = "100\%", height = "100\%", elementId = NULL)
@@ -21,23 +21,6 @@ string and have \code{'px'} appended.}
 }
 \description{
 This function provides 'd3po' methods from R console
-}
-\examples{
-dta <- data.frame(
-  id = c("alpha", "alpha", "alpha", "beta", "beta", "beta"),
-  x = c(4, 5, 6, 4, 5, 6),
-  y = c(7, 25, 13, 7, 8, 13)
-)
-
-d3po() \%>\%
-  d3po_data(dta) \%>\%
-  d3po_type("bar")
-d3po() \%>\%
-  d3po_data(dta) \%>\%
-  d3po_type("hbar")
-d3po() \%>\%
-  d3po_data(dta) \%>\%
-  d3po_type("area")
 }
 \author{
 Mauricio Vargas

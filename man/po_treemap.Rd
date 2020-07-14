@@ -2,10 +2,32 @@
 % Please edit documentation in R/d3po-api-2.R
 \name{po_treemap}
 \alias{po_treemap}
-\title{Treemap plot}
+\title{Treemap}
 \usage{
 po_treemap(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
+\arguments{
+\item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
+
+\item{...}{Aesthetics, see \code{\link[=daes]{daes()}}.}
+
+\item{data}{Any dataset to use for plot, overrides data passed
+to \code{\link[=d3po]{d3po()}}.}
+
+\item{inherit_daes}{Whether to inherit aesthetics previous specified.}
+}
 \description{
-Treemap plot
+Plot a treemap
+}
+\examples{
+treemap_data <- data.frame(
+ parent = c(rep("Group 1", 3), rep("Group 2", 2)),
+ id = c("alpha", "beta", "gamma", "delta", "eta"),
+ value = c(29, 10, 2, 29, 25)
+)
+
+d3po(treemap_data) \%>\%
+ po_treemap(daes(sum = value, group_by = id)) \%>\%
+ po_title("wrongly aligned title")
+
 }

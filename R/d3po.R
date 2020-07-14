@@ -8,23 +8,7 @@
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
 #' @param height Same as width parameter.
-#'
-#' @examples
-#' dta <- data.frame(
-#'   id = c("alpha", "alpha", "alpha", "beta", "beta", "beta"),
-#'   x = c(4, 5, 6, 4, 5, 6),
-#'   y = c(7, 25, 13, 7, 8, 13)
-#' )
-#'
-#' d3po() %>%
-#'   d3po_data(dta) %>%
-#'   d3po_type("bar")
-#' d3po() %>%
-#'   d3po_data(dta) %>%
-#'   d3po_type("hbar")
-#' d3po() %>%
-#'   d3po_data(dta) %>%
-#'   d3po_type("area")
+#' 
 #' @export
 d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL) {
   x <- list(tempdata = data)
@@ -57,7 +41,7 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
 #' Output and render functions for using d3po within Shiny
 #' applications and interactive Rmd documents.
 #'
-#' @param outputId output variable to read from
+#' @param output_id output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
@@ -65,7 +49,8 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
-#' @param id Id of
+#' @param id Id of plot to create a proxy of.
+#' @param session A valid shiny session.
 #
 #' @name d3po-shiny
 #'

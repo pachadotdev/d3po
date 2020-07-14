@@ -2,10 +2,27 @@
 % Please edit documentation in R/d3po-api-2.R
 \name{po_area}
 \alias{po_area}
-\title{Area plot}
+\title{Area}
 \usage{
-po_area(d3po, ..., data = NULL, inherit_daes = TRUE)
+po_area(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE)
+}
+\arguments{
+\item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
+
+\item{...}{Aesthetics, see \code{\link[=daes]{daes()}}.}
+
+\item{data}{Any dataset to use for plot, overrides data passed
+to \code{\link[=d3po]{d3po()}}.}
+
+\item{inherit_daes}{Whether to inherit aesthetics previous specified.}
+
+\item{stack}{Whether to stack the series.}
 }
 \description{
-Area plot
+Plot an area chart.
+}
+\examples{
+d3po(cars) \%>\% 
+ po_area(daes(speed, dist)) 
+
 }

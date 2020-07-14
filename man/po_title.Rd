@@ -6,6 +6,11 @@
 \usage{
 po_title(d3po, title)
 }
+\arguments{
+\item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
+
+\item{title}{Title to add.}
+}
 \description{
-Title
+Add a title to a chart.
 }

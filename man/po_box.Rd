@@ -5,11 +5,22 @@
 \title{Boxplot}
 \usage{
 po_box(d3po, ..., data = NULL, inherit_daes = TRUE)
+}
+\arguments{
+\item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
 
-po_box(d3po, ..., data = NULL, inherit_daes = TRUE)
+\item{...}{Aesthetics, see \code{\link[=daes]{daes()}}.}
+
+\item{data}{Any dataset to use for plot, overrides data passed
+to \code{\link[=d3po]{d3po()}}.}
+
+\item{inherit_daes}{Whether to inherit aesthetics previous specified.}
 }
 \description{
-Boxplot
+Draw a boxplot.
+}
+\examples{
+d3po(mtcars) \%>\%
+ po_box(daes(x = cyl, y = qsec))
 
-Box and Whisker plot
 }

@@ -2,10 +2,30 @@
 % Please edit documentation in R/d3po-api-2.R
 \name{po_bar}
 \alias{po_bar}
-\title{Bar plot}
+\title{Bar}
 \usage{
 po_bar(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
+\arguments{
+\item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
+
+\item{...}{Aesthetics, see \code{\link[=daes]{daes()}}.}
+
+\item{data}{Any dataset to use for plot, overrides data passed
+to \code{\link[=d3po]{d3po()}}.}
+
+\item{inherit_daes}{Whether to inherit aesthetics previous specified.}
+}
 \description{
-Bar plot
+Draw a bar chart.
+}
+\examples{
+df <- data.frame(
+ x = 1:10,
+ y = runif(10)
+)
+
+d3po(df) \%>\%
+ po_bar(daes(x, y)) 
+
 }

@@ -29,6 +29,9 @@
 d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL) {
   x <- list(tempdata = data)
 
+  # serialise rowwise
+  attr(x, 'TOJSON_ARGS') <- list(dataframe = "rows")
+
   # create widget
   htmlwidgets::createWidget(
     name = "d3po",
@@ -46,7 +49,6 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
 # sensitive data points => only serialize what the user explicitely wants
 .render_d3po <- function(d3po) {
   d3po$x$tempdata <- NULL
-  d3po$x$data <- purrr::transpose(d3po$x$data)
   return(d3po)
 }
 

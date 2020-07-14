@@ -6,3 +6,4 @@ src_d3_35/
 src_v2/
 LICENSE
 inst/htmlwidgets/lib/d3po.full.min
+^\.github$

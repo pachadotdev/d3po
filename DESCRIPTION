@@ -1,8 +1,9 @@
 Package: d3po
 Type: Package
-Title: A javascript library designed to work with Shiny.
+Title: A javascript library designed to work with Shiny
 Version: 0.1.2
 Author: Mauricio Vargas [aut,cre],
+  John Coene [aut],
   Joshua Kunst [aut]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
 Description: A javascript library designed to work with Shiny. It extends the popular 
@@ -11,5 +12,11 @@ Depends: htmlwidgets, magrittr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
 NeedsCompilation: no
+Imports: 
+    assertthat,
+    dplyr,
+    purrr,
+    rlang

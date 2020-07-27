@@ -1,15 +1,11 @@
 library(dplyr)
 library(d3po)
 
-pokemon <- readRDS("dev/pokemon.rds")
+pokemon <- readRDS("dev/pokemon.rds") %>% 
+  # ideally this renaming shouldn't be needed
+  select(value = weight, id = type_1, color = color_1)
 
-pokemon_type <- pokemon %>% 
-  rename(type = type_2) %>% 
-  group_by(type, color_1) %>% 
-  count() %>% 
-  ungroup() %>% 
-  select(id = type, color = color_1, value = n)
-
-d3po(pokemon_type) %>%
+d3po(pokemon) %>%
+  # and here I want to group by two variables type_1,type_2
   po_treemap(daes(sum = value, group_by = id, color = color)) %>%
   po_title("Count of pokemon by type 1")

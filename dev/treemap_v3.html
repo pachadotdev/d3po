@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+
+  <head>
+    <script src="d3po.full.min.js"></script>
+  </head>
+
+  <body>
+    <script>
+      var data = "pokemon.json";
+      new d3po.Treemap()
+        .data(data)
+        .groupBy(["type_1", "type_2"])
+        .sum("weight")
+        .color("color_1")
+        .depth(0)
+        .render();
+    </script>
+  </body>
+</html>

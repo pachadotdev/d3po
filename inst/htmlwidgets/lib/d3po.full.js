@@ -56417,8 +56417,8 @@
       _this._titleClass = new TextBox();
       _this._titleConfig = {
         ariaHidden: true,
-        fontSize: 12,
-        padding: 5,
+        fontSize: 20,
+        padding: 0,
         resize: false,
         textAnchor: "middle"
       };

@@ -1,3 +1,5 @@
+# Box ----
+
 #' Boxplot
 #' 
 #' Draw a boxplot.
@@ -33,10 +35,12 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$xaxis <- daes_to_opts(daes, "x")
   d3po$x$yaxis <- daes_to_opts(daes, "y")
-  d3po$x$id <- daes_to_opts(daes, "group")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
 
   return(d3po)
 }
+
+# Treemap ----
 
 #' Treemap
 #' 
@@ -74,12 +78,14 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   columns <- daes_to_columns(daes)
   
   d3po$x$data <- dplyr::select(data, columns)
-  d3po$x$sum <- daes_to_opts(daes, "sum")
-  d3po$x$group_by <- daes_to_opts(daes, "group")
+  d3po$x$sum <- daes_to_opts(daes, "value")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
   d3po$x$color <- daes_to_opts(daes, "color")
-  
+
   return(d3po)
 }
+
+# Area ----
 
 #' Area
 #' 
@@ -113,10 +119,12 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
-  d3po$x$group_by <- daes_to_opts(daes, "group")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
   
   return(d3po)
 }
+
+# Bar ----
 
 #' Bar
 #' 
@@ -155,10 +163,12 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$id <- daes_to_opts(daes, "id")
-  d3po$x$group_by <- daes_to_opts(daes, "group")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
   
   return(d3po)
 }
+
+# Title ----
 
 #' Title
 #' 
@@ -188,5 +198,38 @@ po_title.d3proxy <- function(d3po, title){
 
   d3po$session$sendCustomMessage("d3po-title", msg)
 
+  return(d3po)
+}
+
+# Legend ----
+
+#' Legend
+#' 
+#' Add a legend to a chart.
+#' 
+#' @inheritParams po_box
+#' @param legend legend to add.
+#' 
+#' @export 
+po_legend <- function(d3po, legend) UseMethod("po_legend")
+
+#' @export 
+#' @method po_legend d3po
+po_legend.d3po <- function(d3po, legend){
+  assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
+  
+  d3po$x$legend <- legend
+  return(d3po)
+}
+
+#' @export 
+#' @method po_legend d3proxy
+po_legend.d3proxy <- function(d3po, legend){
+  assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
+  
+  msg <- list(id = d3po$id, msg = list(legend = legend))
+  
+  d3po$session$sendCustomMessage("d3po-legend", msg)
+  
   return(d3po)
 }

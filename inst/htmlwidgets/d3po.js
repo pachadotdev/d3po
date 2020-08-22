@@ -68,6 +68,9 @@ HTMLWidgets.widget({
           chart.title(x.title);
         }
         
+        // title, subtitle and footer
+        chart.legend(x.legend);
+        
         // aesthetic parameters
         if (x.color) {
           chart.color(x.color);

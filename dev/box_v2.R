@@ -18,5 +18,5 @@ box_data <- tibble(
 
 # here I need to group by id AND value
 d3po(box_data) %>%
-  po_box(daes(x = id, y = value, group_by = value)) %>%
+  po_box(daes(x = id, y = value, group_by = id)) %>%
   po_title("wrongly aligned title")

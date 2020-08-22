@@ -17,6 +17,6 @@ d3po(area_data) %>%
   po_title("wrongly aligned title")
 
 # broken
-d3po(area_data) %>%
-  po_area(daes(x = x, y = y, id = aaa)) %>%
-  po_title("wrongly aligned title")
+# d3po(area_data) %>%
+#   po_area(daes(x = x, y = y, id = aaa)) %>%
+#   po_title("wrongly aligned title")

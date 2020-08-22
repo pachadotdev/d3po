@@ -20,4 +20,5 @@ d3po(bar_data) %>%
 # also ok
 d3po(bar_data) %>%
   po_bar(daes(x = x, y = y, id = id)) %>%
-  po_title("wrongly aligned title")
+  po_title("wrongly aligned title") %>% 
+  po_legend(TRUE)

@@ -1,9 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-dev/
-src_d3_50/
-src_d3_35/
-src_v2/
+dev
+javascript
 LICENSE
 inst/htmlwidgets/lib/d3po.full.min
 ^\.github$

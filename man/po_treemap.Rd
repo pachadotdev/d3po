@@ -27,7 +27,7 @@ treemap_data <- data.frame(
 )
 
 d3po(treemap_data) \%>\%
- po_treemap(daes(sum = value, group_by = id)) \%>\%
+ po_treemap(daes(size = value, group_by = id)) \%>\%
  po_title("wrongly aligned title")
 
 }

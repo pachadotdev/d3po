@@ -56,7 +56,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' )
 #' 
 #' d3po(treemap_data) %>%
-#'  po_treemap(daes(sum = value, group_by = id)) %>%
+#'  po_treemap(daes(size = value, group_by = id)) %>%
 #'  po_title("wrongly aligned title")
 #' 
 #' @export 
@@ -78,7 +78,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   columns <- daes_to_columns(daes)
   
   d3po$x$data <- dplyr::select(data, columns)
-  d3po$x$sum <- daes_to_opts(daes, "value")
+  d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
   d3po$x$color <- daes_to_opts(daes, "color")
 

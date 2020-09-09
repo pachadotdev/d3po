@@ -19,6 +19,9 @@ HTMLWidgets.widget({
     
         // visualization method
         
+        chart = new d3po.viz();
+        chart.container("#" + el.id);
+
         switch (x.type) {
           case "area":
             chart = new d3po.AreaPlot();
@@ -39,7 +42,7 @@ HTMLWidgets.widget({
             chart = new d3po.StackedArea();
             break;
           case "treemap":
-            chart = new d3po.Treemap();
+            chart.type("treemap");
             break;
           default:
             chart = null;
@@ -49,10 +52,10 @@ HTMLWidgets.widget({
         chart.data(x.data);
         
         if (x.group_by) {
-          chart.groupBy(x.group_by);
+          chart.id(x.group_by);
         }
-        if (x.sum) {
-          chart.sum(x.sum);
+        if (x.size) {
+          chart.size(x.size);
         }
     
         // bar/line chart
@@ -77,8 +80,8 @@ HTMLWidgets.widget({
         }
         
         setTimeout(function() {
-          // chart.resize(true);
-          chart.render();
+          chart.resize(true);
+          chart.draw();
         }, 10);
 
       },

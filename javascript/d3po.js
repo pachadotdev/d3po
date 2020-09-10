@@ -30540,7 +30540,7 @@ arguments[4][120][0].apply(exports,arguments)
             color: "#444444",
             decoration: decoration(),
             family: family(),
-            size: 24,
+            size: 20,
             transform: transform(),
             weight: 400
         },

@@ -24,22 +24,22 @@ HTMLWidgets.widget({
 
         switch (x.type) {
           case "area":
-            chart = new d3po.AreaPlot();
+            chart.type("area");
             break;
           case "bar":
-            chart = new d3po.BarChart();
+            chart.type("bar");
             break;
           case "box":
-            chart = new d3po.BoxWhisker();
+            chart.type("box");
             break;
           case "line":
-            chart = new d3po.LinePlot();
+            chart.type("line");
             break;
           case "scatter":
-            chart = new d3po.Plot();
+            chart = new type("scatter");
             break;
           case "stacked":
-            chart = new d3po.StackedArea();
+            chart.type("stacked");
             break;
           case "treemap":
             chart.type("treemap");

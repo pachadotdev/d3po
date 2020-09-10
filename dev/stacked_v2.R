@@ -13,5 +13,5 @@ area_data <- tibble(
 
 # ok
 d3po(area_data) %>%
-  po_stacked_area(daes(x = x, y = y, group_by = aaa)) %>%
+  po_area(daes(x = x, y = y, group_by = aaa), stack = TRUE) %>%
   po_title("wrongly aligned title")

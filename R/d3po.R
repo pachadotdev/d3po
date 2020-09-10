@@ -24,6 +24,7 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
     width = width,
     height = height,
     package = "d3po",
+    sizingPolicy = htmlwidgets::sizingPolicy(padding = 5),
     elementId = elementId
   )
 }

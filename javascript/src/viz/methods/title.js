@@ -16,7 +16,7 @@
             color: "#444444",
             decoration: decoration(),
             family: family(),
-            size: 16,
+            size: 24,
             transform: transform(),
             weight: 400
         },

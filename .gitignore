@@ -4,21 +4,8 @@
 .Ruserdata
 source/
 dev/*.js
-src_d3_35/node_modules/
-src_d3_35/d3po.full.js
-src_d3_35/d3po.full.min.js
-src_d3_35/d3po.js
-src_d3_35/d3po.min.js
-src_d3_35/d3.min.js
-src_d3_35/*.html
-src_d3_50/node_modules/
-src_d3_50/d3po.full.js
-src_d3_50/d3po.full.min.js
-src_d3_50/d3po.js
-src_d3_50/d3po.min.js
-src_d3_50/d3.min.js
-src_d3_50/*.html
-src_v2
-
-# Vim
+javascript/node_modules
+javascript/d3po.full.js
+javascript/d3po.full.min.js
+javacript/d3.min.js
 *.swp

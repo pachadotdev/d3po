@@ -33,8 +33,8 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- dplyr::select(data, columns)
-  d3po$x$xaxis <- daes_to_opts(daes, "x")
-  d3po$x$yaxis <- daes_to_opts(daes, "y")
+  d3po$x$x <- daes_to_opts(daes, "x")
+  d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
 
   return(d3po)

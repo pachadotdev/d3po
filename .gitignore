@@ -5,6 +5,8 @@
 source/
 dev/*.js
 javascript/node_modules
+javascript/d3po.min.js
+javascript/d3po.min.js
 javascript/d3po.full.js
 javascript/d3po.full.min.js
 javacript/d3.min.js

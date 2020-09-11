@@ -8,4 +8,4 @@ dependencies:
     version: 0.1.0
     src: htmlwidgets/lib/
     script:
-      - d3po.full.min.js
+      - d3po.min.js

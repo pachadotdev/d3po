@@ -72,6 +72,9 @@ HTMLWidgets.widget({
         }
         
         // title, subtitle and footer
+        if(x.legend === undefined) {
+          x.legend = false;
+        }
         chart.legend(x.legend);
         
         // aesthetic parameters

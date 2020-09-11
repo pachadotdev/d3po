@@ -1,5 +1,7 @@
 # d3po
 
+## D3 5.x migration
+
 What remains to finish the migration to D3.js 5.x:
 
 - migrate d3.layout.treemap(), d3.layout.pack() and d3.layout.stack() to their 5.x counterparts

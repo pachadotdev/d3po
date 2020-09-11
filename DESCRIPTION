@@ -9,7 +9,7 @@ Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
 Description: A javascript library designed to work with Shiny. It extends the popular 
   D3 to enable fast and beautiful visualizations.
 Depends: htmlwidgets, magrittr
-License: GPL-3
+License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

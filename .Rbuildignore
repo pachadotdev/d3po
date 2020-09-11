@@ -5,3 +5,4 @@ javascript
 LICENSE
 inst/htmlwidgets/lib/d3po.full.min
 ^\.github$
+^LICENSE\.md$

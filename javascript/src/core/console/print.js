@@ -1,10 +1,8 @@
 // Custom styling and behavior for browser console statements
 (function() {
-    var ie, print, wiki;
+    var ie, print;
 
     ie = require("../../client/ie.js");
-
-    wiki = require("./wiki.js");
 
     print = function(type, message, style) {
         style = style || "";
@@ -24,7 +22,6 @@
     print.error = function(message, url) {
         this("groupCollapsed", "ERROR: " + message, "font-weight:800;color:#D74B03;");
         this.stack();
-        this.wiki(url);
         this.groupEnd();
     };
 
@@ -90,17 +87,7 @@
     print.warning = function(message, url) {
         this("groupCollapsed", message, "color:#888;");
         this.stack();
-        this.wiki(url);
         this.groupEnd();
-    };
-
-    print.wiki = function(url) {
-        if (url) {
-            if (url in wiki) {
-                url = d3po.repo + "wiki/" + wiki[url];
-            }
-            this("log", "documentation: " + url, "color:#aaa;");
-        }
     };
 
     module.exports = print;

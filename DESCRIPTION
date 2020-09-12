@@ -8,7 +8,10 @@ Author: Mauricio Vargas [aut,cre],
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
 Description: A javascript library designed to work with Shiny. It extends the popular 
   D3 to enable fast and beautiful visualizations.
-Depends: htmlwidgets, magrittr
+Depends: 
+    htmlwidgets,
+    magrittr,
+    R (>= 2.10)
 License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true

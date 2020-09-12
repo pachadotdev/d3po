@@ -11,8 +11,9 @@
 #' @param inherit_daes Whether to inherit aesthetics previous specified.
 #' 
 #' @examples 
-#' d3po(mtcars) %>%
-#'  po_box(daes(x = cyl, y = qsec))
+#' d3po(pokemon) %>%
+#'  po_box(daes(x = type_1, y = speed, group_by = name, color = color_1)) %>%
+#'  po_title("Distribution of Pokemon Speed")
 #' 
 #' @export 
 po_box <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_box")
@@ -36,6 +37,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$color <- daes_to_opts(daes, "color")
 
   return(d3po)
 }
@@ -49,15 +51,17 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' @inheritParams po_box
 #' 
 #' @examples 
-#' treemap_data <- data.frame(
-#'  parent = c(rep("Group 1", 3), rep("Group 2", 2)),
-#'  id = c("alpha", "beta", "gamma", "delta", "eta"),
-#'  value = c(29, 10, 2, 29, 25)
-#' )
+#' library(dplyr)
 #' 
-#' d3po(treemap_data) %>%
-#'  po_treemap(daes(size = value, group_by = id)) %>%
-#'  po_title("wrongly aligned title")
+#' pokemon_n <- pokemon %>% 
+#'  group_by(type_1, color_1) %>% 
+#'  count()
+#'  
+#' d3po(pokemon_n) %>%
+#'  po_treemap(
+#'   daes(size = n, group_by = type_1, color = color_1)
+#'  ) %>%
+#'  po_title("Share of Pokemon by Type 1")
 #' 
 #' @export 
 po_treemap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_treemap")
@@ -94,9 +98,21 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' @inheritParams po_box
 #' @param stack Whether to stack the series.
 #' 
-#' @examples 
-#' d3po(cars) %>% 
-#'  po_area(daes(speed, dist)) 
+#' @examples
+#' library(dplyr)
+#' 
+#' pokemon_d <- tibble(
+#'  decile = 0:10,
+#'  weight = quantile(pokemon$weight, probs = seq(0, 1, by = .1)),
+#'  var = "weight",
+#'  color = "#5377e3"
+#' )
+#' 
+#' d3po(pokemon_d) %>%
+#'  po_area(
+#'   daes(x = decile, y = weight, group_by = var, color = color)
+#'  ) %>%
+#'  po_title("Deciles of Pokemon Weight")
 #' 
 #' @export 
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_area")
@@ -120,6 +136,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)
 }
@@ -133,13 +150,17 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
 #' @inheritParams po_box
 #' 
 #' @examples
-#' df <- data.frame(
-#'  x = 1:10,
-#'  y = runif(10)
-#' )
+#' library(dplyr)
 #' 
-#' d3po(df) %>%
-#'  po_bar(daes(x, y)) 
+#' pokemon_n <- pokemon %>% 
+#'  group_by(type_1, color_1) %>% 
+#'  count()
+#'  
+#' d3po(pokemon_n) %>%
+#'  po_bar(
+#'   daes(x = type_1, y = n, group_by = color_1, color = color_1)
+#'  ) %>%
+#'  po_title("Count of Pokemon by Type 1")
 #' 
 #' @export 
 po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
@@ -164,6 +185,59 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$id <- daes_to_opts(daes, "id")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$color <- daes_to_opts(daes, "color")
+  
+  return(d3po)
+}
+
+# Line ----
+
+#' Line
+#' 
+#' Plot an line chart.
+#' 
+#' @inheritParams po_box
+#' 
+#' @examples
+#' library(dplyr)
+#' 
+#' pokemon_s <- pokemon %>% 
+#'  filter(type_1 %in% c("grass", "fire", "water")) %>% 
+#'  group_by(type_1 ,color_1) %>% 
+#'  summarise(
+#'   decile = 0:10,
+#'   weight = quantile(weight, probs = seq(0, 1, by = .1))
+#'  )
+#'  
+#' d3po(pokemon_s) %>%
+#'  po_line(
+#'   daes(x = decile, y = weight, group_by = type_1, color = color_1)
+#'  ) %>%
+#'  po_title("Deciles of Pokemon Weight by Type 1")
+#' 
+#' @export 
+po_line <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_line")
+
+#' @export
+#' @method po_line d3po
+po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "line"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$x <- daes_to_opts(daes, "x")
+  d3po$x$y <- daes_to_opts(daes, "y")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)
 }

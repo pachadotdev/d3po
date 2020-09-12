@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny bindings for 'd3po' — d3po-shiny • d3po</title>
+<title>Line — po_line • d3po</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Shiny bindings for 'd3po' — d3po-shiny" />
-<meta property="og:description" content="Output and render functions for using d3po within Shiny
-applications and interactive Rmd documents." />
+<meta property="og:title" content="Line — po_line" />
+<meta property="og:description" content="Plot an line chart." />
 
 
 
@@ -107,59 +106,55 @@ applications and interactive Rmd documents." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny bindings for 'd3po'</h1>
+    <h1>Line</h1>
     
-    <div class="hidden name"><code>d3po-shiny.Rd</code></div>
+    <div class="hidden name"><code>po_line.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Output and render functions for using d3po within Shiny
-applications and interactive Rmd documents.</p>
+    <p>Plot an line chart.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>d3po_output</span>(<span class='no'>output_id</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='st'>"100%"</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='st'>"100%"</span>)
-
-<span class='fu'>render_d3po</span>(<span class='no'>expr</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='kw'>quoted</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>d3po_proxy</span>(<span class='no'>id</span>, <span class='kw'>session</span> <span class='kw'>=</span> <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())</pre>
+    <pre class="usage"><span class='fu'>po_line</span>(<span class='no'>d3po</span>, <span class='no'>...</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inherit_daes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>output_id</th>
-      <td><p>output variable to read from</p></td>
+      <th>d3po</th>
+      <td><p>Either the output of <code><a href='d3po.html'>d3po()</a></code> or <code><a href='d3po-shiny.html'>d3po_proxy()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>width, height</th>
-      <td><p>Must be a valid CSS unit (like <code>'100%'</code>,
-<code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a
-string and have <code>'px'</code> appended.</p></td>
+      <th>...</th>
+      <td><p>Aesthetics, see <code><a href='daes.html'>daes()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>expr</th>
-      <td><p>An expression that generates a d3po object</p></td>
+      <th>data</th>
+      <td><p>Any dataset to use for plot, overrides data passed
+to <code><a href='d3po.html'>d3po()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>env</th>
-      <td><p>The environment in which to evaluate <code>expr</code>.</p></td>
-    </tr>
-    <tr>
-      <th>quoted</th>
-      <td><p>Is <code>expr</code> a quoted expression (with <code><a href='https://rdrr.io/r/base/substitute.html'>quote()</a></code>)? This
-is useful if you want to save an expression in a variable.</p></td>
-    </tr>
-    <tr>
-      <th>id</th>
-      <td><p>Id of plot to create a proxy of.</p></td>
-    </tr>
-    <tr>
-      <th>session</th>
-      <td><p>A valid shiny session.</p></td>
+      <th>inherit_daes</th>
+      <td><p>Whether to inherit aesthetics previous specified.</p></td>
     </tr>
     </table>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+
+<span class='no'>pokemon_decile</span> <span class='kw'>&lt;-</span> <span class='no'>pokemon</span> <span class='kw'>%&gt;%</span>
+ <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>type_1</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"grass"</span>, <span class='st'>"fire"</span>, <span class='st'>"water"</span>)) <span class='kw'>%&gt;%</span>
+ <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>type_1</span> ,<span class='no'>color_1</span>) <span class='kw'>%&gt;%</span>
+ <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span>(
+  <span class='kw'>decile</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>10</span>,
+  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>weight</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
+ )</div><div class='output co'>#&gt; <span class='message'>`summarise()` regrouping output by 'type_1', 'color_1' (override with `.groups` argument)</span></div><div class='input'>
+<span class='fu'><a href='d3po.html'>d3po</a></span>(<span class='no'>pokemon_decile</span>) <span class='kw'>%&gt;%</span>
+ <span class='fu'>po_line</span>(
+  <span class='fu'><a href='daes.html'>daes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>decile</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>weight</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='no'>type_1</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>color_1</span>)
+ ) <span class='kw'>%&gt;%</span>
+ <span class='fu'><a href='po_title.html'>po_title</a></span>(<span class='st'>"Decile of Pokemon Weight by Type 1"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

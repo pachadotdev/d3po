@@ -1,13 +1,13 @@
 Package: d3po
 Type: Package
-Title: A javascript library designed to work with Shiny
-Version: 0.1.2
+Title: Fast and Beautiful Interactive Visualization for Markdown and Shiny
+Version: 0.2
 Author: Mauricio Vargas [aut,cre],
   John Coene [aut],
   Joshua Kunst [aut]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
-Description: A javascript library designed to work with Shiny. It extends the popular 
-  D3 to enable fast and beautiful visualizations.
+Description: Apache licensed alternative to highcharter which provides functions
+  for both fast and beautiful interactive visualization for markdown and shiny.
 Depends: 
     htmlwidgets,
     magrittr,
@@ -23,3 +23,7 @@ Imports:
     dplyr,
     purrr,
     rlang
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

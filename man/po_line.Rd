@@ -22,7 +22,7 @@ Plot an line chart.
 \examples{
 library(dplyr)
 
-pokemon_s <- pokemon \%>\% 
+pokemon_decile <- pokemon \%>\% 
  filter(type_1 \%in\% c("grass", "fire", "water")) \%>\% 
  group_by(type_1 ,color_1) \%>\% 
  summarise(
@@ -30,10 +30,10 @@ pokemon_s <- pokemon \%>\%
   weight = quantile(weight, probs = seq(0, 1, by = .1))
  )
  
-d3po(pokemon_s) \%>\%
+d3po(pokemon_decile) \%>\%
  po_line(
   daes(x = decile, y = weight, group_by = type_1, color = color_1)
  ) \%>\%
- po_title("Deciles of Pokemon Weight by Type 1")
+ po_title("Decile of Pokemon Weight by Type 1")
 
 }

@@ -53,11 +53,11 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' @examples 
 #' library(dplyr)
 #' 
-#' pokemon_n <- pokemon %>% 
+#' pokemon_count <- pokemon %>% 
 #'  group_by(type_1, color_1) %>% 
 #'  count()
 #'  
-#' d3po(pokemon_n) %>%
+#' d3po(pokemon_count) %>%
 #'  po_treemap(
 #'   daes(size = n, group_by = type_1, color = color_1)
 #'  ) %>%
@@ -101,18 +101,20 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' @examples
 #' library(dplyr)
 #' 
-#' pokemon_d <- tibble(
-#'  decile = 0:10,
-#'  weight = quantile(pokemon$weight, probs = seq(0, 1, by = .1)),
-#'  var = "weight",
+#' pokemon_density <- density(pokemon$weight, n = 30)
+#' 
+#' pokemon_density <- tibble(
+#'  x = pokemon_density$x,
+#'  y = pokemon_density$y,
+#'  variable = "weight",
 #'  color = "#5377e3"
 #' )
 #' 
-#' d3po(pokemon_d) %>%
+#' d3po(pokemon_density) %>%
 #'  po_area(
-#'   daes(x = decile, y = weight, group_by = var, color = color)
+#'   daes(x = x, y = y, group_by = variable, color = color)
 #'  ) %>%
-#'  po_title("Deciles of Pokemon Weight")
+#'  po_title("Approximated Density of Pokemon Weight")
 #' 
 #' @export 
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_area")
@@ -152,13 +154,13 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
 #' @examples
 #' library(dplyr)
 #' 
-#' pokemon_n <- pokemon %>% 
+#' pokemon_count <- pokemon %>% 
 #'  group_by(type_1, color_1) %>% 
 #'  count()
 #'  
-#' d3po(pokemon_n) %>%
+#' d3po(pokemon_count) %>%
 #'  po_bar(
-#'   daes(x = type_1, y = n, group_by = color_1, color = color_1)
+#'   daes(x = type_1, y = n, group_by = type_1, color = color_1)
 #'  ) %>%
 #'  po_title("Count of Pokemon by Type 1")
 #' 
@@ -201,7 +203,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' @examples
 #' library(dplyr)
 #' 
-#' pokemon_s <- pokemon %>% 
+#' pokemon_decile <- pokemon %>% 
 #'  filter(type_1 %in% c("grass", "fire", "water")) %>% 
 #'  group_by(type_1 ,color_1) %>% 
 #'  summarise(
@@ -209,11 +211,11 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'   weight = quantile(weight, probs = seq(0, 1, by = .1))
 #'  )
 #'  
-#' d3po(pokemon_s) %>%
+#' d3po(pokemon_decile) %>%
 #'  po_line(
 #'   daes(x = decile, y = weight, group_by = type_1, color = color_1)
 #'  ) %>%
-#'  po_title("Deciles of Pokemon Weight by Type 1")
+#'  po_title("Decile of Pokemon Weight by Type 1")
 #' 
 #' @export 
 po_line <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_line")

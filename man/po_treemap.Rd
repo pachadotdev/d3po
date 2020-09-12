@@ -22,11 +22,11 @@ Plot a treemap
 \examples{
 library(dplyr)
 
-pokemon_n <- pokemon \%>\% 
+pokemon_count <- pokemon \%>\% 
  group_by(type_1, color_1) \%>\% 
  count()
  
-d3po(pokemon_n) \%>\%
+d3po(pokemon_count) \%>\%
  po_treemap(
   daes(size = n, group_by = type_1, color = color_1)
  ) \%>\%

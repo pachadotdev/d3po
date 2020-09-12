@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">d3po</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -83,6 +83,9 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/d3po.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -148,18 +151,20 @@ to <code><a href='d3po.html'>d3po()</a></code>.</p></td>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
-<span class='no'>pokemon_d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(
- <span class='kw'>decile</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>10</span>,
- <span class='kw'>weight</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>pokemon</span>$<span class='no'>weight</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)),
- <span class='kw'>var</span> <span class='kw'>=</span> <span class='st'>"weight"</span>,
+<span class='no'>pokemon_density</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>pokemon</span>$<span class='no'>weight</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>30</span>)
+
+<span class='no'>pokemon_density</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(
+ <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>pokemon_density</span>$<span class='no'>x</span>,
+ <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>pokemon_density</span>$<span class='no'>y</span>,
+ <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"weight"</span>,
  <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"#5377e3"</span>
 )
 
-<span class='fu'><a href='d3po.html'>d3po</a></span>(<span class='no'>pokemon_d</span>) <span class='kw'>%&gt;%</span>
+<span class='fu'><a href='d3po.html'>d3po</a></span>(<span class='no'>pokemon_density</span>) <span class='kw'>%&gt;%</span>
  <span class='fu'>po_area</span>(
-  <span class='fu'><a href='daes.html'>daes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>decile</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>weight</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='no'>var</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>color</span>)
+  <span class='fu'><a href='daes.html'>daes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='no'>variable</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>color</span>)
  ) <span class='kw'>%&gt;%</span>
- <span class='fu'><a href='po_title.html'>po_title</a></span>(<span class='st'>"Deciles of Pokemon Weight"</span>)</div></pre>
+ <span class='fu'><a href='po_title.html'>po_title</a></span>(<span class='st'>"Approximated Density of Pokemon Weight"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

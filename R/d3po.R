@@ -10,7 +10,7 @@
 #' @param height Same as width parameter.
 #' 
 #' @export
-d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL) {
+d3po <- function(data = NULL, width = "100%", height = "400px", elementId = NULL) {
   x <- list(tempdata = data)
 
   # serialise rowwise
@@ -56,7 +56,7 @@ d3po <- function(data = NULL, width = "100%", height = "100%", elementId = NULL)
 #' @name d3po-shiny
 #'
 #' @export
-d3po_output <- function(output_id, width = "100%", height = "100%") {
+d3po_output <- function(output_id, width = "100%", height = "400px") {
   htmlwidgets::shinyWidgetOutput(output_id, "d3po", width, height, package = "d3po")
 }
 

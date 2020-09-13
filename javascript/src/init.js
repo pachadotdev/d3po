@@ -18,19 +18,7 @@
      */
 
     d3po.version = "0.1.0";
-
-
-    /**
-     * The URL for the repo, used internally for certain error messages.
-     * @property d3po.repo
-     * @for d3po
-     * @type String
-     * @static
-     */
-
-    d3po.repo = "https://github.com/pachamaltese/d3po/";
-
-
+    
     /**
      * Utilities related to modifying arrays.
      * @class d3po.array

@@ -71,7 +71,6 @@ module.exports = {
         "temp": "segmentos temporales",
         "text": "texto",
         "time": "tiempo",
-        "timeline": "línea de tiempo",
         "total": "segmentos totales",
         "type": "tipo",
         "width": "anchura",

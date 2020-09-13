@@ -37,7 +37,7 @@ module.exports = function(vars) {
 
             if (vars.draw.first || vars.zoom.reset) {
                 bounds(vars, zoom, 0);
-            } else if (vars.type.changed || vars.focus.changed || vars.height.changed || vars.width.changed || vars.nodes.changed || vars.legend.changed || vars.timeline.changed || vars.ui.changed) {
+            } else if (vars.type.changed || vars.focus.changed || vars.height.changed || vars.width.changed || vars.nodes.changed || vars.legend.changed || vars.ui.changed) {
                 bounds(vars, zoom);
             }
 

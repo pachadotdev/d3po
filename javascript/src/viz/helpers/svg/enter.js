@@ -27,12 +27,6 @@ module.exports = function(vars) {
         .attr("width", vars.width.value)
         .attr("height", vars.height.value);
 
-    // Enter Timeline Group
-    vars.g.timeline = vars.svg.selectAll("g#timeline").data(["timeline"]);
-    vars.g.timeline.enter().append("g")
-        .attr("id", "timeline")
-        .attr("transform", "translate(0," + vars.height.value + ")");
-
     // Enter Key Group
     vars.g.legend = vars.svg.selectAll("g#key").data(["key"]);
     vars.g.legend.enter().append("g")

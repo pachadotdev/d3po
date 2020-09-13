@@ -4,7 +4,6 @@ var dataFormat = require("../../core/data/format.js"),
     dataLoad = require("../../core/data/load.js"),
     drawDrawer = require("./ui/drawer.js"),
     drawLegend = require("./ui/legend.js"),
-    drawTimeline = require("./ui/timeline.js"),
     errorCheck = require("./errorCheck.js"),
     fetchData = require("../../core/fetch/data.js"),
     finish = require("./finish.js"),
@@ -317,7 +316,6 @@ module.exports = function(vars) {
                 if (vars.draw.update) {
 
                     drawDrawer(vars)
-                    drawTimeline(vars)
                     drawLegend(vars)
 
                 } else {
@@ -327,13 +325,10 @@ module.exports = function(vars) {
                     var drawer = vars.container.value.select("div#d3po_drawer").node().offsetHeight ||
                         vars.container.value.select("div#d3po_drawer").node().getBoundingClientRect().height
 
-                    var timeline = vars.g.timeline.node().getBBox()
-                    timeline = vars.timeline.value ? timeline.height + vars.ui.padding : 0
-
                     var legend = vars.g.legend.node().getBBox()
                     legend = vars.legend.value ? legend.height + vars.ui.padding : 0
 
-                    vars.margin.bottom += drawer + timeline + legend
+                    vars.margin.bottom += drawer + legend
 
                     if (vars.dev.value) print.timeEnd("calculating margins")
 

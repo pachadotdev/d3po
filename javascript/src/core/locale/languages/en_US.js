@@ -68,7 +68,6 @@
             temp: "temporary segments",
             text: "text",
             time: "time",
-            timeline: "timeline",
             total: "total segments",
             type: "type",
             width: "width",

@@ -36,13 +36,16 @@ HTMLWidgets.widget({
             chart.type("line");
             break;
           case "scatter":
-            chart = new type("scatter");
+            chart.type("scatter");
             break;
           case "stacked":
             chart.type("stacked");
             break;
           case "treemap":
             chart.type("treemap");
+            break;
+          case "pie":
+            chart.type("pie");
             break;
           default:
             chart = null;

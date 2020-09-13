@@ -80,6 +80,20 @@ d3po(pokemon_count) %>%
   po_title("Share of Pokemon by Type 1")
 ```
 
+# Pie
+
+Use these plots with caution because polar coordinates has major perceptual 
+problems. Use with *EXTREME* caution.
+
+This method is exactly the same as `treemap` but changing the function.
+```{r}
+d3po(pokemon_count) %>%
+  po_pie(
+    daes(size = n, group_by = type_1, color = color_1)
+  ) %>%
+  po_title("Share of Pokemon by Type 1")
+```
+
 # Line
 
 Let's start by obtaining the decile for the Pokemon `weight` just for the 

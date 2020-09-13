@@ -89,6 +89,53 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+# Pie ----
+
+#' Pie
+#' 
+#' Plot a pie
+#' 
+#' @inheritParams po_box
+#' 
+#' @examples 
+#' library(dplyr)
+#' 
+#' pokemon_count <- pokemon %>% 
+#'  group_by(type_1, color_1) %>% 
+#'  count()
+#'  
+#' d3po(pokemon_count) %>%
+#'  po_pie(
+#'   daes(size = n, group_by = type_1, color = color_1)
+#'  ) %>%
+#'  po_title("Share of Pokemon by Type 1")
+#' 
+#' @export 
+po_pie <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_pie")
+
+#' @export
+#' @method po_pie d3po
+po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "pie"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$size <- daes_to_opts(daes, "size")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$color <- daes_to_opts(daes, "color")
+  
+  return(d3po)
+}
+
 # Area ----
 
 #' Area
@@ -238,6 +285,59 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
+  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$color <- daes_to_opts(daes, "color")
+  
+  return(d3po)
+}
+
+# Scatter ----
+
+#' scatter
+#' 
+#' Plot an scatter chart.
+#' 
+#' @inheritParams po_box
+#' 
+#' @examples
+#' library(dplyr)
+#' 
+#' pokemon_decile <- pokemon %>% 
+#'  filter(type_1 %in% c("grass", "fire", "water")) %>% 
+#'  group_by(type_1 ,color_1) %>% 
+#'  summarise(
+#'   decile = 0:10,
+#'   weight = quantile(weight, probs = seq(0, 1, by = .1))
+#'  )
+#'  
+#' d3po(pokemon_decile) %>%
+#'  po_scatter(
+#'   daes(x = decile, y = weight, group_by = type_1, color = color_1)
+#'  ) %>%
+#'  po_title("Decile of Pokemon Weight by Type 1")
+#' 
+#' @export 
+po_scatter <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_scatter")
+
+#' @export
+#' @method po_scatter d3po
+po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
+  
+  # defaults
+  d3po$x$type <- "scatter"
+  
+  data <- .get_data(d3po$x$tempdata, data)
+  
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+  
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$x <- daes_to_opts(daes, "x")
+  d3po$x$y <- daes_to_opts(daes, "y")
+  d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group_by <- daes_to_opts(daes, "group_by")
   d3po$x$color <- daes_to_opts(daes, "color")
   

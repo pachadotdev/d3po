@@ -7,7 +7,7 @@
 \alias{d3po_proxy}
 \title{Shiny bindings for 'd3po'}
 \usage{
-d3po_output(output_id, width = "100\%", height = "100\%")
+d3po_output(output_id, width = "100\%", height = "400px")
 
 render_d3po(expr, env = parent.frame(), quoted = FALSE)
 

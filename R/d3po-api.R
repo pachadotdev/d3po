@@ -377,6 +377,31 @@ po_title.d3proxy <- function(d3po, title){
   return(d3po)
 }
 
+
+# Labels ----
+
+#' Labels
+#' 
+#' Edit labels positioning in a chart.
+#' 
+#' @inheritParams po_box
+#' @param align horizontal alignment.
+#' @param valign vertical alignment.
+#' 
+#' @export 
+po_labels <- function(d3po, align, valign) UseMethod("po_labels")
+
+#' @export 
+#' @method po_labels d3po
+po_labels.d3po <- function(d3po, align = "middle", valign = "middle"){
+  assertthat::assert_that(!missing(align) | !missing(valign), msg = "Missing `labels`")
+  
+  d3po$x$labels <- NULL
+  d3po$x$labels$align <- align
+  d3po$x$labels$valign <- valign
+  return(d3po)
+}
+
 # Legend ----
 
 #' Legend

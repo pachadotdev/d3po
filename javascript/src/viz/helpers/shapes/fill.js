@@ -12,13 +12,11 @@ module.exports = function(vars, selection, enter, exit) {
     // The position and size of each rectangle on enter and exit.
     //----------------------------------------------------------------------------
     function init(nodes) {
-
         nodes
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", 0)
             .attr("height", 0);
-
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -190,21 +188,17 @@ module.exports = function(vars, selection, enter, exit) {
             .data(fill_data);
 
         fills.transition().duration(vars.draw.timing)
-            .call(shapeStyle, vars)
-            .call(size);
+            .call(shapeStyle, vars);
 
         fills.enter().insert("path", "rect.d3po_mouse")
             .attr("class", "d3po_fill")
             .attr("clip-path", "url(#d3po_clip_" + d.d3po.id + ")")
             .transition().duration(0)
             .call(shapeStyle, vars)
-            .call(size, 0, undefined, 0)
             .transition().duration(vars.draw.timing)
-            .call(size)
             .call(shapeStyle, vars);
 
         fills.exit().transition().duration(vars.draw.timing)
-            .call(size, 0, undefined, 0)
             .remove();
 
     });

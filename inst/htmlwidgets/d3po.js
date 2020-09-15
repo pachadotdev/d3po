@@ -69,12 +69,12 @@ HTMLWidgets.widget({
           chart.y(x.y);
         }
     
-        // title, subtitle and footer
+        // title
         if (x.title) {
           chart.title(x.title);
         }
         
-        // title, subtitle and footer
+        // legend
         if(x.legend === undefined) {
           x.legend = false;
         }
@@ -83,6 +83,10 @@ HTMLWidgets.widget({
         // aesthetic parameters
         if (x.color) {
           chart.color(x.color);
+        }
+        
+        if (x.labels) {
+          chart.labels({"align": x.labels.align, "valign": x.labels.valign});
         }
         
         setTimeout(function() {

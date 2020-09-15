@@ -45,7 +45,7 @@ doesn't need additional aggregation or transformation, just to use the Pokemon
 ```{r box1, fig.height=7}
 d3po(pokemon) %>%
   po_box(daes(x = type_1, y = speed, group_by = name, color = color_1)) %>%
-  po_title("Distribution of Pokemon Speed")
+  po_title("Distribution of Pokemon Speed by Type")
 ```
 
 # Bar
@@ -64,7 +64,7 @@ d3po(pokemon_count) %>%
   po_bar(
     daes(x = type_1, y = n, group_by = type_1, color = color_1)
   ) %>%
-  po_title("Count of Pokemon by Type 1")
+  po_title("Count of Pokemon by Type")
 ```
 
 # Treemap
@@ -77,7 +77,7 @@ d3po(pokemon_count) %>%
   po_treemap(
     daes(size = n, group_by = type_1, color = color_1)
   ) %>%
-  po_title("Share of Pokemon by Type 1")
+  po_title("Share of Pokemon by Type")
 ```
 
 # Pie
@@ -91,7 +91,7 @@ d3po(pokemon_count) %>%
   po_pie(
     daes(size = n, group_by = type_1, color = color_1)
   ) %>%
-  po_title("Share of Pokemon by Type 1")
+  po_title("Share of Pokemon by Type")
 ```
 
 # Line
@@ -115,7 +115,7 @@ d3po(pokemon_decile) %>%
   po_line(
     daes(x = decile, y = weight, group_by = type_1, color = color_1)
   ) %>%
-  po_title("Decile of Pokemon Weight by Type 1")
+  po_title("Decile of Pokemon Weight by Type")
 ```
 
 # Area
@@ -140,4 +140,24 @@ d3po(pokemon_density) %>%
   daes(x = x, y = y, group_by = variable, color = color)
  ) %>%
  po_title("Approximated Density of Pokemon Weight")
+```
+
+# Scatterplot
+
+Let's explore the balance between defense and attack by Pokemon type:
+
+```{r}
+pokemon_def_vs_att <- pokemon %>% 
+  group_by(type_1, color_1) %>% 
+  summarise(
+    mean_def = mean(defense),
+    mean_att = mean(attack),
+    n_pkmn = n()
+  )
+
+d3po(pokemon_def_vs_att) %>%
+  po_scatter(
+    daes(x = mean_att, y = mean_def, size = n_pkmn, group_by = type_1, color = color_1)
+  ) %>%
+  po_title("Average Attack vs Average Defense by Type")
 ```

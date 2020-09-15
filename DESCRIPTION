@@ -4,7 +4,12 @@ Title: Fast and Beautiful Interactive Visualization for Markdown and Shiny
 Version: 0.2
 Author: Mauricio Vargas [aut,cre],
   John Coene [aut],
-  Joshua Kunst [aut]
+  Joshua Kunst [ctb],
+  Riva Quiroga [ctb],
+  Ariel Alvarado [aut],
+  Sylvain Lesage [ctb],
+  Curran Kelleher [ctb],
+  Fernando Becerra [ctb]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
 Description: Apache licensed alternative to highcharter which provides functions
   for both fast and beautiful interactive visualization for markdown and shiny.

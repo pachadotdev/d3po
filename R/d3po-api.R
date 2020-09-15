@@ -385,15 +385,15 @@ po_title.d3proxy <- function(d3po, title){
 #' Edit labels positioning in a chart.
 #' 
 #' @inheritParams po_box
-#' @param align horizontal alignment.
-#' @param valign vertical alignment.
+#' @param align horizontal alignment (left, center, right, start, middle, end).
+#' @param valign vertical alignment (top, middle, botton).
 #' 
 #' @export 
 po_labels <- function(d3po, align, valign) UseMethod("po_labels")
 
 #' @export 
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align = "middle", valign = "middle"){
+po_labels.d3po <- function(d3po, align = "center", valign = "middle"){
   assertthat::assert_that(!missing(align) | !missing(valign), msg = "Missing `labels`")
   
   d3po$x$labels <- NULL

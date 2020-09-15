@@ -28084,7 +28084,7 @@ module.exports = {
                 }
                 return value;
             },
-            value: "middle"
+            value: "center"
         },
         color: {
             accepted: [false, String],

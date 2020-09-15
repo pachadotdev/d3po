@@ -1,7 +1,7 @@
 {
   "name": "d3po",
   "version": "0.1.0",
-  "description": "A javascript library designed to work with Shiny.",
+  "description": "See the DESCRIPTION file at the root of the project",
   "devDependencies": {
     "browserify": "^16.5.2",
     "gulp": "^4.0.2",
@@ -17,37 +17,6 @@
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.11.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pachamaltese/d3po.git"
-  },
-  "keywords": [
-    "charts",
-    "d3",
-    "d3po",
-    "data",
-    "visualization"
-  ],
-  "author": {
-    "name": "Mauricio Vargas",
-    "email": "mvargas@dcc.uchile.cl"
-  },
-  "contributors": [
-    {
-      "name": "Ariel Alvarado",
-      "email": "alvarado.ariel.contact@gmail.com"
-    },
-    {
-      "name": "Curran Kelleher",
-      "email": "curran@datavis.tech"
-    }
-  ],
-  "license": "Apache-2.0-or-later",
-  "bugs": {
-    "url": "https://github.com/pachamaltese/d3po/issues",
-    "email": "bugs@gmail.com"
-  },
-  "homepage": "https://github.com/pachamaltese/d3po",
   "dependencies": {
     "acorn": "^6.4.1",
     "d3": "^3.5.17",
@@ -64,8 +33,6 @@
     {
       "basePath": "/",
       "files": [
-        "d3po.full.js",
-        "d3po.full.min.js",
         "d3po.js",
         "d3po.min.js"
       ]

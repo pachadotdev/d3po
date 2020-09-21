@@ -32,7 +32,8 @@
                 pie: require("./types/pie.js"),
                 scatter: require("./types/scatter.js"),
                 stacked: require("./types/area.js"),
-                treemap: require("./types/treemap.js")
+                treemap: require("./types/treemap.js"),
+                network: require("./types/network.js")
             }
         };
         vars.self = function(selection) {

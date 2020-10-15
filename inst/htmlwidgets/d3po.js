@@ -14,44 +14,16 @@ HTMLWidgets.widget({
 
         document.getElementById(el.id).innerHTML = "";
     
-        window.x = x;
-        window.el = el;
-    
         // visualization method
-        
         chart = new d3po.viz();
         chart.container("#" + el.id);
 
-        switch (x.type) {
-          case "area":
-            chart.type("area");
-            break;
-          case "bar":
-            chart.type("bar");
-            break;
-          case "box":
-            chart.type("box");
-            break;
-          case "line":
-            chart.type("line");
-            break;
-          case "scatter":
-            chart.type("scatter");
-            break;
-          case "stacked":
-            chart.type("stacked");
-            break;
-          case "treemap":
-            chart.type("treemap");
-            break;
-          case "pie":
-            chart.type("pie");
-            break;
-          default:
-            chart = null;
-        }
+        // type
+        chart.type(x.type);
     
         // common arguments
+        // add id if missing
+        chart.id("d3poKey");
         chart.data(x.data);
         
         if (x.group_by) {

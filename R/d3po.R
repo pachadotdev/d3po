@@ -8,33 +8,22 @@
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
 #' @param height Same as width parameter.
+#' @param ... Aesthetics to pass, see [daes()]
 #' 
 #' @export
-d3po <- function(data = NULL, width = "100%", height = "400px", elementId = NULL) {
+d3po <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) UseMethod("d3po")
+
+#' @export 
+d3po.default <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) {
   x <- list(tempdata = data)
+
+  x$daes <- get_daes(...)
 
   # serialise rowwise
   attr(x, 'TOJSON_ARGS') <- list(dataframe = "rows")
 
   # create widget
-  htmlwidgets::createWidget(
-    name = "d3po",
-    x,
-    preRenderHook = .render_d3po, # add pre render hook (below) to remove data
-    width = width,
-    height = height,
-    package = "d3po",
-    sizingPolicy = htmlwidgets::sizingPolicy(padding = 5),
-    elementId = elementId
-  )
-}
-
-# remove tempdata
-# this is important to make sure we don't share
-# sensitive data points => only serialize what the user explicitely wants
-.render_d3po <- function(d3po) {
-  d3po$x$tempdata <- NULL
-  return(d3po)
+  widget_this(x, width, height, elementId)
 }
 
 #' Shiny bindings for 'd3po'

@@ -87,8 +87,7 @@
         // Match nodes to data
         //----------------------------------------------------------------------------
         var data = [],
-            lookup = {},
-            links = []
+            lookup = {}
         nodes.forEach(function(n) {
 
             var d = vars.data.viz.filter(function(a) {
@@ -119,43 +118,35 @@
 
         edges.forEach(function(l, i) {
 
-            var obj = {};
-
             if (l.d3po) {
                 delete l.d3po.spline
             }
 
-            obj[vars.edges.source] = {}
-            obj[vars.edges.source][vars.id.value] = l[vars.edges.source]
-            obj[vars.edges.source].d3po = {}
-            var source = lookup[obj[vars.edges.source][vars.id.value]]
+            l[vars.edges.source].d3po = {}
+            var source = lookup[l[vars.edges.source][vars.id.value]]
             if (source !== undefined) {
-                obj[vars.edges.source].d3po.r = source.r
-                obj[vars.edges.source].d3po.x = source.x
-                obj[vars.edges.source].d3po.y = source.y
+                l[vars.edges.source].d3po.r = source.r
+                l[vars.edges.source].d3po.x = source.x
+                l[vars.edges.source].d3po.y = source.y
             } else {
-                delete obj[vars.edges.source].d3po;
+                delete l[vars.edges.source].d3po;
             }
 
-            obj[vars.edges.target] = {}
-            obj[vars.edges.target][vars.id.value] = l[vars.edges.target]
-            obj[vars.edges.target].d3po = {}
-            var target = lookup[obj[vars.edges.target][vars.id.value]]
+            l[vars.edges.target].d3po = {}
+            var target = lookup[l[vars.edges.target][vars.id.value]]
             if (target !== undefined) {
-                obj[vars.edges.target].d3po.r = target.r
-                obj[vars.edges.target].d3po.x = target.x
-                obj[vars.edges.target].d3po.y = target.y
+                l[vars.edges.target].d3po.r = target.r
+                l[vars.edges.target].d3po.x = target.x
+                l[vars.edges.target].d3po.y = target.y
             } else {
-                delete obj[vars.edges.target].d3po;
+                delete l[vars.edges.target].d3po;
             }
-
-            links.push(obj)
 
         })
 
         return {
             "nodes": data,
-            "edges": links
+            "edges": edges
         }
 
     }
@@ -164,7 +155,7 @@
     // Visualization Settings and Helper Functions
     //------------------------------------------------------------------------------
     network.nesting = false
-    network.requirements = ["nodes"]
+    network.requirements = ["nodes", "edges"]
     network.scale = 1.05
     network.shapes = ["circle"]
     network.tooltip = "static"

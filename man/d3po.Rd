@@ -6,10 +6,12 @@
 \title{An \code{htmlwidget} interface to the
 d3po javascript chart library}
 \usage{
-d3po(data = NULL, width = "100\%", height = "400px", elementId = NULL)
+d3po(data = NULL, ..., width = NULL, height = NULL, elementId = NULL)
 }
 \arguments{
 \item{data}{d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.}
+
+\item{...}{Aesthetics to pass, see \code{\link[=daes]{daes()}}}
 
 \item{width}{Must be a valid CSS unit (like \code{'100\%'},
 \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a

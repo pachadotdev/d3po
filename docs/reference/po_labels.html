@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Legend — po_legend • d3po</title>
+<title>Labels — po_labels • d3po</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Legend — po_legend" />
-<meta property="og:description" content="Add a legend to a chart." />
+<meta property="og:title" content="Labels — po_labels" />
+<meta property="og:description" content="Edit labels positioning in a chart." />
 
 
 
@@ -106,16 +106,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Legend</h1>
+    <h1>Labels</h1>
     
-    <div class="hidden name"><code>po_legend.Rd</code></div>
+    <div class="hidden name"><code>po_labels.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add a legend to a chart.</p>
+    <p>Edit labels positioning in a chart.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>po_legend</span><span class='op'>(</span><span class='va'>d3po</span>, <span class='va'>legend</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>po_labels</span><span class='op'>(</span><span class='va'>d3po</span>, <span class='va'>align</span>, <span class='va'>valign</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -125,8 +125,12 @@
       <td><p>Either the output of <code><a href='d3po.html'>d3po()</a></code> or <code><a href='d3po-shiny.html'>d3po_proxy()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>legend</th>
-      <td><p>legend to add.</p></td>
+      <th>align</th>
+      <td><p>horizontal alignment (left, center, right, start, middle, end).</p></td>
+    </tr>
+    <tr>
+      <th>valign</th>
+      <td><p>vertical alignment (top, middle, botton).</p></td>
     </tr>
     </table>
 

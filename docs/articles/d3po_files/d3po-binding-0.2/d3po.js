@@ -14,46 +14,20 @@ HTMLWidgets.widget({
 
         document.getElementById(el.id).innerHTML = "";
     
-        window.x = x;
-        window.el = el;
-    
         // visualization method
-        
         chart = new d3po.viz();
         chart.container("#" + el.id);
 
-        switch (x.type) {
-          case "area":
-            chart.type("area");
-            break;
-          case "bar":
-            chart.type("bar");
-            break;
-          case "box":
-            chart.type("box");
-            break;
-          case "line":
-            chart.type("line");
-            break;
-          case "scatter":
-            chart = new type("scatter");
-            break;
-          case "stacked":
-            chart.type("stacked");
-            break;
-          case "treemap":
-            chart.type("treemap");
-            break;
-          default:
-            chart = null;
-        }
+        // type
+        chart.type(x.type);
     
-        // common arguments
-        chart.data(x.data);
-        
-        if (x.group_by) {
-          chart.id(x.group_by);
+        // add id if data present
+        // network may just be constituted of edges
+        if(x.data){
+          chart.id(x.group);
+          chart.data(x.data);
         }
+        
         if (x.size) {
           chart.size(x.size);
         }
@@ -66,12 +40,12 @@ HTMLWidgets.widget({
           chart.y(x.y);
         }
     
-        // title, subtitle and footer
+        // title
         if (x.title) {
           chart.title(x.title);
         }
         
-        // title, subtitle and footer
+        // legend
         if(x.legend === undefined) {
           x.legend = false;
         }
@@ -82,10 +56,23 @@ HTMLWidgets.widget({
           chart.color(x.color);
         }
         
-        setTimeout(function() {
-          chart.resize(true);
-          chart.draw();
-        }, 10);
+        if (x.labels) {
+          chart.labels({"align": x.labels.align, "valign": x.labels.valign});
+        }
+
+        if(x.edges)
+          chart.edges(x.edges);
+
+        if(x.nodes)
+          chart.nodes(x.nodes);
+        
+        chart.draw();
+
+      },
+
+      resize: function(width, height) {
+
+        chart.resize();
 
       },
 

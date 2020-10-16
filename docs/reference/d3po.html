@@ -118,7 +118,7 @@ d3po javascript chart library</h1>
     <p>This function provides 'd3po' methods from R console</p>
     </div>
 
-    <pre class="usage"><span class='fu'>d3po</span>(data = <span class='kw'>NULL</span>, width = <span class='st'>"100%"</span>, height = <span class='st'>"400px"</span>, elementId = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>d3po</span><span class='op'>(</span>data <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span>, width <span class='op'>=</span> <span class='cn'>NULL</span>, height <span class='op'>=</span> <span class='cn'>NULL</span>, elementId <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -126,6 +126,10 @@ d3po javascript chart library</h1>
     <tr>
       <th>data</th>
       <td><p>d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Aesthetics to pass, see <code><a href='daes.html'>daes()</a></code></p></td>
     </tr>
     <tr>
       <th>width</th>

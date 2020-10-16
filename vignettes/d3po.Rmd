@@ -27,6 +27,7 @@ Let's start by loading packages.
 
 ```{r pkgs}
 library(dplyr)
+library(igraph)
 library(d3po)
 ```
 
@@ -146,7 +147,7 @@ d3po(pokemon_density) %>%
 
 Let's explore the balance between defense and attack by Pokemon type:
 
-```{r}
+```{r scatterplot1}
 pokemon_def_vs_att <- pokemon %>% 
   group_by(type_1, color_1) %>% 
   summarise(
@@ -160,4 +161,30 @@ d3po(pokemon_def_vs_att) %>%
     daes(x = mean_att, y = mean_def, size = n_pkmn, group_by = type_1, color = color_1)
   ) %>%
   po_title("Average Attack vs Average Defense by Type")
+```
+
+# Network
+
+This visualization method is different to the rest, as it can work with a single `data` object or `data`, `nodes` and `edges` objects by separate.
+
+Let's create an igraph object:
+```{r network1}
+tr <- make_tree(40, children = 3, mode = "undirected")
+```
+
+To visualize is as simple as:
+```{r network2}
+d3po(tr) %>% 
+  po_layout() # optional
+```
+
+Another option is to work with a `data.frame` or `tibble`:
+```{r network3}
+edges <- igraph::as_data_frame(tr, "edges")
+```
+
+Which is also visualized in a straightforward manner:
+```{r}
+d3po() %>% 
+  po_edges(data = edges)
 ```

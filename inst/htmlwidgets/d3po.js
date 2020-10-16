@@ -61,7 +61,10 @@ HTMLWidgets.widget({
         }
 
         if(x.edges)
-          chart.edges(x.edges)
+          chart.edges(x.edges);
+
+        if(x.nodes)
+          chart.nodes(x.nodes);
         
         chart.draw();
 

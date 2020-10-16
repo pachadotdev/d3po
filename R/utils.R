@@ -67,3 +67,26 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL){
   
   return(d3po)
 }
+
+# checks that a package is installed
+check_installed <- function(pkg){
+  has_it <- base::requireNamespace(pkg, quietly = TRUE)
+
+  if(!has_it)
+    stop(sprintf("This function requires the package {%s}", pkg), call. = FALSE)
+}
+
+# igraph may return vertices with rows but 0 column
+# here we generate proper vertices if that is the case.
+get_vertices <- function(vertices){
+  if(ncol(vertices) > 0)
+    return(vertices)
+  
+  data.frame(name = 1:nrow(vertices))
+
+}
+
+get_edges <- function(edges){
+  names(edges)[1:2] <- c("source", "target")
+  return(edges)
+}

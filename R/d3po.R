@@ -41,15 +41,12 @@ d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, elementId
   # default to network
   x$type <- "network"
 
-  # nodes are optional in igraph & d3po
-  if(nrow(graph_df$vertices))
-    x$data <- graph_df$vertices
-
   # add edges
   # rename source target as expected by d3po
-  edges <- graph_df$edges
-  names(edges)[1:2] <- c("source", "target")
-  x$edges <- edges
+  x$edges <- get_edges(graph_df$edges)
+
+  # nodes are optional in igraph & d3po
+  x$data <- get_vertices(graph_df$vertices)
 
   # get aes as group may be overriden
   x$daes <- get_daes(...)

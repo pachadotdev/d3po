@@ -58,10 +58,7 @@ HTMLWidgets.widget({
           chart.labels({"align": x.labels.align, "valign": x.labels.valign});
         }
         
-        setTimeout(function() {
-          chart.resize(true);
-          chart.draw();
-        }, 10);
+        chart.draw();
 
       },
 

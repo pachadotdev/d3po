@@ -17802,7 +17802,7 @@ module.exports = function(vars) {
 
 }).call(this);
 
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":85,"./data/lof.js":86,"./data/mad.js":87,"./font/sizes.js":88,"./font/validate.js":89,"./form/form.js":90,"./geom/largestrectangle.js":146,"./geom/offset.js":147,"./geom/path2poly.js":148,"./network/cluster.js":150,"./network/distance.js":151,"./network/normalize.js":152,"./network/shortestpath.js":153,"./network/smallestgap.js":154,"./network/subgraph.js":155,"./number/format.js":156,"./object/merge.js":157,"./object/validate.js":158,"./string/format.js":159,"./string/list.js":160,"./string/strip.js":161,"./string/title.js":162,"./textwrap/textwrap.js":186,"./tooltip/create.js":187,"./tooltip/move.js":188,"./tooltip/remove.js":189,"./util/buckets.js":190,"./util/child.js":191,"./util/closest.js":192,"./util/copy.js":193,"./util/d3selection.js":194,"./util/dataurl.js":195,"./util/uniques.js":196,"./viz/viz.js":305}],150:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":85,"./data/lof.js":86,"./data/mad.js":87,"./font/sizes.js":88,"./font/validate.js":89,"./form/form.js":90,"./geom/largestrectangle.js":146,"./geom/offset.js":147,"./geom/path2poly.js":148,"./network/cluster.js":150,"./network/distance.js":151,"./network/normalize.js":152,"./network/shortestpath.js":153,"./network/smallestgap.js":154,"./network/subgraph.js":155,"./number/format.js":156,"./object/merge.js":157,"./object/validate.js":158,"./string/format.js":159,"./string/list.js":160,"./string/strip.js":161,"./string/title.js":162,"./textwrap/textwrap.js":186,"./tooltip/create.js":187,"./tooltip/move.js":188,"./tooltip/remove.js":189,"./util/buckets.js":190,"./util/child.js":191,"./util/closest.js":192,"./util/copy.js":193,"./util/d3selection.js":194,"./util/dataurl.js":195,"./util/uniques.js":196,"./viz/viz.js":306}],150:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -31457,6 +31457,173 @@ module.exports = {
 }).call(this);
 },{"../../array/sort.js":29,"../../core/fetch/value.js":61,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],301:[function(require,module,exports){
 (function() {
+    var smallestGap = require("../../network/smallestgap.js"),
+        fetchValue = require("../../core/fetch/value.js");
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // Network
+    //------------------------------------------------------------------------------
+    var network = function(vars) {
+
+        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // Use filtered lists if they are available
+        //----------------------------------------------------------------------------
+        var nodes = vars.nodes.restricted || vars.nodes.value,
+            edges = vars.edges.restricted || vars.edges.value || [];
+
+        var x_range = d3.extent(nodes, function(n) {
+                return n.x
+            }),
+            y_range = d3.extent(nodes, function(n) {
+                return n.y
+            })
+
+        var val_range = [1, 1]
+        if (typeof vars.size.value === "number") {
+            val_range = [vars.size.value, vars.size.value]
+        } else if (vars.size.value) {
+            val_range = d3.extent(nodes, function(d) {
+                var val = fetchValue(vars, d, vars.size.value)
+                return val === 0 ? null : val
+            })
+        }
+        if (typeof val_range[0] == "undefined") val_range = [1, 1]
+
+        if (typeof vars.size.value === "number") {
+            var max_size = vars.size.value;
+            var min_size = vars.size.value;
+        } else {
+
+            var max_size = smallestGap(nodes, {
+                "accessor": function(n) {
+                    return [n.x, n.y];
+                }
+            });
+
+            var limit = max_size / 2;
+
+            var overlap = vars.size.value ? vars.nodes.overlap : 0.4
+            max_size = max_size * overlap;
+
+            if (vars.edges.arrows.value) {
+                max_size = max_size * 0.5;
+            }
+
+            if (val_range[0] === val_range[1]) {
+                var min_size = limit;
+                max_size = limit;
+            } else {
+
+                var width = (x_range[1] + max_size * 1.1) - (x_range[0] - max_size * 1.1),
+                    height = (y_range[1] + max_size * 1.1) - (y_range[0] - max_size * 1.1),
+                    aspect = width / height,
+                    app = vars.width.viz / vars.height.viz;
+
+                if (app > aspect) {
+                    var scale = vars.height.viz / height;
+                } else {
+                    var scale = vars.width.viz / width;
+                }
+                var min_size = max_size * 0.25;
+                if (min_size * scale < 2) {
+                    min_size = 2 / scale;
+                }
+
+            }
+        }
+
+        // Create size scale
+        var radius = vars.size.scale.value
+            .domain(val_range)
+            .range([min_size, max_size])
+
+        vars.zoom.bounds = [
+            [x_range[0] - max_size * 1.1, y_range[0] - max_size * 1.1],
+            [x_range[1] + max_size * 1.1, y_range[1] + max_size * 1.1]
+        ]
+
+        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // Match nodes to data
+        //----------------------------------------------------------------------------
+        var data = [],
+            lookup = {}
+        nodes.forEach(function(n) {
+
+            var d = vars.data.viz.filter(function(a) {
+                return a[vars.id.value] == n[vars.id.value]
+            })[0]
+
+            var obj = d || {}
+
+            obj[vars.id.value] = n[vars.id.value]
+
+            obj.d3po = {}
+            obj.d3po.x = n.x
+            obj.d3po.y = n.y
+            var val = fetchValue(vars, obj, vars.size.value)
+            obj.d3po.r = val ? radius(val) : radius.range()[0]
+            lookup[obj[vars.id.value]] = {
+                "x": obj.d3po.x,
+                "y": obj.d3po.y,
+                "r": obj.d3po.r
+            }
+
+            data.push(obj)
+        })
+
+        data.sort(function(a, b) {
+            return b.d3po.r - a.d3po.r
+        })
+
+        edges.forEach(function(l, i) {
+
+            if (l.d3po) {
+                delete l.d3po.spline
+            }
+
+            l[vars.edges.source].d3po = {}
+            var source = lookup[l[vars.edges.source][vars.id.value]]
+            if (source !== undefined) {
+                l[vars.edges.source].d3po.r = source.r
+                l[vars.edges.source].d3po.x = source.x
+                l[vars.edges.source].d3po.y = source.y
+            } else {
+                delete l[vars.edges.source].d3po;
+            }
+
+            l[vars.edges.target].d3po = {}
+            var target = lookup[l[vars.edges.target][vars.id.value]]
+            if (target !== undefined) {
+                l[vars.edges.target].d3po.r = target.r
+                l[vars.edges.target].d3po.x = target.x
+                l[vars.edges.target].d3po.y = target.y
+            } else {
+                delete l[vars.edges.target].d3po;
+            }
+
+        })
+
+        return {
+            "nodes": data,
+            "edges": edges
+        }
+
+    }
+
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // Visualization Settings and Helper Functions
+    //------------------------------------------------------------------------------
+    network.nesting = false
+    network.requirements = ["nodes", "edges"]
+    network.scale = 1.05
+    network.shapes = ["circle"]
+    network.tooltip = "static"
+    network.zoom = true
+
+    module.exports = network
+}).call(this);
+
+},{"../../core/fetch/value.js":61,"../../network/smallestgap.js":154}],302:[function(require,module,exports){
+(function() {
     var fetchValue, shortestPath, uniqueValues, viz,
         indexOf = [].indexOf || function(item) {
             for (var i = 0, l = this.length; i < l; i++) {
@@ -31722,7 +31889,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../network/shortestpath.js":153,"../../util/uniques.js":196}],302:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../network/shortestpath.js":153,"../../util/uniques.js":196}],303:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, pie;
 
@@ -31777,7 +31944,7 @@ module.exports = {
     module.exports = pie;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],303:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],304:[function(require,module,exports){
 (function() {
     var fetchValue, graph, print, scatter, sort, ticks;
 
@@ -31847,7 +32014,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":61,"./helpers/graph/dataticks.js":291,"./helpers/graph/draw.js":292}],304:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":61,"./helpers/graph/dataticks.js":291,"./helpers/graph/draw.js":292}],305:[function(require,module,exports){
 (function() {
     var dataThreshold, groupData, mergeObject, treemap;
 
@@ -31912,7 +32079,7 @@ module.exports = {
     module.exports = treemap;
 
 }).call(this);
-},{"../../core/data/group.js":51,"../../core/data/threshold.js":55,"../../object/merge.js":157}],305:[function(require,module,exports){
+},{"../../core/data/group.js":51,"../../core/data/threshold.js":55,"../../object/merge.js":157}],306:[function(require,module,exports){
 (function() {
     var attach, axis, container, flash, getSteps, print, validObject;
 
@@ -31947,7 +32114,8 @@ module.exports = {
                 pie: require("./types/pie.js"),
                 scatter: require("./types/scatter.js"),
                 stacked: require("./types/area.js"),
-                treemap: require("./types/treemap.js")
+                treemap: require("./types/treemap.js"),
+                network: require("./types/network.js")
             }
         };
         vars.self = function(selection) {
@@ -32113,4 +32281,4 @@ module.exports = {
 
 }).call(this);
 
-},{"../core/console/print.js":47,"../core/methods/attach.js":66,"../object/validate.js":158,"./helpers/container.js":197,"./helpers/drawSteps.js":198,"./helpers/ui/message.js":227,"./methods/active.js":235,"./methods/aggs.js":236,"./methods/attrs.js":237,"./methods/axes.js":238,"./methods/background.js":239,"./methods/class.js":240,"./methods/color.js":241,"./methods/cols.js":242,"./methods/config.js":243,"./methods/container.js":244,"./methods/coords.js":245,"./methods/csv.js":246,"./methods/data.js":247,"./methods/depth.js":248,"./methods/descs.js":249,"./methods/dev.js":250,"./methods/draw.js":251,"./methods/edges.js":252,"./methods/error.js":253,"./methods/focus.js":254,"./methods/font.js":255,"./methods/footer.js":256,"./methods/format.js":257,"./methods/height.js":258,"./methods/helpers/axis.js":259,"./methods/history.js":260,"./methods/icon.js":261,"./methods/id.js":262,"./methods/labels.js":263,"./methods/legend.js":264,"./methods/links.js":265,"./methods/margin.js":266,"./methods/messages.js":267,"./methods/mouse.js":268,"./methods/nodes.js":269,"./methods/order.js":270,"./methods/resize.js":271,"./methods/shape.js":272,"./methods/size.js":273,"./methods/style.js":274,"./methods/temp.js":275,"./methods/text.js":276,"./methods/time.js":277,"./methods/timing.js":278,"./methods/title.js":279,"./methods/tooltip.js":280,"./methods/total.js":281,"./methods/type.js":282,"./methods/ui.js":283,"./methods/width.js":284,"./methods/zoom.js":285,"./types/area.js":286,"./types/bar.js":287,"./types/box.js":288,"./types/donut.js":289,"./types/halfdonut.js":290,"./types/line.js":300,"./types/paths.js":301,"./types/pie.js":302,"./types/scatter.js":303,"./types/treemap.js":304}]},{},[149]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":66,"../object/validate.js":158,"./helpers/container.js":197,"./helpers/drawSteps.js":198,"./helpers/ui/message.js":227,"./methods/active.js":235,"./methods/aggs.js":236,"./methods/attrs.js":237,"./methods/axes.js":238,"./methods/background.js":239,"./methods/class.js":240,"./methods/color.js":241,"./methods/cols.js":242,"./methods/config.js":243,"./methods/container.js":244,"./methods/coords.js":245,"./methods/csv.js":246,"./methods/data.js":247,"./methods/depth.js":248,"./methods/descs.js":249,"./methods/dev.js":250,"./methods/draw.js":251,"./methods/edges.js":252,"./methods/error.js":253,"./methods/focus.js":254,"./methods/font.js":255,"./methods/footer.js":256,"./methods/format.js":257,"./methods/height.js":258,"./methods/helpers/axis.js":259,"./methods/history.js":260,"./methods/icon.js":261,"./methods/id.js":262,"./methods/labels.js":263,"./methods/legend.js":264,"./methods/links.js":265,"./methods/margin.js":266,"./methods/messages.js":267,"./methods/mouse.js":268,"./methods/nodes.js":269,"./methods/order.js":270,"./methods/resize.js":271,"./methods/shape.js":272,"./methods/size.js":273,"./methods/style.js":274,"./methods/temp.js":275,"./methods/text.js":276,"./methods/time.js":277,"./methods/timing.js":278,"./methods/title.js":279,"./methods/tooltip.js":280,"./methods/total.js":281,"./methods/type.js":282,"./methods/ui.js":283,"./methods/width.js":284,"./methods/zoom.js":285,"./types/area.js":286,"./types/bar.js":287,"./types/box.js":288,"./types/donut.js":289,"./types/halfdonut.js":290,"./types/line.js":300,"./types/network.js":301,"./types/paths.js":302,"./types/pie.js":303,"./types/scatter.js":304,"./types/treemap.js":305}]},{},[149]);

@@ -126,14 +126,16 @@ mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE){
 
 # combine mappings into main
 combine_daes <- function(main_daes, daes, inherit_daes = TRUE){
+  if(length(daes) == 0)
+    return(main_daes)
+
   if(inherit_daes){
     for(i in 1:length(daes)){
       c <- names(daes)[[i]]
       main_daes[[c]] <- daes[[i]]
     }
-  } else {
-    main_daes <- daes
-  }
+  } 
+  
   return(main_daes)
 }
 

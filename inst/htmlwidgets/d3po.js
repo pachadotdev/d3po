@@ -21,10 +21,12 @@ HTMLWidgets.widget({
         // type
         chart.type(x.type);
     
-        // common arguments
-        // add id if missing
-        chart.id(x.group);
-        chart.data(x.data);
+        // add id if data present
+        // network may just be constituted of edges
+        if(x.data){
+          chart.id(x.group);
+          chart.data(x.data);
+        }
         
         if (x.size) {
           chart.size(x.size);
@@ -57,6 +59,9 @@ HTMLWidgets.widget({
         if (x.labels) {
           chart.labels({"align": x.labels.align, "valign": x.labels.valign});
         }
+
+        if(x.edges)
+          chart.edges(x.edges)
         
         chart.draw();
 

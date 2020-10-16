@@ -26,6 +26,43 @@ d3po.default <- function(data = NULL, ..., width = NULL, height = NULL, elementI
   widget_this(x, width, height, elementId)
 }
 
+#' @method d3po igraph
+#' @export 
+d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) {
+
+  # extract data from igraph object
+  graph_df <- igraph::as_data_frame(data, "both")
+
+  x <- list(tempdata = data)
+
+  # group defaults to name as in igraph
+  x$group <- "name"
+
+  # default to network
+  x$type <- "network"
+
+  # nodes are optional in igraph & d3po
+  if(nrow(graph_df$vertices))
+    x$data <- graph_df$vertices
+
+  # add edges
+  # rename source target as expected by d3po
+  edges <- graph_df$edges
+  names(edges)[1:2] <- c("source", "target")
+  x$edges <- edges
+
+  # get aes as group may be overriden
+  x$daes <- get_daes(...)
+  if(!is.null(x$daes$group))
+    x$group <- daes_to_opts(x$daes, "group")
+
+  # serialise rowwise
+  attr(x, 'TOJSON_ARGS') <- list(dataframe = "rows")
+
+  # create widget
+  widget_this(x, width, height, elementId)
+}
+
 #' Shiny bindings for 'd3po'
 #'
 #' Output and render functions for using d3po within Shiny

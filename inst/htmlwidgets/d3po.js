@@ -23,12 +23,9 @@ HTMLWidgets.widget({
     
         // common arguments
         // add id if missing
-        chart.id("d3poKey");
+        chart.id(x.group);
         chart.data(x.data);
         
-        if (x.group_by) {
-          chart.id(x.group_by);
-        }
         if (x.size) {
           chart.size(x.size);
         }

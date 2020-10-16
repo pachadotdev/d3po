@@ -45,20 +45,25 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL){
 .render_d3po <- function(d3po) {
 
   # add key to data
-  d3po$x$data <- .add_key(d3po$x$data)
+  d3po <- .add_key(d3po)
 
   d3po$x$tempdata <- NULL
   d3po$x$daes <- NULL
   return(d3po)
 }
 
-.add_key <- function(data){
+.add_key <- function(d3po){
 
-  if(is.null(data))
-    return()
-
-  if(!"d3poKey" %in% names(data))
-    data[["d3poKey"]] <- row.names(data)
+  if(is.null(d3po$x$data))
+    return(d3po)
   
-  return(data)
+  # group aesthetic already defined
+  if(!is.null(d3po$x$group))
+    return(d3po)
+
+  # add mandatory key
+  d3po$x$group <- "d3poKey"
+  d3po$x$data[["d3poKey"]] <- row.names(d3po$x$data)
+  
+  return(d3po)
 }

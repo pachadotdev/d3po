@@ -44,7 +44,7 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL){
 # sensitive data points => only serialize what the user explicitely wants
 .render_d3po <- function(d3po) {
   if(!"d3poKey" %in% names(d3po$x$data)){
-    d3po$x$data[["d3poKey"]] <- 1:nrow(d3po$x$data)
+    d3po$x$data[["d3poKey"]] <- row.names(d3po$x$data)
   }
   d3po$x$tempdata <- NULL
   d3po$x$daes <- NULL

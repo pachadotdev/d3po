@@ -28,7 +28,7 @@ pokemon_count <- pokemon \%>\%
  
 d3po(pokemon_count) \%>\%
  po_bar(
-  daes(x = type_1, y = n, group_by = type_1, color = color_1)
+  daes(x = type_1, y = n, group = type_1, color = color_1)
  ) \%>\%
  po_title("Count of Pokemon by Type 1")
 

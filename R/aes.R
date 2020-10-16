@@ -6,6 +6,14 @@
 #'  variables. The names for x and y aesthetics are typically omitted because
 #'  they are so common; all other aspects must be named.
 #' 
+#' @section Aesthetics:
+#' Valid aesthetics (depending on the geom)
+#' 
+#' - `x`, `y`: cartesian coordinates.
+#' - `group`: grouping data.
+#' - `color`: color of geom.
+#' - `size`: size of geom.
+#' 
 #' @export
 daes <- function(x, y, ...) {
   exprs <- rlang::enquos(x = x, y = y, ..., .ignore_empty = "all")

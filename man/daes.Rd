@@ -14,3 +14,14 @@ they are so common; all other aspects must be named.}
 \description{
 Aesthetics of the chart.
 }
+\section{Aesthetics}{
+
+Valid aesthetics (depending on the geom)
+\itemize{
+\item \code{x}, \code{y}: cartesian coordinates.
+\item \code{group}: grouping data.
+\item \code{color}: color of geom.
+\item \code{size}: size of geom.
+}
+}
+

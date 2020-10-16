@@ -30,5 +30,6 @@ Imports:
     rlang
 Suggests: 
     knitr,
+    igraph,
     rmarkdown
 VignetteBuilder: knitr

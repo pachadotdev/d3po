@@ -35,7 +35,7 @@ pokemon_density <- tibble(
 
 d3po(pokemon_density) \%>\%
  po_area(
-  daes(x = x, y = y, group_by = variable, color = color)
+  daes(x = x, y = y, group = variable, color = color)
  ) \%>\%
  po_title("Approximated Density of Pokemon Weight")
 

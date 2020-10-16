@@ -12,7 +12,7 @@
 #' 
 #' @examples 
 #' d3po(pokemon) %>%
-#'  po_box(daes(x = type_1, y = speed, group_by = name, color = color_1)) %>%
+#'  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
 #'  po_title("Distribution of Pokemon Speed")
 #' 
 #' @export 
@@ -36,7 +36,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
 
   return(d3po)
@@ -59,7 +59,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  
 #' d3po(pokemon_count) %>%
 #'  po_treemap(
-#'   daes(size = n, group_by = type_1, color = color_1)
+#'   daes(size = n, group = type_1, color = color_1)
 #'  ) %>%
 #'  po_title("Share of Pokemon by Type 1")
 #' 
@@ -83,7 +83,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$size <- daes_to_opts(daes, "size")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
 
   return(d3po)
@@ -106,7 +106,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  
 #' d3po(pokemon_count) %>%
 #'  po_pie(
-#'   daes(size = n, group_by = type_1, color = color_1)
+#'   daes(size = n, group = type_1, color = color_1)
 #'  ) %>%
 #'  po_title("Share of Pokemon by Type 1")
 #' 
@@ -130,7 +130,7 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$size <- daes_to_opts(daes, "size")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)
@@ -159,7 +159,7 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' 
 #' d3po(pokemon_density) %>%
 #'  po_area(
-#'   daes(x = x, y = y, group_by = variable, color = color)
+#'   daes(x = x, y = y, group = variable, color = color)
 #'  ) %>%
 #'  po_title("Approximated Density of Pokemon Weight")
 #' 
@@ -184,7 +184,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)
@@ -207,7 +207,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
 #'  
 #' d3po(pokemon_count) %>%
 #'  po_bar(
-#'   daes(x = type_1, y = n, group_by = type_1, color = color_1)
+#'   daes(x = type_1, y = n, group = type_1, color = color_1)
 #'  ) %>%
 #'  po_title("Count of Pokemon by Type 1")
 #' 
@@ -232,8 +232,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
-  d3po$x$id <- daes_to_opts(daes, "id")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)
@@ -260,7 +259,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  
 #' d3po(pokemon_decile) %>%
 #'  po_line(
-#'   daes(x = decile, y = weight, group_by = type_1, color = color_1)
+#'   daes(x = decile, y = weight, group = type_1, color = color_1)
 #'  ) %>%
 #'  po_title("Decile of Pokemon Weight by Type 1")
 #' 
@@ -285,7 +284,7 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)
@@ -312,7 +311,7 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  
 #' d3po(pokemon_decile) %>%
 #'  po_scatter(
-#'   daes(x = decile, y = weight, group_by = type_1, color = color_1)
+#'   daes(x = decile, y = weight, group = type_1, color = color_1)
 #'  ) %>%
 #'  po_title("Decile of Pokemon Weight by Type 1")
 #' 
@@ -338,7 +337,7 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$size <- daes_to_opts(daes, "size")
-  d3po$x$group_by <- daes_to_opts(daes, "group_by")
+  d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   
   return(d3po)

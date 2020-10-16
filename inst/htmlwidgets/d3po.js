@@ -21,14 +21,13 @@ HTMLWidgets.widget({
         // type
         chart.type(x.type);
     
-        // common arguments
-        // add id if missing
-        chart.id("d3poKey");
-        chart.data(x.data);
-        
-        if (x.group_by) {
-          chart.id(x.group_by);
+        // add id if data present
+        // network may just be constituted of edges
+        if(x.data){
+          chart.id(x.group);
+          chart.data(x.data);
         }
+        
         if (x.size) {
           chart.size(x.size);
         }
@@ -60,11 +59,20 @@ HTMLWidgets.widget({
         if (x.labels) {
           chart.labels({"align": x.labels.align, "valign": x.labels.valign});
         }
+
+        if(x.edges)
+          chart.edges(x.edges);
+
+        if(x.nodes)
+          chart.nodes(x.nodes);
         
-        setTimeout(function() {
-          chart.resize(true);
-          chart.draw();
-        }, 10);
+        chart.draw();
+
+      },
+
+      resize: function(width, height) {
+
+        chart.resize();
 
       },
 

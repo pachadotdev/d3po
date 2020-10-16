@@ -28,7 +28,7 @@ pokemon_count <- pokemon \%>\%
  
 d3po(pokemon_count) \%>\%
  po_treemap(
-  daes(size = n, group_by = type_1, color = color_1)
+  daes(size = n, group = type_1, color = color_1)
  ) \%>\%
  po_title("Share of Pokemon by Type 1")
 

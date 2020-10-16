@@ -21,7 +21,7 @@ Draw a boxplot.
 }
 \examples{
 d3po(pokemon) \%>\%
- po_box(daes(x = type_1, y = speed, group_by = name, color = color_1)) \%>\%
+ po_box(daes(x = type_1, y = speed, group = name, color = color_1)) \%>\%
  po_title("Distribution of Pokemon Speed")
 
 }

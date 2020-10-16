@@ -32,7 +32,7 @@ pokemon_decile <- pokemon \%>\%
  
 d3po(pokemon_decile) \%>\%
  po_line(
-  daes(x = decile, y = weight, group_by = type_1, color = color_1)
+  daes(x = decile, y = weight, group = type_1, color = color_1)
  ) \%>\%
  po_title("Decile of Pokemon Weight by Type 1")
 

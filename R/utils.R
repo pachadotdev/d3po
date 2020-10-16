@@ -43,10 +43,22 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL){
 # this is important to make sure we don't share
 # sensitive data points => only serialize what the user explicitely wants
 .render_d3po <- function(d3po) {
-  if(!"d3poKey" %in% names(d3po$x$data)){
-    d3po$x$data[["d3poKey"]] <- row.names(d3po$x$data)
-  }
+
+  # add key to data
+  d3po$x$data <- .add_key(d3po$x$data)
+
   d3po$x$tempdata <- NULL
   d3po$x$daes <- NULL
   return(d3po)
+}
+
+.add_key <- function(data){
+
+  if(is.null(data))
+    return()
+
+  if(!"d3poKey" %in% names(data))
+    data[["d3poKey"]] <- row.names(data)
+  
+  return(data)
 }

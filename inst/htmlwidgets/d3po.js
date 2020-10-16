@@ -65,6 +65,12 @@ HTMLWidgets.widget({
 
       },
 
+      resize: function(width, height) {
+
+        chart.resize();
+
+      },
+
       getChart: function(){
         return chart;
       }

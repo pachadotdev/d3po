@@ -232,7 +232,6 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
-  d3po$x$id <- daes_to_opts(daes, "id")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   

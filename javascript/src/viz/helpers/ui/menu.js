@@ -3,7 +3,7 @@ module.exports = function(type) {
     var styles, menu;
     styles = {
         position: "absolute",
-        right: "10px",
+        left: "10px",
         top: "10px",
         display: "block"
     };

@@ -5,7 +5,6 @@ module.exports = function(type) {
         position: "absolute",
         right: "10px",
         top: "10px",
-        // visibility: "hidden",
         display: "block"
     };
     menu = d3.select("body").selectAll("div.d3po_menu").data([0]);

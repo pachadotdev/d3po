@@ -26,7 +26,7 @@
                 data = {};
                 data[vars.id.value] = focus.value[0];
             }
-            offset = Math.max(vars.labels.padding, 30);
+            offset = vars.labels.padding;
             createTooltip({
                 anchor: "top left",
                 arrow: false,

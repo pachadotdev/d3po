@@ -26,7 +26,7 @@
                 data = {};
                 data[vars.id.value] = focus.value[0];
             }
-            offset = vars.labels.padding;
+            offset = Math.max(vars.labels.padding, 30);
             createTooltip({
                 anchor: "top left",
                 arrow: false,
@@ -36,7 +36,7 @@
                 length: "long",
                 maxheight: vars.height.viz - offset * 2,
                 mouseevents: true,
-                offset: 30, // 30px is the size of the download icon
+                offset: Math.max(30 - vars.margin.top, 0), // 30px is the size of the download icon
                 vars: vars,
                 width: vars.tooltip.large,
                 x: vars.width.value - vars.margin.right - offset,

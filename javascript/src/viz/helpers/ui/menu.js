@@ -12,6 +12,7 @@ module.exports = function(type) {
       .append("ion-icon")
       .attr("name", "download")
       .style("font-size", "30px")
+      .style("cursor", "pointer")
       .on("click", function(){
         saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
       });

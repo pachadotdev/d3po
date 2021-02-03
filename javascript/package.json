@@ -23,6 +23,7 @@
     "heap": "^0.2.6",
     "notify-send": "^0.1.2",
     "numeric": "^1.2.6",
+    "save-svg-as-png": "^1.4.17",
     "simplify-js": "^1.2.4",
     "static-kdtree": "^1.0.1",
     "topojson": "^3.0.2"

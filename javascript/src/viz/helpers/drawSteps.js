@@ -4,6 +4,7 @@ var dataFormat = require("../../core/data/format.js"),
     dataLoad = require("../../core/data/load.js"),
     drawDrawer = require("./ui/drawer.js"),
     drawLegend = require("./ui/legend.js"),
+    drawMenu = require("./ui/menu.js"),
     errorCheck = require("./errorCheck.js"),
     fetchData = require("../../core/fetch/data.js"),
     finish = require("./finish.js"),
@@ -340,6 +341,18 @@ module.exports = function(vars) {
             vars.width.viz -= (vars.margin.left + vars.margin.right)
 
         },
+        "message": uiMessage
+    })
+
+    if (!vars.error.value) {
+        steps.push({
+            "function": focusTooltip,
+            "message": uiMessage
+        })
+    }
+
+    steps.push({
+        "function": drawMenu,
         "message": uiMessage
     })
 

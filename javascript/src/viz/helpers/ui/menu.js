@@ -5,13 +5,23 @@ module.exports = function(type) {
         position: "absolute",
         right: "10px",
         top: "10px",
-        display: "block"
+        display: "flex",
+        "align-items": "center",
+        "justify-content": "center"
     };
     menu = d3.select("body").selectAll("div.d3po_menu").data([0]);
     menu.enter().append("div").attr("class", "d3po_menu").style(styles)//.text('Save PNG')
-      .append("ion-icon")
+      .text("Download")
       .attr("name", "download")
-      .style("font-size", "30px")
+      .style("font-size", "18px")
+      .style("font-family", "sans-serif")
+      .style("color", "rgb(68, 68, 68)")
+      .style("background-color", "rgb(244, 244, 244)")
+      .style("box-shadow", "rgba(0, 0, 0, 0.25) 0px 1px 3px")
+      .style("border-radius", "3px")
+      .style("height", "40px")
+      .style("min-width", "40px")
+      .style("padding", "0 10px")
       .style("cursor", "pointer")
       .on("click", function(){
         saveSvgAsPng(document.getElementById('d3po'), "diagram.png")

@@ -17802,7 +17802,7 @@ module.exports = function(vars) {
 
 }).call(this);
 
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":85,"./data/lof.js":86,"./data/mad.js":87,"./font/sizes.js":88,"./font/validate.js":89,"./form/form.js":90,"./geom/largestrectangle.js":146,"./geom/offset.js":147,"./geom/path2poly.js":148,"./network/cluster.js":150,"./network/distance.js":151,"./network/normalize.js":152,"./network/shortestpath.js":153,"./network/smallestgap.js":154,"./network/subgraph.js":155,"./number/format.js":156,"./object/merge.js":157,"./object/validate.js":158,"./string/format.js":159,"./string/list.js":160,"./string/strip.js":161,"./string/title.js":162,"./textwrap/textwrap.js":186,"./tooltip/create.js":187,"./tooltip/move.js":188,"./tooltip/remove.js":189,"./util/buckets.js":190,"./util/child.js":191,"./util/closest.js":192,"./util/copy.js":193,"./util/d3selection.js":194,"./util/dataurl.js":195,"./util/uniques.js":196,"./viz/viz.js":306}],150:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":85,"./data/lof.js":86,"./data/mad.js":87,"./font/sizes.js":88,"./font/validate.js":89,"./form/form.js":90,"./geom/largestrectangle.js":146,"./geom/offset.js":147,"./geom/path2poly.js":148,"./network/cluster.js":150,"./network/distance.js":151,"./network/normalize.js":152,"./network/shortestpath.js":153,"./network/smallestgap.js":154,"./network/subgraph.js":155,"./number/format.js":156,"./object/merge.js":157,"./object/validate.js":158,"./string/format.js":159,"./string/list.js":160,"./string/strip.js":161,"./string/title.js":162,"./textwrap/textwrap.js":186,"./tooltip/create.js":187,"./tooltip/move.js":188,"./tooltip/remove.js":189,"./util/buckets.js":190,"./util/child.js":191,"./util/closest.js":192,"./util/copy.js":193,"./util/d3selection.js":194,"./util/dataurl.js":195,"./util/uniques.js":196,"./viz/viz.js":307}],150:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -20418,6 +20418,7 @@ var dataFormat = require("../../core/data/format.js"),
     dataLoad = require("../../core/data/load.js"),
     drawDrawer = require("./ui/drawer.js"),
     drawLegend = require("./ui/legend.js"),
+    drawMenu = require("./ui/menu.js"),
     errorCheck = require("./errorCheck.js"),
     fetchData = require("../../core/fetch/data.js"),
     finish = require("./finish.js"),
@@ -20765,6 +20766,18 @@ module.exports = function(vars) {
     }
 
     steps.push({
+        "function": drawMenu,
+        "message": uiMessage
+    })
+
+    if (!vars.error.value) {
+        steps.push({
+            "function": focusTooltip,
+            "message": uiMessage
+        })
+    }
+
+    steps.push({
         "function": svgUpdate,
         "message": drawMessage
     })
@@ -20785,7 +20798,7 @@ module.exports = function(vars) {
 
 }
 
-},{"../../core/console/print.js":47,"../../core/data/color.js":48,"../../core/data/format.js":50,"../../core/data/keys.js":52,"../../core/data/load.js":53,"../../core/fetch/data.js":58,"../../core/parse/edges.js":81,"../../core/parse/nodes.js":84,"../../object/validate.js":158,"../../string/format.js":159,"../../tooltip/remove.js":189,"./errorCheck.js":199,"./finish.js":200,"./focus/tooltip.js":201,"./shapes/draw.js":208,"./svg/enter.js":219,"./svg/update.js":220,"./types/run.js":223,"./ui/drawer.js":224,"./ui/history.js":225,"./ui/legend.js":226,"./ui/titles.js":228}],199:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/data/color.js":48,"../../core/data/format.js":50,"../../core/data/keys.js":52,"../../core/data/load.js":53,"../../core/fetch/data.js":58,"../../core/parse/edges.js":81,"../../core/parse/nodes.js":84,"../../object/validate.js":158,"../../string/format.js":159,"../../tooltip/remove.js":189,"./errorCheck.js":199,"./finish.js":200,"./focus/tooltip.js":201,"./shapes/draw.js":208,"./svg/enter.js":219,"./svg/update.js":220,"./types/run.js":223,"./ui/drawer.js":224,"./ui/history.js":225,"./ui/legend.js":226,"./ui/menu.js":227,"./ui/titles.js":229}],199:[function(require,module,exports){
 var fetchText = require("../../core/fetch/text.js"),
     print = require("../../core/console/print.js"),
     rejected = require("../../core/methods/rejected.js"),
@@ -21102,7 +21115,7 @@ module.exports = function(vars) {
 
 }
 
-},{"../../core/console/print.js":47,"../../core/methods/reset.js":79,"../../string/title.js":162,"./focus/viz.js":202,"./shapes/edges.js":209,"./shapes/labels.js":211,"./shapes/paths.js":213,"./ui/message.js":227,"./zoom/bounds.js":229,"./zoom/labels.js":231,"./zoom/mouse.js":232}],201:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../core/methods/reset.js":79,"../../string/title.js":162,"./focus/viz.js":202,"./shapes/edges.js":209,"./shapes/labels.js":211,"./shapes/paths.js":213,"./ui/message.js":228,"./zoom/bounds.js":230,"./zoom/labels.js":232,"./zoom/mouse.js":233}],201:[function(require,module,exports){
 // Creates focus tooltip, if applicable
 (function() {
     var createTooltip, fetchValue, print, removeTooltip;
@@ -21141,13 +21154,13 @@ module.exports = function(vars) {
                 length: "long",
                 maxheight: vars.height.viz - offset * 2,
                 mouseevents: true,
-                offset: 0,
+                offset: Math.max(30 - vars.margin.top, 0), // 30px is the size of the download icon
                 vars: vars,
                 width: vars.tooltip.large,
                 x: vars.width.value - vars.margin.right - offset,
                 y: vars.margin.top + offset
             });
-            vars.width.viz -= vars.tooltip.large + offset * 2;
+            vars.width.viz -= offset * 2; // vars.width.viz -= vars.tooltip.large + offset * 2;
             if (vars.dev.value) {
                 print.timeEnd("drawing focus tooltip");
             }
@@ -21157,6 +21170,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
+
 },{"../../../core/console/print.js":47,"../../../core/fetch/value.js":61,"../../../tooltip/remove.js":189,"../tooltip/create.js":221}],202:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     ie = require("../../../client/ie.js"),
@@ -22587,7 +22601,7 @@ module.exports = function(vars) {
 
 }
 
-},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/validate.js":158,"../../../string/strip.js":161,"../../../tooltip/remove.js":189,"../../../util/child.js":191,"../../../util/closest.js":192,"../../../util/uniques.js":196,"../tooltip/create.js":221,"../zoom/direction.js":230,"../zoom/propagation.js":233,"./arc.js":203,"./area.js":204,"./check.js":205,"./coordinates.js":207,"./fill.js":210,"./line.js":212,"./radial.js":214,"./rect.js":215,"./segments.js":216,"./whisker.js":218}],209:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/touch.js":38,"../../../color/legible.js":39,"../../../core/console/print.js":47,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/validate.js":158,"../../../string/strip.js":161,"../../../tooltip/remove.js":189,"../../../util/child.js":191,"../../../util/closest.js":192,"../../../util/uniques.js":196,"../tooltip/create.js":221,"../zoom/direction.js":231,"../zoom/propagation.js":234,"./arc.js":203,"./area.js":204,"./check.js":205,"./coordinates.js":207,"./fill.js":210,"./line.js":212,"./radial.js":214,"./rect.js":215,"./segments.js":216,"./whisker.js":218}],209:[function(require,module,exports){
 var buckets = require("../../../util/buckets.js"),
     offset = require("../../../geom/offset.js");
 
@@ -24710,7 +24724,7 @@ module.exports = function(vars) {
 
 };
 
-},{"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../client/touch.js":38,"../../../core/console/print.js":47,"../zoom/propagation.js":233}],220:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/prefix.js":34,"../../../client/touch.js":38,"../../../core/console/print.js":47,"../zoom/propagation.js":234}],220:[function(require,module,exports){
 var print = require("../../../core/console/print.js")
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // Updating Elements
@@ -25141,7 +25155,7 @@ module.exports = function(params) {
     }
 
 }
-},{"../../../array/sort.js":29,"../../../client/scroll.js":36,"../../../core/data/nest.js":54,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/merge.js":157,"../../../object/validate.js":158,"../../../tooltip/create.js":187,"../../../tooltip/remove.js":189,"../../../util/uniques.js":196,"../shapes/segments.js":216,"../zoom/direction.js":230,"./data.js":222}],222:[function(require,module,exports){
+},{"../../../array/sort.js":29,"../../../client/scroll.js":36,"../../../core/data/nest.js":54,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/merge.js":157,"../../../object/validate.js":158,"../../../tooltip/create.js":187,"../../../tooltip/remove.js":189,"../../../util/uniques.js":196,"../shapes/segments.js":216,"../zoom/direction.js":231,"./data.js":222}],222:[function(require,module,exports){
 var copy = require("../../../util/copy.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     fetchColor = require("../../../core/fetch/color.js"),
@@ -26369,6 +26383,38 @@ module.exports = function(vars) {
 
 }
 },{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":54,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/validate.js":158,"../../../string/strip.js":161,"../../../textwrap/textwrap.js":186,"../../../tooltip/remove.js":189,"../../../util/buckets.js":190,"../../../util/copy.js":193,"../../../util/dataurl.js":195,"../../../util/uniques.js":196,"../tooltip/create.js":221}],227:[function(require,module,exports){
+// Create menu to download image
+module.exports = function(type) {
+    var styles, menu;
+    styles = {
+        position: "absolute",
+        right: "10px",
+        top: "10px",
+        display: "flex",
+        "align-items": "center",
+        "justify-content": "center"
+    };
+    menu = d3.select("body").selectAll("div.d3po_menu").data([0]);
+    menu.enter().append("div").attr("class", "d3po_menu").style(styles)//.text('Save PNG')
+      .text("Download")
+      .attr("name", "download")
+      .style("font-size", "18px")
+      .style("font-family", "sans-serif")
+      .style("color", "rgb(68, 68, 68)")
+      .style("background-color", "rgb(244, 244, 244)")
+      .style("box-shadow", "rgba(0, 0, 0, 0.25) 0px 1px 3px")
+      .style("border-radius", "3px")
+      .style("height", "40px")
+      .style("min-width", "40px")
+      .style("padding", "0 10px")
+      .style("cursor", "pointer")
+      .on("click", function(){
+        saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
+      });
+    return menu;
+};
+
+},{}],228:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     textColor = require("../../../color/text.js");
 
@@ -26484,7 +26530,7 @@ module.exports = function(vars, message) {
         .call(style).style("opacity", message ? 1 : 0)
 
 }
-},{"../../../client/pointer.js":33,"../../../color/text.js":45}],228:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../color/text.js":45}],229:[function(require,module,exports){
 var events = require("../../../client/pointer.js"),
     fetchValue = require("../../../core/fetch/value.js"),
     print = require("../../../core/console/print.js"),
@@ -26802,7 +26848,7 @@ module.exports = function(vars) {
     if (vars.dev.value) print.timeEnd("drawing titles")
 
 }
-},{"../../../client/pointer.js":33,"../../../client/rtl.js":35,"../../../core/console/print.js":47,"../../../core/fetch/value.js":61,"../../../textwrap/textwrap.js":186}],229:[function(require,module,exports){
+},{"../../../client/pointer.js":33,"../../../client/rtl.js":35,"../../../core/console/print.js":47,"../../../core/fetch/value.js":61,"../../../textwrap/textwrap.js":186}],230:[function(require,module,exports){
 (function() {
     var labels, transform;
 
@@ -26856,7 +26902,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"./labels.js":231,"./transform.js":234}],230:[function(require,module,exports){
+},{"./labels.js":232,"./transform.js":235}],231:[function(require,module,exports){
 (function() {
     module.exports = function(data, vars) {
         var depth, max_depth, nextDepth;
@@ -26875,7 +26921,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 (function() {
     var print;
 
@@ -26913,7 +26959,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../core/console/print.js":47}],232:[function(require,module,exports){
+},{"../../../core/console/print.js":47}],233:[function(require,module,exports){
 (function() {
     var labels, removeTooltip, transform;
 
@@ -26970,7 +27016,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../../tooltip/remove.js":189,"./labels.js":231,"./transform.js":234}],233:[function(require,module,exports){
+},{"../../../tooltip/remove.js":189,"./labels.js":232,"./transform.js":235}],234:[function(require,module,exports){
 (function() {
     module.exports = function(vars, event) {
         var enabled, zoom, zoomable, zoomed;
@@ -26987,7 +27033,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],234:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 (function() {
     module.exports = function(vars, timing) {
         var translate;
@@ -27004,7 +27050,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],235:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -27022,7 +27068,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67}],236:[function(require,module,exports){
+},{"../../core/methods/filter.js":67}],237:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Object],
@@ -27031,7 +27077,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],237:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 (function() {
     var process;
 
@@ -27053,7 +27099,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":73}],238:[function(require,module,exports){
+},{"../../core/methods/process/data.js":73}],239:[function(require,module,exports){
 (function() {
     var process, rendering;
 
@@ -27094,7 +27140,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../core/methods/process/margin.js":76,"../../core/methods/rendering.js":78}],239:[function(require,module,exports){
+},{"../../core/methods/process/margin.js":76,"../../core/methods/rendering.js":78}],240:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [String],
@@ -27102,7 +27148,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],240:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Function, String],
@@ -27110,7 +27156,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{}],241:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 (function() {
     var filter, scale;
 
@@ -27151,7 +27197,7 @@ module.exports = function(vars) {
     };
 
 }).call(this);
-},{"../../color/scale.js":43,"../../core/methods/filter.js":67}],242:[function(require,module,exports){
+},{"../../color/scale.js":43,"../../core/methods/filter.js":67}],243:[function(require,module,exports){
 module.exports = {
     "accepted": [Array, Function, String],
     "index": {
@@ -27164,9 +27210,9 @@ module.exports = {
     },
     "value": false
 }
-},{}],243:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 arguments[4][94][0].apply(exports,arguments)
-},{"dup":94}],244:[function(require,module,exports){
+},{"dup":94}],245:[function(require,module,exports){
 (function() {
     var d3selection;
 
@@ -27197,7 +27243,7 @@ arguments[4][94][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../util/d3selection.js":194}],245:[function(require,module,exports){
+},{"../../util/d3selection.js":194}],246:[function(require,module,exports){
 (function() {
     var filter, process;
 
@@ -27237,7 +27283,7 @@ arguments[4][94][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67,"../../core/methods/process/data.js":73}],246:[function(require,module,exports){
+},{"../../core/methods/filter.js":67,"../../core/methods/process/data.js":73}],247:[function(require,module,exports){
 (function() {
     var fetchValue, ie, stringStrip;
 
@@ -27366,7 +27412,7 @@ arguments[4][94][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../client/ie.js":32,"../../core/fetch/value.js":61,"../../string/strip.js":161}],247:[function(require,module,exports){
+},{"../../client/ie.js":32,"../../core/fetch/value.js":61,"../../string/strip.js":161}],248:[function(require,module,exports){
 (function() {
     var process;
 
@@ -27404,7 +27450,7 @@ arguments[4][94][0].apply(exports,arguments)
 
 }).call(this);
 
-},{"../../core/methods/process/data.js":73}],248:[function(require,module,exports){
+},{"../../core/methods/process/data.js":73}],249:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Function, Number],
@@ -27412,7 +27458,7 @@ arguments[4][94][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],249:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Function, Object],
@@ -27420,9 +27466,9 @@ arguments[4][94][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],250:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 arguments[4][98][0].apply(exports,arguments)
-},{"dup":98}],251:[function(require,module,exports){
+},{"dup":98}],252:[function(require,module,exports){
 var print = require("../../core/console/print.js"),
     stringFormat = require("../../string/format.js")
 
@@ -27481,7 +27527,7 @@ module.exports = {
     "update": true,
     "value": undefined
 }
-},{"../../core/console/print.js":47,"../../string/format.js":159}],252:[function(require,module,exports){
+},{"../../core/console/print.js":47,"../../string/format.js":159}],253:[function(require,module,exports){
 var process = require("../../core/methods/process/data.js");
 
 module.exports = {
@@ -27580,7 +27626,7 @@ module.exports = {
     "target": "target",
     "value": false
 };
-},{"../../core/methods/process/data.js":73}],253:[function(require,module,exports){
+},{"../../core/methods/process/data.js":73}],254:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, String],
@@ -27588,7 +27634,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],254:[function(require,module,exports){
+},{}],255:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Array, Function, Number, String],
@@ -27609,7 +27655,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],255:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -27643,7 +27689,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":68,"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],256:[function(require,module,exports){
+},{"../../core/methods/font/align.js":68,"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],257:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -27671,7 +27717,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],257:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],258:[function(require,module,exports){
 (function() {
     var formatNumber, locale, mergeObject, titleCase;
 
@@ -27751,7 +27797,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/locale/locale.js":65,"../../number/format.js":156,"../../object/merge.js":157,"../../string/title.js":162}],258:[function(require,module,exports){
+},{"../../core/locale/locale.js":65,"../../number/format.js":156,"../../object/merge.js":157,"../../string/title.js":162}],259:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -27762,7 +27808,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],259:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 (function() {
     var align, decoration, family, filter, orientMap, position, rendering, transform;
 
@@ -27995,7 +28041,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../core/methods/filter.js":67,"../../../core/methods/font/align.js":68,"../../../core/methods/font/decoration.js":69,"../../../core/methods/font/family.js":70,"../../../core/methods/font/position.js":71,"../../../core/methods/font/transform.js":72,"../../../core/methods/rendering.js":78}],260:[function(require,module,exports){
+},{"../../../core/methods/filter.js":67,"../../../core/methods/font/align.js":68,"../../../core/methods/font/decoration.js":69,"../../../core/methods/font/family.js":70,"../../../core/methods/font/position.js":71,"../../../core/methods/font/transform.js":72,"../../../core/methods/rendering.js":78}],261:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -28018,7 +28064,7 @@ module.exports = {
     };
 
 }).call(this);
-},{}],261:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 (function() {
     var process;
 
@@ -28042,7 +28088,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/process/icon.js":75}],262:[function(require,module,exports){
+},{"../../core/methods/process/icon.js":75}],263:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -28062,7 +28108,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67}],263:[function(require,module,exports){
+},{"../../core/methods/filter.js":67}],264:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -28116,7 +28162,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],264:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],265:[function(require,module,exports){
 (function() {
     var family;
 
@@ -28176,7 +28222,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/family.js":70}],265:[function(require,module,exports){
+},{"../../core/methods/font/family.js":70}],266:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -28204,9 +28250,9 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],266:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],267:[function(require,module,exports){
 arguments[4][109][0].apply(exports,arguments)
-},{"../../core/methods/process/margin.js":76,"dup":109}],267:[function(require,module,exports){
+},{"../../core/methods/process/margin.js":76,"dup":109}],268:[function(require,module,exports){
 (function() {
     var decoration, family, transform;
 
@@ -28239,7 +28285,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],268:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],269:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -28263,7 +28309,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],269:[function(require,module,exports){
+},{}],270:[function(require,module,exports){
 (function() {
     var process;
 
@@ -28285,7 +28331,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/process/data.js":73}],270:[function(require,module,exports){
+},{"../../core/methods/process/data.js":73}],271:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean, Function, String],
@@ -28301,7 +28347,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],271:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [Boolean],
@@ -28335,7 +28381,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],272:[function(require,module,exports){
+},{}],273:[function(require,module,exports){
 (function() {
     var rendering;
 
@@ -28363,7 +28409,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/rendering.js":78}],273:[function(require,module,exports){
+},{"../../core/methods/rendering.js":78}],274:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -28408,14 +28454,14 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67}],274:[function(require,module,exports){
+},{"../../core/methods/filter.js":67}],275:[function(require,module,exports){
 (function() {
     module.exports = {
         value: false
     };
 
 }).call(this);
-},{}],275:[function(require,module,exports){
+},{}],276:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -28429,7 +28475,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67}],276:[function(require,module,exports){
+},{"../../core/methods/filter.js":67}],277:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -28444,7 +28490,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67}],277:[function(require,module,exports){
+},{"../../core/methods/filter.js":67}],278:[function(require,module,exports){
 (function() {
     var filter;
 
@@ -28467,7 +28513,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/filter.js":67}],278:[function(require,module,exports){
+},{"../../core/methods/filter.js":67}],279:[function(require,module,exports){
 (function() {
     module.exports = {
         mouseevents: 60,
@@ -28476,7 +28522,7 @@ arguments[4][109][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],279:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 (function() {
     var decoration, family, stringStrip, transform;
 
@@ -28552,7 +28598,7 @@ arguments[4][109][0].apply(exports,arguments)
 
 }).call(this);
 
-},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72,"../../string/strip.js":161}],280:[function(require,module,exports){
+},{"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72,"../../string/strip.js":161}],281:[function(require,module,exports){
 (function() {
     var family, transform;
 
@@ -28622,9 +28668,9 @@ arguments[4][109][0].apply(exports,arguments)
 
 }).call(this);
 
-},{"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],281:[function(require,module,exports){
-arguments[4][275][0].apply(exports,arguments)
-},{"../../core/methods/filter.js":67,"dup":275}],282:[function(require,module,exports){
+},{"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],282:[function(require,module,exports){
+arguments[4][276][0].apply(exports,arguments)
+},{"../../core/methods/filter.js":67,"dup":276}],283:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: function(vars) {
@@ -28640,7 +28686,7 @@ arguments[4][275][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],283:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 (function() {
     var align, decoration, family, transform;
 
@@ -28695,7 +28741,7 @@ arguments[4][275][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{"../../core/methods/font/align.js":68,"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],284:[function(require,module,exports){
+},{"../../core/methods/font/align.js":68,"../../core/methods/font/decoration.js":69,"../../core/methods/font/family.js":70,"../../core/methods/font/transform.js":72}],285:[function(require,module,exports){
 (function() {
     module.exports = {
         accepted: [false, Number],
@@ -28705,7 +28751,7 @@ arguments[4][275][0].apply(exports,arguments)
     };
 
 }).call(this);
-},{}],285:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 module.exports = {
     "accepted": [Boolean],
     "behavior": d3.behavior.zoom().scaleExtent([1, 1]).duration(0),
@@ -28723,7 +28769,7 @@ module.exports = {
     },
     "value": true
 }
-},{}],286:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 (function() {
     var area, closest, fetchValue, graph, nest, sort, stack, threshold;
 
@@ -28827,7 +28873,7 @@ module.exports = {
     module.exports = area;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/data/threshold.js":55,"../../core/fetch/value.js":61,"../../util/closest.js":192,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],287:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":55,"../../core/fetch/value.js":61,"../../util/closest.js":192,"./helpers/graph/draw.js":293,"./helpers/graph/nest.js":299,"./helpers/graph/stack.js":300}],288:[function(require,module,exports){
 (function() {
     var bar, buckets, fetchValue, graph, nest, stack, uniques,
         indexOf = [].indexOf || function(item) {
@@ -29033,7 +29079,7 @@ module.exports = {
     module.exports = bar;
 
 }).call(this);
-},{"../../core/fetch/value.js":61,"../../util/buckets.js":190,"../../util/uniques.js":196,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],288:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../util/buckets.js":190,"../../util/uniques.js":196,"./helpers/graph/draw.js":293,"./helpers/graph/nest.js":299,"./helpers/graph/stack.js":300}],289:[function(require,module,exports){
 (function() {
     var box, fetchValue, graph, stringFormat, strip, uniques;
 
@@ -29307,7 +29353,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../string/format.js":159,"../../string/strip.js":161,"../../util/uniques.js":196,"./helpers/graph/draw.js":292}],289:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../string/format.js":159,"../../string/strip.js":161,"../../util/uniques.js":196,"./helpers/graph/draw.js":293}],290:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, donut, groupData;
 
@@ -29362,7 +29408,7 @@ module.exports = {
     module.exports = donut;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],290:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],291:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, halfdonut;
 
@@ -29421,7 +29467,7 @@ module.exports = {
     module.exports = halfdonut;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],291:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],292:[function(require,module,exports){
 (function() {
     var color, legible, print;
 
@@ -29503,7 +29549,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":57}],292:[function(require,module,exports){
+},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":57}],293:[function(require,module,exports){
 (function() {
     var axes, draw, mouse, plot;
 
@@ -29526,7 +29572,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"./includes/axes.js":293,"./includes/mouse.js":295,"./includes/plot.js":296,"./includes/svg.js":297}],293:[function(require,module,exports){
+},{"./includes/axes.js":294,"./includes/mouse.js":296,"./includes/plot.js":297,"./includes/svg.js":298}],294:[function(require,module,exports){
 (function() {
     var arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
 
@@ -29878,7 +29924,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":58,"../../../../../core/fetch/value.js":61,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":294}],294:[function(require,module,exports){
+},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":58,"../../../../../core/fetch/value.js":61,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":295}],295:[function(require,module,exports){
 (function() {
     var buckets, closest;
 
@@ -30069,7 +30115,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../util/buckets.js":190,"../../../../../util/closest.js":192}],295:[function(require,module,exports){
+},{"../../../../../util/buckets.js":190,"../../../../../util/closest.js":192}],296:[function(require,module,exports){
 (function() {
     var copy, events, fetchColor, fetchValue, legible, textColor;
 
@@ -30315,7 +30361,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":57,"../../../../../core/fetch/value.js":61,"../../../../../util/copy.js":193}],296:[function(require,module,exports){
+},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":57,"../../../../../core/fetch/value.js":61,"../../../../../util/copy.js":193}],297:[function(require,module,exports){
 (function() {
     var buckets, buffer, createAxis, fetchValue, fontSizes, formatPower, labelPadding, superscript, textwrap, timeDetect, uniques;
 
@@ -30765,7 +30811,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../core/data/time.js":56,"../../../../../core/fetch/value.js":61,"../../../../../font/sizes.js":88,"../../../../../textwrap/textwrap.js":186,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":294}],297:[function(require,module,exports){
+},{"../../../../../core/data/time.js":56,"../../../../../core/fetch/value.js":61,"../../../../../font/sizes.js":88,"../../../../../textwrap/textwrap.js":186,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":295}],298:[function(require,module,exports){
 (function() {
     var mix, textwrap, validObject;
 
@@ -31171,7 +31217,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":158,"../../../../../textwrap/textwrap.js":186}],298:[function(require,module,exports){
+},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":158,"../../../../../textwrap/textwrap.js":186}],299:[function(require,module,exports){
 (function() {
     var fetchValue, stringStrip, uniqueValues;
 
@@ -31296,7 +31342,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":61,"../../../../string/strip.js":161,"../../../../util/uniques.js":196}],299:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":61,"../../../../string/strip.js":161,"../../../../util/uniques.js":196}],300:[function(require,module,exports){
 (function() {
     var fetchValue;
 
@@ -31375,7 +31421,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":61}],300:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":61}],301:[function(require,module,exports){
 (function() {
     var fetchValue, graph, line, nest, sort, stack;
 
@@ -31455,7 +31501,7 @@ module.exports = {
     module.exports = line;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/fetch/value.js":61,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],301:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":61,"./helpers/graph/draw.js":293,"./helpers/graph/nest.js":299,"./helpers/graph/stack.js":300}],302:[function(require,module,exports){
 (function() {
     var smallestGap = require("../../network/smallestgap.js"),
         fetchValue = require("../../core/fetch/value.js");
@@ -31622,7 +31668,7 @@ module.exports = {
     module.exports = network
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../network/smallestgap.js":154}],302:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../network/smallestgap.js":154}],303:[function(require,module,exports){
 (function() {
     var fetchValue, shortestPath, uniqueValues, viz,
         indexOf = [].indexOf || function(item) {
@@ -31889,7 +31935,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../network/shortestpath.js":153,"../../util/uniques.js":196}],303:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../network/shortestpath.js":153,"../../util/uniques.js":196}],304:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, pie;
 
@@ -31944,7 +31990,7 @@ module.exports = {
     module.exports = pie;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],304:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],305:[function(require,module,exports){
 (function() {
     var fetchValue, graph, print, scatter, sort, ticks;
 
@@ -32014,7 +32060,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":61,"./helpers/graph/dataticks.js":291,"./helpers/graph/draw.js":292}],305:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":61,"./helpers/graph/dataticks.js":292,"./helpers/graph/draw.js":293}],306:[function(require,module,exports){
 (function() {
     var dataThreshold, groupData, mergeObject, treemap;
 
@@ -32079,7 +32125,7 @@ module.exports = {
     module.exports = treemap;
 
 }).call(this);
-},{"../../core/data/group.js":51,"../../core/data/threshold.js":55,"../../object/merge.js":157}],306:[function(require,module,exports){
+},{"../../core/data/group.js":51,"../../core/data/threshold.js":55,"../../object/merge.js":157}],307:[function(require,module,exports){
 (function() {
     var attach, axis, container, flash, getSteps, print, validObject;
 
@@ -32281,4 +32327,4 @@ module.exports = {
 
 }).call(this);
 
-},{"../core/console/print.js":47,"../core/methods/attach.js":66,"../object/validate.js":158,"./helpers/container.js":197,"./helpers/drawSteps.js":198,"./helpers/ui/message.js":227,"./methods/active.js":235,"./methods/aggs.js":236,"./methods/attrs.js":237,"./methods/axes.js":238,"./methods/background.js":239,"./methods/class.js":240,"./methods/color.js":241,"./methods/cols.js":242,"./methods/config.js":243,"./methods/container.js":244,"./methods/coords.js":245,"./methods/csv.js":246,"./methods/data.js":247,"./methods/depth.js":248,"./methods/descs.js":249,"./methods/dev.js":250,"./methods/draw.js":251,"./methods/edges.js":252,"./methods/error.js":253,"./methods/focus.js":254,"./methods/font.js":255,"./methods/footer.js":256,"./methods/format.js":257,"./methods/height.js":258,"./methods/helpers/axis.js":259,"./methods/history.js":260,"./methods/icon.js":261,"./methods/id.js":262,"./methods/labels.js":263,"./methods/legend.js":264,"./methods/links.js":265,"./methods/margin.js":266,"./methods/messages.js":267,"./methods/mouse.js":268,"./methods/nodes.js":269,"./methods/order.js":270,"./methods/resize.js":271,"./methods/shape.js":272,"./methods/size.js":273,"./methods/style.js":274,"./methods/temp.js":275,"./methods/text.js":276,"./methods/time.js":277,"./methods/timing.js":278,"./methods/title.js":279,"./methods/tooltip.js":280,"./methods/total.js":281,"./methods/type.js":282,"./methods/ui.js":283,"./methods/width.js":284,"./methods/zoom.js":285,"./types/area.js":286,"./types/bar.js":287,"./types/box.js":288,"./types/donut.js":289,"./types/halfdonut.js":290,"./types/line.js":300,"./types/network.js":301,"./types/paths.js":302,"./types/pie.js":303,"./types/scatter.js":304,"./types/treemap.js":305}]},{},[149]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":66,"../object/validate.js":158,"./helpers/container.js":197,"./helpers/drawSteps.js":198,"./helpers/ui/message.js":228,"./methods/active.js":236,"./methods/aggs.js":237,"./methods/attrs.js":238,"./methods/axes.js":239,"./methods/background.js":240,"./methods/class.js":241,"./methods/color.js":242,"./methods/cols.js":243,"./methods/config.js":244,"./methods/container.js":245,"./methods/coords.js":246,"./methods/csv.js":247,"./methods/data.js":248,"./methods/depth.js":249,"./methods/descs.js":250,"./methods/dev.js":251,"./methods/draw.js":252,"./methods/edges.js":253,"./methods/error.js":254,"./methods/focus.js":255,"./methods/font.js":256,"./methods/footer.js":257,"./methods/format.js":258,"./methods/height.js":259,"./methods/helpers/axis.js":260,"./methods/history.js":261,"./methods/icon.js":262,"./methods/id.js":263,"./methods/labels.js":264,"./methods/legend.js":265,"./methods/links.js":266,"./methods/margin.js":267,"./methods/messages.js":268,"./methods/mouse.js":269,"./methods/nodes.js":270,"./methods/order.js":271,"./methods/resize.js":272,"./methods/shape.js":273,"./methods/size.js":274,"./methods/style.js":275,"./methods/temp.js":276,"./methods/text.js":277,"./methods/time.js":278,"./methods/timing.js":279,"./methods/title.js":280,"./methods/tooltip.js":281,"./methods/total.js":282,"./methods/type.js":283,"./methods/ui.js":284,"./methods/width.js":285,"./methods/zoom.js":286,"./types/area.js":287,"./types/bar.js":288,"./types/box.js":289,"./types/donut.js":290,"./types/halfdonut.js":291,"./types/line.js":301,"./types/network.js":302,"./types/paths.js":303,"./types/pie.js":304,"./types/scatter.js":305,"./types/treemap.js":306}]},{},[149]);

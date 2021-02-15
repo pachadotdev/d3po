@@ -9,3 +9,9 @@ dependencies:
     src: htmlwidgets/lib/
     script:
       - d3po.js
+  - name: saveSvgAsPng
+    version: 0.1.0
+    src: htmlwidgets/lib/
+    script:
+      - saveSvgAsPng.js
+      

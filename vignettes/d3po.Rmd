@@ -45,7 +45,7 @@ doesn't need additional aggregation or transformation, just to use the Pokemon
 `name` as the grouping variable and (optionally) the `color` variable:
 ```{r box1, fig.height=7}
 d3po(pokemon) %>%
-  po_box(daes(x = type_1, y = speed, group_by = name, color = color_1)) %>%
+  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
   po_title("Distribution of Pokemon Speed by Type")
 ```
 
@@ -63,7 +63,7 @@ Now we can create a bar chart by using `type_1` both for the `x` axis and the
 ```{r bar2}
 d3po(pokemon_count) %>%
   po_bar(
-    daes(x = type_1, y = n, group_by = type_1, color = color_1)
+    daes(x = type_1, y = n, group = type_1, color = color_1)
   ) %>%
   po_title("Count of Pokemon by Type")
 ```
@@ -76,7 +76,7 @@ instead of `x` and `y`:
 ```{r}
 d3po(pokemon_count) %>%
   po_treemap(
-    daes(size = n, group_by = type_1, color = color_1)
+    daes(size = n, group = type_1, color = color_1)
   ) %>%
   po_title("Share of Pokemon by Type")
 ```
@@ -90,7 +90,7 @@ This method is exactly the same as `treemap` but changing the function.
 ```{r}
 d3po(pokemon_count) %>%
   po_pie(
-    daes(size = n, group_by = type_1, color = color_1)
+    daes(size = n, group = type_1, color = color_1)
   ) %>%
   po_title("Share of Pokemon by Type")
 ```
@@ -114,7 +114,7 @@ created above:
 ```{r line2}
 d3po(pokemon_decile) %>%
   po_line(
-    daes(x = decile, y = weight, group_by = type_1, color = color_1)
+    daes(x = decile, y = weight, group = type_1, color = color_1)
   ) %>%
   po_title("Decile of Pokemon Weight by Type")
 ```
@@ -138,7 +138,7 @@ created above:
 ```{r area2}
 d3po(pokemon_density) %>%
  po_area(
-  daes(x = x, y = y, group_by = variable, color = color)
+  daes(x = x, y = y, group = variable, color = color)
  ) %>%
  po_title("Approximated Density of Pokemon Weight")
 ```
@@ -158,7 +158,7 @@ pokemon_def_vs_att <- pokemon %>%
 
 d3po(pokemon_def_vs_att) %>%
   po_scatter(
-    daes(x = mean_att, y = mean_def, size = n_pkmn, group_by = type_1, color = color_1)
+    daes(x = mean_att, y = mean_def, size = n_pkmn, group = type_1, color = color_1)
   ) %>%
   po_title("Average Attack vs Average Defense by Type")
 ```

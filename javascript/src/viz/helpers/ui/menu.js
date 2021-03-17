@@ -57,11 +57,11 @@ module.exports = function(type) {
         .attr("height", 20)
         .append("path")
         .attr("d", "M9.1 12L4.9 7.9c-.5-.5-1.3-.5-1.8 0s-.5 1.3 0 1.8l6.2 6.2c.5.5 1.3.5 1.8 0l6.2-6.2c.5-.5.5-1.3 0-1.8s-1.3-.5-1.8 0L11.6 12V1.2C11.6.6 11 0 10.3 0c-.7 0-1.2.6-1.2 1.2V12zM4 20c-.7 0-1.2-.6-1.2-1.2s.6-1.2 1.2-1.2h12.5c.7 0 1.2.6 1.2 1.2s-.5 1.2-1.2 1.2H4z")
-        .attr("fill", "#3e3d40")
+        .attr("fill", "#3e3d40");
 
       downloadDiv.append("div")
         .style("padding-left", "5px")
-        .text("Download")
+        .text("Download");
 
       copyDiv = menu.append("div")
         .style(styles)
@@ -71,7 +71,7 @@ module.exports = function(type) {
         .style("cursor", "pointer")
         .on("click", function(){
           svgAsPngUri(document.getElementById("d3po")).then(function(uri){
-            let blob = dataURItoBlob(uri);
+            var blob = dataURItoBlob(uri);
             navigator.clipboard.write([
                 new ClipboardItem({
                     [blob.type]: blob
@@ -86,11 +86,11 @@ module.exports = function(type) {
         .attr("height",18)
         .append("path")
         .attr("d", "M14.707 8.293l-3-3A1 1 0 0 0 11 5h-1V4a1 1 0 0 0-.293-.707l-3-3A1 1 0 0 0 6 0H3a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3v3a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2V9a1 1 0 0 0-.293-.707zM12.586 9H11V7.414zm-5-5H6V2.414zM6 7v2H3V2h2v2.5a.5.5 0 0 0 .5.5H8a2 2 0 0 0-2 2zm2 7V7h2v2.5a.5.5 0 0 0 .5.5H13v4z")
-        .attr("fill", "#3e3d40")
+        .attr("fill", "#3e3d40");
 
       copyDiv.append("div")
         .style("padding-left", "5px")
-        .text("Copy")
+        .text("Copy");
 
       return menu;
 };

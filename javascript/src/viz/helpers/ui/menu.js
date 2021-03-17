@@ -4,7 +4,7 @@ module.exports = function(type) {
     styles = {
         position: "absolute",
         right: "10px",
-        top: "10px",
+        bottom: "10px",
         display: "flex",
         "align-items": "center",
         "justify-content": "center"

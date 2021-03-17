@@ -19,7 +19,7 @@
 
   timer = require("gulp-duration");
 
-  uglify = require("gulp-uglify");
+  uglify = require("gulp-uglify-es").default;
 
   chmod = require("gulp-chmod");
 

@@ -36,7 +36,7 @@
                 length: "long",
                 maxheight: vars.height.viz - offset * 2,
                 mouseevents: true,
-                offset: Math.max(30-vars.margin.top, 0), // 30px is the size of the download icon
+                offset: Math.max(30 - vars.margin.top, 0), // 30px is the size of the download icon
                 vars: vars,
                 width: vars.tooltip.large,
                 x: vars.width.value - vars.margin.right - offset,

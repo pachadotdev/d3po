@@ -21154,7 +21154,7 @@ module.exports = function(vars) {
                 length: "long",
                 maxheight: vars.height.viz - offset * 2,
                 mouseevents: true,
-                offset: Math.max(30 - vars.margin.top, 0), // 30px is the size of the download icon
+                offset: Math.max(30-vars.margin.top, 0), // 30px is the size of the download icon
                 vars: vars,
                 width: vars.tooltip.large,
                 x: vars.width.value - vars.margin.right - offset,
@@ -26385,33 +26385,116 @@ module.exports = function(vars) {
 },{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":54,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/validate.js":158,"../../../string/strip.js":161,"../../../textwrap/textwrap.js":186,"../../../tooltip/remove.js":189,"../../../util/buckets.js":190,"../../../util/copy.js":193,"../../../util/dataurl.js":195,"../../../util/uniques.js":196,"../tooltip/create.js":221}],227:[function(require,module,exports){
 // Create menu to download image
 module.exports = function(type) {
-    var styles, menu;
-    styles = {
-        position: "absolute",
-        right: "10px",
-        top: "10px",
-        display: "flex",
-        "align-items": "center",
-        "justify-content": "center"
-    };
-    menu = d3.select("body").selectAll("div.d3po_menu").data([0]);
-    menu.enter().append("div").attr("class", "d3po_menu").style(styles)//.text('Save PNG')
-      .text("Download")
-      .attr("name", "download")
-      .style("font-size", "18px")
-      .style("font-family", "sans-serif")
-      .style("color", "rgb(68, 68, 68)")
-      .style("background-color", "rgb(244, 244, 244)")
-      .style("box-shadow", "rgba(0, 0, 0, 0.25) 0px 1px 3px")
-      .style("border-radius", "3px")
-      .style("height", "40px")
-      .style("min-width", "40px")
-      .style("padding", "0 10px")
-      .style("cursor", "pointer")
-      .on("click", function(){
-        saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
-      });
-    return menu;
+
+  function hover(el) {
+    el.on("mouseover", function(){
+      d3.select(this).style("background-color", "rgb(214, 214, 214)");
+    })
+    .on("mouseout", function(){
+      d3.select(this).style("background-color", "rgb(244, 244, 244)");
+    })
+  }
+
+  var styles, saveStyles, menu, downloadDiv, imageDiv;
+
+  styles = {
+      position: "absolute",
+      display: "flex",
+      "align-items": "center",
+      "justify-content": "center",
+      "font-size": "18px",
+      "font-family": "sans-serif",
+      "color": "rgb(68, 68, 68)",
+      "background-color": "rgb(244, 244, 244)",
+      "border-radius": "3px",
+      "border": "1px solid rgb(144, 144, 144)",
+      "height": "30px",
+      "padding": "0 5px",
+      "z-index": 3000
+  };
+
+  menu = d3.select("body").selectAll("div.d3po_menu").data([0])
+    .enter().append("div")
+    .attr("class", "d3po_menu")
+    .attr("name", "download");
+
+  downloadDiv = menu.append("div")
+    .style(styles)
+    .style("right", "10px")
+    .style("top", "10px")
+    .style("cursor", "pointer")
+    .call(hover)
+    .on("click", function(){
+      if (imageDiv.style("opacity") > 0) {
+        imageDiv.transition().duration(100).style("opacity", 0);
+      } else {
+        imageDiv.transition().duration(100).style("opacity", 1);
+      }
+    });
+
+  downloadDiv.append("svg")
+    .attr("xmlns", "http://www.w3.org/2000/svg")
+    .attr("width", 24)
+    .attr("height", 24)
+    .append("path")
+    .attr("d", "M4 7a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1z")
+    .attr("fill", "#0D0D0D")
+    .on("click", function(){
+      if (imageDiv.style("opacity") > 0) {
+        imageDiv.transition().duration(100).style("opacity", 0);
+      } else {
+        imageDiv.transition().duration(100).style("opacity", 1);
+      }
+    });
+
+  imageDiv = menu.append("div")
+    .style(styles)
+    .style("display", "block")
+    .style("right", "10px")
+    .style("top", "40px")
+    .style("font-size", "12px")
+    .style("min-width", "130px")
+    .style("height", "auto")
+    .style("padding", 0)
+    .style("opacity", 0);
+
+  saveStyles = {
+    display: "flex",
+    "align-items": "center",
+    "justify-content": "left",
+    "color": "rgb(68, 68, 68)",
+    "border-radius": "3px",
+    "height": "30px",
+    "padding": "0 10px",
+  };
+
+  imageDiv.append("div")
+    .style(saveStyles)
+    .style("cursor", "pointer")
+    .html('Download PNG image')
+    .call(hover)
+    .on("click", function(){
+      saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
+    });
+
+  imageDiv.append("div")
+    .style(saveStyles)
+    .style("cursor", "pointer")
+    .html('Download SVG image')
+    .call(hover)
+    .on("click", function(){
+      var svgData = d3.select("#d3po").node().outerHTML;
+      var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+      var svgUrl = URL.createObjectURL(svgBlob);
+      var downloadLink = document.createElement("a");
+      downloadLink.href = svgUrl;
+      downloadLink.download = "diagram.svg";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+
+  return menu;
 };
 
 },{}],228:[function(require,module,exports){

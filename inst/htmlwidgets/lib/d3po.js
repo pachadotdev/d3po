@@ -4534,6 +4534,10 @@ function arrayDType(data) {
         return "uint32"
       case "[object Uint8ClampedArray]":
         return "uint8_clamped"
+      case "[object BigInt64Array]":
+        return "bigint64"
+      case "[object BigUint64Array]":
+        return "biguint64"
     }
   }
   if(Array.isArray(data)) {
@@ -4553,6 +4557,8 @@ var CACHED_CONSTRUCTORS = {
   "uint32":[],
   "array":[],
   "uint8_clamped":[],
+  "bigint64": [],
+  "biguint64": [],
   "buffer":[],
   "generic":[]
 }
@@ -9905,35 +9911,46 @@ proto.dispose = function() {
   pool.freeFloat64(this.data)
 }
 },{"typedarray-pool":25}],25:[function(require,module,exports){
-(function (global,Buffer){
+(function (global){
 'use strict'
 
 var bits = require('bit-twiddle')
 var dup = require('dup')
+var Buffer = require('buffer').Buffer
 
 //Legacy pool support
 if(!global.__TYPEDARRAY_POOL) {
   global.__TYPEDARRAY_POOL = {
-      UINT8   : dup([32, 0])
-    , UINT16  : dup([32, 0])
-    , UINT32  : dup([32, 0])
-    , INT8    : dup([32, 0])
-    , INT16   : dup([32, 0])
-    , INT32   : dup([32, 0])
-    , FLOAT   : dup([32, 0])
-    , DOUBLE  : dup([32, 0])
-    , DATA    : dup([32, 0])
-    , UINT8C  : dup([32, 0])
-    , BUFFER  : dup([32, 0])
+      UINT8     : dup([32, 0])
+    , UINT16    : dup([32, 0])
+    , UINT32    : dup([32, 0])
+    , BIGUINT64 : dup([32, 0])
+    , INT8      : dup([32, 0])
+    , INT16     : dup([32, 0])
+    , INT32     : dup([32, 0])
+    , BIGINT64  : dup([32, 0])
+    , FLOAT     : dup([32, 0])
+    , DOUBLE    : dup([32, 0])
+    , DATA      : dup([32, 0])
+    , UINT8C    : dup([32, 0])
+    , BUFFER    : dup([32, 0])
   }
 }
 
 var hasUint8C = (typeof Uint8ClampedArray) !== 'undefined'
+var hasBigUint64 = (typeof BigUint64Array) !== 'undefined'
+var hasBigInt64 = (typeof BigInt64Array) !== 'undefined'
 var POOL = global.__TYPEDARRAY_POOL
 
 //Upgrade pool
 if(!POOL.UINT8C) {
   POOL.UINT8C = dup([32, 0])
+}
+if(!POOL.BIGUINT64) {
+  POOL.BIGUINT64 = dup([32, 0])
+}
+if(!POOL.BIGINT64) {
+  POOL.BIGINT64 = dup([32, 0])
 }
 if(!POOL.BUFFER) {
   POOL.BUFFER = dup([32, 0])
@@ -9975,9 +9992,11 @@ function freeTypedArray(array) {
 exports.freeUint8 =
 exports.freeUint16 =
 exports.freeUint32 =
+exports.freeBigUint64 =
 exports.freeInt8 =
 exports.freeInt16 =
 exports.freeInt32 =
+exports.freeBigInt64 =
 exports.freeFloat32 = 
 exports.freeFloat =
 exports.freeFloat64 = 
@@ -10016,6 +10035,10 @@ exports.malloc = function malloc(n, dtype) {
         return mallocDouble(n)
       case 'uint8_clamped':
         return mallocUint8Clamped(n)
+      case 'bigint64':
+        return mallocBigInt64(n)
+      case 'biguint64':
+        return mallocBigUint64(n)
       case 'buffer':
         return mallocBuffer(n)
       case 'data':
@@ -10089,6 +10112,24 @@ function mallocUint8Clamped(n) {
 }
 exports.mallocUint8Clamped = mallocUint8Clamped
 
+function mallocBigUint64(n) {
+  if(hasBigUint64) {
+    return new BigUint64Array(mallocArrayBuffer(8*n), 0, n)
+  } else {
+    return null;
+  }
+}
+exports.mallocBigUint64 = mallocBigUint64
+
+function mallocBigInt64(n) {
+  if (hasBigInt64) {
+    return new BigInt64Array(mallocArrayBuffer(8*n), 0, n)
+  } else {
+    return null;
+  }
+}
+exports.mallocBigInt64 = mallocBigInt64
+
 function mallocDataView(n) {
   return new DataView(mallocArrayBuffer(n), 0, n)
 }
@@ -10115,12 +10156,15 @@ exports.clearCache = function clearCache() {
     POOL.INT32[i].length = 0
     POOL.FLOAT[i].length = 0
     POOL.DOUBLE[i].length = 0
+    POOL.BIGUINT64[i].length = 0
+    POOL.BIGINT64[i].length = 0
     POOL.UINT8C[i].length = 0
     DATA[i].length = 0
     BUFFER[i].length = 0
   }
 }
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"bit-twiddle":2,"buffer":3,"dup":7}],26:[function(require,module,exports){
 "use strict"
 
@@ -21154,7 +21198,7 @@ module.exports = function(vars) {
                 length: "long",
                 maxheight: vars.height.viz - offset * 2,
                 mouseevents: true,
-                offset: Math.max(30-vars.margin.top, 0), // 30px is the size of the download icon
+                offset: Math.max(30 - vars.margin.top, 0), // 30px is the size of the download icon
                 vars: vars,
                 width: vars.tooltip.large,
                 x: vars.width.value - vars.margin.right - offset,

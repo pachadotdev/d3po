@@ -4534,6 +4534,10 @@ function arrayDType(data) {
         return "uint32"
       case "[object Uint8ClampedArray]":
         return "uint8_clamped"
+      case "[object BigInt64Array]":
+        return "bigint64"
+      case "[object BigUint64Array]":
+        return "biguint64"
     }
   }
   if(Array.isArray(data)) {
@@ -4553,6 +4557,8 @@ var CACHED_CONSTRUCTORS = {
   "uint32":[],
   "array":[],
   "uint8_clamped":[],
+  "bigint64": [],
+  "biguint64": [],
   "buffer":[],
   "generic":[]
 }
@@ -9905,35 +9911,46 @@ proto.dispose = function() {
   pool.freeFloat64(this.data)
 }
 },{"typedarray-pool":25}],25:[function(require,module,exports){
-(function (global,Buffer){
+(function (global){
 'use strict'
 
 var bits = require('bit-twiddle')
 var dup = require('dup')
+var Buffer = require('buffer').Buffer
 
 //Legacy pool support
 if(!global.__TYPEDARRAY_POOL) {
   global.__TYPEDARRAY_POOL = {
-      UINT8   : dup([32, 0])
-    , UINT16  : dup([32, 0])
-    , UINT32  : dup([32, 0])
-    , INT8    : dup([32, 0])
-    , INT16   : dup([32, 0])
-    , INT32   : dup([32, 0])
-    , FLOAT   : dup([32, 0])
-    , DOUBLE  : dup([32, 0])
-    , DATA    : dup([32, 0])
-    , UINT8C  : dup([32, 0])
-    , BUFFER  : dup([32, 0])
+      UINT8     : dup([32, 0])
+    , UINT16    : dup([32, 0])
+    , UINT32    : dup([32, 0])
+    , BIGUINT64 : dup([32, 0])
+    , INT8      : dup([32, 0])
+    , INT16     : dup([32, 0])
+    , INT32     : dup([32, 0])
+    , BIGINT64  : dup([32, 0])
+    , FLOAT     : dup([32, 0])
+    , DOUBLE    : dup([32, 0])
+    , DATA      : dup([32, 0])
+    , UINT8C    : dup([32, 0])
+    , BUFFER    : dup([32, 0])
   }
 }
 
 var hasUint8C = (typeof Uint8ClampedArray) !== 'undefined'
+var hasBigUint64 = (typeof BigUint64Array) !== 'undefined'
+var hasBigInt64 = (typeof BigInt64Array) !== 'undefined'
 var POOL = global.__TYPEDARRAY_POOL
 
 //Upgrade pool
 if(!POOL.UINT8C) {
   POOL.UINT8C = dup([32, 0])
+}
+if(!POOL.BIGUINT64) {
+  POOL.BIGUINT64 = dup([32, 0])
+}
+if(!POOL.BIGINT64) {
+  POOL.BIGINT64 = dup([32, 0])
 }
 if(!POOL.BUFFER) {
   POOL.BUFFER = dup([32, 0])
@@ -9975,9 +9992,11 @@ function freeTypedArray(array) {
 exports.freeUint8 =
 exports.freeUint16 =
 exports.freeUint32 =
+exports.freeBigUint64 =
 exports.freeInt8 =
 exports.freeInt16 =
 exports.freeInt32 =
+exports.freeBigInt64 =
 exports.freeFloat32 = 
 exports.freeFloat =
 exports.freeFloat64 = 
@@ -10016,6 +10035,10 @@ exports.malloc = function malloc(n, dtype) {
         return mallocDouble(n)
       case 'uint8_clamped':
         return mallocUint8Clamped(n)
+      case 'bigint64':
+        return mallocBigInt64(n)
+      case 'biguint64':
+        return mallocBigUint64(n)
       case 'buffer':
         return mallocBuffer(n)
       case 'data':
@@ -10089,6 +10112,24 @@ function mallocUint8Clamped(n) {
 }
 exports.mallocUint8Clamped = mallocUint8Clamped
 
+function mallocBigUint64(n) {
+  if(hasBigUint64) {
+    return new BigUint64Array(mallocArrayBuffer(8*n), 0, n)
+  } else {
+    return null;
+  }
+}
+exports.mallocBigUint64 = mallocBigUint64
+
+function mallocBigInt64(n) {
+  if (hasBigInt64) {
+    return new BigInt64Array(mallocArrayBuffer(8*n), 0, n)
+  } else {
+    return null;
+  }
+}
+exports.mallocBigInt64 = mallocBigInt64
+
 function mallocDataView(n) {
   return new DataView(mallocArrayBuffer(n), 0, n)
 }
@@ -10115,12 +10156,15 @@ exports.clearCache = function clearCache() {
     POOL.INT32[i].length = 0
     POOL.FLOAT[i].length = 0
     POOL.DOUBLE[i].length = 0
+    POOL.BIGUINT64[i].length = 0
+    POOL.BIGINT64[i].length = 0
     POOL.UINT8C[i].length = 0
     DATA[i].length = 0
     BUFFER[i].length = 0
   }
 }
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"bit-twiddle":2,"buffer":3,"dup":7}],26:[function(require,module,exports){
 "use strict"
 
@@ -26385,23 +26429,116 @@ module.exports = function(vars) {
 },{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":54,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/validate.js":158,"../../../string/strip.js":161,"../../../textwrap/textwrap.js":186,"../../../tooltip/remove.js":189,"../../../util/buckets.js":190,"../../../util/copy.js":193,"../../../util/dataurl.js":195,"../../../util/uniques.js":196,"../tooltip/create.js":221}],227:[function(require,module,exports){
 // Create menu to download image
 module.exports = function(type) {
-    var styles, menu;
-    styles = {
-        position: "absolute",
-        right: "10px",
-        top: "10px",
-        display: "block"
-    };
-    menu = d3.select("body").selectAll("div.d3po_menu").data([0]);
-    menu.enter().append("div").attr("class", "d3po_menu").style(styles)//.text('Save PNG')
-      .append("ion-icon")
-      .attr("name", "download")
-      .style("font-size", "30px")
-      .style("cursor", "pointer")
-      .on("click", function(){
-        saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
-      });
-    return menu;
+
+  function hover(el) {
+    el.on("mouseover", function(){
+      d3.select(this).style("background-color", "rgb(214, 214, 214)");
+    })
+    .on("mouseout", function(){
+      d3.select(this).style("background-color", "rgb(244, 244, 244)");
+    })
+  }
+
+  var styles, saveStyles, menu, downloadDiv, imageDiv;
+
+  styles = {
+      position: "absolute",
+      display: "flex",
+      "align-items": "center",
+      "justify-content": "center",
+      "font-size": "18px",
+      "font-family": "sans-serif",
+      "color": "rgb(68, 68, 68)",
+      "background-color": "rgb(244, 244, 244)",
+      "border-radius": "3px",
+      "border": "1px solid rgb(144, 144, 144)",
+      "height": "30px",
+      "padding": "0 5px",
+      "z-index": 3000
+  };
+
+  menu = d3.select("body").selectAll("div.d3po_menu").data([0])
+    .enter().append("div")
+    .attr("class", "d3po_menu")
+    .attr("name", "download");
+
+  downloadDiv = menu.append("div")
+    .style(styles)
+    .style("right", "10px")
+    .style("top", "10px")
+    .style("cursor", "pointer")
+    .call(hover)
+    .on("click", function(){
+      if (imageDiv.style("opacity") > 0) {
+        imageDiv.transition().duration(100).style("opacity", 0);
+      } else {
+        imageDiv.transition().duration(100).style("opacity", 1);
+      }
+    });
+
+  downloadDiv.append("svg")
+    .attr("xmlns", "http://www.w3.org/2000/svg")
+    .attr("width", 24)
+    .attr("height", 24)
+    .append("path")
+    .attr("d", "M4 7a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1z")
+    .attr("fill", "#0D0D0D")
+    .on("click", function(){
+      if (imageDiv.style("opacity") > 0) {
+        imageDiv.transition().duration(100).style("opacity", 0);
+      } else {
+        imageDiv.transition().duration(100).style("opacity", 1);
+      }
+    });
+
+  imageDiv = menu.append("div")
+    .style(styles)
+    .style("display", "block")
+    .style("right", "10px")
+    .style("top", "40px")
+    .style("font-size", "12px")
+    .style("min-width", "130px")
+    .style("height", "auto")
+    .style("padding", 0)
+    .style("opacity", 0);
+
+  saveStyles = {
+    display: "flex",
+    "align-items": "center",
+    "justify-content": "left",
+    "color": "rgb(68, 68, 68)",
+    "border-radius": "3px",
+    "height": "30px",
+    "padding": "0 10px",
+  };
+
+  imageDiv.append("div")
+    .style(saveStyles)
+    .style("cursor", "pointer")
+    .html('Download PNG image')
+    .call(hover)
+    .on("click", function(){
+      saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
+    });
+
+  imageDiv.append("div")
+    .style(saveStyles)
+    .style("cursor", "pointer")
+    .html('Download SVG image')
+    .call(hover)
+    .on("click", function(){
+      var svgData = d3.select("#d3po").node().outerHTML;
+      var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+      var svgUrl = URL.createObjectURL(svgBlob);
+      var downloadLink = document.createElement("a");
+      downloadLink.href = svgUrl;
+      downloadLink.download = "diagram.svg";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+
+  return menu;
 };
 
 },{}],228:[function(require,module,exports){

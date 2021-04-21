@@ -352,7 +352,9 @@ module.exports = function(vars) {
     }
 
     steps.push({
-        "function": drawMenu,
+        "function": function(vars) {
+            drawMenu(vars);
+          },
         "message": uiMessage
     })
 

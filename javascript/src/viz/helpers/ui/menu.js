@@ -1,5 +1,5 @@
 // Create menu to download image
-module.exports = function(type) {
+module.exports = function(vars, type) {
 
   function hover(el) {
     el.on("mouseover", function(){
@@ -28,7 +28,7 @@ module.exports = function(type) {
       "z-index": 3000
   };
 
-  menu = d3.select("body").selectAll("div.d3po_menu").data([0])
+  menu = vars.container.value.selectAll("div.d3po_menu").data([0])
     .enter().append("div")
     .attr("class", "d3po_menu")
     .attr("name", "download");

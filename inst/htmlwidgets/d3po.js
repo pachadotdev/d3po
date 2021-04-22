@@ -66,13 +66,9 @@ HTMLWidgets.widget({
         if(x.nodes)
           chart.nodes(x.nodes);
         
+        chart.resize(true);
+        
         chart.draw();
-
-      },
-
-      resize: function(width, height) {
-
-        chart.resize();
 
       },
 

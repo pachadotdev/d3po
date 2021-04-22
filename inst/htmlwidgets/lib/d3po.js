@@ -20810,7 +20810,9 @@ module.exports = function(vars) {
     }
 
     steps.push({
-        "function": drawMenu,
+        "function": function(vars) {
+            drawMenu(vars);
+          },
         "message": uiMessage
     })
 
@@ -26428,7 +26430,7 @@ module.exports = function(vars) {
 }
 },{"../../../array/sort.js":29,"../../../client/pointer.js":33,"../../../client/scroll.js":36,"../../../client/touch.js":38,"../../../color/text.js":45,"../../../core/console/print.js":47,"../../../core/data/nest.js":54,"../../../core/fetch/color.js":57,"../../../core/fetch/text.js":60,"../../../core/fetch/value.js":61,"../../../object/validate.js":158,"../../../string/strip.js":161,"../../../textwrap/textwrap.js":186,"../../../tooltip/remove.js":189,"../../../util/buckets.js":190,"../../../util/copy.js":193,"../../../util/dataurl.js":195,"../../../util/uniques.js":196,"../tooltip/create.js":221}],227:[function(require,module,exports){
 // Create menu to download image
-module.exports = function(type) {
+module.exports = function(vars, type) {
 
   function hover(el) {
     el.on("mouseover", function(){
@@ -26457,7 +26459,7 @@ module.exports = function(type) {
       "z-index": 3000
   };
 
-  menu = d3.select("body").selectAll("div.d3po_menu").data([0])
+  menu = vars.container.value.selectAll("div.d3po_menu").data([0])
     .enter().append("div")
     .attr("class", "d3po_menu")
     .attr("name", "download");

@@ -89,7 +89,7 @@ module.exports = function(vars, type) {
     .html('Download PNG image')
     .call(hover)
     .on("click", function(){
-      saveSvgAsPng(document.getElementById('d3po'), "diagram.png")
+      saveSvgAsPng(vars.svg, "diagram.png")
     });
 
   imageDiv.append("div")
@@ -98,7 +98,7 @@ module.exports = function(vars, type) {
     .html('Download SVG image')
     .call(hover)
     .on("click", function(){
-      var svgData = d3.select("#d3po").node().outerHTML;
+      var svgData = vars.svg.outerHTML;
       var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
       var svgUrl = URL.createObjectURL(svgBlob);
       var downloadLink = document.createElement("a");

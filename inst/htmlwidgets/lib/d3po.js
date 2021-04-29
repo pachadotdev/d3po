@@ -26520,7 +26520,7 @@ module.exports = function(vars, type) {
     .html('Download PNG image')
     .call(hover)
     .on("click", function(){
-      saveSvgAsPng(vars.svg, "diagram.png")
+      saveSvgAsPng(vars.svg.node(), "diagram.png")
     });
 
   imageDiv.append("div")
@@ -26529,7 +26529,7 @@ module.exports = function(vars, type) {
     .html('Download SVG image')
     .call(hover)
     .on("click", function(){
-      var svgData = vars.svg.outerHTML;
+      var svgData = vars.svg.node().outerHTML;
       var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
       var svgUrl = URL.createObjectURL(svgBlob);
       var downloadLink = document.createElement("a");

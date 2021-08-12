@@ -11,6 +11,7 @@ module.exports = function(vars, type) {
   }
 
   var styles, saveStyles, menu, downloadDiv, imageDiv;
+  var marginTop = vars.margin.top > 30 ? vars.margin.top - 30 : vars.margin.top;
 
   styles = {
       position: "absolute",
@@ -35,8 +36,8 @@ module.exports = function(vars, type) {
 
   downloadDiv = menu.append("div")
     .style(styles)
-    .style("right", "10px")
-    .style("top", "10px")
+    .style("right", vars.margin.right+"px")
+    .style("top", marginTop+"px")
     .style("cursor", "pointer")
     .call(hover)
     .on("click", function(){

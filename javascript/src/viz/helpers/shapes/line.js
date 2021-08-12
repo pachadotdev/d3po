@@ -293,7 +293,7 @@ function initCircle(n) {
         .attr("cy", function(d) {
             return d.d3po.y;
         })
-        .attr("r", 4);
+        .attr("r", 3);
 
 }
 

@@ -30,7 +30,8 @@ module.exports = function(vars, selection, enter, exit) {
     // point on the line.
     //----------------------------------------------------------------------------
 
-    var stroke = 2 * vars.size.value ||  2 * vars.data.stroke.width,
+    vars.data.stroke.width = 2;
+    var stroke = vars.size.value || vars.data.stroke.width,
         discrete = vars[vars.axes.discrete],
         hitarea = function(l) {
             var s = stroke;
@@ -106,9 +107,15 @@ module.exports = function(vars, selection, enter, exit) {
         var rects = group.selectAll("rect.d3po_anchor")
             .data(nodes, function(d) {
                 if (!d.d3po) d.d3po = {};
-                d.d3po.r = stroke * 4;
+                d.d3po.r = stroke;
                 return d.d3po.id;
             });
+
+        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // Bind values data to "circles"
+        //--------------------------------------------------------------------------
+        var circles = group.selectAll("circle.d3po_circle")
+            .data(d.values);
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // "paths" and "rects" Enter/Update
@@ -152,6 +159,17 @@ module.exports = function(vars, selection, enter, exit) {
                 .call(init)
                 .remove();
 
+            circles.exit().remove();
+
+            circles.transition().duration(vars.draw.timing)
+                .call(initCircle)
+                .call(shapeStyle, vars);
+
+            circles.enter().append("circle")
+                .attr("class", "d3po_circle")
+                .call(initCircle)
+                .call(shapeStyle, vars);
+
         } else {
 
             paths.exit().remove();
@@ -177,6 +195,14 @@ module.exports = function(vars, selection, enter, exit) {
             rects.call(update)
                 .call(shapeStyle, vars);
 
+            circles.exit().remove();
+
+            circles.enter().append("circle")
+                .attr("class", "d3po_circle");
+
+            circles
+                .call(initCircle)
+                .call(shapeStyle, vars);
         }
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -252,6 +278,22 @@ function init(n) {
         })
         .attr("width", 0)
         .attr("height", 0);
+
+}
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// The position and size of each circle on enter and exit.
+//----------------------------------------------------------------------------
+function initCircle(n) {
+
+    n
+        .attr("cx", function(d) {
+            return d.d3po.x;
+        })
+        .attr("cy", function(d) {
+            return d.d3po.y;
+        })
+        .attr("r", 4);
 
 }
 

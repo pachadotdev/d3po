@@ -163,12 +163,14 @@ module.exports = function(vars, selection, enter, exit) {
 
             circles.transition().duration(vars.draw.timing)
                 .call(initCircle)
-                .call(shapeStyle, vars);
+                .call(shapeStyle, vars)
+                .attr("fill", "white");
 
             circles.enter().append("circle")
                 .attr("class", "d3po_circle")
                 .call(initCircle)
-                .call(shapeStyle, vars);
+                .call(shapeStyle, vars)
+                .attr("fill", "white");
 
         } else {
 
@@ -202,7 +204,8 @@ module.exports = function(vars, selection, enter, exit) {
 
             circles
                 .call(initCircle)
-                .call(shapeStyle, vars);
+                .call(shapeStyle, vars)
+                .attr("fill", "white");
         }
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -17846,7 +17846,7 @@ module.exports = function(vars) {
 
 }).call(this);
 
-},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":85,"./data/lof.js":86,"./data/mad.js":87,"./font/sizes.js":88,"./font/validate.js":89,"./form/form.js":90,"./geom/largestrectangle.js":146,"./geom/offset.js":147,"./geom/path2poly.js":148,"./network/cluster.js":150,"./network/distance.js":151,"./network/normalize.js":152,"./network/shortestpath.js":153,"./network/smallestgap.js":154,"./network/subgraph.js":155,"./number/format.js":156,"./object/merge.js":157,"./object/validate.js":158,"./string/format.js":159,"./string/list.js":160,"./string/strip.js":161,"./string/title.js":162,"./textwrap/textwrap.js":186,"./tooltip/create.js":187,"./tooltip/move.js":188,"./tooltip/remove.js":189,"./util/buckets.js":190,"./util/child.js":191,"./util/closest.js":192,"./util/copy.js":193,"./util/d3selection.js":194,"./util/dataurl.js":195,"./util/uniques.js":196,"./viz/viz.js":307}],150:[function(require,module,exports){
+},{"./array/comparator.js":27,"./array/contains.js":28,"./array/sort.js":29,"./array/update.js":30,"./client/css.js":31,"./client/ie.js":32,"./client/pointer.js":33,"./client/prefix.js":34,"./client/rtl.js":35,"./client/scroll.js":36,"./client/scrollbar.js":37,"./client/touch.js":38,"./color/legible.js":39,"./color/lighter.js":40,"./color/mix.js":41,"./color/random.js":42,"./color/scale.js":43,"./color/sort.js":44,"./color/text.js":45,"./color/validate.js":46,"./core/console/print.js":47,"./data/bestregression.js":85,"./data/lof.js":86,"./data/mad.js":87,"./font/sizes.js":88,"./font/validate.js":89,"./form/form.js":90,"./geom/largestrectangle.js":146,"./geom/offset.js":147,"./geom/path2poly.js":148,"./network/cluster.js":150,"./network/distance.js":151,"./network/normalize.js":152,"./network/shortestpath.js":153,"./network/smallestgap.js":154,"./network/subgraph.js":155,"./number/format.js":156,"./object/merge.js":157,"./object/validate.js":158,"./string/format.js":159,"./string/list.js":160,"./string/strip.js":161,"./string/title.js":162,"./textwrap/textwrap.js":186,"./tooltip/create.js":187,"./tooltip/move.js":188,"./tooltip/remove.js":189,"./util/buckets.js":190,"./util/child.js":191,"./util/closest.js":192,"./util/copy.js":193,"./util/d3selection.js":194,"./util/dataurl.js":195,"./util/uniques.js":196,"./viz/viz.js":306}],150:[function(require,module,exports){
 // Community detection algorithm (graph clustering/partitioning)
 // Based on the paper:
 // Finding community structure in very large networks, A Clauset, MEJ Newman, C Moore - Physical review E, 2004
@@ -23833,6 +23833,7 @@ module.exports = function(vars, selection, enter, exit) {
     // point on the line.
     //----------------------------------------------------------------------------
 
+    vars.data.stroke.width = 2;
     var stroke = vars.size.value || vars.data.stroke.width,
         discrete = vars[vars.axes.discrete],
         hitarea = function(l) {
@@ -23914,6 +23915,12 @@ module.exports = function(vars, selection, enter, exit) {
             });
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // Bind values data to "circles"
+        //--------------------------------------------------------------------------
+        var circles = group.selectAll("circle.d3po_circle")
+            .data(d.values);
+
+        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // "paths" and "rects" Enter/Update
         //--------------------------------------------------------------------------
         if (vars.draw.timing) {
@@ -23955,6 +23962,19 @@ module.exports = function(vars, selection, enter, exit) {
                 .call(init)
                 .remove();
 
+            circles.exit().remove();
+
+            circles.transition().duration(vars.draw.timing)
+                .call(initCircle)
+                .call(shapeStyle, vars)
+                .attr("fill", "white");
+
+            circles.enter().append("circle")
+                .attr("class", "d3po_circle")
+                .call(initCircle)
+                .call(shapeStyle, vars)
+                .attr("fill", "white");
+
         } else {
 
             paths.exit().remove();
@@ -23980,6 +24000,15 @@ module.exports = function(vars, selection, enter, exit) {
             rects.call(update)
                 .call(shapeStyle, vars);
 
+            circles.exit().remove();
+
+            circles.enter().append("circle")
+                .attr("class", "d3po_circle");
+
+            circles
+                .call(initCircle)
+                .call(shapeStyle, vars)
+                .attr("fill", "white");
         }
 
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -24055,6 +24084,22 @@ function init(n) {
         })
         .attr("width", 0)
         .attr("height", 0);
+
+}
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// The position and size of each circle on enter and exit.
+//----------------------------------------------------------------------------
+function initCircle(n) {
+
+    n
+        .attr("cx", function(d) {
+            return d.d3po.x;
+        })
+        .attr("cy", function(d) {
+            return d.d3po.y;
+        })
+        .attr("r", 3);
 
 }
 
@@ -26442,6 +26487,7 @@ module.exports = function(vars, type) {
   }
 
   var styles, saveStyles, menu, downloadDiv, imageDiv;
+  var marginTop = vars.margin.top > 30 ? vars.margin.top - 30 : vars.margin.top;
 
   styles = {
       position: "absolute",
@@ -26466,8 +26512,8 @@ module.exports = function(vars, type) {
 
   downloadDiv = menu.append("div")
     .style(styles)
-    .style("right", "10px")
-    .style("top", "10px")
+    .style("right", vars.margin.right+"px")
+    .style("top", marginTop+"px")
     .style("cursor", "pointer")
     .call(hover)
     .on("click", function(){
@@ -26496,8 +26542,8 @@ module.exports = function(vars, type) {
   imageDiv = menu.append("div")
     .style(styles)
     .style("display", "block")
-    .style("right", "10px")
-    .style("top", "40px")
+    .style("right", vars.margin.right+"px")
+    .style("top", (marginTop + 30)+"px")
     .style("font-size", "12px")
     .style("min-width", "130px")
     .style("height", "auto")
@@ -29002,7 +29048,7 @@ module.exports = {
     module.exports = area;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/data/threshold.js":55,"../../core/fetch/value.js":61,"../../util/closest.js":192,"./helpers/graph/draw.js":293,"./helpers/graph/nest.js":299,"./helpers/graph/stack.js":300}],288:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/data/threshold.js":55,"../../core/fetch/value.js":61,"../../util/closest.js":192,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],288:[function(require,module,exports){
 (function() {
     var bar, buckets, fetchValue, graph, nest, stack, uniques,
         indexOf = [].indexOf || function(item) {
@@ -29208,7 +29254,7 @@ module.exports = {
     module.exports = bar;
 
 }).call(this);
-},{"../../core/fetch/value.js":61,"../../util/buckets.js":190,"../../util/uniques.js":196,"./helpers/graph/draw.js":293,"./helpers/graph/nest.js":299,"./helpers/graph/stack.js":300}],289:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../util/buckets.js":190,"../../util/uniques.js":196,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],289:[function(require,module,exports){
 (function() {
     var box, fetchValue, graph, stringFormat, strip, uniques;
 
@@ -29482,121 +29528,47 @@ module.exports = {
 
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../string/format.js":159,"../../string/strip.js":161,"../../util/uniques.js":196,"./helpers/graph/draw.js":293}],290:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../string/format.js":159,"../../string/strip.js":161,"../../util/uniques.js":196,"./helpers/graph/draw.js":292}],290:[function(require,module,exports){
 (function() {
-    var comparator, dataThreshold, donut, groupData;
+    var geomap;
 
-    comparator = require("../../array/comparator.js");
-
-    dataThreshold = require("../../core/data/threshold.js");
-
-    groupData = require("../../core/data/group.js");
-
-    donut = function(vars) {
-        var d, donutData, donutLayout, groupedData, i, item, len, outer_radius, returnData;
-        donutLayout = d3.layout.pie().value(function(d) {
-            return d.value;
-        }).sort(function(a, b) {
-            if (vars.order.value) {
-                return comparator(a.d3po, b.d3po, [vars.order.value], vars.order.sort.value, [], vars);
-            } else if (vars.id.nesting.length > 1) {
-                return comparator(a.d3po, b.d3po, vars.id.nesting.concat([vars.size.value]), void 0, [], vars);
+    geomap = function(vars) {
+        var coords, features, key, mute, solo, topo;
+        coords = vars.coords.value;
+        key = vars.coords.key || d3.keys(coords.objects)[0];
+        topo = topojson.feature(coords, coords.objects[key]);
+        features = topo.features;
+        solo = vars.coords.solo.value;
+        mute = vars.coords.mute.value;
+        features = features.filter(function(f) {
+            f[vars.id.value] = f.id;
+            if (solo.length) {
+                return solo.indexOf(f.id) >= 0;
+            } else if (mute.length) {
+                return mute.indexOf(f.id) < 0;
             } else {
-                return comparator(a.d3po, b.d3po, [vars.size.value], "desc", [], vars);
+                return true;
             }
         });
-        groupedData = groupData(vars, vars.data.viz, []);
-        donutData = donutLayout(groupedData);
-        returnData = [];
-        outer_radius = d3.min([vars.width.viz, vars.height.viz]) / 2 - vars.labels.padding * 2;
-        for (i = 0, len = donutData.length; i < len; i++) {
-            d = donutData[i];
-            item = d.data.d3po;
-            item.d3po.startAngle = d.startAngle;
-            item.d3po.endAngle = d.endAngle;
-            item.d3po.r_inner = outer_radius / 3;
-            item.d3po.r_outer = outer_radius;
-            item.d3po.x = vars.width.viz / 2;
-            item.d3po.y = vars.height.viz / 2;
-            item.d3po.share = (d.endAngle - d.startAngle) / (Math.PI * 2);
-            returnData.push(item);
-        }
-        return returnData;
+        return features;
     };
 
-    donut.filter = dataThreshold;
+    geomap.libs = ["topojson"];
 
-    donut.requirements = ["data", "size"];
+    geomap.nesting = false;
 
-    donut.shapes = ["arc"];
+    geomap.requirements = ["coords"];
 
-    donut.threshold = function(vars) {
-        return (40 * 40) / (vars.width.viz * vars.height.viz);
-    };
+    geomap.scale = 1;
 
-    module.exports = donut;
+    geomap.shapes = ["coordinates"];
+
+    geomap.zoom = true;
+
+    module.exports = geomap;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],291:[function(require,module,exports){
-(function() {
-    var comparator, dataThreshold, groupData, halfdonut;
-
-    comparator = require("../../array/comparator.js");
-
-    dataThreshold = require("../../core/data/threshold.js");
-
-    groupData = require("../../core/data/group.js");
-
-    halfdonut = function(vars) {
-        var d, groupedData, halfdonutData, halfdonutLayout, i, item, len, outer_radius, returnData;
-        halfdonutLayout = d3.layout.pie().value(function(d) {
-            return d.value;
-        }).startAngle(function(d) {
-            return -90 * (Math.PI / 180);
-        }).endAngle(function(d) {
-            return 90 * (Math.PI / 180);
-        }).sort(function(a, b) {
-            if (vars.order.value) {
-                return comparator(a.d3po, b.d3po, [vars.order.value], vars.order.sort.value, [], vars);
-            } else if (vars.id.nesting.length > 1) {
-                return comparator(a.d3po, b.d3po, vars.id.nesting.concat([vars.size.value]), void 0, [], vars);
-            } else {
-                return comparator(a.d3po, b.d3po, [vars.size.value], "desc", [], vars);
-            }
-        });
-        groupedData = groupData(vars, vars.data.viz, []);
-        halfdonutData = halfdonutLayout(groupedData);
-        returnData = [];
-        outer_radius = d3.min([vars.width.viz / 2, vars.height.viz]) - vars.labels.padding * 2;
-        for (i = 0, len = halfdonutData.length; i < len; i++) {
-            d = halfdonutData[i];
-            item = d.data.d3po;
-            item.d3po.startAngle = d.startAngle;
-            item.d3po.endAngle = d.endAngle;
-            item.d3po.r_inner = outer_radius / 3;
-            item.d3po.r_outer = outer_radius;
-            item.d3po.x = vars.width.viz / 2;
-            item.d3po.y = vars.height.viz;
-            item.d3po.share = (d.endAngle - d.startAngle) / (Math.PI * 2);
-            returnData.push(item);
-        }
-        return returnData;
-    };
-
-    halfdonut.filter = dataThreshold;
-
-    halfdonut.requirements = ["data", "size"];
-
-    halfdonut.shapes = ["arc"];
-
-    halfdonut.threshold = function(vars) {
-        return (40 * 40) / (vars.width.viz * vars.height.viz);
-    };
-
-    module.exports = halfdonut;
-
-}).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],292:[function(require,module,exports){
+},{}],291:[function(require,module,exports){
 (function() {
     var color, legible, print;
 
@@ -29678,7 +29650,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":57}],293:[function(require,module,exports){
+},{"../../../../color/legible.js":39,"../../../../core/console/print.js":47,"../../../../core/fetch/color.js":57}],292:[function(require,module,exports){
 (function() {
     var axes, draw, mouse, plot;
 
@@ -29701,7 +29673,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"./includes/axes.js":294,"./includes/mouse.js":296,"./includes/plot.js":297,"./includes/svg.js":298}],294:[function(require,module,exports){
+},{"./includes/axes.js":293,"./includes/mouse.js":295,"./includes/plot.js":296,"./includes/svg.js":297}],293:[function(require,module,exports){
 (function() {
     var arraySort, axisRange, buckets, buffer, dataChange, fetchData, fetchValue, getData, getScale, print, sizeScale, uniques;
 
@@ -30053,7 +30025,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":58,"../../../../../core/fetch/value.js":61,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":295}],295:[function(require,module,exports){
+},{"../../../../../array/sort.js":29,"../../../../../core/console/print.js":47,"../../../../../core/fetch/data.js":58,"../../../../../core/fetch/value.js":61,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":294}],294:[function(require,module,exports){
 (function() {
     var buckets, closest;
 
@@ -30244,7 +30216,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../util/buckets.js":190,"../../../../../util/closest.js":192}],296:[function(require,module,exports){
+},{"../../../../../util/buckets.js":190,"../../../../../util/closest.js":192}],295:[function(require,module,exports){
 (function() {
     var copy, events, fetchColor, fetchValue, legible, textColor;
 
@@ -30490,7 +30462,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":57,"../../../../../core/fetch/value.js":61,"../../../../../util/copy.js":193}],297:[function(require,module,exports){
+},{"../../../../../client/pointer.js":33,"../../../../../color/legible.js":39,"../../../../../color/text.js":45,"../../../../../core/fetch/color.js":57,"../../../../../core/fetch/value.js":61,"../../../../../util/copy.js":193}],296:[function(require,module,exports){
 (function() {
     var buckets, buffer, createAxis, fetchValue, fontSizes, formatPower, labelPadding, superscript, textwrap, timeDetect, uniques;
 
@@ -30940,7 +30912,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../../core/data/time.js":56,"../../../../../core/fetch/value.js":61,"../../../../../font/sizes.js":88,"../../../../../textwrap/textwrap.js":186,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":295}],298:[function(require,module,exports){
+},{"../../../../../core/data/time.js":56,"../../../../../core/fetch/value.js":61,"../../../../../font/sizes.js":88,"../../../../../textwrap/textwrap.js":186,"../../../../../util/buckets.js":190,"../../../../../util/uniques.js":196,"./buffer.js":294}],297:[function(require,module,exports){
 (function() {
     var mix, textwrap, validObject;
 
@@ -31346,7 +31318,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":158,"../../../../../textwrap/textwrap.js":186}],299:[function(require,module,exports){
+},{"../../../../../color/mix.js":41,"../../../../../object/validate.js":158,"../../../../../textwrap/textwrap.js":186}],298:[function(require,module,exports){
 (function() {
     var fetchValue, stringStrip, uniqueValues;
 
@@ -31471,7 +31443,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":61,"../../../../string/strip.js":161,"../../../../util/uniques.js":196}],300:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":61,"../../../../string/strip.js":161,"../../../../util/uniques.js":196}],299:[function(require,module,exports){
 (function() {
     var fetchValue;
 
@@ -31550,7 +31522,7 @@ module.exports = {
     };
 
 }).call(this);
-},{"../../../../core/fetch/value.js":61}],301:[function(require,module,exports){
+},{"../../../../core/fetch/value.js":61}],300:[function(require,module,exports){
 (function() {
     var fetchValue, graph, line, nest, sort, stack;
 
@@ -31630,7 +31602,7 @@ module.exports = {
     module.exports = line;
 
 }).call(this);
-},{"../../array/sort.js":29,"../../core/fetch/value.js":61,"./helpers/graph/draw.js":293,"./helpers/graph/nest.js":299,"./helpers/graph/stack.js":300}],302:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/fetch/value.js":61,"./helpers/graph/draw.js":292,"./helpers/graph/nest.js":298,"./helpers/graph/stack.js":299}],301:[function(require,module,exports){
 (function() {
     var smallestGap = require("../../network/smallestgap.js"),
         fetchValue = require("../../core/fetch/value.js");
@@ -31797,7 +31769,7 @@ module.exports = {
     module.exports = network
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../network/smallestgap.js":154}],303:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../network/smallestgap.js":154}],302:[function(require,module,exports){
 (function() {
     var fetchValue, shortestPath, uniqueValues, viz,
         indexOf = [].indexOf || function(item) {
@@ -32064,7 +32036,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../core/fetch/value.js":61,"../../network/shortestpath.js":153,"../../util/uniques.js":196}],304:[function(require,module,exports){
+},{"../../core/fetch/value.js":61,"../../network/shortestpath.js":153,"../../util/uniques.js":196}],303:[function(require,module,exports){
 (function() {
     var comparator, dataThreshold, groupData, pie;
 
@@ -32119,7 +32091,7 @@ module.exports = {
     module.exports = pie;
 
 }).call(this);
-},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],305:[function(require,module,exports){
+},{"../../array/comparator.js":27,"../../core/data/group.js":51,"../../core/data/threshold.js":55}],304:[function(require,module,exports){
 (function() {
     var fetchValue, graph, print, scatter, sort, ticks;
 
@@ -32189,7 +32161,7 @@ module.exports = {
 
 }).call(this);
 
-},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":61,"./helpers/graph/dataticks.js":292,"./helpers/graph/draw.js":293}],306:[function(require,module,exports){
+},{"../../array/sort.js":29,"../../core/console/print.js":47,"../../core/fetch/value.js":61,"./helpers/graph/dataticks.js":291,"./helpers/graph/draw.js":292}],305:[function(require,module,exports){
 (function() {
     var dataThreshold, groupData, mergeObject, treemap;
 
@@ -32254,7 +32226,7 @@ module.exports = {
     module.exports = treemap;
 
 }).call(this);
-},{"../../core/data/group.js":51,"../../core/data/threshold.js":55,"../../object/merge.js":157}],307:[function(require,module,exports){
+},{"../../core/data/group.js":51,"../../core/data/threshold.js":55,"../../object/merge.js":157}],306:[function(require,module,exports){
 (function() {
     var attach, axis, container, flash, getSteps, print, validObject;
 
@@ -32282,8 +32254,9 @@ module.exports = {
                 area: require("./types/area.js"),
                 bar: require("./types/bar.js"),
                 box: require("./types/box.js"),
-                donut: require("./types/donut.js"),
-                halfdonut: require("./types/halfdonut.js"),
+                // donut: require("./types/donut.js"),
+                geomap: require("./types/geomap.js"),
+                // halfdonut: require("./types/halfdonut.js"),
                 line: require("./types/line.js"),
                 paths: require("./types/paths.js"),
                 pie: require("./types/pie.js"),
@@ -32456,4 +32429,4 @@ module.exports = {
 
 }).call(this);
 
-},{"../core/console/print.js":47,"../core/methods/attach.js":66,"../object/validate.js":158,"./helpers/container.js":197,"./helpers/drawSteps.js":198,"./helpers/ui/message.js":228,"./methods/active.js":236,"./methods/aggs.js":237,"./methods/attrs.js":238,"./methods/axes.js":239,"./methods/background.js":240,"./methods/class.js":241,"./methods/color.js":242,"./methods/cols.js":243,"./methods/config.js":244,"./methods/container.js":245,"./methods/coords.js":246,"./methods/csv.js":247,"./methods/data.js":248,"./methods/depth.js":249,"./methods/descs.js":250,"./methods/dev.js":251,"./methods/draw.js":252,"./methods/edges.js":253,"./methods/error.js":254,"./methods/focus.js":255,"./methods/font.js":256,"./methods/footer.js":257,"./methods/format.js":258,"./methods/height.js":259,"./methods/helpers/axis.js":260,"./methods/history.js":261,"./methods/icon.js":262,"./methods/id.js":263,"./methods/labels.js":264,"./methods/legend.js":265,"./methods/links.js":266,"./methods/margin.js":267,"./methods/messages.js":268,"./methods/mouse.js":269,"./methods/nodes.js":270,"./methods/order.js":271,"./methods/resize.js":272,"./methods/shape.js":273,"./methods/size.js":274,"./methods/style.js":275,"./methods/temp.js":276,"./methods/text.js":277,"./methods/time.js":278,"./methods/timing.js":279,"./methods/title.js":280,"./methods/tooltip.js":281,"./methods/total.js":282,"./methods/type.js":283,"./methods/ui.js":284,"./methods/width.js":285,"./methods/zoom.js":286,"./types/area.js":287,"./types/bar.js":288,"./types/box.js":289,"./types/donut.js":290,"./types/halfdonut.js":291,"./types/line.js":301,"./types/network.js":302,"./types/paths.js":303,"./types/pie.js":304,"./types/scatter.js":305,"./types/treemap.js":306}]},{},[149]);
+},{"../core/console/print.js":47,"../core/methods/attach.js":66,"../object/validate.js":158,"./helpers/container.js":197,"./helpers/drawSteps.js":198,"./helpers/ui/message.js":228,"./methods/active.js":236,"./methods/aggs.js":237,"./methods/attrs.js":238,"./methods/axes.js":239,"./methods/background.js":240,"./methods/class.js":241,"./methods/color.js":242,"./methods/cols.js":243,"./methods/config.js":244,"./methods/container.js":245,"./methods/coords.js":246,"./methods/csv.js":247,"./methods/data.js":248,"./methods/depth.js":249,"./methods/descs.js":250,"./methods/dev.js":251,"./methods/draw.js":252,"./methods/edges.js":253,"./methods/error.js":254,"./methods/focus.js":255,"./methods/font.js":256,"./methods/footer.js":257,"./methods/format.js":258,"./methods/height.js":259,"./methods/helpers/axis.js":260,"./methods/history.js":261,"./methods/icon.js":262,"./methods/id.js":263,"./methods/labels.js":264,"./methods/legend.js":265,"./methods/links.js":266,"./methods/margin.js":267,"./methods/messages.js":268,"./methods/mouse.js":269,"./methods/nodes.js":270,"./methods/order.js":271,"./methods/resize.js":272,"./methods/shape.js":273,"./methods/size.js":274,"./methods/style.js":275,"./methods/temp.js":276,"./methods/text.js":277,"./methods/time.js":278,"./methods/timing.js":279,"./methods/title.js":280,"./methods/tooltip.js":281,"./methods/total.js":282,"./methods/type.js":283,"./methods/ui.js":284,"./methods/width.js":285,"./methods/zoom.js":286,"./types/area.js":287,"./types/bar.js":288,"./types/box.js":289,"./types/geomap.js":290,"./types/line.js":300,"./types/network.js":301,"./types/paths.js":302,"./types/pie.js":303,"./types/scatter.js":304,"./types/treemap.js":305}]},{},[149]);

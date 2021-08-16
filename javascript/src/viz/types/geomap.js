@@ -26,7 +26,7 @@
 
     geomap.nesting = false;
 
-    geomap.requirements = ["coords"];
+    geomap.requirements = ["data"];
 
     geomap.scale = 1;
 

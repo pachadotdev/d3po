@@ -4,6 +4,7 @@
 .Ruserdata
 source/
 dev/*.js
+dev/rsconnect
 javascript/node_modules
 javascript/d3po.js
 javascript/d3po.min.js

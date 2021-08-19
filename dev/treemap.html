@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<script src="d3.min.js"></script>
+<script src="d3po.js"></script>
+
+<div id="viz"></div>
+
+<script>
+
+  var sample_data = [
+    {"value": 100, "name": "alpha"},
+    {"value": 70, "name": "beta"},
+    {"value": 40, "name": "gamma"},
+    {"value": 15, "name": "delta"},
+    {"value": 5, "name": "epsilon"},
+    {"value": 1, "name": "zeta"}
+  ]
+
+  var visualization = d3po.viz()
+    .container("#viz")
+    .data(sample_data)
+    .type("treemap")
+    .id("name")
+    .size("value")
+    .font({ "family": "Roboto Condensed" })
+    .draw()
+
+</script>
+

@@ -29557,7 +29557,7 @@ module.exports = {
 
     geomap.nesting = false;
 
-    geomap.requirements = ["coords"];
+    geomap.requirements = ["data"];
 
     geomap.scale = 1;
 
@@ -29568,6 +29568,7 @@ module.exports = {
     module.exports = geomap;
 
 }).call(this);
+
 },{}],291:[function(require,module,exports){
 (function() {
     var color, legible, print;

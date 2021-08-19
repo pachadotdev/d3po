@@ -433,3 +433,37 @@ po_legend.d3proxy <- function(d3po, legend){
   
   return(d3po)
 }
+
+# Font ----
+
+#' Font
+#' 
+#' Edit the font used in a chart.
+#' 
+#' @inheritParams po_box
+#' @param font font to use ("Roboto", "Merriweather", etc.).
+#' 
+#' @export 
+po_font <- function(d3po, font) UseMethod("po_font")
+
+#' @export 
+#' @method po_font d3po
+po_font.d3po <- function(d3po, font){
+  assertthat::assert_that(!missing(font), msg = "Missing `font`")
+  
+  d3po$x$font <- NULL
+  d3po$x$font$family <- font
+  return(d3po)
+}
+
+#' @export 
+#' @method po_title d3proxy
+po_font.d3proxy <- function(d3po, font){
+  assertthat::assert_that(!missing(font), msg = "Missing `font`")
+  
+  msg <- list(id = d3po$id, msg = list(font = font))
+  
+  d3po$session$sendCustomMessage("d3po-font", msg)
+  
+  return(d3po)
+}

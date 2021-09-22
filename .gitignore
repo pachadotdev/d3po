@@ -10,7 +10,7 @@ javascript/d3po.js
 javascript/d3po.min.js
 javascript/d3po.full.js
 javascript/d3po.full.min.js
-javacript/d3.min.js
+javascript/d3.min.js
 *.swp
 inst/doc
 testing.R

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">d3po</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -63,35 +63,67 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="d3po" class="section level1">
+<div id="d3po-r-package-for-easy-interactive-d3-visualization-with-shiny" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#d3po" class="anchor"></a>d3po</h1></div>
-<div id="d3-5x-migration" class="section level2">
+<a href="#d3po-r-package-for-easy-interactive-d3-visualization-with-shiny" class="anchor"></a>d3po: R package for easy interactive D3 visualization with Shiny</h1></div>
+<div id="the-problem" class="section level2">
 <h2 class="hasAnchor">
-<a href="#d3-5x-migration" class="anchor"></a>D3 5.x migration</h2>
-<p>What remains to finish the migration to D3.js 5.x:</p>
+<a href="#the-problem" class="anchor"></a>The Problem</h2>
+<p>R already features excellent visualization libraries such as D3 (via the r2d3 package) or plotly, however though those enable the creation of great looking visualisations they have very steep learning curves and even sometimes require some understanding of JavaScript.</p>
+<p>There is also the <strong>highcharter</strong> package but the underlying JavaScript library (Highcharts) is not free for commercial and governmental use. A single user license costs around 2,500 USD, something that ONGs cannot always afford.</p>
+<p>Another relevant aspect is the lack of easy alternatives to provide internalization, something that can be addressed easily in a community project due to the variety of languages.</p>
+<p>Our intention is to solve those problems by releasing a complete R package under an open source license (Apache 2.0).</p>
+</div>
+<div id="the-proposal" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-proposal" class="anchor"></a>The proposal</h2>
+<div id="overview" class="section level3">
+<h3 class="hasAnchor">
+<a href="#overview" class="anchor"></a>Overview</h3>
+<p>The name “d3po” is inspired after r2d3 but also d3po is something that a chilean will read as “dee three pooh”, and “pooh” is a very typical chilean slang. That slang reflects the true chilean spirit that copes with earthquakes but in the end they build the technology and adapt to the medium constraints.</p>
+<p>Rather than starting from scratch, d3po takes many ideas and adapts codes from highcharts (just inspiration, not code), echats (excellent library), d3plus 1.9.8 (unmaintained, which is very unfortunate) and many posts from Stackoverflow that were adapted since 2016 to the date.</p>
+<p>It is worth mentioning that the most important goal is to provide out-of-the-box beautiful visualizations with minimum time and coding effort from the final user.</p>
+<p>At the end of the project d3po will be a new software that can be perceived as an intermediate layer between the user and D3 by providing “templates”, enabling high quality interactive visualizations oriented to and designed to be used with <strong>Shiny</strong>.</p>
+<p>The focus will remain on the integration with Shiny and Rmarkdown, the javascript outcome from this project could nonetheless be used with other tools.</p>
+<p>The ultimate aim of the project is to produce a package that:</p>
 <ul>
-<li>migrate d3.layout.treemap(), d3.layout.pack() and d3.layout.stack() to their 5.x counterparts</li>
-<li>migrate d3.svg.axis() and d3.svg.brush() to their 5.x counterparts</li>
-<li>test that everything works as expected.</li>
+<li>Offers perfect integration with Shiny</li>
+<li>Enables downloading the charts in different image formats (png, jpeg, svg)</li>
+<li>Enables downloading the data in different formats (json, csv, xlsx)</li>
+<li>Can produce high quality results with a minimal number of lines of code</li>
+<li>Has internalization with options to render visualizations in english, spanish, french and other languages.</li>
 </ul>
-<p>Why it cannot be done currently:</p>
+</div>
+<div id="details" class="section level3">
+<h3 class="hasAnchor">
+<a href="#details" class="anchor"></a>Details</h3>
+<p>The Minimum Viable Product includes these visualization methods and features:</p>
 <ul>
-<li>the functions that remain to migrate are largely different between 3.x and 5.x, and the surrounding code and logic must be changed accordingly.</li>
-<li>best practice for refactoring code (upgrading a library without modifying the behavior is refactoring) is to ensure the unit tests keep working after modifying the code. But there are no unit tests in the code base: trivial refactoring is OK, but touching largest parts of code is too risky and result cannot be verified.</li>
+<li>Automatic resizing, sensitive to internet browser window maximization/ minimization</li>
+<li>Ability to download the interactive charts in jpeg/png/svg formats to be included in presentations or other media</li>
+<li>Automatic labels text size</li>
+<li>Automatic labels show/hide according to available space (i.e show some labels to avoid breaking margins or overlapping)</li>
+<li>Treemaps</li>
+<li>Line charts</li>
+<li>Column charts (horizontal and vertical)</li>
+<li>Area chart</li>
+<li>Pie/donut chart</li>
+<li>Scatterplots</li>
+<li>Area/distribution chart</li>
+<li>Networks</li>
+<li>Box and whiskers</li>
+<li>Maps</li>
+<li>Gramatically correct translations</li>
 </ul>
-<p>What is recommended:</p>
-<ul>
-<li>create unit tests for all the functions in the library</li>
-</ul>
-<p>Additionally, it would be good to:</p>
-<ul>
-<li>cut the functions in smaller functions (max. 30/35 lines)</li>
-<li>add doctrings to all the functions (see <a href="http://documentation.js.org/" class="uri">http://documentation.js.org/</a> for example) + generate API documentation (result: <a href="https://docs.mapbox.com/mapbox-gl-js/api/" class="uri">https://docs.mapbox.com/mapbox-gl-js/api/</a>)</li>
-<li>enforce coherent code style with eslint and prettier</li>
-<li>add a README.ms in the javascript/ directory</li>
-<li>move the javascript/ directory to its own git repository, publish it as a npm package</li>
-</ul>
+<p>The goal is to provide a package that becomes a gold standard for interactive visualization and facilitates using Shiny.</p>
+<p>As an R package, the idea is to obtain a high quality result to be accepted on rOpenSci and then CRAN. It should run on any computer with RStudio and any server running Shiny.</p>
+<p>We have worked under three goals:</p>
+<ol>
+<li>Minimum number of dependencies</li>
+<li>Use %&gt;% to provide a Tidyverse-alike experience</li>
+<li>Make the internals “hard” and the externals “easy”</li>
+</ol>
+</div>
 </div>
 </div>
   </div>
@@ -100,8 +132,7 @@
     <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small>Apache License (&gt;= 2.0)</small></li>
+<li>Apache License (&gt;= 2.0)</li>
 </ul>
 </div>
 <div class="developers">

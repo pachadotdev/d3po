@@ -25,7 +25,7 @@ pipe, `%>%`, both to filter/summarise data and create the charts.
 
 Let's start by loading packages.
 
-```{r pkgs}
+```{r pkgs, message=FALSE, warning=FALSE}
 library(dplyr)
 library(igraph)
 library(d3po)
@@ -187,4 +187,18 @@ Which is also visualized in a straightforward manner:
 ```{r}
 d3po() %>% 
   po_edges(data = edges)
+```
+
+# Aesthetics
+
+Going back to the treemap example, it is possible to move the labels and
+also use any font that you like:
+```{r}
+d3po(pokemon_count) %>%
+  po_treemap(
+    daes(size = n, group = type_1, color = color_1, align = "left")
+  ) %>%
+  po_title("Share of Pokemon by Type") %>% 
+  po_labels("left", "top") %>% 
+  po_font("Times")
 ```

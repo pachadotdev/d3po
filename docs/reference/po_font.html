@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>pokemon — pokemon • d3po</title>
+<title>Font — po_font • d3po</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="pokemon — pokemon" />
-<meta property="og:description" content="Statistical information about 718 Pokemon from Nintendo RPG series." />
+<meta property="og:title" content="Font — po_font" />
+<meta property="og:description" content="Edit the font used in a chart." />
 
 
 
@@ -106,46 +106,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>pokemon</h1>
+    <h1>Font</h1>
     
-    <div class="hidden name"><code>pokemon.Rd</code></div>
+    <div class="hidden name"><code>po_font.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Statistical information about 718 Pokemon from Nintendo RPG series.</p>
+    <p>Edit the font used in a chart.</p>
     </div>
 
-    <pre class="usage"><span class='va'>pokemon</span></pre>
+    <pre class="usage"><span class='fu'>po_font</span><span class='op'>(</span><span class='va'>d3po</span>, <span class='va'>font</span><span class='op'>)</span></pre>
 
-
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>A <code>data frame</code> with 718 observations and 15 variables.</p>
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p>Adapted from <code>highcharter</code> package.</p>
-    <h2 class="hasAnchor" id="variables"><a class="anchor" href="#variables"></a>Variables</h2>
-
-    
-
-
-<ul>
-<li><p><code>id</code>: Pokedex number.</p></li>
-<li><p><code>name</code>: Pokedex name.</p></li>
-<li><p><code>height</code>: Height in meters.</p></li>
-<li><p><code>weight</code>: Weight in kilograms.</p></li>
-<li><p><code>base_experience</code>: How much the Pokemon has battled.</p></li>
-<li><p><code>type_1</code>: Primary Pokemon type (i.e. Grass, Fire and Water)</p></li>
-<li><p><code>type_2</code>: Secondary Pokemon type (i.e. Poison, Dragon and Ice)</p></li>
-<li><p><code>attack</code>: How much damage a Pokemon deals when using a technique.</p></li>
-<li><p><code>defense</code>: How much damage a Pokemon receives when it is hit by a technique.</p></li>
-<li><p><code>hp</code>: How much damage a Pokemon can receive before fainting.</p></li>
-<li><p><code>special_attack</code>: How much damage a Pokemon deals when using a special technique.</p></li>
-<li><p><code>special_defense</code>: How much damage a Pokemon receives when it is hit by a special technique.</p></li>
-<li><p><code>speed</code>: Determines the order of Pokemon that can act in battle, if the speed is tied then the 1st move is assigned at random.</p></li>
-<li><p><code>color_1</code>: Hex color code for Type 1.</p></li>
-<li><p><code>color_2</code>: Hex color code for Type 2.</p></li>
-</ul>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>d3po</th>
+      <td><p>Either the output of <code><a href='d3po.html'>d3po()</a></code> or <code><a href='d3po-shiny.html'>d3po_proxy()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>font</th>
+      <td><p>font to use ("Roboto", "Merriweather", etc.).</p></td>
+    </tr>
+    </table>
 
 
   </div>

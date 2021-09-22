@@ -25,6 +25,9 @@ to \code{\link[=d3po]{d3po()}}.}
 
 \item{method}{The igraph function to compute node positions.}
 }
+\value{
+Appends nodes arguments to a network-specific 'htmlwidgets' object
+}
 \description{
 Customise edges and nodes.
 }

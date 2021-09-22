@@ -11,6 +11,7 @@
 #' @param ... Aesthetics to pass, see [daes()]
 #' 
 #' @export
+#' @return Creates a basic 'htmlwidget' object for simple visualization
 d3po <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) UseMethod("d3po")
 
 #' @export 
@@ -79,6 +80,7 @@ d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, elementId
 #' @name d3po-shiny
 #'
 #' @export
+#' @return Creates a basic 'htmlwidget' object for 'Shiny' and interactive documents
 d3po_output <- function(output_id, width = "100%", height = "400px") {
   htmlwidgets::shinyWidgetOutput(output_id, "d3po", width, height, package = "d3po")
 }

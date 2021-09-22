@@ -13,6 +13,9 @@ po_labels(d3po, align, valign)
 
 \item{valign}{vertical alignment (top, middle, botton).}
 }
+\value{
+Appends custom labels to an 'htmlwidgets' object
+}
 \description{
 Edit labels positioning in a chart.
 }

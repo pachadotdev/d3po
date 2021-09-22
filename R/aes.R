@@ -15,6 +15,7 @@
 #' - `size`: size of geom.
 #' 
 #' @export
+#' @return Aesthetics for the plots such as axis (x,y), group, color and/or size
 daes <- function(x, y, ...) {
   exprs <- rlang::enquos(x = x, y = y, ..., .ignore_empty = "all")
   aes <- new_aes(exprs, env = parent.frame())

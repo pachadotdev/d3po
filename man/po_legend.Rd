@@ -11,6 +11,9 @@ po_legend(d3po, legend)
 
 \item{legend}{legend to add.}
 }
+\value{
+Appends custom legend to an 'htmlwidgets' object
+}
 \description{
 Add a legend to a chart.
 }

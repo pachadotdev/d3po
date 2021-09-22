@@ -18,6 +18,7 @@
 #' 
 #' @name d3po_graph
 #' @export
+#' @return Appends nodes arguments to a network-specific 'htmlwidgets' object
 po_nodes <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 
   d3po$x$type <- "network"

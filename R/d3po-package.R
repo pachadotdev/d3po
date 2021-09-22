@@ -6,12 +6,6 @@
 #' @author Mauricio Vargas
 NULL
 
-#' d3po exported operators and S3 methods
-#'
-#' The following functions are imported and then re-exported
-#' from the d3po package to avoid listing the magrittr
-#' as Depends of d3po.
-#'
 #' @name d3po-exports
 NULL
 

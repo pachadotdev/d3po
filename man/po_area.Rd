@@ -18,6 +18,9 @@ to \code{\link[=d3po]{d3po()}}.}
 
 \item{stack}{Whether to stack the series.}
 }
+\value{
+an 'htmlwidgets' object with the desired interactive plot
+}
 \description{
 Plot an area chart.
 }

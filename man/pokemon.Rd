@@ -5,7 +5,7 @@
 \alias{pokemon}
 \title{pokemon}
 \format{
-A \code{data frame} with 718 observations and 15 variables.
+A \code{data frame} with 151 observations and 15 variables.
 }
 \source{
 Adapted from \code{highcharter} package.
@@ -14,7 +14,7 @@ Adapted from \code{highcharter} package.
 pokemon
 }
 \description{
-Statistical information about 718 Pokemon from Nintendo RPG series.
+Statistical information about 151 Pokemon from Nintendo RPG series.
 }
 \section{Variables}{
 

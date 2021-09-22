@@ -15,7 +15,8 @@
 #'  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
 #'  po_title("Distribution of Pokemon Speed")
 #' 
-#' @export 
+#' @export
+#' @return an 'htmlwidgets' object with the desired interactive plot 
 po_box <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_box")
 
 #' @export
@@ -64,6 +65,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  po_title("Share of Pokemon by Type 1")
 #' 
 #' @export 
+#' @return an 'htmlwidgets' object with the desired interactive plot
 po_treemap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_treemap")
 
 #' @export
@@ -111,6 +113,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  po_title("Share of Pokemon by Type 1")
 #' 
 #' @export 
+#' @return an 'htmlwidgets' object with the desired interactive plot
 po_pie <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_pie")
 
 #' @export
@@ -164,6 +167,7 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  po_title("Approximated Density of Pokemon Weight")
 #' 
 #' @export 
+#' @return an 'htmlwidgets' object with the desired interactive plot
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_area")
 
 #' @export
@@ -212,6 +216,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
 #'  po_title("Count of Pokemon by Type 1")
 #' 
 #' @export 
+#' @return an 'htmlwidgets' object with the desired interactive plot
 po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
 
 #' @export
@@ -264,6 +269,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  po_title("Decile of Pokemon Weight by Type 1")
 #' 
 #' @export 
+#' @return an 'htmlwidgets' object with the desired interactive plot
 po_line <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_line")
 
 #' @export
@@ -316,6 +322,7 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #'  po_title("Decile of Pokemon Weight by Type 1")
 #' 
 #' @export 
+#' @return an 'htmlwidgets' object with the desired interactive plot
 po_scatter <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_scatter")
 
 #' @export
@@ -353,6 +360,7 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 #' @param title Title to add.
 #' 
 #' @export 
+#' @return Appends a title to an 'htmlwidgets' object
 po_title <- function(d3po, title) UseMethod("po_title")
 
 #' @export 
@@ -388,6 +396,7 @@ po_title.d3proxy <- function(d3po, title){
 #' @param valign vertical alignment (top, middle, botton).
 #' 
 #' @export 
+#' @return Appends custom labels to an 'htmlwidgets' object
 po_labels <- function(d3po, align, valign) UseMethod("po_labels")
 
 #' @export 
@@ -411,6 +420,7 @@ po_labels.d3po <- function(d3po, align = "center", valign = "middle"){
 #' @param legend legend to add.
 #' 
 #' @export 
+#' @return Appends custom legend to an 'htmlwidgets' object
 po_legend <- function(d3po, legend) UseMethod("po_legend")
 
 #' @export 
@@ -444,6 +454,7 @@ po_legend.d3proxy <- function(d3po, legend){
 #' @param font font to use ("Roboto", "Merriweather", etc.).
 #' 
 #' @export 
+#' @return Appends custom font to an 'htmlwidgets' object
 po_font <- function(d3po, font) UseMethod("po_font")
 
 #' @export 

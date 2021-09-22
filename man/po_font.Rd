@@ -11,6 +11,9 @@ po_font(d3po, font)
 
 \item{font}{font to use ("Roboto", "Merriweather", etc.).}
 }
+\value{
+Appends custom font to an 'htmlwidgets' object
+}
 \description{
 Edit the font used in a chart.
 }

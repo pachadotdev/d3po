@@ -11,6 +11,9 @@ po_title(d3po, title)
 
 \item{title}{Title to add.}
 }
+\value{
+Appends a title to an 'htmlwidgets' object
+}
 \description{
 Add a title to a chart.
 }

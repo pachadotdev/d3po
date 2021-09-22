@@ -21,6 +21,9 @@ string and have \code{'px'} appended.}
 
 \item{elementId}{Dummy string parameter. Useful when you have two or more charts on the same page.}
 }
+\value{
+Creates a basic 'htmlwidget' object for simple visualization
+}
 \description{
 This function provides 'd3po' methods from R console
 }

@@ -16,6 +16,9 @@ to \code{\link[=d3po]{d3po()}}.}
 
 \item{inherit_daes}{Whether to inherit aesthetics previous specified.}
 }
+\value{
+an 'htmlwidgets' object with the desired interactive plot
+}
 \description{
 Plot an scatter chart.
 }

@@ -8,3 +8,4 @@ inst/htmlwidgets/lib/d3po.full.min
 ^LICENSE\.md$
 docs
 testing.R
+shinydemo

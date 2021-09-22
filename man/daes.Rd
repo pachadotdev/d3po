@@ -11,6 +11,9 @@ daes(x, y, ...)
 variables. The names for x and y aesthetics are typically omitted because
 they are so common; all other aspects must be named.}
 }
+\value{
+Aesthetics for the plots such as axis (x,y), group, color and/or size
+}
 \description{
 Aesthetics of the chart.
 }

@@ -31,6 +31,9 @@ is useful if you want to save an expression in a variable.}
 
 \item{session}{A valid shiny session.}
 }
+\value{
+Creates a basic 'htmlwidget' object for 'Shiny' and interactive documents
+}
 \description{
 Output and render functions for using d3po within Shiny
 applications and interactive Rmd documents.

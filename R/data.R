@@ -1,6 +1,6 @@
 #' pokemon
 #'
-#' Statistical information about 718 Pokemon from Nintendo RPG series.
+#' Statistical information about 151 Pokemon from Nintendo RPG series.
 #'
 #' @section Variables:
 #'
@@ -25,6 +25,6 @@
 #' @docType data
 #' @name pokemon
 #' @usage pokemon
-#' @format A \code{data frame} with 718 observations and 15 variables.
+#' @format A \code{data frame} with 151 observations and 15 variables.
 #' @source Adapted from \code{highcharter} package.
 "pokemon"

@@ -1,5 +1,9 @@
 # d3po: R package for easy interactive D3 visualization with Shiny
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/pachadotdev/d3po/workflows/R-CMD-check/badge.svg)](https://github.com/pachadotdev/d3po/actions)
+<!-- badges: end -->
+  
 ## The Problem
 
 R already features excellent visualization libraries such as D3 (via the r2d3 

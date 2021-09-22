@@ -13,7 +13,7 @@ some understanding of JavaScript.
 
 There is also the **highcharter** package but the underlying JavaScript library 
 (Highcharts) is not free for commercial and governmental use. A single user 
-license costs around 2,500 USD, something that ONGs cannot always afford.
+license costs around 2,500 USD, something that NGOs cannot always afford.
 
 Another relevant aspect is the lack of easy alternatives to provide 
 internalization, something that can be addressed easily in a community project 

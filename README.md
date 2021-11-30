@@ -77,15 +77,13 @@ The Minimum Viable Product includes these visualization methods and features:
 * Area/distribution chart
 * Networks
 * Box and whiskers
-* Maps
 * Gramatically correct translations
+* Maps (TBA)
 
 The goal is to provide a package that becomes a gold standard for interactive 
 visualization and facilitates using Shiny.
 
-As an R package, the idea is to obtain a high quality result to be accepted on 
-rOpenSci and then CRAN. It should run on any computer with 'RStudio' and any 
-server running 'Shiny'.
+It should run on any computer with 'RStudio' and any server running 'Shiny'.
 
 We have worked under three goals:
 

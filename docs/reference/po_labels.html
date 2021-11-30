@@ -92,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/pachadotdev/d3po/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -107,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Labels</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/pachadotdev/d3po/blob/master/R/d3po-api.R'><code>R/d3po-api.R</code></a></small>
     <div class="hidden name"><code>po_labels.Rd</code></div>
     </div>
 
@@ -115,7 +120,7 @@
     <p>Edit labels positioning in a chart.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>po_labels</span><span class='op'>(</span><span class='va'>d3po</span>, <span class='va'>align</span>, <span class='va'>valign</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>po_labels</span><span class='op'>(</span><span class='va'>d3po</span>, <span class='va'>align</span>, <span class='va'>valign</span>, <span class='va'>resize</span>, <span class='va'>font</span>, <span class='va'>size</span>, <span class='va'>transform</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -126,11 +131,27 @@
     </tr>
     <tr>
       <th>align</th>
-      <td><p>horizontal alignment (left, center, right, start, middle, end).</p></td>
+      <td><p>horizontal alignment ("left", "center", "right", "start", "middle", "end").</p></td>
     </tr>
     <tr>
       <th>valign</th>
-      <td><p>vertical alignment (top, middle, botton).</p></td>
+      <td><p>vertical alignment ("top", "middle", "botton").</p></td>
+    </tr>
+    <tr>
+      <th>resize</th>
+      <td><p>resize labels text (TRUE or FALSE).</p></td>
+    </tr>
+    <tr>
+      <th>font</th>
+      <td><p>font to use ("Roboto", "Merriweather", etc.).</p></td>
+    </tr>
+    <tr>
+      <th>size</th>
+      <td><p>size to use (10, 11, 12, etc. overrides auto-sizing).</p></td>
+    </tr>
+    <tr>
+      <th>transform</th>
+      <td><p>transform to use ("lowercase", "uppercase", "capitalize", "none").</p></td>
     </tr>
     </table>
 

@@ -9,3 +9,5 @@ inst/htmlwidgets/lib/d3po.full.min
 docs
 testing.R
 shinydemo
+^CRAN-RELEASE$
+^cran-comments\.md$

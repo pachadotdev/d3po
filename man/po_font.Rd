@@ -4,12 +4,16 @@
 \alias{po_font}
 \title{Font}
 \usage{
-po_font(d3po, font)
+po_font(d3po, font, size, transform)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
 
 \item{font}{font to use ("Roboto", "Merriweather", etc.).}
+
+\item{size}{size to use (10, 11, 12, etc. overrides auto-sizing).}
+
+\item{transform}{transform to use ("lowercase", "uppercase", "capitalize", "none").}
 }
 \value{
 Appends custom font to an 'htmlwidgets' object

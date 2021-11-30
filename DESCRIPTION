@@ -19,6 +19,8 @@ Depends:
     htmlwidgets,
     magrittr,
     R (>= 2.10)
+URL: https://pacha.dev/d3po/
+BugReports: https://github.com/pachadotdev/d3po/issues
 License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true

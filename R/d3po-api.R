@@ -392,21 +392,38 @@ po_title.d3proxy <- function(d3po, title){
 #' Edit labels positioning in a chart.
 #' 
 #' @inheritParams po_box
-#' @param align horizontal alignment (left, center, right, start, middle, end).
-#' @param valign vertical alignment (top, middle, botton).
+#' @param align horizontal alignment ("left", "center", "right", "start", "middle", "end").
+#' @param valign vertical alignment ("top", "middle", "botton").
+#' @param resize resize labels text (TRUE or FALSE).
+#' @param font font to use ("Roboto", "Merriweather", etc.).
+#' @param size size to use (10, 11, 12, etc. overrides auto-sizing).
+#' @param transform transform to use ("lowercase", "uppercase", "capitalize", "none").
 #' 
 #' @export 
 #' @return Appends custom labels to an 'htmlwidgets' object
-po_labels <- function(d3po, align, valign) UseMethod("po_labels")
+po_labels <- function(d3po, align, valign, resize, font, size, transform) UseMethod("po_labels")
 
 #' @export 
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align = "center", valign = "middle"){
-  assertthat::assert_that(!missing(align) | !missing(valign), msg = "Missing `labels`")
+po_labels.d3po <- function(d3po, align, valign, resize, font, size, transform){
+  assertthat::assert_that(!missing(align), msg = "Missing `align`")
+  assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
+  assertthat::assert_that(!missing(resize), msg = "Missing `resize`")
+  
+  assertthat::assert_that(!missing(font), msg = "Missing `font`")
+  assertthat::assert_that(!missing(size), msg = "Missing `size`")
+  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
   
   d3po$x$labels <- NULL
   d3po$x$labels$align <- align
   d3po$x$labels$valign <- valign
+  d3po$x$labels$resize <- resize
+  
+  d3po$x$labels$font <- NULL
+  d3po$x$labels$font$family <- font
+  d3po$x$labels$font$size <- size
+  d3po$x$labels$font$transform <- transform
+  
   return(d3po)
 }
 
@@ -452,29 +469,71 @@ po_legend.d3proxy <- function(d3po, legend){
 #' 
 #' @inheritParams po_box
 #' @param font font to use ("Roboto", "Merriweather", etc.).
+#' @param size size to use (10, 11, 12, etc. overrides auto-sizing).
+#' @param transform transform to use ("lowercase", "uppercase", "capitalize", "none").
 #' 
 #' @export 
 #' @return Appends custom font to an 'htmlwidgets' object
-po_font <- function(d3po, font) UseMethod("po_font")
+po_font <- function(d3po, font, size, transform) UseMethod("po_font")
 
 #' @export 
 #' @method po_font d3po
-po_font.d3po <- function(d3po, font){
+po_font.d3po <- function(d3po, font, size, transform){
   assertthat::assert_that(!missing(font), msg = "Missing `font`")
+  assertthat::assert_that(!missing(size), msg = "Missing `size`")
+  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
   
   d3po$x$font <- NULL
   d3po$x$font$family <- font
+  d3po$x$font$size <- size
+  d3po$x$font$transform <- transform
   return(d3po)
 }
 
 #' @export 
-#' @method po_title d3proxy
-po_font.d3proxy <- function(d3po, font){
+#' @method po_font d3proxy
+po_font.d3proxy <- function(d3po, font, size, transform){
   assertthat::assert_that(!missing(font), msg = "Missing `font`")
+  assertthat::assert_that(!missing(size), msg = "Missing `size`")
+  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
   
-  msg <- list(id = d3po$id, msg = list(font = font))
+  msg <- list(id = d3po$id, msg = list(font = font, size = size, transform = transform))
   
   d3po$session$sendCustomMessage("d3po-font", msg)
+  
+  return(d3po)
+}
+
+# Background ----
+
+#' Background
+#' 
+#' Add a background to a chart.
+#' 
+#' @inheritParams po_box
+#' @param background background to add (hex code).
+#' 
+#' @export 
+#' @return Appends custom background to an 'htmlwidgets' object
+po_background <- function(d3po, background) UseMethod("po_background")
+
+#' @export 
+#' @method po_background d3po
+po_background.d3po <- function(d3po, background){
+  assertthat::assert_that(!missing(background), msg = "Missing `background`")
+  
+  d3po$x$background <- background
+  return(d3po)
+}
+
+#' @export 
+#' @method po_background d3proxy
+po_background.d3proxy <- function(d3po, background){
+  assertthat::assert_that(!missing(background), msg = "Missing `background`")
+  
+  msg <- list(id = d3po$id, msg = list(background = background))
+  
+  d3po$session$sendCustomMessage("d3po-background", msg)
   
   return(d3po)
 }

@@ -57,7 +57,9 @@ HTMLWidgets.widget({
         }
         
         if (x.labels) {
-          chart.labels({"align": x.labels.align, "valign": x.labels.valign});
+          chart.labels({"align": x.labels.align, "valign": x.labels.valign, "resize":x.labels.resize,
+            "font": {"family": x.labels.font.family, "size": x.labels.font.size, "transform": x.labels.font.transform}
+          });
         }
 
         if(x.edges)
@@ -67,8 +69,12 @@ HTMLWidgets.widget({
           chart.nodes(x.nodes);
           
           
-        if(x.font)
-          chart.font(x.font);
+        if(x.font) {
+          chart.font({"family": x.font.family, "size": x.font.size, "transform": x.font.transform});
+        }
+        
+        if(x.background)
+          chart.background(x.background);
         
         chart.resize(true);
         

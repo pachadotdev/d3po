@@ -4,7 +4,15 @@
 \alias{po_labels}
 \title{Labels}
 \usage{
-po_labels(d3po, align, valign, resize, font, size, transform)
+po_labels(
+  d3po,
+  align = "center",
+  valign = "middle",
+  resize = TRUE,
+  family = "Fira Sans",
+  size = 16,
+  transform = "capitalize"
+)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
@@ -15,7 +23,7 @@ po_labels(d3po, align, valign, resize, font, size, transform)
 
 \item{resize}{resize labels text (TRUE or FALSE).}
 
-\item{font}{font to use ("Roboto", "Merriweather", etc.).}
+\item{family}{family font to use ("Roboto", "Merriweather", etc.).}
 
 \item{size}{size to use (10, 11, 12, etc. overrides auto-sizing).}
 

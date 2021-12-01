@@ -4,6 +4,7 @@ dev
 javascript
 LICENSE
 inst/htmlwidgets/lib/d3po.full.min
+inst/htmlwidgets/lib/control_treemap.html
 ^\.github$
 ^LICENSE\.md$
 docs

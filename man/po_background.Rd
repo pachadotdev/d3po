@@ -4,7 +4,7 @@
 \alias{po_background}
 \title{Background}
 \usage{
-po_background(d3po, background)
+po_background(d3po, background = "#fff")
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}

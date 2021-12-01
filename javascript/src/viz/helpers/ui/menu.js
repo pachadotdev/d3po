@@ -83,16 +83,7 @@ module.exports = function(vars, type) {
     "height": "30px",
     "padding": "0 10px",
   };
-
-  imageDiv.append("div")
-    .style(saveStyles)
-    .style("cursor", "pointer")
-    .html('Download PNG image')
-    .call(hover)
-    .on("click", function(){
-      saveSvgAsPng(vars.svg.node(), "diagram.png")
-    });
-
+    
   imageDiv.append("div")
     .style(saveStyles)
     .style("cursor", "pointer")
@@ -109,6 +100,15 @@ module.exports = function(vars, type) {
       downloadLink.click();
       document.body.removeChild(downloadLink);
     });
+    
+  // imageDiv.append("div")
+  //  .style(saveStyles)
+  //  .style("cursor", "pointer")
+  //  .html('Download PNG image')
+  //  .call(hover)
+  //  .on("click", function(){
+  //    saveSvgAsPng(vars.svg.node(), "diagram.png")
+  //  });
 
   return menu;
 };

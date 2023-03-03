@@ -1,7 +1,7 @@
 Package: d3po
 Type: Package
 Title: Fast and Beautiful Interactive Visualization for 'Markdown' and 'Shiny'
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: c(
   person("Mauricio", "Vargas", role = c("aut","cre","cph"), 
    email = "mavargas11@uc.cl"),
@@ -35,5 +35,6 @@ Imports:
 Suggests: 
     knitr,
     igraph,
-    rmarkdown
+    rmarkdown,
+    shiny
 VignetteBuilder: knitr

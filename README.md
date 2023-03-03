@@ -4,6 +4,8 @@
 # D3po
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Methods and features
@@ -43,6 +45,13 @@ D3po features:
   code
 
 ## Installation
+
+You can install the stable version from
+[CRAN](https://cran.r-project.org/) with:
+
+``` r
+install.packages("d3po")
+```
 
 You can install the development version of d3po from
 [GitHub](https://github.com/) with:

@@ -87,7 +87,7 @@ module.exports = function(vars, type) {
   imageDiv.append("div")
     .style(saveStyles)
     .style("cursor", "pointer")
-    .html('Download SVG image')
+    .html('Download SVG vector image')
     .call(hover)
     .on("click", function(){
       var svgData = vars.svg.node().outerHTML;
@@ -95,20 +95,39 @@ module.exports = function(vars, type) {
       var svgUrl = URL.createObjectURL(svgBlob);
       var downloadLink = document.createElement("a");
       downloadLink.href = svgUrl;
-      downloadLink.download = "diagram.svg";
+      downloadLink.download = "plot.svg";
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
     });
     
-  // imageDiv.append("div")
-  //  .style(saveStyles)
-  //  .style("cursor", "pointer")
-  //  .html('Download PNG image')
-  //  .call(hover)
-  //  .on("click", function(){
-  //    saveSvgAsPng(vars.svg.node(), "diagram.png")
-  //  });
+  imageDiv.append("div")
+   .style(saveStyles)
+   .style("cursor", "pointer")
+   .html('Download PNG image')
+   .call(hover)
+   .on("click", function(){
+      var svgData = vars.svg.node().outerHTML;
+      var canvas = document.createElement("canvas");
+      var svgSize = vars.svg.node().getBoundingClientRect();
+      var width = svgSize.width;
+      var height = svgSize.height;
+      canvas.width = width;
+      canvas.height = height;
+      var ctx = canvas.getContext("2d");
+      var img = document.createElement("img");
+      img.setAttribute("src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData))));
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        var pngUrl = canvas.toDataURL("image/png");
+        var downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = "plot.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      };
+   });
 
   return menu;
 };

@@ -229,7 +229,9 @@ module.exports = function(vars) {
             var align = getAlign(d);
 
             textWrap()
-                .align(align)
+                // TODO: set align left as default
+                .align("start")
+                // .align(align)
                 .container(container)
                 .height(vars.height.value / 2)
                 .size(false)

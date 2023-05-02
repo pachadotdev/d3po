@@ -43,6 +43,19 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+#' @export 
+#' @method po_box d3proxy
+po_box.d3proxy <- function(d3po, ..., data, inherit_daes){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+
+  d3po$session$sendCustomMessage("d3po-box", msg)
+
+  return(d3po)
+}
+
 # Treemap ----
 
 #' Treemap
@@ -87,6 +100,19 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
+
+  return(d3po)
+}
+
+#' @export 
+#' @method po_treemap d3proxy
+po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+
+  d3po$session$sendCustomMessage("d3po-treemap", msg)
 
   return(d3po)
 }

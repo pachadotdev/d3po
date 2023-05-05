@@ -165,6 +165,19 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+#' @export 
+#' @method po_pie d3proxy
+po_pie.d3proxy <- function(d3po, ..., data, inherit_daes){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+  
+  d3po$session$sendCustomMessage("d3po-pie", msg)
+  
+  return(d3po)
+}
+
 # Area ----
 
 #' Area
@@ -220,6 +233,20 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FA
   return(d3po)
 }
 
+#' @export 
+#' @method po_area d3proxy
+po_area.d3proxy <- function(d3po, ..., data, inherit_daes, stack){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  assertthat::assert_that(!missing(stack), msg = "Missing `stack`")
+  
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes, stack = stack))
+  
+  d3po$session$sendCustomMessage("d3po-area", msg)
+  
+  return(d3po)
+}
+
 # Bar ----
 
 #' Bar
@@ -265,6 +292,19 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
+  
+  return(d3po)
+}
+
+#' @export 
+#' @method po_bar d3proxy
+po_bar.d3proxy <- function(d3po, ..., data, inherit_daes){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+  
+  d3po$session$sendCustomMessage("d3po-bar", msg)
   
   return(d3po)
 }
@@ -322,6 +362,19 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   return(d3po)
 }
 
+#' @export 
+#' @method po_line d3proxy
+po_line.d3proxy <- function(d3po, ..., data, inherit_daes){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+  
+  d3po$session$sendCustomMessage("d3po-line", msg)
+  
+  return(d3po)
+}
+
 # Scatter ----
 
 #' scatter
@@ -372,6 +425,19 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
+  
+  return(d3po)
+}
+
+#' @export 
+#' @method po_scatter d3proxy
+po_scatter.d3proxy <- function(d3po, ..., data, inherit_daes){
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+  
+  d3po$session$sendCustomMessage("d3po-scatter", msg)
   
   return(d3po)
 }
@@ -458,6 +524,24 @@ po_labels.d3po <- function(d3po, align, valign, resize, family, size, transform)
   return(d3po)
 }
 
+#' @export 
+#' @method po_labels d3proxy
+po_labels.d3proxy <- function(d3po, align, valign, resize, family, size, transform){
+  assertthat::assert_that(!missing(align), msg = "Missing `align`")
+  assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
+  assertthat::assert_that(!missing(resize), msg = "Missing `resize`")
+  
+  assertthat::assert_that(!missing(family), msg = "Missing `family`")
+  assertthat::assert_that(!missing(size), msg = "Missing `size`")
+  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
+  
+  msg <- list(id = d3po$id, msg = list(align = align, valign = valign, resize = resize, family = family, size = size, transform = transform))
+  
+  d3po$session$sendCustomMessage("d3po-labels", msg)
+  
+  return(d3po)
+}
+
 # Legend ----
 
 #' Legend
@@ -485,6 +569,18 @@ po_legend.d3po <- function(d3po, legend){
 po_legend.d3proxy <- function(d3po, legend){
   assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
   
+  msg <- list(id = d3po$id, msg = list(legend = legend))
+  
+  d3po$session$sendCustomMessage("d3po-legend", msg)
+  
+  return(d3po)
+}
+
+#' @export 
+#' @method po_legend d3proxy
+po_legend.d3proxy <- function(d3po, legend){
+  assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
+
   msg <- list(id = d3po$id, msg = list(legend = legend))
   
   d3po$session$sendCustomMessage("d3po-legend", msg)
@@ -520,6 +616,20 @@ po_font.d3po <- function(d3po, family, size, transform){
   d3po$x$font$family <- family
   d3po$x$font$size <- size
   d3po$x$font$transform <- transform
+  return(d3po)
+}
+
+#' @export 
+#' @method po_font d3proxy
+po_font.d3proxy <- function(d3po, family, size, transform){
+  assertthat::assert_that(!missing(family), msg = "Missing `family`")
+  assertthat::assert_that(!missing(size), msg = "Missing `size`")
+  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
+  
+  msg <- list(id = d3po$id, msg = list(family = family, size = size, transform = transform))
+  
+  d3po$session$sendCustomMessage("d3po-font", msg)
+  
   return(d3po)
 }
 

@@ -7,7 +7,7 @@
 
     module.exports = {
         background: {
-            color: "#fafafa",
+            color: "#ebebeb",
             rendering: rendering(),
             stroke: {
                 color: "#ccc",

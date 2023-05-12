@@ -318,6 +318,7 @@ module.exports = function(vars) {
 
                     drawDrawer(vars)
                     drawLegend(vars)
+                    drawMenu(vars)
 
                 } else {
 
@@ -350,13 +351,6 @@ module.exports = function(vars) {
             "message": uiMessage
         })
     }
-
-    steps.push({
-        "function": function(vars) {
-            drawMenu(vars);
-          },
-        "message": uiMessage
-    })
 
     if (!vars.error.value) {
         steps.push({

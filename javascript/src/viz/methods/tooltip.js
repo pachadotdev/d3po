@@ -8,7 +8,7 @@
     module.exports = {
         accepted: [Boolean, Array, Function, Object, String],
         anchor: "top center",
-        background: "#f4f4f4",
+        background: "#ebebeb",
         children: {
             accepted: [Boolean, Number],
             value: true

@@ -230,8 +230,8 @@ module.exports = function(vars) {
 
             textWrap()
                 // TODO: set align left as default
-                .align("start")
-                // .align(align)
+                // .align("start")
+                .align(align)
                 .container(container)
                 .height(vars.height.value / 2)
                 .size(false)

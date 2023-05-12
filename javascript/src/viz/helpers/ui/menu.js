@@ -13,6 +13,11 @@ module.exports = function(vars, type) {
   var styles, saveStyles, menu, downloadDiv, imageDiv;
   var marginTop = vars.margin.top > 30 ? vars.margin.top - 30 : vars.margin.top;
 
+  // if title is present, align menu with title
+  if (vars.title.value) {
+    marginTop = vars.margin.top - 33;
+  }
+
   styles = {
       position: "absolute",
       display: "flex",
@@ -28,6 +33,12 @@ module.exports = function(vars, type) {
       "padding": "0 5px",
       "z-index": 3000
   };
+
+  // if title is present, make background white and remove border
+  if (vars.title.value) {
+    styles["background-color"] = "white";
+    styles["border"] = "none";
+  }
 
   menu = vars.container.value.selectAll("div.d3po_menu").data([0])
     .enter().append("div")

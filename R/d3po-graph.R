@@ -22,7 +22,6 @@
 po_nodes <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
 
   d3po$x$type <- "network"
-  d3po$x$group <- "name"
 
   data <- .get_data(d3po$x$data, data)
   

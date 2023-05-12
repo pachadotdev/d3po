@@ -69,9 +69,9 @@ app_server <- function(input, output, session) {
     #   po_layout(daes(color = V(pokemon_tree)$color)) %>%
     #   po_title("Connections between Pokemon types based on Type 1 and 2")
 
-    # TODO: make size and colour work
+    # load("d3pogolem/data/pokemon_tree.rda")
     d3po(pokemon_tree) %>%
-      po_nodes(daes(size = V(pokemon_tree)$size, color = V(pokemon_tree)$color)) %>%
+      po_nodes(daes(size = size, color = color)) %>%
       po_title("Connections between Pokemon types based on Type 1 and 2")
   })
 }

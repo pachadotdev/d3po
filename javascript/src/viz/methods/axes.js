@@ -10,7 +10,7 @@
             color: "#ebebeb",
             rendering: rendering(),
             stroke: {
-                color: "#ccc",
+                color: "#ffffff",
                 width: 1
             }
         },

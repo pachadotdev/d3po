@@ -55,7 +55,7 @@
             },
             grid: {
                 accepted: [Boolean],
-                color: "#ccc",
+                color: "#ffffff",
                 rendering: rendering(),
                 value: true
             },
@@ -202,7 +202,7 @@
             },
             ticks: {
                 accepted: [false, Array],
-                color: "#ccc",
+                color: "#666",
                 font: {
                     color: "#666",
                     decoration: decoration(),

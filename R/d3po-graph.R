@@ -34,6 +34,7 @@ po_nodes <- function(d3po, ..., data = NULL, inherit_daes = TRUE){
   d3po$x$data <- data
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
+  d3po$x$color <- daes_to_opts(daes, "color")
 
   return(d3po) 
 }

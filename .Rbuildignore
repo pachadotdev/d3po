@@ -9,7 +9,7 @@ inst/htmlwidgets/lib/control_treemap.html
 ^LICENSE\.md$
 docs
 testing.R
-shinydemo
+d3pogolem
 ^CRAN-RELEASE$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$

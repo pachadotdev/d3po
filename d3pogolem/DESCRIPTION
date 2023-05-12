@@ -1,0 +1,20 @@
+Package: d3pogolem
+Title: D3po demonstration with Shiny
+Version: 0.0.0.9000
+Authors@R: person('Mauricio', 'Vargas Sepulveda', email = 'm.sepulveda@mail.utoronto.ca', role = c('cre', 'aut'))
+Description: Just for demonstration purposes.
+License: MIT + file LICENSE
+Imports: 
+    config (>= 0.3.1),
+    d3po,
+    dplyr,
+    golem (>= 0.4.0),
+    igraph,
+    magrittr,
+    shiny (>= 1.7.3),
+    shinydashboard
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.2
+Depends: 
+    R (>= 2.10)

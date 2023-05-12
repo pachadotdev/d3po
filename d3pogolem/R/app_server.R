@@ -1,11 +1,21 @@
-shinyServer(function(input, output) {
-  
+#' The application server-side
+#'
+#' @param input,output,session Internal parameters for {shiny}.
+#'     DO NOT REMOVE.
+#' @import shiny
+#' @import shinydashboard
+#' @import d3po
+#' @import dplyr
+#' @import igraph
+#' @noRd
+app_server <- function(input, output, session) {
+  # Your application server logic
   output$boxplot <- render_d3po({
     d3po(pokemon) %>%
       po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
       po_title("Distribution of Pokemon Speed by Type")
   })
-  
+
   output$barplot <- render_d3po({
     d3po(pokemon_count) %>%
       po_bar(
@@ -13,7 +23,7 @@ shinyServer(function(input, output) {
       ) %>%
       po_title("Count of Pokemon by Type")
   })
-  
+
   output$treemap <- render_d3po({
     d3po(pokemon_count) %>%
       po_treemap(
@@ -21,7 +31,7 @@ shinyServer(function(input, output) {
       ) %>%
       po_title("Share of Pokemon by Type")
   })
-  
+
   output$pie <- render_d3po({
     d3po(pokemon_count) %>%
       po_pie(
@@ -29,7 +39,7 @@ shinyServer(function(input, output) {
       ) %>%
       po_title("Share of Pokemon by Type")
   })
-  
+
   output$line <- render_d3po({
     d3po(pokemon_decile) %>%
       po_line(
@@ -37,7 +47,7 @@ shinyServer(function(input, output) {
       ) %>%
       po_title("Decile of Pokemon Weight by Type")
   })
-  
+
   output$density <- render_d3po({
     d3po(pokemon_density) %>%
       po_area(
@@ -45,7 +55,7 @@ shinyServer(function(input, output) {
       ) %>%
       po_title("Approximated Density of Pokemon Weight")
   })
-  
+
   output$scatterplot <- render_d3po({
     d3po(pokemon_def_vs_att) %>%
       po_scatter(
@@ -53,9 +63,15 @@ shinyServer(function(input, output) {
       ) %>%
       po_title("Average Attack vs Average Defense by Type")
   })
-  
+
   output$network <- render_d3po({
-    d3po(tr) %>% 
-      po_layout()
+    # d3po(pokemon_tree) %>%
+    #   po_layout(daes(color = V(pokemon_tree)$color)) %>%
+    #   po_title("Connections between Pokemon types based on Type 1 and 2")
+
+    # TODO: make size and colour work
+    d3po(pokemon_tree) %>%
+      po_nodes(daes(size = V(pokemon_tree)$size, color = V(pokemon_tree)$color)) %>%
+      po_title("Connections between Pokemon types based on Type 1 and 2")
   })
-})
+}

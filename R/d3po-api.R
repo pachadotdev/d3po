@@ -175,6 +175,66 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
   return(d3po)
 }
 
+# Donut ----
+
+#' Donut
+#'
+#' Plot a donut
+#'
+#' @inheritParams po_box
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' pokemon_count <- pokemon %>%
+#'   group_by(type_1, color_1) %>%
+#'   count()
+#'
+#' d3po(pokemon_count) %>%
+#'   po_donut(
+#'     daes(size = n, group = type_1, color = color_1)
+#'   ) %>%
+#'   po_title("Share of Pokemon by Type 1")
+#'
+#' @export
+#' @return an 'htmlwidgets' object with the desired interactive plot
+po_donut <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_donut")
+
+#' @export
+#' @method po_donut d3po
+po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+  # defaults
+  d3po$x$type <- "donut"
+
+  data <- .get_data(d3po$x$tempdata, data)
+
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$size <- daes_to_opts(daes, "size")
+  d3po$x$group <- daes_to_opts(daes, "group")
+  d3po$x$color <- daes_to_opts(daes, "color")
+
+  return(d3po)
+}
+
+#' @export
+#' @method po_donut d3proxy
+po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+
+  d3po$session$sendCustomMessage("d3po-donut", msg)
+
+  return(d3po)
+}
+
 # Area ----
 
 #' Area
@@ -715,8 +775,6 @@ po_graph.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$color <- daes_to_opts(daes, "color")
 
   layout <- daes_to_opts(daes, "layout")
-
-  print(layout)
 
   if (is.null(layout)) {
     warning("No layout specified, using 'nicely'.")

@@ -40,6 +40,14 @@ app_server <- function(input, output, session) {
       po_title("Share of Pokemon by Type")
   })
 
+  output$donut <- render_d3po({
+    d3po(pokemon_count) %>%
+      po_donut(
+        daes(size = n, group = type_1, color = color_1)
+      ) %>%
+      po_title("Share of Pokemon by Type")
+  })
+
   output$line <- render_d3po({
     d3po(pokemon_decile) %>%
       po_line(

@@ -15,6 +15,8 @@ app_ui <- function(request) {
       dashboardHeader(title = "d3po examples in Shiny"),
       dashboardSidebar(),
       dashboardBody(
+        tags$head(tags$style(HTML('.content-wrapper { overflow: auto; }'))),
+
         box(
           title = "Boxplot",
           d3po_output("boxplot"),
@@ -33,6 +35,11 @@ app_ui <- function(request) {
         box(
           title = "Pie",
           d3po_output("pie"),
+          collapsible = T
+        ),
+        box(
+          title = "Donut",
+          d3po_output("donut"),
           collapsible = T
         ),
         box(

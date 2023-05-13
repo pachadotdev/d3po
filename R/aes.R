@@ -1,19 +1,20 @@
 #' Aesthetics
-#' 
+#'
 #' Aesthetics of the chart.
-#' 
+#'
 #' @param x,y,... List of name value pairs giving aesthetics to map to
 #'  variables. The names for x and y aesthetics are typically omitted because
 #'  they are so common; all other aspects must be named.
-#' 
+#'
 #' @section Aesthetics:
 #' Valid aesthetics (depending on the geom)
-#' 
+#'
 #' - `x`, `y`: cartesian coordinates.
 #' - `group`: grouping data.
 #' - `color`: color of geom.
 #' - `size`: size of geom.
-#' 
+#' - `layout`: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds, sugiyama), in quotes.
+#'
 #' @export
 #' @return Aesthetics for the plots such as axis (x,y), group, color and/or size
 daes <- function(x, y, ...) {
@@ -23,16 +24,17 @@ daes <- function(x, y, ...) {
 }
 
 #' Construct aesthetics for re-use
-#' 
+#'
 #' @param aes Output of [new_aes()]
 #' @param cl Class to assign to output
-#' 
-#' @noRd 
+#'
+#' @noRd
 #' @keywords internal
-.construct_aesthetics <- function(aes, cl = NULL){
+.construct_aesthetics <- function(aes, cl = NULL) {
   class <- "daes"
-  if(!is.null(cl))
+  if (!is.null(cl)) {
     class <- append(class, cl)
+  }
   structure(aes, class = c(class, class(aes)))
 }
 
@@ -99,31 +101,33 @@ print.uneval <- function(x, ...) {
 }
 
 # is aesthetic?
-is_daes <- function(x, cl = "daes"){
+is_daes <- function(x, cl = "daes") {
   aes <- FALSE
-  if(inherits(x, cl))
+  if (inherits(x, cl)) {
     aes <- TRUE
+  }
   return(aes)
 }
 
 # retrieve aesthetics
-get_daes <- function(...){
-  aes <- list(...) %>% 
-    purrr::keep(is_daes) 
+get_daes <- function(...) {
+  aes <- list(...) %>%
+    purrr::keep(is_daes)
 
-  if(length(aes))
+  if (length(aes)) {
     aes[[1]]
-  else
+  } else {
     list()
+  }
 }
 
 # mutate aesthetics
-mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE){
-
-  if(is.null(aes) && isTRUE(inherit))
+mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE) {
+  if (is.null(aes) && isTRUE(inherit)) {
     return(main_aes)
+  }
 
-  if(isTRUE(inherit)){
+  if (isTRUE(inherit)) {
     # aes overrides main_aes
     main_aes <- main_aes[!names(main_aes) %in% names(aes)]
     combined <- append(aes, main_aes)
@@ -134,46 +138,49 @@ mutate_aes <- function(main_aes = NULL, aes = NULL, inherit = TRUE){
 }
 
 # combine mappings into main
-combine_daes <- function(main_daes, daes, inherit_daes = TRUE){
-  if(length(daes) == 0)
+combine_daes <- function(main_daes, daes, inherit_daes = TRUE) {
+  if (length(daes) == 0) {
     return(main_daes)
+  }
 
-  if(inherit_daes){
-    for(i in 1:length(daes)){
+  if (inherit_daes) {
+    for (i in 1:length(daes)) {
       c <- names(daes)[[i]]
       main_daes[[c]] <- daes[[i]]
     }
-  } 
-  
+  }
+
   return(main_daes)
 }
 
 #' Convert daes to names
-#' 
+#'
 #' @param daes Output of [daes()].
-#' 
-#' @noRd 
+#'
+#' @noRd
 #' @keywords internal
-daes_to_columns <- function(daes){
-  purrr::keep(daes, function(x){
+daes_to_columns <- function(daes) {
+  purrr::keep(daes, function(x) {
     !rlang::is_bare_atomic(x)
-  }) %>% 
-    purrr::map(rlang::as_label) %>% 
-    unname() %>% 
+  }) %>%
+    purrr::map(rlang::as_label) %>%
+    unname() %>%
     unlist()
 }
 
 #' Coordinate to JSON options
-#' 
+#'
 #' @param daes Output of [daes()].
 #' @param var Variable to retrieve.
-#' 
-#' @noRd 
+#'
+#' @noRd
 #' @keywords internal
-daes_to_opts <- function(daes, var){
-  if(rlang::is_null(daes[[var]]))
+daes_to_opts <- function(daes, var) {
+  if (rlang::is_null(daes[[var]])) {
     return(NULL)
-  if(rlang::is_bare_atomic(daes[[var]]))
+  }
+  if (rlang::is_bare_atomic(daes[[var]])) {
     return(daes[[var]])
+  }
   rlang::as_label(daes[[var]])
 }

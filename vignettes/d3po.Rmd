@@ -53,9 +53,9 @@ d3po(pokemon) %>%
 
 Let's start by counting Pokemon by type:
 ```{r bar1}
-pokemon_count <- pokemon %>% 
- group_by(type_1, color_1) %>% 
- count()
+pokemon_count <- pokemon %>%
+  group_by(type_1, color_1) %>%
+  count()
 ```
 
 Now we can create a bar chart by using `type_1` both for the `x` axis and the
@@ -100,9 +100,9 @@ d3po(pokemon_count) %>%
 Let's start by obtaining the decile for the Pokemon `weight` just for the 
 grass, fire and water type:
 ```{r line1}
-pokemon_decile <- pokemon %>% 
-  filter(type_1 %in% c("grass", "fire", "water")) %>% 
-  group_by(type_1 ,color_1) %>% 
+pokemon_decile <- pokemon %>%
+  filter(type_1 %in% c("grass", "fire", "water")) %>%
+  group_by(type_1, color_1) %>%
   summarise(
     decile = 0:10,
     weight = quantile(weight, probs = seq(0, 1, by = .1))
@@ -126,10 +126,10 @@ Let's start by obtaining the density for the Pokemon `weight`:
 pokemon_density <- density(pokemon$weight, n = 30)
 
 pokemon_density <- tibble(
- x = pokemon_density$x,
- y = pokemon_density$y,
- variable = "weight",
- color = "#5377e3"
+  x = pokemon_density$x,
+  y = pokemon_density$y,
+  variable = "weight",
+  color = "#5377e3"
 )
 ```
 
@@ -137,10 +137,10 @@ Now we can create an area chart by using the `variable` and `color` columns
 created above:
 ```{r area2}
 d3po(pokemon_density) %>%
- po_area(
-  daes(x = x, y = y, group = variable, color = color)
- ) %>%
- po_title("Approximated Density of Pokemon Weight")
+  po_area(
+    daes(x = x, y = y, group = variable, color = color)
+  ) %>%
+  po_title("Approximated Density of Pokemon Weight")
 ```
 
 # Scatterplot
@@ -148,8 +148,8 @@ d3po(pokemon_density) %>%
 Let's explore the balance between defense and attack by Pokemon type:
 
 ```{r scatterplot1}
-pokemon_def_vs_att <- pokemon %>% 
-  group_by(type_1, color_1) %>% 
+pokemon_def_vs_att <- pokemon %>%
+  group_by(type_1, color_1) %>%
   summarise(
     mean_def = mean(defense),
     mean_att = mean(attack),
@@ -165,28 +165,13 @@ d3po(pokemon_def_vs_att) %>%
 
 # Network
 
-This visualization method is different to the rest, as it can work with a single `data` object or `data`, `nodes` and `edges` objects by separate.
-
-Let's create an igraph object:
-```{r network1}
-tr <- make_tree(40, children = 3, mode = "undirected")
-```
-
-To visualize is as simple as:
-```{r network2}
-d3po(tr) %>% 
-  po_layout() # optional
-```
-
-Another option is to work with a `data.frame` or `tibble`:
-```{r network3}
-edges <- igraph::as_data_frame(tr, "edges")
-```
-
-Which is also visualized in a straightforward manner:
+Let's visualize a `igraph` object, we need a seed to make the layout reproducible:
 ```{r}
-d3po() %>% 
-  po_edges(data = edges)
+set.seed(4321)
+d3po(pokemon_graph) %>%
+  po_graph(
+    daes(size = size, color = color, layout = "nicely")
+  )
 ```
 
 # Aesthetics
@@ -198,7 +183,7 @@ d3po(pokemon_count) %>%
   po_treemap(
     daes(size = n, group = type_1, color = color_1, align = "left")
   ) %>%
-  po_title("Share of Pokemon by Type") %>% 
-  po_font("Fira Sans", 12, "uppercase") %>% 
+  po_title("Share of Pokemon by Type") %>%
+  po_font("Fira Sans", 12, "uppercase") %>%
   po_labels("left", "top", F, "Times", 30, "uppercase")
 ```

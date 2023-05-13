@@ -65,13 +65,10 @@ app_server <- function(input, output, session) {
   })
 
   output$network <- render_d3po({
-    # d3po(pokemon_tree) %>%
-    #   po_layout(daes(color = V(pokemon_tree)$color)) %>%
-    #   po_title("Connections between Pokemon types based on Type 1 and 2")
-
     # load("d3pogolem/data/pokemon_tree.rda")
-    d3po(pokemon_tree) %>%
-      po_nodes(daes(size = size, color = color)) %>%
+    set.seed(4321)
+    d3po(pokemon_graph) %>%
+      po_graph(daes(size = size, color = color, layout = "nicely")) %>%
       po_title("Connections between Pokemon types based on Type 1 and 2")
   })
 }

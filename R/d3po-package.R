@@ -6,6 +6,7 @@
 #' @author Mauricio Vargas
 NULL
 
+#' D3po (re)exported methods
 #' @name d3po-exports
 NULL
 

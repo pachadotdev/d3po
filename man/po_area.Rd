@@ -30,16 +30,16 @@ library(dplyr)
 pokemon_density <- density(pokemon$weight, n = 30)
 
 pokemon_density <- tibble(
- x = pokemon_density$x,
- y = pokemon_density$y,
- variable = "weight",
- color = "#5377e3"
+  x = pokemon_density$x,
+  y = pokemon_density$y,
+  variable = "weight",
+  color = "#5377e3"
 )
 
 d3po(pokemon_density) \%>\%
- po_area(
-  daes(x = x, y = y, group = variable, color = color)
- ) \%>\%
- po_title("Approximated Density of Pokemon Weight")
+  po_area(
+    daes(x = x, y = y, group = variable, color = color)
+  ) \%>\%
+  po_title("Approximated Density of Pokemon Weight")
 
 }

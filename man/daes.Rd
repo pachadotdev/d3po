@@ -25,6 +25,7 @@ Valid aesthetics (depending on the geom)
 \item \code{group}: grouping data.
 \item \code{color}: color of geom.
 \item \code{size}: size of geom.
+\item \code{layout}: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds, sugiyama), in quotes.
 }
 }
 

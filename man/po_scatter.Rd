@@ -25,18 +25,18 @@ Plot an scatter chart.
 \examples{
 library(dplyr)
 
-pokemon_decile <- pokemon \%>\% 
- filter(type_1 \%in\% c("grass", "fire", "water")) \%>\% 
- group_by(type_1 ,color_1) \%>\% 
- summarise(
-  decile = 0:10,
-  weight = quantile(weight, probs = seq(0, 1, by = .1))
- )
- 
+pokemon_decile <- pokemon \%>\%
+  filter(type_1 \%in\% c("grass", "fire", "water")) \%>\%
+  group_by(type_1, color_1) \%>\%
+  summarise(
+    decile = 0:10,
+    weight = quantile(weight, probs = seq(0, 1, by = .1))
+  )
+
 d3po(pokemon_decile) \%>\%
- po_scatter(
-  daes(x = decile, y = weight, group = type_1, color = color_1)
- ) \%>\%
- po_title("Decile of Pokemon Weight by Type 1")
+  po_scatter(
+    daes(x = decile, y = weight, group = type_1, color = color_1)
+  ) \%>\%
+  po_title("Decile of Pokemon Weight by Type 1")
 
 }

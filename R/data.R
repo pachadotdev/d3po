@@ -10,7 +10,7 @@
 #'  \item \code{height}: Height in meters.
 #'  \item \code{weight}: Weight in kilograms.
 #'  \item \code{base_experience}: How much the Pokemon has battled.
-#'  \item \code{type_1}: Primary Pokemon type (i.e. Grass, Fire and Water) 
+#'  \item \code{type_1}: Primary Pokemon type (i.e. Grass, Fire and Water)
 #'  \item \code{type_2}: Secondary Pokemon type (i.e. Poison, Dragon and Ice)
 #'  \item \code{attack}: How much damage a Pokemon deals when using a technique.
 #'  \item \code{defense}: How much damage a Pokemon receives when it is hit by a technique.
@@ -28,3 +28,14 @@
 #' @format A \code{data frame} with 151 observations and 15 variables.
 #' @source Adapted from \code{highcharter} package.
 "pokemon"
+
+#' pokemon_graph
+#'
+#' Connections between Pokemon types based on Type 1 and 2.
+#'
+#' @docType data
+#' @name pokemon_graph
+#' @usage pokemon_graph
+#' @format A \code{igraph} object with 17 vertices (nodes) and 26 edges (arcs).
+#' @source Adapted from \code{highcharter} package.
+"pokemon_graph"

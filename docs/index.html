@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,28 +35,25 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">d3po</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="articles/d3po.html">Get started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/pachadotdev/d3po/">
+  <a href="https://github.com/pachadotdev/d3po/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -71,117 +70,140 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="d3po-fast-and-beautiful-interactive-visualization-for-markdown-and-shiny" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#d3po-fast-and-beautiful-interactive-visualization-for-markdown-and-shiny" class="anchor"></a>d3po: Fast and Beautiful Interactive Visualization for ‘Markdown’ and ‘Shiny’</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="d3po">D3po<a class="anchor" aria-label="anchor" href="#d3po"></a>
+</h1></div>
 <!-- badges: start -->
 
-<div id="the-problem" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-problem" class="anchor"></a>The Problem</h2>
-<p>R already features excellent visualization libraries such as ‘D3’ (via the ‘r2d3’ package) or ‘plotly’, however though those enable the creation of great looking visualisations they have very steep learning curves and even sometimes require some understanding of ‘JavaScript’.</p>
-<p>There is also the ‘Highcharter’ package but the underlying ‘JavaScript’ library (‘Highcharts’) is not free for commercial and governmental use. A single user license costs around 2,500 USD, something that NGOs cannot always afford.</p>
-<p>Another relevant aspect is the lack of easy alternatives to provide internalization, something that can be addressed easily in a community project due to the variety of languages.</p>
-<p>Our intention is to solve those problems by releasing a complete ‘R’ package under an open source license (Apache 2.0).</p>
-</div>
-<div id="the-proposal" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-proposal" class="anchor"></a>The proposal</h2>
-<div id="overview" class="section level3">
-<h3 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h3>
-<p>The name ‘d3po’ is inspired after ‘r2d3’ but also ‘d3po’ is something that a chilean will read as “dee three pooh”, and “pooh” is a very typical chilean slang. That slang reflects the true chilean spirit that copes with earthquakes but in the end they build the technology and adapt to the medium constraints.</p>
-<p>Rather than starting from scratch, ‘d3po’ takes many ideas and adapts codes from ‘highcharts’ (just inspiration, not code), ‘echats’ (excellent library), ‘d3plus’ 1.9.8 (unmaintained, which is very unfortunate) and many posts from Stackoverflow that were adapted since 2016 to the date.</p>
-<p>It is worth mentioning that the most important goal is to provide out-of-the-box beautiful visualizations with minimum time and coding effort from the final user.</p>
-<p>At the end of the project ‘d3po’ will be a new software that can be perceived as an intermediate layer between the user and D3 by providing “templates”, enabling high quality interactive visualizations oriented to and designed to be used with ‘Shiny’.</p>
-<p>The focus will remain on the integration with ‘Shiny’ and ‘R Markdown’, the javascript outcome from this project could nonetheless be used with other tools.</p>
-<p>The ultimate aim of the project is to produce a package that:</p>
-<ul>
-<li>Offers perfect integration with ‘Shiny’</li>
-<li>Enables downloading the charts in different image formats (png, jpeg, svg)</li>
-<li>Enables downloading the data in different formats (json, csv, xlsx)</li>
-<li>Can produce high quality results with a minimal number of lines of code</li>
-<li>Has internalization with options to render visualizations in english, spanish, french and other languages.</li>
+<div class="section level2">
+<h2 id="methods-and-features">Methods and features<a class="anchor" aria-label="anchor" href="#methods-and-features"></a>
+</h2>
+<p>D3po’s goal is to provide out-of-the-box beautiful visualizations with minimum time and coding effort from the final user. It acts as intermediate layer between the user and Shiny and D3 by providing “templates”, enabling high quality interactive visualizations.</p>
+<p>D3po methods:</p>
+<ul class="task-list">
+<li>
+<input type="checkbox" checked>Area (or distribution) chart</li>
+<li>
+<input type="checkbox" checked>Box and whiskers</li>
+<li>
+<input type="checkbox" checked>Column charts (horizontal and vertical)</li>
+<li>
+<input type="checkbox">Donut chart</li>
+<li>
+<input type="checkbox">Geographical maps</li>
+<li>
+<input type="checkbox">Half-pie chart</li>
+<li>
+<input type="checkbox">Half-donut chart</li>
+<li>
+<input type="checkbox" checked>Line charts</li>
+<li>
+<input type="checkbox" checked>Networks</li>
+<li>
+<input type="checkbox" checked>Pie chart</li>
+<li>
+<input type="checkbox" checked>Scatterplots</li>
+<li>
+<input type="checkbox" checked>Treemaps</li>
+</ul>
+<p>D3po features:</p>
+<ul class="task-list">
+<li>
+<input type="checkbox" checked>Automatic content resizing, sensitive to internet browser window maximization/minimization</li>
+<li>
+<input type="checkbox" checked>Downloading the charts in SVG format</li>
+<li>
+<input type="checkbox" checked>Downloading the charts in PNG format</li>
+<li>
+<input type="checkbox" checked>Downloading the charts in JPEG format</li>
+<li>
+<input type="checkbox">Downloading the data in XLSX format</li>
+<li>
+<input type="checkbox">Downloading the data in CSV/TSV format</li>
+<li>
+<input type="checkbox">Providing internatilization options (i.e., numbers as 1.234.567,89 instead of 1,234,567.89 in Spanish or French).</li>
+<li>
+<input type="checkbox" checked>Producing high quality results with a minimal number of lines of code</li>
 </ul>
 </div>
-<div id="details" class="section level3">
-<h3 class="hasAnchor">
-<a href="#details" class="anchor"></a>Details</h3>
-<p>The Minimum Viable Product includes these visualization methods and features:</p>
-<ul>
-<li>Automatic resizing, sensitive to internet browser window maximization/ minimization</li>
-<li>Ability to download the interactive charts in jpeg/png/svg formats to be included in presentations or other media</li>
-<li>Automatic labels text size</li>
-<li>Automatic labels show/hide according to available space (i.e show some labels to avoid breaking margins or overlapping)</li>
-<li>Treemaps</li>
-<li>Line charts</li>
-<li>Column charts (horizontal and vertical)</li>
-<li>Area chart</li>
-<li>Pie/donut chart</li>
-<li>Scatterplots</li>
-<li>Area/distribution chart</li>
-<li>Networks</li>
-<li>Box and whiskers</li>
-<li>Gramatically correct translations</li>
-<li>Maps (TBA)</li>
-</ul>
-<p>The goal is to provide a package that becomes a gold standard for interactive visualization and facilitates using Shiny.</p>
-<p>It should run on any computer with ‘RStudio’ and any server running ‘Shiny’.</p>
-<p>We have worked under three goals:</p>
-<ol>
-<li>Minimum number of dependencies</li>
-<li>Use %&gt;% to provide a ‘Tidyverse’-alike experience</li>
-<li>Make the internals “hard” and the externals “easy”</li>
-</ol>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the stable version from <a href="https://cran.r-project.org/" class="external-link">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"d3po"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version of d3po from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pachadotdev/d3po"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>This is an example consisting in the creation of a box and whiskers plot:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/d3po.html">d3po</a></span><span class="op">(</span><span class="va">pokemon</span><span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/po_box.html">po_box</a></span><span class="op">(</span><span class="fu"><a href="reference/daes.html">daes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">type_1</span>, y <span class="op">=</span> <span class="va">speed</span>, group <span class="op">=</span> <span class="va">name</span>, color <span class="op">=</span> <span class="va">color_1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/po_title.html">po_title</a></span><span class="op">(</span><span class="st">"Distribution of Pokemon Speed by Type"</span><span class="op">)</span></span></code></pre></div>
+<p>In the <code>shinydemo</code> directory (<a href="https://github.com/pachadotdev/d3po/tree/master/shinydemo" class="external-link uri">https://github.com/pachadotdev/d3po/tree/master/shinydemo</a>) there is a fully worked example with Shiny for all the available visualization types in the package.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=d3po">https://​cloud.r-project.org/​package=d3po</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/pachadotdev/d3po/">https://​github.com/​pachadotdev/​d3po/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/pachadotdev/d3po/issues">https://​github.com/​pachadotdev/​d3po/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=d3po" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/pachadotdev/d3po/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/pachadotdev/d3po/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>Apache License (&gt;= 2.0)</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing d3po</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Mauricio Vargas <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 <li>John Coene <br><small class="roles"> Author </small>  </li>
 <li> R Consortium <br><small class="roles"> Funder </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/pachadotdev/d3po/actions"><img src="https://github.com/pachadotdev/d3po/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Mauricio Vargas, John Coene,  R Consortium.</p>
+  <p></p>
+<p>Developed by Mauricio Vargas, John Coene, R Consortium.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -189,6 +211,8 @@
 
   
 
+
+  
 
   </body>
 </html>

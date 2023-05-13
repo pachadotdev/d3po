@@ -68,7 +68,6 @@ HTMLWidgets.widget({
         if(x.nodes)
           chart.nodes(x.nodes);
           
-          
         if(x.font) {
           chart.font({"family": x.font.family, "size": x.font.size, "transform": x.font.transform});
         }

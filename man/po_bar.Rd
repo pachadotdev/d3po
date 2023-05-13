@@ -25,14 +25,14 @@ Draw a bar chart.
 \examples{
 library(dplyr)
 
-pokemon_count <- pokemon \%>\% 
- group_by(type_1, color_1) \%>\% 
- count()
- 
+pokemon_count <- pokemon \%>\%
+  group_by(type_1, color_1) \%>\%
+  count()
+
 d3po(pokemon_count) \%>\%
- po_bar(
-  daes(x = type_1, y = n, group = type_1, color = color_1)
- ) \%>\%
- po_title("Count of Pokemon by Type 1")
+  po_bar(
+    daes(x = type_1, y = n, group = type_1, color = color_1)
+  ) \%>\%
+  po_title("Count of Pokemon by Type 1")
 
 }

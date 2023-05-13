@@ -25,7 +25,7 @@
                 area: require("./types/area.js"),
                 bar: require("./types/bar.js"),
                 box: require("./types/box.js"),
-                // donut: require("./types/donut.js"),
+                donut: require("./types/donut.js"),
                 // geomap: require("./types/geomap.js"),
                 // halfdonut: require("./types/halfdonut.js"),
                 // sankey: require("./types/sankey.js"),

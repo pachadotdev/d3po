@@ -1,3 +1,8 @@
+# d3po 0.4.0
+
+* Heavily simplifies plotting graph/network objects
+* Allows to plot donuts and geographic maps
+
 # d3po 0.3.3
 
 * Added a `NEWS.md` file to track changes to the package.

@@ -1,0 +1,186 @@
+---
+title: Introduction to d3po
+output: 
+  github_document: default
+description: |
+  Start here if this is your first time using d3po. You'll learn the basic    philosophy, and (hopefully) you'll realize it integrates well with the pipe,  `%>%`, and the Tidyverse.
+always_allow_html: yes
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The package `d3po` integrates well with `dplyr`. All the examples here use the 
+pipe, `%>%`, both to filter/summarise data and create the charts.
+
+# Setup
+
+Let's start by loading packages.
+
+```{r pkgs, message=FALSE, warning=FALSE}
+library(dplyr)
+library(igraph)
+library(d3po)
+```
+
+# Pokemon dataset
+
+The included dataset `pokemon` has the present structure:
+```{r}
+glimpse(pokemon)
+```
+
+# Box and Whiskers
+
+To compare the distribution of `weight` by `type_1`, the `pokemon` dataset 
+doesn't need additional aggregation or transformation, just to use the Pokemon
+`name` as the grouping variable and (optionally) the `color` variable:
+```{r box1, fig.height=7}
+d3po(pokemon) %>%
+  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
+  po_title("Distribution of Pokemon Speed by Type")
+```
+
+# Bar
+
+Let's start by counting Pokemon by type:
+```{r bar1}
+pokemon_count <- pokemon %>%
+  group_by(type_1, color_1) %>%
+  count()
+```
+
+Now we can create a bar chart by using `type_1` both for the `x` axis and the
+`group_by` variable provided this data has no `year` column or similar:
+```{r bar2}
+d3po(pokemon_count) %>%
+  po_bar(
+    daes(x = type_1, y = n, group = type_1, color = color_1)
+  ) %>%
+  po_title("Count of Pokemon by Type")
+```
+
+# Treemap
+
+By using the `pokemon_count` table created for the bar chart, the logic is 
+exactly the same and we only need to change the function and specify the `size` 
+instead of `x` and `y`:
+```{r}
+d3po(pokemon_count) %>%
+  po_treemap(
+    daes(size = n, group = type_1, color = color_1)
+  ) %>%
+  po_title("Share of Pokemon by Type")
+```
+
+# Pie
+
+Use these plots with caution because polar coordinates has major perceptual 
+problems. Use with *EXTREME* caution.
+
+This method is exactly the same as `treemap` but changing the function.
+```{r}
+d3po(pokemon_count) %>%
+  po_pie(
+    daes(size = n, group = type_1, color = color_1)
+  ) %>%
+  po_title("Share of Pokemon by Type")
+```
+
+# Line
+
+Let's start by obtaining the decile for the Pokemon `weight` just for the 
+grass, fire and water type:
+```{r line1}
+pokemon_decile <- pokemon %>%
+  filter(type_1 %in% c("grass", "fire", "water")) %>%
+  group_by(type_1, color_1) %>%
+  summarise(
+    decile = 0:10,
+    weight = quantile(weight, probs = seq(0, 1, by = .1))
+  )
+```
+
+Now we can create an area chart by using the `variable` and `color` columns 
+created above:
+```{r line2}
+d3po(pokemon_decile) %>%
+  po_line(
+    daes(x = decile, y = weight, group = type_1, color = color_1)
+  ) %>%
+  po_title("Decile of Pokemon Weight by Type")
+```
+
+# Area
+
+Let's start by obtaining the density for the Pokemon `weight`:
+```{r area1}
+pokemon_density <- density(pokemon$weight, n = 30)
+
+pokemon_density <- tibble(
+  x = pokemon_density$x,
+  y = pokemon_density$y,
+  variable = "weight",
+  color = "#5377e3"
+)
+```
+
+Now we can create an area chart by using the `variable` and `color` columns 
+created above:
+```{r area2}
+d3po(pokemon_density) %>%
+  po_area(
+    daes(x = x, y = y, group = variable, color = color)
+  ) %>%
+  po_title("Approximated Density of Pokemon Weight")
+```
+
+# Scatterplot
+
+Let's explore the balance between defense and attack by Pokemon type:
+
+```{r scatterplot1}
+pokemon_def_vs_att <- pokemon %>%
+  group_by(type_1, color_1) %>%
+  summarise(
+    mean_def = mean(defense),
+    mean_att = mean(attack),
+    n_pkmn = n()
+  )
+
+d3po(pokemon_def_vs_att) %>%
+  po_scatter(
+    daes(x = mean_att, y = mean_def, size = n_pkmn, group = type_1, color = color_1)
+  ) %>%
+  po_title("Average Attack vs Average Defense by Type")
+```
+
+# Network
+
+Let's visualize a `igraph` object, we need a seed to make the layout reproducible:
+```{r}
+set.seed(4321)
+d3po(pokemon_network) %>%
+  po_network(
+    daes(size = size, color = color, layout = "nicely")
+  )
+```
+
+# Aesthetics
+
+Going back to the treemap example, it is possible to move the labels and
+also use any font that you like:
+```{r}
+d3po(pokemon_count) %>%
+  po_treemap(
+    daes(size = n, group = type_1, color = color_1, align = "left")
+  ) %>%
+  po_title("Share of Pokemon by Type") %>%
+  po_font("Fira Sans", 12, "uppercase") %>%
+  po_labels("left", "top", F, "Times", 30, "uppercase")
+```

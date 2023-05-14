@@ -12,8 +12,8 @@
 #'
 #' @examples
 #' d3po(pokemon) %>%
-#'  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
-#'  po_title("Distribution of Pokemon Speed")
+#'   po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
+#'   po_title("Distribution of Pokemon Speed")
 #'
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -261,7 +261,7 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     daes(x = x, y = y, group = variable, color = color)
 #'   ) %>%
 #'   po_title("Approximated Density of Pokemon Weight")
-#'
+#' 
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_area")
@@ -823,14 +823,16 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @inheritParams po_box
 #' @param map map to use (i.e., `system.file("extdata", "worldmap.topojson", package = "d3po")`)
 #'
-#' map <- system.file("extdata", "south-america.topojson", package = "d3po")
-#' map <- jsonlite::fromJSON(map, simplifyVector = FALSE)
-#' pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+#' library(jsonlite)
 #' 
+#' map <- system.file("extdata", "south-america.topojson", package = "d3po")
+#' map <- fromJSON(map, simplifyVector = FALSE)
+#' pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+#'
 #' d3po(pokemon_mewtwo) %>%
 #'  po_geomap(daes(group = id, color = value), map = map) %>%
 #'  po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
-#' 
+#'
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_geomap <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) UseMethod("po_geomap")

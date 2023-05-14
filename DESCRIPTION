@@ -36,5 +36,6 @@ Suggests:
     knitr,
     igraph,
     rmarkdown,
-    shiny
+    shiny,
+    jsonlite
 VignetteBuilder: knitr

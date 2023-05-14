@@ -70,7 +70,7 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
   if (d3po$x$type == "network") {
     d3po$x$nodes[["d3poKey"]] <- row.names(d3po$x$data)
   }
-  
+
   return(d3po)
 }
 

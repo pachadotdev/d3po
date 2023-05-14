@@ -32,9 +32,7 @@ D3po methods:
 - [x] Box and whiskers
 - [x] Column charts (horizontal and vertical)
 - [x] Donut chart
-- [ ] Geographical maps (work in progress)
-- [ ] Half-pie chart (maybe not a good idea)
-- [ ] Half-donut chart (maybe not a good idea either)
+- [x] Geographical maps
 - [x] Line charts
 - [x] Networks
 - [x] Pie chart
@@ -76,3 +74,5 @@ d3po(pokemon) %>%
 ```
 
 In the `d3pogolem` directory (https://github.com/pachadotdev/d3po/tree/main/d3pogolem) there is a fully worked example with Shiny and golem for all the available visualization types in the package.
+
+Also, please (*please!*) see the vignette (https://github.com/pachadotdev/d3po/blob/main/vignettes/d3po.Rmd). At the moment there is an error in pkgdown, and I cannot figure out how to render it with altdoc.

@@ -16,8 +16,10 @@ to \code{\link[=d3po]{d3po()}}.}
 
 \item{map}{map to use (i.e., \code{system.file("extdata", "worldmap.topojson", package = "d3po")})
 
+library(jsonlite)
+
 map <- system.file("extdata", "south-america.topojson", package = "d3po")
-map <- jsonlite::fromJSON(map, simplifyVector = FALSE)
+map <- fromJSON(map, simplifyVector = FALSE)
 pokemon_mewtwo <- data.frame(id = "CL", value = 1)
 
 d3po(pokemon_mewtwo) \%>\%

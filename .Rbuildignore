@@ -15,3 +15,4 @@ d3pogolem
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^README\.Rmd$
+^docs$

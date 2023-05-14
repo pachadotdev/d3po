@@ -47,7 +47,7 @@ HTMLWidgets.widget({
         
         // legend
         if(x.legend === undefined) {
-          x.legend = false;
+          x.legend = true;
         }
         chart.legend(x.legend);
         
@@ -82,11 +82,10 @@ HTMLWidgets.widget({
         
         if(x.background)
           chart.background(x.background);
-        
+
         chart.resize(true);
         
         chart.draw();
-
       },
 
       getChart: function(){

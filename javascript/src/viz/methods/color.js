@@ -12,7 +12,10 @@
             value: false
         },
         focus: "#444444",
-        heatmap: ["#282F6B", "#419391", "#AFD5E8", "#EACE3F", "#B35C1E", "#B22200"],
+        // heatmap: ["#ffeedd", "#ffd7b5", "#ffb38a", "#ff9248", "#ff6700"],
+        // heatmap: ["#eeaf61", "#fb9062", "#ee5d6c", "#ce4993", "#6a0d83"],
+        // heatmap: ["#ffdef5", "#ffa6fc", "#ff94e0", "#ff76d8", "#ff59c7"],
+        heatmap: ["#a8dfc7", "#8dd1b9", "#6cc3ab", "#4cb59d", "#317256"],
         missing: "#eeeeee",
         mute: filter(true),
         primary: "#d74b03",

@@ -168,8 +168,8 @@ d3po(pokemon_def_vs_att) %>%
 Let's visualize a `igraph` object, we need a seed to make the layout reproducible:
 ```{r}
 set.seed(4321)
-d3po(pokemon_graph) %>%
-  po_graph(
+d3po(pokemon_network) %>%
+  po_network(
     daes(size = size, color = color, layout = "nicely")
   )
 ```

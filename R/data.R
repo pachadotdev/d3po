@@ -29,13 +29,13 @@
 #' @source Adapted from \code{highcharter} package.
 "pokemon"
 
-#' pokemon_graph
+#' pokemon_network
 #'
 #' Connections between Pokemon types based on Type 1 and 2.
 #'
 #' @docType data
-#' @name pokemon_graph
-#' @usage pokemon_graph
+#' @name pokemon_network
+#' @usage pokemon_network
 #' @format A \code{igraph} object with 17 vertices (nodes) and 26 edges (arcs).
 #' @source Adapted from \code{highcharter} package.
-"pokemon_graph"
+"pokemon_network"

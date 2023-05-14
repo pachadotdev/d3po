@@ -31,10 +31,10 @@ D3po methods:
 - [x] Area (or distribution) chart
 - [x] Box and whiskers
 - [x] Column charts (horizontal and vertical)
-- [ ] Donut chart
-- [ ] Geographical maps
-- [ ] Half-pie chart
-- [ ] Half-donut chart
+- [x] Donut chart
+- [ ] Geographical maps (work in progress)
+- [ ] Half-pie chart (maybe not a good idea)
+- [ ] Half-donut chart (maybe not a good idea either)
 - [x] Line charts
 - [x] Networks
 - [x] Pie chart
@@ -47,8 +47,6 @@ D3po features:
 - [x] Downloading the charts in SVG format
 - [x] Downloading the charts in PNG format
 - [x] Downloading the charts in JPEG format
-- [ ] Downloading the data in XLSX format
-- [ ] Downloading the data in CSV/TSV format
 - [ ] Providing internatilization options (i.e., numbers as 1.234.567,89 instead of 1,234,567.89 in Spanish or French).
 - [x] Producing high quality results with a minimal number of lines of code
 
@@ -77,4 +75,4 @@ d3po(pokemon) %>%
   po_title("Distribution of Pokemon Speed by Type")
 ```
 
-In the `shinydemo` directory (https://github.com/pachadotdev/d3po/tree/master/shinydemo) there is a fully worked example with Shiny for all the available visualization types in the package.
+In the `d3pogolem` directory (https://github.com/pachadotdev/d3po/tree/main/d3pogolem) there is a fully worked example with Shiny and golem for all the available visualization types in the package.

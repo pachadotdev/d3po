@@ -62,11 +62,19 @@ HTMLWidgets.widget({
           });
         }
 
+        // these two are for networks
         if(x.edges)
           chart.edges(x.edges);
-
         if(x.nodes)
           chart.nodes(x.nodes);
+
+        // this is for geomaps
+        if(x.coords)
+          chart.coords(x.coords);
+        if (x.text)
+          chart.text(x.text);
+        if(x.tooltip)
+          chart.tooltip(x.tooltip);
           
         if(x.font) {
           chart.font({"family": x.font.family, "size": x.font.size, "transform": x.font.transform});

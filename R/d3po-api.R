@@ -11,9 +11,9 @@
 #' @param inherit_daes Whether to inherit aesthetics previous specified.
 #'
 #' @examples
-#' d3po(pokemon_graph) %>%
-#'   po_graph(daes(size = size, color = color, layout = "nicely")) %>%
-#'   po_title("Connections between Pokemon types based on Type 1 and 2")
+#' d3po(pokemon) %>%
+#'  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
+#'  po_title("Distribution of Pokemon Speed")
 #'
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -738,26 +738,26 @@ po_background.d3proxy <- function(d3po, background) {
   return(d3po)
 }
 
-# Graph ----
+# Network ----
 
-#' Graph
+#' Network
 #'
-#' Draw a graph.
+#' Draw a network.
 #'
 #' @inheritParams po_box
 #'
 #' @examples
-#' d3po(pokemon_graph) %>%
-#'   po_graph(daes(size = size, color = color, layout = "nicely")) %>%
+#' d3po(pokemon_network) %>%
+#'   po_network(daes(size = size, color = color, layout = "nicely")) %>%
 #'   po_title("Connections between Pokemon types based on Type 1 and 2")
 #'
 #' @export
 #' @return Appends nodes arguments to a network-specific 'htmlwidgets' object
-po_graph <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_graph")
+po_network <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_network")
 
 #' @export
-#' @method po_graph d3po
-po_graph.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+#' @method po_network d3po
+po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   check_installed("igraph")
 
   d3po$x$type <- "network"
@@ -802,14 +802,74 @@ po_graph.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 }
 
 #' @export
-#' @method po_graph d3proxy
-po_graph.d3proxy <- function(d3po, ..., data, inherit_daes) {
+#' @method po_network d3proxy
+po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
   assertthat::assert_that(!missing(data), msg = "Missing `data`")
   assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
   d3po$session$sendCustomMessage("d3po-graph", msg)
+
+  return(d3po)
+}
+
+# Geomap ----
+
+#' Geomap
+#'
+#' Plot a geomap
+#'
+#' @inheritParams po_box
+#' @param map map to use (i.e., `system.file("extdata", "worldmap.topojson", package = "d3po")`)
+#'
+#' map <- system.file("extdata", "south-america.topojson", package = "d3po")
+#' map <- jsonlite::fromJSON(map, simplifyVector = FALSE)
+#' pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+#' 
+#' d3po(pokemon_mewtwo) %>%
+#'  po_geomap(daes(group = id, color = value), map = map) %>%
+#'  po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+#' 
+#' @export
+#' @return an 'htmlwidgets' object with the desired interactive plot
+po_geomap <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) UseMethod("po_geomap")
+
+#' @export
+#' @method po_geomap d3po
+po_geomap.d3po <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) {
+  # defaults
+  d3po$x$type <- "geomap"
+
+  data <- .get_data(d3po$x$tempdata, data)
+
+  # extract & process coordinates
+  daes <- get_daes(...)
+  daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  assertthat::assert_that(has_daes(daes))
+  columns <- daes_to_columns(daes)
+
+  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$coords <- map
+
+  d3po$x$group <- daes_to_opts(daes, "group")
+  d3po$x$text <- daes_to_opts(daes, "text")
+  d3po$x$color <- daes_to_opts(daes, "color")
+  d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
+
+  return(d3po)
+}
+
+#' @export
+#' @method po_geomap d3proxy
+po_geomap.d3proxy <- function(d3po, ..., data, map, inherit_daes) {
+  assertthat::assert_that(!missing(data), msg = "Missing `data`")
+  assertthat::assert_that(!missing(map), msg = "Missing `map`")
+  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+
+  msg <- list(id = d3po$id, msg = list(data = data, map = map, inherit_daes = inherit_daes))
+
+  d3po$session$sendCustomMessage("d3po-geomap", msg)
 
   return(d3po)
 }

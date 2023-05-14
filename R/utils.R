@@ -66,8 +66,11 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
   # add mandatory key
   d3po$x$group <- "d3poKey"
   d3po$x$data[["d3poKey"]] <- row.names(d3po$x$data)
-  d3po$x$nodes[["d3poKey"]] <- row.names(d3po$x$data)
 
+  if (d3po$x$type == "network") {
+    d3po$x$nodes[["d3poKey"]] <- row.names(d3po$x$data)
+  }
+  
   return(d3po)
 }
 

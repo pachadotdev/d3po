@@ -76,7 +76,7 @@ app_server <- function(input, output, session) {
     # load("d3pogolem/data/pokemon_tree.rda")
     set.seed(4321)
     d3po(pokemon_graph) %>%
-      po_graph(daes(size = size, color = color, layout = "nicely")) %>%
+      po_network(daes(size = size, color = color, layout = "nicely")) %>%
       po_title("Connections between Pokemon types based on Type 1 and 2")
   })
 }

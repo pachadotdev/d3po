@@ -23,8 +23,8 @@ an 'htmlwidgets' object with the desired interactive plot
 Draw a boxplot.
 }
 \examples{
-d3po(pokemon_graph) \%>\%
-  po_graph(daes(size = size, color = color, layout = "nicely")) \%>\%
-  po_title("Connections between Pokemon types based on Type 1 and 2")
+d3po(pokemon) \%>\%
+ po_box(daes(x = type_1, y = speed, group = name, color = color_1)) \%>\%
+ po_title("Distribution of Pokemon Speed")
 
 }

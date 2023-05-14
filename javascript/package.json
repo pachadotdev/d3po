@@ -1,6 +1,6 @@
 {
   "name": "d3po",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "The JS/D3 Parts of the 'd3po' R Package Fast and Beautiful Interactive Visualization for Markdown and Shiny",
   "repository": "https://github.com/pachamaltese/d3po",
   "license": "Apache-2.0",

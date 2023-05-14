@@ -9,8 +9,9 @@ Imports:
     d3po,
     dplyr,
     golem (>= 0.4.0),
-    igraph,
+    jsonlite,
     magrittr,
+    rlang,
     shiny (>= 1.7.3),
     shinydashboard
 Encoding: UTF-8

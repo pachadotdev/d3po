@@ -47,7 +47,11 @@ HTMLWidgets.widget({
         
         // legend
         if(x.legend === undefined) {
-          x.legend = true;
+          if (x.type === "geomap") {
+            x.legend = true;
+          } else {
+            x.legend = false;
+          }
         }
         chart.legend(x.legend);
         

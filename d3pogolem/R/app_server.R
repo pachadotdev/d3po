@@ -6,77 +6,93 @@
 #' @import shinydashboard
 #' @import d3po
 #' @import dplyr
-#' @import igraph
+#' @importFrom rlang sym
+#' @importFrom jsonlite fromJSON
 #' @noRd
 app_server <- function(input, output, session) {
   # Your application server logic
   output$boxplot <- render_d3po({
-    d3po(pokemon) %>%
-      po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
+    d3po(d3pogolem::pokemon) %>%
+      po_box(daes(x = !!sym("type_1"), y = !!sym("speed"), group = !!sym("name"), color = !!sym("color_1"))) %>%
       po_title("Distribution of Pokemon Speed by Type")
   })
 
   output$barplot <- render_d3po({
-    d3po(pokemon_count) %>%
+    d3po(d3pogolem::pokemon_count) %>%
       po_bar(
-        daes(x = type_1, y = n, group = type_1, color = color_1)
+        daes(x = !!sym("type_1"), y = !!sym("n"), group = !!sym("type_1"), color = !!sym("color_1"))
       ) %>%
       po_title("Count of Pokemon by Type")
   })
 
   output$treemap <- render_d3po({
-    d3po(pokemon_count) %>%
+    d3po(d3pogolem::pokemon_count) %>%
       po_treemap(
-        daes(size = n, group = type_1, color = color_1)
+        daes(size = !!sym("n"), group = !!sym("type_1"), color = !!sym("color_1"))
       ) %>%
       po_title("Share of Pokemon by Type")
   })
 
   output$pie <- render_d3po({
-    d3po(pokemon_count) %>%
+    d3po(d3pogolem::pokemon_count) %>%
       po_pie(
-        daes(size = n, group = type_1, color = color_1)
+        daes(size = !!sym("n"), group = !!sym("type_1"), color = !!sym("color_1"))
       ) %>%
       po_title("Share of Pokemon by Type")
   })
 
   output$donut <- render_d3po({
-    d3po(pokemon_count) %>%
+    d3po(d3pogolem::pokemon_count) %>%
       po_donut(
-        daes(size = n, group = type_1, color = color_1)
+        daes(size = !!sym("n"), group = !!sym("type_1"), color = !!sym("color_1"))
       ) %>%
       po_title("Share of Pokemon by Type")
   })
 
   output$line <- render_d3po({
-    d3po(pokemon_decile) %>%
+    d3po(d3pogolem::pokemon_decile) %>%
       po_line(
-        daes(x = decile, y = weight, group = type_1, color = color_1)
+        daes(x = !!sym("decile"), y = !!sym("weight"), group = !!sym("type_1"), color = !!sym("color_1"))
       ) %>%
       po_title("Decile of Pokemon Weight by Type")
   })
 
   output$density <- render_d3po({
-    d3po(pokemon_density) %>%
+    d3po(d3pogolem::pokemon_density) %>%
       po_area(
-        daes(x = x, y = y, group = variable, color = color)
+        daes(x = !!sym("x"), y = !!sym("y"), group = !!sym("variable"), color = !!sym("color"))
       ) %>%
       po_title("Approximated Density of Pokemon Weight")
   })
 
   output$scatterplot <- render_d3po({
-    d3po(pokemon_def_vs_att) %>%
+    d3po(d3pogolem::pokemon_def_vs_att) %>%
       po_scatter(
-        daes(x = mean_att, y = mean_def, size = n_pkmn, group = type_1, color = color_1)
+        daes(x = !!sym("mean_att"), y = !!sym("mean_def"), size = !!sym("n_pkmn"), group = !!sym("type_1"), color = !!sym("color_1"))
       ) %>%
       po_title("Average Attack vs Average Defense by Type")
   })
 
   output$network <- render_d3po({
-    # load("d3pogolem/data/pokemon_tree.rda")
     set.seed(4321)
-    d3po(pokemon_graph) %>%
-      po_network(daes(size = size, color = color, layout = "nicely")) %>%
+    d3po(d3pogolem::pokemon_network) %>%
+      po_network(daes(size = !!sym("size"), color = !!sym("color"), layout = "nicely")) %>%
       po_title("Connections between Pokemon types based on Type 1 and 2")
   })
+
+  output$geomap <- render_d3po({
+    map <- system.file("extdata", "south-america.topojson", package = "d3po")
+    map <- fromJSON(map, simplifyVector = FALSE)
+
+    countries <- data.frame(
+      id = c("CL","GY","VE","CO","EC","PE","BO","PY","AR","UY","BR","SR","GB"),
+      value = c(1,1, rep(0,11)),
+      pkmn = c("Mewtwo","Mew", rep("",11))
+    )
+
+    d3po(countries) %>%
+      po_geomap(daes(group = !!sym("id"), color = !!sym("value"), tooltip = !!sym("pkmn")), map = map) %>%
+      po_title("Pokemon found in South America")
+  })
+
 }

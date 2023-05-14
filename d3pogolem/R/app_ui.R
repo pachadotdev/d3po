@@ -12,10 +12,10 @@ app_ui <- function(request) {
 
     # Your application UI logic
     dashboardPage(
-      dashboardHeader(title = "d3po examples in Shiny"),
+      dashboardHeader(title = "D3po + Shiny"),
       dashboardSidebar(),
       dashboardBody(
-        tags$head(tags$style(HTML('.content-wrapper { overflow: auto; }'))),
+        tags$head(tags$style(HTML(".content-wrapper { overflow: auto; }"))),
 
         box(
           title = "Boxplot",
@@ -60,6 +60,11 @@ app_ui <- function(request) {
         box(
           title = "Network",
           d3po_output("network"),
+          collapsible = T
+        ),
+        box(
+          title = "Geomap",
+          d3po_output("geomap"),
           collapsible = T
         )
       )

@@ -1,6 +1,7 @@
 # Reference 
 
 ## D3po-exports
+-------------------------
 
 ### Description
 
@@ -9,6 +10,7 @@ D3po (re)exported methods
 
 ---
 ## D3po-shiny
+-------------------------
 
 ### Description
 
@@ -32,11 +34,8 @@ interactive Rmd documents.
 <td><p>output variable to read from</p></td>
 </tr>
 <tr class="even">
-<td><code id="d3po-shiny_:_width">width</code>, <code
-id="d3po-shiny_:_height">height</code></td>
-<td><p>Must be a valid CSS unit (like <code>'100%'</code>,
-<code>'400px'</code>, <code>'auto'</code>) or a number, which will be
-coerced to a string and have <code>'px'</code> appended.</p></td>
+<td><code id="d3po-shiny_:_width">width</code>, <code id="d3po-shiny_:_height">height</code></td>
+<td><p>Must be a valid CSS unit (like <code>'100%'</code>, <code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a string and have <code>'px'</code> appended.</p></td>
 </tr>
 <tr class="odd">
 <td><code id="d3po-shiny_:_expr">expr</code></td>
@@ -48,9 +47,7 @@ coerced to a string and have <code>'px'</code> appended.</p></td>
 </tr>
 <tr class="odd">
 <td><code id="d3po-shiny_:_quoted">quoted</code></td>
-<td><p>Is <code>expr</code> a quoted expression (with
-<code>quote()</code>)? This is useful if you want to save an expression
-in a variable.</p></td>
+<td><p>Is <code>expr</code> a quoted expression (with <code>quote()</code>)? This is useful if you want to save an expression in a variable.</p></td>
 </tr>
 <tr class="even">
 <td><code id="d3po-shiny_:_id">id</code></td>
@@ -71,6 +68,7 @@ documents
 
 ---
 ## D3po
+--------------------------------------------------------------
 
 ### Description
 
@@ -86,8 +84,7 @@ This function provides 'd3po' methods from R console
 <tbody>
 <tr class="odd">
 <td><code id="d3po_:_data">data</code></td>
-<td><p>d3po need explicit specified data objects formatted as JSON, and
-this parameter passed it from R.</p></td>
+<td><p>d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.</p></td>
 </tr>
 <tr class="even">
 <td><code id="d3po_:_...">...</code></td>
@@ -95,9 +92,7 @@ this parameter passed it from R.</p></td>
 </tr>
 <tr class="odd">
 <td><code id="d3po_:_width">width</code></td>
-<td><p>Must be a valid CSS unit (like <code>'100%'</code>,
-<code>'400px'</code>, <code>'auto'</code>) or a number, which will be
-coerced to a string and have <code>'px'</code> appended.</p></td>
+<td><p>Must be a valid CSS unit (like <code>'100%'</code>, <code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a string and have <code>'px'</code> appended.</p></td>
 </tr>
 <tr class="even">
 <td><code id="d3po_:_height">height</code></td>
@@ -105,8 +100,7 @@ coerced to a string and have <code>'px'</code> appended.</p></td>
 </tr>
 <tr class="odd">
 <td><code id="d3po_:_elementId">elementId</code></td>
-<td><p>Dummy string parameter. Useful when you have two or more charts
-on the same page.</p></td>
+<td><p>Dummy string parameter. Useful when you have two or more charts on the same page.</p></td>
 </tr>
 </tbody>
 </table>
@@ -122,6 +116,7 @@ Mauricio Vargas
 
 ---
 ## Daes
+----------
 
 ### Description
 
@@ -136,11 +131,8 @@ Aesthetics of the chart.
 <table>
 <tbody>
 <tr class="odd">
-<td><code id="daes_:_x">x</code>, <code id="daes_:_y">y</code>, <code
-id="daes_:_...">...</code></td>
-<td><p>List of name value pairs giving aesthetics to map to variables.
-The names for x and y aesthetics are typically omitted because they are
-so common; all other aspects must be named.</p></td>
+<td><code id="daes_:_x">x</code>, <code id="daes_:_y">y</code>, <code id="daes_:_...">...</code></td>
+<td><p>List of name value pairs giving aesthetics to map to variables. The names for x and y aesthetics are typically omitted because they are so common; all other aspects must be named.</p></td>
 </tr>
 </tbody>
 </table>
@@ -166,7 +158,31 @@ Valid aesthetics (depending on the geom)
 
 
 ---
+## Maps
+----
+
+### Description
+
+World and individual continents maps.
+
+### Usage
+
+    maps
+
+### Format
+
+A `list` object with 7 elements. The Americas are separated in North
+America and South America, and with Africa, Asia, Europe, Oceania and
+World make 7 maps in total.
+
+### Source
+
+Adapted from Natural Earth.
+
+
+---
 ## Po area
+----
 
 ### Description
 
@@ -182,8 +198,7 @@ Plot an area chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_area_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_area_:_...">...</code></td>
@@ -191,8 +206,7 @@ Plot an area chart.
 </tr>
 <tr class="odd">
 <td><code id="po_area_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_area_:_inherit_daes">inherit_daes</code></td>
@@ -233,6 +247,7 @@ daes(x = x, y = y, group = variable, color = color)
 
 ---
 ## Po background
+----------
 
 ### Description
 
@@ -248,8 +263,7 @@ Add a background to a chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_background_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_background_:_background">background</code></td>
@@ -265,6 +279,7 @@ Appends custom background to an 'htmlwidgets' object
 
 ---
 ## Po bar
+---
 
 ### Description
 
@@ -280,8 +295,7 @@ Draw a bar chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_bar_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_bar_:_...">...</code></td>
@@ -289,8 +303,7 @@ Draw a bar chart.
 </tr>
 <tr class="odd">
 <td><code id="po_bar_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_bar_:_inherit_daes">inherit_daes</code></td>
@@ -322,6 +335,7 @@ daes(x = type_1, y = n, group = type_1, color = color_1)
 
 ---
 ## Po box
+-------
 
 ### Description
 
@@ -337,8 +351,7 @@ Draw a boxplot.
 <tbody>
 <tr class="odd">
 <td><code id="po_box_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_box_:_...">...</code></td>
@@ -346,8 +359,7 @@ Draw a boxplot.
 </tr>
 <tr class="odd">
 <td><code id="po_box_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_box_:_inherit_daes">inherit_daes</code></td>
@@ -371,6 +383,7 @@ d3po(pokemon) %>%
 
 ---
 ## Po donut
+-----
 
 ### Description
 
@@ -386,8 +399,7 @@ Plot a donut
 <tbody>
 <tr class="odd">
 <td><code id="po_donut_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_donut_:_...">...</code></td>
@@ -395,8 +407,7 @@ Plot a donut
 </tr>
 <tr class="odd">
 <td><code id="po_donut_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_donut_:_inherit_daes">inherit_daes</code></td>
@@ -428,6 +439,7 @@ daes(size = n, group = type_1, color = color_1)
 
 ---
 ## Po font
+----
 
 ### Description
 
@@ -443,8 +455,7 @@ Edit the font used in a chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_font_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_font_:_family">family</code></td>
@@ -456,8 +467,7 @@ Edit the font used in a chart.
 </tr>
 <tr class="even">
 <td><code id="po_font_:_transform">transform</code></td>
-<td><p>transform to use ("lowercase", "uppercase", "capitalize",
-"none").</p></td>
+<td><p>transform to use ("lowercase", "uppercase", "capitalize", "none").</p></td>
 </tr>
 </tbody>
 </table>
@@ -469,6 +479,7 @@ Appends custom font to an 'htmlwidgets' object
 
 ---
 ## Po geomap
+------
 
 ### Description
 
@@ -481,15 +492,10 @@ Plot a geomap
 ### Arguments
 
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <tbody>
 <tr class="odd">
 <td><code id="po_geomap_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_geomap_:_...">...</code></td>
@@ -497,20 +503,11 @@ Plot a geomap
 </tr>
 <tr class="odd">
 <td><code id="po_geomap_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_geomap_:_map">map</code></td>
-<td><p>map to use (i.e.,
-<code>system.file("extdata", "worldmap.topojson", package = "d3po")</code>)</p>
-<p>library(jsonlite)</p>
-<p>map &lt;- system.file("extdata", "south-america.topojson", package =
-"d3po") map &lt;- fromJSON(map, simplifyVector = FALSE) pokemon_mewtwo
-&lt;- data.frame(id = "CL", value = 1)</p>
-<p>d3po(pokemon_mewtwo) %&gt;% po_geomap(daes(group = id, color =
-value), map = map) %&gt;% po_title("Mewtwo was found in Isla Nueva (New
-Island, Chile)")</p></td>
+<td><p>map to use (i.e., any valid list or topojson file such as <code>maps$south_america</code> or <code>jsonlite::fromJSON("south_america.topojson", simplifyVector = F)</code>)</p></td>
 </tr>
 <tr class="odd">
 <td><code id="po_geomap_:_inherit_daes">inherit_daes</code></td>
@@ -523,9 +520,20 @@ Island, Chile)")</p></td>
 
 an 'htmlwidgets' object with the desired interactive plot
 
+### Examples
+
+```r
+pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+
+d3po(pokemon_mewtwo) %>%
+ po_geomap(daes(group = id, color = value), map = maps$south_america) %>%
+ po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+```
+
 
 ---
 ## Po labels
+------
 
 ### Description
 
@@ -549,13 +557,11 @@ Edit labels positioning in a chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_labels_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_labels_:_align">align</code></td>
-<td><p>horizontal alignment ("left", "center", "right", "start",
-"middle", "end").</p></td>
+<td><p>horizontal alignment ("left", "center", "right", "start", "middle", "end").</p></td>
 </tr>
 <tr class="odd">
 <td><code id="po_labels_:_valign">valign</code></td>
@@ -575,8 +581,7 @@ Edit labels positioning in a chart.
 </tr>
 <tr class="odd">
 <td><code id="po_labels_:_transform">transform</code></td>
-<td><p>transform to use ("lowercase", "uppercase", "capitalize",
-"none").</p></td>
+<td><p>transform to use ("lowercase", "uppercase", "capitalize", "none").</p></td>
 </tr>
 </tbody>
 </table>
@@ -588,6 +593,7 @@ Appends custom labels to an 'htmlwidgets' object
 
 ---
 ## Po legend
+------
 
 ### Description
 
@@ -603,8 +609,7 @@ Add a legend to a chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_legend_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_legend_:_legend">legend</code></td>
@@ -620,6 +625,7 @@ Appends custom legend to an 'htmlwidgets' object
 
 ---
 ## Po line
+----
 
 ### Description
 
@@ -635,8 +641,7 @@ Plot an line chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_line_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_line_:_...">...</code></td>
@@ -644,8 +649,7 @@ Plot an line chart.
 </tr>
 <tr class="odd">
 <td><code id="po_line_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_line_:_inherit_daes">inherit_daes</code></td>
@@ -681,6 +685,7 @@ daes(x = decile, y = weight, group = type_1, color = color_1)
 
 ---
 ## Po network
+-------
 
 ### Description
 
@@ -696,8 +701,7 @@ Draw a network.
 <tbody>
 <tr class="odd">
 <td><code id="po_network_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_network_:_...">...</code></td>
@@ -705,8 +709,7 @@ Draw a network.
 </tr>
 <tr class="odd">
 <td><code id="po_network_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_network_:_inherit_daes">inherit_daes</code></td>
@@ -730,6 +733,7 @@ d3po(pokemon_network) %>%
 
 ---
 ## Po pie
+---
 
 ### Description
 
@@ -745,8 +749,7 @@ Plot a pie
 <tbody>
 <tr class="odd">
 <td><code id="po_pie_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_pie_:_...">...</code></td>
@@ -754,8 +757,7 @@ Plot a pie
 </tr>
 <tr class="odd">
 <td><code id="po_pie_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_pie_:_inherit_daes">inherit_daes</code></td>
@@ -787,6 +789,7 @@ daes(size = n, group = type_1, color = color_1)
 
 ---
 ## Po scatter
+-------
 
 ### Description
 
@@ -802,8 +805,7 @@ Plot an scatter chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_scatter_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_scatter_:_...">...</code></td>
@@ -811,8 +813,7 @@ Plot an scatter chart.
 </tr>
 <tr class="odd">
 <td><code id="po_scatter_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_scatter_:_inherit_daes">inherit_daes</code></td>
@@ -848,6 +849,7 @@ daes(x = decile, y = weight, group = type_1, color = color_1)
 
 ---
 ## Po title
+-----
 
 ### Description
 
@@ -863,8 +865,7 @@ Add a title to a chart.
 <tbody>
 <tr class="odd">
 <td><code id="po_title_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_title_:_title">title</code></td>
@@ -880,6 +881,7 @@ Appends a title to an 'htmlwidgets' object
 
 ---
 ## Po treemap
+-------
 
 ### Description
 
@@ -895,8 +897,7 @@ Plot a treemap
 <tbody>
 <tr class="odd">
 <td><code id="po_treemap_:_d3po">d3po</code></td>
-<td><p>Either the output of <code>d3po()</code> or
-<code>d3po_proxy()</code>.</p></td>
+<td><p>Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_treemap_:_...">...</code></td>
@@ -904,8 +905,7 @@ Plot a treemap
 </tr>
 <tr class="odd">
 <td><code id="po_treemap_:_data">data</code></td>
-<td><p>Any dataset to use for plot, overrides data passed to
-<code>d3po()</code>.</p></td>
+<td><p>Any dataset to use for plot, overrides data passed to <code>d3po()</code>.</p></td>
 </tr>
 <tr class="even">
 <td><code id="po_treemap_:_inherit_daes">inherit_daes</code></td>
@@ -937,6 +937,7 @@ daes(size = n, group = type_1, color = color_1)
 
 ---
 ## Pokemon network
+----------------
 
 ### Description
 
@@ -957,6 +958,7 @@ Adapted from `highcharter` package.
 
 ---
 ## Pokemon
+-------
 
 ### Description
 

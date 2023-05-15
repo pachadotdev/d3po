@@ -1,3 +1,7 @@
+## d3po 0.4.5
+
+- Provides maps directly as R-formatted lists, and not as topjson files in inst/
+
 ## d3po 0.4.0
 
 - Heavily simplifies plotting graph/network objects

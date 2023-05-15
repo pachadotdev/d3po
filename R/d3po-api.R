@@ -821,16 +821,13 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' Plot a geomap
 #'
 #' @inheritParams po_box
-#' @param map map to use (i.e., `system.file("extdata", "worldmap.topojson", package = "d3po")`)
+#' @param map map to use (i.e., any valid list or topojson file such as `maps$south_america` or `jsonlite::fromJSON("south_america.topojson", simplifyVector = F)`)
 #'
-#' library(jsonlite)
-#' 
-#' map <- system.file("extdata", "south-america.topojson", package = "d3po")
-#' map <- fromJSON(map, simplifyVector = FALSE)
+#' @examples
 #' pokemon_mewtwo <- data.frame(id = "CL", value = 1)
 #'
 #' d3po(pokemon_mewtwo) %>%
-#'  po_geomap(daes(group = id, color = value), map = map) %>%
+#'  po_geomap(daes(group = id, color = value), map = maps$south_america) %>%
 #'  po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
 #'
 #' @export

@@ -81,9 +81,6 @@ app_server <- function(input, output, session) {
   })
 
   output$geomap <- render_d3po({
-    map <- system.file("extdata", "south-america.topojson", package = "d3po")
-    map <- fromJSON(map, simplifyVector = FALSE)
-
     countries <- data.frame(
       id = c("CL","GY","VE","CO","EC","PE","BO","PY","AR","UY","BR","SR","GB"),
       value = c(1,1, rep(0,11)),
@@ -91,7 +88,7 @@ app_server <- function(input, output, session) {
     )
 
     d3po(countries) %>%
-      po_geomap(daes(group = !!sym("id"), color = !!sym("value"), tooltip = !!sym("pkmn")), map = map) %>%
+      po_geomap(daes(group = !!sym("id"), color = !!sym("value"), tooltip = !!sym("pkmn")), map = d3po::maps$south_america) %>%
       po_title("Pokemon found in South America")
   })
 

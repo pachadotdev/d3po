@@ -24,7 +24,6 @@ Let's start by loading packages.
 
 ```{r pkgs, message=FALSE, warning=FALSE}
 library(dplyr)
-library(igraph)
 library(d3po)
 ```
 
@@ -87,6 +86,20 @@ This method is exactly the same as `treemap` but changing the function.
 ```{r}
 d3po(pokemon_count) %>%
   po_pie(
+    daes(size = n, group = type_1, color = color_1)
+  ) %>%
+  po_title("Share of Pokemon by Type")
+```
+
+# Donut
+
+Use these plots with caution because polar coordinates has major perceptual 
+problems. Use with *EXTREME* caution.
+
+This method is exactly the same as `treemap` but changing the function.
+```{r}
+d3po(pokemon_count) %>%
+  po_donut(
     daes(size = n, group = type_1, color = color_1)
   ) %>%
   po_title("Share of Pokemon by Type")
@@ -171,6 +184,17 @@ d3po(pokemon_network) %>%
   )
 ```
 
+# Geomap
+
+Let's visualize where Mewtwo was found:
+```{r}
+pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+
+d3po(pokemon_mewtwo) %>%
+  po_geomap(daes(group = id, color = value), map = maps$south_america) %>%
+  po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+```
+
 # Aesthetics
 
 Going back to the treemap example, it is possible to move the labels and
@@ -181,6 +205,6 @@ d3po(pokemon_count) %>%
     daes(size = n, group = type_1, color = color_1, align = "left")
   ) %>%
   po_title("Share of Pokemon by Type") %>%
-  po_font("Fira Sans", 12, "uppercase") %>%
+  po_font("Times New Roman", 12, "uppercase") %>%
   po_labels("left", "top", F, "Times", 30, "uppercase")
 ```

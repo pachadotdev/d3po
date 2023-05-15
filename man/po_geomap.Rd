@@ -14,17 +14,7 @@ po_geomap(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE)
 \item{data}{Any dataset to use for plot, overrides data passed
 to \code{\link[=d3po]{d3po()}}.}
 
-\item{map}{map to use (i.e., \code{system.file("extdata", "worldmap.topojson", package = "d3po")})
-
-library(jsonlite)
-
-map <- system.file("extdata", "south-america.topojson", package = "d3po")
-map <- fromJSON(map, simplifyVector = FALSE)
-pokemon_mewtwo <- data.frame(id = "CL", value = 1)
-
-d3po(pokemon_mewtwo) \%>\%
-po_geomap(daes(group = id, color = value), map = map) \%>\%
-po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")}
+\item{map}{map to use (i.e., any valid list or topojson file such as \code{maps$south_america} or \code{jsonlite::fromJSON("south_america.topojson", simplifyVector = F)})}
 
 \item{inherit_daes}{Whether to inherit aesthetics previous specified.}
 }
@@ -33,4 +23,12 @@ an 'htmlwidgets' object with the desired interactive plot
 }
 \description{
 Plot a geomap
+}
+\examples{
+pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+
+d3po(pokemon_mewtwo) \%>\%
+ po_geomap(daes(group = id, color = value), map = maps$south_america) \%>\%
+ po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+
 }

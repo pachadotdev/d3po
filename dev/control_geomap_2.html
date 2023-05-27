@@ -1,0 +1,26 @@
+
+<!doctype html>
+<meta charset="utf-8">
+
+<script src="d3.min.js"></script>
+<script src="d3po.min.js"></script>
+<script src="topojson.min.js"></script>
+
+<!-- create container element for visualization -->
+<div id="viz"></div>
+
+<script>
+  // sample data array
+  var sample_data = [
+    {"proptotal_atleast1dose": 83.9, "prname": "None"}
+  ]
+  var visualization = d3po.viz()
+    .container("#viz")        // container DIV to hold the visualization
+    .data(sample_data)        // data to use with the visualization
+    .coords("provinces.topojson") // pass topojson coordinates
+    .type("geomap")          // visualization type
+    .id("prname")            // key for which our data is unique on
+    .color("proptotal_atleast1dose")           // key for coloring countries
+    .draw()                   // finally, draw the visualization!
+    .title("DEMO")
+</script>

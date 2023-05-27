@@ -42,11 +42,11 @@
 
 #' maps
 #'
-#' World and individual continents maps.
+#' World, continent and country maps.
 #'
 #' @docType data
 #' @name maps
 #' @usage maps
-#' @format A \code{list} object with 7 elements. The Americas are separated in North America and South America, and with Africa, Asia, Europe, Oceania and World make 7 maps in total.
+#' @format A \code{list} object with 7 elements. The Americas are separated in North America and South America.
 #' @source Adapted from Natural Earth.
 "maps"

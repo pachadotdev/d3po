@@ -1,7 +1,7 @@
 load_all()
 
 map <- system.file("extdata", "south-america.topojson", package = "d3po")
-map <- jsonlite::fromJSON(map, simplifyVector = FALSE)
+map <- jsonlite::fromJSON("dev/south-america.topojson", simplifyVector = FALSE)
 pokemon_mewtwo <- data.frame(id = "CL", value = 1)
 
 d3po(pokemon_mewtwo) %>%

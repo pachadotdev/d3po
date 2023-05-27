@@ -48,7 +48,7 @@ download_and_simplify_topojson <- function(url) {
 
   # merge polygons by hc.a2
   country <- country %>%
-    ms_simplify(keep = 0.9, keep_shapes = TRUE) %>%
+    ms_simplify(keep = 0.95, keep_shapes = TRUE) %>%
     ms_dissolve(field = "hc.a2")
 
   # convert to geojson

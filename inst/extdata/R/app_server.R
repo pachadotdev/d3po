@@ -70,17 +70,16 @@ app_server <- function(input, output, session) {
     len <- length(ids)
 
     set.seed(selected_seed())
-    daux <- switch(
-      selected_distribution(),
-      "Normal" = rnorm(len, 0, 1),
-      "Poisson" = rpois(len, 5),
-      "Uniform" = runif(len),
-      "Exponential" = rexp(len)
-    )
 
     out <- data.frame(
       id = ids,
-      value = daux
+      value = switch(
+        selected_distribution(),
+        "Normal" = rnorm(len, 0, 1),
+        "Poisson" = rpois(len, 5),
+        "Uniform" = runif(len),
+        "Exponential" = rexp(len)
+      )
     )
 
     return(out)
@@ -89,11 +88,8 @@ app_server <- function(input, output, session) {
   output$geomap <- render_d3po({
     d3po(random_data()) %>%
       po_geomap(
-        daes(
-          group = !!sym("id"),
-          color = !!sym("value")
-        ),
-        map = map_topojson(),
+        daes(group = !!sym("id"), color = !!sym("value")),
+        map = map_topojson()
       ) %>%
       po_title(sprintf("Map of %s with random values", selected_map()))
   })

@@ -25,10 +25,12 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a geomap
 }
 \examples{
-pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+if (rlang::is_installed("d3pomaps")) {
+ pokemon_mewtwo <- data.frame(id = "CL", value = 1)
 
-d3po(pokemon_mewtwo) \%>\%
- po_geomap(daes(group = id, color = value), map = maps$south_america) \%>\%
- po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+ d3po(pokemon_mewtwo) \%>\%
+   po_geomap(daes(group = id, color = value), map = d3pomaps::maps$south_america) \%>\%
+   po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+}
 
 }

@@ -15,11 +15,17 @@
         // heatmap: ["#ffeedd", "#ffd7b5", "#ffb38a", "#ff9248", "#ff6700"],
         // heatmap: ["#eeaf61", "#fb9062", "#ee5d6c", "#ce4993", "#6a0d83"],
         // heatmap: ["#ffdef5", "#ffa6fc", "#ff94e0", "#ff76d8", "#ff59c7"],
-        heatmap: ["#a8dfc7", "#8dd1b9", "#6cc3ab", "#4cb59d", "#317256"],
+        // heatmap: ["#a8dfc7", "#8dd1b9", "#6cc3ab", "#4cb59d", "#317256"],
+        // from viridis R package
+        // heatmap: ["#FDE725", "#5DC863", "#21908C", "#3B528B", "#440154"],
+        // from RColorBrewer R package
+        heatmap: ["#e6f598", "#abdda4", "#66bd62", "#3288bd", "#5e4fa2"],
         missing: "#eeeeee",
         mute: filter(true),
         primary: "#d74b03",
-        range: ["#B22200", "#FFEE8D", "#759143"],
+        // range: ["#B22200", "#FFEE8D", "#759143"],
+        // from RColorBrewer R package
+        range: ["#3288bd", "#fffdbf", "#d53e4f"],
         scale: {
             accepted: [Array, Function, "d3po", "category10", "category20", "category20b", "category20c"],
             process: function(value) {

@@ -1,13 +1,17 @@
-# The function itself just echos its inputs and outputs to a file called INDEX,
+# The function itself just echoes its inputs and outputs to a file called INDEX,
 # which is then opened by RStudio when the new project is opened.
-start_project <- function(path, ...) {
+
+#' Create a new d3po templated project
+#' @param path The path to create the new project in
+#' @export
+d3po_template <- function(path = ".") {
   # ensure path exists
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 
   # copy files
   file.copy(
     list.files(
-      system.file("extdata", "", package = "d3po"), full.names = TRUE),
+      system.file("skeleton", "", package = "d3po"), full.names = TRUE),
     path,
     recursive = TRUE
   )

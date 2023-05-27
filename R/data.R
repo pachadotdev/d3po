@@ -39,14 +39,3 @@
 #' @format A \code{igraph} object with 17 vertices (nodes) and 26 edges (arcs).
 #' @source Adapted from \code{highcharter} package.
 "pokemon_network"
-
-#' maps
-#'
-#' World, continent and country maps.
-#'
-#' @docType data
-#' @name maps
-#' @usage maps
-#' @format A \code{list} object with 7 elements. The Americas are separated in North America and South America.
-#' @source Adapted from Natural Earth.
-"maps"

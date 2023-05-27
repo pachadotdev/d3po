@@ -4,7 +4,7 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import shinydashboard
-#' @import d3po
+#' @importFrom d3po d3po_output
 #' @importFrom stringr str_to_title str_replace_all
 #' @noRd
 app_ui <- function(request) {
@@ -19,17 +19,7 @@ app_ui <- function(request) {
         selectInput(
           inputId = "map",
           label = "Select a continent or country",
-          # Get a nested list thanks to this amazing trick taught by Dean Attali https://github.com/daattali/advanced-shiny/tree/master/dropdown-groups
-          choices = list(
-            "Africa" = str_to_title(str_replace_all(names(d3po::maps$africa)[names(d3po::maps$africa) != "continent"], "_", " ")),
-            "Asia" = str_to_title(str_replace_all(names(d3po::maps$asia)[names(d3po::maps$asia) != "continent"], "_", " ")),
-            "Europe" = str_to_title(str_replace_all(names(d3po::maps$europe)[names(d3po::maps$europe) != "continent"], "_", " ")),
-            "North America" = str_to_title(str_replace_all(names(d3po::maps$north_america)[names(d3po::maps$north_america) != "continent"], "_", " ")),
-            "Oceania" = str_to_title(str_replace_all(names(d3po::maps$oceania)[names(d3po::maps$oceania) != "continent"], "_", " ")),
-            "South America" = str_to_title(str_replace_all(names(d3po::maps$south_america)[names(d3po::maps$south_america) != "continent"], "_", " ")),
-            "Continents" = c("Africa", "Asia", "Europe", "North America", "Oceania", "South America"),
-            "World" = "World"
-          ),
+          choices = list_maps(), # see golem_utils_ui.R
           selected = "Canada"
         ),
         selectInput(
@@ -37,6 +27,14 @@ app_ui <- function(request) {
           label = "Select a distribution",
           choices = c("Normal", "Poisson", "Uniform", "Exponential"),
           selected = "Normal"
+        ),
+        sliderInput(
+          inputId = "poisson_parameter",
+          label = "Select a Poisson parameter",
+          min = 1L,
+          max = 10L,
+          step = 1L,
+          value = 5L
         ),
         textInput(
           inputId = "seed",

@@ -403,3 +403,19 @@ make_action_button <- function(tag, inputId = NULL) {
 #'
 #'   return(HTML(html))
 #' }
+
+#' Return a list of all the maps in titlecase
+#' @noRd
+list_maps <- function() {
+# Get a nested list thanks to this amazing trick taught by Dean Attali https://github.com/daattali/advanced-shiny/tree/master/dropdown-groups
+  list(
+            "Africa" = str_to_title(str_replace_all(names(d3pomaps::maps$africa)[names(d3pomaps::maps$africa) != "continent"], "_", " ")),
+            "Asia" = str_to_title(str_replace_all(names(d3pomaps::maps$asia)[names(d3pomaps::maps$asia) != "continent"], "_", " ")),
+            "Europe" = str_to_title(str_replace_all(names(d3pomaps::maps$europe)[names(d3pomaps::maps$europe) != "continent"], "_", " ")),
+            "North America" = str_to_title(str_replace_all(names(d3pomaps::maps$north_america)[names(d3pomaps::maps$north_america) != "continent"], "_", " ")),
+            "Oceania" = str_to_title(str_replace_all(names(d3pomaps::maps$oceania)[names(d3pomaps::maps$oceania) != "continent"], "_", " ")),
+            "South America" = str_to_title(str_replace_all(names(d3pomaps::maps$south_america)[names(d3pomaps::maps$south_america) != "continent"], "_", " ")),
+            "Continents" = c("Africa", "Asia", "Europe", "North America", "Oceania", "South America"),
+            "World" = "World"
+          )
+}

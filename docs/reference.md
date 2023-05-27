@@ -1,5 +1,29 @@
 # Reference 
 
+## D3po template
+-----------------------------------
+
+### Description
+
+Create a new d3po templated project
+
+### Usage
+
+    d3po_template(path = ".")
+
+### Arguments
+
+<table>
+<tbody>
+<tr class="odd">
+<td><code id="d3po_template_:_path">path</code></td>
+<td><p>The path to create the new project in</p></td>
+</tr>
+</tbody>
+</table>
+
+
+---
 ## D3po-exports
 -------------------------
 
@@ -155,29 +179,6 @@ Valid aesthetics (depending on the geom)
 
 -   `layout`: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds,
     sugiyama), in quotes.
-
-
----
-## Maps
-----
-
-### Description
-
-World and individual continents maps.
-
-### Usage
-
-    maps
-
-### Format
-
-A `list` object with 7 elements. The Americas are separated in North
-America and South America, and with Africa, Asia, Europe, Oceania and
-World make 7 maps in total.
-
-### Source
-
-Adapted from Natural Earth.
 
 
 ---
@@ -523,11 +524,13 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+if (rlang::is_installed("d3pomaps")) {
+ pokemon_mewtwo <- data.frame(id = "CL", value = 1)
 
-d3po(pokemon_mewtwo) %>%
- po_geomap(daes(group = id, color = value), map = maps$south_america) %>%
- po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+ d3po(pokemon_mewtwo) %>%
+   po_geomap(daes(group = id, color = value), map = d3pomaps::maps$south_america) %>%
+   po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+}
 ```
 
 

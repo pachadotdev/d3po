@@ -25,6 +25,7 @@ Let's start by loading packages.
 ```{r pkgs, message=FALSE, warning=FALSE}
 library(dplyr)
 library(d3po)
+library(d3pomaps)
 ```
 
 # Pokemon dataset
@@ -191,7 +192,7 @@ Let's visualize where Mewtwo was found:
 pokemon_mewtwo <- data.frame(id = "CL", value = 1)
 
 d3po(pokemon_mewtwo) %>%
-  po_geomap(daes(group = id, color = value), map = maps$south_america) %>%
+  po_geomap(daes(group = id, color = value), map = maps$south_america$continent) %>%
   po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
 ```
 

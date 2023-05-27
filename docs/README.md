@@ -1,6 +1,3 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # D3po
 
 <!-- badges: start -->
@@ -68,12 +65,8 @@ d3po(pokemon) %>%
   po_title("Distribution of Pokemon Speed by Type")
 ```
 
-In the `d3pogolem` directory
-(<https://github.com/pachadotdev/d3po/tree/main/d3pogolem>) there is a
-fully worked example with Shiny and golem for all the available
-visualization types in the package.
+To access a templated project, in RStudio's top bar click *File -> New Project -> New Directory -> Shiny app with Golem+D3po*. Otherwise, start with a blank project and run `d3po::d3po_template()` to copy the same template.
 
-Also, please (*please!*) see the vignette
-(<https://github.com/pachadotdev/d3po/blob/main/vignettes/d3po.Rmd>). At
-the moment there is an error in pkgdown, and I cannot figure out how to
-render it with altdoc.
+You can install the templated project as any other R package. The template has its own readme, so please read it.
+
+Also, please (*please!*) see the vignette (<https://github.com/pachadotdev/d3po/blob/main/vignettes/d3po.Rmd>). At the moment there is an error in pkgdown, and I cannot figure out how to render it with altdoc but it provides examples for each of the available visualization type in the package.

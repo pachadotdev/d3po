@@ -8,7 +8,6 @@ inst/htmlwidgets/lib/control_treemap.html
 ^\.github$
 ^LICENSE\.md$
 docs
-dev
 testing.R
 d3pogolem
 ^CRAN-RELEASE$

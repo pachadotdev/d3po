@@ -25,7 +25,7 @@ golem::fill_desc(
   author_first_name = "Mauricio", # Your First Name
   author_last_name = "Vargas Sepulveda", # Your Last Name
   author_email = "m.sepulveda@mail.utoronto.ca", # Your Email
-  repo_url = "https://github.com/pachadotdev/d3podemocovid", # The URL of the GitHub Repo (optional),
+  repo_url = "https://github.com/pachadotdev/d3podemo", # The URL of the GitHub Repo (optional),
   pkg_version = "0.0.0.9000" # The Version of the package containing the App
 )
 

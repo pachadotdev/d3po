@@ -1,7 +1,7 @@
 Package: d3po
 Type: Package
 Title: Fast and Beautiful Interactive Visualization for 'Markdown' and 'Shiny'
-Version: 0.4.5
+Version: 0.5.0
 Authors@R: c(
   person("Mauricio", "Vargas", role = c("aut","cre","cph"), 
    email = "mavargas11@uc.cl"),

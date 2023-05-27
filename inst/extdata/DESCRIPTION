@@ -7,8 +7,8 @@ Description: Open `dev/01_start.R` to edit the description. This is a
     short demonstration of d3po functions using the maps provided within
     the package.
 License: MIT + file LICENSE
-URL: https://github.com/pachadotdev/d3podemocovid
-BugReports: https://github.com/pachadotdev/d3podemocovid/issues
+URL: https://github.com/pachadotdev/d3po
+BugReports: https://github.com/pachadotdev/d3po/issues
 Depends: 
     R (>= 2.10)
 Imports: 

@@ -6,6 +6,7 @@ library(dplyr)
 library(tidyr)
 library(readxl)
 library(countrycode)
+library(stringr)
 library(igraph)
 library(RPostgres)
 library(economiccomplexity)
@@ -69,14 +70,46 @@ freedom_house <- freedom_house %>%
         n == 2 ~ "civil_liberties",
         n == 3 ~ "status"
     )
-  )
+  ) %>% 
+  ungroup()
 
 freedom_house
 
- # put in tidy format
- freedom_house <- freedom_house %>%
+# put in tidy format
+freedom_house <- freedom_house %>%
   select(-n) %>% 
   pivot_wider(names_from = category, values_from = value)
+
+freedom_house
+
+# convert political rights and civil liberties to integer
+remove_parenthesis <- function(x) {
+  y <- str_extract(x, "\\((.*?)\\)")
+  y <- str_replace_all(y, "\\(|\\)", "")
+  return(y)
+}
+
+freedom_house <- freedom_house %>%
+  mutate(
+    political_rights = case_when(
+      country == "South Africa" & year == 1973 ~ remove_parenthesis(political_rights),
+      TRUE ~ political_rights
+    ),
+    civil_liberties = case_when(
+      country == "South Africa" & year == 1973 ~ remove_parenthesis(civil_liberties),
+      TRUE ~ civil_liberties
+    ),
+    status = case_when(
+      country == "South Africa" & year == 1973 ~ remove_parenthesis(status),
+      TRUE ~ status
+    ),
+
+    political_rights = as.integer(political_rights),
+    civil_liberties = as.integer(civil_liberties)
+  )
+
+freedom_house %>%
+  filter(country == "South Africa", year == 1973)
 
 freedom_house
 
@@ -91,15 +124,6 @@ freedom_house <- freedom_house %>%
       ),
       levels = c("Free", "Partially Free", "Not Free"),
     )
-  )
-
-freedom_house
-
-# convert political rights and civil liberties to integer
-freedom_house <- freedom_house %>%
-  mutate(
-    political_rights = as.integer(political_rights),
-    civil_liberties = as.integer(civil_liberties)
   )
 
 freedom_house
@@ -193,10 +217,7 @@ freedom_house <- freedom_house %>%
     )
   )
 
-# ungroup and save
-freedom_house <- freedom_house %>%
-  ungroup()
-
+# save
 use_data(freedom_house, overwrite = TRUE)
 
 con <- dbConnect(

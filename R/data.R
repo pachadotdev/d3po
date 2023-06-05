@@ -1,4 +1,4 @@
-#' Freedom House Country and Territory Ratings and Statuses, 1973-2023
+#' Freedom House Country and Territory Ratings and Statuses, 1972-2022
 #'
 #' For each country and territory, Freedom in the World analyzes the electoral process,
 #' political pluralism and participation, the functioning of the government, freedom of
@@ -8,7 +8,7 @@
 #' @section Variables:
 #'
 #' \itemize{
-#'  \item \code{year}: Year of observation (1973-2023).
+#'  \item \code{year}: Year of observation (1972-2022). The survey is applied the year after.
 #'  \item \code{country}: Country name.
 #'  \item \code{iso2c}: ISO 2-character country code. Czechoslovakia, Kosovo, Micronesia,
 #'   Serbia and Montenegro, and Yugoslavia do not have unambiguous matches and appear as 'NA'.

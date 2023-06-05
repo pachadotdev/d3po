@@ -45,7 +45,7 @@ freedom_house
 # obtain the year by removing all non-numeric characters in year
 freedom_house <- freedom_house %>%
   mutate(
-    year = as.integer(gsub("[^0-9]", "", year)),
+    year = as.integer(gsub("[^0-9]", "", year)) - 1L,
     year = case_when(
       year < 1973 ~ NA_integer_,
       TRUE ~ year

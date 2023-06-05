@@ -3,7 +3,7 @@
 \docType{data}
 \name{freedom_house}
 \alias{freedom_house}
-\title{Freedom House Country and Territory Ratings and Statuses, 1973-2023}
+\title{Freedom House Country and Territory Ratings and Statuses, 1972-2022}
 \format{
 A \code{data frame} with 9,044 observations and 5 variables.
 }
@@ -23,7 +23,7 @@ and personal autonomy and individual rights.
 
 
 \itemize{
-\item \code{year}: Year of observation (1973-2023).
+\item \code{year}: Year of observation (1972-2022). The survey is applied the year after.
 \item \code{country}: Country name.
 \item \code{iso2c}: ISO 2-character country code. Czechoslovakia, Kosovo, Micronesia,
 Serbia and Montenegro, and Yugoslavia do not have unambiguous matches and appear as 'NA'.

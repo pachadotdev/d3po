@@ -23,8 +23,12 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 Draw a network.
 }
 \examples{
-d3po(pokemon_network) \%>\%
-  po_network(daes(size = size, color = color, layout = "nicely")) \%>\%
-  po_title("Connections between Pokemon types based on Type 1 and 2")
+if (rlang::is_installed("igraph")) {
+ library(magrittr)
 
+ d3po(freedom_house_network) \%>\%
+   po_network(daes(size = exports, color = color,
+     tooltip = status, layout = "kk")) \%>\%
+   po_title("Network of countries by Freedom House status and exports")
+}
 }

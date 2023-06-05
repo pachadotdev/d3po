@@ -25,14 +25,14 @@ Draw a bar chart.
 \examples{
 library(dplyr)
 
-pokemon_count <- pokemon \%>\%
-  group_by(type_1, color_1) \%>\%
+dout <- freedom_house \%>\%
+  filter(year >= 2010) \%>\%
+  group_by(year, status, color) \%>\%
   count()
 
-d3po(pokemon_count) \%>\%
+d3po(dout) \%>\%
   po_bar(
-    daes(x = type_1, y = n, group = type_1, color = color_1)
+    daes(x = year, y = n, group = status, color = color)
   ) \%>\%
-  po_title("Count of Pokemon by Type 1")
-
+  po_title("Evolution of Country Status in Time")
 }

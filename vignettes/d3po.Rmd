@@ -14,12 +14,16 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 10,
+  fig.height = 5
 )
 ```
 
 The package `d3po` integrates well with `dplyr`. All the examples here use the 
 pipe, `%>%`, both to filter/summarise data and create the charts.
+
+These examples are the same as in the documentation but with some extended comments.
 
 # Setup
 
@@ -31,54 +35,59 @@ library(d3po)
 library(d3pomaps)
 ```
 
-# Pokemon dataset
+# Freedom House dataset
 
-The included dataset `pokemon` has the present structure:
+The included dataset `freedom_house` includes a detailed documentation but let's explore the data structure:
 ```{r}
-glimpse(pokemon)
+glimpse(freedom_house)
+```
 ```
 
 # Box and Whiskers
 
-To compare the distribution of `weight` by `type_1`, the `pokemon` dataset 
-doesn't need additional aggregation or transformation, just to use the Pokemon
-`name` as the grouping variable and (optionally) the `color` variable:
+To plot the distribution of civil liberties in 2023 by continent, we need to indicate the variables 
+for the axis, group, and (optionally) color:
 ```{r box1, fig.height=7}
-d3po(pokemon) %>%
-  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
-  po_title("Distribution of Pokemon Speed by Type")
+dout <- freedom_house %>% 
+  filter(year == 2023)
+ 
+d3po(dout) %>%
+  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
+  po_title("Civil Liberties Distribution by Continent")
 ```
 
 # Bar
 
-Let's start by counting Pokemon by type:
+To plot the evolution of country status in time, we need to indicate the variables for the axis
+and, group, and (optionally) color:
 ```{r bar1}
-pokemon_count <- pokemon %>%
-  group_by(type_1, color_1) %>%
+dout <- freedom_house %>%
+  filter(year >= 2010) %>%
+  group_by(year, status, color) %>%
   count()
-```
 
-Now we can create a bar chart by using `type_1` both for the `x` axis and the
-`group_by` variable provided this data has no `year` column or similar:
-```{r bar2}
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_bar(
-    daes(x = type_1, y = n, group = type_1, color = color_1)
+    daes(x = year, y = n, group = status, color = color)
   ) %>%
-  po_title("Count of Pokemon by Type")
+  po_title("Evolution of Country Status in Time")
 ```
 
 # Treemap
 
-By using the `pokemon_count` table created for the bar chart, the logic is 
-exactly the same and we only need to change the function and specify the `size` 
-instead of `x` and `y`:
+To plot the share of countries by status in 2023, we need to indicate the variables for the
+size, group, and (optionally) color:
 ```{r}
-d3po(pokemon_count) %>%
+dout <- freedom_house %>%
+  filter(year == 2023) %>%
+  group_by(status, color) %>%
+  count()
+
+d3po(dout) %>%
   po_treemap(
-    daes(size = n, group = type_1, color = color_1)
+    daes(size = n, group = status, color = color)
   ) %>%
-  po_title("Share of Pokemon by Type")
+  po_title("Count of Countries by Continent and Status")
 ```
 
 # Pie
@@ -86,11 +95,11 @@ d3po(pokemon_count) %>%
 Use these plots with caution because polar coordinates has major perceptual 
 problems. Use with *EXTREME* caution.
 
-This method is exactly the same as `treemap` but changing the function.
+This method is exactly the same as `treemap` but calling a different function:
 ```{r}
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_pie(
-    daes(size = n, group = type_1, color = color_1)
+    daes(size = n, group = status, color = color)
   ) %>%
   po_title("Share of Pokemon by Type")
 ```
@@ -100,103 +109,92 @@ d3po(pokemon_count) %>%
 Use these plots with caution because polar coordinates has major perceptual 
 problems. Use with *EXTREME* caution.
 
-This method is exactly the same as `treemap` but changing the function.
+This method is exactly the same as `treemap` but calling a different function:
 ```{r}
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_donut(
-    daes(size = n, group = type_1, color = color_1)
+    daes(size = n, group = status, color = color)
   ) %>%
   po_title("Share of Pokemon by Type")
 ```
 
 # Line
 
-Let's start by obtaining the decile for the Pokemon `weight` just for the 
-grass, fire and water type:
+To plot the evolution of country status in time, we need to indicate the variables for the axis, group, and (optionally) color:
 ```{r line1}
-pokemon_decile <- pokemon %>%
-  filter(type_1 %in% c("grass", "fire", "water")) %>%
-  group_by(type_1, color_1) %>%
-  summarise(
-    decile = 0:10,
-    weight = quantile(weight, probs = seq(0, 1, by = .1))
-  )
-```
+dout <- freedom_house %>%
+  group_by(year, status, color) %>%
+  count()
 
-Now we can create an area chart by using the `variable` and `color` columns 
-created above:
-```{r line2}
-d3po(pokemon_decile) %>%
+d3po(dout) %>%
   po_line(
-    daes(x = decile, y = weight, group = type_1, color = color_1)
+    daes(x = year, y = n, group = status, color = color)
   ) %>%
-  po_title("Decile of Pokemon Weight by Type")
+  po_title("Evolution of Country Status in Time")
 ```
 
 # Area
 
-Let's start by obtaining the density for the Pokemon `weight`:
+This method is exactly the same as `treemap` but calling a different function and
+with the option of stacking the areas:
 ```{r area1}
-pokemon_density <- density(pokemon$weight, n = 30)
-
-pokemon_density <- tibble(
-  x = pokemon_density$x,
-  y = pokemon_density$y,
-  variable = "weight",
-  color = "#5377e3"
-)
-```
-
-Now we can create an area chart by using the `variable` and `color` columns 
-created above:
-```{r area2}
-d3po(pokemon_density) %>%
+d3po(dout) %>%
   po_area(
-    daes(x = x, y = y, group = variable, color = color)
+    daes(x = year, y = n, group = status, color = color),
+    stack = TRUE
   ) %>%
-  po_title("Approximated Density of Pokemon Weight")
+  po_title("Evolution of Country Status in Time")
 ```
 
 # Scatterplot
 
-Let's explore the balance between defense and attack by Pokemon type:
-
+This method is exactly the same as `treemap` but calling a different function:
 ```{r scatterplot1}
-pokemon_def_vs_att <- pokemon %>%
-  group_by(type_1, color_1) %>%
-  summarise(
-    mean_def = mean(defense),
-    mean_att = mean(attack),
-    n_pkmn = n()
-  )
-
-d3po(pokemon_def_vs_att) %>%
-  po_scatter(
-    daes(x = mean_att, y = mean_def, size = n_pkmn, group = type_1, color = color_1)
+dout <- freedom_house %>%
+  filter(
+  year %in% c(1975, 1985, 1995, 2005, 2015),
+  country == "Chile"
   ) %>%
-  po_title("Average Attack vs Average Defense by Type")
-```
-
-# Network
-
-Let's visualize a `igraph` object, we need a seed to make the layout reproducible:
-```{r}
-set.seed(4321)
-d3po(pokemon_network) %>%
-  po_network(
-    daes(size = size, color = color, layout = "nicely")
+  mutate(
+    inv_civil_liberties = sqrt(1 / civil_liberties),
+    inv_political_rights = sqrt(1 / political_rights)
   )
+
+d3po(dout) %>%
+  po_scatter(
+    daes(x = inv_civil_liberties, y = inv_political_rights,
+      group = year, color = color)
+  ) %>%
+  po_title("Evolution of Chile in Time")
 ```
 
 # Geomap
 
-Let's visualize where Mewtwo was found:
+This method is very similar to all the others but we need to specify the map.
+In this case, we are going to use the map of South America from the `d3pomaps`
+package:
 ```{r}
-pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+dout <- freedom_house %>%
+  filter(year == 2023, !is.na(iso2c)) %>%
+  select(id = iso2c, status, color)
 
-d3po(pokemon_mewtwo) %>%
-  po_geomap(daes(group = id, color = value), map = maps$south_america$continent) %>%
-  po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+d3po(dout) %>% 
+  po_geomap(
+    daes(group = id, color = color, size = status, tooltip = status),
+    map = d3pomaps::maps$south_america$continent
+  )
+```
+
+# Network
+
+This method is very similar to all the others but, unlike the others, 
+it needs an igraph object as input, and with the option of using a specific
+layout:
+```{r}
+d3po(freedom_house_network) %>%
+      po_network(daes(size = exports, color = color, 
+        tooltip = status, layout = "kk")) %>%
+      po_title("Network of countries by Freedom House status and exports")
 ```
 
 # Aesthetics
@@ -204,11 +202,16 @@ d3po(pokemon_mewtwo) %>%
 Going back to the treemap example, it is possible to move the labels and
 also use any font that you like:
 ```{r}
-d3po(pokemon_count) %>%
+dout <- freedom_house %>%
+  filter(year == 2023) %>%
+  group_by(status, color) %>%
+  count()
+
+d3po(dout) %>%
   po_treemap(
-    daes(size = n, group = type_1, color = color_1, align = "left")
+    daes(size = n, group = status, color = color)
   ) %>%
-  po_title("Share of Pokemon by Type") %>%
-  po_font("Times New Roman", 12, "uppercase") %>%
-  po_labels("left", "top", F, "Times", 30, "uppercase")
+  po_title("Count of Countries by Continent and Status") %>%
+  po_font("Comic Sans MS", 20, "uppercase") %>%
+  po_labels("left", "top", F, "Times", 30, "titlecase")
 ```

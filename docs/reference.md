@@ -182,6 +182,83 @@ Valid aesthetics (depending on the geom)
 
 
 ---
+## Freedom house network
+----------------------------------------------
+
+### Description
+
+Connections between countries correspond to the strongest arcs based on
+the products they export. The network was trimmed until obtaining an
+average of four arcs per node.
+
+### Usage
+
+    freedom_house_network
+
+### Format
+
+A `igraph` object with 190 vertices (nodes) and 316 edges (arcs).
+
+### Source
+
+Adapted from the United Nations (trade volumes) and Freedom House
+(freedom information).
+
+
+---
+## Freedom house
+-------------------------------------------------------------------
+
+### Description
+
+For each country and territory, Freedom in the World analyzes the
+electoral process, political pluralism and participation, the
+functioning of the government, freedom of expression and of belief,
+associational and organizational rights, the rule of law, and personal
+autonomy and individual rights.
+
+### Usage
+
+    freedom_house
+
+### Format
+
+A `data frame` with 9,044 observations and 5 variables.
+
+### Variables
+
+-   `year`: Year of observation (1973-2023).
+
+-   `country`: Country name.
+
+-   `iso2c`: ISO 2-character country code. Czechoslovakia, Kosovo,
+    Micronesia, Serbia and Montenegro, and Yugoslavia do not have
+    unambiguous matches and appear as 'NA'.
+
+-   `iso3c`: ISO 3-character country code. Czechoslovakia, Kosovo,
+    Micronesia, Serbia and Montenegro, and Yugoslavia do not have
+    unambiguous matches and appear as 'NA'.
+
+-   `continent`: Continent name.
+
+-   `year`: Year of observation (1973-2023).
+
+-   `political_rights`: Political rights score (1-7 scale, with one
+    representing the highest degree of Freedom and seven the lowest).
+
+-   `civil_liberties`: Civil liberties score (1-7 scale, with one
+    representing the highest degree of Freedom and seven the lowest).
+
+-   `status`: Status of the country (Free, Partly Free, Not Free).
+
+-   `color`: Color associated with the status of the country.
+
+### Source
+
+Adapted from Freedom House.
+
+
+---
 ## Po area
 ----
 
@@ -229,20 +306,16 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_density <- density(pokemon$weight, n = 30)
+dout <- freedom_house %>%
+  group_by(year, status, color) %>%
+  count()
 
-pokemon_density <- tibble(
-  x = pokemon_density$x,
-  y = pokemon_density$y,
-  variable = "weight",
-  color = "#5377e3"
-)
-
-d3po(pokemon_density) %>%
+d3po(dout) %>%
   po_area(
-daes(x = x, y = y, group = variable, color = color)
+daes(x = year, y = n, group = status, color = color),
+stack = TRUE
   ) %>%
-  po_title("Approximated Density of Pokemon Weight")
+  po_title("Evolution of Country Status in Time")
 ```
 
 
@@ -322,15 +395,16 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_count <- pokemon %>%
-  group_by(type_1, color_1) %>%
+dout <- freedom_house %>%
+  filter(year >= 2010) %>%
+  group_by(year, status, color) %>%
   count()
 
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_bar(
-daes(x = type_1, y = n, group = type_1, color = color_1)
+daes(x = year, y = n, group = status, color = color)
   ) %>%
-  po_title("Count of Pokemon by Type 1")
+  po_title("Evolution of Country Status in Time")
 ```
 
 
@@ -376,9 +450,14 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-d3po(pokemon) %>%
-  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
-  po_title("Distribution of Pokemon Speed")
+library(dplyr)
+
+dout <- freedom_house %>% 
+  filter(year == 2023)
+ 
+d3po(dout) %>%
+  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
+  po_title("Civil Liberties Distribution by Continent")
 ```
 
 
@@ -426,15 +505,16 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_count <- pokemon %>%
-  group_by(type_1, color_1) %>%
+dout <- freedom_house %>%
+  filter(year == 2023) %>%
+  group_by(status, color) %>%
   count()
 
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_donut(
-daes(size = n, group = type_1, color = color_1)
+daes(size = n, group = status, color = color)
   ) %>%
-  po_title("Share of Pokemon by Type 1")
+  po_title("Count of Countries by Continent and Status")
 ```
 
 
@@ -525,11 +605,17 @@ an 'htmlwidgets' object with the desired interactive plot
 
 ```r
 if (rlang::is_installed("d3pomaps")) {
- pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+ library(dplyr)
 
- d3po(pokemon_mewtwo) %>%
-   po_geomap(daes(group = id, color = value), map = d3pomaps::maps$south_america) %>%
-   po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+ dout <- freedom_house %>%
+   filter(year == 2023, !is.na(iso2c)) %>%
+   select(id = iso2c, status, color)
+
+ d3po(dout) %>% 
+   po_geomap(
+ daes(group = id, color = color, size = status, tooltip = status),
+ map = d3pomaps::maps$south_america$continent
+   )
 }
 ```
 
@@ -670,19 +756,15 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_decile <- pokemon %>%
-  filter(type_1 %in% c("grass", "fire", "water")) %>%
-  group_by(type_1, color_1) %>%
-  summarise(
-decile = 0:10,
-weight = quantile(weight, probs = seq(0, 1, by = .1))
-  )
+dout <- freedom_house %>%
+  group_by(year, status, color) %>%
+  count()
 
-d3po(pokemon_decile) %>%
+d3po(dout) %>%
   po_line(
-daes(x = decile, y = weight, group = type_1, color = color_1)
+daes(x = year, y = n, group = status, color = color)
   ) %>%
-  po_title("Decile of Pokemon Weight by Type 1")
+  po_title("Evolution of Country Status in Time")
 ```
 
 
@@ -728,9 +810,14 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 ### Examples
 
 ```r
-d3po(pokemon_network) %>%
-  po_network(daes(size = size, color = color, layout = "nicely")) %>%
-  po_title("Connections between Pokemon types based on Type 1 and 2")
+if (rlang::is_installed("igraph")) {
+ library(magrittr)
+
+ d3po(freedom_house_network) %>%
+   po_network(daes(size = exports, color = color,
+ tooltip = status, layout = "kk")) %>%
+   po_title("Network of countries by Freedom House status and exports")
+}
 ```
 
 
@@ -778,15 +865,16 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_count <- pokemon %>%
-  group_by(type_1, color_1) %>%
+dout <- freedom_house %>%
+  filter(year == 2023) %>%
+  group_by(status, color) %>%
   count()
 
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_pie(
-daes(size = n, group = type_1, color = color_1)
+daes(size = n, group = status, color = color)
   ) %>%
-  po_title("Share of Pokemon by Type 1")
+  po_title("Count of Countries by Continent and Status")
 ```
 
 
@@ -834,19 +922,22 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_decile <- pokemon %>%
-  filter(type_1 %in% c("grass", "fire", "water")) %>%
-  group_by(type_1, color_1) %>%
-  summarise(
-decile = 0:10,
-weight = quantile(weight, probs = seq(0, 1, by = .1))
-  )
+dout <- freedom_house %>%
+filter(
+ year %in% c(1975, 1985, 1995, 2005, 2015),
+ country == "Chile"
+) %>%
+mutate(
+  inv_civil_liberties = sqrt(1 / civil_liberties),
+  inv_political_rights = sqrt(1 / political_rights)
+)
 
-d3po(pokemon_decile) %>%
+d3po(dout) %>%
   po_scatter(
-daes(x = decile, y = weight, group = type_1, color = color_1)
+daes(x = inv_civil_liberties, y = inv_political_rights,
+  group = year, color = color)
   ) %>%
-  po_title("Decile of Pokemon Weight by Type 1")
+po_title("Evolution of Chile in Time")
 ```
 
 
@@ -926,94 +1017,17 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-pokemon_count <- pokemon %>%
-  group_by(type_1, color_1) %>%
+dout <- freedom_house %>%
+  filter(year == 2023) %>%
+  group_by(status, color) %>%
   count()
 
-d3po(pokemon_count) %>%
+d3po(dout) %>%
   po_treemap(
-daes(size = n, group = type_1, color = color_1)
+daes(size = n, group = status, color = color)
   ) %>%
-  po_title("Share of Pokemon by Type 1")
+  po_title("Count of Countries by Continent and Status")
 ```
-
-
----
-## Pokemon network
-----------------
-
-### Description
-
-Connections between Pokemon types based on Type 1 and 2.
-
-### Usage
-
-    pokemon_network
-
-### Format
-
-A `igraph` object with 17 vertices (nodes) and 26 edges (arcs).
-
-### Source
-
-Adapted from `highcharter` package.
-
-
----
-## Pokemon
--------
-
-### Description
-
-Statistical information about 151 Pokemon from Nintendo RPG series.
-
-### Usage
-
-    pokemon
-
-### Format
-
-A `data frame` with 151 observations and 15 variables.
-
-### Variables
-
--   `id`: Pokedex number.
-
--   `name`: Pokedex name.
-
--   `height`: Height in meters.
-
--   `weight`: Weight in kilograms.
-
--   `base_experience`: How much the Pokemon has battled.
-
--   `type_1`: Primary Pokemon type (i.e. Grass, Fire and Water)
-
--   `type_2`: Secondary Pokemon type (i.e. Poison, Dragon and Ice)
-
--   `attack`: How much damage a Pokemon deals when using a technique.
-
--   `defense`: How much damage a Pokemon receives when it is hit by a
-    technique.
-
--   `hp`: How much damage a Pokemon can receive before fainting.
-
--   `special_attack`: How much damage a Pokemon deals when using a
-    special technique.
-
--   `special_defense`: How much damage a Pokemon receives when it is hit
-    by a special technique.
-
--   `speed`: Determines the order of Pokemon that can act in battle, if
-    the speed is tied then the 1st move is assigned at random.
-
--   `color_1`: Hex color code for Type 1.
-
--   `color_2`: Hex color code for Type 2.
-
-### Source
-
-Adapted from `highcharter` package.
 
 
 ---

@@ -1,7 +1,7 @@
 Package: d3po
 Type: Package
 Title: Fast and Beautiful Interactive Visualization for 'Markdown' and 'Shiny'
-Version: 0.5.0
+Version: 0.5.1
 Authors@R: c(
   person("Mauricio", "Vargas", role = c("aut","cre","cph"), 
    email = "mavargas11@uc.cl"),
@@ -11,7 +11,9 @@ Authors@R: c(
   person("Sylvain", "Lesage", role = "ctb"),
   person("Curran", "Kelleher", role = "ctb"),
   person("Fernando", "Becerra", role = "ctb"),
-  person(family = "Natural Earth", role = "dtc"),
+  person("Marta", "Kolczynska", role = "ctb"),
+  person(family = "United Nations", role = "dtc"),
+  person(family = "Freedom House", role = "dtc"),
   person(family = "R Consortium", role = "fnd"))
 Description: Apache licensed alternative to 'Highcharter' which provides 
   functions for both fast and beautiful interactive visualization for 'Markdown'

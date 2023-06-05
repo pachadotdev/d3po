@@ -26,11 +26,16 @@ Plot a geomap
 }
 \examples{
 if (rlang::is_installed("d3pomaps")) {
- pokemon_mewtwo <- data.frame(id = "CL", value = 1)
+ library(dplyr)
 
- d3po(pokemon_mewtwo) \%>\%
-   po_geomap(daes(group = id, color = value), map = d3pomaps::maps$south_america) \%>\%
-   po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+ dout <- freedom_house \%>\%
+   filter(year == 2023, !is.na(iso2c)) \%>\%
+   select(id = iso2c, status, color)
+
+ d3po(dout) \%>\% 
+   po_geomap(
+     daes(group = id, color = color, size = status, tooltip = status),
+     map = d3pomaps::maps$south_america$continent
+   )
 }
-
 }

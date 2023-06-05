@@ -23,8 +23,12 @@ an 'htmlwidgets' object with the desired interactive plot
 Draw a boxplot.
 }
 \examples{
-d3po(pokemon) \%>\%
-  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) \%>\%
-  po_title("Distribution of Pokemon Speed")
+library(dplyr)
 
+dout <- freedom_house \%>\% 
+  filter(year == 2023)
+ 
+d3po(dout) \%>\%
+  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) \%>\% 
+  po_title("Civil Liberties Distribution by Continent")
 }

@@ -25,18 +25,20 @@ Plot an scatter chart.
 \examples{
 library(dplyr)
 
-pokemon_decile <- pokemon \%>\%
-  filter(type_1 \%in\% c("grass", "fire", "water")) \%>\%
-  group_by(type_1, color_1) \%>\%
-  summarise(
-    decile = 0:10,
-    weight = quantile(weight, probs = seq(0, 1, by = .1))
-  )
+dout <- freedom_house \%>\%
+filter(
+ year \%in\% c(1975, 1985, 1995, 2005, 2015),
+ country == "Chile"
+) \%>\%
+mutate(
+  inv_civil_liberties = sqrt(1 / civil_liberties),
+  inv_political_rights = sqrt(1 / political_rights)
+)
 
-d3po(pokemon_decile) \%>\%
+d3po(dout) \%>\%
   po_scatter(
-    daes(x = decile, y = weight, group = type_1, color = color_1)
+    daes(x = inv_civil_liberties, y = inv_political_rights,
+      group = year, color = color)
   ) \%>\%
-  po_title("Decile of Pokemon Weight by Type 1")
-
+po_title("Evolution of Chile in Time")
 }

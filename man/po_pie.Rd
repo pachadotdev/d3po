@@ -25,14 +25,14 @@ Plot a pie
 \examples{
 library(dplyr)
 
-pokemon_count <- pokemon \%>\%
-  group_by(type_1, color_1) \%>\%
+dout <- freedom_house \%>\%
+  filter(year == 2023) \%>\%
+  group_by(status, color) \%>\%
   count()
 
-d3po(pokemon_count) \%>\%
+d3po(dout) \%>\%
   po_pie(
-    daes(size = n, group = type_1, color = color_1)
+    daes(size = n, group = status, color = color)
   ) \%>\%
-  po_title("Share of Pokemon by Type 1")
-
+  po_title("Count of Countries by Continent and Status")
 }

@@ -60,9 +60,14 @@ This is an example consisting in the creation of a box and whiskers
 plot:
 
 ``` r
-d3po(pokemon) %>%
-  po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
-  po_title("Distribution of Pokemon Speed by Type")
+library(dplyr)
+
+dout <- freedom_house %>% 
+  filter(year == 2023)
+ 
+d3po(dout) %>%
+  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
+  po_title("Civil Liberties Distribution by Continent")
 ```
 
 To access a templated project, in RStudio's top bar click *File -> New Project -> New Directory -> Shiny app with Golem+D3po*. Otherwise, start with a blank project and run `d3po::d3po_template()` to copy the same template.

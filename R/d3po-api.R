@@ -11,10 +11,14 @@
 #' @param inherit_daes Whether to inherit aesthetics previous specified.
 #'
 #' @examples
-#' d3po(pokemon) %>%
-#'   po_box(daes(x = type_1, y = speed, group = name, color = color_1)) %>%
-#'   po_title("Distribution of Pokemon Speed")
-#'
+#' library(dplyr)
+#' 
+#' dout <- freedom_house %>% 
+#'   filter(year == 2023)
+#'  
+#' d3po(dout) %>%
+#'   po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
+#'   po_title("Civil Liberties Distribution by Continent")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_box <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_box")
@@ -66,16 +70,16 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' pokemon_count <- pokemon %>%
-#'   group_by(type_1, color_1) %>%
+#' dout <- freedom_house %>%
+#'   filter(year == 2023) %>%
+#'   group_by(status, color) %>%
 #'   count()
-#'
-#' d3po(pokemon_count) %>%
+#' 
+#' d3po(dout) %>%
 #'   po_treemap(
-#'     daes(size = n, group = type_1, color = color_1)
+#'     daes(size = n, group = status, color = color)
 #'   ) %>%
-#'   po_title("Share of Pokemon by Type 1")
-#'
+#'   po_title("Count of Countries by Continent and Status")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_treemap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_treemap")
@@ -126,16 +130,16 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' pokemon_count <- pokemon %>%
-#'   group_by(type_1, color_1) %>%
+#' dout <- freedom_house %>%
+#'   filter(year == 2023) %>%
+#'   group_by(status, color) %>%
 #'   count()
-#'
-#' d3po(pokemon_count) %>%
+#' 
+#' d3po(dout) %>%
 #'   po_pie(
-#'     daes(size = n, group = type_1, color = color_1)
+#'     daes(size = n, group = status, color = color)
 #'   ) %>%
-#'   po_title("Share of Pokemon by Type 1")
-#'
+#'   po_title("Count of Countries by Continent and Status")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_pie <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_pie")
@@ -186,16 +190,16 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' pokemon_count <- pokemon %>%
-#'   group_by(type_1, color_1) %>%
+#' dout <- freedom_house %>%
+#'   filter(year == 2023) %>%
+#'   group_by(status, color) %>%
 #'   count()
-#'
-#' d3po(pokemon_count) %>%
+#' 
+#' d3po(dout) %>%
 #'   po_donut(
-#'     daes(size = n, group = type_1, color = color_1)
+#'     daes(size = n, group = status, color = color)
 #'   ) %>%
-#'   po_title("Share of Pokemon by Type 1")
-#'
+#'   po_title("Count of Countries by Continent and Status")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_donut <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_donut")
@@ -246,22 +250,17 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' library(dplyr)
-#'
-#' pokemon_density <- density(pokemon$weight, n = 30)
-#'
-#' pokemon_density <- tibble(
-#'   x = pokemon_density$x,
-#'   y = pokemon_density$y,
-#'   variable = "weight",
-#'   color = "#5377e3"
-#' )
-#'
-#' d3po(pokemon_density) %>%
-#'   po_area(
-#'     daes(x = x, y = y, group = variable, color = color)
-#'   ) %>%
-#'   po_title("Approximated Density of Pokemon Weight")
 #' 
+#' dout <- freedom_house %>%
+#'   group_by(year, status, color) %>%
+#'   count()
+#' 
+#' d3po(dout) %>%
+#'   po_area(
+#'     daes(x = year, y = n, group = status, color = color),
+#'     stack = TRUE
+#'   ) %>%
+#'   po_title("Evolution of Country Status in Time")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_area")
@@ -313,17 +312,17 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes, stack) {
 #'
 #' @examples
 #' library(dplyr)
-#'
-#' pokemon_count <- pokemon %>%
-#'   group_by(type_1, color_1) %>%
+#' 
+#' dout <- freedom_house %>%
+#'   filter(year >= 2010) %>%
+#'   group_by(year, status, color) %>%
 #'   count()
-#'
-#' d3po(pokemon_count) %>%
+#' 
+#' d3po(dout) %>%
 #'   po_bar(
-#'     daes(x = type_1, y = n, group = type_1, color = color_1)
+#'     daes(x = year, y = n, group = status, color = color)
 #'   ) %>%
-#'   po_title("Count of Pokemon by Type 1")
-#'
+#'   po_title("Evolution of Country Status in Time")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
@@ -374,21 +373,16 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' library(dplyr)
-#'
-#' pokemon_decile <- pokemon %>%
-#'   filter(type_1 %in% c("grass", "fire", "water")) %>%
-#'   group_by(type_1, color_1) %>%
-#'   summarise(
-#'     decile = 0:10,
-#'     weight = quantile(weight, probs = seq(0, 1, by = .1))
-#'   )
-#'
-#' d3po(pokemon_decile) %>%
+#' 
+#' dout <- freedom_house %>%
+#'   group_by(year, status, color) %>%
+#'   count()
+#' 
+#' d3po(dout) %>%
 #'   po_line(
-#'     daes(x = decile, y = weight, group = type_1, color = color_1)
+#'     daes(x = year, y = n, group = status, color = color)
 #'   ) %>%
-#'   po_title("Decile of Pokemon Weight by Type 1")
-#'
+#'   po_title("Evolution of Country Status in Time")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_line <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_line")
@@ -439,21 +433,23 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' library(dplyr)
-#'
-#' pokemon_decile <- pokemon %>%
-#'   filter(type_1 %in% c("grass", "fire", "water")) %>%
-#'   group_by(type_1, color_1) %>%
-#'   summarise(
-#'     decile = 0:10,
-#'     weight = quantile(weight, probs = seq(0, 1, by = .1))
-#'   )
-#'
-#' d3po(pokemon_decile) %>%
+#' 
+#' dout <- freedom_house %>%
+#' filter(
+#'  year %in% c(1975, 1985, 1995, 2005, 2015),
+#'  country == "Chile"
+#' ) %>%
+#' mutate(
+#'   inv_civil_liberties = sqrt(1 / civil_liberties),
+#'   inv_political_rights = sqrt(1 / political_rights)
+#' )
+#' 
+#' d3po(dout) %>%
 #'   po_scatter(
-#'     daes(x = decile, y = weight, group = type_1, color = color_1)
+#'     daes(x = inv_civil_liberties, y = inv_political_rights,
+#'       group = year, color = color)
 #'   ) %>%
-#'   po_title("Decile of Pokemon Weight by Type 1")
-#'
+#' po_title("Evolution of Chile in Time")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_scatter <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_scatter")
@@ -653,7 +649,6 @@ po_legend.d3proxy <- function(d3po, legend) {
 #' @param family family font to use ("Roboto", "Merriweather", etc.).
 #' @param size size to use (10, 11, 12, etc. overrides auto-sizing).
 #' @param transform transform to use ("lowercase", "uppercase", "capitalize", "none").
-#'
 #' @export
 #' @return Appends custom font to an 'htmlwidgets' object
 po_font <- function(d3po, family = "Fira Sans",
@@ -745,12 +740,15 @@ po_background.d3proxy <- function(d3po, background) {
 #' Draw a network.
 #'
 #' @inheritParams po_box
-#'
 #' @examples
-#' d3po(pokemon_network) %>%
-#'   po_network(daes(size = size, color = color, layout = "nicely")) %>%
-#'   po_title("Connections between Pokemon types based on Type 1 and 2")
-#'
+#' if (rlang::is_installed("igraph")) {
+#'  library(magrittr)
+#' 
+#'  d3po(freedom_house_network) %>%
+#'    po_network(daes(size = exports, color = color,
+#'      tooltip = status, layout = "kk")) %>%
+#'    po_title("Network of countries by Freedom House status and exports")
+#' }
 #' @export
 #' @return Appends nodes arguments to a network-specific 'htmlwidgets' object
 po_network <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_network")
@@ -773,6 +771,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
+  d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
 
   layout <- daes_to_opts(daes, "layout")
 
@@ -825,13 +824,18 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (rlang::is_installed("d3pomaps")) {
-#'  pokemon_mewtwo <- data.frame(id = "CL", value = 1)
-#'
-#'  d3po(pokemon_mewtwo) %>%
-#'    po_geomap(daes(group = id, color = value), map = d3pomaps::maps$south_america) %>%
-#'    po_title("Mewtwo was found in Isla Nueva (New Island, Chile)")
+#'  library(dplyr)
+#' 
+#'  dout <- freedom_house %>%
+#'    filter(year == 2023, !is.na(iso2c)) %>%
+#'    select(id = iso2c, status, color)
+#' 
+#'  d3po(dout) %>% 
+#'    po_geomap(
+#'      daes(group = id, color = color, size = status, tooltip = status),
+#'      map = d3pomaps::maps$south_america$continent
+#'    )
 #' }
-#'
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_geomap <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) UseMethod("po_geomap")

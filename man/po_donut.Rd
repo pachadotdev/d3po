@@ -25,8 +25,8 @@ Plot a donut
 \examples{
 library(dplyr)
 
-dout <- freedom_house \%>\%
-  filter(year == 2023) \%>\%
+dout <- freedom::country_rating_statuses \%>\%
+  filter(year == 2022) \%>\%
   group_by(status, color) \%>\%
   count()
 

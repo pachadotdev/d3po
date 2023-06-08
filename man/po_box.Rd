@@ -25,10 +25,10 @@ Draw a boxplot.
 \examples{
 library(dplyr)
 
-dout <- freedom_house \%>\% 
-  filter(year == 2023)
- 
+dout <- freedom::country_rating_statuses \%>\%
+  filter(year == 2022)
+
 d3po(dout) \%>\%
-  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) \%>\% 
+  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) \%>\%
   po_title("Civil Liberties Distribution by Continent")
 }

@@ -61,10 +61,16 @@ HTMLWidgets.widget({
         }
         
         if (x.labels) {
-          chart.labels({"align": x.labels.align, "valign": x.labels.valign, "resize":x.labels.resize,
-            "font": {"family": x.labels.font.family, "size": x.labels.font.size, "transform": x.labels.font.transform}
+          chart.labels({
+            "align": x.labels.align, 
+            "valign": x.labels.valign, 
+            "resize":x.labels.resize
           });
         }
+
+        // if (x.type === "geomap") {
+        //   chart.labels(false);
+        // }
 
         // these two are for networks
         if(x.edges)
@@ -81,7 +87,10 @@ HTMLWidgets.widget({
           chart.tooltip(x.tooltip);
           
         if(x.font) {
-          chart.font({"family": x.font.family, "size": x.font.size, "transform": x.font.transform});
+          chart.font({
+            "family": x.font.family,
+            "size": x.font.size, 
+            "transform": x.font.transform});
         }
         
         if(x.background)

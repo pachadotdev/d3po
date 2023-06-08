@@ -182,83 +182,6 @@ Valid aesthetics (depending on the geom)
 
 
 ---
-## Freedom house network
-----------------------------------------------
-
-### Description
-
-Connections between countries correspond to the strongest arcs based on
-the products they export. The network was trimmed until obtaining an
-average of four arcs per node.
-
-### Usage
-
-    freedom_house_network
-
-### Format
-
-A `igraph` object with 190 vertices (nodes) and 316 edges (arcs).
-
-### Source
-
-Adapted from the United Nations (trade volumes) and Freedom House
-(freedom information).
-
-
----
-## Freedom house
--------------------------------------------------------------------
-
-### Description
-
-For each country and territory, Freedom in the World analyzes the
-electoral process, political pluralism and participation, the
-functioning of the government, freedom of expression and of belief,
-associational and organizational rights, the rule of law, and personal
-autonomy and individual rights.
-
-### Usage
-
-    freedom_house
-
-### Format
-
-A `data frame` with 9,044 observations and 5 variables.
-
-### Variables
-
--   `year`: Year of observation (1973-2023).
-
--   `country`: Country name.
-
--   `iso2c`: ISO 2-character country code. Czechoslovakia, Kosovo,
-    Micronesia, Serbia and Montenegro, and Yugoslavia do not have
-    unambiguous matches and appear as 'NA'.
-
--   `iso3c`: ISO 3-character country code. Czechoslovakia, Kosovo,
-    Micronesia, Serbia and Montenegro, and Yugoslavia do not have
-    unambiguous matches and appear as 'NA'.
-
--   `continent`: Continent name.
-
--   `year`: Year of observation (1973-2023).
-
--   `political_rights`: Political rights score (1-7 scale, with one
-    representing the highest degree of Freedom and seven the lowest).
-
--   `civil_liberties`: Civil liberties score (1-7 scale, with one
-    representing the highest degree of Freedom and seven the lowest).
-
--   `status`: Status of the country (Free, Partly Free, Not Free).
-
--   `color`: Color associated with the status of the country.
-
-### Source
-
-Adapted from Freedom House.
-
-
----
 ## Po area
 ----
 
@@ -306,7 +229,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
+dout <- freedom::country_rating_statuses %>%
   group_by(year, status, color) %>%
   count()
 
@@ -395,7 +318,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
+dout <- freedom::country_rating_statuses %>%
   filter(year >= 2010) %>%
   group_by(year, status, color) %>%
   count()
@@ -452,11 +375,11 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>% 
-  filter(year == 2023)
- 
+dout <- freedom::country_rating_statuses %>%
+  filter(year == 2022)
+
 d3po(dout) %>%
-  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
+  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>%
   po_title("Civil Liberties Distribution by Continent")
 ```
 
@@ -505,8 +428,8 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
-  filter(year == 2023) %>%
+dout <- freedom::country_rating_statuses %>%
+  filter(year == 2022) %>%
   group_by(status, color) %>%
   count()
 
@@ -548,7 +471,7 @@ Edit the font used in a chart.
 </tr>
 <tr class="even">
 <td><code id="po_font_:_transform">transform</code></td>
-<td><p>transform to use ("lowercase", "uppercase", "capitalize", "none").</p></td>
+<td><p>transformation to use for the title ("lowercase", "uppercase", "capitalize", "none").</p></td>
 </tr>
 </tbody>
 </table>
@@ -605,17 +528,17 @@ an 'htmlwidgets' object with the desired interactive plot
 
 ```r
 if (rlang::is_installed("d3pomaps")) {
- library(dplyr)
+  library(dplyr)
 
- dout <- freedom_house %>%
-   filter(year == 2023, !is.na(iso2c)) %>%
-   select(id = iso2c, status, color)
+  dout <- freedom::country_rating_statuses %>%
+filter(year == 2022, !is.na(iso2c)) %>%
+select(id = iso2c, status, color)
 
- d3po(dout) %>% 
-   po_geomap(
- daes(group = id, color = color, size = status, tooltip = status),
- map = d3pomaps::maps$south_america$continent
-   )
+  d3po(dout) %>%
+po_geomap(
+  daes(group = id, color = color, size = status, tooltip = status),
+  map = d3pomaps::maps$south_america$continent
+)
 }
 ```
 
@@ -630,15 +553,7 @@ Edit labels positioning in a chart.
 
 ### Usage
 
-    po_labels(
-      d3po,
-      align = "center",
-      valign = "middle",
-      resize = TRUE,
-      family = "Fira Sans",
-      size = 16,
-      transform = "capitalize"
-    )
+    po_labels(d3po, align = "center", valign = "middle", resize = TRUE)
 
 ### Arguments
 
@@ -659,18 +574,6 @@ Edit labels positioning in a chart.
 <tr class="even">
 <td><code id="po_labels_:_resize">resize</code></td>
 <td><p>resize labels text (TRUE or FALSE).</p></td>
-</tr>
-<tr class="odd">
-<td><code id="po_labels_:_family">family</code></td>
-<td><p>family font to use ("Roboto", "Merriweather", etc.).</p></td>
-</tr>
-<tr class="even">
-<td><code id="po_labels_:_size">size</code></td>
-<td><p>size to use (10, 11, 12, etc. overrides auto-sizing).</p></td>
-</tr>
-<tr class="odd">
-<td><code id="po_labels_:_transform">transform</code></td>
-<td><p>transform to use ("lowercase", "uppercase", "capitalize", "none").</p></td>
 </tr>
 </tbody>
 </table>
@@ -756,7 +659,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
+dout <- freedom::country_rating_statuses %>%
   group_by(year, status, color) %>%
   count()
 
@@ -811,12 +714,14 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 
 ```r
 if (rlang::is_installed("igraph")) {
- library(magrittr)
+  library(magrittr)
 
- d3po(freedom_house_network) %>%
-   po_network(daes(size = exports, color = color,
- tooltip = status, layout = "kk")) %>%
-   po_title("Network of countries by Freedom House status and exports")
+  d3po(freedom::country_exports_similarity) %>%
+po_network(daes(
+  size = exports, color = color,
+  tooltip = status, layout = "kk"
+)) %>%
+po_title("Network of countries by Freedom House status and exports")
 }
 ```
 
@@ -865,8 +770,8 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
-  filter(year == 2023) %>%
+dout <- freedom::country_rating_statuses %>%
+  filter(year == 2022) %>%
   group_by(status, color) %>%
   count()
 
@@ -922,22 +827,24 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
-filter(
- year %in% c(1975, 1985, 1995, 2005, 2015),
- country == "Chile"
-) %>%
-mutate(
-  inv_civil_liberties = sqrt(1 / civil_liberties),
-  inv_political_rights = sqrt(1 / political_rights)
-)
+dout <- freedom::country_rating_statuses %>%
+  filter(
+year %in% c(1975, 1985, 1995, 2005, 2015),
+country == "Chile"
+  ) %>%
+  mutate(
+inv_civil_liberties = sqrt(1 / civil_liberties),
+inv_political_rights = sqrt(1 / political_rights)
+  )
 
 d3po(dout) %>%
   po_scatter(
-daes(x = inv_civil_liberties, y = inv_political_rights,
-  group = year, color = color)
+daes(
+  x = inv_civil_liberties, y = inv_political_rights,
+  group = year, color = color
+)
   ) %>%
-po_title("Evolution of Chile in Time")
+  po_title("Evolution of Chile in Time")
 ```
 
 
@@ -1017,8 +924,8 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom_house %>%
-  filter(year == 2023) %>%
+dout <- freedom::country_rating_statuses %>%
+  filter(year == 2022) %>%
   group_by(status, color) %>%
   count()
 

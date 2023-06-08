@@ -24,11 +24,13 @@ Draw a network.
 }
 \examples{
 if (rlang::is_installed("igraph")) {
- library(magrittr)
+  library(magrittr)
 
- d3po(freedom_house_network) \%>\%
-   po_network(daes(size = exports, color = color,
-     tooltip = status, layout = "kk")) \%>\%
-   po_title("Network of countries by Freedom House status and exports")
+  d3po(freedom::country_exports_similarity) \%>\%
+    po_network(daes(
+      size = exports, color = color,
+      tooltip = status, layout = "kk"
+    )) \%>\%
+    po_title("Network of countries by Freedom House status and exports")
 }
 }

@@ -26,16 +26,16 @@ Plot a geomap
 }
 \examples{
 if (rlang::is_installed("d3pomaps")) {
- library(dplyr)
+  library(dplyr)
 
- dout <- freedom_house \%>\%
-   filter(year == 2023, !is.na(iso2c)) \%>\%
-   select(id = iso2c, status, color)
+  dout <- freedom::country_rating_statuses \%>\%
+    filter(year == 2022, !is.na(iso2c)) \%>\%
+    select(id = iso2c, status, color)
 
- d3po(dout) \%>\% 
-   po_geomap(
-     daes(group = id, color = color, size = status, tooltip = status),
-     map = d3pomaps::maps$south_america$continent
-   )
+  d3po(dout) \%>\%
+    po_geomap(
+      daes(group = id, color = color, size = status, tooltip = status),
+      map = d3pomaps::maps$south_america$continent
+    )
 }
 }

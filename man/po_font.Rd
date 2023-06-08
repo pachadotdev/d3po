@@ -13,7 +13,7 @@ po_font(d3po, family = "Fira Sans", size = 16, transform = "none")
 
 \item{size}{size to use (10, 11, 12, etc. overrides auto-sizing).}
 
-\item{transform}{transform to use ("lowercase", "uppercase", "capitalize", "none").}
+\item{transform}{transformation to use for the title ("lowercase", "uppercase", "capitalize", "none").}
 }
 \value{
 Appends custom font to an 'htmlwidgets' object

@@ -17,34 +17,21 @@ app_ui <- function(request) {
       dashboardSidebar(
         collapsed = FALSE,
         selectInput(
-          inputId = "map",
-          label = "Select a continent or country",
-          choices = list_maps(), # see golem_utils_ui.R
+          inputId = "country",
+          label = "Select a country",
+          choices =  list_countries(), # see golem_utils_ui.R
           selected = "Canada"
         ),
         selectInput(
-          inputId = "distribution",
-          label = "Select a distribution",
-          choices = c("Normal", "Poisson", "Uniform", "Exponential"),
-          selected = "Normal"
-        ),
-        sliderInput(
-          inputId = "poisson_parameter",
-          label = "Select a Poisson parameter",
-          min = 1L,
-          max = 10L,
-          step = 1L,
-          value = 5L
-        ),
-        textInput(
-          inputId = "seed",
-          label = "Seed value",
-          value = 42
+          inputId = "question",
+          label = "Select a question",
+          choices =  list_questions(), # see golem_utils_ui.R
+          selected = "A1"
         )
       ),
       dashboardBody(
         tags$head(tags$style(HTML(".content-wrapper { overflow: auto; }"))),
-        col_12(d3po_output("geomap", height = "650px"))
+        col_12(d3po_output("question_plot", height = "650px"))
       )
     )
   )

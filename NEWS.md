@@ -1,3 +1,14 @@
+# d3po 0.5.3
+
+* Moves Freedom House data to https://github.com/pachadotdev/freedom.
+* The shiny template includes common Shiny tricks and good practice.
+
+# d3po 0.5.2
+
+* Provides Freedom House data for the examples and drops the Pokemon dataset.
+* Includes Shiny project template.
+* Maps were moved to the side package `d3pomaps`.
+
 # d3po 0.4.5
 
 * Provides maps directly as R-formatted lists, and not as topjson files in inst/

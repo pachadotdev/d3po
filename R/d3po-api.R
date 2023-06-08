@@ -12,12 +12,12 @@
 #'
 #' @examples
 #' library(dplyr)
-#' 
-#' dout <- freedom_house %>% 
-#'   filter(year == 2023)
-#'  
+#'
+#' dout <- freedom::country_rating_statuses %>%
+#'   filter(year == 2022)
+#'
 #' d3po(dout) %>%
-#'   po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
+#'   po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>%
 #'   po_title("Civil Liberties Distribution by Continent")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -70,11 +70,11 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom_house %>%
-#'   filter(year == 2023) %>%
+#' dout <- freedom::country_rating_statuses %>%
+#'   filter(year == 2022) %>%
 #'   group_by(status, color) %>%
 #'   count()
-#' 
+#'
 #' d3po(dout) %>%
 #'   po_treemap(
 #'     daes(size = n, group = status, color = color)
@@ -130,11 +130,11 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom_house %>%
-#'   filter(year == 2023) %>%
+#' dout <- freedom::country_rating_statuses %>%
+#'   filter(year == 2022) %>%
 #'   group_by(status, color) %>%
 #'   count()
-#' 
+#'
 #' d3po(dout) %>%
 #'   po_pie(
 #'     daes(size = n, group = status, color = color)
@@ -190,11 +190,11 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom_house %>%
-#'   filter(year == 2023) %>%
+#' dout <- freedom::country_rating_statuses %>%
+#'   filter(year == 2022) %>%
 #'   group_by(status, color) %>%
 #'   count()
-#' 
+#'
 #' d3po(dout) %>%
 #'   po_donut(
 #'     daes(size = n, group = status, color = color)
@@ -250,11 +250,11 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' library(dplyr)
-#' 
-#' dout <- freedom_house %>%
+#'
+#' dout <- freedom::country_rating_statuses %>%
 #'   group_by(year, status, color) %>%
 #'   count()
-#' 
+#'
 #' d3po(dout) %>%
 #'   po_area(
 #'     daes(x = year, y = n, group = status, color = color),
@@ -312,12 +312,12 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes, stack) {
 #'
 #' @examples
 #' library(dplyr)
-#' 
-#' dout <- freedom_house %>%
+#'
+#' dout <- freedom::country_rating_statuses %>%
 #'   filter(year >= 2010) %>%
 #'   group_by(year, status, color) %>%
 #'   count()
-#' 
+#'
 #' d3po(dout) %>%
 #'   po_bar(
 #'     daes(x = year, y = n, group = status, color = color)
@@ -373,11 +373,11 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' library(dplyr)
-#' 
-#' dout <- freedom_house %>%
+#'
+#' dout <- freedom::country_rating_statuses %>%
 #'   group_by(year, status, color) %>%
 #'   count()
-#' 
+#'
 #' d3po(dout) %>%
 #'   po_line(
 #'     daes(x = year, y = n, group = status, color = color)
@@ -433,23 +433,25 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' library(dplyr)
-#' 
-#' dout <- freedom_house %>%
-#' filter(
-#'  year %in% c(1975, 1985, 1995, 2005, 2015),
-#'  country == "Chile"
-#' ) %>%
-#' mutate(
-#'   inv_civil_liberties = sqrt(1 / civil_liberties),
-#'   inv_political_rights = sqrt(1 / political_rights)
-#' )
-#' 
+#'
+#' dout <- freedom::country_rating_statuses %>%
+#'   filter(
+#'     year %in% c(1975, 1985, 1995, 2005, 2015),
+#'     country == "Chile"
+#'   ) %>%
+#'   mutate(
+#'     inv_civil_liberties = sqrt(1 / civil_liberties),
+#'     inv_political_rights = sqrt(1 / political_rights)
+#'   )
+#'
 #' d3po(dout) %>%
 #'   po_scatter(
-#'     daes(x = inv_civil_liberties, y = inv_political_rights,
-#'       group = year, color = color)
+#'     daes(
+#'       x = inv_civil_liberties, y = inv_political_rights,
+#'       group = year, color = color
+#'     )
 #'   ) %>%
-#' po_title("Evolution of Chile in Time")
+#'   po_title("Evolution of Chile in Time")
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_scatter <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_scatter")
@@ -536,57 +538,38 @@ po_title.d3proxy <- function(d3po, title) {
 #' @param align horizontal alignment ("left", "center", "right", "start", "middle", "end").
 #' @param valign vertical alignment ("top", "middle", "botton").
 #' @param resize resize labels text (TRUE or FALSE).
-#' @param family family font to use ("Roboto", "Merriweather", etc.).
-#' @param size size to use (10, 11, 12, etc. overrides auto-sizing).
-#' @param transform transform to use ("lowercase", "uppercase", "capitalize", "none").
 #'
 #' @export
 #' @return Appends custom labels to an 'htmlwidgets' object
 po_labels <- function(d3po, align = "center",
                       valign = "middle",
-                      resize = TRUE,
-                      family = "Fira Sans",
-                      size = 16,
-                      transform = "capitalize") {
+                      resize = TRUE) {
   UseMethod("po_labels")
 }
 
 #' @export
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align, valign, resize, family, size, transform) {
+po_labels.d3po <- function(d3po, align, valign, resize) {
   assertthat::assert_that(!missing(align), msg = "Missing `align`")
   assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
   assertthat::assert_that(!missing(resize), msg = "Missing `resize`")
-
-  assertthat::assert_that(!missing(family), msg = "Missing `family`")
-  assertthat::assert_that(!missing(size), msg = "Missing `size`")
-  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
 
   d3po$x$labels <- NULL
   d3po$x$labels$align <- align
   d3po$x$labels$valign <- valign
   d3po$x$labels$resize <- resize
 
-  d3po$x$labels$font <- NULL
-  d3po$x$labels$font$family <- family
-  d3po$x$labels$font$size <- size
-  d3po$x$labels$font$transform <- transform
-
   return(d3po)
 }
 
 #' @export
 #' @method po_labels d3proxy
-po_labels.d3proxy <- function(d3po, align, valign, resize, family, size, transform) {
+po_labels.d3proxy <- function(d3po, align, valign, resize) {
   assertthat::assert_that(!missing(align), msg = "Missing `align`")
   assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
   assertthat::assert_that(!missing(resize), msg = "Missing `resize`")
 
-  assertthat::assert_that(!missing(family), msg = "Missing `family`")
-  assertthat::assert_that(!missing(size), msg = "Missing `size`")
-  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
-
-  msg <- list(id = d3po$id, msg = list(align = align, valign = valign, resize = resize, family = family, size = size, transform = transform))
+  msg <- list(id = d3po$id, msg = list(align = align, valign = valign, resize = resize))
 
   d3po$session$sendCustomMessage("d3po-labels", msg)
 
@@ -648,7 +631,7 @@ po_legend.d3proxy <- function(d3po, legend) {
 #' @inheritParams po_box
 #' @param family family font to use ("Roboto", "Merriweather", etc.).
 #' @param size size to use (10, 11, 12, etc. overrides auto-sizing).
-#' @param transform transform to use ("lowercase", "uppercase", "capitalize", "none").
+#' @param transform transformation to use for the title ("lowercase", "uppercase", "capitalize", "none").
 #' @export
 #' @return Appends custom font to an 'htmlwidgets' object
 po_font <- function(d3po, family = "Fira Sans",
@@ -742,12 +725,14 @@ po_background.d3proxy <- function(d3po, background) {
 #' @inheritParams po_box
 #' @examples
 #' if (rlang::is_installed("igraph")) {
-#'  library(magrittr)
-#' 
-#'  d3po(freedom_house_network) %>%
-#'    po_network(daes(size = exports, color = color,
-#'      tooltip = status, layout = "kk")) %>%
-#'    po_title("Network of countries by Freedom House status and exports")
+#'   library(magrittr)
+#'
+#'   d3po(freedom::country_exports_similarity) %>%
+#'     po_network(daes(
+#'       size = exports, color = color,
+#'       tooltip = status, layout = "kk"
+#'     )) %>%
+#'     po_title("Network of countries by Freedom House status and exports")
 #' }
 #' @export
 #' @return Appends nodes arguments to a network-specific 'htmlwidgets' object
@@ -824,17 +809,17 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (rlang::is_installed("d3pomaps")) {
-#'  library(dplyr)
-#' 
-#'  dout <- freedom_house %>%
-#'    filter(year == 2023, !is.na(iso2c)) %>%
-#'    select(id = iso2c, status, color)
-#' 
-#'  d3po(dout) %>% 
-#'    po_geomap(
-#'      daes(group = id, color = color, size = status, tooltip = status),
-#'      map = d3pomaps::maps$south_america$continent
-#'    )
+#'   library(dplyr)
+#'
+#'   dout <- freedom::country_rating_statuses %>%
+#'     filter(year == 2022, !is.na(iso2c)) %>%
+#'     select(id = iso2c, status, color)
+#'
+#'   d3po(dout) %>%
+#'     po_geomap(
+#'       daes(group = id, color = color, size = status, tooltip = status),
+#'       map = d3pomaps::maps$south_america$continent
+#'     )
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot

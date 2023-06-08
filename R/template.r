@@ -11,7 +11,9 @@ d3po_template <- function(path = ".") {
   # copy files
   file.copy(
     list.files(
-      system.file("skeleton", "", package = "d3po"), full.names = TRUE),
+      system.file("shinyexample", "", package = "d3po"),
+      full.names = TRUE
+    ),
     path,
     recursive = TRUE
   )

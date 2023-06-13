@@ -25,7 +25,7 @@ Draw a boxplot.
 \examples{
 library(dplyr)
 
-dout <- freedom::country_rating_statuses \%>\%
+dout <- freedomhouse::country_rating_statuses \%>\%
   filter(year == 2022)
 
 d3po(dout) \%>\%

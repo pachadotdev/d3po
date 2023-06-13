@@ -25,7 +25,7 @@ Draw a bar chart.
 \examples{
 library(dplyr)
 
-dout <- freedom::country_rating_statuses \%>\%
+dout <- freedomhouse::country_rating_statuses \%>\%
   filter(year >= 2010) \%>\%
   group_by(year, status, color) \%>\%
   count()

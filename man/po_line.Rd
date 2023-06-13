@@ -25,7 +25,7 @@ Plot an line chart.
 \examples{
 library(dplyr)
 
-dout <- freedom::country_rating_statuses \%>\%
+dout <- freedomhouse::country_rating_statuses \%>\%
   group_by(year, status, color) \%>\%
   count()
 

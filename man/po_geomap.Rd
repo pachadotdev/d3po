@@ -28,7 +28,7 @@ Plot a geomap
 if (rlang::is_installed("d3pomaps")) {
   library(dplyr)
 
-  dout <- freedom::country_rating_statuses \%>\%
+  dout <- freedomhouse::country_rating_statuses \%>\%
     filter(year == 2022, !is.na(iso2c)) \%>\%
     select(id = iso2c, status, color)
 

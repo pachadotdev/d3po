@@ -26,7 +26,7 @@ Draw a network.
 if (rlang::is_installed("igraph")) {
   library(magrittr)
 
-  d3po(freedom::country_exports_similarity) \%>\%
+  d3po(freedomhouse::country_exports_similarity) \%>\%
     po_network(daes(
       size = exports, color = color,
       tooltip = status, layout = "kk"

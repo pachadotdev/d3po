@@ -30,7 +30,7 @@ Let's start by loading packages.
 library(dplyr)
 library(d3po)
 library(d3pomaps)
-library(freedom)
+library(freedomhouse)
 ```
 
 # Freedom House dataset

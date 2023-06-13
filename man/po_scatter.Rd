@@ -25,7 +25,7 @@ Plot an scatter chart.
 \examples{
 library(dplyr)
 
-dout <- freedom::country_rating_statuses \%>\%
+dout <- freedomhouse::country_rating_statuses \%>\%
   filter(
     year \%in\% c(1975, 1985, 1995, 2005, 2015),
     country == "Chile"

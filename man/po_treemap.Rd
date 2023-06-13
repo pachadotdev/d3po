@@ -25,7 +25,7 @@ Plot a treemap
 \examples{
 library(dplyr)
 
-dout <- freedom::country_rating_statuses \%>\%
+dout <- freedomhouse::country_rating_statuses \%>\%
   filter(year == 2022) \%>\%
   group_by(status, color) \%>\%
   count()

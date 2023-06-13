@@ -229,7 +229,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   group_by(year, status, color) %>%
   count()
 
@@ -318,7 +318,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   filter(year >= 2010) %>%
   group_by(year, status, color) %>%
   count()
@@ -375,7 +375,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   filter(year == 2022)
 
 d3po(dout) %>%
@@ -428,7 +428,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   filter(year == 2022) %>%
   group_by(status, color) %>%
   count()
@@ -530,7 +530,7 @@ an 'htmlwidgets' object with the desired interactive plot
 if (rlang::is_installed("d3pomaps")) {
   library(dplyr)
 
-  dout <- freedom::country_rating_statuses %>%
+  dout <- freedomhouse::country_rating_statuses %>%
 filter(year == 2022, !is.na(iso2c)) %>%
 select(id = iso2c, status, color)
 
@@ -659,7 +659,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   group_by(year, status, color) %>%
   count()
 
@@ -716,7 +716,7 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 if (rlang::is_installed("igraph")) {
   library(magrittr)
 
-  d3po(freedom::country_exports_similarity) %>%
+  d3po(freedomhouse::country_exports_similarity) %>%
 po_network(daes(
   size = exports, color = color,
   tooltip = status, layout = "kk"
@@ -770,7 +770,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   filter(year == 2022) %>%
   group_by(status, color) %>%
   count()
@@ -827,7 +827,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   filter(
 year %in% c(1975, 1985, 1995, 2005, 2015),
 country == "Chile"
@@ -924,7 +924,7 @@ an 'htmlwidgets' object with the desired interactive plot
 ```r
 library(dplyr)
 
-dout <- freedom::country_rating_statuses %>%
+dout <- freedomhouse::country_rating_statuses %>%
   filter(year == 2022) %>%
   group_by(status, color) %>%
   count()

@@ -13,7 +13,7 @@
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   filter(year == 2022)
 #'
 #' d3po(dout) %>%
@@ -70,7 +70,7 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   filter(year == 2022) %>%
 #'   group_by(status, color) %>%
 #'   count()
@@ -130,7 +130,7 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   filter(year == 2022) %>%
 #'   group_by(status, color) %>%
 #'   count()
@@ -190,7 +190,7 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   filter(year == 2022) %>%
 #'   group_by(status, color) %>%
 #'   count()
@@ -251,7 +251,7 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   group_by(year, status, color) %>%
 #'   count()
 #'
@@ -313,7 +313,7 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes, stack) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   filter(year >= 2010) %>%
 #'   group_by(year, status, color) %>%
 #'   count()
@@ -374,7 +374,7 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   group_by(year, status, color) %>%
 #'   count()
 #'
@@ -434,7 +434,7 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @examples
 #' library(dplyr)
 #'
-#' dout <- freedom::country_rating_statuses %>%
+#' dout <- freedomhouse::country_rating_statuses %>%
 #'   filter(
 #'     year %in% c(1975, 1985, 1995, 2005, 2015),
 #'     country == "Chile"
@@ -727,7 +727,7 @@ po_background.d3proxy <- function(d3po, background) {
 #' if (rlang::is_installed("igraph")) {
 #'   library(magrittr)
 #'
-#'   d3po(freedom::country_exports_similarity) %>%
+#'   d3po(freedomhouse::country_exports_similarity) %>%
 #'     po_network(daes(
 #'       size = exports, color = color,
 #'       tooltip = status, layout = "kk"
@@ -811,7 +811,7 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' if (rlang::is_installed("d3pomaps")) {
 #'   library(dplyr)
 #'
-#'   dout <- freedom::country_rating_statuses %>%
+#'   dout <- freedomhouse::country_rating_statuses %>%
 #'     filter(year == 2022, !is.na(iso2c)) %>%
 #'     select(id = iso2c, status, color)
 #'

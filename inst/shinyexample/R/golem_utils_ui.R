@@ -19,7 +19,7 @@ list_countries <- function() {
 
   daux <- freedom::category_scores %>%
     distinct(
-      !!sym("continent"), 
+      !!sym("continent"),
       !!sym("country_territory")
     ) %>%
     mutate_if(is.factor, as.character)

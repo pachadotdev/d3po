@@ -23,12 +23,14 @@ an 'htmlwidgets' object with the desired interactive plot
 Draw a boxplot.
 }
 \examples{
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses \%>\%
-  filter(year == 2022)
+  dout <- freedomhouse::country_rating_statuses \%>\%
+    filter(year == 2022)
 
-d3po(dout) \%>\%
-  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) \%>\%
-  po_title("Civil Liberties Distribution by Continent")
+  d3po(dout) \%>\%
+    po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) \%>\%
+    po_title("Civil Liberties Distribution by Continent")
+}
 }

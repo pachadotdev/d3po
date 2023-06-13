@@ -23,16 +23,18 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a treemap
 }
 \examples{
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses \%>\%
-  filter(year == 2022) \%>\%
-  group_by(status, color) \%>\%
-  count()
+  dout <- freedomhouse::country_rating_statuses \%>\%
+    filter(year == 2022) \%>\%
+    group_by(status, color) \%>\%
+    count()
 
-d3po(dout) \%>\%
-  po_treemap(
-    daes(size = n, group = status, color = color)
-  ) \%>\%
-  po_title("Count of Countries by Continent and Status")
+  d3po(dout) \%>\%
+    po_treemap(
+      daes(size = n, group = status, color = color)
+    ) \%>\%
+    po_title("Count of Countries by Continent and Status")
+}
 }

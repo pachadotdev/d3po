@@ -56,11 +56,13 @@ app_server <- function(input, output, session) {
   output$question_plot <- render_d3po({
     d3po(question_tbl()) %>%
       po_bar(
-        daes(x = !!sym("year"),
-             y = !!sym("score"),
-             # group = !!sym("status"),
-             group = !!sym("country_territory"),
-             color = !!sym("color"))
+        daes(
+          x = !!sym("year"),
+          y = !!sym("score"),
+          # group = !!sym("status"),
+          group = !!sym("country_territory"),
+          color = !!sym("color")
+        )
       ) %>%
       po_title(paste(selected_country(), " vs World Average"))
   })

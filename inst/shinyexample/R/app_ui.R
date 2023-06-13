@@ -19,13 +19,13 @@ app_ui <- function(request) {
         selectInput(
           inputId = "country",
           label = "Select a country",
-          choices =  list_countries(), # see golem_utils_ui.R
+          choices = list_countries(), # see golem_utils_ui.R
           selected = "Canada"
         ),
         selectInput(
           inputId = "question",
           label = "Select a question",
-          choices =  list_questions(), # see golem_utils_ui.R
+          choices = list_questions(), # see golem_utils_ui.R
           selected = "A1"
         )
       ),

@@ -23,15 +23,17 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an line chart.
 }
 \examples{
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses \%>\%
-  group_by(year, status, color) \%>\%
-  count()
+  dout <- freedomhouse::country_rating_statuses \%>\%
+    group_by(year, status, color) \%>\%
+    count()
 
-d3po(dout) \%>\%
-  po_line(
-    daes(x = year, y = n, group = status, color = color)
-  ) \%>\%
-  po_title("Evolution of Country Status in Time")
+  d3po(dout) \%>\%
+    po_line(
+      daes(x = year, y = n, group = status, color = color)
+    ) \%>\%
+    po_title("Evolution of Country Status in Time")
+}
 }

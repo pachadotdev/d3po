@@ -23,24 +23,26 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an scatter chart.
 }
 \examples{
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses \%>\%
-  filter(
-    year \%in\% c(1975, 1985, 1995, 2005, 2015),
-    country == "Chile"
-  ) \%>\%
-  mutate(
-    inv_civil_liberties = sqrt(1 / civil_liberties),
-    inv_political_rights = sqrt(1 / political_rights)
-  )
-
-d3po(dout) \%>\%
-  po_scatter(
-    daes(
-      x = inv_civil_liberties, y = inv_political_rights,
-      group = year, color = color
+  dout <- freedomhouse::country_rating_statuses \%>\%
+    filter(
+      year \%in\% c(1975, 1985, 1995, 2005, 2015),
+      country == "Chile"
+    ) \%>\%
+    mutate(
+      inv_civil_liberties = sqrt(1 / civil_liberties),
+      inv_political_rights = sqrt(1 / political_rights)
     )
-  ) \%>\%
-  po_title("Evolution of Chile in Time")
+
+  d3po(dout) \%>\%
+    po_scatter(
+      daes(
+        x = inv_civil_liberties, y = inv_political_rights,
+        group = year, color = color
+      )
+    ) \%>\%
+    po_title("Evolution of Chile in Time")
+}
 }

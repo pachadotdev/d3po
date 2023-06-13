@@ -23,16 +23,18 @@ an 'htmlwidgets' object with the desired interactive plot
 Draw a bar chart.
 }
 \examples{
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses \%>\%
-  filter(year >= 2010) \%>\%
-  group_by(year, status, color) \%>\%
-  count()
+  dout <- freedomhouse::country_rating_statuses \%>\%
+    filter(year >= 2010) \%>\%
+    group_by(year, status, color) \%>\%
+    count()
 
-d3po(dout) \%>\%
-  po_bar(
-    daes(x = year, y = n, group = status, color = color)
-  ) \%>\%
-  po_title("Evolution of Country Status in Time")
+  d3po(dout) \%>\%
+    po_bar(
+      daes(x = year, y = n, group = status, color = color)
+    ) \%>\%
+    po_title("Evolution of Country Status in Time")
+}
 }

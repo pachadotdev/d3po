@@ -25,16 +25,18 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an area chart.
 }
 \examples{
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses \%>\%
-  group_by(year, status, color) \%>\%
-  count()
+  dout <- freedomhouse::country_rating_statuses \%>\%
+    group_by(year, status, color) \%>\%
+    count()
 
-d3po(dout) \%>\%
-  po_area(
-    daes(x = year, y = n, group = status, color = color),
-    stack = TRUE
-  ) \%>\%
-  po_title("Evolution of Country Status in Time")
+  d3po(dout) \%>\%
+    po_area(
+      daes(x = year, y = n, group = status, color = color),
+      stack = TRUE
+    ) \%>\%
+    po_title("Evolution of Country Status in Time")
+}
 }

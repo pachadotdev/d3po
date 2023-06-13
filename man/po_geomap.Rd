@@ -25,7 +25,8 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a geomap
 }
 \examples{
-if (rlang::is_installed("d3pomaps")) {
+if (rlang::is_installed("freedomhouse") &&
+  rlang::is_installed("d3pomaps")) {
   library(dplyr)
 
   dout <- freedomhouse::country_rating_statuses \%>\%

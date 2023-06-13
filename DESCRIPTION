@@ -1,7 +1,7 @@
 Package: d3po
 Type: Package
 Title: Fast and Beautiful Interactive Visualization for 'Markdown' and 'Shiny'
-Version: 0.5.3
+Version: 0.5.4
 Authors@R: c(
   person("Mauricio", "Vargas Sepulveda", role = c("aut","cre","cph"), 
    email = "m.sepulveda@mail.utoronto.ca"),
@@ -40,7 +40,4 @@ Suggests:
     shiny,
     golem,
     d3pomaps
-Remotes:
-    pachadotdev/d3pomaps,
-    pachadotdev/freedomhouse
 VignetteBuilder: knitr

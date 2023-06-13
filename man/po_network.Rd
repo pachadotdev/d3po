@@ -23,7 +23,8 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 Draw a network.
 }
 \examples{
-if (rlang::is_installed("igraph")) {
+if (rlang::is_installed("freedomhouse") &&
+  rlang::is_installed("igraph")) {
   library(magrittr)
 
   d3po(freedomhouse::country_exports_similarity) \%>\%

@@ -227,18 +227,20 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  group_by(year, status, color) %>%
-  count()
+  dout <- freedomhouse::country_rating_statuses %>%
+group_by(year, status, color) %>%
+count()
 
-d3po(dout) %>%
-  po_area(
-daes(x = year, y = n, group = status, color = color),
-stack = TRUE
-  ) %>%
-  po_title("Evolution of Country Status in Time")
+  d3po(dout) %>%
+po_area(
+  daes(x = year, y = n, group = status, color = color),
+  stack = TRUE
+) %>%
+po_title("Evolution of Country Status in Time")
+}
 ```
 
 
@@ -316,18 +318,20 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  filter(year >= 2010) %>%
-  group_by(year, status, color) %>%
-  count()
+  dout <- freedomhouse::country_rating_statuses %>%
+filter(year >= 2010) %>%
+group_by(year, status, color) %>%
+count()
 
-d3po(dout) %>%
-  po_bar(
-daes(x = year, y = n, group = status, color = color)
-  ) %>%
-  po_title("Evolution of Country Status in Time")
+  d3po(dout) %>%
+po_bar(
+  daes(x = year, y = n, group = status, color = color)
+) %>%
+po_title("Evolution of Country Status in Time")
+}
 ```
 
 
@@ -373,14 +377,16 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  filter(year == 2022)
+  dout <- freedomhouse::country_rating_statuses %>%
+filter(year == 2022)
 
-d3po(dout) %>%
-  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>%
-  po_title("Civil Liberties Distribution by Continent")
+  d3po(dout) %>%
+po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>%
+po_title("Civil Liberties Distribution by Continent")
+}
 ```
 
 
@@ -426,18 +432,20 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  filter(year == 2022) %>%
-  group_by(status, color) %>%
-  count()
+  dout <- freedomhouse::country_rating_statuses %>%
+filter(year == 2022) %>%
+group_by(status, color) %>%
+count()
 
-d3po(dout) %>%
-  po_donut(
-daes(size = n, group = status, color = color)
-  ) %>%
-  po_title("Count of Countries by Continent and Status")
+  d3po(dout) %>%
+po_donut(
+  daes(size = n, group = status, color = color)
+) %>%
+po_title("Count of Countries by Continent and Status")
+}
 ```
 
 
@@ -527,7 +535,8 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("d3pomaps")) {
+if (rlang::is_installed("freedomhouse") &&
+  rlang::is_installed("d3pomaps")) {
   library(dplyr)
 
   dout <- freedomhouse::country_rating_statuses %>%
@@ -657,17 +666,19 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  group_by(year, status, color) %>%
-  count()
+  dout <- freedomhouse::country_rating_statuses %>%
+group_by(year, status, color) %>%
+count()
 
-d3po(dout) %>%
-  po_line(
-daes(x = year, y = n, group = status, color = color)
-  ) %>%
-  po_title("Evolution of Country Status in Time")
+  d3po(dout) %>%
+po_line(
+  daes(x = year, y = n, group = status, color = color)
+) %>%
+po_title("Evolution of Country Status in Time")
+}
 ```
 
 
@@ -713,7 +724,8 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 ### Examples
 
 ```r
-if (rlang::is_installed("igraph")) {
+if (rlang::is_installed("freedomhouse") &&
+  rlang::is_installed("igraph")) {
   library(magrittr)
 
   d3po(freedomhouse::country_exports_similarity) %>%
@@ -768,18 +780,20 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  filter(year == 2022) %>%
-  group_by(status, color) %>%
-  count()
+  dout <- freedomhouse::country_rating_statuses %>%
+filter(year == 2022) %>%
+group_by(status, color) %>%
+count()
 
-d3po(dout) %>%
-  po_pie(
-daes(size = n, group = status, color = color)
-  ) %>%
-  po_title("Count of Countries by Continent and Status")
+  d3po(dout) %>%
+po_pie(
+  daes(size = n, group = status, color = color)
+) %>%
+po_title("Count of Countries by Continent and Status")
+}
 ```
 
 
@@ -825,26 +839,28 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  filter(
-year %in% c(1975, 1985, 1995, 2005, 2015),
-country == "Chile"
-  ) %>%
-  mutate(
-inv_civil_liberties = sqrt(1 / civil_liberties),
-inv_political_rights = sqrt(1 / political_rights)
-  )
-
-d3po(dout) %>%
-  po_scatter(
-daes(
-  x = inv_civil_liberties, y = inv_political_rights,
-  group = year, color = color
+  dout <- freedomhouse::country_rating_statuses %>%
+filter(
+  year %in% c(1975, 1985, 1995, 2005, 2015),
+  country == "Chile"
+) %>%
+mutate(
+  inv_civil_liberties = sqrt(1 / civil_liberties),
+  inv_political_rights = sqrt(1 / political_rights)
 )
-  ) %>%
-  po_title("Evolution of Chile in Time")
+
+  d3po(dout) %>%
+po_scatter(
+  daes(
+x = inv_civil_liberties, y = inv_political_rights,
+group = year, color = color
+  )
+) %>%
+po_title("Evolution of Chile in Time")
+}
 ```
 
 
@@ -922,18 +938,20 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-library(dplyr)
+if (rlang::is_installed("freedomhouse")) {
+  library(dplyr)
 
-dout <- freedomhouse::country_rating_statuses %>%
-  filter(year == 2022) %>%
-  group_by(status, color) %>%
-  count()
+  dout <- freedomhouse::country_rating_statuses %>%
+filter(year == 2022) %>%
+group_by(status, color) %>%
+count()
 
-d3po(dout) %>%
-  po_treemap(
-daes(size = n, group = status, color = color)
-  ) %>%
-  po_title("Count of Countries by Continent and Status")
+  d3po(dout) %>%
+po_treemap(
+  daes(size = n, group = status, color = color)
+) %>%
+po_title("Count of Countries by Continent and Status")
+}
 ```
 
 

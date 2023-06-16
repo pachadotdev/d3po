@@ -17,21 +17,15 @@ app_ui <- function(request) {
       dashboardSidebar(
         collapsed = FALSE,
         selectInput(
-          inputId = "country",
-          label = "Select a country",
-          choices = list_countries(), # see golem_utils_ui.R
-          selected = "Canada"
-        ),
-        selectInput(
-          inputId = "question",
-          label = "Select a question",
-          choices = list_questions(), # see golem_utils_ui.R
-          selected = "A1"
+          inputId = "type",
+          label = "Select a Pokemon type",
+          choices = list_types(), # see golem_utils_ui.R
+          selected = "water"
         )
       ),
       dashboardBody(
         tags$head(tags$style(HTML(".content-wrapper { overflow: auto; }"))),
-        col_12(d3po_output("question_plot", height = "650px"))
+        col_12(d3po_output("type_bar", height = "650px"))
       )
     )
   )
@@ -55,7 +49,7 @@ golem_add_external_resources <- function() {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "d3podemocovid"
+      app_title = "d3pobasicdemo"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()

@@ -9,7 +9,7 @@ Create a new d3po templated project
 
 ### Usage
 
-    d3po_template(path = ".")
+    d3po_template(path)
 
 ### Arguments
 
@@ -182,6 +182,79 @@ Valid aesthetics (depending on the geom)
 
 
 ---
+## Map ids
+--------------------------
+
+### Description
+
+Extract the IDs from a Map
+
+### Usage
+
+    map_ids(map)
+
+### Arguments
+
+<table>
+<tbody>
+<tr class="odd">
+<td><code id="map_ids_:_map">map</code></td>
+<td><p>A map object</p></td>
+</tr>
+</tbody>
+</table>
+
+### Value
+
+A tibble containing IDs and names
+
+### Examples
+
+```r
+map <- map_ids(maps$south_america$continent)
+```
+
+
+---
+## Maps
+----
+
+### Description
+
+World, continent and country maps. These maps are provided as R lists
+structured by following the 'topojson' standard. The maps are organized
+in sub-lists by continent and here I provide maps for both the
+continents and the countries. There are missing states or regions
+because those could not be found in the original maps.
+
+### Usage
+
+    maps
+
+### Format
+
+A `list` object with 6 elements (one per continent). The Americas are
+separated in North America and South America.
+
+### Details
+
+Missing in Asia: 'Siachen Glacier (JK)', 'Scarborough Reef (SH)', and
+'Spratly Islands (SP)'. Missing in Europe: 'Vatican City (VA)'.
+
+Missing in North America: 'Bajo Nuevo Bank (BU)', 'Serranilla Bank
+(SW)', and 'United States Minor Outlying Islands (UM)'.
+
+Missing in Oceania: 'Federated States of Micronesia (FM)', 'Marshall
+Islands (MH)', and 'Tuvalu (TV)'.
+
+Consider all these maps as referential and unofficial.
+
+### Source
+
+Adapted from Natural Earth.
+
+
+---
 ## Po area
 ----
 
@@ -227,20 +300,30 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  filter(
+#   type_1 == "water"
+#  ) %>%
+#  group_by(type_1, color_1) %>%
+#  reframe(
+#   probability = c(0, 0.25, 0.5, 0.75, 1),
+#   quantile = quantile(speed, probability)
+#  )
 
-  dout <- freedomhouse::country_rating_statuses %>%
-group_by(year, status, color) %>%
-count()
+dout <- data.frame(
+  type_1 = rep("water", 5),
+  color_1 = rep("#6890F0", 5),
+  probability = c(0, 0.25, 0.5, 0.75, 1),
+  quantile = c(15, 57.25, 70, 82, 115)
+)
 
-  d3po(dout) %>%
-po_area(
-  daes(x = year, y = n, group = status, color = color),
-  stack = TRUE
-) %>%
-po_title("Evolution of Country Status in Time")
-}
+d3po(dout) %>%
+  po_area(daes(
+x = probability, y = quantile, group = type_1,
+color = color_1
+  )) %>%
+  po_title("Sample Quantiles for Water Pokemon Speed")
 ```
 
 
@@ -318,20 +401,32 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  group_by(type_1, color_1) %>%
+#  count()
 
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(year >= 2010) %>%
-group_by(year, status, color) %>%
-count()
+dout <- data.frame(
+  type_1 = c(
+"bug", "dragon", "electric", "fairy", "fighting",
+"fire", "ghost", "grass", "ground", "ice",
+"normal", "poison", "psychic", "rock", "water"
+  ),
+  color_1 = c(
+"#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
+"#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
+"#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
+  ),
+  n = c(
+12, 3, 9, 2, 7,
+12, 3, 12, 8, 2,
+22, 14, 8, 9, 28
+  )
+)
 
-  d3po(dout) %>%
-po_bar(
-  daes(x = year, y = n, group = status, color = color)
-) %>%
-po_title("Evolution of Country Status in Time")
-}
+d3po(dout) %>%
+  po_bar(daes(x = type_1, y = n, color = color_1)) %>%
+  po_title("Share of Pokemon by main type")
 ```
 
 
@@ -377,16 +472,9 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
-
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(year == 2022)
-
-  d3po(dout) %>%
-po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>%
-po_title("Civil Liberties Distribution by Continent")
-}
+d3po(pokemon) %>%
+  po_box(daes(x = type_1, y = speed, color = color_1)) %>%
+  po_title("Distribution of Pokemon speed by main type")
 ```
 
 
@@ -432,20 +520,32 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  group_by(type_1, color_1) %>%
+#  count()
 
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(year == 2022) %>%
-group_by(status, color) %>%
-count()
+dout <- data.frame(
+  type_1 = c(
+"bug", "dragon", "electric", "fairy", "fighting",
+"fire", "ghost", "grass", "ground", "ice",
+"normal", "poison", "psychic", "rock", "water"
+  ),
+  color_1 = c(
+"#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
+"#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
+"#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
+  ),
+  n = c(
+12, 3, 9, 2, 7,
+12, 3, 12, 8, 2,
+22, 14, 8, 9, 28
+  )
+)
 
-  d3po(dout) %>%
-po_donut(
-  daes(size = n, group = status, color = color)
-) %>%
-po_title("Count of Countries by Continent and Status")
-}
+d3po(dout) %>%
+  po_donut(daes(size = n, group = type_1, color = color_1)) %>%
+  po_title("Share of Pokemon by main type")
 ```
 
 
@@ -535,20 +635,19 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse") &&
-  rlang::is_installed("d3pomaps")) {
-  library(dplyr)
+dout <- map_ids(d3po::maps$asia$japan)
+dout$value <- ifelse(dout$id == "TK", 1L, NA)
+dout$color <- ifelse(dout$id == "TK", "#bd0029", NA)
 
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(year == 2022, !is.na(iso2c)) %>%
-select(id = iso2c, status, color)
-
-  d3po(dout) %>%
-po_geomap(
-  daes(group = id, color = color, size = status, tooltip = status),
-  map = d3pomaps::maps$south_america$continent
-)
-}
+d3po(dout) %>%
+  po_geomap(
+daes(
+  group = id, color = color, size = value,
+  tooltip = name
+),
+map = d3po::maps$asia$japan
+  ) %>%
+  po_title("Pokemon was created in the Japanese city of Tokyo")
 ```
 
 
@@ -666,19 +765,30 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  filter(
+#   type_1 == "water"
+#  ) %>%
+#  group_by(type_1, color_1) %>%
+#  reframe(
+#   probability = c(0, 0.25, 0.5, 0.75, 1),
+#   quantile = quantile(speed, probability)
+#  )
 
-  dout <- freedomhouse::country_rating_statuses %>%
-group_by(year, status, color) %>%
-count()
+dout <- data.frame(
+  type_1 = rep("water", 5),
+  color_1 = rep("#6890F0", 5),
+  probability = c(0, 0.25, 0.5, 0.75, 1),
+  quantile = c(15, 57.25, 70, 82, 115)
+)
 
-  d3po(dout) %>%
-po_line(
-  daes(x = year, y = n, group = status, color = color)
-) %>%
-po_title("Evolution of Country Status in Time")
-}
+d3po(dout) %>%
+  po_line(daes(
+x = probability, y = quantile, group = type_1,
+color = color_1
+  )) %>%
+  po_title("Sample Quantiles for Water Pokemon Speed")
 ```
 
 
@@ -724,17 +834,9 @@ Appends nodes arguments to a network-specific 'htmlwidgets' object
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse") &&
-  rlang::is_installed("igraph")) {
-  library(magrittr)
-
-  d3po(freedomhouse::country_exports_similarity) %>%
-po_network(daes(
-  size = exports, color = color,
-  tooltip = status, layout = "kk"
-)) %>%
-po_title("Network of countries by Freedom House status and exports")
-}
+d3po(pokemon_network) %>%
+  po_network(daes(size = size, color = color, layout = "kk")) %>%
+  po_title("Connections Between Pokemon Types")
 ```
 
 
@@ -780,20 +882,32 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  group_by(type_1, color_1) %>%
+#  count()
 
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(year == 2022) %>%
-group_by(status, color) %>%
-count()
+dout <- data.frame(
+  type_1 = c(
+"bug", "dragon", "electric", "fairy", "fighting",
+"fire", "ghost", "grass", "ground", "ice",
+"normal", "poison", "psychic", "rock", "water"
+  ),
+  color_1 = c(
+"#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
+"#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
+"#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
+  ),
+  n = c(
+12, 3, 9, 2, 7,
+12, 3, 12, 8, 2,
+22, 14, 8, 9, 28
+  )
+)
 
-  d3po(dout) %>%
-po_pie(
-  daes(size = n, group = status, color = color)
-) %>%
-po_title("Count of Countries by Continent and Status")
-}
+d3po(dout) %>%
+  po_pie(daes(size = n, group = type_1, color = color_1)) %>%
+  po_title("Share of Pokemon by main type")
 ```
 
 
@@ -839,28 +953,49 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  group_by(type_1, color_1) %>%
+#  summarise(
+#   attack = mean(attack),
+#   defense = mean(defense)
+#  ) %>%
+#  mutate(log_attack_x_defense = log(attack * defense))
 
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(
-  year %in% c(1975, 1985, 1995, 2005, 2015),
-  country == "Chile"
-) %>%
-mutate(
-  inv_civil_liberties = sqrt(1 / civil_liberties),
-  inv_political_rights = sqrt(1 / political_rights)
+dout <- data.frame(
+  type_1 = c(
+"bug", "dragon", "electric", "fairy", "fighting",
+"fire", "ghost", "grass", "ground", "ice",
+"normal", "poison", "psychic", "rock", "water"
+  ),
+  color_1 = c(
+"#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
+"#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
+"#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
+  ),
+  attack = c(
+63.7, 94, 62, 57.5, 102.8,
+83.9, 50, 70.6, 81.8, 67.5,
+67.7, 74.4, 60.1, 82.2, 70.2
+  ),
+  defense = c(
+57, 68.3, 64.6, 60.5, 61,
+62.5, 45, 69.5, 86.2, 67.5,
+53.5, 67, 57.5, 110, 77.5
+  ),
+  log_attack_x_defense = c(
+8.1, 8.7, 8.2, 8.1, 8.7,
+8.5, 7.7, 8.5, 8.8, 8.4,
+8.1, 8.5, 8.1, 9.1, 8.6
+  )
 )
 
-  d3po(dout) %>%
-po_scatter(
-  daes(
-x = inv_civil_liberties, y = inv_political_rights,
-group = year, color = color
-  )
-) %>%
-po_title("Evolution of Chile in Time")
-}
+d3po(dout) %>%
+  po_scatter(daes(
+x = defense, y = attack,
+size = log_attack_x_defense, group = type_1, color = color_1
+  )) %>%
+  po_title("Pokemon Mean Attack vs Mean Defense by Main Type")
 ```
 
 
@@ -938,21 +1073,111 @@ an 'htmlwidgets' object with the desired interactive plot
 ### Examples
 
 ```r
-if (rlang::is_installed("freedomhouse")) {
-  library(dplyr)
+# library(dplyr)
+# dout <- pokemon %>%
+#  group_by(type_1, color_1) %>%
+#  count()
 
-  dout <- freedomhouse::country_rating_statuses %>%
-filter(year == 2022) %>%
-group_by(status, color) %>%
-count()
+dout <- data.frame(
+  type_1 = c(
+"bug", "dragon", "electric", "fairy", "fighting",
+"fire", "ghost", "grass", "ground", "ice",
+"normal", "poison", "psychic", "rock", "water"
+  ),
+  color_1 = c(
+"#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
+"#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
+"#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
+  ),
+  n = c(
+12, 3, 9, 2, 7,
+12, 3, 12, 8, 2,
+22, 14, 8, 9, 28
+  )
+)
 
-  d3po(dout) %>%
-po_treemap(
-  daes(size = n, group = status, color = color)
-) %>%
-po_title("Count of Countries by Continent and Status")
-}
+d3po(dout) %>%
+  po_treemap(daes(size = n, group = type_1, color = color_1)) %>%
+  po_title("Share of Pokemon by main type")
 ```
+
+
+---
+## Pokemon network
+----------------
+
+### Description
+
+Connections between Pokemon types based on Type 1 and 2.
+
+### Usage
+
+    pokemon_network
+
+### Format
+
+A `igraph` object with 17 vertices (nodes) and 26 edges (arcs).
+
+### Source
+
+Adapted from the `highcharter` package.
+
+
+---
+## Pokemon
+-------
+
+### Description
+
+Statistical information about 151 Pokemon from Nintendo RPG series.
+
+### Usage
+
+    pokemon
+
+### Format
+
+A `data frame` with 151 observations and 15 variables.
+
+### Variables
+
+-   `id`: Pokedex number.
+
+-   `name`: Pokedex name.
+
+-   `height`: Height in meters.
+
+-   `weight`: Weight in kilograms.
+
+-   `base_experience`: How much the Pokemon has battled.
+
+-   `type_1`: Primary Pokemon type (i.e. Grass, Fire and Water)
+
+-   `type_2`: Secondary Pokemon type (i.e. Poison, Dragon and Ice)
+
+-   `attack`: How much damage a Pokemon deals when using a technique.
+
+-   `defense`: How much damage a Pokemon receives when it is hit by a
+    technique.
+
+-   `hp`: How much damage a Pokemon can receive before fainting.
+
+-   `special_attack`: How much damage a Pokemon deals when using a
+    special technique.
+
+-   `special_defense`: How much damage a Pokemon receives when it is hit
+    by a special technique.
+
+-   `speed`: Determines the order of Pokemon that can act in battle, if
+    the speed is tied then the 1st move is assigned at random.
+
+-   `color_1`: Hex color code for Type 1.
+
+-   `color_2`: Hex color code for Type 2.
+
+### Source
+
+Adapted from `highcharter` package.
 
 
 ---

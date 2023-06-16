@@ -1,7 +1,7 @@
 Package: d3po
 Type: Package
 Title: Fast and Beautiful Interactive Visualization for 'Markdown' and 'Shiny'
-Version: 0.5.4
+Version: 0.5.5
 Authors@R: c(
   person("Mauricio", "Vargas Sepulveda", role = c("aut","cre","cph"), 
    email = "m.sepulveda@mail.utoronto.ca"),
@@ -11,6 +11,7 @@ Authors@R: c(
   person("Sylvain", "Lesage", role = "ctb"),
   person("Curran", "Kelleher", role = "ctb"),
   person("Fernando", "Becerra", role = "ctb"),
+  person(family = "Natural Earth", role = "dtc"),
   person(family = "R Consortium", role = "fnd"))
 Description: Apache licensed alternative to 'Highcharter' which provides 
   functions for both fast and beautiful interactive visualization for 'Markdown'
@@ -33,11 +34,9 @@ Imports:
     purrr,
     rlang
 Suggests: 
-    freedomhouse,
     knitr,
     igraph,
     rmarkdown,
     shiny,
-    golem,
-    d3pomaps
+    golem
 VignetteBuilder: knitr

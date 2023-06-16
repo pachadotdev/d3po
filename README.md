@@ -60,18 +60,15 @@ This is an example consisting in the creation of a box and whiskers
 plot:
 
 ``` r
-library(dplyr)
-
-dout <- freedom_house %>% 
-  filter(year == 2023)
- 
-d3po(dout) %>%
-  po_box(daes(x = continent, y = civil_liberties, group = country, color = color)) %>% 
-  po_title("Civil Liberties Distribution by Continent")
+d3po(pokemon) %>%
+  po_box(daes(x = type_1, y = speed, color = color_1)) %>%
+  po_title("Distribution of Pokemon speed by main type")
 ```
 
-To access a templated project, in RStudio's top bar click *File -> New Project -> New Directory -> Shiny app with Golem+D3po*. Otherwise, start with a blank project and run `d3po::d3po_template()` to copy the same template.
+To access a templated project, in RStudio's top bar click *File -> New Project -> New Directory -> Shiny app with Golem+D3po*. Otherwise, start with a blank project and run `d3po::d3po_template()` to copy the same templates.
 
-You can install the templated project as any other R package. The template has its own readme, so please read it.
+You can install the templated projects as any other R package. The templates have their own readme files, so please read them.
 
-Also, please (*please!*) see the vignette (<https://github.com/pachadotdev/d3po/blob/main/vignettes/d3po.Rmd>). At the moment there is an error in pkgdown, and I cannot figure out how to render it with altdoc but it provides examples for each of the available visualization type in the package.
+## Vignette
+
+Please (*please!*) read the vignette (<https://github.com/pachadotdev/d3po/blob/main/vignettes/d3po.Rmd>).

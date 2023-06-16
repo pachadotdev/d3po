@@ -1,3 +1,9 @@
+# d3po 0.5.5
+
+* Back to the pokemon dataset to provide simple examples.
+* All the maps were moved back to the package to reduce dependencies.
+* All the examples use final data frames and the dplyr codes are commented.
+
 # d3po 0.5.3
 
 * Moves Freedom House data to https://github.com/pachadotdev/freedom.

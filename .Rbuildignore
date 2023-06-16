@@ -12,4 +12,6 @@
 ^README\.Rmd$
 ^docs$
 ^images$
-^inst/shinyexample/\.Rbuildignore$
+^inst/shinyexample/basic/.Rbuildignore$
+^inst/shinyexample/advanced/.Rbuildignore$
+

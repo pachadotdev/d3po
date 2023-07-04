@@ -1,25 +1,32 @@
-
-# d3podemocovid
+# d3pbasicdemo
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of d3podemo is to show to visualize something with relative low effort with Shiny+Golem+D3po.
+The goal of d3pbasicdemo is to show to visualize something complicated with relative low effort with Shiny+Golem+D3po.
 
 ## Installation
 
 You can install the development version of d3po like so:
 
-``` r
+```r
 remotes::install_github("pachadotdev/d3po")
 ```
 
+Or the stable version like so:
+
+```r
+install.packages("d3po")
+```
+
+Then follow the instructions to create a templated project from the [main readme](https://github.com/pachadotdev/d3po/tree/main#examples).
+
 ## Example
 
-The next line allows you to run the Shiny app locally:
+The next line allows you to run this Shiny app locally:
 
-``` r
-d3podemo::run_app()
+```r
+d3pbasicdemo::run_app()
 ```
 
 ## Usage

@@ -1,26 +1,32 @@
-
-# d3pomapsdemo
+# d3poadvanceddemo
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of d3pomapsdemo is to show to visualize something with relative low effort with Shiny+Golem+D3po.
+The goal of d3poadvanceddemo is to show to visualize something complicated with relative low effort with Shiny+Golem+D3po.
 
 ## Installation
 
-You can install the development version of d3po and d3pomaps like so:
+You can install the development version of d3po like so:
 
-``` r
+```r
 remotes::install_github("pachadotdev/d3po")
-remotes::install_github("pachadotdev/d3pomaps")
 ```
+
+Or the stable version like so:
+
+```r
+install.packages("d3po")
+```
+
+Then follow the instructions to create a templated project from the [main readme](https://github.com/pachadotdev/d3po/tree/main#examples).
 
 ## Example
 
 The next line allows you to run this Shiny app locally:
 
-``` r
-d3pomapsdemo::run_app()
+```r
+d3poadvanceddemo::run_app()
 ```
 
 ## Usage

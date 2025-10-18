@@ -15,6 +15,7 @@ export default class Treemap extends D3po {
    * @param {string} options.group - Group field name
    * @param {string} [options.color] - Color field name
    * @param {Function} [options.tile] - Tiling method (e.g., d3.treemapSquarify, d3.treemapBinary)
+   * @param {object} [options.labels] - Label positioning options
    */
   constructor(container, options) {
     super(container, options);
@@ -27,6 +28,7 @@ export default class Treemap extends D3po {
     this.groupField = options.group;
     this.colorField = options.color;
     this.tile = options.tile || d3.treemapSquarify;
+    this.labels = options.labels || { align: 'left', valign: 'top' };
   }
 
   /**
@@ -108,7 +110,13 @@ export default class Treemap extends D3po {
       })
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
-      .style('opacity', 1)
+      .style('opacity', 1);
+
+    // Add tooltip handlers with proper context
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+    
+    cells.selectAll('rect')
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
         // For light colors, darken instead of brighten
@@ -124,7 +132,9 @@ export default class Treemap extends D3po {
           event,
           `<strong>${d.data.name}</strong>` +
             `Value: ${d.data.value}<br/>` +
-            `Percentage: ${percentage}%`
+            `Percentage: ${percentage}%`,
+          fontFamily,
+          fontSize
         );
       })
       .on('mouseout', function (event, d) {
@@ -132,54 +142,148 @@ export default class Treemap extends D3po {
         hideTooltip();
       });
 
-    // Add text labels for category names
-    cells
-      .append('text')
-      .attr('x', 5)
-      .attr('y', 16)
-      .text(d => d.data.name)
-      .attr('font-size', '14px')
-      .attr('font-weight', 'bold')
-      .attr('fill', d => getTextColor(d.data.color || '#999'))
-      .attr('stroke', d => getTextStroke(d.data.color || '#999'))
-      .attr('stroke-width', 0)
-      .attr('paint-order', 'stroke')
-      .attr('pointer-events', 'none')
-      .each(function (d) {
-        const bbox = this.getBBox();
-        const cellWidth = d.x1 - d.x0;
-        const cellHeight = d.y1 - d.y0;
-        // Remove if text doesn't fit in cell
-        if (bbox.width > cellWidth - 10 || cellHeight < 20) {
-          d3.select(this).remove();
-        }
-      });
+    // Calculate x position based on label align
+    const getLabelX = (d, align) => {
+      const cellWidth = d.x1 - d.x0;
+      switch(align) {
+        case 'center':
+        case 'middle':
+          return cellWidth / 2;
+        case 'right':
+        case 'end':
+          return cellWidth - 5;
+        case 'left':
+        case 'start':
+        default:
+          return 5;
+      }
+    };
 
-    // Add percentage labels
-    cells
-      .append('text')
-      .attr('x', 5)
-      .attr('y', 32)
-      .text(d => {
-        const percentage = ((d.value / total) * 100).toFixed(1);
-        return `${percentage}%`;
-      })
-      .attr('font-size', '14px')
-      .attr('font-weight', 'bold')
-      .attr('fill', d => getTextColor(d.data.color || '#999'))
-      .attr('stroke', d => getTextStroke(d.data.color || '#999'))
-      .attr('stroke-width', 0)
-      .attr('paint-order', 'stroke')
-      .attr('pointer-events', 'none')
-      .each(function (d) {
-        const bbox = this.getBBox();
-        const cellWidth = d.x1 - d.x0;
-        const cellHeight = d.y1 - d.y0;
-        // Remove if percentage doesn't fit in cell
-        if (bbox.width > cellWidth - 10 || cellHeight < 35) {
-          d3.select(this).remove();
+    // Calculate y position based on label valign (always returns numeric value)
+    const getLabelY = (d, valign, lineNumber = 0) => {
+      const cellHeight = d.y1 - d.y0;
+      const lineHeight = this.options.fontSize * 1.4; // Dynamic line height based on font size
+      const baseY = lineNumber * lineHeight;
+      switch(valign) {
+        case 'middle':
+          return cellHeight / 2 - lineHeight + baseY;
+        case 'bottom':
+          return cellHeight - 5 - (lineHeight * (lineNumber + 1));
+        case 'top':
+        default:
+          return this.options.fontSize + 4 + baseY; // Start below the top margin
+      }
+    };
+
+    // Calculate text anchor based on align
+    const getTextAnchor = (align) => {
+      switch(align) {
+        case 'center':
+        case 'middle':
+          return 'middle';
+        case 'right':
+        case 'end':
+          return 'end';
+        case 'left':
+        case 'start':
+        default:
+          return 'start';
+      }
+    };
+
+    // Always check if labels fit before adding them - check BEFORE adding
+    const labels = this.labels;
+    
+    // Use arrow function to maintain 'this' context
+    cells.each((d) => {
+      // Find the cell group for this data point
+      const cell = cells.filter((cd) => cd === d);
+      const cellWidth = d.x1 - d.x0;
+      const cellHeight = d.y1 - d.y0;
+      
+      // Helper to check if text fits (measure before adding)
+      const checkTextFits = (text, lineNumber) => {
+        // If labels are disabled, don't add
+        if (!labels) return false;
+        
+        // Always check if it fits - simple and consistent behavior
+        const x = getLabelX(d, labels.align);
+        const y = getLabelY(d, labels.valign, lineNumber);
+        const textAnchor = getTextAnchor(labels.align);
+        
+        // Quick vertical check: y position + fontSize must be <= cellHeight
+        if (y + this.options.fontSize > cellHeight) {
+          return false;
         }
-      });
+        
+        // Create temporary text to measure - append to the chart SVG root
+        const tempText = this.chart.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .text(text)
+          .attr('font-size', `${this.options.fontSize}px`)
+          .attr('font-family', this.options.fontFamily)
+          .attr('font-weight', 'bold')
+          .attr('text-anchor', textAnchor)
+          .style('visibility', 'hidden');
+        
+        const bbox = tempText.node().getBBox();
+        tempText.remove();
+        
+        // Calculate boundaries based on text-anchor
+        let left, right;
+        if (textAnchor === 'start') {
+          left = x;
+          right = x + bbox.width;
+        } else if (textAnchor === 'end') {
+          left = x - bbox.width;
+          right = x;
+        } else { // middle
+          left = x - bbox.width / 2;
+          right = x + bbox.width / 2;
+        }
+        
+        // Check if it fits within cell bounds
+        return left >= 0 && right <= cellWidth;
+      };
+      
+      const categoryName = d.data.name;
+      const percentage = ((d.value / total) * 100).toFixed(1) + '%';
+      
+      // Check and add category label (line 0)
+      if (checkTextFits(categoryName, 0)) {
+        cell.append('text')
+          .attr('x', getLabelX(d, labels.align))
+          .attr('y', getLabelY(d, labels.valign, 0))
+          .text(categoryName)
+          .attr('font-size', `${this.options.fontSize}px`)
+          .attr('font-family', this.options.fontFamily)
+          .attr('font-weight', 'bold')
+          .attr('text-anchor', getTextAnchor(labels.align))
+          .attr('fill', getTextColor(d.data.color || '#999'))
+          .attr('stroke', getTextStroke(d.data.color || '#999'))
+          .attr('stroke-width', 0)
+          .attr('paint-order', 'stroke')
+          .attr('pointer-events', 'none');
+      }
+      
+      // Check and add percentage label (line 1) - independent of category
+      if (checkTextFits(percentage, 1)) {
+        cell.append('text')
+          .attr('x', getLabelX(d, labels.align))
+          .attr('y', getLabelY(d, labels.valign, 1))
+          .text(percentage)
+          .attr('font-size', `${this.options.fontSize}px`)
+          .attr('font-family', this.options.fontFamily)
+          .attr('font-weight', 'bold')
+          .attr('text-anchor', getTextAnchor(labels.align))
+          .attr('fill', getTextColor(d.data.color || '#999'))
+          .attr('stroke', getTextStroke(d.data.color || '#999'))
+          .attr('stroke-width', 0)
+          .attr('paint-order', 'stroke')
+          .attr('pointer-events', 'none');
+      }
+    });
 
     return this;
   }

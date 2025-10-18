@@ -46,6 +46,21 @@ HTMLWidgets.widget({
         // Add background
         if (x.background) options.background = x.background;
         
+        // Add download option (default true if not specified)
+        if (x.download !== undefined) options.download = x.download;
+        
+        // Add font settings
+        if (x.font) {
+          if (x.font.family) options.fontFamily = x.font.family;
+          if (x.font.size) options.fontSize = x.font.size;
+          // Note: font.transform is handled in CSS/text-transform, not in D3po options
+        }
+        
+        // Add labels settings
+        if (x.labels) {
+          options.labels = x.labels;
+        }
+        
         // Create chart based on type
         var ChartClass;
         switch(x.type) {
@@ -155,7 +170,15 @@ if (HTMLWidgets.shinyMode) {
     function(msg) {
       var chart = get_chart(msg.id);
       if (typeof chart != 'undefined') {
-        chart.title(msg.title);
+        chart.setTitle(msg.msg.title);
+      }
+  });
+
+  Shiny.addCustomMessageHandler('d3po-download',
+    function(msg) {
+      var chart = get_chart(msg.id);
+      if (typeof chart != 'undefined') {
+        chart.setDownload(msg.msg.show);
       }
   });
 

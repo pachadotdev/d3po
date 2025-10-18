@@ -117,7 +117,13 @@ export default class Network extends D3po {
             d.fx = null;
             d.fy = null;
           })
-      )
+      );
+
+    // Save font settings for tooltip handlers
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+
+    node
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
         // For light colors, darken instead of brighten
@@ -132,7 +138,7 @@ export default class Network extends D3po {
           `<strong>${d.id || 'Node'}</strong>` +
           (sizeField ? `Size: ${d[sizeField]}` : '');
 
-        showTooltip(event, tooltipContent);
+        showTooltip(event, tooltipContent, fontFamily, fontSize);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).attr('fill', d._originalColor);
@@ -164,6 +170,19 @@ export default class Network extends D3po {
 
       labels.attr('x', d => d.x).attr('y', d => d.y);
     });
+
+    // Add zoom behavior
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.5, 5]) // Allow zoom from 50% to 500%
+      .on('zoom', event => {
+        // Apply transform to all network elements
+        link.attr('transform', event.transform);
+        node.attr('transform', event.transform);
+        labels.attr('transform', event.transform);
+      });
+
+    this.svg.call(zoom);
 
     return this;
   }

@@ -100,7 +100,7 @@ export default class ScatterPlot extends D3po {
     const groupField = this.groupField;
 
     // Draw points
-    this.chart
+    const circles = this.chart
       .selectAll('.point')
       .data(this.data)
       .enter()
@@ -125,7 +125,13 @@ export default class ScatterPlot extends D3po {
       )
       .attr('stroke', 'white')
       .attr('stroke-width', 1)
-      .style('opacity', 1)
+      .style('opacity', 1);
+
+    // Save font settings for tooltip handlers
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+
+    circles
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
         // For light colors, darken instead of brighten
@@ -143,7 +149,9 @@ export default class ScatterPlot extends D3po {
           (groupField ? `<strong>${d[groupField]}</strong>` : '') +
             `${xField}: ${d[xField].toFixed(2)}<br/>` +
             `${yField}: ${d[yField].toFixed(2)}` +
-            (sizeField ? `<br/>Size: ${d[sizeField].toFixed(2)}` : '')
+            (sizeField ? `<br/>Size: ${d[sizeField].toFixed(2)}` : ''),
+          fontFamily,
+          fontSize
         );
       })
       .on('mouseout', function (event, d) {

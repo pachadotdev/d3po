@@ -121,7 +121,7 @@ export default class PieChart extends D3po {
       .append('g')
       .attr('class', 'slice');
 
-    slices
+    const arcs = slices
       .append('path')
       .attr('d', arc)
       .attr('fill', d =>
@@ -139,7 +139,13 @@ export default class PieChart extends D3po {
       )
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
-      .style('opacity', 1)
+      .style('opacity', 1);
+
+    // Save font settings for tooltip handlers
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+
+    arcs
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
         // For light colors, darken instead of brighten
@@ -153,7 +159,9 @@ export default class PieChart extends D3po {
           event,
           `<strong>${d.data[groupField]}</strong>` +
             `Value: ${d.data[sizeField]}<br/>` +
-            `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`
+            `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`,
+          fontFamily,
+          fontSize
         );
       })
       .on('mouseout', function (event, d) {

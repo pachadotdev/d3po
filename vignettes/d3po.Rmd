@@ -317,13 +317,16 @@ Going back to the treemap example, it is possible to move the labels,
 change the background, and also use any font that you like:
 
 ```{r}
+load_all()
+
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
 d3po(dout) %>%
   po_treemap(daes(size = count, group = type, color = color)) %>%
   po_title("Share of Pokemon by main type") %>%
-  po_labels("left", "top", F) %>%
+  po_labels("center", "middle") %>%
   po_background("#ffcc00") %>%
-  po_font("Comic Sans MS", 20, "uppercase")
+  po_font("Comic Sans MS", 16, "uppercase") %>%
+  po_download(TRUE)
 ```

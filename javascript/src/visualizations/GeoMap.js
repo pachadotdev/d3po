@@ -68,7 +68,7 @@ export default class GeoMap extends D3po {
     const tooltipField = this.tooltipField;
     const sizeField = this.sizeField;
 
-    this.chart
+    const paths = this.chart
       .selectAll('.region')
       .data(features)
       .enter()
@@ -88,7 +88,13 @@ export default class GeoMap extends D3po {
       })
       .attr('stroke', 'white')
       .attr('stroke-width', 1)
-      .style('opacity', 1)
+      .style('opacity', 1);
+
+    // Save font settings for tooltip handlers
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+
+    paths
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
         // For light colors, darken instead of brighten
@@ -105,7 +111,7 @@ export default class GeoMap extends D3po {
           `<strong>${tooltipField ? data[tooltipField] : d.id}</strong>` +
           (sizeField ? `Value: ${data[sizeField]}` : '');
 
-        showTooltip(event, tooltipContent);
+        showTooltip(event, tooltipContent, fontFamily, fontSize);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).attr('fill', d._originalColor);

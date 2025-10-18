@@ -359,6 +359,10 @@ export default class BoxPlot extends D3po {
       .style('font-size', '14px')
       .text(this.yField);
 
+    // Save font settings for tooltip handlers
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+
     // Add tooltips
     boxes
       .on('mouseover', function (event, d) {
@@ -380,7 +384,7 @@ export default class BoxPlot extends D3po {
           `Percentile 100th (Max): ${d.stats.max.toFixed(2)}<br/>` +
           `Outliers: ${d.stats.outliers.length}`;
 
-        showTooltip(event, tooltipContent);
+        showTooltip(event, tooltipContent, fontFamily, fontSize);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).select('rect').attr('fill', d.color);

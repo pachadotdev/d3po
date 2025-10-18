@@ -116,6 +116,10 @@ export default class BarChart extends D3po {
         .attr('height', d => this.getInnerHeight() - yScale(d[yField]));
     }
 
+    // Save font settings for tooltip handlers
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+
     bars
       .on('mouseover', function (event, d) {
         const baseColor = d3.select(this).attr('fill');
@@ -124,7 +128,9 @@ export default class BarChart extends D3po {
         showTooltip(
           event,
           `<strong>${d[isHorizontal ? yField : xField]}</strong>` +
-            `${isHorizontal ? xField : yField}: ${d[isHorizontal ? xField : yField]}`
+            `${isHorizontal ? xField : yField}: ${d[isHorizontal ? xField : yField]}`,
+          fontFamily,
+          fontSize
         );
       })
       .on('mouseout', function (event, d) {

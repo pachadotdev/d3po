@@ -551,39 +551,34 @@ po_title.d3proxy <- function(d3po, title) {
 #'
 #' @inheritParams po_box
 #' @param align horizontal alignment ("left", "center", "right", "start", "middle", "end").
-#' @param valign vertical alignment ("top", "middle", "botton").
-#' @param resize resize labels text (TRUE or FALSE).
+#' @param valign vertical alignment ("top", "middle", "bottom").
 #' @export
 #' @return Appends custom labels to an 'htmlwidgets' object
 po_labels <- function(d3po, align = "center",
-                      valign = "middle",
-                      resize = TRUE) {
+                      valign = "middle") {
   UseMethod("po_labels")
 }
 
 #' @export
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align, valign, resize) {
+po_labels.d3po <- function(d3po, align, valign) {
   assertthat::assert_that(!missing(align), msg = "Missing `align`")
   assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
-  assertthat::assert_that(!missing(resize), msg = "Missing `resize`")
 
   d3po$x$labels <- NULL
   d3po$x$labels$align <- align
   d3po$x$labels$valign <- valign
-  d3po$x$labels$resize <- resize
 
   return(d3po)
 }
 
 #' @export
 #' @method po_labels d3proxy
-po_labels.d3proxy <- function(d3po, align, valign, resize) {
+po_labels.d3proxy <- function(d3po, align, valign) {
   assertthat::assert_that(!missing(align), msg = "Missing `align`")
   assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
-  assertthat::assert_that(!missing(resize), msg = "Missing `resize`")
 
-  msg <- list(id = d3po$id, msg = list(align = align, valign = valign, resize = resize))
+  msg <- list(id = d3po$id, msg = list(align = align, valign = valign))
 
   d3po$session$sendCustomMessage("d3po-labels", msg)
 
@@ -724,6 +719,39 @@ po_background.d3proxy <- function(d3po, background) {
   msg <- list(id = d3po$id, msg = list(background = background))
 
   d3po$session$sendCustomMessage("d3po-background", msg)
+
+  return(d3po)
+}
+
+# Download ----
+
+#' Download
+#' 
+#' Show/hide the download button.
+#' 
+#' @param d3po A 'd3po' or 'd3proxy' object.
+#' @param show Logical indicating whether to show (TRUE) or hide (FALSE) the download button.
+#' @export
+#' @return Appends download button settings to an 'htmlwidgets' object
+po_download <- function(d3po, show = TRUE) UseMethod("po_download")
+
+#' @export
+#' @method po_download d3po
+po_download.d3po <- function(d3po, show = TRUE) {
+  assertthat::assert_that(is.logical(show), msg = "`show` must be TRUE or FALSE")
+
+  d3po$x$download <- show
+  return(d3po)
+}
+
+#' @export
+#' @method po_download d3proxy
+po_download.d3proxy <- function(d3po, show = TRUE) {
+  assertthat::assert_that(is.logical(show), msg = "`show` must be TRUE or FALSE")
+
+  msg <- list(id = d3po$id, msg = list(show = show))
+
+  d3po$session$sendCustomMessage("d3po-download", msg)
 
   return(d3po)
 }

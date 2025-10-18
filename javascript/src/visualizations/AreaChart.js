@@ -176,7 +176,9 @@ export default class AreaChart extends D3po {
           showTooltip(event,
             (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
             `${this.xField}: ${d[this.xField]}<br/>` +
-            `${this.yField}: ${d[this.yField]}`
+            `${this.yField}: ${d[this.yField]}`,
+            this.options.fontFamily,
+            this.options.fontSize
           );
         })
         .on('mouseout', (event) => {

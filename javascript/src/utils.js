@@ -7,11 +7,21 @@ import * as d3 from 'd3';
 
 // Inject tooltip CSS styles once
 let tooltipStylesInjected = false;
+let currentTooltipFont = null;
 
-function injectTooltipStyles() {
-  if (tooltipStylesInjected) return;
+function injectTooltipStyles(fontFamily, fontSize) {
+  // If font changed, remove old styles
+  const newFont = `${fontFamily}-${fontSize}`;
+  if (tooltipStylesInjected && currentTooltipFont === newFont) return;
+  
+  // Remove old style if exists
+  const oldStyle = document.getElementById('d3po-tooltip-styles');
+  if (oldStyle) {
+    oldStyle.remove();
+  }
 
   const style = document.createElement('style');
+  style.id = 'd3po-tooltip-styles';
   style.textContent = `
     .d3po-tooltip {
       position: absolute;
@@ -20,8 +30,9 @@ function injectTooltipStyles() {
       padding: 8px 10px;
       border-radius: 4px;
       pointer-events: none;
-      font-size: 12px;
-      line-height: 1.4;
+      font-family: ${fontFamily || '"Noto Sans", "Fira Sans", sans-serif'};
+      font-size: ${fontSize || 12}px;
+      line-height: 1.6;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       z-index: 1000;
       max-width: 200px;
@@ -55,22 +66,24 @@ function injectTooltipStyles() {
     
     .d3po-tooltip strong {
       display: block;
-      margin-bottom: 0;
+      margin-bottom: 4px;
       color: #333;
     }
   `;
   document.head.appendChild(style);
   tooltipStylesInjected = true;
+  currentTooltipFont = newFont;
 }
-
 /**
  * Creates and shows a tooltip
  * @param {Object} event - Mouse event
  * @param {string} content - HTML content for tooltip
+ * @param {string} fontFamily - Font family to use
+ * @param {number} fontSize - Font size to use
  * @returns {Object} D3 selection of tooltip
  */
-export function showTooltip(event, content) {
-  injectTooltipStyles();
+export function showTooltip(event, content, fontFamily, fontSize) {
+  injectTooltipStyles(fontFamily, fontSize);
 
   // Remove any existing tooltips
   d3.selectAll('.d3po-tooltip').remove();

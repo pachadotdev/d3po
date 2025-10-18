@@ -94,6 +94,7 @@ export default class LineChart extends D3po {
     // Draw lines/areas
     series.forEach((data, i) => {
       const color = this.colorField ? data[0][this.colorField] : colorScale(i);
+      const groupValue = this.groupField ? data[0][this.groupField] : '';
 
       if (this.area) {
         this.chart
@@ -115,8 +116,6 @@ export default class LineChart extends D3po {
         .attr('stroke-width', 2);
 
       // Add points
-      const groupValue = this.groupField ? data[0][this.groupField] : '';
-      
       this.chart
         .selectAll(`.point-${i}`)
         .data(data)
@@ -144,7 +143,9 @@ export default class LineChart extends D3po {
           showTooltip(event,
             (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
             `${this.xField}: ${d[this.xField]}<br/>` +
-            `${this.yField}: ${d[this.yField]}`
+            `${this.yField}: ${d[this.yField]}`,
+            this.options.fontFamily,
+            this.options.fontSize
           );
         })
         .on('mouseout', (event) => {

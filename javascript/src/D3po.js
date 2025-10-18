@@ -37,6 +37,7 @@ export default class D3po {
       background: options.background || '#ffffff',
       fontFamily: options.fontFamily || '"Noto Sans", "Fira Sans", sans-serif',
       fontSize: options.fontSize || 12,
+      download: options.download !== undefined ? options.download : true,
       ...options,
     };
 
@@ -85,8 +86,10 @@ export default class D3po {
         `translate(${this.options.margin.left},${this.options.margin.top})`
       );
 
-    // Add download functionality
-    this._addDownloadButtons();
+    // Add download functionality if enabled
+    if (this.options.download) {
+      this._addDownloadButtons();
+    }
   }
 
   /**
@@ -360,6 +363,25 @@ export default class D3po {
     this.svg
       .style('font-family', fontFamily)
       .style('font-size', `${fontSize}px`);
+    return this;
+  }
+
+  /**
+   * Shows or hides the download buttons
+   * @param {boolean} show - Whether to show download buttons
+   * @returns {D3po} This instance for chaining
+   */
+  setDownload(show) {
+    this.options.download = show;
+    
+    // Remove existing download buttons if they exist
+    this.svg.select('.d3po-download-buttons').remove();
+    
+    // Add them back if show is true
+    if (show) {
+      this._addDownloadButtons();
+    }
+    
     return this;
   }
 

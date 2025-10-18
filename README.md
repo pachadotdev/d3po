@@ -69,3 +69,5 @@ d3po(pokemon) %>%
 ```
 
 Please check the vignettes and this comprehensive example Shiny app using Golem: <https://github.com/pachadotdev/d3po/tree/main/d3podemo>.
+
+I have a minimal Shiny app without Golem that I use to debug here: <https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R>.

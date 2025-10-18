@@ -23,6 +23,7 @@ app_ui <- function(request) {
 			  "Treemap (Binary)" = "treemap2",
 			  "Treemap (Slice)" = "treemap3",
 			  "Treemap (Dice)" = "treemap4",
+			  "Treemap (Custom Aesthetics)" = "treemap5",
               "Pie Chart" = "pie",
               "Donut Chart" = "donut",
               "Line Chart" = "line",

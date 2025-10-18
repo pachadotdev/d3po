@@ -1,7 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
-debug_app.R
 ^dev$
 $run_dev.*
 ^.here$

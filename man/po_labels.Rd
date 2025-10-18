@@ -4,20 +4,16 @@
 \alias{po_labels}
 \title{Labels}
 \usage{
-po_labels(d3po, align = "center", valign = "middle", resize = TRUE)
+po_labels(d3po, align = "center-middle")
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
 
-\item{align}{horizontal alignment ("left", "center", "right", "start", "middle", "end").}
-
-\item{valign}{vertical alignment ("top", "middle", "botton").}
-
-\item{resize}{resize labels text (TRUE or FALSE).}
+\item{align}{Label alignment. Must be one of "left-top", "center-middle", or "right-top".}
 }
 \value{
 Appends custom labels to an 'htmlwidgets' object
 }
 \description{
-Edit labels positioning in a chart.
+Edit labels positioning in a treemap.
 }

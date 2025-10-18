@@ -325,8 +325,8 @@ names(dout) <- c("type", "color", "count")
 d3po(dout) %>%
   po_treemap(daes(size = count, group = type, color = color)) %>%
   po_title("Share of Pokemon by main type") %>%
-  po_labels("center", "middle") %>%
+  po_labels("center-middle") %>% # default is "left-top"
   po_background("#ffcc00") %>%
   po_font("Comic Sans MS", 16, "uppercase") %>%
-  po_download(TRUE)
+  po_download(FALSE) # default is TRUE
 ```

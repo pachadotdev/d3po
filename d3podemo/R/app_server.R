@@ -87,6 +87,19 @@ app_server <- function(input, output, session) {
       d3po(dout) %>%
         po_treemap(daes(size = .data$count, group = .data$type, color = .data$color, tiling = "dice")) %>%
         po_title("Share of Pokemon by Main Type (Dice)")
+    } else if (input$plot_type == "treemap5") {
+      dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1,
+        data = pokemon, FUN = length
+      )
+      names(dout) <- c("type", "color", "count")
+
+      d3po(dout) %>%
+        po_treemap(daes(size = .data$count, group = .data$type, color = .data$color)) %>%
+        po_title("Share of Pokemon by Main Type") %>%
+        po_labels("center-middle") %>%
+        po_background("#ffcc00") %>%
+        po_font("Comic Sans MS", 16, "uppercase") %>%
+        po_download(FALSE)
     } else if (input$plot_type == "pie") {
       dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1,
         data = pokemon, FUN = length

@@ -547,38 +547,63 @@ po_title.d3proxy <- function(d3po, title) {
 
 #' Labels
 #'
-#' Edit labels positioning in a chart.
+#' Edit labels positioning in a treemap.
 #'
 #' @inheritParams po_box
-#' @param align horizontal alignment ("left", "center", "right", "start", "middle", "end").
-#' @param valign vertical alignment ("top", "middle", "bottom").
+#' @param align Label alignment. Must be one of "left-top", "center-middle", or "right-top".
 #' @export
 #' @return Appends custom labels to an 'htmlwidgets' object
-po_labels <- function(d3po, align = "center",
-                      valign = "middle") {
+po_labels <- function(d3po, align = "center-middle") {
   UseMethod("po_labels")
 }
 
 #' @export
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align, valign) {
+po_labels.d3po <- function(d3po, align) {
   assertthat::assert_that(!missing(align), msg = "Missing `align`")
-  assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
+
+  # Check if this is a treemap
+  assertthat::assert_that(
+    !is.null(d3po$x$type) && d3po$x$type == "treemap",
+    msg = "po_labels() can only be used with treemap visualizations. Use po_treemap() before po_labels()."
+  )
+
+  # Validate align value
+  valid_values <- c("left-top", "center-middle", "right-top")
+  assertthat::assert_that(
+    align %in% valid_values,
+    msg = paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'")
+  )
+
+  # Split align into horizontal and vertical components
+  parts <- strsplit(align, "-")[[1]]
 
   d3po$x$labels <- NULL
-  d3po$x$labels$align <- align
-  d3po$x$labels$valign <- valign
+  d3po$x$labels$align <- parts[1]
+  d3po$x$labels$valign <- parts[2]
 
   return(d3po)
 }
 
 #' @export
 #' @method po_labels d3proxy
-po_labels.d3proxy <- function(d3po, align, valign) {
+po_labels.d3proxy <- function(d3po, align) {
   assertthat::assert_that(!missing(align), msg = "Missing `align`")
-  assertthat::assert_that(!missing(valign), msg = "Missing `valign`")
 
-  msg <- list(id = d3po$id, msg = list(align = align, valign = valign))
+  # Note: For Shiny proxies, we can't easily check the type,
+  # so we trust the user to use this correctly
+  
+  # Validate align value
+  valid_values <- c("left-top", "center-middle", "right-top")
+  assertthat::assert_that(
+    align %in% valid_values,
+    msg = paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'")
+  )
+
+  # Split align into horizontal and vertical components
+  parts <- strsplit(align, "-")[[1]]
+
+  msg <- list(id = d3po$id, msg = list(align = parts[1], valign = parts[2]))
 
   d3po$session$sendCustomMessage("d3po-labels", msg)
 

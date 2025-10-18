@@ -160,15 +160,19 @@ export default class Treemap extends D3po {
     };
 
     // Calculate y position based on label valign (always returns numeric value)
-    const getLabelY = (d, valign, lineNumber = 0) => {
+    const getLabelY = (d, valign, lineNumber = 0, totalLines = 2) => {
       const cellHeight = d.y1 - d.y0;
       const lineHeight = this.options.fontSize * 1.4; // Dynamic line height based on font size
+      const totalTextHeight = totalLines * lineHeight;
       const baseY = lineNumber * lineHeight;
+      
       switch(valign) {
         case 'middle':
-          return cellHeight / 2 - lineHeight + baseY;
+          // Center the entire text block (both lines together)
+          const startY = (cellHeight - totalTextHeight) / 2 + this.options.fontSize;
+          return startY + baseY;
         case 'bottom':
-          return cellHeight - 5 - (lineHeight * (lineNumber + 1));
+          return cellHeight - 5 - (lineHeight * (totalLines - lineNumber));
         case 'top':
         default:
           return this.options.fontSize + 4 + baseY; // Start below the top margin
@@ -201,6 +205,10 @@ export default class Treemap extends D3po {
       const cellWidth = d.x1 - d.x0;
       const cellHeight = d.y1 - d.y0;
       
+      const totalLines = 2; // We always try to show 2 lines (name + percentage)
+      const lineHeight = this.options.fontSize * 1.4;
+      const totalTextHeight = totalLines * lineHeight;
+      
       // Helper to check if text fits (measure before adding)
       const checkTextFits = (text, lineNumber) => {
         // If labels are disabled, don't add
@@ -208,12 +216,19 @@ export default class Treemap extends D3po {
         
         // Always check if it fits - simple and consistent behavior
         const x = getLabelX(d, labels.align);
-        const y = getLabelY(d, labels.valign, lineNumber);
+        const y = getLabelY(d, labels.valign, lineNumber, totalLines);
         const textAnchor = getTextAnchor(labels.align);
         
-        // Quick vertical check: y position + fontSize must be <= cellHeight
-        if (y + this.options.fontSize > cellHeight) {
-          return false;
+        // For middle alignment, check if entire text block fits vertically
+        if (labels.valign === 'middle') {
+          if (totalTextHeight > cellHeight) {
+            return false;
+          }
+        } else {
+          // Quick vertical check: y position + fontSize must be <= cellHeight
+          if (y + this.options.fontSize > cellHeight || y < this.options.fontSize) {
+            return false;
+          }
         }
         
         // Create temporary text to measure - append to the chart SVG root
@@ -230,7 +245,8 @@ export default class Treemap extends D3po {
         const bbox = tempText.node().getBBox();
         tempText.remove();
         
-        // Calculate boundaries based on text-anchor
+        // Calculate boundaries based on text-anchor with some margin
+        const margin = 5;
         let left, right;
         if (textAnchor === 'start') {
           left = x;
@@ -243,8 +259,8 @@ export default class Treemap extends D3po {
           right = x + bbox.width / 2;
         }
         
-        // Check if it fits within cell bounds
-        return left >= 0 && right <= cellWidth;
+        // Check if it fits within cell bounds with margins
+        return left >= margin && right <= (cellWidth - margin);
       };
       
       const categoryName = d.data.name;
@@ -254,7 +270,7 @@ export default class Treemap extends D3po {
       if (checkTextFits(categoryName, 0)) {
         cell.append('text')
           .attr('x', getLabelX(d, labels.align))
-          .attr('y', getLabelY(d, labels.valign, 0))
+          .attr('y', getLabelY(d, labels.valign, 0, totalLines))
           .text(categoryName)
           .attr('font-size', `${this.options.fontSize}px`)
           .attr('font-family', this.options.fontFamily)
@@ -271,7 +287,7 @@ export default class Treemap extends D3po {
       if (checkTextFits(percentage, 1)) {
         cell.append('text')
           .attr('x', getLabelX(d, labels.align))
-          .attr('y', getLabelY(d, labels.valign, 1))
+          .attr('y', getLabelY(d, labels.valign, 1, totalLines))
           .text(percentage)
           .attr('font-size', `${this.options.fontSize}px`)
           .attr('font-family', this.options.fontFamily)

@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { validateData } from './utils.js';
+import { validateData, triggerDownload } from './utils.js';
 
 /**
  * Base D3po class for creating interactive visualizations
@@ -94,33 +94,205 @@ export default class D3po {
    * @private
    */
   _addDownloadButtons() {
+    // Store reference to this for use in event handlers
+    const self = this;
+    
     const buttonGroup = this.svg
       .append('g')
       .attr('class', 'd3po-download-buttons')
-      .attr(
-        'transform',
-        `translate(${this.options.width - 100}, ${this.options.margin.top / 2})`
-      );
+      .attr('transform', `translate(${this.options.width - 40}, 20)`);
 
-    // SVG download button
-    buttonGroup
-      .append('text')
+    // Hamburger icon container
+    const hamburger = buttonGroup
+      .append('g')
+      .attr('class', 'd3po-hamburger')
+      .style('cursor', 'pointer');
+
+    // Add invisible larger hit area for easier clicking
+    hamburger
+      .append('rect')
+      .attr('x', -12)
+      .attr('y', -12)
+      .attr('width', 24)
+      .attr('height', 24)
+      .style('fill', 'transparent')
+      .style('stroke', 'none');
+
+    // Hamburger icon (three lines)
+    const lineData = [-4, 0, 4];
+    lineData.forEach(y => {
+      hamburger
+        .append('line')
+        .attr('x1', -6)
+        .attr('x2', 6)
+        .attr('y1', y)
+        .attr('y2', y)
+        .style('stroke', '#666')
+        .style('stroke-width', '2px')
+        .style('stroke-linecap', 'round')
+        .style('pointer-events', 'none'); // Let the rect handle events
+    });
+
+    // Dropdown menu (initially hidden)
+    const menu = buttonGroup
+      .append('g')
+      .attr('class', 'd3po-menu')
+      .attr('transform', 'translate(-80, 20)')
+      .style('opacity', 0)
+      .style('pointer-events', 'none');
+
+    // Menu background
+    menu
+      .append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .style('cursor', 'pointer')
-      .style('font-size', '12px')
-      .text('📥 SVG')
-      .on('click', () => this.downloadSVG());
+      .attr('width', 90)
+      .attr('height', 60)
+      .attr('rx', 4)
+      .style('fill', 'white')
+      .style('stroke', '#999')
+      .style('stroke-width', '1px')
+      .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))');
 
-    // PNG download button
-    buttonGroup
-      .append('text')
-      .attr('x', 50)
+    // SVG download menu item
+    const svgItem = menu
+      .append('g')
+      .attr('class', 'd3po-menu-item')
+      .attr('transform', 'translate(0, 0)')
+      .style('cursor', 'pointer');
+
+    svgItem
+      .append('rect')
+      .attr('x', 0)
       .attr('y', 0)
-      .style('cursor', 'pointer')
+      .attr('width', 90)
+      .attr('height', 30)
+      .style('fill', 'transparent');
+
+    svgItem
+      .append('text')
+      .attr('x', 10)
+      .attr('y', 20)
       .style('font-size', '12px')
-      .text('📥 PNG')
-      .on('click', () => this.downloadPNG());
+      .style('fill', '#333')
+      .style('user-select', 'none')
+      .text('📥 SVG');
+
+    svgItem
+      .on('click', function(event) {
+        event.stopPropagation();
+        self.downloadSVG();
+        self._hideMenu();
+      })
+      .on('mouseover', function() {
+        d3.select(this).select('rect').style('fill', '#f0f0f0');
+      })
+      .on('mouseout', function() {
+        d3.select(this).select('rect').style('fill', 'transparent');
+      });
+
+    // PNG download menu item
+    const pngItem = menu
+      .append('g')
+      .attr('class', 'd3po-menu-item')
+      .attr('transform', 'translate(0, 30)')
+      .style('cursor', 'pointer');
+
+    pngItem
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', 90)
+      .attr('height', 30)
+      .style('fill', 'transparent');
+
+    pngItem
+      .append('text')
+      .attr('x', 10)
+      .attr('y', 20)
+      .style('font-size', '12px')
+      .style('fill', '#333')
+      .style('user-select', 'none')
+      .text('📥 PNG');
+
+    pngItem
+      .on('click', function(event) {
+        event.stopPropagation();
+        self.downloadPNG();
+        self._hideMenu();
+      })
+      .on('mouseover', function() {
+        d3.select(this).select('rect').style('fill', '#f0f0f0');
+      })
+      .on('mouseout', function() {
+        d3.select(this).select('rect').style('fill', 'transparent');
+      });
+
+    // Show menu on hover instead of click
+    hamburger
+      .on('mouseenter', function(event) {
+        event.stopPropagation();
+        // Highlight the hamburger
+        d3.select(this).selectAll('line')
+          .style('stroke', '#333');
+        self._showMenu();
+      })
+      .on('mouseleave', function() {
+        // Reset hamburger color
+        d3.select(this).selectAll('line')
+          .style('stroke', '#666');
+        
+        // Delay hiding to allow moving to menu
+        setTimeout(() => {
+          if (!self._isMouseOverMenu) {
+            self._hideMenu();
+          }
+        }, 100);
+      });
+
+    // Keep menu open when hovering over it
+    menu
+      .on('mouseenter', function() {
+        self._isMouseOverMenu = true;
+      })
+      .on('mouseleave', function() {
+        self._isMouseOverMenu = false;
+        self._hideMenu();
+      });
+
+    // Initialize mouse tracking
+    this._isMouseOverMenu = false;
+
+    // Store menu reference for show/hide
+    this.menu = menu;
+  }
+
+  /**
+   * Shows the download menu
+   * @private
+   */
+  _showMenu() {
+    if (this.menu) {
+      this.menu
+        .transition()
+        .duration(200)
+        .style('opacity', 1)
+        .style('pointer-events', 'all');
+    }
+  }
+
+  /**
+   * Hides the download menu
+   * @private
+   */
+  _hideMenu() {
+    if (this.menu) {
+      this.menu
+        .transition()
+        .duration(200)
+        .style('opacity', 0)
+        .style('pointer-events', 'none');
+    }
   }
 
   /**
@@ -195,78 +367,94 @@ export default class D3po {
    * Downloads the chart as SVG
    */
   downloadSVG() {
-    const svgNode = this.svg.node();
+    try {
+      const svgNode = this.svg.node();
 
-    // Clone the SVG and add proper namespace
-    const clonedSvg = svgNode.cloneNode(true);
-    clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    clonedSvg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+      // Clone the SVG and add proper namespace
+      const clonedSvg = svgNode.cloneNode(true);
+      clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      clonedSvg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
 
-    // Remove download buttons from the clone
-    const downloadButtons = clonedSvg.querySelector('.d3po-download-buttons');
-    if (downloadButtons) {
-      downloadButtons.remove();
+      // Remove download buttons from the clone
+      const downloadButtons = clonedSvg.querySelector('.d3po-download-buttons');
+      if (downloadButtons) {
+        downloadButtons.remove();
+      }
+
+      // Serialize with XML declaration
+      const svgData =
+        '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
+        new XMLSerializer().serializeToString(clonedSvg);
+
+      const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      triggerDownload(blob, 'd3po-chart.svg');
+      
+    } catch (error) {
+      console.error('Error in downloadSVG:', error);
+      alert('Failed to download SVG: ' + error.message);
     }
-
-    // Serialize with XML declaration
-    const svgData =
-      '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
-      new XMLSerializer().serializeToString(clonedSvg);
-
-    const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'd3po-chart.svg';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   }
 
   /**
    * Downloads the chart as PNG
    */
   downloadPNG() {
-    const svgNode = this.svg.node();
+    try {
+      const svgNode = this.svg.node();
 
-    // Clone the SVG and remove download buttons
-    const clonedSvg = svgNode.cloneNode(true);
-    const downloadButtons = clonedSvg.querySelector('.d3po-download-buttons');
-    if (downloadButtons) {
-      downloadButtons.remove();
+      // Clone the SVG and remove download buttons
+      const clonedSvg = svgNode.cloneNode(true);
+      clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      clonedSvg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+      
+      const downloadButtons = clonedSvg.querySelector('.d3po-download-buttons');
+      if (downloadButtons) {
+        downloadButtons.remove();
+      }
+
+      const svgData = new XMLSerializer().serializeToString(clonedSvg);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+
+      canvas.width = this.options.width;
+      canvas.height = this.options.height;
+
+      img.onload = () => {
+        try {
+          ctx.fillStyle = this.options.background || 'white';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+          
+          canvas.toBlob(blob => {
+            if (blob) {
+              triggerDownload(blob, 'd3po-chart.png');
+            } else {
+              console.error('Failed to create blob from canvas');
+              alert('PNG export failed: Could not create image blob');
+            }
+          }, 'image/png');
+        } catch (error) {
+          console.error('Error converting to PNG:', error);
+          alert('PNG export failed: ' + error.message);
+        }
+      };
+
+      img.onerror = error => {
+        console.error('Failed to load SVG into image:', error);
+        alert('PNG export failed. Please try SVG export instead.');
+      };
+
+      // Convert SVG to base64 data URL
+      const base64 = btoa(encodeURIComponent(svgData).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode('0x' + p1);
+      }));
+      img.src = 'data:image/svg+xml;base64,' + base64;
+      
+    } catch (error) {
+      console.error('Error in downloadPNG:', error);
+      alert('Failed to download PNG: ' + error.message);
     }
-
-    const svgData = new XMLSerializer().serializeToString(clonedSvg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-
-    canvas.width = this.options.width;
-    canvas.height = this.options.height;
-
-    img.onload = () => {
-      ctx.fillStyle = this.options.background || 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
-      canvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'd3po-chart.png';
-        link.click();
-        URL.revokeObjectURL(url);
-      });
-    };
-
-    img.onerror = error => {
-      console.error('Failed to load SVG into image:', error);
-      alert('PNG export failed. Please try SVG export instead.');
-    };
-
-    // Use unescape and encodeURIComponent for proper UTF-8 encoding
-    const base64 = btoa(unescape(encodeURIComponent(svgData)));
-    img.src = 'data:image/svg+xml;base64,' + base64;
   }
 
   /**
@@ -304,7 +492,7 @@ export default class D3po {
 
     // Update download buttons position
     this.svg.select('.d3po-download-buttons')
-      .attr('transform', `translate(${width - 100}, ${this.options.margin.top / 2})`);
+      .attr('transform', `translate(${width - 40}, 20)`);
 
     // Re-render the chart with new dimensions
     if (this.data) {
@@ -322,5 +510,7 @@ export default class D3po {
     this.data = null;
     this.svg = null;
     this.chart = null;
+    this.menu = null;
+    this._isMouseOverMenu = false;
   }
 }

@@ -5,6 +5,7 @@ import {
   createColorScale,
   showTooltip,
   hideTooltip,
+  getHighlightColor,
 } from '../utils.js';
 
 /**
@@ -117,13 +118,8 @@ export default class BarChart extends D3po {
 
     bars
       .on('mouseover', function (event, d) {
-        const color = d3.color(d3.select(this).attr('fill'));
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-        d3.select(this).attr('fill', highlightColor);
+        const baseColor = d3.select(this).attr('fill');
+        d3.select(this).attr('fill', getHighlightColor(baseColor));
 
         showTooltip(
           event,

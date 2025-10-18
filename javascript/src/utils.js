@@ -222,3 +222,38 @@ export function groupBy(data, field) {
     return acc;
   }, {});
 }
+
+/**
+ * Helper to trigger a file download
+ * @param {Blob} blob - Blob to download
+ * @param {string} filename - Filename for download
+ */
+export function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.style.display = 'none';
+  
+  document.body.appendChild(link);
+  
+  setTimeout(() => {
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 100);
+  }, 0);
+}
+
+/**
+ * Creates a highlight color for interactive elements
+ * @param {string} baseColor - Base color string
+ * @returns {string} Highlighted color
+ */
+export function getHighlightColor(baseColor) {
+  const color = d3.color(baseColor);
+  // For light colors, darken instead of brighten
+  const luminance = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+  return luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
+}

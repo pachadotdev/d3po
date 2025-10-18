@@ -23,47 +23,35 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an scatter chart.
 }
 \examples{
-# library(dplyr)
-# dout <- pokemon \%>\%
-#  group_by(type_1, color_1) \%>\%
-#  summarise(
-#   attack = mean(attack),
-#   defense = mean(defense)
-#  ) \%>\%
-#  mutate(log_attack_x_defense = log(attack * defense))
-
-dout <- data.frame(
-  type_1 = c(
-    "bug", "dragon", "electric", "fairy", "fighting",
-    "fire", "ghost", "grass", "ground", "ice",
-    "normal", "poison", "psychic", "rock", "water"
-  ),
-  color_1 = c(
-    "#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
-    "#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
-    "#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
-  ),
-  attack = c(
-    63.7, 94, 62, 57.5, 102.8,
-    83.9, 50, 70.6, 81.8, 67.5,
-    67.7, 74.4, 60.1, 82.2, 70.2
-  ),
-  defense = c(
-    57, 68.3, 64.6, 60.5, 61,
-    62.5, 45, 69.5, 86.2, 67.5,
-    53.5, 67, 57.5, 110, 77.5
-  ),
-  log_attack_x_defense = c(
-    8.1, 8.7, 8.2, 8.1, 8.7,
-    8.5, 7.7, 8.5, 8.8, 8.4,
-    8.1, 8.5, 8.1, 9.1, 8.6
-  )
-)
-
-d3po(dout) \%>\%
+# Basic scatter plot
+d3po(pokemon) \%>\%
   po_scatter(daes(
-    x = defense, y = attack,
-    size = log_attack_x_defense, group = type_1, color = color_1
+    x = height, y = weight, group = name, color = color_1
   )) \%>\%
-  po_title("Pokemon Mean Attack vs Mean Defense by Main Type")
+  po_title("Height vs Weight")
+
+# Log-transformed scatter plot
+pokemon$log_height <- log10(pokemon$height)
+pokemon$log_weight <- log10(pokemon$weight)
+
+d3po(pokemon) \%>\%
+  po_scatter(daes(
+    x = log_height, y = log_weight, group = name, color = color_1
+  )) \%>\%
+  po_title("Log(Height) vs Log(Weight)")
+
+# With size encoding (inverse distance from mean)
+mean_weight <- mean(pokemon$weight, na.rm = TRUE)
+mean_height <- mean(pokemon$height, na.rm = TRUE)
+pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
+pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
+pokemon$avg_distance <- (pokemon$distance_from_mean_weight + pokemon$distance_from_mean_height) / 2
+pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
+
+d3po(pokemon) \%>\%
+  po_scatter(daes(
+    x = height, y = weight, size = inverse_distance_from_mean,
+    group = name, color = color_1
+  )) \%>\%
+  po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
 }

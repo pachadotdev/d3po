@@ -20,10 +20,14 @@ to \code{\link[=d3po]{d3po()}}.}
 Appends nodes arguments to a network-specific 'htmlwidgets' object
 }
 \description{
-Draw a network.
+Draw a network graph showing relationships between entities.
+Requires an igraph object with nodes (vertices) and links (edges).
+Node size can represent counts or other metrics.
 }
 \examples{
+# pokemon_network has nodes (types) and links (type_1 to type_2 connections)
+# Node size represents the count of each type
 d3po(pokemon_network) \%>\%
   po_network(daes(size = size, color = color, layout = "kk")) \%>\%
-  po_title("Connections Between Pokemon Types")
+  po_title("Pokemon Type Network")
 }

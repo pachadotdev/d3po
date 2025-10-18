@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po GeoMap Test - Pokemon in Chile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Pokemon Distribution in Chile</h1>
+    <p>How many Pokemon live in each region? Mewtwo lives in Magallanes</p>
+    
+    <div style="max-width: 600px; height: 700px; margin: 0 auto;">
+      <div id="chart"></div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load TopoJSON client -->
+  <script src="https://unpkg.com/topojson-client@3"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Data: Pokemon count by Chilean region
+        // Only Magallanes has 1 Pokemon, all others have 0
+        const data = [
+          { id: 'CL.AI', name: 'Aisén', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.AN', name: 'Antofagasta', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.AP', name: 'Arica y Parinacota', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.AR', name: 'Araucanía', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.AT', name: 'Atacama', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.BI', name: 'Biobío', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.CO', name: 'Coquimbo', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.LI', name: 'Libertador General Bernardo O\'Higgins', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.LL', name: 'Los Lagos', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.LR', name: 'Los Ríos', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.MA', name: 'Magallanes', pokemon_count: 1, color: '#F85888' },
+          { id: 'CL.ML', name: 'Maule', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.NB', name: 'Ñuble', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.RM', name: 'Región Metropolitana', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.TA', name: 'Tarapacá', pokemon_count: 0, color: '#e0e0e0' },
+          { id: 'CL.VS', name: 'Valparaíso', pokemon_count: 0, color: '#e0e0e0' }
+        ];
+
+        console.log('📊 Data:', data);
+
+        // Load the TopoJSON file
+        const topology = await d3.json('./cl-all.topojson');
+        
+        console.log('🗺️ Topology loaded:', topology);
+
+        // Create GeoMap
+        const geoMap = new d3po.GeoMap('#chart', {
+          group: 'id',
+          map: topology,
+          color: 'color',
+          size: 'pokemon_count',
+          tooltip: 'name',
+          width: 500,
+          height: 700
+        });
+
+        geoMap.setData(data).render();
+
+        console.log('✅ GeoMap rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error rendering GeoMap:', error);
+        document.getElementById('chart').innerHTML = `
+          <div style="color: red; padding: 20px; border: 2px solid red; border-radius: 4px;">
+            <h3>Error!</h3>
+            <p>${error.message}</p>
+            <pre>${error.stack}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>

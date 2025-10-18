@@ -1,16 +1,16 @@
 dependencies:
   - name: d3
-    version: 3.5.17
+    version: 7.9.0
     src: htmlwidgets/lib/
     script:
       - d3.min.js
   - name: d3po
-    version: 0.4.0
+    version: 1.0.0
     src: htmlwidgets/lib/
     script:
       - d3po.min.js
   - name: topojson
-    version: 1.6.24
+    version: 3.0.2
     src: htmlwidgets/lib/
     script:
       - topojson.min.js

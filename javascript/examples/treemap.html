@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po Treemap Test</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .charts-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .chart-wrapper {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .chart-wrapper h2 {
+      margin-top: 0;
+      font-size: 18px;
+      text-align: center;
+      color: #333;
+    }
+    .chart-wrapper div[id^="chart"] {
+      width: 100%;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>D3po Treemap Test - Different Tiling Methods</h1>
+    
+    <div class="charts-container">
+      <div class="chart-wrapper">
+        <h2>Squarify (Default)</h2>
+        <div id="chart1"></div>
+      </div>
+      
+      <div class="chart-wrapper">
+        <h2>Binary</h2>
+        <div id="chart2"></div>
+      </div>
+      
+      <div class="chart-wrapper">
+        <h2>Slice</h2>
+        <div id="chart3"></div>
+      </div>
+      
+      <div class="chart-wrapper">
+        <h2>Dice</h2>
+        <div id="chart4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load CSV data
+        const rawData = await d3.csv('pokemon-count.csv');
+      
+        // Transform the data to match expected format
+        const data = rawData.map(d => ({
+          type: d.type_1,
+          count: +d.n,  // Convert string to number
+          color: d.color_1
+        }));
+
+        console.log('📊 Loaded data:', data);
+
+        // Common options
+        const commonOptions = {
+          size: 'count',
+          group: 'type',
+          color: 'color',
+          width: 450,
+          height: 400
+        };
+
+        // Create treemap with default tiling (squarify)
+        const treemap1 = new d3po.Treemap('#chart1', {
+          ...commonOptions,
+          tile: d3.treemapSquarify
+        });
+        treemap1.setData(data).render();
+
+        // Create treemap with binary tiling
+        const treemap2 = new d3po.Treemap('#chart2', {
+          ...commonOptions,
+          tile: d3.treemapBinary
+        });
+        treemap2.setData(data).render();
+
+        // Create treemap with slice tiling
+        const treemap3 = new d3po.Treemap('#chart3', {
+          ...commonOptions,
+          tile: d3.treemapSlice
+        });
+        treemap3.setData(data).render();
+
+        // Create treemap with dice tiling
+        const treemap4 = new d3po.Treemap('#chart4', {
+          ...commonOptions,
+          tile: d3.treemapDice
+        });
+        treemap4.setData(data).render();
+
+        console.log('✅ All treemaps rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error rendering treemap:', error);
+        document.getElementById('chart1').innerHTML = `
+          <div style="color: red; padding: 20px; border: 2px solid red; border-radius: 4px;">
+            <h3>Error!</h3>
+            <p>${error.message}</p>
+            <p>Make sure pokemon-count.csv is in the same directory as this HTML file.</p>
+            <pre>${error.stack}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>

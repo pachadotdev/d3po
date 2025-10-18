@@ -3,16 +3,25 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml)
+[![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://buymeacoffee.com/pacha)
+
 <!-- badges: end -->
 
-## Methods and features
+## About
 
-D3po’s goal is to provide out-of-the-box beautiful visualizations with
-minimum time and coding effort from the final user. It acts as
-intermediate layer between the user and Shiny and D3 by providing
-“templates”, enabling high quality interactive visualizations.
+D3po’s goal is to provide out-of-the-box beautiful visualizations with minimum time and coding effort from the final user. It acts as
+intermediate layer between the user and Shiny and D3 by providing “templates”, enabling high quality interactive visualizations.
 
-D3po methods:
+D3po is essentially a set of templates for D3 version 7.0+ with a permissive licence (Apache 2.0) that can be used in R and Shiny applications via htmlwidgets.
+
+While this package does not have all the features of highcharter, it aims to be a cost free alternative for it without imposing a
+commercial license for NGOs and government use.
+
+If this project is useful for you, please consider supporting its development by buying me a coffee at <https://buymeacoffee.com/pacha>.
+
+## Features
+
+Visualization methods:
 
 - [x] Area (or distribution) chart
 - [x] Box and whiskers
@@ -25,39 +34,33 @@ D3po methods:
 - [x] Scatterplots
 - [x] Treemaps
 
-D3po features:
+Enhancements:
 
-- [x] Automatic content resizing, sensitive to internet browser window
-  maximization/minimization
+- [x] Automatic content resizing
 - [x] Downloading the charts in SVG format
 - [x] Downloading the charts in PNG format
-- [x] Downloading the charts in JPEG format
-- [ ] Providing internatilization options (i.e., numbers as 1.234.567,89
-  instead of 1,234,567.89 in Spanish or French).
-- [x] Producing high quality results with a minimal number of lines of
-  code
 
 ## Installation
 
-You can install the stable version from
-[CRAN](https://cran.r-project.org/) with:
+You can install the most recent version from the R-Universe:
 
 ``` r
-install.packages("d3po")
+install.packages("d3po", repos = "https://pachadotdev.r-universe.dev")
 ```
 
-You can install the development version of d3po from
-[GitHub](https://github.com/) with:
+Or from GitHub using remotes:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("pachadotdev/d3po")
+remotes::install_github("pachadotdev/d3po")
 ```
 
 ## Examples
 
-This is an example consisting in the creation of a box and whiskers
-plot:
+Here is a video of all the current features of D3po:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6pIq2rJONFQ?si=Ai6NUk-BSyG0MTFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+This is an example consisting in the creation of a box and whiskers plot:
 
 ``` r
 d3po(pokemon) %>%
@@ -65,10 +68,4 @@ d3po(pokemon) %>%
   po_title("Distribution of Pokemon speed by main type")
 ```
 
-To access a templated project, in RStudio's top bar click *File -> New Project -> New Directory -> Shiny app with Golem+D3po*. Otherwise, start with a blank project and run `d3po::d3po_template()` to copy the same templates.
-
-You can install the templated projects as any other R package. The templates have their own readme files, so please read them.
-
-## Vignette
-
-Please (*please!*) read the vignette (<https://github.com/pachadotdev/d3po/blob/main/vignettes/d3po.Rmd>).
+Please check the vignettes and this comprehensive example Shiny app using Golem: <https://github.com/pachadotdev/d3po/tree/main/d3podemo>.

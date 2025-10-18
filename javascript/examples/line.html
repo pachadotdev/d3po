@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Evolution Lines by Type</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Evolution: Weight vs Height (Line Chart)</h1>
+    <p>Showing Pokemon evolution chains with lines. Each line represents an evolution line.</p>
+    <div id="chart"></div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load Pokemon evolution data
+        const csv = await d3.csv('pokemon-evolution.csv');
+
+        // Parse numeric fields
+        const data = csv.map(r => ({
+          name: r.name,
+          type: r.type_1,
+          color: r.color_1 || '#888',
+          height: r.height ? +r.height : null,
+          weight: r.weight ? +r.weight : null
+        }));
+
+        console.log('📊 Loaded data:', data);
+        console.log('📊 Data points:', data.length);
+
+        // Create Line Chart
+        const lineChart = new d3po.LineChart('#chart', {
+          x: 'height',
+          y: 'weight',
+          group: 'type',
+          color: 'color',
+          width: 900,
+          height: 500
+        });
+
+        lineChart.setData(data).render();
+
+        console.log('✅ Line chart rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error rendering line chart:', error);
+        document.getElementById('chart').innerHTML = `
+          <div style="color: red; padding: 20px; border: 2px solid red; border-radius: 4px;">
+            <h3>Error!</h3>
+            <p>${error.message}</p>
+            <p>Make sure pokemon-evolution.csv is in the same directory as this HTML file.</p>
+            <pre>${error.stack}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>

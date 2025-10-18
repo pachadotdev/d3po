@@ -25,28 +25,15 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an area chart.
 }
 \examples{
-# library(dplyr)
-# dout <- pokemon \%>\%
-#  filter(
-#   type_1 == "water"
-#  ) \%>\%
-#  group_by(type_1, color_1) \%>\%
-#  reframe(
-#   probability = c(0, 0.25, 0.5, 0.75, 1),
-#   quantile = quantile(speed, probability)
-#  )
+dout <- pokemon[pokemon$name \%in\% c("Squirtle", "Wartortle", "Blastoise",
+  "Charmander", "Charmeleon", "Charizard",
+  "Pikachu", "Raichu"), c("height", "weight", "type_1", "color_1")]
 
-dout <- data.frame(
-  type_1 = rep("water", 5),
-  color_1 = rep("#6890F0", 5),
-  probability = c(0, 0.25, 0.5, 0.75, 1),
-  quantile = c(15, 57.25, 70, 82, 115)
-)
+colnames(dout) <- c("height", "weight", "type", "color")
 
 d3po(dout) \%>\%
   po_area(daes(
-    x = probability, y = quantile, group = type_1,
-    color = color_1
+    x = height, y = weight, group = type, color = color
   )) \%>\%
-  po_title("Sample Quantiles for Water Pokemon Speed")
+  po_title("Pokemon Evolution: Weight vs Height by Type")
 }

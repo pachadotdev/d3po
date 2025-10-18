@@ -1,50 +1,58 @@
 {
   "name": "d3po",
-  "version": "0.4.0",
-  "description": "The JS/D3 Parts of the 'd3po' R Package Fast and Beautiful Interactive Visualization for Markdown and Shiny",
-  "repository": "https://github.com/pachamaltese/d3po",
+  "version": "1.0.0",
+  "description": "Fast and Beautiful Interactive Visualizations with D3.js 7.9",
+  "main": "dist/d3po.js",
+  "module": "dist/d3po.esm.js",
+  "browser": "dist/d3po.min.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "format": "prettier --write \"src/**/*.js\""
+  },
+  "keywords": [
+    "d3",
+    "visualization",
+    "chart",
+    "treemap",
+    "bar-chart",
+    "line-chart",
+    "scatter-plot",
+    "geomap",
+    "network",
+    "interactive"
+  ],
+  "author": "Mauricio Vargas Sepulveda",
   "license": "Apache-2.0",
-  "devDependencies": {
-    "browserify": "^16.5.2",
-    "gulp": "^4.0.2",
-    "gulp-chmod": "^3.0.0",
-    "gulp-connect": "^5.7.0",
-    "gulp-duration": "^0.0.0",
-    "gulp-notify": "^4.0.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "^3.0.2",
-    "merge-stream": "^2.0.0",
-    "require-dir": "^1.2.0",
-    "vinyl-source-stream": "^2.0.0",
-    "watchify": "^3.11.1"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pachadotdev/d3po.git"
   },
   "dependencies": {
-    "acorn": "^6.4.1",
-    "d3": "^3.5.17",
-    "gulp-uglify-es": "^2.0.0",
-    "heap": "^0.2.6",
-    "ionicons": "^4.5.10-0",
-    "notify-send": "^0.1.2",
-    "numeric": "^1.2.6",
-    "save-svg-as-png": "^1.4.17",
-    "simplify-js": "^1.2.4",
-    "static-kdtree": "^1.0.1",
-    "topojson": "^3.0.2"
+    "d3": "^7.9.0",
+    "topojson-client": "^3.1.0"
   },
-  "filename": "d3po.min.js",
-  "npmName": "d3po",
-  "npmFileMap": [
-    {
-      "basePath": "/",
-      "files": [
-        "d3po.js",
-        "d3po.min.js"
-      ]
-    }
-  ],
-  "scripts": {
-    "start": "./node_modules/.bin/gulp",
-    "build": "./node_modules/.bin/gulp release"
-  }
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@rollup/plugin-node-resolve": "^15.2.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jsdoc": "^46.8.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.0.3",
+    "rollup": "^4.1.4",
+    "vite": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
 }

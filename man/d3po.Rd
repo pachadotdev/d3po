@@ -3,8 +3,7 @@
 \docType{package}
 \name{d3po}
 \alias{d3po}
-\title{An \code{htmlwidget} interface to the
-d3po javascript chart library}
+\title{An \code{htmlwidget} interface to the d3po javascript chart library}
 \usage{
 d3po(data = NULL, ..., width = NULL, height = NULL, elementId = NULL)
 }
@@ -25,8 +24,35 @@ string and have \code{'px'} appended.}
 Creates a basic 'htmlwidget' object for simple visualization
 }
 \description{
+Apache licensed alternative to 'Highcharter' which provides functions for both fast and beautiful interactive visualization for 'Markdown' and 'Shiny'.
+
 This function provides 'd3po' methods from R console
 }
-\author{
-Mauricio Vargas
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://pacha.dev/d3po/}
+  \item Report bugs at \url{https://github.com/pachadotdev/d3po/issues}
 }
+
+}
+\author{
+\strong{Maintainer}: Mauricio Vargas Sepulveda \email{m.vargas.sepulveda@gmail.com} (\href{https://orcid.org/0000-0003-1017-7574}{ORCID}) [copyright holder]
+
+Authors:
+\itemize{
+  \item John Coene
+}
+
+Other contributors:
+\itemize{
+  \item Ariel Alvarado [contributor]
+  \item Sylvain Lesage [contributor]
+  \item Curran Kelleher [contributor]
+  \item Fernando Becerra [contributor]
+  \item  Natural Earth [data contributor]
+  \item  R Consortium [funder]
+}
+
+}
+\keyword{internal}

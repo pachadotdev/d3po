@@ -23,30 +23,13 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a donut
 }
 \examples{
-# library(dplyr)
-# dout <- pokemon \%>\%
-#  group_by(type_1, color_1) \%>\%
-#  count()
+dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
+ color = pokemon$color_1), FUN = length)
 
-dout <- data.frame(
-  type_1 = c(
-    "bug", "dragon", "electric", "fairy", "fighting",
-    "fire", "ghost", "grass", "ground", "ice",
-    "normal", "poison", "psychic", "rock", "water"
-  ),
-  color_1 = c(
-    "#A8B820", "#7038F8", "#F8D030", "#EE99AC", "#C03028",
-    "#F08030", "#705898", "#78C850", "#E0C068", "#98D8D8",
-    "#A8A878", "#A040A0", "#F85888", "#B8A038", "#6890F0"
-  ),
-  n = c(
-    12, 3, 9, 2, 7,
-    12, 3, 12, 8, 2,
-    22, 14, 8, 9, 28
-  )
-)
+colnames(dout)[3] <- "count"
 
 d3po(dout) \%>\%
-  po_donut(daes(size = n, group = type_1, color = color_1)) \%>\%
+  po_donut(daes(size = count, group = type, color = color,
+                innerRadius = 0.5, startAngle = 0, endAngle = 2 * pi)) \%>\%
   po_title("Share of Pokemon by main type")
 }

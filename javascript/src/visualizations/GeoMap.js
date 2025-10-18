@@ -1,0 +1,127 @@
+import * as d3 from 'd3';
+import * as topojson from 'topojson-client';
+import D3po from '../D3po.js';
+import { validateData, showTooltip, hideTooltip } from '../utils.js';
+
+/**
+ * Geographic map visualization
+ * @augments D3po
+ */
+export default class GeoMap extends D3po {
+  /**
+   * Creates a geographic map
+   * @param {string|HTMLElement} container - Container selector or element
+   * @param {object} options - Configuration options
+   * @param {string} options.group - Group/ID field name
+   * @param {object} options.map - TopoJSON map data
+   * @param {string} [options.color] - Color field name
+   * @param {string} [options.size] - Size/value field name
+   * @param {string} [options.tooltip] - Tooltip field name
+   */
+  constructor(container, options) {
+    super(container, options);
+
+    if (!options.group || !options.map) {
+      throw new Error('GeoMap requires group and map fields');
+    }
+
+    this.groupField = options.group;
+    this.mapData = options.map;
+    this.colorField = options.color;
+    this.sizeField = options.size;
+    this.tooltipField = options.tooltip;
+  }
+
+  /**
+   * Renders the geographic map
+   * @returns {GeoMap} This instance for chaining
+   */
+  render() {
+    if (!this.data) {
+      throw new Error('No data provided');
+    }
+
+    validateData(this.data, [this.groupField]);
+
+    // Create data lookup
+    const dataMap = new Map(this.data.map(d => [d[this.groupField], d]));
+
+    // Extract features from TopoJSON
+    const key = Object.keys(this.mapData.objects)[0];
+    const features = topojson.feature(
+      this.mapData,
+      this.mapData.objects[key]
+    ).features;
+
+    // Create projection
+    const projection = d3
+      .geoMercator()
+      .fitSize([this.getInnerWidth(), this.getInnerHeight()], {
+        type: 'FeatureCollection',
+        features: features,
+      });
+
+    const path = d3.geoPath().projection(projection);
+
+    // Draw map
+    const colorField = this.colorField;
+    const tooltipField = this.tooltipField;
+    const sizeField = this.sizeField;
+
+    this.chart
+      .selectAll('.region')
+      .data(features)
+      .enter()
+      .append('path')
+      .attr('class', 'region')
+      .attr('d', path)
+      .attr('fill', d => {
+        const data = dataMap.get(d.id);
+        if (!data) return '#e0e0e0';
+        return colorField ? data[colorField] : '#69b3a2';
+      })
+      .each(function (d) {
+        // Store original color on the element's data
+        const data = dataMap.get(d.id);
+        d._originalColor =
+          data && colorField ? data[colorField] : data ? '#69b3a2' : '#e0e0e0';
+      })
+      .attr('stroke', 'white')
+      .attr('stroke-width', 1)
+      .style('opacity', 1)
+      .on('mouseover', function (event, d) {
+        const color = d3.color(d._originalColor);
+        // For light colors, darken instead of brighten
+        const luminance =
+          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+        const highlightColor =
+          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
+        d3.select(this).attr('fill', highlightColor);
+
+        const data = dataMap.get(d.id);
+        if (!data) return;
+
+        const tooltipContent =
+          `<strong>${tooltipField ? data[tooltipField] : d.id}</strong>` +
+          (sizeField ? `Value: ${data[sizeField]}` : '');
+
+        showTooltip(event, tooltipContent);
+      })
+      .on('mouseout', function (event, d) {
+        d3.select(this).attr('fill', d._originalColor);
+        hideTooltip();
+      });
+
+    // Add zoom behavior
+    const zoom = d3
+      .zoom()
+      .scaleExtent([1, 8])
+      .on('zoom', event => {
+        this.chart.selectAll('path').attr('transform', event.transform);
+      });
+
+    this.svg.call(zoom);
+
+    return this;
+  }
+}

@@ -14,7 +14,7 @@ po_geomap(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE)
 \item{data}{Any dataset to use for plot, overrides data passed
 to \code{\link[=d3po]{d3po()}}.}
 
-\item{map}{map to use (i.e., any valid list or topojson file such as \code{maps$south_america} or \code{jsonlite::fromJSON("south_america.topojson", simplifyVector = F)})}
+\item{map}{map to use (i.e., any valid list or topojson file such as \code{maps$south_america$chile} or \code{jsonlite::fromJSON("chile.topojson", simplifyVector = F)})}
 
 \item{inherit_daes}{Whether to inherit aesthetics previous specified.}
 }
@@ -25,17 +25,20 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a geomap
 }
 \examples{
-dout <- map_ids(d3po::maps$asia$japan)
-dout$value <- ifelse(dout$id == "TK", 1L, NA)
-dout$color <- ifelse(dout$id == "TK", "#bd0029", NA)
+# Get region IDs and names from the Chile map
+dout <- map_ids(d3po::maps$south_america$chile)
+
+# Only Magallanes has Pokemon (Mewtwo lives there!)
+dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
+dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
 
 d3po(dout) \%>\%
   po_geomap(
     daes(
-      group = id, color = color, size = value,
+      group = id, color = color, size = pokemon_count,
       tooltip = name
     ),
-    map = d3po::maps$asia$japan
+    map = d3po::maps$south_america$chile
   ) \%>\%
-  po_title("Pokemon was created in the Japanese city of Tokyo")
+  po_title("Pokemon Distribution in Chile")
 }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po Network Test - Pokemon Types</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Pokemon Type Network</h1>
+    <p>Connections between Type 1 and Type 2. Node size represents the count of each type.</p>
+    
+    <div style="max-width: 900px; margin: 0 auto;">
+      <div id="chart" style="height: 700px;"></div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load Pokemon data
+        const pokemonData = await d3.csv('pokemon.csv');
+        
+        console.log('📊 Loaded pokemon data:', pokemonData.length, 'pokemon');
+
+        // Count occurrences of each type
+        const typeCounts = {};
+        
+        pokemonData.forEach(p => {
+          const type1 = p.type_1;
+          const type2 = p.type_2;
+          
+          if (type1 && type1 !== 'NA') {
+            typeCounts[type1] = (typeCounts[type1] || 0) + 1;
+          }
+          
+          if (type2 && type2 !== 'NA') {
+            typeCounts[type2] = (typeCounts[type2] || 0) + 1;
+          }
+        });
+
+        console.log('📊 Type counts:', typeCounts);
+
+        // Create nodes (unique types)
+        const nodes = Object.entries(typeCounts).map(([type, count]) => ({
+          id: type,
+          count: count,
+          color: pokemonData.find(p => p.type_1 === type || p.type_2 === type)?.color_1 || '#888'
+        }));
+
+        console.log('📊 Nodes:', nodes);
+
+        // Create links (connections between type_1 and type_2)
+        const linkMap = {};
+        
+        pokemonData.forEach(p => {
+          const type1 = p.type_1;
+          const type2 = p.type_2;
+          
+          if (type1 && type2 && type1 !== 'NA' && type2 !== 'NA') {
+            const key = [type1, type2].sort().join('-');
+            linkMap[key] = (linkMap[key] || 0) + 1;
+          }
+        });
+
+        const links = Object.entries(linkMap).map(([key, count]) => {
+          const [source, target] = key.split('-');
+          return { source, target, count };
+        });
+
+        console.log('📊 Links:', links);
+
+        // Create Network
+        const network = new d3po.Network('#chart', {
+          nodes: nodes,
+          links: links,
+          size: 'count',
+          color: 'color',
+          width: 900,
+          height: 700
+        });
+
+        network.render();
+
+        console.log('✅ Network rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error rendering network:', error);
+        document.getElementById('chart').innerHTML = `
+          <div style="color: red; padding: 20px; border: 2px solid red; border-radius: 4px;">
+            <h3>Error!</h3>
+            <p>${error.message}</p>
+            <p>Make sure pokemon.csv is in the same directory as this HTML file.</p>
+            <pre>${error.stack}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+name,type_1,color_1,height,weight
+Bulbasaur,Grass,#78C850,0.7,6.9
+Ivysaur,Grass,#78C850,1,13
+Venusaur,Grass,#78C850,2,100
+Charmander,Fire,#F08030,0.6,8.5
+Charmeleon,Fire,#F08030,1.1,19
+Charizard,Fire,#F08030,1.7,90.5
+Squirtle,Water,#6890F0,0.5,9
+Wartortle,Water,#6890F0,1,22.5
+Blastoise,Water,#6890F0,1.6,85.5
+Pikachu,Electric,#F8D030,0.4,6
+Raichu,Electric,#F8D030,0.8,30

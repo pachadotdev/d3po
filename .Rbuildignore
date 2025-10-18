@@ -12,6 +12,4 @@
 ^README\.Rmd$
 ^docs$
 ^images$
-^inst/shinyexample/basic/.Rbuildignore$
-^inst/shinyexample/advanced/.Rbuildignore$
-
+^d3podemo$

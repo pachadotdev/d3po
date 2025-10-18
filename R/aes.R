@@ -25,7 +25,7 @@ daes <- function(x, y, ...) {
 
 #' Construct aesthetics for re-use
 #'
-#' @param aes Output of [new_aes()]
+#' @param aes Aesthetic object
 #' @param cl Class to assign to output
 #'
 #' @noRd
@@ -161,9 +161,30 @@ combine_daes <- function(main_daes, daes, inherit_daes = TRUE) {
 #' @keywords internal
 daes_to_columns <- function(daes) {
   purrr::keep(daes, function(x) {
-    !rlang::is_bare_atomic(x)
+    # Check if it's a bare atomic (scalar value)
+    if (rlang::is_bare_atomic(x)) {
+      return(FALSE)
+    }
+    # Check if it's a quosure that evaluates to a scalar
+    if (rlang::is_quosure(x)) {
+      tryCatch({
+        val <- rlang::eval_tidy(x)
+        return(!rlang::is_bare_atomic(val))
+      }, error = function(e) {
+        # If evaluation fails, assume it's a column reference
+        return(TRUE)
+      })
+    }
+    return(TRUE)
   }) %>%
-    purrr::map(rlang::as_label) %>%
+    purrr::map(function(x) {
+      label <- rlang::as_label(x)
+      # Handle .data$column_name syntax
+      if (grepl("^\\.data\\$", label)) {
+        return(sub("^\\.data\\$", "", label))
+      }
+      return(label)
+    }) %>%
     unname() %>%
     unlist()
 }
@@ -182,5 +203,10 @@ daes_to_opts <- function(daes, var) {
   if (rlang::is_bare_atomic(daes[[var]])) {
     return(daes[[var]])
   }
-  rlang::as_label(daes[[var]])
+  label <- rlang::as_label(daes[[var]])
+  # Handle .data$column_name syntax
+  if (grepl("^\\.data\\$", label)) {
+    return(sub("^\\.data\\$", "", label))
+  }
+  return(label)
 }

@@ -54,21 +54,45 @@ export default class PieChart extends D3po {
 
     const width = this.getInnerWidth();
     const height = this.getInnerHeight();
+    
+    if (width <= 0 || height <= 0 || isNaN(width) || isNaN(height)) {
+      console.error('Invalid chart dimensions:', { width, height });
+      return this;
+    }
+    
     const radius = Math.min(width, height) / 2;
 
     // Calculate the total angle range for percentage calculations
     const totalAngle = this.endAngle - this.startAngle;
     const isHalfChart = totalAngle <= Math.PI;
 
+    // Calculate center position
+    const centerX = this.options.margin.left + width / 2;
+    
     // Adjust vertical position for half charts to use space better
-    const centerY = isHalfChart
-      ? this.options.margin.top + height * 0.7 // Position lower for half charts
-      : this.options.margin.top + height / 2;
+    // For half charts, position the center so the chart uses available space
+    let centerY;
+    if (isHalfChart) {
+      // For half charts, position based on whether it's top or bottom half
+      if (this.startAngle < 0 && this.endAngle > 0) {
+        // Bottom half (e.g., -π/2 to π/2)
+        centerY = this.options.margin.top + radius;
+      } else if (this.startAngle >= 0 && this.endAngle <= Math.PI) {
+        // Top half
+        centerY = this.options.margin.top + height - radius;
+      } else {
+        // Other half configurations
+        centerY = this.options.margin.top + height / 2;
+      }
+    } else {
+      // Full circle - center it vertically
+      centerY = this.options.margin.top + height / 2;
+    }
 
     // Move chart to center
     this.chart.attr(
       'transform',
-      `translate(${this.options.margin.left + width / 2},${centerY})`
+      `translate(${centerX},${centerY})`
     );
 
     // Create pie layout

@@ -14,7 +14,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  eval = FALSE,
+  eval = TRUE,
   comment = "#>",
   fig.width = 10,
   fig.height = 5
@@ -51,7 +51,7 @@ You can create both vertical and horizontal box plots by switching x and y axes:
 ## Weight Distribution by Type
 
 ```{r box1}
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_box(daes(x = type_1, y = weight, color = color_1)) %>%
   po_title("Weight Distribution by Type")
 ```
@@ -59,7 +59,7 @@ d3po(pokemon) %>%
 ## Height Distribution by Type (Horizontal)
 
 ```{r box2}
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_box(daes(x = height, y = type_1, color = color_1)) %>%
   po_title("Height Distribution by Type")
 ```
@@ -73,13 +73,13 @@ For data with large ranges, log transformations can be useful:
 pokemon$log_weight <- log10(pokemon$weight)
 pokemon$log_height <- log10(pokemon$height)
 
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_box(daes(x = type_1, y = log_weight, color = color_1)) %>%
   po_title("Log(Weight) Distribution by Type")
 ```
 
 ```{r box4}
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_box(daes(x = log_height, y = type_1, color = color_1)) %>%
   po_title("Log(Height) Distribution by Type")
 ```
@@ -94,7 +94,7 @@ Bar charts can be oriented vertically or horizontally by switching the x and y a
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_bar(daes(x = type, y = count, color = color)) %>%
   po_title("Vertical Bars")
 ```
@@ -102,7 +102,7 @@ d3po(dout) %>%
 ## Horizontal Bars
 
 ```{r bar2}
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_bar(daes(x = count, y = type, color = color)) %>%
   po_title("Horizontal Bars")
 ```
@@ -117,7 +117,7 @@ size, group, and (optionally) color. You can also specify the tiling method
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) %>%
   po_title("Share of Pokemon by main type")
 ```
@@ -138,7 +138,7 @@ A complete pie chart with no inner radius:
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(size = count, group = type, color = color)) %>%
   po_title("Full Pie")
 ```
@@ -148,7 +148,7 @@ d3po(dout) %>%
 A pie with an inner radius creating a "donut hole":
 
 ```{r}
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(size = count, group = type, color = color, innerRadius = 0.4)) %>%
   po_title("Donut")
 ```
@@ -158,9 +158,11 @@ d3po(dout) %>%
 A semicircular pie chart:
 
 ```{r}
-d3po(dout) %>%
-  po_pie(daes(size = count, group = type, color = color,
-              startAngle = -pi/2, endAngle = pi/2)) %>%
+d3po(dout, width = 800, height = 600) %>%
+  po_pie(daes(
+    size = count, group = type, color = color,
+    startAngle = -pi / 2, endAngle = pi / 2
+  )) %>%
   po_title("Half Pie")
 ```
 
@@ -169,9 +171,11 @@ d3po(dout) %>%
 A semicircular donut chart:
 
 ```{r}
-d3po(dout) %>%
-  po_pie(daes(size = count, group = type, color = color,
-              innerRadius = 0.4, startAngle = -pi/2, endAngle = pi/2)) %>%
+d3po(dout, width = 800, height = 600) %>%
+  po_pie(daes(
+    size = count, group = type, color = color,
+    innerRadius = 0.4, startAngle = -pi / 2, endAngle = pi / 2
+  )) %>%
   po_title("Half Donut")
 ```
 
@@ -181,13 +185,15 @@ Line charts are great for showing trends and evolution over continuous variables
 You can plot multiple series by specifying group and color aesthetics:
 
 ```{r line1}
-dout <- pokemon[pokemon$name %in% c("Squirtle", "Wartortle", "Blastoise",
+dout <- pokemon[pokemon$name %in% c(
+  "Squirtle", "Wartortle", "Blastoise",
   "Charmander", "Charmeleon", "Charizard",
-  "Pikachu", "Raichu"), c("height", "weight", "type_1", "color_1")]
+  "Pikachu", "Raichu"
+), c("height", "weight", "type_1", "color_1")]
 
 colnames(dout) <- c("height", "weight", "type", "color")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_line(daes(
     x = height, y = weight, group = type, color = color
   )) %>%
@@ -200,13 +206,15 @@ Area charts are similar to line charts but with filled areas. You can also
 stack multiple series:
 
 ```{r area1}
-dout <- pokemon[pokemon$name %in% c("Squirtle", "Wartortle", "Blastoise",
+dout <- pokemon[pokemon$name %in% c(
+  "Squirtle", "Wartortle", "Blastoise",
   "Charmander", "Charmeleon", "Charizard",
-  "Pikachu", "Raichu"), c("height", "weight", "type_1", "color_1")]
- 
+  "Pikachu", "Raichu"
+), c("height", "weight", "type_1", "color_1")]
+
 colnames(dout) <- c("height", "weight", "type", "color")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_area(daes(
     x = height, y = weight, group = type, color = color
   ), stack = FALSE) %>%
@@ -221,7 +229,7 @@ control point size to represent a third dimension:
 ## Height vs Weight
 
 ```{r scatter1}
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_scatter(daes(
     x = height, y = weight, group = name, color = color_1
   )) %>%
@@ -237,7 +245,7 @@ if (!"log_height" %in% names(pokemon)) {
   pokemon$log_weight <- log10(pokemon$weight)
 }
 
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_scatter(daes(
     x = log_height, y = log_weight, group = name, color = color_1
   )) %>%
@@ -258,7 +266,7 @@ pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
 pokemon$avg_distance <- (pokemon$distance_from_mean_weight + pokemon$distance_from_mean_height) / 2
 pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_scatter(daes(
     x = height, y = weight, size = inverse_distance_from_mean,
     group = name, color = color_1
@@ -267,7 +275,7 @@ d3po(pokemon) %>%
 ```
 
 ```{r scatter4}
-d3po(pokemon) %>%
+d3po(pokemon, width = 800, height = 600) %>%
   po_scatter(daes(
     x = log_height, y = log_weight, size = inverse_distance_from_mean,
     group = name, color = color_1
@@ -281,6 +289,26 @@ Geographic maps allow you to visualize data across regions. You need to specify
 a TopoJSON map and data with matching region IDs:
 
 ```{r}
+# Get country IDs and names from the South America map
+dout <- map_ids(d3po::maps$south_america$continent)
+
+# Chile has Mewtwo and Guyana has Mew
+dout$pokemon_count <- ifelse(dout$id == "CL", 1L, 0L)
+dout$pokemon_count <- ifelse(dout$id == "GY", 1L, 0L)
+dout$color <- ifelse(dout$id %in% c("CL", "GY"), "#F85888", "#e0e0e0")
+
+d3po(dout, width = 800, height = 600) %>%
+  po_geomap(
+    daes(
+      group = id, color = color, size = pokemon_count,
+      tooltip = name
+    ),
+    map = d3po::maps$south_america$continent
+  ) %>%
+  po_title("Pokemon Distribution in South America")
+```
+
+```{r}
 # Get region IDs and names from the Chile map
 dout <- map_ids(d3po::maps$south_america$chile)
 
@@ -288,7 +316,7 @@ dout <- map_ids(d3po::maps$south_america$chile)
 dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
 dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_geomap(
     daes(
       group = id, color = color, size = pokemon_count,
@@ -303,12 +331,105 @@ d3po(dout) %>%
 
 Network graphs show relationships between entities. The `pokemon_network` dataset
 contains nodes (Pokemon types) and links (connections between type_1 and type_2).
-Node size represents the count of each type:
+Node size represents the count of each type.
+
+By default, nodes are fixed in their positions. You can enable dragging with `move = TRUE`:
 
 ```{r}
-d3po(pokemon_network) %>%
-  po_network(daes(size = size, color = color, layout = "kk")) %>%
-  po_title("Pokemon Type Network")
+# Using KK layout algorithm
+d3po(pokemon_network, width = 800, height = 600) %>%
+  po_network(daes(size = node_size, color = color, layout = "kk")) %>%
+  po_title("Pokemon Type Network (Fixed Positions)")
+```
+
+```{r}
+# Using FR layout algorithm
+d3po(pokemon_network, width = 800, height = 600) %>%
+  po_network(daes(size = node_size, color = color, layout = "fr")) %>%
+  po_title("Pokemon Type Network (Draggable - nodes stay where you put them)")
+```
+
+```{r}
+# Use manual positions (from pokemon_network$layout)
+d3po(pokemon_network, width = 800, height = 600) %>%
+  po_network(daes(size = node_size, color = color)) %>%
+  po_title("Pokemon Type Network (Manual Positions)")
+```
+
+Here is how I created the `pokemon_network` dataset:
+
+```{r, eval = FALSE}
+load_all()
+library(dplyr)
+library(igraph)
+
+pokemon_network_1 <- pokemon %>%
+  filter(!is.na(type_2)) %>%
+  group_by(type_1, type_2) %>%
+  summarise(edge_size = n(), .groups = "drop") %>%
+  rename(
+    from = type_1,
+    to = type_2
+  )
+
+# Create vertices WITH x/y coordinates
+pokemon_network_2 <- pokemon %>%
+  group_by(type = type_1, color = color_1) %>%
+  summarise(node_size = n(), .groups = "drop") %>%
+  bind_rows(
+    pokemon %>%
+      group_by(type = type_2, color = color_2) %>%
+      summarise(node_size = n(), .groups = "drop")
+  ) %>%
+  filter(!is.na(type)) %>%
+  group_by(type, color) %>%
+  summarise(node_size = sum(node_size), .groups = "drop")
+
+# Create a single network object with manual coordinates
+pokemon_network <- igraph::graph_from_data_frame(
+  d = pokemon_network_1,
+  vertices = pokemon_network_2,
+  directed = FALSE
+)
+
+pokemon_network$layout <- igraph::layout_with_kk(pokemon_network)
+rownames(pokemon_network$layout) <- V(pokemon_network)$name
+colnames(pokemon_network$layout) <- c("x", "y")
+
+# Manually optimize layout to minimize edge crossings
+# Place Flying at center since it's the biggest hub
+pokemon_network$layout["Flying", ] <- c(0, 0)
+
+# Place types that connect to Flying in a circle around it
+# Top: Dragon, Electric, Fire
+pokemon_network$layout["Dragon", ] <- c(2, 1.5)
+pokemon_network$layout["Electric", ] <- c(1, 2)
+pokemon_network$layout["Fire", ] <- c(-1, 2)
+
+# Right side: Steel (connects to Electric), Rock, Ground cluster
+pokemon_network$layout["Steel", ] <- c(2, 2.2)
+pokemon_network$layout["Rock", ] <- c(1.5, -1)
+pokemon_network$layout["Ground", ] <- c(0.5, -2)
+
+# Bottom: Ice (connects to Flying, Water, Psychic)
+pokemon_network$layout["Ice", ] <- c(-1, -2)
+pokemon_network$layout["Water", ] <- c(-2, -1)
+
+# Left side: Poison cluster (connects to Bug, Ghost, Grass, Flying, Ground, Water)
+pokemon_network$layout["Poison", ] <- c(-2, 0)
+pokemon_network$layout["Bug", ] <- c(-2.4, 1)
+pokemon_network$layout["Grass", ] <- c(-3, 0)
+pokemon_network$layout["Ghost", ] <- c(-2.5, -0.9)
+
+# Top left: Normal, Fairy (Normal connects to Flying and Fairy)
+pokemon_network$layout["Normal", ] <- c(-1.5, 1.5)
+pokemon_network$layout["Fairy", ] <- c(-2.5, 2)
+
+# Left side: Psychic (connects to Grass, Ice, Water, Fairy)
+pokemon_network$layout["Psychic", ] <- c(-3, -1.5)
+
+# Near Water: Fighting (only connects to Water)
+pokemon_network$layout["Fighting", ] <- c(-1.5, -1.5)
 ```
 
 # Aesthetics
@@ -317,12 +438,10 @@ Going back to the treemap example, it is possible to move the labels,
 change the background, and also use any font that you like:
 
 ```{r}
-load_all()
-
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
-d3po(dout) %>%
+d3po(dout, width = 800, height = 600) %>%
   po_treemap(daes(size = count, group = type, color = color)) %>%
   po_title("Share of Pokemon by main type") %>%
   po_labels("center-middle") %>% # default is "left-top"

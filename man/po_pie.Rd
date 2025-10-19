@@ -23,13 +23,19 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a pie
 }
 \examples{
-dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
- color = pokemon$color_1), FUN = length)
+if (interactive()) {
+  dout <- aggregate(pokemon$name, by = list(
+    type = pokemon$type_1,
+    color = pokemon$color_1
+  ), FUN = length)
 
-colnames(dout)[3] <- "count"
+  colnames(dout)[3] <- "count"
 
-d3po(dout) \%>\%
-  po_pie(daes(size = count, group = type, color = color,
-              innerRadius = 0, startAngle = 0, endAngle = 2 * pi)) \%>\%
-  po_title("Share of Pokemon by main type")
+  d3po(dout) \%>\%
+    po_pie(daes(
+      size = count, group = type, color = color,
+      innerRadius = 0, startAngle = 0, endAngle = 2 * pi
+    )) \%>\%
+    po_title("Share of Pokemon by main type")
+}
 }

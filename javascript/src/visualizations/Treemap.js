@@ -167,10 +167,11 @@ export default class Treemap extends D3po {
       const baseY = lineNumber * lineHeight;
       
       switch(valign) {
-        case 'middle':
+        case 'middle': {
           // Center the entire text block (both lines together)
           const startY = (cellHeight - totalTextHeight) / 2 + this.options.fontSize;
           return startY + baseY;
+        }
         case 'bottom':
           return cellHeight - 5 - (lineHeight * (totalLines - lineNumber));
         case 'top':

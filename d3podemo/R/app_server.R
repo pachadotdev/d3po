@@ -12,7 +12,7 @@ app_server <- function(input, output, session) {
   pokemon <- d3po::pokemon
   pokemon$log_weight <- log10(pokemon$weight)
   pokemon$log_height <- log10(pokemon$height)
-  
+
   # Calculate inverse distance from mean for weighted scatterplots
   mean_weight <- mean(pokemon$weight, na.rm = TRUE)
   mean_height <- mean(pokemon$height, na.rm = TRUE)
@@ -164,8 +164,23 @@ app_server <- function(input, output, session) {
           group = .data$name, color = .data$color_1
         )) %>%
         po_title("Log(Height) vs Log(Weight) (Size = 1 / Distance from the Mean)")
-    } else if (input$plot_type == "geomap") {
-	  maps <- d3po::maps
+    } else if (input$plot_type == "geomap1") {
+      maps <- d3po::maps
+      dout <- map_ids(maps$south_america$continent)
+
+      # Chile has Mewtwo and Guyana has Mew
+      dout$pokemon_count <- ifelse(dout$id == "CL", 1L, 0L)
+      dout$pokemon_count <- ifelse(dout$id == "GY", 1L, 0L)
+      dout$color <- ifelse(dout$id %in% c("CL", "GY"), "#F85888", "#e0e0e0")
+
+      d3po(dout) %>%
+        po_geomap(
+          daes(group = .data$id, color = .data$color, size = .data$pokemon_count, tooltip = .data$name),
+          map = maps$south_america$continent
+        ) %>%
+        po_title("Pokemon Distribution in South America")
+    } else if (input$plot_type == "geomap2") {
+      maps <- d3po::maps
       dout <- map_ids(maps$south_america$chile)
       dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
       dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
@@ -176,11 +191,21 @@ app_server <- function(input, output, session) {
           map = maps$south_america$chile
         ) %>%
         po_title("Pokemon Distribution in Chile")
-    } else if (input$plot_type == "network") {
-	  pokemon_network <- d3po::pokemon_network
+    } else if (input$plot_type == "network_kk") {
+      pokemon_network <- d3po::pokemon_network
       d3po(pokemon_network) %>%
-        po_network(daes(size = .data$size, color = .data$color, layout = "kk")) %>%
-        po_title("Pokemon Type Network")
+        po_network(daes(size = .data$node_size, color = .data$color, layout = "kk")) %>%
+        po_title("Pokemon Type Network (KK Layout)")
+    } else if (input$plot_type == "network_fr") {
+      pokemon_network <- d3po::pokemon_network
+      d3po(pokemon_network) %>%
+        po_network(daes(size = .data$node_size, color = .data$color, layout = "fr")) %>%
+        po_title("Pokemon Type Network (FR Layout)")
+    } else if (input$plot_type == "network_manual") {
+      pokemon_network <- d3po::pokemon_network
+      d3po(pokemon_network) %>%
+        po_network(daes(size = .data$node_size, color = .data$color)) %>%
+        po_title("Pokemon Type Network (Manual Layout)")
     }
   })
 }

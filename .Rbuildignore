@@ -14,3 +14,4 @@
 ^images$
 ^d3podemo$
 ^debug-with-shiny\.R$
+^Makefile$

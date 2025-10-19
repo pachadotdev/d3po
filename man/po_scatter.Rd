@@ -23,35 +23,38 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an scatter chart.
 }
 \examples{
-# Basic scatter plot
-d3po(pokemon) \%>\%
-  po_scatter(daes(
-    x = height, y = weight, group = name, color = color_1
-  )) \%>\%
-  po_title("Height vs Weight")
+if (interactive()) {
+  # Unweighted scatter plot
+  d3po(pokemon) \%>\%
+    po_scatter(daes(
+      x = height, y = weight, group = name, color = color_1
+    )) \%>\%
+    po_title("Height vs Weight")
 
-# Log-transformed scatter plot
-pokemon$log_height <- log10(pokemon$height)
-pokemon$log_weight <- log10(pokemon$weight)
+  # Log-transformed scatter plot
+  pokemon$log_height <- log10(pokemon$height)
+  pokemon$log_weight <- log10(pokemon$weight)
 
-d3po(pokemon) \%>\%
-  po_scatter(daes(
-    x = log_height, y = log_weight, group = name, color = color_1
-  )) \%>\%
-  po_title("Log(Height) vs Log(Weight)")
+  d3po(pokemon) \%>\%
+    po_scatter(daes(
+      x = log_height, y = log_weight, group = name, color = color_1
+    )) \%>\%
+    po_title("Log(Height) vs Log(Weight)")
 
-# With size encoding (inverse distance from mean)
-mean_weight <- mean(pokemon$weight, na.rm = TRUE)
-mean_height <- mean(pokemon$height, na.rm = TRUE)
-pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
-pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
-pokemon$avg_distance <- (pokemon$distance_from_mean_weight + pokemon$distance_from_mean_height) / 2
-pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
+  # Weighted scatterplot by inverse distance from mean
+  mean_weight <- mean(pokemon$weight, na.rm = TRUE)
+  mean_height <- mean(pokemon$height, na.rm = TRUE)
+  pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
+  pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
+  pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
+   pokemon$distance_from_mean_height) / 2
+  pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 
-d3po(pokemon) \%>\%
-  po_scatter(daes(
-    x = height, y = weight, size = inverse_distance_from_mean,
-    group = name, color = color_1
-  )) \%>\%
-  po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+  d3po(pokemon) \%>\%
+    po_scatter(daes(
+      x = height, y = weight, size = inverse_distance_from_mean,
+      group = name, color = color_1
+    )) \%>\%
+    po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+}
 }

@@ -2,6 +2,7 @@
 % Please edit documentation in R/d3po-package.R, R/methods.R
 \docType{package}
 \name{d3po}
+\alias{d3po-package}
 \alias{d3po}
 \title{An \code{htmlwidget} interface to the d3po javascript chart library}
 \usage{
@@ -51,7 +52,7 @@ Other contributors:
   \item Curran Kelleher [contributor]
   \item Fernando Becerra [contributor]
   \item  Natural Earth [data contributor]
-  \item  R Consortium [funder]
+  \item  R Consortium (Funded for the 2016-2017 ISC grants cycle) [funder]
 }
 
 }

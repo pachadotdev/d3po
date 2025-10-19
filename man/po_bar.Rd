@@ -23,18 +23,22 @@ an 'htmlwidgets' object with the desired interactive plot
 Draw a bar chart.
 }
 \examples{
-dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
- color = pokemon$color_1), FUN = length)
+if (interactive()) {
+  dout <- aggregate(pokemon$name, by = list(
+    type = pokemon$type_1,
+    color = pokemon$color_1
+  ), FUN = length)
 
-colnames(dout)[3] <- "count"
+  colnames(dout)[3] <- "count"
 
-# Vertical bars
-d3po(dout) \%>\%
-  po_bar(daes(x = type, y = count, color = color)) \%>\%
-  po_title("Vertical Bars")
+  # Vertical bars
+  d3po(dout) \%>\%
+    po_bar(daes(x = type, y = count, color = color)) \%>\%
+    po_title("Vertical Bars")
 
-# Horizontal bars (flipped axes)
-d3po(dout) \%>\%
-  po_bar(daes(x = count, y = type, color = color)) \%>\%
-  po_title("Horizontal Bars")
+  # Horizontal bars (flipped axes)
+  d3po(dout) \%>\%
+    po_bar(daes(x = count, y = type, color = color)) \%>\%
+    po_title("Horizontal Bars")
+}
 }

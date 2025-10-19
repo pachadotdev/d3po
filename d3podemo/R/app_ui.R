@@ -20,10 +20,10 @@ app_ui <- function(request) {
               "Bar Chart (Vertical)" = "bar1",
               "Bar Chart (Horizontal)" = "bar2",
               "Treemap (Squarify)" = "treemap1",
-			  "Treemap (Binary)" = "treemap2",
-			  "Treemap (Slice)" = "treemap3",
-			  "Treemap (Dice)" = "treemap4",
-			  "Treemap (Custom Aesthetics)" = "treemap5",
+              "Treemap (Binary)" = "treemap2",
+              "Treemap (Slice)" = "treemap3",
+              "Treemap (Dice)" = "treemap4",
+              "Treemap (Custom Aesthetics)" = "treemap5",
               "Pie Chart" = "pie",
               "Donut Chart" = "donut",
               "Line Chart" = "line",
@@ -32,8 +32,11 @@ app_ui <- function(request) {
               "Scatter Plot (Log Scale)" = "scatter2",
               "Scatter Plot (Weighted)" = "scatter3",
               "Scatter Plot (Weighted, Log Scale)" = "scatter4",
-              "Geomap (Chile)" = "geomap",
-              "Network Graph" = "network"
+              "Geomap (South America)" = "geomap1",
+              "Geomap (Chile)" = "geomap2",
+              "Network Graph (KK Layout)" = "network_kk",
+              "Network Graph (FR Layout)" = "network_fr",
+              "Network Graph (Manual Layout)" = "network_manual"
             ),
             selected = "box1"
           ),

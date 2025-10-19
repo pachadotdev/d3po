@@ -43,6 +43,20 @@ export default class GeoMap extends D3po {
 
     validateData(this.data, [this.groupField]);
 
+    // Add clipping path to prevent overflow into title area
+    const clipId = `clip-${Math.random().toString(36).substr(2, 9)}`;
+    this.svg
+      .append('defs')
+      .append('clipPath')
+      .attr('id', clipId)
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', this.getInnerWidth())
+      .attr('height', this.getInnerHeight());
+
+    this.chart.attr('clip-path', `url(#${clipId})`);
+
     // Create data lookup
     const dataMap = new Map(this.data.map(d => [d[this.groupField], d]));
 

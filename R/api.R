@@ -11,21 +11,23 @@
 #' @param inherit_daes Whether to inherit aesthetics previous specified.
 #'
 #' @examples
-#' # Vertical box plot
-#' d3po(pokemon) %>%
-#'   po_box(daes(x = type_1, y = weight, color = color_1)) %>%
-#'   po_title("Weight Distribution by Type")
+#' if (interactive()) {
+#'   # Vertical box plot
+#'   d3po(pokemon) %>%
+#'     po_box(daes(x = type_1, y = weight, color = color_1)) %>%
+#'     po_title("Weight Distribution by Type")
 #'
-#' # Horizontal box plot
-#' d3po(pokemon) %>%
-#'   po_box(daes(x = height, y = type_1, color = color_1)) %>%
-#'   po_title("Height Distribution by Type")
+#'   # Horizontal box plot
+#'   d3po(pokemon) %>%
+#'     po_box(daes(x = height, y = type_1, color = color_1)) %>%
+#'     po_title("Height Distribution by Type")
 #'
-#' # Log-transformed distribution
-#' pokemon$log_weight <- log10(pokemon$weight)
-#' d3po(pokemon) %>%
-#'   po_box(daes(x = type_1, y = log_weight, color = color_1)) %>%
-#'   po_title("Log(Weight) Distribution by Type")
+#'   # Log-transformed distribution
+#'   pokemon$log_weight <- log10(pokemon$weight)
+#'   d3po(pokemon) %>%
+#'     po_box(daes(x = type_1, y = log_weight, color = color_1)) %>%
+#'     po_title("Log(Weight) Distribution by Type")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_box <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_box")
@@ -75,14 +77,18 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @inheritParams po_box
 #'
 #' @examples
-#' dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
-#'  color = pokemon$color_1), FUN = length)
-#' 
-#' colnames(dout)[3] <- "count"
+#' if (interactive()) {
+#'   dout <- aggregate(pokemon$name, by = list(
+#'     type = pokemon$type_1,
+#'     color = pokemon$color_1
+#'   ), FUN = length)
 #'
-#' d3po(dout) %>%
-#'   po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) %>%
-#'   po_title("Share of Pokemon by main type")
+#'   colnames(dout)[3] <- "count"
+#'
+#'   d3po(dout) %>%
+#'     po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) %>%
+#'     po_title("Share of Pokemon by main type")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_treemap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_treemap")
@@ -132,15 +138,21 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @inheritParams po_box
 #'
 #' @examples
-#' dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
-#'  color = pokemon$color_1), FUN = length)
-#' 
-#' colnames(dout)[3] <- "count"
+#' if (interactive()) {
+#'   dout <- aggregate(pokemon$name, by = list(
+#'     type = pokemon$type_1,
+#'     color = pokemon$color_1
+#'   ), FUN = length)
 #'
-#' d3po(dout) %>%
-#'   po_pie(daes(size = count, group = type, color = color,
-#'               innerRadius = 0, startAngle = 0, endAngle = 2 * pi)) %>%
-#'   po_title("Share of Pokemon by main type")
+#'   colnames(dout)[3] <- "count"
+#'
+#'   d3po(dout) %>%
+#'     po_pie(daes(
+#'       size = count, group = type, color = color,
+#'       innerRadius = 0, startAngle = 0, endAngle = 2 * pi
+#'     )) %>%
+#'     po_title("Share of Pokemon by main type")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_pie <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_pie")
@@ -192,15 +204,21 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @inheritParams po_box
 #'
 #' @examples
-#' dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
-#'  color = pokemon$color_1), FUN = length)
-#' 
-#' colnames(dout)[3] <- "count"
+#' if (interactive()) {
+#'   dout <- aggregate(pokemon$name, by = list(
+#'     type = pokemon$type_1,
+#'     color = pokemon$color_1
+#'   ), FUN = length)
 #'
-#' d3po(dout) %>%
-#'   po_donut(daes(size = count, group = type, color = color,
-#'                 innerRadius = 0.5, startAngle = 0, endAngle = 2 * pi)) %>%
-#'   po_title("Share of Pokemon by main type")
+#'   colnames(dout)[3] <- "count"
+#'
+#'   d3po(dout) %>%
+#'     po_donut(daes(
+#'       size = count, group = type, color = color,
+#'       innerRadius = 0.4, startAngle = 0, endAngle = 2 * pi
+#'     )) %>%
+#'     po_title("Share of Pokemon by main type")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_donut <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_donut")
@@ -253,17 +271,21 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @param stack Whether to stack the series.
 #'
 #' @examples
-#' dout <- pokemon[pokemon$name %in% c("Squirtle", "Wartortle", "Blastoise",
-#'   "Charmander", "Charmeleon", "Charizard",
-#'   "Pikachu", "Raichu"), c("height", "weight", "type_1", "color_1")]
-#' 
-#' colnames(dout) <- c("height", "weight", "type", "color")
+#' if (interactive()) {
+#'   dout <- pokemon[pokemon$name %in% c(
+#'     "Squirtle", "Wartortle", "Blastoise",
+#'     "Charmander", "Charmeleon", "Charizard",
+#'     "Pikachu", "Raichu"
+#'   ), c("height", "weight", "type_1", "color_1")]
 #'
-#' d3po(dout) %>%
-#'   po_area(daes(
-#'     x = height, y = weight, group = type, color = color
-#'   )) %>%
-#'   po_title("Pokemon Evolution: Weight vs Height by Type")
+#'   colnames(dout) <- c("height", "weight", "type", "color")
+#'
+#'   d3po(dout) %>%
+#'     po_area(daes(
+#'       x = height, y = weight, group = type, color = color
+#'     )) %>%
+#'     po_title("Pokemon Evolution: Weight vs Height by Type")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_area <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_area")
@@ -314,20 +336,24 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes, stack) {
 #' @inheritParams po_box
 #'
 #' @examples
-#' dout <- aggregate(pokemon$name, by = list(type = pokemon$type_1,
-#'  color = pokemon$color_1), FUN = length)
-#' 
-#' colnames(dout)[3] <- "count"
+#' if (interactive()) {
+#'   dout <- aggregate(pokemon$name, by = list(
+#'     type = pokemon$type_1,
+#'     color = pokemon$color_1
+#'   ), FUN = length)
 #'
-#' # Vertical bars
-#' d3po(dout) %>%
-#'   po_bar(daes(x = type, y = count, color = color)) %>%
-#'   po_title("Vertical Bars")
+#'   colnames(dout)[3] <- "count"
 #'
-#' # Horizontal bars (flipped axes)
-#' d3po(dout) %>%
-#'   po_bar(daes(x = count, y = type, color = color)) %>%
-#'   po_title("Horizontal Bars")
+#'   # Vertical bars
+#'   d3po(dout) %>%
+#'     po_bar(daes(x = type, y = count, color = color)) %>%
+#'     po_title("Vertical Bars")
+#'
+#'   # Horizontal bars (flipped axes)
+#'   d3po(dout) %>%
+#'     po_bar(daes(x = count, y = type, color = color)) %>%
+#'     po_title("Horizontal Bars")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
@@ -377,17 +403,21 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @inheritParams po_box
 #'
 #' @examples
-#' dout <- pokemon[pokemon$name %in% c("Squirtle", "Wartortle", "Blastoise",
-#'   "Charmander", "Charmeleon", "Charizard",
-#'   "Pikachu", "Raichu"), c("height", "weight", "type_1", "color_1")]
-#' 
-#' colnames(dout) <- c("height", "weight", "type", "color")
+#' if (interactive()) {
+#'   dout <- pokemon[pokemon$name %in% c(
+#'     "Squirtle", "Wartortle", "Blastoise",
+#'     "Charmander", "Charmeleon", "Charizard",
+#'     "Pikachu", "Raichu"
+#'   ), c("height", "weight", "type_1", "color_1")]
 #'
-#' d3po(dout) %>%
-#'   po_line(daes(
-#'     x = height, y = weight, group = type, color = color
-#'   )) %>%
-#'   po_title("Pokemon Evolution: Weight vs Height by Type")
+#'   colnames(dout) <- c("height", "weight", "type", "color")
+#'
+#'   d3po(dout) %>%
+#'     po_line(daes(
+#'       x = height, y = weight, group = type, color = color
+#'     )) %>%
+#'     po_title("Pokemon Evolution: Weight vs Height by Type")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_line <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_line")
@@ -437,37 +467,40 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @inheritParams po_box
 #'
 #' @examples
-#' # Basic scatter plot
-#' d3po(pokemon) %>%
-#'   po_scatter(daes(
-#'     x = height, y = weight, group = name, color = color_1
-#'   )) %>%
-#'   po_title("Height vs Weight")
+#' if (interactive()) {
+#'   # Unweighted scatter plot
+#'   d3po(pokemon) %>%
+#'     po_scatter(daes(
+#'       x = height, y = weight, group = name, color = color_1
+#'     )) %>%
+#'     po_title("Height vs Weight")
 #'
-#' # Log-transformed scatter plot
-#' pokemon$log_height <- log10(pokemon$height)
-#' pokemon$log_weight <- log10(pokemon$weight)
+#'   # Log-transformed scatter plot
+#'   pokemon$log_height <- log10(pokemon$height)
+#'   pokemon$log_weight <- log10(pokemon$weight)
 #'
-#' d3po(pokemon) %>%
-#'   po_scatter(daes(
-#'     x = log_height, y = log_weight, group = name, color = color_1
-#'   )) %>%
-#'   po_title("Log(Height) vs Log(Weight)")
+#'   d3po(pokemon) %>%
+#'     po_scatter(daes(
+#'       x = log_height, y = log_weight, group = name, color = color_1
+#'     )) %>%
+#'     po_title("Log(Height) vs Log(Weight)")
 #'
-#' # With size encoding (inverse distance from mean)
-#' mean_weight <- mean(pokemon$weight, na.rm = TRUE)
-#' mean_height <- mean(pokemon$height, na.rm = TRUE)
-#' pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
-#' pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
-#' pokemon$avg_distance <- (pokemon$distance_from_mean_weight + pokemon$distance_from_mean_height) / 2
-#' pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
+#'   # Weighted scatterplot by inverse distance from mean
+#'   mean_weight <- mean(pokemon$weight, na.rm = TRUE)
+#'   mean_height <- mean(pokemon$height, na.rm = TRUE)
+#'   pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
+#'   pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
+#'   pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
+#'    pokemon$distance_from_mean_height) / 2
+#'   pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 #'
-#' d3po(pokemon) %>%
-#'   po_scatter(daes(
-#'     x = height, y = weight, size = inverse_distance_from_mean,
-#'     group = name, color = color_1
-#'   )) %>%
-#'   po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+#'   d3po(pokemon) %>%
+#'     po_scatter(daes(
+#'       x = height, y = weight, size = inverse_distance_from_mean,
+#'       group = name, color = color_1
+#'     )) %>%
+#'     po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_scatter <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_scatter")
@@ -592,7 +625,7 @@ po_labels.d3proxy <- function(d3po, align) {
 
   # Note: For Shiny proxies, we can't easily check the type,
   # so we trust the user to use this correctly
-  
+
   # Validate align value
   valid_values <- c("left-top", "center-middle", "right-top")
   assertthat::assert_that(
@@ -751,9 +784,9 @@ po_background.d3proxy <- function(d3po, background) {
 # Download ----
 
 #' Download
-#' 
+#'
 #' Show/hide the download button.
-#' 
+#'
 #' @param d3po A 'd3po' or 'd3proxy' object.
 #' @param show Logical indicating whether to show (TRUE) or hide (FALSE) the download button.
 #' @export
@@ -791,11 +824,12 @@ po_download.d3proxy <- function(d3po, show = TRUE) {
 #'
 #' @inheritParams po_box
 #' @examples
-#' # pokemon_network has nodes (types) and links (type_1 to type_2 connections)
-#' # Node size represents the count of each type
-#' d3po(pokemon_network) %>%
-#'   po_network(daes(size = size, color = color, layout = "kk")) %>%
-#'   po_title("Pokemon Type Network")
+#' if (interactive()) {
+#'   d3po(pokemon_network) %>%
+#'     po_network(daes(size = size, color = color, layout = "kk")) %>%
+#'     po_title("Pokemon Type Network")
+#' }
+#'
 #' @export
 #' @return Appends nodes arguments to a network-specific 'htmlwidgets' object
 po_network <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_network")
@@ -809,7 +843,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 
   # For network, data comes from igraph vertices
   vertices_data <- igraph::as_data_frame(d3po$x$tempdata, what = "vertices")
-  
+
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
@@ -820,29 +854,71 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
 
   layout <- daes_to_opts(daes, "layout")
+  move <- daes_to_opts(daes, "move")
 
-  if (is.null(layout)) {
-    warning("No layout specified, using 'nicely'.")
-    layout <- "nicely"
+  # Set default for move if not specified
+  if (is.null(move)) {
+    move <- FALSE
   }
 
-  layout_func <- switch(layout,
-    "nicely" = igraph::layout_nicely,
-    "fr" = igraph::layout_with_fr,
-    "kk" = igraph::layout_with_kk,
-    "graphopt" = igraph::layout_with_graphopt,
-    "drl" = igraph::layout_with_drl,
-    "lgl" = igraph::layout_with_lgl,
-    "mds" = igraph::layout_with_mds,
-    "sugiyama" = igraph::layout_with_sugiyama
-  )
+  d3po$x$move <- move
 
-  layout_coords <- round(as.data.frame(layout_func(d3po$x$tempdata)), 3)
-  names(layout_coords) <- c("x", "y")
-  
+  # Check if vertices already have x and y coordinates
+  has_manual_coords <- all(c("x", "y") %in% names(vertices_data))
+
+  # Check if graph object has a $layout attribute
+  has_layout_attr <- !is.null(d3po$x$tempdata$layout) && is.matrix(d3po$x$tempdata$layout)
+
+  # Decide whether to use manual coordinates or calculate layout
+  # Priority:
+  # 1. If layout is specified, use it (ignoring any manual coords or layout attr)
+  # 2. If no layout specified but graph has $layout attribute, use that
+  # 3. If no layout specified but vertex x/y exist, use those
+  # 4. If none of above, default to 'kk' layout
+  if (!is.null(layout)) {
+    # Layout algorithm specified - calculate positions using igraph
+    layout_func <- switch(layout,
+      "nicely" = igraph::layout_nicely,
+      "fr" = igraph::layout_with_fr,
+      "kk" = igraph::layout_with_kk,
+      "graphopt" = igraph::layout_with_graphopt,
+      "drl" = igraph::layout_with_drl,
+      "lgl" = igraph::layout_with_lgl,
+      "mds" = igraph::layout_with_mds,
+      "sugiyama" = igraph::layout_with_sugiyama,
+      stop("Unknown layout: ", layout)
+    )
+
+    layout_coords <- round(as.data.frame(layout_func(d3po$x$tempdata)), 3)
+    names(layout_coords) <- c("x", "y")
+    d3po$x$layout <- layout
+  } else if (has_layout_attr) {
+    # No layout specified, but graph has $layout attribute - use it
+    # Both the layout matrix and vertices_data are in the same igraph vertex order
+    # So we can use the layout directly without reordering
+    layout_matrix <- d3po$x$tempdata$layout
+
+    layout_coords <- round(as.data.frame(layout_matrix), 3)
+    names(layout_coords) <- c("x", "y")
+    d3po$x$layout <- "manual"
+  } else if (has_manual_coords) {
+    # No layout specified, but manual coordinates exist in vertices - use them
+    layout_coords <- vertices_data[, c("x", "y")]
+    d3po$x$layout <- "manual"
+  } else {
+    # No layout specified and no manual coordinates - default to 'kk'
+    layout_coords <- round(as.data.frame(igraph::layout_with_kk(d3po$x$tempdata)), 3)
+    names(layout_coords) <- c("x", "y")
+    d3po$x$layout <- "kk"
+  }
+
   # Combine vertex attributes with layout coordinates
   # Add id field from vertex names
   vertices_data$id <- vertices_data$name
+
+  # Remove x and y from vertices_data if they exist to avoid duplication
+  vertices_data <- vertices_data[, !names(vertices_data) %in% c("x", "y"), drop = FALSE]
+
   nodes <- dplyr::bind_cols(vertices_data, layout_coords)
 
   d3po$x$nodes <- nodes
@@ -852,7 +928,9 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # Use node names as source/target (not numeric indices)
   edges$source <- edges$from
   edges$target <- edges$to
-  d3po$x$edges <- edges[, c("source", "target")]
+  # Keep all edge attributes (including edge_size, weight, etc.)
+  edges <- edges[, !names(edges) %in% c("from", "to"), drop = FALSE]
+  d3po$x$edges <- edges
 
   return(d3po)
 }
@@ -880,22 +958,24 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @param map map to use (i.e., any valid list or topojson file such as `maps$south_america$chile` or `jsonlite::fromJSON("chile.topojson", simplifyVector = F)`)
 #'
 #' @examples
-#' # Get region IDs and names from the Chile map
-#' dout <- map_ids(d3po::maps$south_america$chile)
+#' if (interactive()) {
+#'   # Get region IDs and names from the Chile map
+#'   dout <- map_ids(d3po::maps$south_america$chile)
 #'
-#' # Only Magallanes has Pokemon (Mewtwo lives there!)
-#' dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
-#' dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
+#'   # Only Magallanes has Pokemon (Mewtwo lives there!)
+#'   dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
+#'   dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
 #'
-#' d3po(dout) %>%
-#'   po_geomap(
-#'     daes(
-#'       group = id, color = color, size = pokemon_count,
-#'       tooltip = name
-#'     ),
-#'     map = d3po::maps$south_america$chile
-#'   ) %>%
-#'   po_title("Pokemon Distribution in Chile")
+#'   d3po(dout) %>%
+#'     po_geomap(
+#'       daes(
+#'         group = id, color = color, size = pokemon_count,
+#'         tooltip = name
+#'       ),
+#'       map = d3po::maps$south_america$chile
+#'     ) %>%
+#'     po_title("Pokemon Distribution in Chile")
+#' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
 po_geomap <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) UseMethod("po_geomap")

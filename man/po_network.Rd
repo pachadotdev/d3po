@@ -25,9 +25,10 @@ Requires an igraph object with nodes (vertices) and links (edges).
 Node size can represent counts or other metrics.
 }
 \examples{
-# pokemon_network has nodes (types) and links (type_1 to type_2 connections)
-# Node size represents the count of each type
-d3po(pokemon_network) \%>\%
-  po_network(daes(size = size, color = color, layout = "kk")) \%>\%
-  po_title("Pokemon Type Network")
+if (interactive()) {
+  d3po(pokemon_network) \%>\%
+    po_network(daes(size = size, color = color, layout = "kk")) \%>\%
+    po_title("Pokemon Type Network")
+}
+
 }

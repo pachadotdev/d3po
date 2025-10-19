@@ -167,13 +167,16 @@ daes_to_columns <- function(daes) {
     }
     # Check if it's a quosure that evaluates to a scalar
     if (rlang::is_quosure(x)) {
-      tryCatch({
-        val <- rlang::eval_tidy(x)
-        return(!rlang::is_bare_atomic(val))
-      }, error = function(e) {
-        # If evaluation fails, assume it's a column reference
-        return(TRUE)
-      })
+      tryCatch(
+        {
+          val <- rlang::eval_tidy(x)
+          return(!rlang::is_bare_atomic(val))
+        },
+        error = function(e) {
+          # If evaluation fails, assume it's a column reference
+          return(TRUE)
+        }
+      )
     }
     return(TRUE)
   }) %>%
@@ -208,5 +211,15 @@ daes_to_opts <- function(daes, var) {
   if (grepl("^\\.data\\$", label)) {
     return(sub("^\\.data\\$", "", label))
   }
-  return(label)
+  # Try to evaluate as an expression (for numeric values like -pi/2)
+  # If it succeeds and returns a number, use that; otherwise return the label
+  tryCatch({
+    result <- eval(parse(text = label))
+    if (is.numeric(result) && length(result) == 1) {
+      return(result)
+    }
+    return(label)
+  }, error = function(e) {
+    return(label)
+  })
 }

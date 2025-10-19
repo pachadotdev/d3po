@@ -47,16 +47,16 @@
 #' sub-lists by continent and here I provide maps for both the continents and
 #' the countries. There are missing states or regions because those could not be
 #' found in the original maps.
-#' 
-#' Missing in Asia: 'Siachen Glacier (JK)', 'Scarborough Reef (SH)', and 
+#'
+#' Missing in Asia: 'Siachen Glacier (JK)', 'Scarborough Reef (SH)', and
 #' 'Spratly Islands (SP)'. Missing in Europe: 'Vatican City (VA)'.
 #'
 #' Missing in North America: 'Bajo Nuevo Bank (BU)', 'Serranilla Bank (SW)', and
 #' 'United States Minor Outlying Islands (UM)'.
-#' 
-#' Missing in Oceania: 'Federated States of Micronesia (FM)', 
+#'
+#' Missing in Oceania: 'Federated States of Micronesia (FM)',
 #' 'Marshall Islands (MH)', and 'Tuvalu (TV)'.
-#' 
+#'
 #' Consider all these maps as referential and unofficial.
 #'
 #' @docType data

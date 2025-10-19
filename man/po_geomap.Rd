@@ -25,20 +25,22 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot a geomap
 }
 \examples{
-# Get region IDs and names from the Chile map
-dout <- map_ids(d3po::maps$south_america$chile)
+if (interactive()) {
+  # Get region IDs and names from the Chile map
+  dout <- map_ids(d3po::maps$south_america$chile)
 
-# Only Magallanes has Pokemon (Mewtwo lives there!)
-dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
-dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
+  # Only Magallanes has Pokemon (Mewtwo lives there!)
+  dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
+  dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
 
-d3po(dout) \%>\%
-  po_geomap(
-    daes(
-      group = id, color = color, size = pokemon_count,
-      tooltip = name
-    ),
-    map = d3po::maps$south_america$chile
-  ) \%>\%
-  po_title("Pokemon Distribution in Chile")
+  d3po(dout) \%>\%
+    po_geomap(
+      daes(
+        group = id, color = color, size = pokemon_count,
+        tooltip = name
+      ),
+      map = d3po::maps$south_america$chile
+    ) \%>\%
+    po_title("Pokemon Distribution in Chile")
+}
 }

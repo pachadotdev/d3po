@@ -16,6 +16,3 @@ NULL
 #' @name JS
 #' @rdname d3po-exports
 NULL
-
-#' @keywords internal
-"_PACKAGE"

@@ -23,15 +23,19 @@ an 'htmlwidgets' object with the desired interactive plot
 Plot an line chart.
 }
 \examples{
-dout <- pokemon[pokemon$name \%in\% c("Squirtle", "Wartortle", "Blastoise",
-  "Charmander", "Charmeleon", "Charizard",
-  "Pikachu", "Raichu"), c("height", "weight", "type_1", "color_1")]
+if (interactive()) {
+  dout <- pokemon[pokemon$name \%in\% c(
+    "Squirtle", "Wartortle", "Blastoise",
+    "Charmander", "Charmeleon", "Charizard",
+    "Pikachu", "Raichu"
+  ), c("height", "weight", "type_1", "color_1")]
 
-colnames(dout) <- c("height", "weight", "type", "color")
+  colnames(dout) <- c("height", "weight", "type", "color")
 
-d3po(dout) \%>\%
-  po_line(daes(
-    x = height, y = weight, group = type, color = color
-  )) \%>\%
-  po_title("Pokemon Evolution: Weight vs Height by Type")
+  d3po(dout) \%>\%
+    po_line(daes(
+      x = height, y = weight, group = type, color = color
+    )) \%>\%
+    po_title("Pokemon Evolution: Weight vs Height by Type")
+}
 }

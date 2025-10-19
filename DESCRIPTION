@@ -11,7 +11,7 @@ Authors@R: c(
   person("Curran", "Kelleher", role = "ctb"),
   person("Fernando", "Becerra", role = "ctb"),
   person(family = "Natural Earth", role = "dtc"),
-  person(family = "R Consortium", role = "fnd"))
+  person(family = "R Consortium", role = "fnd", comment = "Funded for the 2016-2017 ISC grants cycle"))
 Description: Apache licensed alternative to 'Highcharter' which provides 
   functions for both fast and beautiful interactive visualization for 'Markdown'
   and 'Shiny'.

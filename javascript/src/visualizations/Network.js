@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { showTooltip, hideTooltip } from '../utils.js';
+import { showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
 
 /**
  * Network/Graph visualization
@@ -220,6 +220,15 @@ export default class Network extends D3po {
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
 
+    // resolve tooltip formatter: prefer this.tooltip (from D3po base) then options.tooltip
+    let tooltipFormatter = null;
+    if (typeof this.tooltip === 'function') {
+      tooltipFormatter = this.tooltip;
+    } else if (this.options && this.options.tooltip) {
+      const tf = maybeEvalJSFormatter(this.options.tooltip);
+      if (tf) tooltipFormatter = tf;
+    }
+
     node
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
@@ -231,10 +240,21 @@ export default class Network extends D3po {
 
         d3.select(this).attr('fill', highlightColor);
 
-        const tooltipContent =
-          `<strong>${d.id || 'Node'}</strong>` +
-          (sizeField ? `Size: ${d[sizeField]}` : '');
+        // If a formatter is provided, use it: (value, row)
+        if (tooltipFormatter) {
+          try {
+            const content = tooltipFormatter(null, d);
+            showTooltip(event, content, fontFamily, fontSize);
+            return;
+          } catch (e) {
+            void 0;
+          }
+        }
 
+        // Default tooltip: "Count of <Type> Pokemon: <count>"
+        const typeLabel = d.id || 'Node';
+        const cnt = d[sizeField] != null ? d[sizeField] : (d.count != null ? d.count : 'N/A');
+        const tooltipContent = `<strong>Count of ${typeLabel} Pokemon: ${cnt}</strong>`;
         showTooltip(event, tooltipContent, fontFamily, fontSize);
       })
       .on('mouseout', function (event, d) {

@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { validateData, triggerDownload } from './utils.js';
+import { validateData, triggerDownload, maybeEvalJSFormatter } from './utils.js';
 
 /**
  * Base D3po class for creating interactive visualizations
@@ -41,9 +41,40 @@ export default class D3po {
       ...options,
     };
 
-    this.data = null;
-    this.svg = null;
-    this.chart = null;
+  this.data = null;
+  this.svg = null;
+  this.chart = null;
+
+    // Optional formatters/templates provided by the R or JS layer
+    // tooltip: string/function
+    this.tooltip = options.tooltip || null;
+    // axisFormatters: { x: fn, y: fn }
+    this.axisFormatters = options.axisFormatters || null;
+
+    // If user passed axis_x / axis_y (convenience for direct JS usage), evaluate
+    // JS.* strings into functions and populate options.axisFormatters so
+    // visualizations can read this.options.axisFormatters.
+    if (options.axis_x !== undefined) {
+      this.options.axisFormatters = this.options.axisFormatters || {};
+      const fx = maybeEvalJSFormatter(options.axis_x);
+      this.options.axisFormatters.x = fx || null;
+    }
+    if (options.axis_y !== undefined) {
+      this.options.axisFormatters = this.options.axisFormatters || {};
+      const fy = maybeEvalJSFormatter(options.axis_y);
+      this.options.axisFormatters.y = fy || null;
+    }
+
+    // If tooltip provided as JS.* string, evaluate it to a function and keep
+    // the result on this.tooltip (visualizations check this.tooltip first).
+    if (options.tooltip !== undefined) {
+      const tf = maybeEvalJSFormatter(options.tooltip);
+      if (tf) this.tooltip = tf;
+      // otherwise leave this.tooltip as the raw value (string/template)
+    }
+
+    // Mirror options.axisFormatters to this.axisFormatters for convenience
+    this.axisFormatters = this.options.axisFormatters || this.axisFormatters;
 
     this._initializeSVG();
   }

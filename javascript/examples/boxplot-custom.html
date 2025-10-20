@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po Box Plot Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>D3po Box Plot Test</h1>
+    
+    <div class="charts-container">
+      <div class="chart-wrapper">
+        <h2>Weight Distribution by Type</h2>
+        <div id="chart1" style="height: 580px;"></div>
+      </div>
+      
+      <div class="chart-wrapper">
+        <h2>Height Distribution by Type</h2>
+        <div id="chart2" style="height: 580px;"></div>
+      </div>
+    </div>
+    
+    <!-- Custom versions (axis/tooltip) -->
+    <div class="charts-container">
+      <div class="chart-wrapper">
+        <h2>Weight Distribution by Type — Custom</h2>
+        <div id="chart1-custom" style="height: 580px;"></div>
+      </div>
+      
+      <div class="chart-wrapper">
+        <h2>Height Distribution by Type — Custom (flipped)</h2>
+        <div id="chart2-custom" style="height: 580px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load CSV data
+        const rawData = await d3.csv('pokemon-height-weight.csv');
+      
+        // Transform the data to match expected format
+        const data = rawData.map(d => ({
+          name: d.name,
+          type: d.type_1,
+          height: +d.height,  // Convert string to number
+          weight: +d.weight,  // Convert string to number
+          log_height: Math.log10(+d.height),  // Log base 10 of height
+          log_weight: Math.log10(+d.weight),  // Log base 10 of weight
+          color: d.color_1
+        }));
+
+        console.log('📊 Loaded data:', data);
+        console.log('📊 Data points:', data.length);
+
+        // Create weight box plot
+        const boxPlot1 = new d3po.BoxPlot('#chart1', {
+          x: 'type',
+          y: 'weight',
+          color: 'color',
+          width: 450,
+          height: 500
+        });
+
+        boxPlot1.setData(data).render();
+
+        // debug: show computed transform for boxPlot1 (like in bar-custom.html)
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart1 svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart1 transform: ${transform}`;
+            document.querySelector('#chart1').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        // Create height box plot (horizontal)
+        const boxPlot2 = new d3po.BoxPlot('#chart2', {
+          x: 'height',
+          y: 'type',
+          color: 'color',
+          width: 450,
+          height: 500,
+          margin: { top: 60, right: 40, bottom: 80, left: 100 }
+        });
+
+        boxPlot2.setData(data).render();
+
+        // debug: show computed transform for boxPlot2
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart2 svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart2 transform: ${transform}`;
+            document.querySelector('#chart2').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        // Helpers to compute grouped boxData expected by BoxPlot when passing grouped data
+        function boxDataFromData(data) {
+          // group by type, compute stats for 'weight'
+          const grouped = d3.rollups(data, vals => vals.map(d => d.weight).filter(v => v != null), d => d.type);
+          return grouped.map(([group, vals]) => ({ group, stats: (function(values){
+            const sorted = values.slice().sort((a,b)=>a-b);
+            const min = sorted[0] || 0;
+            const max = sorted[sorted.length-1] || 0;
+            const q1 = d3.quantile(sorted, 0.25) || 0;
+            const median = d3.quantile(sorted, 0.5) || 0;
+            const q3 = d3.quantile(sorted, 0.75) || 0;
+            // whiskers as 1.5*IQR
+            const iqr = q3 - q1;
+            const whiskerMin = Math.max(min, q1 - 1.5 * iqr);
+            const whiskerMax = Math.min(max, q3 + 1.5 * iqr);
+            const outliers = sorted.filter(v => v < whiskerMin || v > whiskerMax);
+            return { min, q1, median, q3, max, whiskerMin, whiskerMax, outliers };
+          })(vals) }));
+        }
+
+        function boxDataFromDataByHeight(data) {
+          const grouped = d3.rollups(data, vals => vals.map(d => d.height).filter(v => v != null), d => d.type);
+          return grouped.map(([group, vals]) => ({ group, stats: (function(values){
+            const sorted = values.slice().sort((a,b)=>a-b);
+            const min = sorted[0] || 0;
+            const max = sorted[sorted.length-1] || 0;
+            const q1 = d3.quantile(sorted, 0.25) || 0;
+            const median = d3.quantile(sorted, 0.5) || 0;
+            const q3 = d3.quantile(sorted, 0.75) || 0;
+            const iqr = q3 - q1;
+            const whiskerMin = Math.max(min, q1 - 1.5 * iqr);
+            const whiskerMax = Math.min(max, q3 + 1.5 * iqr);
+            const outliers = sorted.filter(v => v < whiskerMin || v > whiskerMax);
+            return { min, q1, median, q3, max, whiskerMin, whiskerMax, outliers };
+          })(vals) }));
+        }
+
+        // Custom weight box plot with axis formatter (kg -> g) and tooltip
+        const boxPlot1Custom = new d3po.BoxPlot('#chart1-custom', {
+          x: 'type',
+          y: 'weight',
+          color: 'color',
+          width: 450,
+          height: 500,
+          xLabel: 'Type',
+          yLabel: 'Weight (g)',
+          // axis formatters: show weight in grams
+          axis_y: "JS((value * 1000).toLocaleString() + ' g')",
+          tooltip: "JS('<strong>' + row.group + '</strong>Median: ' + (row.stats && row.stats.median ? (Math.round(row.stats.median * 1000).toLocaleString() + ' g') : 'N/A') + '<br/>Min: ' + (row.stats && row.stats.min ? (Math.round(row.stats.min * 1000).toLocaleString() + ' g') : 'N/A'))"
+        });
+  // BoxPlot expects raw rows (with x/y fields); it will group internally.
+  boxPlot1Custom.setData(data).render();
+
+        // debug: show computed transform for boxPlot1-custom
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart1-custom svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart1-custom transform: ${transform}`;
+            document.querySelector('#chart1-custom').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        // Custom flipped height box plot (horizontal) with custom axis/tooltip
+        const boxPlot2Custom = new d3po.BoxPlot('#chart2-custom', {
+          x: 'height',
+          y: 'type',
+          color: 'color',
+          width: 450,
+          height: 500,
+          xLabel: 'Height (cm)',
+          yLabel: 'Type',
+          axis_x: "JS((value * 100).toFixed(0) + ' cm')",
+          tooltip: "JS('<strong>' + row.group + '</strong>Median height: ' + (row.stats && row.stats.median ? (Math.round(row.stats.median * 100) + ' cm') : 'N/A'))"
+        });
+  // Pass raw data here as well; BoxPlot will compute group stats for height.
+  boxPlot2Custom.setData(data).render();
+
+        // debug: show computed transform for boxPlot2-custom
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart2-custom svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart2-custom transform: ${transform}`;
+            document.querySelector('#chart2-custom').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        console.log('✅ Box plots rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error rendering box plot:', error);
+        document.getElementById('chart1').innerHTML = `
+          <div style="color: red; padding: 20px; border: 2px solid red; border-radius: 4px;">
+            <h3>Error!</h3>
+            <p>${error.message}</p>
+            <p>Make sure pokemon-height-weight.csv is in the same directory as this HTML file.</p>
+            <pre>${error.stack}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>

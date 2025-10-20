@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
 
 /**
  * Geographic map visualization
@@ -82,6 +82,18 @@ export default class GeoMap extends D3po {
     const tooltipField = this.tooltipField;
     const sizeField = this.sizeField;
 
+    // resolve tooltip formatter: prefer an evaluated function (this.tooltip)
+    // otherwise try to evaluate the tooltipField (could be 'JS(...)')
+    let tooltipFormatter = null;
+    if (typeof this.tooltip === 'function') {
+      tooltipFormatter = this.tooltip;
+    } else if (typeof tooltipField === 'function') {
+      tooltipFormatter = tooltipField;
+    } else if (typeof tooltipField === 'string') {
+      const tf = maybeEvalJSFormatter(tooltipField);
+      if (tf) tooltipFormatter = tf;
+    }
+
     const paths = this.chart
       .selectAll('.region')
       .data(features)
@@ -121,9 +133,20 @@ export default class GeoMap extends D3po {
         const data = dataMap.get(d.id);
         if (!data) return;
 
-        const tooltipContent =
-          `<strong>${tooltipField ? data[tooltipField] : d.id}</strong>` +
-          (sizeField ? `Value: ${data[sizeField]}` : '');
+        // If we have a tooltip formatter (function), prefer it. Call with (value, row)
+        if (tooltipFormatter) {
+          try {
+            const content = tooltipFormatter(null, data);
+            showTooltip(event, content, fontFamily, fontSize);
+            return;
+          } catch (e) {
+            // fall through to default rendering
+            void 0;
+          }
+        }
+
+  const fieldValue = (tooltipField && typeof tooltipField === 'string') ? (data[tooltipField] != null ? data[tooltipField] : d.id) : d.id;
+  const tooltipContent = `<strong>Region: ${fieldValue}</strong>` + (sizeField ? ` Value: ${data[sizeField]}` : '');
 
         showTooltip(event, tooltipContent, fontFamily, fontSize);
       })

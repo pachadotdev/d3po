@@ -7,6 +7,41 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
 
     var chart;
+    // helper to evaluate JS formatter strings (same rules as utils.maybeEvalJSFormatter)
+    function _maybeEvalJSFormatter(opt) {
+      if (typeof opt === 'function') return opt;
+      if (typeof opt !== 'string') return null;
+      if (!(opt.indexOf('JS.') === 0 || opt.indexOf('JS(') === 0)) return null;
+      var expr;
+      if (opt.indexOf('JS.') === 0) {
+        expr = opt.slice(3).trim();
+      } else {
+        var first = opt.indexOf('(');
+        var last = opt.lastIndexOf(')');
+        if (first >= 0 && last > first) {
+          expr = opt.substring(first + 1, last).trim();
+        } else {
+          expr = opt.slice(3).trim();
+        }
+      }
+      var m = expr.match(/^([A-Za-z0-9_\-]+)\s*\((.*)\)$/);
+      if (m) {
+        var name = m[1];
+        var args = m[2] || '';
+        try {
+          return new Function('value', 'row', 'return window.d3po.format["' + name + '"](' + args + ');');
+        } catch (e) {
+          console.warn('d3po: failed compiling simple formatter', opt, e);
+          return null;
+        }
+      }
+      try {
+        return new Function('value', 'row', 'with (window.d3po) { return (' + expr + '); }');
+      } catch (e) {
+        console.warn('d3po: failed compiling JS formatter expression:', opt, e);
+        return null;
+      }
+    }
 
     return {
 
@@ -42,6 +77,17 @@ HTMLWidgets.widget({
         
         // Add tooltip
         if (x.tooltip) options.tooltip = x.tooltip;
+        // Axis formatters provided as strings: x.axis_x and x.axis_y (R side will pass axis_x/axis_y)
+        if (x.axis_x) {
+          var fx = _maybeEvalJSFormatter(x.axis_x);
+          if (fx) options.axisFormatters = options.axisFormatters || {}, options.axisFormatters.x = fx;
+          else options.axisFormatters = options.axisFormatters || {}, options.axisFormatters.x = null;
+        }
+        if (x.axis_y) {
+          var fy = _maybeEvalJSFormatter(x.axis_y);
+          if (fy) options.axisFormatters = options.axisFormatters || {}, options.axisFormatters.y = fy;
+          else options.axisFormatters = options.axisFormatters || {}, options.axisFormatters.y = null;
+        }
         
         // Add background
         if (x.background) options.background = x.background;
@@ -173,6 +219,42 @@ if (HTMLWidgets.shinyMode) {
       var chart = get_chart(msg.id);
       if (typeof chart != 'undefined') {
         chart.setTitle(msg.msg.title);
+      }
+  });
+
+  // Tooltip proxy: allow updating tooltip option (string or function)
+  Shiny.addCustomMessageHandler('d3po-tooltip',
+    function(msg) {
+      var chart = get_chart(msg.id);
+      if (typeof chart != 'undefined') {
+        var opt = msg.msg.tooltip;
+        // keep raw on chart.tooltip so visualization code can re-evaluate
+        chart.tooltip = opt;
+        // if chart has setData/render methods, call a re-render when possible
+        if (typeof chart.render === 'function') {
+          try { chart.render(); } catch (e) { /* ignore render errors */ }
+        }
+      }
+  });
+
+  // Axis proxy: update axis formatters at runtime
+  Shiny.addCustomMessageHandler('d3po-axis',
+    function(msg) {
+      var chart = get_chart(msg.id);
+      if (typeof chart != 'undefined') {
+        if (msg.msg.x !== undefined) {
+          var fx = _maybeEvalJSFormatter(msg.msg.x);
+          chart.options.axisFormatters = chart.options.axisFormatters || {};
+          chart.options.axisFormatters.x = fx || null;
+        }
+        if (msg.msg.y !== undefined) {
+          var fy = _maybeEvalJSFormatter(msg.msg.y);
+          chart.options.axisFormatters = chart.options.axisFormatters || {};
+          chart.options.axisFormatters.y = fy || null;
+        }
+        if (typeof chart.render === 'function') {
+          try { chart.render(); } catch (e) { /* ignore render errors */ }
+        }
       }
   });
 

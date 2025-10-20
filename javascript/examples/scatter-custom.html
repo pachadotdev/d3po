@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po Scatter Plot Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Log(Height) vs Log(Weight) — default and custom</h1>
+
+    <div class="charts-container">
+      <div class="chart-wrapper" style="height: 400px">
+        <h2>Log(Height) vs Log(Weight) — Default</h2>
+        <div id="chart" style="height: 420px;"></div>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <div class="chart-wrapper" style="height: 400px">
+        <h2>Log(Height) vs Log(Weight) — Custom</h2>
+        <div id="chart-custom" style="height: 420px;"></div>
+      </div>
+    </div>
+    
+    <!-- Flipped-axis duplicates for checking label placement -->
+    <div class="charts-container">
+      <div class="chart-wrapper" style="height: 400px">
+        <h2>Log(Weight) vs Log(Height) — Default (flipped)</h2>
+        <div id="chart-flip" style="height: 420px;"></div>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <div class="chart-wrapper" style="height: 400px">
+        <h2>Log(Weight) vs Log(Height) — Custom (flipped)</h2>
+        <div id="chart-custom-flip" style="height: 420px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load CSV data from both files
+        const pokemonData = await d3.csv('pokemon-height-weight.csv');
+      
+        // Transform the basic data
+        const data = pokemonData.map(d => ({
+          name: d.name,
+          type: d.type_1,
+          color: d.color_1 || '#888',
+          height: d.height ? +d.height : null,
+          weight: d.weight ? +d.weight : null,
+          log_height: d.height ? Math.log10(+d.height) : null,
+          log_weight: d.weight ? Math.log10(+d.weight) : null
+        }));
+
+        // Transform pokemon data with attack and defense
+        const dataWithStats = pokemonData.map(d => ({
+          name: d.name,
+          type: d.type_1,
+          height: +d.height,
+          weight: +d.weight,
+          log_height: Math.log10(+d.height),
+          log_weight: Math.log10(+d.weight),
+          color: d.color_1,
+          attack: +d.attack,
+          defense: +d.defense,
+          avg_attack_defense: (+d.attack + +d.defense) / 2
+        }));
+
+        // Calculate mean weight and mean height
+        const meanWeight = d3.mean(dataWithStats, d => d.weight);
+        const meanHeight = d3.mean(dataWithStats, d => d.height);
+        
+        console.log('📊 Mean weight:', meanWeight);
+        console.log('📊 Mean height:', meanHeight);
+        
+        // Add distance from mean size (inverse)
+        dataWithStats.forEach(d => {
+          const distanceFromMeanWeight = Math.abs(d.weight - meanWeight);
+          const distanceFromMeanHeight = Math.abs(d.height - meanHeight);
+          const avgDistance = (distanceFromMeanWeight + distanceFromMeanHeight) / 2;
+          // Use inverse so Pokemon closer to mean have larger circles
+          // Add small value to avoid division by zero
+          d.inverse_distance_from_mean = 1 / (avgDistance + 0.01);
+        });
+
+        console.log('📊 Loaded data:', data);
+        console.log('📊 Data points:', data.length);
+        console.log('📊 Loaded pokemon data with stats:', dataWithStats);
+
+        // Default log-log scatter
+        const scatter = new d3po.ScatterPlot('#chart', {
+          x: 'log_height',
+          y: 'log_weight',
+          color: 'color',
+          group: 'name',
+          width: 900,
+          height: 360
+        });
+        scatter.setData(data).render();
+
+        // Custom log-log scatter with JS axis formatters and tooltip (convert to cm/g)
+        const customScatter = new d3po.ScatterPlot('#chart-custom', {
+          x: 'log_height',
+          y: 'log_weight',
+          color: 'color',
+          group: 'name',
+          xLabel: 'Log(Height)',
+          yLabel: 'Log(Weight)',
+          width: 900,
+          height: 360,
+          axis_x: "JS((Math.pow(10, value) * 100).toFixed(0) + ' cm')",
+          axis_y: "JS((Math.pow(10, value) * 1000).toLocaleString() + ' g')",
+          tooltip: "JS('<strong> Pokemon: ' + (row.type || '') + '</strong>Log(Height): ' + (row.height != null ? (Math.round(row.height * 100) + ' cm') : 'N/A') + '<br/>Log(Weight): ' + (row.weight != null ? (Math.round(row.weight * 1000).toLocaleString() + ' g') : 'N/A'))"
+        });
+        customScatter.setData(data).render();
+
+        // Flipped default: swap x/y
+        const scatterFlip = new d3po.ScatterPlot('#chart-flip', {
+          x: 'log_weight',
+          y: 'log_height',
+          color: 'color',
+          group: 'name',
+          width: 900,
+          height: 360
+        });
+        scatterFlip.setData(data).render();
+
+        // Flipped custom: swap x/y and swap axis formatters accordingly
+        const customScatterFlip = new d3po.ScatterPlot('#chart-custom-flip', {
+          x: 'log_weight',
+          y: 'log_height',
+          color: 'color',
+          group: 'name',
+          xLabel: 'Log(Weight)',
+          yLabel: 'Log(Height)',
+          width: 900,
+          height: 360,
+          axis_x: "JS((Math.pow(10, value) * 1000).toLocaleString() + ' g')",
+          axis_y: "JS((Math.pow(10, value) * 100).toFixed(0) + ' cm')",
+          tooltip: "JS('<strong> Pokemon: ' + (row.type || '') + '</strong>Log(Height): ' + (row.height != null ? (Math.round(row.height * 100) + ' cm') : 'N/A') + '<br/>Log(Weight): ' + (row.weight != null ? (Math.round(row.weight * 1000).toLocaleString() + ' g') : 'N/A'))"
+        });
+        customScatterFlip.setData(data).render();
+
+        console.log('✅ Scatter plots rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error rendering scatter plot:', error);
+        document.getElementById('chart1').innerHTML = `
+          <div style="color: red; padding: 20px; border: 2px solid red; border-radius: 4px;">
+            <h3>Error!</h3>
+            <p>${error.message}</p>
+            <p>Make sure pokemon-height-weight.csv and pokemon.csv are in the same directory as this HTML file.</p>
+            <pre>${error.stack}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>

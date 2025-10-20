@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
 
 /**
  * Pie chart visualization
@@ -39,6 +39,8 @@ export default class PieChart extends D3po {
     this.startAngle = options.startAngle !== undefined ? options.startAngle : 0;
     this.endAngle =
       options.endAngle !== undefined ? options.endAngle : 2 * Math.PI;
+  // labelMode: 'percent' (default) or 'count' — controls inner labels
+  this.labelMode = options.labelMode || 'percent';
   }
 
   /**
@@ -169,6 +171,11 @@ export default class PieChart extends D3po {
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
 
+  // Tooltip formatter: allow passing JS.* strings or functions via options
+  var tooltipOpt = this.tooltip || this.options.tooltip || null;
+  var tooltipFormatter = null;
+  if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt) || (typeof tooltipOpt === 'function' ? tooltipOpt : null);
+
     arcs
       .on('mouseover', function (event, d) {
         const color = d3.color(d._originalColor);
@@ -178,6 +185,39 @@ export default class PieChart extends D3po {
         const highlightColor =
           luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
         d3.select(this).attr('fill', highlightColor);
+
+        if (tooltipFormatter) {
+          try {
+            // Compute percentage relative to total data values (as 0-100)
+            var pct = 0;
+            try {
+              // Prefer using numeric size field if available
+              var total = 0;
+              // data may be in outer scope; if not, derive from current d3 selection
+              if (Array.isArray(d.data.__pie_source__)) {
+                total = d.data.__pie_source__.reduce((s, x) => s + (x[sizeField] || 0), 0);
+              } else if (this && this.data) {
+                total = this.data.reduce((s, x) => s + (x[sizeField] || 0), 0);
+              } else {
+                // Fallback: derive from arc angles and totalAngle
+                pct = ((d.endAngle - d.startAngle) / totalAngle) * 100;
+              }
+              if (total > 0) {
+                pct = (d.data[sizeField] / total) * 100;
+              }
+            } catch (e) {
+              pct = ((d.endAngle - d.startAngle) / totalAngle) * 100;
+            }
+
+            // For consistency with other charts, call formatter as (value, row)
+            const content = tooltipFormatter(pct, d.data);
+            showTooltip(event, content, fontFamily, fontSize);
+            return;
+          } catch (e) {
+            console.warn('PieChart: tooltip formatter failed', e);
+            // fallthrough to default content
+          }
+        }
 
         showTooltip(
           event,
@@ -193,12 +233,15 @@ export default class PieChart extends D3po {
         hideTooltip();
       });
 
-    // Add category labels
-    slices
+    // Add labels inside slices. If labelMode === 'count' render two lines:
+    // line 1 = category, line 2 = count. Otherwise fall back to previous
+    // single-line behavior (category when percent > 5).
+    const self = this;
+    const labelText = slices
       .append('text')
       .attr('transform', d => {
         const [x, y] = labelArc.centroid(d);
-        return `translate(${x},${y - 8})`;
+        return `translate(${x},${y})`;
       })
       .attr('text-anchor', 'middle')
       .attr('font-size', '14px')
@@ -206,30 +249,53 @@ export default class PieChart extends D3po {
         const color = colorField ? d.data[colorField] : '#999';
         return getTextColor(color);
       })
-      .style('font-weight', 'bold')
-      .text(d => {
-        const percent = ((d.endAngle - d.startAngle) / totalAngle) * 100;
-        return percent > 5 ? d.data[groupField] : '';
-      });
+      .style('font-weight', 'bold');
 
-    // Add percentage labels
-    slices
-      .append('text')
-      .attr('transform', d => {
-        const [x, y] = labelArc.centroid(d);
-        return `translate(${x},${y + 8})`;
-      })
-      .attr('text-anchor', 'middle')
-      .attr('font-size', '14px')
-      .attr('fill', d => {
-        const color = colorField ? d.data[colorField] : '#999';
-        return getTextColor(color);
-      })
-      .style('font-weight', 'bold')
-      .text(d => {
-        const percent = ((d.endAngle - d.startAngle) / totalAngle) * 100;
-        return percent > 5 ? `${percent.toFixed(1)}%` : '';
-      });
+    labelText.each(function(d) {
+      const node = d3.select(this);
+      const percent = ((d.endAngle - d.startAngle) / totalAngle) * 100;
+      // clear any existing content
+      node.selectAll('*').remove();
+
+      if (self.labelMode === 'count') {
+        // first line: category
+        node.append('tspan')
+          .attr('x', 0)
+          .attr('dy', '-6')
+          .text(d.data[groupField] || '');
+        // second line: count
+        node.append('tspan')
+          .attr('x', 0)
+          .attr('dy', '14')
+          .text(d.data[sizeField] != null ? d.data[sizeField].toString() : '');
+      } else {
+        // default behavior: show category + percent (two lines) when percent > 5
+        if (percent > 5) {
+          node.append('tspan')
+            .attr('x', 0)
+            .attr('dy', '-6')
+            .text(d.data[groupField] || '');
+          node.append('tspan')
+            .attr('x', 0)
+            .attr('dy', '14')
+            .text(`${percent.toFixed(1)}%`);
+        }
+      }
+
+      // Measure and hide if label is too wide for the slice arc
+      try {
+        const bbox = node.node().getBBox();
+        const textWidth = bbox.width || 0;
+        const labelRadius = radius * 0.7; // same radius used for labelArc
+        const arcLen = (d.endAngle - d.startAngle) * labelRadius;
+        // hide if text width exceeds available arc length (with small padding)
+        if (textWidth > arcLen * 0.9) {
+          node.style('display', 'none');
+        }
+      } catch (e) {
+        // ignore measurement errors
+      }
+    });
 
     return this;
   }

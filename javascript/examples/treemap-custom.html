@@ -17,20 +17,10 @@
       </div>
       
       <div class="chart-wrapper">
-        <h2>Binary</h2>
-        <div id="chart2"></div>
+        <h2>Squarify (Default with Custom Labels and Tooltip)</h2>
+        <div id="chart1-custom"></div>
       </div>
-      
-      <div class="chart-wrapper">
-        <h2>Slice</h2>
-        <div id="chart3"></div>
-      </div>
-      
-      <div class="chart-wrapper">
-        <h2>Dice</h2>
-        <div id="chart4"></div>
-      </div>
-    </div>
+     </div>
   </div>
 
   <!-- Load D3.js 7.9 from CDN -->
@@ -70,26 +60,18 @@
         });
         treemap1.setData(data).render();
 
-        // Create treemap with binary tiling
-        const treemap2 = new d3po.Treemap('#chart2', {
-          ...commonOptions,
-          tile: d3.treemapBinary
-        });
-        treemap2.setData(data).render();
+        // Custom treemap: show counts as second-line labels and a custom tooltip
+        const tooltipExpr = `JS('<div580px>' + '<strong>Type: ' + (row.name || '') + '</strong>' + 'Count: ' + (row.value != null ? row.value.toLocaleString() : 'N/A') + (typeof value === \'number\' ? (' (' + value.toFixed(1) + '%)') : '') + '</div>')`;
 
-        // Create treemap with slice tiling
-        const treemap3 = new d3po.Treemap('#chart3', {
+        const treemapCustom = new d3po.Treemap('#chart1-custom', {
           ...commonOptions,
-          tile: d3.treemapSlice
+          tile: d3.treemapSquarify,
+          tooltip: tooltipExpr,
+          labelMode: 'count',
+          labels: { align: 'left', valign: 'top' }
         });
-        treemap3.setData(data).render();
 
-        // Create treemap with dice tiling
-        const treemap4 = new d3po.Treemap('#chart4', {
-          ...commonOptions,
-          tile: d3.treemapDice
-        });
-        treemap4.setData(data).render();
+        treemapCustom.setData(data).render();
 
         console.log('✅ All treemaps rendered successfully!');
       } catch (error) {

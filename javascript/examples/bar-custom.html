@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po Bar Chart Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>D3po Bar Chart Test</h1>
+    
+    <div class="charts-container">
+      <div class="chart-wrapper" style="height: 580px;">
+        <h2>Vertical Bars</h2>
+        <div id="chart1"></div>
+      </div>
+      
+      <div class="chart-wrapper" style="height: 580px;">
+        <h2>Horizontal Bars</h2>
+        <div id="chart2"></div>
+      </div>
+      
+      <div class="chart-wrapper" style="height: 580px;">
+        <h2>Vertical Bars (grams)</h2>
+        <div id="chart1g"></div>
+      </div>
+      
+      <div class="chart-wrapper" style="height: 580px;">
+        <h2>Horizontal Bars (grams)</h2>
+        <div id="chart2g"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load CSV data
+        const rawData = await d3.csv('pokemon.csv');
+      
+        // Aggregate by type and compute average weight (assume weight field 'weight_kg' or similar)
+        // We'll detect a numeric weight field in the CSV; common names include 'weight_kg' or 'weight'.
+        const weightField = Object.keys(rawData[0]).find(k => /weight/i.test(k)) || 'weight_kg';
+
+        // Group by type and compute average weight and count
+        const grouped = d3.rollups(
+          rawData,
+          vals => {
+            const nums = vals
+              .map(d => {
+                const v = +d[weightField];
+                return Number.isFinite(v) ? v : null;
+              })
+              .filter(v => v != null);
+            const sum = nums.reduce((s, n) => s + n, 0);
+            const avg = nums.length ? sum / nums.length : 0;
+            return { avgWeight: avg, count: nums.length, color: vals[0].color_1 || '#888' };
+          },
+          d => d.type_1
+        );
+
+        // Transform grouped data into array for charts
+        const data = grouped.map(([type, stats]) => ({
+          type,
+          avgWeight: +stats.avgWeight.toFixed(2),
+          count: stats.count,
+          color: stats.color
+        }));
+
+        console.log('📊 Aggregated data (avg weight per type):', data);
+
+        // Create vertical bar chart showing average weight (kg)
+        const chart1 = new d3po.BarChart('#chart1', {
+          x: 'type',
+          y: 'avgWeight',
+          color: 'color',
+          width: 450,
+          height: 500,
+          useLeftMarginSpace: true,
+          axis_y: {
+            tickFormat: (d) => d + ' kg'
+          }
+        });
+
+        chart1.setData(data).render();
+
+        // debug: show computed transform for chart1
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart1 svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart1 transform: ${transform}`;
+            document.querySelector('#chart1').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        // Create horizontal bar chart (flipped axes) showing avg weight
+        const chart2 = new d3po.BarChart('#chart2', {
+          x: 'avgWeight',
+          y: 'type',
+          color: 'color',
+          width: 450,
+          height: 500,
+          margin: { top: 60, right: 40, bottom: 80, left: 140 },
+          axis_x: {
+            tickFormat: (d) => d + ' kg'
+          },
+          tooltip: `JS('<div580px>' + '<strong>Type: ' + (row.type || '') + '</strong>' + 'Avg weight: ' + (row.avgWeight != null ? row.avgWeight.toFixed(2) + ' kg' : 'N/A') + '<br/>Cases: ' + (row.count || 0) + '</div>')`
+        });
+
+        chart2.setData(data).render();
+
+        // debug: show computed transform for chart2
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart2 svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart2 transform: ${transform}`;
+            document.querySelector('#chart2').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        // Create a grams version of the data (avgWeight in grams)
+        const dataG = data.map(d => ({
+          ...d,
+          avgWeightG: +(d.avgWeight * 1000).toFixed(0)
+        }));
+
+        // Vertical bars (grams)
+        const chart1g = new d3po.BarChart('#chart1g', {
+          x: 'type',
+          y: 'avgWeightG',
+          color: 'color',
+          width: 450,
+          height: 500,
+          useLeftMarginSpace: true,
+          axis_y: {
+            tickFormat: (d) => d + ' g'
+          }
+        });
+
+        chart1g.setData(dataG).render();
+
+        // debug: show computed transform for chart1g
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart1g svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart1g transform: ${transform}`;
+            document.querySelector('#chart1g').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        // Horizontal bars (grams)
+        const chart2g = new d3po.BarChart('#chart2g', {
+          x: 'avgWeightG',
+          y: 'type',
+          color: 'color',
+          width: 450,
+          height: 500,
+          margin: { top: 60, right: 40, bottom: 80, left: 140 },
+          useLeftMarginSpace: true,
+          axis_x: {
+            tickFormat: (d) => d + ' g'
+          },
+          tooltip: `JS('<div580px>' + '<strong>Type: ' + (row.type || '') + '</strong>' + 'Avg weight: ' + (row.avgWeightG != null ? row.avgWeightG.toLocaleString() + ' g' : 'N/A') + '<br/>Cases: ' + (row.count || 0) + '</div>')`
+        });
+
+        chart2g.setData(dataG).render();
+
+        // debug: show computed transform for chart2g
+        setTimeout(() => {
+          try {
+            const svg = document.querySelector('#chart2g svg');
+            const g = svg ? svg.querySelector('g') : null;
+            const transform = g ? g.getAttribute('transform') : 'n/a';
+            const info = document.createElement('pre');
+            info.style.fontSize = '12px';
+            info.style.marginTop = '6px';
+            info.textContent = `chart2g transform: ${transform}`;
+            document.querySelector('#chart2g').appendChild(info);
+          } catch (e) { /* ignore debug probe errors */ }
+        }, 300);
+
+        console.log('✅ Bar charts rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error:', error);
+        document.getElementById('chart1').innerHTML = 
+          `<div style="color: red; padding: 20px;">Error: ${error.message}<br/><br/>Make sure pokemon-count.csv is in the same directory as this HTML file.</div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

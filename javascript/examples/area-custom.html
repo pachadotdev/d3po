@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Evolution Area by Type — Custom Formatters</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Evolution: Weight vs Height (Area Chart, Custom Formatters)</h1>
+    <p>Showing Pokemon evolution chains with filled areas. Each area represents an evolution line.</p>
+    <p>Electric: Pikachu -> Raichu</p>
+    <p>Fire: Charmander -> Charmeleon -> Charizard</p>
+    <p>Grass: Bulbasaur -> Ivysaur -> Venusaur</p>
+    <p>Water: Squirtle -> Wartortle -> Blastoise</p>
+
+    <div id="chart" style="height: 400px"></div>
+    <div id="chart-custom" style="height: 400px"></div>
+  </div>
+
+  <script src="./d3.v7.min.js"></script>
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+  (async function(){
+    try {
+      const csv = await d3.csv('pokemon-evolution.csv');
+      const data = csv.map(r => ({
+        name: r.name,
+        type: r.type_1,
+        color: r.color_1 || '#888',
+        height: r.height ? +r.height : null,
+        weight: r.weight ? +r.weight : null
+      }));
+
+      // Default chart
+      const areaChart = new d3po.AreaChart('#chart', {
+        x: 'height', y: 'weight', group: 'type', color: 'color', width: 900, height: 360
+      });
+      areaChart.setData(data).render();
+
+      // Custom chart with JS formatters (convert units: meters->cm, kg->g)
+      const customChart = new d3po.AreaChart('#chart-custom', {
+        x: 'height',
+        y: 'weight',
+        group: 'type',
+        color: 'color',
+        xLabel: 'Height',
+        yLabel: 'Weight',
+        width: 900,
+        height: 360,
+        // axis formatters use the JS.<expr> convention
+        // show height in cm (meters * 100) and format with no decimals
+        axis_x: "JS((value * 100).toFixed(0) + ' cm')",
+  // show weight in grams (kg * 1000) with thousands separator and units
+  axis_y: "JS((value * 1000).toLocaleString(undefined) + ' g')",
+  // tooltip expression — return an HTML string using row (converted values)
+  tooltip: "JS('<strong>Pokemon: '+ (row.name || '') + '</strong>Height: ' + ((row.height != null) ? (Math.round(row.height * 100) + ' cm') : '') + '<br/>Weight: ' + ((row.weight != null) ? (Math.round(row.weight * 1000).toLocaleString() + ' g') : ''))",
+      });
+      customChart.setData(data).render();
+
+      // Debug: log options/formatters to verify evaluation
+      console.log('Custom demo ready');
+      try {
+        console.log('customChart.options:', customChart.options);
+        console.log('customChart.axisFormatters:', customChart.axisFormatters);
+        console.log('customChart.options.axisFormatters:', customChart.options && customChart.options.axisFormatters);
+        console.log('typeof axis_x formatter:', customChart.options && customChart.options.axisFormatters && typeof customChart.options.axisFormatters.x);
+        console.log('customChart.tooltip (type):', typeof customChart.tooltip, customChart.tooltip);
+      } catch (e) {
+        console.warn('debug log failed', e);
+      }
+    } catch (err) {
+      console.error(err);
+      document.body.innerHTML = '<pre style="color:red">' + err.stack + '</pre>';
+    }
+  })();
+  </script>
+</body>
+</html>

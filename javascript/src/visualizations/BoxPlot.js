@@ -6,6 +6,7 @@ import {
   calculateBoxStats,
   showTooltip,
   hideTooltip,
+  maybeEvalJSFormatter,
 } from '../utils.js';
 
 /**
@@ -64,6 +65,10 @@ export default class BoxPlot extends D3po {
     // Create scales based on orientation
     let categoryScale, valueScale;
 
+  // Resolve axis label text (allow user overrides). Use raw field names by default.
+  const xLabelText = (this.options && this.options.xLabel) ? this.options.xLabel : (this.xField ? String(this.xField) : '');
+  const yLabelText = (this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : '');
+
     if (isHorizontal) {
       // Horizontal: y is categorical, x is numeric
       categoryScale = d3
@@ -98,24 +103,142 @@ export default class BoxPlot extends D3po {
         .range([this.getInnerHeight(), 0]);
     }
 
-    // Add axes
+    // Add axes with measurement-aware label placement (borrowed from BarChart)
+    // We'll measure tick text widths and label bbox to avoid overlap with rotated y-labels.
+    let bottomAxis = null;
+    let leftAxis = null;
+
     if (isHorizontal) {
-      this.chart
-        .append('g')
-        .attr('transform', `translate(0,${this.getInnerHeight()})`)
-        .call(d3.axisBottom(valueScale));
+      bottomAxis = d3.axisBottom(valueScale);
+      if (this.options && this.options.axisFormatters && this.options.axisFormatters.x) bottomAxis.tickFormat(this.options.axisFormatters.x);
 
-      this.chart.append('g').call(d3.axisLeft(categoryScale));
+      leftAxis = d3.axisLeft(categoryScale);
+      // no tick formatting for category axis normally
     } else {
-      this.chart
-        .append('g')
-        .attr('transform', `translate(0,${this.getInnerHeight()})`)
-        .call(d3.axisBottom(categoryScale))
-        .selectAll('text')
-        .attr('transform', 'rotate(-45)')
-        .style('text-anchor', 'end');
+      bottomAxis = d3.axisBottom(categoryScale);
+      if (this.options && this.options.axisFormatters && this.options.axisFormatters.x) bottomAxis.tickFormat(this.options.axisFormatters.x);
 
-      this.chart.append('g').call(d3.axisLeft(valueScale));
+      leftAxis = d3.axisLeft(valueScale);
+      if (this.options && this.options.axisFormatters && this.options.axisFormatters.y) leftAxis.tickFormat(this.options.axisFormatters.y);
+    }
+
+    // Measure max tick width and label bbox to possibly reclaim left margin space
+    let measuredMaxTickWidth = 0;
+    let measuredLabelBBoxHeight = 0;
+    // current effective inner sizes (may change if we adjust margins)
+    let effectiveInnerWidth = this.getInnerWidth();
+    let effectiveInnerHeight = this.getInnerHeight();
+    // default to true (opt-out by setting useLeftMarginSpace: false)
+    const useLeftMarginSpace = (this.options && this.options.useLeftMarginSpace !== false);
+
+    try {
+      const probe = this.svg.append('g').attr('class', 'd3po-probe');
+      probe.call(leftAxis);
+      try {
+        const ticks = probe.selectAll('.tick text').nodes();
+        if (ticks && ticks.length) measuredMaxTickWidth = d3.max(ticks, n => n.getBBox().width) || 0;
+      } catch (e) {
+        void 0;
+      }
+      probe.remove();
+      try {
+        const lab = this.svg.append('text').attr('x', -9999).attr('y', -9999).style('font-size', '14px').text(isHorizontal ? this.xField : this.yField);
+        measuredLabelBBoxHeight = lab.node().getBBox().height || 0;
+        lab.remove();
+      } catch (e) {
+        measuredLabelBBoxHeight = 14;
+      }
+
+      const gap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+      const requiredLeft = Math.ceil(measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8);
+      const currentLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+      if (requiredLeft > currentLeft) {
+        this.options.margin = this.options.margin || {};
+        this.options.margin.left = requiredLeft;
+        // update effective inner sizes and scales to match new margins
+        effectiveInnerWidth = this.getInnerWidth();
+        effectiveInnerHeight = this.getInnerHeight();
+        if (categoryScale && categoryScale.range) {
+          if (isHorizontal) categoryScale.range([0, effectiveInnerHeight]); else categoryScale.range([0, effectiveInnerWidth]);
+        }
+        if (valueScale && valueScale.range) {
+          if (isHorizontal) valueScale.range([0, effectiveInnerWidth]); else valueScale.range([effectiveInnerHeight, 0]);
+        }
+        if (this.chart && this.chart.attr) this.chart.attr('transform', `translate(${this.options.margin.left},${this.options.margin.top})`);
+      }
+  } catch (e) { void 0; }
+
+    // Optionally reclaim left margin space similar to BarChart (shifts chart translate and widens inner area)
+    if (useLeftMarginSpace && measuredMaxTickWidth > 0) {
+      const gap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+      const measuredRequiredLeft = Math.ceil(measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8);
+      const marginLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+      const safetyBuffer = 4; // px
+      const targetLeft = Math.max(0, (measuredRequiredLeft || 0) + safetyBuffer);
+      const delta = marginLeft - targetLeft;
+      const baseInner = this.getInnerWidth();
+      const newInner = Math.max(20, Math.round(baseInner + Math.max(0, delta)));
+      effectiveInnerWidth = newInner;
+      effectiveInnerHeight = this.getInnerHeight();
+      if (categoryScale && categoryScale.range) {
+        if (isHorizontal) categoryScale.range([0, effectiveInnerHeight]); else categoryScale.range([0, effectiveInnerWidth]);
+      }
+      if (valueScale && valueScale.range) {
+        if (isHorizontal) valueScale.range([0, effectiveInnerWidth]); else valueScale.range([effectiveInnerHeight, 0]);
+      }
+      const translateX = targetLeft;
+      if (this.chart && this.chart.attr) this.chart.attr('transform', `translate(${translateX},${this.options.margin.top})`);
+    }
+
+    // Append axes using possibly-updated effective inner sizes.
+    // Attach axes to groups so we can measure ticks reliably and place labels like BarChart.
+    const xg = this.chart
+      .append('g')
+      .attr('transform', `translate(0,${effectiveInnerHeight})`)
+      .call(bottomAxis);
+    try {
+      // rotate x tick labels when necessary (similar heuristics to BarChart)
+      const xTicks = xg.selectAll('.tick text').nodes();
+      let maxTickWidth = 0, maxTickHeight = 0;
+      if (xTicks && xTicks.length) {
+        maxTickWidth = d3.max(xTicks, n => n.getBBox().width) || 0;
+        maxTickHeight = d3.max(xTicks, n => n.getBBox().height) || 0;
+      }
+      let rotateX = false;
+      if (categoryScale && categoryScale.bandwidth) {
+        const bw = categoryScale.bandwidth();
+        if (maxTickWidth > bw * 0.9) rotateX = true;
+      } else if (xTicks && xTicks.length) {
+        const avgSpace = Math.max(10, effectiveInnerWidth / xTicks.length);
+        if (maxTickWidth > avgSpace * 0.9) rotateX = true;
+      }
+      if (rotateX) xg.selectAll('text').attr('transform', 'rotate(-45)').style('text-anchor', 'end');
+      const xLabelPadding = Math.max(8, maxTickHeight + 8);
+      this.chart.append('text').attr('class', 'x-axis-label').attr('text-anchor', 'middle').attr('x', effectiveInnerWidth / 2).attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24)).attr('fill', 'black').style('font-size', '14px').text(xLabelText);
+    } catch (e) {
+      this.chart.append('text').attr('class', 'x-axis-label').attr('text-anchor', 'middle').attr('x', effectiveInnerWidth / 2).attr('y', effectiveInnerHeight + (isHorizontal ? 45 : 65)).attr('fill', 'black').style('font-size', '14px').text(xLabelText);
+    }
+
+    // Append left axis to its own group so we can append the rotated label on the axis group
+    const yg = this.chart.append('g').call(leftAxis);
+    try {
+      const yTicks = yg.selectAll('.tick text').nodes();
+      const yMaxTickWidth = (yTicks && yTicks.length) ? d3.max(yTicks, n => n.getBBox().width) : measuredMaxTickWidth;
+      const labelGap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+      const measuredLabelH = measuredLabelBBoxHeight || 14;
+      const labelBaseline = Math.max(yMaxTickWidth + labelGap, measuredLabelH + labelGap);
+      const adaptivePadding = Math.min(36, Math.max(4, Math.round(yMaxTickWidth * 0.08)));
+      let labelOffset = labelBaseline + adaptivePadding + 10;
+      const measuredRequiredLeft = (yMaxTickWidth > 0) ? Math.ceil(yMaxTickWidth + labelGap + measuredLabelH + 8) : null;
+      const marginLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+      let maxAllowed = marginLeft - 4;
+      if (measuredRequiredLeft != null) maxAllowed = Math.max(10, Math.min(maxAllowed, measuredRequiredLeft)); else maxAllowed = Math.max(10, maxAllowed);
+      if (labelOffset > maxAllowed) labelOffset = maxAllowed;
+      // Append rotated y label to the left axis group so it sits next to ticks and moves with the axis
+      yg.append('text').attr('class', 'y-axis-label').attr('transform', `translate(${-labelOffset},${effectiveInnerHeight / 2}) rotate(-90)`).attr('x', 0).attr('y', 0).attr('fill', 'black').attr('text-anchor', 'middle').style('font-size', '14px').text(yLabelText);
+    } catch (e) {
+      // fallback
+      this.chart.append('text').attr('class', 'y-axis-label').attr('text-anchor', 'middle').attr('transform', 'rotate(-90)').attr('x', -effectiveInnerHeight / 2).attr('y', isHorizontal ? -70 : -40).attr('fill', 'black').style('font-size', '14px').text(yLabelText);
     }
 
     // Draw box plots
@@ -337,33 +460,21 @@ export default class BoxPlot extends D3po {
       });
     }
 
-    // Add axis labels
-    this.chart
-      .append('text')
-      .attr('class', 'x-axis-label')
-      .attr('text-anchor', 'middle')
-      .attr('x', this.getInnerWidth() / 2)
-      .attr('y', this.getInnerHeight() + (isHorizontal ? 45 : 65))
-      .attr('fill', 'black')
-      .style('font-size', '14px')
-      .text(this.xField);
+  // (xLabelText and yLabelText are declared earlier)
 
-    this.chart
-      .append('text')
-      .attr('class', 'y-axis-label')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -this.getInnerHeight() / 2)
-      .attr('y', isHorizontal ? -70 : -40)
-      .attr('fill', 'black')
-      .style('font-size', '14px')
-      .text(this.yField);
+  // (x-axis label is appended above alongside the axis group)
+
+  // (y-axis label was appended earlier on the left axis group)
 
     // Save font settings for tooltip handlers
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
 
-    // Add tooltips
+    // Add tooltips (allow user-supplied tooltip formatter via options.tooltip)
+    var tooltipOpt = this.tooltip || this.options.tooltip || null;
+    var tooltipFormatter = null;
+    if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
+
     boxes
       .on('mouseover', function (event, d) {
         const rect = d3.select(this).select('rect');
@@ -375,16 +486,33 @@ export default class BoxPlot extends D3po {
           luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
         rect.attr('fill', highlightColor);
 
-        const tooltipContent =
-          `<strong>${d.group}</strong>` +
-          `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
-          `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
-          `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +
-          `Percentile 75th: ${d.stats.q3.toFixed(2)}<br/>` +
-          `Percentile 100th (Max): ${d.stats.max.toFixed(2)}<br/>` +
-          `Outliers: ${d.stats.outliers.length}`;
+        if (tooltipFormatter) {
+          try {
+            const content = tooltipFormatter(null, { group: d.group, stats: d.stats });
+            showTooltip(event, content, fontFamily, fontSize);
+          } catch (e) {
+            const tooltipContent =
+              `<strong>${d.group}</strong>` +
+              `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
+              `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
+              `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +
+              `Percentile 75th: ${d.stats.q3.toFixed(2)}<br/>` +
+              `Percentile 100th (Max): ${d.stats.max.toFixed(2)}<br/>` +
+              `Outliers: ${d.stats.outliers.length}`;
+            showTooltip(event, tooltipContent, fontFamily, fontSize);
+          }
+        } else {
+          const tooltipContent =
+            `<strong>${d.group}</strong>` +
+            `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
+            `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
+            `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +
+            `Percentile 75th: ${d.stats.q3.toFixed(2)}<br/>` +
+            `Percentile 100th (Max): ${d.stats.max.toFixed(2)}<br/>` +
+            `Outliers: ${d.stats.outliers.length}`;
 
-        showTooltip(event, tooltipContent, fontFamily, fontSize);
+          showTooltip(event, tooltipContent, fontFamily, fontSize);
+        }
       })
       .on('mouseout', function (event, d) {
         d3.select(this).select('rect').attr('fill', d.color);

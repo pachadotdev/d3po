@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
 
 /**
  * Treemap visualization
@@ -28,7 +28,11 @@ export default class Treemap extends D3po {
     this.groupField = options.group;
     this.colorField = options.color;
     this.tile = options.tile || d3.treemapSquarify;
-    this.labels = options.labels || { align: 'left', valign: 'top' };
+  this.labels = options.labels || { align: 'left', valign: 'top' };
+  // labelMode: 'percent' (default) or 'count'
+  this.labelMode = options.labelMode || 'percent';
+  // tooltip can be a JS(...) string or a function; compile if needed
+  this.tooltipFormatter = maybeEvalJSFormatter(options.tooltip);
   }
 
   /**
@@ -115,19 +119,44 @@ export default class Treemap extends D3po {
     // Add tooltip handlers with proper context
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
-    
+
+    // Use compiled formatter if provided; fallback to default HTML
+    const tooltipFormatter = this.tooltipFormatter;
+
     cells.selectAll('rect')
-      .on('mouseover', function (event, d) {
+      .on('mouseover', (event, d) => {
         const color = d3.color(d._originalColor);
         // For light colors, darken instead of brighten
         const luminance =
           0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
         const highlightColor =
           luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-        d3.select(this).attr('fill', highlightColor);
+        d3.select(event.currentTarget).attr('fill', highlightColor);
 
-        const percentage = ((d.value / total) * 100).toFixed(1);
+        const percentageNum = (d.value / total) * 100;
+        const percentage = percentageNum.toFixed(1);
 
+        // If a tooltip formatter exists, call it with (value, row)
+        if (tooltipFormatter) {
+          try {
+            const out = tooltipFormatter(percentageNum, {
+              name: d.data.name,
+              value: d.data.value,
+              color: d.data.color,
+            });
+            // If formatter returns a DOM node or string, show it; else fallback
+            if (out != null) {
+              showTooltip(event, out, fontFamily, fontSize);
+              return;
+            }
+          } catch (err) {
+            // Fall through to default tooltip on error
+            // eslint-disable-next-line no-console
+            console.error('Tooltip formatter error', err);
+          }
+        }
+
+        // Default tooltip
         showTooltip(
           event,
           `<strong>${d.data.name}</strong>` +
@@ -137,8 +166,8 @@ export default class Treemap extends D3po {
           fontSize
         );
       })
-      .on('mouseout', function (event, d) {
-        d3.select(this).attr('fill', d._originalColor);
+      .on('mouseout', (event, d) => {
+        d3.select(event.currentTarget).attr('fill', d._originalColor);
         hideTooltip();
       });
 
@@ -206,7 +235,7 @@ export default class Treemap extends D3po {
       const cellWidth = d.x1 - d.x0;
       const cellHeight = d.y1 - d.y0;
       
-      const totalLines = 2; // We always try to show 2 lines (name + percentage)
+  const totalLines = 2; // We always try to show 2 lines (name + percentage or count)
       const lineHeight = this.options.fontSize * 1.4;
       const totalTextHeight = totalLines * lineHeight;
       
@@ -265,7 +294,8 @@ export default class Treemap extends D3po {
       };
       
       const categoryName = d.data.name;
-      const percentage = ((d.value / total) * 100).toFixed(1) + '%';
+  const percentage = ((d.value / total) * 100).toFixed(1) + '%';
+  const countText = d.data.value != null ? d.data.value.toLocaleString() : '';
       
       // Check and add category label (line 0)
       if (checkTextFits(categoryName, 0)) {
@@ -284,12 +314,13 @@ export default class Treemap extends D3po {
           .attr('pointer-events', 'none');
       }
       
-      // Check and add percentage label (line 1) - independent of category
-      if (checkTextFits(percentage, 1)) {
+      // Check and add second-line label (percentage or count depending on labelMode)
+      const secondLine = this.labelMode === 'count' ? countText : percentage;
+      if (secondLine && checkTextFits(secondLine, 1)) {
         cell.append('text')
           .attr('x', getLabelX(d, labels.align))
           .attr('y', getLabelY(d, labels.valign, 1, totalLines))
-          .text(percentage)
+          .text(secondLine)
           .attr('font-size', `${this.options.fontSize}px`)
           .attr('font-family', this.options.fontFamily)
           .attr('font-weight', 'bold')

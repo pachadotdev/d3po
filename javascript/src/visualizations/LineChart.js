@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
 
 /**
  * Line chart visualization
@@ -51,25 +51,164 @@ export default class LineChart extends D3po {
       series = Array.from(grouped.values());
     }
 
-    // Create scales
-    const xScale = d3
-      .scaleLinear()
-      .domain(d3.extent(this.data, d => d[this.xField]))
-      .range([0, this.getInnerWidth()]);
-
+    // Create provisional yScale (inner height unaffected by left margin)
+    const innerHeight = this.options.height - this.options.margin.top - this.options.margin.bottom;
     const yScale = d3
       .scaleLinear()
       .domain([0, d3.max(this.data, d => d[this.yField])])
       .nice()
-      .range([this.getInnerHeight(), 0]);
+      .range([innerHeight, 0]);
+
+    // Measure y-axis tick widths using a temporary off-DOM group so we can
+    // calculate how much left margin we need to reserve for the label + ticks.
+    const yAxisProbe = d3.axisLeft(yScale);
+    if (this.options.axisFormatters && this.options.axisFormatters.y) {
+      yAxisProbe.tickFormat(this.options.axisFormatters.y);
+    }
+
+    // Create a temporary group at the top-left of the svg (not translated by
+    // margin.left) for measuring tick labels, then remove it.
+    const probeGroup = this.svg.append('g').attr('class', 'd3po-probe-group');
+    probeGroup.call(yAxisProbe);
+
+    // Measure max tick label width for the y axis from the probe
+    let maxTickWidth = 0;
+    try {
+      const yTicksProbe = probeGroup.selectAll('.tick text').nodes();
+      if (yTicksProbe && yTicksProbe.length) {
+        maxTickWidth = d3.max(yTicksProbe, n => n.getBBox().width) || 0;
+      }
+    } catch (e) {
+      // ignore measurement errors
+    }
+
+    // Remove the probe group
+    probeGroup.remove();
+
+    // Compute required left margin to accommodate tick labels + desired gap.
+    // Also measure the y-axis label size (height) because when rotated the
+    // label's vertical size contributes to how far left it reaches.
+    const gap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+
+    // Create a temporary label to measure its bbox (place it off-canvas)
+    let labelBBoxHeight = 0;
+    try {
+      const probeLabel = this.svg
+        .append('text')
+        .attr('x', -9999)
+        .attr('y', -9999)
+        .style('font-size', '14px')
+        .text((this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : ''));
+      const lb = probeLabel.node().getBBox();
+      labelBBoxHeight = lb.height || 0;
+      probeLabel.remove();
+    } catch (e) {
+      // ignore measurement errors, fall back to small estimate
+      labelBBoxHeight = 14;
+    }
+
+    const requiredLeft = Math.ceil(maxTickWidth + gap + labelBBoxHeight + 8); // extra safety padding
+    const currentLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+    let usedLeft = Math.max(currentLeft, requiredLeft);
+
+    // If we need to expand left margin, update options so getInnerWidth() uses it
+    if (usedLeft !== currentLeft) {
+      this.options.margin.left = usedLeft;
+      // Move the main chart group so all chart content shifts right to make room
+      // for the y-axis tick labels and the y-axis label.
+      try {
+        if (this.chart && this.chart.attr) {
+          this.chart.attr(
+            'transform',
+            `translate(${this.options.margin.left},${this.options.margin.top})`
+          );
+        }
+      } catch (e) {
+        // ignore if chart isn't available or transform fails
+      }
+    }
+
+    // Now create xScale using (possibly) updated left margin
+    const xScale = d3
+      .scaleLinear()
+      .domain(d3.extent(this.data, d => d[this.xField]))
+      .nice()
+      .range([0, this.getInnerWidth()]);
+
+    // Update yScale range to reflect actual innerHeight (unchanged) and keep it
+    // consistent with previously used innerHeight
+    yScale.range([this.getInnerHeight(), 0]);
 
     // Add axes
-    this.chart
+    var xAxis = d3.axisBottom(xScale);
+    if (this.options.axisFormatters && this.options.axisFormatters.x) {
+      xAxis.tickFormat(this.options.axisFormatters.x);
+    }
+
+    var yAxis = d3.axisLeft(yScale);
+    if (this.options.axisFormatters && this.options.axisFormatters.y) {
+      yAxis.tickFormat(this.options.axisFormatters.y);
+    }
+
+    // Append axes groups so we can measure tick labels and position axis labels
+    const xg = this.chart
       .append('g')
       .attr('transform', `translate(0,${this.getInnerHeight()})`)
-      .call(d3.axisBottom(xScale));
+      .call(xAxis);
 
-    this.chart.append('g').call(d3.axisLeft(yScale));
+    // Measure max tick label height for the x axis
+    let maxTickHeight = 0;
+    try {
+      const xTicks = xg.selectAll('.tick text').nodes();
+      if (xTicks && xTicks.length) {
+        maxTickHeight = d3.max(xTicks, n => n.getBBox().height) || 0;
+      }
+    } catch (e) {
+      // ignore measurement errors
+    }
+
+    const xLabelPadding = Math.max(8, maxTickHeight + 8);
+    const xLabelText = (this.options && this.options.xLabel) ? this.options.xLabel : (this.xField ? String(this.xField) : '');
+    const yLabelText = (this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : '');
+
+    xg.append('text')
+      .attr('x', this.getInnerWidth() / 2)
+      .attr('y', xLabelPadding + 24) // baseline offset plus measured padding
+      .attr('fill', '#000')
+      .attr('text-anchor', 'middle')
+      .style('font-size', '14px')
+      .text(xLabelText);
+
+    const yg = this.chart.append('g').call(yAxis);
+
+  // (y-axis tick widths were measured earlier via probeGroup)
+
+  // Compute target offset: label should sit left of tick labels by `gap` pixels
+  const labelGap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+  let labelOffset = maxTickWidth + labelGap;
+  // clamp so label does not move outside the left margin (leave 4px padding)
+  const marginLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+  const maxAllowed = Math.max(10, marginLeft - 4);
+  if (labelOffset > maxAllowed) labelOffset = maxAllowed;
+
+    // Place the y label so it sits to the left of tick labels by `labelOffset`.
+    // Use translate before rotate so the offset is applied in the unrotated
+    // coordinate system and the label reliably appears left of the ticks.
+    yg.append('text')
+      .attr('transform', `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`) 
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('fill', '#000')
+      .attr('text-anchor', 'middle')
+      .style('font-size', '14px')
+      .text(yLabelText);
+
+    // Add grid lines
+    this.chart
+      .append('g')
+      .attr('class', 'grid')
+      .call(d3.axisLeft(yScale).ticks(6).tickSize(-this.getInnerWidth()).tickFormat(''))
+      .attr('opacity', 0.08);
 
     // Line generator
     const line = d3
@@ -115,7 +254,12 @@ export default class LineChart extends D3po {
         .attr('stroke', color)
         .attr('stroke-width', 2);
 
-      // Add points
+  // Tooltip formatter
+  var tooltipOpt = this.tooltip || this.options.tooltip || null;
+  var tooltipFormatter = null;
+  if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
+
+  // Add points
       this.chart
         .selectAll(`.point-${i}`)
         .data(data)
@@ -128,7 +272,7 @@ export default class LineChart extends D3po {
         .attr('fill', color)
         .attr('stroke', '#fff')
         .attr('stroke-width', 1.2)
-        .on('mouseover', (event, d) => {
+  .on('mouseover', (event, d) => {
           const circle = d3.select(event.currentTarget);
           const colorObj = d3.color(color);
           // For light colors, darken instead of brighten
@@ -140,13 +284,28 @@ export default class LineChart extends D3po {
             .attr('r', 8)
             .attr('fill', highlightColor);
 
-          showTooltip(event,
-            (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
-            `${this.xField}: ${d[this.xField]}<br/>` +
-            `${this.yField}: ${d[this.yField]}`,
-            this.options.fontFamily,
-            this.options.fontSize
-          );
+          if (tooltipFormatter) {
+            try {
+              var content = tooltipFormatter(null, d);
+              showTooltip(event, content, this.options.fontFamily, this.options.fontSize);
+            } catch (e) {
+              showTooltip(event,
+                (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
+                `${this.xField}: ${d[this.xField]}<br/>` +
+                `${this.yField}: ${d[this.yField]}`,
+                this.options.fontFamily,
+                this.options.fontSize
+              );
+            }
+          } else {
+            showTooltip(event,
+              (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
+              `${this.xField}: ${d[this.xField]}<br/>` +
+              `${this.yField}: ${d[this.yField]}`,
+              this.options.fontFamily,
+              this.options.fontSize
+            );
+          }
         })
         .on('mouseout', (event) => {
           d3.select(event.currentTarget)

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3po Pie Chart Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>D3po Pie/Donut Chart Variations</h1>
+    
+    <div class="charts-container">
+      <div class="chart-wrapper">
+        <h2>Pie</h2>
+        <div id="chart1"></div>
+      </div>
+
+      <div class="chart-wrapper">
+        <h2>Pie (custom labels and tooltip)</h2>
+        <div id="chart1-custom"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load D3.js 7.9 from CDN -->
+  <script src="./d3.v7.min.js"></script>
+  
+  <!-- Load D3po library from build -->
+  <script src="../dist/d3po.min.js"></script>
+
+  <script>
+    (async function() {
+      try {
+        // Load CSV data
+        const rawData = await d3.csv('pokemon-count.csv');
+      
+        // Transform the data to match expected format
+        const data = rawData.map(d => ({
+          type: d.type_1,
+          count: +d.n,  // Convert string to number
+          color: d.color_1
+        }));
+
+        console.log('📊 Loaded data:', data);
+
+        // Chart 1: Full Pie
+        const chart1 = new d3po.PieChart('#chart1', {
+          size: 'count',
+          group: 'type',
+          color: 'color',
+          width: 450,
+          height: 450
+        });
+
+  chart1.setData(data).render();
+
+    // Custom versions with JS tooltip (HTML)
+    // 'value' will be the percentage (0-100) passed by PieChart, 'row' is the data row
+    const tooltipExpr = `JS('<div>' + '<strong>Pokemon: ' + (row.type || '') + '</strong>' + 'Count: ' + (row.count != null ? row.count.toLocaleString() : 'N/A') + (typeof value === 'number' ? (' (' + value.toFixed(1) + '%)') : '') + '</div>')`;
+
+        const chart1c = new d3po.PieChart('#chart1-custom', {
+          size: 'count', group: 'type', color: 'color', width: 450, height: 450,
+          tooltip: tooltipExpr,
+          labelMode: 'count'
+        });
+
+        chart1c.setData(data).render();
+
+        console.log('✅ All pie charts rendered successfully!');
+      } catch (error) {
+        console.error('❌ Error:', error);
+        document.getElementById('chart1').innerHTML = 
+          `<div style="color: red; padding: 20px;">Error: ${error.message}<br/><br/>Make sure pokemon-count.csv is in the same directory as this HTML file.</div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

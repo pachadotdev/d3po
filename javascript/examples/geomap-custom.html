@@ -12,8 +12,15 @@
     <p>How many Pokemon live in each region? Mewtwo lives in Magallanes</p>
     <p>You can zoom in/out with the mouse wheel or touchpad (two-finger scroll)</p>
     
-    <div style="max-width: 600px; height: 700px; margin: 0 auto;">
-      <div id="chart"></div>
+    <div style="max-width: 1200px; height: 750px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;">
+      <div>
+        <h3 style="text-align:center;">Vanilla GeoMap</h3>
+        <div id="chart-vanilla" style="height: 700px;"></div>
+      </div>
+      <div>
+        <h3 style="text-align:center;">Custom GeoMap</h3>
+        <div id="chart" style="height: 700px;"></div>
+      </div>
     </div>
   </div>
 
@@ -52,7 +59,7 @@
         // Load the TopoJSON file
         const topology = await d3.json('./cl-all.topojson');
 
-        // Create GeoMap
+        // Create GeoMap (custom tooltip)
         const geoMap = new d3po.GeoMap('#chart', {
           group: 'id',
           map: topology,
@@ -64,11 +71,23 @@
           height: 700
         });
 
-  // Render the map with built-in tooltip formatter
-  geoMap.setData(data).render();
+        // Render the map with built-in tooltip formatter
+        geoMap.setData(data).render();
 
+        // Also create the vanilla GeoMap example side-by-side for comparison
+        const geoMapVanilla = new d3po.GeoMap('#chart-vanilla', {
+          group: 'id',
+          map: topology,
+          color: 'color',
+          size: 'pokemon_count',
+          tooltip: 'name',
+          width: 500,
+          height: 700
+        });
 
-        console.log('✅ GeoMap rendered with custom tooltip');
+        geoMapVanilla.setData(data).render();
+
+        console.log('✅ Both GeoMaps rendered successfully!');
       } catch (error) {
         console.error('❌ Error rendering GeoMap:', error);
         document.getElementById('chart').innerHTML = `

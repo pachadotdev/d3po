@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getHighlightColor } from '../utils.js';
 
 /**
  * Area chart visualization
@@ -286,11 +286,7 @@ export default class AreaChart extends D3po {
         .attr('stroke-width', 1.2)
   .on('mouseover', (event, d) => {
           const circle = d3.select(event.currentTarget);
-          const colorObj = d3.color(color);
-          // For light colors, darken instead of brighten
-          const luminance = 0.2126 * colorObj.r + 0.7152 * colorObj.g + 0.0722 * colorObj.b;
-          const highlightColor = luminance > 180 ? colorObj.darker(0.3) : colorObj.brighter(0.5);
-          
+          const highlightColor = getHighlightColor(color);
           circle
             .raise()
             .attr('r', 8)

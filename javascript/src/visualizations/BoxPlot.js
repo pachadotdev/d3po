@@ -7,6 +7,8 @@ import {
   showTooltip,
   hideTooltip,
   maybeEvalJSFormatter,
+  escapeHtml,
+  getHighlightColor,
 } from '../utils.js';
 
 /**
@@ -477,14 +479,9 @@ export default class BoxPlot extends D3po {
 
     boxes
       .on('mouseover', function (event, d) {
-        const rect = d3.select(this).select('rect');
-        const color = d3.color(rect.attr('fill'));
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-        rect.attr('fill', highlightColor);
+  const rect = d3.select(this).select('rect');
+  const highlightColor = getHighlightColor(rect.attr('fill'));
+  rect.attr('fill', highlightColor);
 
         if (tooltipFormatter) {
           try {
@@ -492,7 +489,7 @@ export default class BoxPlot extends D3po {
             showTooltip(event, content, fontFamily, fontSize);
           } catch (e) {
             const tooltipContent =
-              `<strong>${d.group}</strong>` +
+              `<strong>${escapeHtml(d.group)}</strong>` +
               `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
               `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
               `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +

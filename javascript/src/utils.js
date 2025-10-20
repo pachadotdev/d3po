@@ -166,6 +166,41 @@ export function formatNumber(value, decimals = 2) {
 }
 
 /**
+ * Escape HTML for safe insertion into tooltips
+ * @param {string} str
+ * @returns {string}
+ */
+export function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Choose a readable text color (black/white) for a given background color
+ * @param {string} bgColor - any CSS color accepted by d3.rgb
+ * @returns {string} 'black' or 'white'
+ */
+export function getTextColor(bgColor) {
+  try {
+    const rgb = d3.rgb(bgColor);
+    const r = rgb.r / 255;
+    const g = rgb.g / 255;
+    const b = rgb.b / 255;
+    const [rL, gL, bL] = [r, g, b].map(c =>
+      c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+    );
+    const lum = 0.2126 * rL + 0.7152 * gL + 0.0722 * bL;
+    return lum > 0.5 ? 'black' : 'white';
+  } catch (e) {
+    return 'black';
+  }
+}
+
+/**
  * Truncates text to fit within width
  * @param {string} text - Text to truncate
  * @param {number} maxLength - Maximum length

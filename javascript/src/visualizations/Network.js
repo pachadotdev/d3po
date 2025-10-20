@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
+import { showTooltip, hideTooltip, maybeEvalJSFormatter, getHighlightColor, escapeHtml } from '../utils.js';
 
 /**
  * Network/Graph visualization
@@ -231,14 +231,8 @@ export default class Network extends D3po {
 
     node
       .on('mouseover', function (event, d) {
-        const color = d3.color(d._originalColor);
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-
-        d3.select(this).attr('fill', highlightColor);
+  const highlightColor = getHighlightColor(d._originalColor);
+  d3.select(this).attr('fill', highlightColor);
 
         // If a formatter is provided, use it: (value, row)
         if (tooltipFormatter) {
@@ -251,11 +245,28 @@ export default class Network extends D3po {
           }
         }
 
-        // Default tooltip: "Count of <Type> Pokemon: <count>"
-        const typeLabel = d.id || 'Node';
-        const cnt = d[sizeField] != null ? d[sizeField] : (d.count != null ? d.count : 'N/A');
-        const tooltipContent = `<strong>Count of ${typeLabel} Pokemon: ${cnt}</strong>`;
-        showTooltip(event, tooltipContent, fontFamily, fontSize);
+  // Default tooltip: match Treemap style but show the actual numeric field name (e.g., 'size: 10' or 'value: 20')
+  const typeLabel = escapeHtml(d.id || 'Node');
+  // Determine which numeric field to show: prefer explicit sizeField, then common names 'value' or 'size', then 'count'
+  const numericFieldCandidates = [];
+  if (sizeField) numericFieldCandidates.push(sizeField);
+  numericFieldCandidates.push('value', 'size', 'count');
+
+  let chosenField = null;
+  let chosenValue = null;
+  for (const f of numericFieldCandidates) {
+    if (d[f] != null) {
+      chosenField = f;
+      chosenValue = d[f];
+      break;
+    }
+  }
+
+  let tooltipContent = `<strong>${typeLabel}</strong>`;
+  if (chosenField != null) {
+    tooltipContent += `${escapeHtml(String(chosenField))}: ${escapeHtml(String(chosenValue))}`;
+  }
+  showTooltip(event, tooltipContent, fontFamily, fontSize);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).attr('fill', d._originalColor);

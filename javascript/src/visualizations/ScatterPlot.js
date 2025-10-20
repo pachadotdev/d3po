@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, escapeHtml, getHighlightColor } from '../utils.js';
 
 /**
  * Scatter plot visualization
@@ -270,24 +270,11 @@ export default class ScatterPlot extends D3po {
   var tooltipFormatter = null;
   if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
 
-  // small helpers for tooltip content
-  const escapeHtml = (str) => String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-
   const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
 
     circles
       .on('mouseover', function (event, d) {
-        const color = d3.color(d._originalColor);
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
+        const highlightColor = getHighlightColor(d._originalColor);
         d3.select(this)
           .raise()
           .attr('r', d._originalRadius * 2.0)

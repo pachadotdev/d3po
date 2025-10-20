@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getTextColor, getHighlightColor, escapeHtml } from '../utils.js';
 
 /**
  * Treemap visualization
@@ -70,29 +70,8 @@ export default class Treemap extends D3po {
     // Calculate total for percentage
     const total = root.value;
 
-    // Helper function to calculate luminance from hex color
-    const getLuminance = hex => {
-      const rgb = d3.rgb(hex);
-      const r = rgb.r / 255;
-      const g = rgb.g / 255;
-      const b = rgb.b / 255;
-      const [rL, gL, bL] = [r, g, b].map(c =>
-        c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
-      );
-      return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL;
-    };
-
-    // Helper function to determine text color based on background
-    const getTextColor = bgColor => {
-      const luminance = getLuminance(bgColor);
-      return luminance > 0.5 ? 'black' : 'white';
-    };
-
-    // Helper function to get text stroke color (opposite of fill)
-    const getTextStroke = bgColor => {
-      const luminance = getLuminance(bgColor);
-      return luminance > 0.5 ? 'white' : 'black';
-    };
+  // use shared getTextColor/getHighlightColor from utils
+  const getTextStroke = bgColor => (getTextColor(bgColor) === 'black' ? 'white' : 'black');
 
     // Draw rectangles
     const cells = this.chart
@@ -125,13 +104,8 @@ export default class Treemap extends D3po {
 
     cells.selectAll('rect')
       .on('mouseover', (event, d) => {
-        const color = d3.color(d._originalColor);
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-        d3.select(event.currentTarget).attr('fill', highlightColor);
+  const highlightColor = getHighlightColor(d._originalColor);
+  d3.select(event.currentTarget).attr('fill', highlightColor);
 
         const percentageNum = (d.value / total) * 100;
         const percentage = percentageNum.toFixed(1);
@@ -159,8 +133,8 @@ export default class Treemap extends D3po {
         // Default tooltip
         showTooltip(
           event,
-          `<strong>${d.data.name}</strong>` +
-            `Value: ${d.data.value}<br/>` +
+          `<strong>${escapeHtml(d.data.name)}</strong>` +
+            `Value: ${escapeHtml(String(d.data.value))}<br/>` +
             `Percentage: ${percentage}%`,
           fontFamily,
           fontSize

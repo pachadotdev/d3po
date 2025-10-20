@@ -7,6 +7,7 @@ import {
   hideTooltip,
   getHighlightColor,
   maybeEvalJSFormatter,
+  escapeHtml,
 } from '../utils.js';
 
 export default class BarChart extends D3po {
@@ -109,15 +110,7 @@ export default class BarChart extends D3po {
     const tooltipOpt = this.tooltip || this.options.tooltip || null;
     const tooltipFormatter = tooltipOpt ? maybeEvalJSFormatter(tooltipOpt) : null;
 
-    // small helpers for tooltip content
-    const escapeHtml = (str) => String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-
-    const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
+  const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
 
     // capture field names for use inside event handlers
     const xField = this.xField;

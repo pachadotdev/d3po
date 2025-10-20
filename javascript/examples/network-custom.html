@@ -13,8 +13,18 @@
     <p>You can drag nodes to rearrange them and zoom in/out with the mouse wheel or touchpad (two-finger scroll).</p>
     <p>Note: the node rearrangement only works if you do not specify fixed coordinates for each node.</p>
     
-    <div style="max-width: 900px; margin: 0 auto;">
-      <div id="chart" style="height: 700px;"></div>
+    <div style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div>
+        <h3 style="text-align:center;">Vanilla Network</h3>
+        <div id="chart-vanilla" style="height: 700px;"></div>
+      </div>
+    </div>
+
+    <div style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div>
+        <h3 style="text-align:center;">Custom Network</h3>
+        <div id="chart" style="height: 700px;"></div>
+      </div>
     </div>
   </div>
 
@@ -79,8 +89,28 @@
 
         console.log('📊 Links:', links);
 
-        // Create Network
+        // Create Network (custom) — pass a custom tooltip that shows "Node size: N"
         const network = new d3po.Network('#chart', {
+          nodes: nodes,
+          links: links,
+          size: 'count',
+          color: 'color',
+          width: 900,
+          height: 700,
+          // tooltip can be a JS(...) string or a function; here we use a simple function
+          tooltip: function(value, row) {
+            // 'row' is the node object; size field is 'count'
+            const sizeVal = row && (row.count != null ? row.count : null);
+            const label = sizeVal != null ? `node size: ${sizeVal}` : null;
+            // Return HTML string (will be displayed by showTooltip)
+            return label ? `${row.id} ${label}` : `<strong>${row.id}</strong>`;
+          }
+        });
+
+        network.render();
+
+        // Create a second (vanilla) Network instance to compare behavior
+        const networkVanilla = new d3po.Network('#chart-vanilla', {
           nodes: nodes,
           links: links,
           size: 'count',
@@ -89,9 +119,9 @@
           height: 700
         });
 
-        network.render();
+        networkVanilla.render();
 
-        console.log('✅ Network rendered successfully!');
+        console.log('✅ Both networks rendered successfully!');
       } catch (error) {
         console.error('❌ Error rendering network:', error);
         document.getElementById('chart').innerHTML = `

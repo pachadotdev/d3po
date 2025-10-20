@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getHighlightColor, escapeHtml } from '../utils.js';
 
 /**
  * Geographic map visualization
@@ -122,13 +122,8 @@ export default class GeoMap extends D3po {
 
     paths
       .on('mouseover', function (event, d) {
-        const color = d3.color(d._originalColor);
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-        d3.select(this).attr('fill', highlightColor);
+  const highlightColor = getHighlightColor(d._originalColor);
+  d3.select(this).attr('fill', highlightColor);
 
         const data = dataMap.get(d.id);
         if (!data) return;
@@ -145,8 +140,8 @@ export default class GeoMap extends D3po {
           }
         }
 
-  const fieldValue = (tooltipField && typeof tooltipField === 'string') ? (data[tooltipField] != null ? data[tooltipField] : d.id) : d.id;
-  const tooltipContent = `<strong>Region: ${fieldValue}</strong>` + (sizeField ? ` Value: ${data[sizeField]}` : '');
+  const fieldValue = (tooltipField && typeof tooltipField === 'string') ? (data[tooltipField] != null ? escapeHtml(data[tooltipField]) : escapeHtml(d.id)) : escapeHtml(d.id);
+  const tooltipContent = `<strong>Region: ${fieldValue}</strong>` + (sizeField ? ` Value: ${escapeHtml(String(data[sizeField]))}` : '');
 
         showTooltip(event, tooltipContent, fontFamily, fontSize);
       })

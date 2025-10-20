@@ -8,11 +8,13 @@ app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
-    # Your application UI logic
-    fluidPage(
-      titlePanel("d3po Visualization Examples"),
-      sidebarLayout(
-        sidebarPanel(
+    # Your application UI logic using tabler layout
+    tabler::tablerPage(
+      title = "d3po Visualization Examples",
+      layout = "fluid-vertical",
+      navbar = tabler::tablerSidebar(
+        title = "Visualizations",
+  tabler::sidebarMenu(
           selectInput("plot_type", "Select Visualization Type:",
             choices = c(
               "Box Plot (Weight by Type)" = "box1",
@@ -39,14 +41,16 @@ app_ui <- function(request) {
               "Network Graph (Manual Layout)" = "network_manual"
             ),
             selected = "box1"
-          ),
-          width = 3
-        ),
-        mainPanel(
-          d3po::d3po_output("plot", width = "100%", height = "600px"),
-          width = 9
+          )
         )
-      )
+      ),
+      body = tabler::tablerBody(
+        tabler::tablerCard(
+          title = "Visualization",
+          d3po::d3po_output("plot", width = "100%", height = "600px")
+        )
+      ),
+      footer = tabler::tablerFooter(left = "", right = "d3po demo")
     )
   )
 }

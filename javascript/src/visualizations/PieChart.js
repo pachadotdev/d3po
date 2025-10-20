@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getTextColor, getHighlightColor } from '../utils.js';
 
 /**
  * Pie chart visualization
@@ -116,23 +116,7 @@ export default class PieChart extends D3po {
       .innerRadius(radius * 0.7)
       .outerRadius(radius * 0.7);
 
-    // Helper function to calculate luminance from hex color
-    const getLuminance = hex => {
-      const rgb = d3.rgb(hex);
-      const r = rgb.r / 255;
-      const g = rgb.g / 255;
-      const b = rgb.b / 255;
-      const [rL, gL, bL] = [r, g, b].map(c =>
-        c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
-      );
-      return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL;
-    };
-
-    // Helper function to determine text color based on background
-    const getTextColor = bgColor => {
-      const luminance = getLuminance(bgColor);
-      return luminance > 0.5 ? 'black' : 'white';
-    };
+  // use shared getTextColor/getHighlightColor from utils
 
     // Capture field names for tooltips and labels
     const groupField = this.groupField;
@@ -178,13 +162,8 @@ export default class PieChart extends D3po {
 
     arcs
       .on('mouseover', function (event, d) {
-        const color = d3.color(d._originalColor);
-        // For light colors, darken instead of brighten
-        const luminance =
-          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        const highlightColor =
-          luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
-        d3.select(this).attr('fill', highlightColor);
+  const highlightColor = getHighlightColor(d._originalColor);
+  d3.select(this).attr('fill', highlightColor);
 
         if (tooltipFormatter) {
           try {

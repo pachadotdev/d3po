@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, escapeHtml, getHighlightColor } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, escapeHtml, getHighlightColor, resolveTooltipFormatter, showTooltipWithFormatter } from '../utils.js';
 
 /**
  * Scatter plot visualization
@@ -266,7 +266,7 @@ export default class ScatterPlot extends D3po {
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
   // Determine tooltip formatter/template: prefer compiled this.tooltip from base class
-  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
   const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
 
@@ -280,16 +280,11 @@ export default class ScatterPlot extends D3po {
 
         // If user provided a tooltip formatter, call it (AreaChart uses tooltipFormatter(null, row))
         if (tooltipFormatter) {
-          try {
-            var content = tooltipFormatter(null, d);
-            // Allow functions that return HTML strings
-            showTooltip(event, content, fontFamily, fontSize);
-          } catch (e) {
-            // Fallback to default (group bold then x/y lines, optional size)
+          const fallback = () => {
             const prefix = groupField && d && d[groupField] ? `<strong>${escapeHtml(String(d[groupField]))}</strong>` : '';
-            const content = prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` + (sizeField ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])) )}` : '');
-            showTooltip(event, content, fontFamily, fontSize);
-          }
+            return prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` + (sizeField ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])) )}` : '');
+          };
+          showTooltipWithFormatter(event, tooltipFormatter, null, d, fontFamily, fontSize, fallback);
         } else {
           const prefix = groupField && d && d[groupField] ? `<strong>${escapeHtml(String(d[groupField]))}</strong>` : '';
           const content = prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` + (sizeField ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])) )}` : '');

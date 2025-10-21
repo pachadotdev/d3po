@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getTextColor, getHighlightColor, escapeHtml } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getTextColor, getHighlightColor, escapeHtml, resolveTooltipFormatter } from '../utils.js';
 
 /**
  * Treemap visualization
@@ -67,8 +67,8 @@ export default class Treemap extends D3po {
     if (mode === 'flat') return this.groupField;
     return this.subgroupField || this.groupField;
   };
-  // tooltip can be a JS(...) string, a compiled this.tooltip from base, or a function; compile if needed
-  this.tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : maybeEvalJSFormatter(options.tooltip);
+  // tooltip can be a JS(...) string, a compiled this.tooltip from base, or a function; resolve with helper
+  this.tooltipFormatter = resolveTooltipFormatter(this.tooltip, options && options.tooltip);
   }
 
   /**

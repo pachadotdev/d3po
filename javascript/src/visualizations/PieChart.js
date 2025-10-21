@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getTextColor, getHighlightColor } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, getTextColor, getHighlightColor, resolveTooltipFormatter, showTooltipWithFormatter } from '../utils.js';
 
 /**
  * Pie chart visualization
@@ -156,7 +156,7 @@ export default class PieChart extends D3po {
     const fontSize = this.options.fontSize;
 
   // Tooltip formatter: prefer compiled this.tooltip from base, otherwise evaluate options.tooltip
-  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
     arcs
       .on('mouseover', function (event, d) {
@@ -187,8 +187,8 @@ export default class PieChart extends D3po {
             }
 
             // For consistency with other charts, call formatter as (value, row)
-            const content = tooltipFormatter(pct, d.data);
-            showTooltip(event, content, fontFamily, fontSize);
+            const fallback = () => `<strong>${d.data[groupField]}</strong>` + `Value: ${d.data[sizeField]}<br/>` + `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`;
+            showTooltipWithFormatter(event, tooltipFormatter, pct, d.data, fontFamily, fontSize, fallback);
             return;
           } catch (e) {
             console.warn('PieChart: tooltip formatter failed', e);

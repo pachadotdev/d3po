@@ -6,9 +6,10 @@ import {
   calculateBoxStats,
   showTooltip,
   hideTooltip,
-  maybeEvalJSFormatter,
   escapeHtml,
   getHighlightColor,
+  resolveTooltipFormatter,
+  showTooltipWithFormatter,
 } from '../utils.js';
 
 /**
@@ -514,7 +515,7 @@ export default class BoxPlot extends D3po {
     const fontSize = this.options.fontSize;
 
   // Add tooltips: prefer compiled this.tooltip (from base class) then evaluate options.tooltip
-  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
     boxes
       .on('mouseover', function (event, d) {
@@ -523,20 +524,15 @@ export default class BoxPlot extends D3po {
   rect.attr('fill', highlightColor);
 
         if (tooltipFormatter) {
-          try {
-            const content = tooltipFormatter(null, { group: d.group, label: d.label || d.group, stats: d.stats });
-            showTooltip(event, content, fontFamily, fontSize);
-          } catch (e) {
-            const tooltipContent =
-              `<strong>${escapeHtml(d.label || d.group)}</strong>` +
-              `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
-              `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
-              `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +
-              `Percentile 75th: ${d.stats.q3.toFixed(2)}<br/>` +
-              `Percentile 100th (Max): ${d.stats.max.toFixed(2)}<br/>` +
-              `Outliers: ${d.stats.outliers.length}`;
-            showTooltip(event, tooltipContent, fontFamily, fontSize);
-          }
+          const fallback = () =>
+            `<strong>${escapeHtml(d.label || d.group)}</strong>` +
+            `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
+            `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
+            `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +
+            `Percentile 75th: ${d.stats.q3.toFixed(2)}<br/>` +
+            `Percentile 100th (Max): ${d.stats.max.toFixed(2)}<br/>` +
+            `Outliers: ${d.stats.outliers.length}`;
+          showTooltipWithFormatter(event, tooltipFormatter, null, { group: d.group, label: d.label || d.group, stats: d.stats }, fontFamily, fontSize, fallback);
         } else {
           const tooltipContent =
             `<strong>${d.label || d.group}</strong>` +

@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getHighlightColor } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, getHighlightColor, resolveTooltipFormatter } from '../utils.js';
 
 /**
  * Area chart visualization
@@ -263,7 +263,7 @@ export default class AreaChart extends D3po {
     });
 
     // Determine tooltip formatter/template: prefer compiled this.tooltip from base class
-    var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
     // Finally draw all points on top (topmost layer)
     series.forEach((data, i) => {

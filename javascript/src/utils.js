@@ -114,6 +114,46 @@ export function hideTooltip() {
 }
 
 /**
+ * Resolve a tooltip formatter given possible sources.
+ * Prefer instanceTooltip if it's a function; otherwise try optionsTooltip (string -> maybeEvalJSFormatter).
+ * @param {Function|null} instanceTooltip
+ * @param {string|Function|null} optionsTooltip
+ * @returns {Function|null}
+ */
+export function resolveTooltipFormatter(instanceTooltip, optionsTooltip) {
+  if (typeof instanceTooltip === 'function') return instanceTooltip;
+  if (typeof optionsTooltip === 'function') return optionsTooltip;
+  if (typeof optionsTooltip === 'string') return maybeEvalJSFormatter(optionsTooltip);
+  return null;
+}
+
+/**
+ * Safely call a tooltip formatter and show the tooltip, falling back to the provided fallback when
+ * the formatter returns null/undefined or throws.
+ * @param {Event} event
+ * @param {Function|null} formatter - function(value,row) -> content
+ * @param {*} value
+ * @param {*} row
+ * @param {string} fontFamily
+ * @param {number} fontSize
+ * @param {Function|string} fallback - either a string or function(value,row) -> string
+ */
+export function showTooltipWithFormatter(event, formatter, value, row, fontFamily, fontSize, fallback) {
+  try {
+    if (typeof formatter === 'function') {
+      const out = formatter(value, row);
+      if (out != null) return showTooltip(event, out, fontFamily, fontSize);
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Tooltip formatter error', err);
+  }
+
+  const content = (typeof fallback === 'function') ? fallback(value, row) : String(fallback || '');
+  return showTooltip(event, content, fontFamily, fontSize);
+}
+
+/**
  * Validates that required fields exist in data
  * @param {Array} data - Array of data objects
  * @param {Array<string>} requiredFields - Array of required field names
@@ -220,6 +260,20 @@ export function calculateBoxStats(values) {
   const sorted = values.slice().sort((a, b) => a - b);
   const n = sorted.length;
 
+  // handle empty input
+  if (n === 0) {
+    return {
+      min: null,
+      q1: null,
+      median: null,
+      q3: null,
+      max: null,
+      whiskerMin: null,
+      whiskerMax: null,
+      outliers: [],
+    };
+  }
+
   const quantile = (arr, p) => {
     const idx = (arr.length - 1) * p;
     const lower = Math.floor(idx);
@@ -236,10 +290,22 @@ export function calculateBoxStats(values) {
   const lowerBound = q1 - 1.5 * iqr;
   const upperBound = q3 + 1.5 * iqr;
 
-  // Find min and max within whisker bounds (non-outliers)
-  const whiskerMin = sorted.find(v => v >= lowerBound) || sorted[0];
-  const whiskerMax = sorted.reverse().find(v => v <= upperBound) || sorted[0];
-  sorted.reverse(); // restore order
+  // Find min and max within whisker bounds (non-outliers) without mutating
+  let whiskerMin = sorted[0];
+  for (let i = 0; i < n; i++) {
+    if (sorted[i] >= lowerBound) {
+      whiskerMin = sorted[i];
+      break;
+    }
+  }
+
+  let whiskerMax = sorted[n - 1];
+  for (let i = n - 1; i >= 0; i--) {
+    if (sorted[i] <= upperBound) {
+      whiskerMax = sorted[i];
+      break;
+    }
+  }
 
   // Find outliers
   const outliers = sorted.filter(v => v < lowerBound || v > upperBound);

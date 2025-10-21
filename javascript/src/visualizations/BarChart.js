@@ -6,8 +6,9 @@ import {
   showTooltip,
   hideTooltip,
   getHighlightColor,
-  maybeEvalJSFormatter,
   escapeHtml,
+  resolveTooltipFormatter,
+  showTooltipWithFormatter,
 } from '../utils.js';
 
 export default class BarChart extends D3po {
@@ -109,7 +110,7 @@ export default class BarChart extends D3po {
   const fontSize = this.options.fontSize;
   // prefer a compiled tooltip on the instance (from D3po base) then fall back
   // to options.tooltip which may be a JS(...) expression
-  const tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  const tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
   const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
 
@@ -123,15 +124,11 @@ export default class BarChart extends D3po {
       d3.select(this).attr('fill', getHighlightColor(baseColor));
       // replicate AreaChart's default tooltip: optional bold group, then x and y labeled on separate lines
       if (tooltipFormatter) {
-        try {
-          // call formatter same way as AreaChart: (null, row)
-          const content = tooltipFormatter(null, d);
-          showTooltip(event, content, fontFamily, fontSize);
-        } catch (e) {
+        const fallback = () => {
           const prefix = (groupField && d && d[groupField]) ? `<strong>${escapeHtml(String(d[groupField]))}</strong>` : '';
-          const content = prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}`;
-          showTooltip(event, content, fontFamily, fontSize);
-        }
+          return prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}`;
+        };
+        showTooltipWithFormatter(event, tooltipFormatter, null, d, fontFamily, fontSize, fallback);
       } else {
         // Determine which field is the category (string) and which is the measure
         const categoryField = isHorizontal ? yField : xField;

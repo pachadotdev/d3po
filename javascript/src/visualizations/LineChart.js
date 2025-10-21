@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, maybeEvalJSFormatter, getHighlightColor } from '../utils.js';
+import { validateData, showTooltip, hideTooltip, getHighlightColor, resolveTooltipFormatter, showTooltipWithFormatter } from '../utils.js';
 
 /**
  * Line chart visualization
@@ -255,7 +255,7 @@ export default class LineChart extends D3po {
         .attr('stroke-width', 2);
 
   // Tooltip formatter
-  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
   // Add points
       this.chart
@@ -279,26 +279,10 @@ export default class LineChart extends D3po {
             .attr('fill', highlightColor);
 
           if (tooltipFormatter) {
-            try {
-              var content = tooltipFormatter(null, d);
-              showTooltip(event, content, this.options.fontFamily, this.options.fontSize);
-            } catch (e) {
-              showTooltip(event,
-                (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
-                `${this.xField}: ${d[this.xField]}<br/>` +
-                `${this.yField}: ${d[this.yField]}`,
-                this.options.fontFamily,
-                this.options.fontSize
-              );
-            }
+            const fallback = () => (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') + `${this.xField}: ${d[this.xField]}<br/>` + `${this.yField}: ${d[this.yField]}`;
+            showTooltipWithFormatter(event, tooltipFormatter, null, d, this.options.fontFamily, this.options.fontSize, fallback);
           } else {
-            showTooltip(event,
-              (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
-              `${this.xField}: ${d[this.xField]}<br/>` +
-              `${this.yField}: ${d[this.yField]}`,
-              this.options.fontFamily,
-              this.options.fontSize
-            );
+            showTooltip(event, (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') + `${this.xField}: ${d[this.xField]}<br/>` + `${this.yField}: ${d[this.yField]}`, this.options.fontFamily, this.options.fontSize);
           }
         })
         .on('mouseout', (event) => {

@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { showTooltip, hideTooltip, maybeEvalJSFormatter, getHighlightColor, escapeHtml } from '../utils.js';
+import { showTooltip, hideTooltip, getHighlightColor, escapeHtml, resolveTooltipFormatter } from '../utils.js';
 
 /**
  * Network/Graph visualization
@@ -221,7 +221,7 @@ export default class Network extends D3po {
     const fontSize = this.options.fontSize;
 
     // resolve tooltip formatter: prefer this.tooltip (from D3po base) then options.tooltip
-  let tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
+  let tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
 
     node
       .on('mouseover', function (event, d) {
@@ -231,11 +231,13 @@ export default class Network extends D3po {
         // If a formatter is provided, use it: (value, row)
         if (tooltipFormatter) {
           try {
-            const content = tooltipFormatter(null, d);
-            showTooltip(event, content, fontFamily, fontSize);
-            return;
+            const out = tooltipFormatter(null, d);
+            if (out != null) {
+              showTooltip(event, out, fontFamily, fontSize);
+              return;
+            }
           } catch (e) {
-            void 0;
+            // ignore and fall through to default
           }
         }
 

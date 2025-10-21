@@ -31,7 +31,7 @@ server <- function(input, output, session) {
     if (input$plot_type == "box") {
       result <- d3po(pokemon) %>%
         po_box(daes(x = type_1, y = weight, color = color_1)) %>%
-        po_title("Weight Distribution by Type")
+        po_labels(title = "Weight Distribution by Type")
     } else {
       dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1,
                         data = pokemon, FUN = length)
@@ -39,7 +39,7 @@ server <- function(input, output, session) {
       
       result <- d3po(dout) %>%
         po_bar(daes(x = type, y = count, color = color)) %>%
-        po_title("Pokemon Count by Type")
+        po_labels(title = "Pokemon Count by Type")
     }
     
     cat("Plot created successfully\n")

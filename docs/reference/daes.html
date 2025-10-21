@@ -23,11 +23,21 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
-  <a href="../articles/d3po.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/customizations.html">Using D3po with Customizations</a>
+    </li>
+    <li>
+      <a href="../articles/defaults.html">Using D3po with Default Settings</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -79,6 +89,7 @@ they are so common; all other aspects must be named.</p></dd>
 
 <p>Valid aesthetics (depending on the geom)</p><ul><li><p><code>x</code>, <code>y</code>: cartesian coordinates.</p></li>
 <li><p><code>group</code>: grouping data.</p></li>
+<li><p><code>name</code>: name data.</p></li>
 <li><p><code>color</code>: color of geom.</p></li>
 <li><p><code>size</code>: size of geom.</p></li>
 <li><p><code>layout</code>: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds, sugiyama), in quotes.</p></li>

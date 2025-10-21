@@ -75,8 +75,14 @@ HTMLWidgets.widget({
         // Add title
         if (x.title) options.title = x.title;
         
-        // Add tooltip
-        if (x.tooltip) options.tooltip = x.tooltip;
+  // Add tooltip: prefer explicit `tooltip_template` set by `po_tooltip()`
+  // over a `tooltip` aesthetic provided via `daes(tooltip = ...)` so user
+  // supplied templates override column-based tooltip fields.
+  if (x.tooltip_template) options.tooltip = x.tooltip_template;
+  else if (x.tooltip) options.tooltip = x.tooltip;
+  // Pass formatted columns and axis labels produced by R (po_format / po_labels)
+  if (x.formatted_cols) options.formattedCols = x.formatted_cols;
+  if (x.axis_labels) options.axisLabels = x.axis_labels;
         // Axis formatters provided as strings: x.axis_x and x.axis_y (R side will pass axis_x/axis_y)
         if (x.axis_x) {
           var fx = _maybeEvalJSFormatter(x.axis_x);
@@ -182,6 +188,52 @@ HTMLWidgets.widget({
         // Set data and render
         if (x.data) {
           chart.setData(x.data).render();
+
+          // Compatibility shim: if server-side provided formattedCols (for
+          // example via po_format(x = toupper(...))), try to replace axis
+          // tick text with the formatted strings so the widget shows exactly
+          // the R-provided labels even if the minified visualization code
+          // hasn't been rebuilt yet.
+          try {
+            if (options.formattedCols && x.data && x.data.length) {
+              var fc = options.formattedCols || {};
+              // Determine which field is categorical (x or y)
+              var categoryField = null;
+              var axisKey = null; // 'x' means bottom axis, 'y' means left axis
+              if (options.x && typeof x.data[0][options.x] === 'string') {
+                categoryField = options.x; axisKey = 'x';
+              } else if (options.y && typeof x.data[0][options.y] === 'string') {
+                categoryField = options.y; axisKey = 'y';
+              }
+              if (categoryField) {
+                // Resolve formatted column name conservatively: prefer an exact match
+                // for the category field; only use fc.x/fc.y when they refer to the
+                // same field as the category axis to avoid replacing categorical
+                // labels with formatted numeric values (e.g., mean values).
+                var formattedColName = null;
+                if (fc[categoryField]) formattedColName = fc[categoryField];
+                else if (axisKey === 'x' && fc.x && options.x && options.x === categoryField) formattedColName = fc.x;
+                else if (axisKey === 'y' && fc.y && options.y && options.y === categoryField) formattedColName = fc.y;
+                if (formattedColName) {
+                  var map = {};
+                  x.data.forEach(function(r) {
+                    if (r[categoryField] !== undefined && r[formattedColName] !== undefined) {
+                      map[String(r[categoryField])] = String(r[formattedColName]);
+                    }
+                  });
+                  // Replace tick text nodes where content matches a raw key
+                  var ticks = document.getElementById(el.id).querySelectorAll('.tick text');
+                  ticks.forEach(function(t) {
+                    var txt = t.textContent;
+                    if (map[txt]) t.textContent = map[txt];
+                  });
+                }
+              }
+            }
+          } catch (e) {
+            // non-fatal: leave rendering as-is
+            console.warn('d3po: failed applying formattedCols shim', e);
+          }
         }
       },
 

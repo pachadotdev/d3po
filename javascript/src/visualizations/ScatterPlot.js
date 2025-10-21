@@ -265,10 +265,8 @@ export default class ScatterPlot extends D3po {
     // Save font settings for tooltip handlers
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
-  // Determine tooltip formatter/template
-  var tooltipOpt = this.tooltip || this.options.tooltip || null;
-  var tooltipFormatter = null;
-  if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
+  // Determine tooltip formatter/template: prefer compiled this.tooltip from base class
+  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
   const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
 

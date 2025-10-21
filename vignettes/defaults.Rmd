@@ -1,17 +1,17 @@
 ---
-title: "Introduction to d3po"
+title: "Using D3po with Default Settings"
 output: rmarkdown::html_vignette
 description: >
   Start here if this is your first time using d3po. You'll learn the basic   
   philosophy, and (hopefully) you'll realize it integrates well with the pipe, 
   `%>%`, and the Tidyverse.
 vignette: >
-  %\VignetteIndexEntry{Introduction to d3po}
+  %\VignetteIndexEntry{Using D3po with Default Settings}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   eval = TRUE,
@@ -31,7 +31,6 @@ These examples are the same as in the documentation but with some extended comme
 Let's start by loading packages.
 
 ```{r pkgs, message=FALSE, warning=FALSE}
-library(dplyr)
 library(d3po)
 ```
 
@@ -39,8 +38,8 @@ library(d3po)
 
 The included dataset, `pokemon`, has a detailed documentation but let's explore the data structure:
 
-```{r}
-glimpse(pokemon)
+```{r data}
+str(pokemon)
 ```
 
 # Box and Whiskers
@@ -113,7 +112,7 @@ To plot the share of Pokemon by type, we need to indicate the variables for the
 size, group, and (optionally) color. You can also specify the tiling method
 (squarify, binary, slice, or dice):
 
-```{r}
+```{r treemap1}
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
@@ -134,7 +133,7 @@ You can customize pie charts with innerRadius (0 for full pie) and angles
 
 A complete pie chart with no inner radius:
 
-```{r}
+```{r pie1}
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
@@ -147,7 +146,7 @@ d3po(dout, width = 800, height = 600) %>%
 
 A pie with an inner radius creating a "donut hole":
 
-```{r}
+```{r pie2}
 d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(size = count, group = type, color = color, innerRadius = 0.4)) %>%
   po_title("Donut")
@@ -157,7 +156,7 @@ d3po(dout, width = 800, height = 600) %>%
 
 A semicircular pie chart:
 
-```{r}
+```{r pie3}
 d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(
     size = count, group = type, color = color,
@@ -170,7 +169,7 @@ d3po(dout, width = 800, height = 600) %>%
 
 A semicircular donut chart:
 
-```{r}
+```{r pie4}
 d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(
     size = count, group = type, color = color,
@@ -288,13 +287,13 @@ d3po(pokemon, width = 800, height = 600) %>%
 Geographic maps allow you to visualize data across regions. You need to specify
 a TopoJSON map and data with matching region IDs:
 
-```{r}
+```{r geomap1}
 # Get country IDs and names from the South America map
 dout <- map_ids(d3po::maps$south_america$continent)
 
 # Chile has Mewtwo and Guyana has Mew
 dout$pokemon_count <- ifelse(dout$id == "CL", 1L, 0L)
-dout$pokemon_count <- ifelse(dout$id == "GY", 1L, 0L)
+dout$pokemon_count <- ifelse(dout$id == "GY", 1L, dout$pokemon_count)
 dout$color <- ifelse(dout$id %in% c("CL", "GY"), "#F85888", "#e0e0e0")
 
 d3po(dout, width = 800, height = 600) %>%
@@ -308,7 +307,7 @@ d3po(dout, width = 800, height = 600) %>%
   po_title("Pokemon Distribution in South America")
 ```
 
-```{r}
+```{r geomap2}
 # Get region IDs and names from the Chile map
 dout <- map_ids(d3po::maps$south_america$chile)
 
@@ -335,21 +334,21 @@ Node size represents the count of each type.
 
 By default, nodes are fixed in their positions. You can enable dragging with `move = TRUE`:
 
-```{r}
+```{r network1}
 # Using KK layout algorithm
 d3po(pokemon_network, width = 800, height = 600) %>%
   po_network(daes(size = node_size, color = color, layout = "kk")) %>%
   po_title("Pokemon Type Network (Fixed Positions)")
 ```
 
-```{r}
+```{r network2}
 # Using FR layout algorithm
 d3po(pokemon_network, width = 800, height = 600) %>%
   po_network(daes(size = node_size, color = color, layout = "fr")) %>%
   po_title("Pokemon Type Network (Draggable - nodes stay where you put them)")
 ```
 
-```{r}
+```{r network3}
 # Use manual positions (from pokemon_network$layout)
 d3po(pokemon_network, width = 800, height = 600) %>%
   po_network(daes(size = node_size, color = color)) %>%
@@ -358,7 +357,7 @@ d3po(pokemon_network, width = 800, height = 600) %>%
 
 Here is how I created the `pokemon_network` dataset:
 
-```{r, eval = FALSE}
+```{r network-create, eval = FALSE}
 load_all()
 library(dplyr)
 library(igraph)
@@ -430,22 +429,4 @@ pokemon_network$layout["Psychic", ] <- c(-3, -1.5)
 
 # Near Water: Fighting (only connects to Water)
 pokemon_network$layout["Fighting", ] <- c(-1.5, -1.5)
-```
-
-# Aesthetics
-
-Going back to the treemap example, it is possible to move the labels,
-change the background, and also use any font that you like:
-
-```{r}
-dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
-names(dout) <- c("type", "color", "count")
-
-d3po(dout, width = 800, height = 600) %>%
-  po_treemap(daes(size = count, group = type, color = color)) %>%
-  po_title("Share of Pokemon by main type") %>%
-  po_labels("center-middle") %>% # default is "left-top"
-  po_background("#ffcc00") %>%
-  po_font("Comic Sans MS", 16, "uppercase") %>%
-  po_download(FALSE) # default is TRUE
 ```

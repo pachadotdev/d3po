@@ -255,9 +255,7 @@ export default class LineChart extends D3po {
         .attr('stroke-width', 2);
 
   // Tooltip formatter
-  var tooltipOpt = this.tooltip || this.options.tooltip || null;
-  var tooltipFormatter = null;
-  if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
+  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
   // Add points
       this.chart

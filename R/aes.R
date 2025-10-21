@@ -11,6 +11,7 @@
 #'
 #' - `x`, `y`: cartesian coordinates.
 #' - `group`: grouping data.
+#' - `name`: name data.
 #' - `color`: color of geom.
 #' - `size`: size of geom.
 #' - `layout`: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds, sugiyama), in quotes.
@@ -213,13 +214,16 @@ daes_to_opts <- function(daes, var) {
   }
   # Try to evaluate as an expression (for numeric values like -pi/2)
   # If it succeeds and returns a number, use that; otherwise return the label
-  tryCatch({
-    result <- eval(parse(text = label))
-    if (is.numeric(result) && length(result) == 1) {
-      return(result)
+  tryCatch(
+    {
+      result <- eval(parse(text = label))
+      if (is.numeric(result) && length(result) == 1) {
+        return(result)
+      }
+      return(label)
+    },
+    error = function(e) {
+      return(label)
     }
-    return(label)
-  }, error = function(e) {
-    return(label)
-  })
+  )
 }

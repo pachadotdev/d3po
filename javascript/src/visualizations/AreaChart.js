@@ -262,12 +262,10 @@ export default class AreaChart extends D3po {
         .attr('stroke-width', 2);
     });
 
-  // Determine tooltip formatter/template
-  var tooltipOpt = this.tooltip || this.options.tooltip || null;
-  var tooltipFormatter = null;
-  if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
+    // Determine tooltip formatter/template: prefer compiled this.tooltip from base class
+    var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
-  // Finally draw all points on top (topmost layer)
+    // Finally draw all points on top (topmost layer)
     series.forEach((data, i) => {
       const color = this.colorField ? data[0][this.colorField] : colorScale(i);
       const groupValue = this.groupField ? data[0][this.groupField] : '';
@@ -284,7 +282,7 @@ export default class AreaChart extends D3po {
         .attr('fill', color)
         .attr('stroke', '#fff')
         .attr('stroke-width', 1.2)
-  .on('mouseover', (event, d) => {
+        .on('mouseover', (event, d) => {
           const circle = d3.select(event.currentTarget);
           const highlightColor = getHighlightColor(color);
           circle
@@ -294,9 +292,32 @@ export default class AreaChart extends D3po {
 
           if (tooltipFormatter) {
             try {
-              var content = tooltipFormatter(null, d);
-              showTooltip(event, content, this.options.fontFamily, this.options.fontSize);
-            } catch (e) {
+                // Prefer calling the tooltip with the actual datum first (matches ScatterPlot).
+                // Keep a fallback to find the original row object if necessary.
+                let rowObj = d || null;
+                if (!rowObj) {
+                  rowObj = d.__row || null;
+                }
+                if (!rowObj) {
+                  rowObj = this.data && this.data.find(r => r === d) || null;
+                }
+                if (!rowObj) {
+                  rowObj = this.data && this.data.find(r => r && r[this.xField] === d[this.xField] && r[this.yField] === d[this.yField]) || d;
+                }
+
+                var content = tooltipFormatter(null, rowObj);
+                // Fallback: if content is empty and rowObj differs from the
+                // current datum, try invoking formatter with the original
+                // datum (some renderers/serializers pass transformed objects).
+                if ((content === null || content === undefined || content === '') && rowObj !== d) {
+                  try {
+                    content = tooltipFormatter(null, d);
+                  } catch (err) {
+                    // ignore fallback error and keep original content
+                  }
+                }
+                showTooltip(event, content, this.options.fontFamily, this.options.fontSize);
+              } catch (e) {
               showTooltip(event,
                 (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') +
                 `${this.xField}: ${d[this.xField]}<br/>` +

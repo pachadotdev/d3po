@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { validateData, triggerDownload, maybeEvalJSFormatter } from './utils.js';
+import { validateData, triggerDownload, maybeEvalJSFormatter, escapeHtml } from './utils.js';
 
 /**
  * Base D3po class for creating interactive visualizations
@@ -65,12 +65,44 @@ export default class D3po {
       this.options.axisFormatters.y = fy || null;
     }
 
-    // If tooltip provided as JS.* string, evaluate it to a function and keep
-    // the result on this.tooltip (visualizations check this.tooltip first).
+    // If tooltip provided, try to compile it to a callable formatter.
+    // Priority:
+    // 1. If options.tooltip is a JS.* string or function, maybeEvalJSFormatter
+    //    will return a function.
+    // 2. If it's a plain string containing {field} placeholders, compile a
+    //    simple template function that substitutes values from the row.
+    // 3. Otherwise leave this.tooltip null (visualizers may fallback to
+    //    default content behavior).
     if (options.tooltip !== undefined) {
       const tf = maybeEvalJSFormatter(options.tooltip);
-      if (tf) this.tooltip = tf;
-      // otherwise leave this.tooltip as the raw value (string/template)
+      if (tf) {
+        this.tooltip = tf;
+      } else if (typeof options.tooltip === 'string' && options.tooltip.indexOf('{') >= 0) {
+        const template = options.tooltip;
+        this.tooltip = function(_v, row) {
+          if (!row) return '';
+          return template.replace(/\{([^}]+)\}/g, function(_, key) {
+            var val = row[key];
+            if (val === null || val === undefined) return '';
+            return escapeHtml(String(val));
+          });
+        };
+      } else {
+        this.tooltip = null;
+      }
+    }
+
+    // Accept formattedCols and axisLabels produced by the R side
+    // formattedCols: { name: '__label_name' }
+    if (options.formattedCols !== undefined) {
+      this.options.formattedCols = options.formattedCols;
+    }
+    // axisLabels: { x: 'label text', y: 'label text' }
+    if (options.axisLabels !== undefined) {
+      // mirror into options.xLabel / options.yLabel for backward compatibility
+      if (!this.options.xLabel && options.axisLabels.x !== undefined) this.options.xLabel = options.axisLabels.x;
+      if (!this.options.yLabel && options.axisLabels.y !== undefined) this.options.yLabel = options.axisLabels.y;
+      this.options.axisLabels = options.axisLabels;
     }
 
     // Mirror options.axisFormatters to this.axisFormatters for convenience

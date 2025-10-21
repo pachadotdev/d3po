@@ -155,10 +155,8 @@ export default class PieChart extends D3po {
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
 
-  // Tooltip formatter: allow passing JS.* strings or functions via options
-  var tooltipOpt = this.tooltip || this.options.tooltip || null;
-  var tooltipFormatter = null;
-  if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt) || (typeof tooltipOpt === 'function' ? tooltipOpt : null);
+  // Tooltip formatter: prefer compiled this.tooltip from base, otherwise evaluate options.tooltip
+  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
     arcs
       .on('mouseover', function (event, d) {

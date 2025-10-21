@@ -221,13 +221,7 @@ export default class Network extends D3po {
     const fontSize = this.options.fontSize;
 
     // resolve tooltip formatter: prefer this.tooltip (from D3po base) then options.tooltip
-    let tooltipFormatter = null;
-    if (typeof this.tooltip === 'function') {
-      tooltipFormatter = this.tooltip;
-    } else if (this.options && this.options.tooltip) {
-      const tf = maybeEvalJSFormatter(this.options.tooltip);
-      if (tf) tooltipFormatter = tf;
-    }
+  let tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
     node
       .on('mouseover', function (event, d) {

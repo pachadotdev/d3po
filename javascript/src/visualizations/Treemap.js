@@ -31,8 +31,8 @@ export default class Treemap extends D3po {
   this.labels = options.labels || { align: 'left', valign: 'top' };
   // labelMode: 'percent' (default) or 'count'
   this.labelMode = options.labelMode || 'percent';
-  // tooltip can be a JS(...) string or a function; compile if needed
-  this.tooltipFormatter = maybeEvalJSFormatter(options.tooltip);
+  // tooltip can be a JS(...) string, a compiled this.tooltip from base, or a function; compile if needed
+  this.tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : maybeEvalJSFormatter(options.tooltip);
   }
 
   /**
@@ -49,10 +49,14 @@ export default class Treemap extends D3po {
     // Prepare hierarchical data
     const root = d3
       .hierarchy({
+        // Keep a reference to the original row on each leaf so tooltip
+        // templates that expect the original column names (e.g. {type}, {count})
+        // can access them. We store it as __row to avoid collisions.
         children: this.data.map(d => ({
           name: d[this.groupField],
           value: d[this.sizeField],
           color: this.colorField ? d[this.colorField] : null,
+          __row: d,
         })),
       })
       .sum(d => d.value);
@@ -113,11 +117,16 @@ export default class Treemap extends D3po {
         // If a tooltip formatter exists, call it with (value, row)
         if (tooltipFormatter) {
           try {
-            const out = tooltipFormatter(percentageNum, {
+            // Prefer passing the original source row (if available) so
+            // templates using original column names work. Fall back to
+            // a small object with mapped fields when original row is missing.
+            const rowObj = d.data.__row || {
               name: d.data.name,
               value: d.data.value,
               color: d.data.color,
-            });
+            };
+
+            const out = tooltipFormatter(percentageNum, rowObj);
             // If formatter returns a DOM node or string, show it; else fallback
             if (out != null) {
               showTooltip(event, out, fontFamily, fontSize);

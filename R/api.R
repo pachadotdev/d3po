@@ -491,7 +491,7 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'   pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
 #'   pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
 #'   pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
-#'    pokemon$distance_from_mean_height) / 2
+#'     pokemon$distance_from_mean_height) / 2
 #'   pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 #'
 #'   d3po(pokemon) %>%
@@ -576,6 +576,144 @@ po_title.d3proxy <- function(d3po, title) {
 }
 
 
+# Tooltip ----
+
+#' Tooltip
+#'
+#' Set a custom tooltip template for a chart. The template can be a literal
+#' string (e.g. `<b>{name}</b><br>Value: {value}`) which will be evaluated
+#' server-side by substituting column values.
+#'
+#' @inheritParams po_box
+#' @param template A character string template or formatter expression.
+#' @export
+#' @return Appends tooltip settings to an 'htmlwidgets' object
+po_tooltip <- function(d3po, template) UseMethod("po_tooltip")
+
+#' @export
+#' @method po_tooltip d3po
+po_tooltip.d3po <- function(d3po, template) {
+  assertthat::assert_that(!missing(template), msg = "Missing `template`")
+
+  # store template on the widget object for use by the javascript renderer
+  d3po$x$tooltip_template <- template
+  return(d3po)
+}
+
+#' @export
+#' @method po_tooltip d3proxy
+po_tooltip.d3proxy <- function(d3po, template) {
+  assertthat::assert_that(!missing(template), msg = "Missing `template`")
+
+  msg <- list(id = d3po$id, msg = list(template = template))
+
+  d3po$session$sendCustomMessage("d3po-tooltip", msg)
+
+  return(d3po)
+}
+
+
+# Format ----
+#' Format
+#'
+#' Precompute formatted label columns from expressions and attach them to the
+#' widget data. Accepts named expressions like `x = round(varx, 2)` or
+#' `y = format(varY, big.mark = ",")`. The formatted columns are added to
+#' `d3po$x$data` with names `__label_<name>` and registered in
+#' `d3po$x$formatted_cols` for the renderer to use.
+#'
+#' @inheritParams po_box
+#' @param ... Named formatting expressions (as quosures). Each name should
+#' correspond to an aesthetic (e.g. `x`, `y`, `tooltip`, etc.).
+#' @export
+po_format <- function(d3po, ...) UseMethod("po_format")
+
+#' @export
+#' @method po_format d3po
+po_format.d3po <- function(d3po, ...) {
+  formats <- rlang::quos(...)
+  assertthat::assert_that(length(formats) > 0, msg = "No formatters provided to po_format()")
+
+  # Work on the already-selected data if present, otherwise fallback to tempdata
+  data <- d3po$x$data
+  if (is.null(data) || ncol(data) == 0) {
+    data <- .get_data(d3po$x$tempdata, NULL)
+  }
+
+  # Ensure data is a data.frame
+  data <- as.data.frame(data)
+
+  if (is.null(d3po$x$formatted_cols)) d3po$x$formatted_cols <- list()
+
+  for (nm in names(formats)) {
+    if (is.null(nm) || nm == "") {
+      stop("po_format requires named arguments like x = round(varx, 2)")
+    }
+
+    q <- formats[[nm]]
+
+    # Evaluate the expression in the data frame context. The result should be
+    # a vector with length 1 or nrow(data).
+    vals <- rlang::eval_tidy(q, data = data)
+
+    if (length(vals) == 1 && nrow(data) > 1) {
+      vals <- rep(vals, nrow(data))
+    }
+
+    if (length(vals) != nrow(data)) {
+      stop(sprintf("Formatter for '%s' returned length %d but data has %d rows", nm, length(vals), nrow(data)))
+    }
+
+    newcol <- paste0("__label_", nm)
+    data[[newcol]] <- as.character(vals)
+    d3po$x$formatted_cols[[nm]] <- newcol
+
+    # If the user formatted the 'x' aesthetic (categorical axis) and the
+    # widget already has a `group` aesthetic defined, replace the group
+    # column values with the formatted strings so category ticks and
+    # labels render as the formatted values on the JS side.
+    if (identical(nm, "x") && !is.null(d3po$x$group) && d3po$x$group %in% names(data)) {
+      data[[d3po$x$group]] <- data[[newcol]]
+    }
+
+    # Heuristic: if the user formatted the 'y' aesthetic using an R-style
+    # thousands separator (e.g. format(..., big.mark = " ")), detect that
+    # and set a client-side JS number formatter using Intl.NumberFormat to
+    # mirror the appearance. This is a best-effort heuristic and won't cover
+    # arbitrary R formatting expressions.
+    if (identical(nm, "y")) {
+      # original y column name (if present in d3po options)
+      original_y_col <- d3po$x$y
+      # Detect formatted strings containing space as thousands sep
+      looks_like_space_grouping <- any(grepl("[0-9] [0-9]{3}", data[[newcol]]))
+      if (!is.null(original_y_col) && looks_like_space_grouping) {
+        # Use French locale as it uses non-breaking space grouping in many browsers
+        d3po$x$axis_y <- "JS(new Intl.NumberFormat('fr-FR').format(value))"
+      }
+    }
+  }
+
+  d3po$x$data <- data
+  return(d3po)
+}
+
+#' @export
+#' @method po_format d3proxy
+po_format.d3proxy <- function(d3po, ...) {
+  formats <- rlang::quos(...)
+  assertthat::assert_that(length(formats) > 0, msg = "No formatters provided to po_format()")
+
+  # Convert quosures to text so they can be handled client-side or by the
+  # server receiver. We use rlang::as_label to get a readable representation.
+  txt <- vapply(formats, function(q) rlang::as_label(q), character(1))
+
+  msg <- list(id = d3po$id, msg = list(formatters = as.list(txt)))
+
+  d3po$session$sendCustomMessage("d3po-format", msg)
+
+  return(d3po)
+}
+
 # Labels ----
 
 #' Labels
@@ -583,23 +721,26 @@ po_title.d3proxy <- function(d3po, title) {
 #' Edit labels positioning in a treemap.
 #'
 #' @inheritParams po_box
-#' @param align Label alignment. Must be one of "left-top", "center-middle", or "right-top".
+#' @param align Label alignment for treemaps. Must be one of "left-top", "center-middle", or "right-top".
+#' @param x Optional x-axis label.
+#' @param y Optional y-axis label.
 #' @export
 #' @return Appends custom labels to an 'htmlwidgets' object
-po_labels <- function(d3po, align = "center-middle") {
+po_labels <- function(d3po, align = "left-top", x = NULL, y = NULL) {
   UseMethod("po_labels")
 }
 
 #' @export
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align) {
-  assertthat::assert_that(!missing(align), msg = "Missing `align`")
+po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL) {
+  # If align is not provided, default to left-top (keeps previous behavior)
+  if (is.null(align)) align <- "left-top"
 
   # Check if this is a treemap
-  assertthat::assert_that(
-    !is.null(d3po$x$type) && d3po$x$type == "treemap",
-    msg = "po_labels() can only be used with treemap visualizations. Use po_treemap() before po_labels()."
-  )
+  # assertthat::assert_that(
+  #   !is.null(d3po$x$type) && d3po$x$type == "treemap",
+  #   msg = "po_labels() can only be used with treemap visualizations. Use po_treemap() before po_labels()."
+  # )
 
   # Validate align value
   valid_values <- c("left-top", "center-middle", "right-top")
@@ -615,13 +756,25 @@ po_labels.d3po <- function(d3po, align) {
   d3po$x$labels$align <- parts[1]
   d3po$x$labels$valign <- parts[2]
 
+  # Optional axis labels (x and y). If provided, store under axis_labels so
+  # the renderer can use them for axes or legends. They must be character
+  # or NULL.
+  if (!is.null(x)) {
+    assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
+  }
+  if (!is.null(y)) {
+    assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
+  }
+
+  d3po$x$axis_labels <- list(x = x, y = y)
+
   return(d3po)
 }
 
 #' @export
 #' @method po_labels d3proxy
-po_labels.d3proxy <- function(d3po, align) {
-  assertthat::assert_that(!missing(align), msg = "Missing `align`")
+po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL) {
+  if (is.null(align)) align <- "left-top"
 
   # Note: For Shiny proxies, we can't easily check the type,
   # so we trust the user to use this correctly
@@ -636,9 +789,64 @@ po_labels.d3proxy <- function(d3po, align) {
   # Split align into horizontal and vertical components
   parts <- strsplit(align, "-")[[1]]
 
-  msg <- list(id = d3po$id, msg = list(align = parts[1], valign = parts[2]))
+  msg_payload <- list(align = parts[1], valign = parts[2])
+
+  if (!is.null(x)) {
+    assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
+    msg_payload$x <- x
+  }
+  if (!is.null(y)) {
+    assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
+    msg_payload$y <- y
+  }
+
+  msg <- list(id = d3po$id, msg = msg_payload)
 
   d3po$session$sendCustomMessage("d3po-labels", msg)
+
+  return(d3po)
+}
+
+
+# Axis formatters ---------------------------------------------------------
+#' Axis formatters
+#'
+#' Provide JS formatter expressions for axis tick labels. Accepts strings
+#' starting with `JS.` or simple formatter names that will be wrapped for
+#' evaluation on the client-side. Examples:
+#'   po_axis_format(p, y = "JS(format-as-billion(value,2))")
+#'   po_axis_format(p, y = "format-as-percentage(0)")
+#'
+#' @param d3po A d3po widget
+#' @param x,y Optional formatter expressions for x and y axes
+#' @export
+po_axis_format <- function(d3po, x = NULL, y = NULL) UseMethod("po_axis_format")
+
+#' @export
+#' @method po_axis_format d3po
+po_axis_format.d3po <- function(d3po, x = NULL, y = NULL) {
+  if (!is.null(x)) {
+    assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
+    # Store the raw string; the JS side will compile JS(...) expressions
+    d3po$x$axis_x <- x
+  }
+  if (!is.null(y)) {
+    assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
+    d3po$x$axis_y <- y
+  }
+
+  return(d3po)
+}
+
+#' @export
+#' @method po_axis_format d3proxy
+po_axis_format.d3proxy <- function(d3po, x = NULL, y = NULL) {
+  msg_payload <- list()
+  if (!is.null(x)) msg_payload$x <- x
+  if (!is.null(y)) msg_payload$y <- y
+
+  msg <- list(id = d3po$id, msg = msg_payload)
+  d3po$session$sendCustomMessage("d3po-axis-format", msg)
 
   return(d3po)
 }

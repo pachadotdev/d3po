@@ -55,9 +55,35 @@ export default class BoxPlot extends D3po {
     const categoryField = isHorizontal ? this.yField : this.xField;
     const valueField = isHorizontal ? this.xField : this.yField;
 
-    const grouped = groupBy(this.data, categoryField);
+    // If R provided formatted columns mapping, and the formatted column for
+    // the categoryField exists, use the formatted column only for display
+    // (tick labels). Grouping / statistics are still computed on the original
+    // data values so numeric operations remain correct.
+    const formattedCols = (this.options && this.options.formattedCols) ? this.options.formattedCols : null;
+    // Some R code registers formattedCols using aesthetic names like 'x' or 'y'.
+    // Provide a helper to resolve the correct formatted column when possible.
+    const resolveFormattedField = (field) => {
+      if (!formattedCols) return null;
+      if (formattedCols[field]) return formattedCols[field];
+      // fallback: if field is the xField/yField, check 'x'/'y' keys
+      if (field === this.xField && formattedCols.x) return formattedCols.x;
+      if (field === this.yField && formattedCols.y) return formattedCols.y;
+      return null;
+    };
+    let grouped;
+  // Group by the raw categoryField values (preserve data grouping)
+  grouped = groupBy(this.data, categoryField);
     const boxData = Object.entries(grouped).map(([key, values]) => ({
+      // `group` holds the raw category key used for positioning. We'll
+      // compute a separate `label` field for display using formattedCols
+      // when available (this preserves positioning but shows R-formatted
+      // labels, e.g. uppercase values).
       group: key,
+      // Resolve formatted field name (allow keys by field name or by 'x'/'y')
+      label: (() => {
+        const ff = resolveFormattedField(categoryField);
+        return (ff && values[0][ff] !== undefined) ? values[0][ff] : key;
+      })(),
       stats: calculateBoxStats(values.map(d => d[valueField])),
       color: this.colorField
         ? values[0][this.colorField]
@@ -67,15 +93,17 @@ export default class BoxPlot extends D3po {
     // Create scales based on orientation
     let categoryScale, valueScale;
 
-  // Resolve axis label text (allow user overrides). Use raw field names by default.
-  const xLabelText = (this.options && this.options.xLabel) ? this.options.xLabel : (this.xField ? String(this.xField) : '');
-  const yLabelText = (this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : '');
+    // Resolve axis label text (allow user overrides). Use raw field names by default.
+  const xLabelText = (this.options && (this.options.xLabel || (this.options.axisLabels && this.options.axisLabels.x))) ? (this.options.xLabel || this.options.axisLabels.x) : (this.xField ? String(this.xField) : '');
+  const yLabelText = (this.options && (this.options.yLabel || (this.options.axisLabels && this.options.axisLabels.y))) ? (this.options.yLabel || this.options.axisLabels.y) : (this.yField ? String(this.yField) : '');
 
     if (isHorizontal) {
       // Horizontal: y is categorical, x is numeric
+      // Use formatted labels (if present) as the domain so ticks render
+      // exactly as provided by R.
       categoryScale = d3
         .scaleBand()
-        .domain(boxData.map(d => d.group))
+        .domain(boxData.map(d => d.label))
         .range([0, this.getInnerHeight()])
         .padding(0.2);
 
@@ -91,7 +119,7 @@ export default class BoxPlot extends D3po {
       // Vertical: x is categorical, y is numeric
       categoryScale = d3
         .scaleBand()
-        .domain(boxData.map(d => d.group))
+        .domain(boxData.map(d => d.label))
         .range([0, this.getInnerWidth()])
         .padding(0.2);
 
@@ -115,9 +143,22 @@ export default class BoxPlot extends D3po {
       if (this.options && this.options.axisFormatters && this.options.axisFormatters.x) bottomAxis.tickFormat(this.options.axisFormatters.x);
 
       leftAxis = d3.axisLeft(categoryScale);
-      // no tick formatting for category axis normally
+      // If we have formatted labels, show them on the categorical axis
+      if (formattedCols && formattedCols[categoryField]) {
+        leftAxis.tickFormat(d => {
+          const found = boxData.find(b => b.group === d);
+          return found ? found.label : d;
+        });
+      }
     } else {
       bottomAxis = d3.axisBottom(categoryScale);
+      // For categorical bottom axis, prefer formatted label when available
+      if (formattedCols && formattedCols[categoryField]) {
+        bottomAxis.tickFormat(d => {
+          const found = boxData.find(b => b.group === d);
+          return found ? found.label : d;
+        });
+      }
       if (this.options && this.options.axisFormatters && this.options.axisFormatters.x) bottomAxis.tickFormat(this.options.axisFormatters.x);
 
       leftAxis = d3.axisLeft(valueScale);
@@ -254,8 +295,8 @@ export default class BoxPlot extends D3po {
       .attr('class', 'box')
       .attr('transform', d =>
         isHorizontal
-          ? `translate(0,${categoryScale(d.group)})`
-          : `translate(${categoryScale(d.group)},0)`
+          ? `translate(0,${categoryScale(d.label)})`
+          : `translate(${categoryScale(d.label)},0)`
       );
 
     if (isHorizontal) {
@@ -472,10 +513,8 @@ export default class BoxPlot extends D3po {
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
 
-    // Add tooltips (allow user-supplied tooltip formatter via options.tooltip)
-    var tooltipOpt = this.tooltip || this.options.tooltip || null;
-    var tooltipFormatter = null;
-    if (tooltipOpt) tooltipFormatter = maybeEvalJSFormatter(tooltipOpt);
+  // Add tooltips: prefer compiled this.tooltip (from base class) then evaluate options.tooltip
+  var tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options && this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
     boxes
       .on('mouseover', function (event, d) {
@@ -485,11 +524,11 @@ export default class BoxPlot extends D3po {
 
         if (tooltipFormatter) {
           try {
-            const content = tooltipFormatter(null, { group: d.group, stats: d.stats });
+            const content = tooltipFormatter(null, { group: d.group, label: d.label || d.group, stats: d.stats });
             showTooltip(event, content, fontFamily, fontSize);
           } catch (e) {
             const tooltipContent =
-              `<strong>${escapeHtml(d.group)}</strong>` +
+              `<strong>${escapeHtml(d.label || d.group)}</strong>` +
               `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
               `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
               `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +
@@ -500,7 +539,7 @@ export default class BoxPlot extends D3po {
           }
         } else {
           const tooltipContent =
-            `<strong>${d.group}</strong>` +
+            `<strong>${d.label || d.group}</strong>` +
             `Percentile 0th (Min): ${d.stats.min.toFixed(2)}<br/>` +
             `Percentile 25th: ${d.stats.q1.toFixed(2)}<br/>` +
             `Percentile 50th (Median): ${d.stats.median.toFixed(2)}<br/>` +

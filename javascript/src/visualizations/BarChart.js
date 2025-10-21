@@ -105,10 +105,11 @@ export default class BarChart extends D3po {
       bars.attr('x', d => xScale(d[this.xField])).attr('y', d => yScale(d[this.yField])).attr('width', xScale.bandwidth()).attr('height', d => effectiveInnerHeight - yScale(d[this.yField]));
     }
 
-    const fontFamily = this.options.fontFamily;
-    const fontSize = this.options.fontSize;
-    const tooltipOpt = this.tooltip || this.options.tooltip || null;
-    const tooltipFormatter = tooltipOpt ? maybeEvalJSFormatter(tooltipOpt) : null;
+  const fontFamily = this.options.fontFamily;
+  const fontSize = this.options.fontSize;
+  // prefer a compiled tooltip on the instance (from D3po base) then fall back
+  // to options.tooltip which may be a JS(...) expression
+  const tooltipFormatter = (typeof this.tooltip === 'function') ? this.tooltip : (this.options.tooltip ? maybeEvalJSFormatter(this.options.tooltip) : null);
 
   const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
 
@@ -172,7 +173,7 @@ export default class BarChart extends D3po {
         xg.selectAll('text').attr('transform', 'rotate(-45)').style('text-anchor', 'end');
       }
       const xLabelPadding = Math.max(8, maxTickHeight + 8);
-      this.chart.append('text').attr('class', 'x-axis-label').attr('text-anchor', 'middle').attr('x', effectiveInnerWidth / 2).attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24)).attr('fill', 'black').style('font-size', '14px').text(this.xField);
+  this.chart.append('text').attr('class', 'x-axis-label').attr('text-anchor', 'middle').attr('x', effectiveInnerWidth / 2).attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24)).attr('fill', 'black').style('font-size', '14px').text(this.options && this.options.xLabel ? this.options.xLabel : (this.xField ? String(this.xField) : ''));
       } catch (e) {
         /* ignore x-axis measurement errors */
       }
@@ -191,7 +192,7 @@ export default class BarChart extends D3po {
       let maxAllowed = marginLeft - 4;
       if (measuredRequiredLeft != null) maxAllowed = Math.max(10, Math.min(maxAllowed, measuredRequiredLeft)); else maxAllowed = Math.max(10, maxAllowed);
       if (labelOffset > maxAllowed) labelOffset = maxAllowed;
-      yg.append('text').attr('transform', `translate(${-labelOffset},${effectiveInnerHeight / 2}) rotate(-90)`).attr('x', 0).attr('y', 0).attr('fill', 'black').attr('text-anchor', 'middle').style('font-size', '14px').text(this.yField);
+  yg.append('text').attr('transform', `translate(${-labelOffset},${effectiveInnerHeight / 2}) rotate(-90)`).attr('x', 0).attr('y', 0).attr('fill', 'black').attr('text-anchor', 'middle').style('font-size', '14px').text(this.options && this.options.yLabel ? this.options.yLabel : (this.yField ? String(this.yField) : ''));
     } catch (e) {
       this.chart.append('text').attr('class', 'y-axis-label').attr('text-anchor', 'middle').attr('transform', 'rotate(-90)').attr('x', -effectiveInnerHeight / 2).attr('y', -40).attr('fill', 'black').style('font-size', '14px').text(this.yField);
     }

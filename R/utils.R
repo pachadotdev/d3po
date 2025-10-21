@@ -47,6 +47,13 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
   # add key to data
   d3po <- .add_key(d3po)
 
+  # Copy axis labels into the top-level option names expected by the
+  # JavaScript renderer. JS looks for `options.xLabel` and `options.yLabel`.
+  if (!is.null(d3po$x$axis_labels) && is.list(d3po$x$axis_labels)) {
+    if (!is.null(d3po$x$axis_labels$x)) d3po$x$xLabel <- d3po$x$axis_labels$x
+    if (!is.null(d3po$x$axis_labels$y)) d3po$x$yLabel <- d3po$x$axis_labels$y
+  }
+
   d3po$x$tempdata <- NULL
   d3po$x$daes <- NULL
 

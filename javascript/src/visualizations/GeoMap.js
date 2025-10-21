@@ -82,8 +82,7 @@ export default class GeoMap extends D3po {
     const tooltipField = this.tooltipField;
     const sizeField = this.sizeField;
 
-    // resolve tooltip formatter: prefer an evaluated function (this.tooltip)
-    // otherwise try to evaluate the tooltipField (could be 'JS(...)')
+    // resolve tooltip formatter: prefer compiled this.tooltip from base, then tooltipField/options
     let tooltipFormatter = null;
     if (typeof this.tooltip === 'function') {
       tooltipFormatter = this.tooltip;

@@ -110,6 +110,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$data <- dplyr::select(data, columns)
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
+  d3po$x$subgroup <- daes_to_opts(daes, "subgroup")
   d3po$x$color <- daes_to_opts(daes, "color")
   d3po$x$tiling <- daes_to_opts(daes, "tiling")
 
@@ -542,38 +543,7 @@ po_scatter.d3proxy <- function(d3po, ..., data, inherit_daes) {
   return(d3po)
 }
 
-# Title ----
 
-#' Title
-#'
-#' Add a title to a chart.
-#'
-#' @inheritParams po_box
-#' @param title Title to add.
-#' @export
-#' @return Appends a title to an 'htmlwidgets' object
-po_title <- function(d3po, title) UseMethod("po_title")
-
-#' @export
-#' @method po_title d3po
-po_title.d3po <- function(d3po, title) {
-  assertthat::assert_that(!missing(title), msg = "Missing `title`")
-
-  d3po$x$title <- title
-  return(d3po)
-}
-
-#' @export
-#' @method po_title d3proxy
-po_title.d3proxy <- function(d3po, title) {
-  assertthat::assert_that(!missing(title), msg = "Missing `title`")
-
-  msg <- list(id = d3po$id, msg = list(title = title))
-
-  d3po$session$sendCustomMessage("d3po-title", msg)
-
-  return(d3po)
-}
 
 
 # Tooltip ----
@@ -724,23 +694,21 @@ po_format.d3proxy <- function(d3po, ...) {
 #' @param align Label alignment for treemaps. Must be one of "left-top", "center-middle", or "right-top".
 #' @param x Optional x-axis label.
 #' @param y Optional y-axis label.
+#' @param title Optional title for the chart.
+#' @param subtitle Optional subtitle for the chart.
 #' @export
 #' @return Appends custom labels to an 'htmlwidgets' object
-po_labels <- function(d3po, align = "left-top", x = NULL, y = NULL) {
+po_labels <- function(d3po, align = "left-top", x = NULL, y = NULL, title = NULL, subtitle = NULL) {
   UseMethod("po_labels")
 }
 
 #' @export
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL) {
-  # If align is not provided, default to left-top (keeps previous behavior)
+po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL, title = NULL, subtitle = NULL) {
+  # ---- Treemaps only ----
+  # treemaps only
+  # If align is not provided, default to left-top
   if (is.null(align)) align <- "left-top"
-
-  # Check if this is a treemap
-  # assertthat::assert_that(
-  #   !is.null(d3po$x$type) && d3po$x$type == "treemap",
-  #   msg = "po_labels() can only be used with treemap visualizations. Use po_treemap() before po_labels()."
-  # )
 
   # Validate align value
   valid_values <- c("left-top", "center-middle", "right-top")
@@ -748,13 +716,19 @@ po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL) {
     align %in% valid_values,
     msg = paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'")
   )
-
+  
   # Split align into horizontal and vertical components
   parts <- strsplit(align, "-")[[1]]
 
   d3po$x$labels <- NULL
   d3po$x$labels$align <- parts[1]
   d3po$x$labels$valign <- parts[2]
+  # -----------------------
+
+  # Accept subtitle passed via po_labels
+  if (!is.null(subtitle)) d3po$x$labels$subtitle <- subtitle
+  # accept title via po_labels for backward compatibility
+  if (!is.null(title)) d3po$x$title <- title
 
   # Optional axis labels (x and y). If provided, store under axis_labels so
   # the renderer can use them for axes or legends. They must be character
@@ -773,7 +747,7 @@ po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL) {
 
 #' @export
 #' @method po_labels d3proxy
-po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL) {
+po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL, title = NULL, subtitle = NULL) {
   if (is.null(align)) align <- "left-top"
 
   # Note: For Shiny proxies, we can't easily check the type,
@@ -799,10 +773,46 @@ po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL) {
     assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
     msg_payload$y <- y
   }
+  if (!is.null(subtitle)) msg_payload$subtitle <- subtitle
+  if (!is.null(title)) msg_payload$title <- title
 
   msg <- list(id = d3po$id, msg = msg_payload)
 
   d3po$session$sendCustomMessage("d3po-labels", msg)
+
+  return(d3po)
+}
+
+#' Subtitle
+#'
+#' Set a subtitle (or subtitle formatter) for a chart. Accepts a character
+#' string or a JS(...) expression passed through to the client. For
+#' treemaps, a JS function can inspect `row.mode` which will be one of
+#' 'aggregated', 'flat', or 'drilled'.
+#'
+#' @inheritParams po_box
+#' @param subtitle Character string or JS(...) formatter.
+#' @export
+#' @return Appends subtitle settings to an 'htmlwidgets' object
+po_subtitle <- function(d3po, subtitle) UseMethod("po_subtitle")
+
+#' @export
+#' @method po_subtitle d3po
+po_subtitle.d3po <- function(d3po, subtitle) {
+  assertthat::assert_that(!missing(subtitle), msg = "Missing `subtitle`")
+
+  if (is.null(d3po$x$labels)) d3po$x$labels <- list()
+  d3po$x$labels$subtitle <- subtitle
+  return(d3po)
+}
+
+#' @export
+#' @method po_subtitle d3proxy
+po_subtitle.d3proxy <- function(d3po, subtitle) {
+  assertthat::assert_that(!missing(subtitle), msg = "Missing `subtitle`")
+
+  msg <- list(id = d3po$id, msg = list(subtitle = subtitle))
+  d3po$session$sendCustomMessage("d3po-subtitle", msg)
 
   return(d3po)
 }

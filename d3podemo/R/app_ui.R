@@ -17,6 +17,7 @@ app_ui <- function(request) {
         tablerCard(
           title = "D3po demo",
           selectInput("plot_type", "Select Visualization Type:",
+            width = "50%",
             choices = c(
               "Box Plot (Weight by Type)" = "box1",
               "Box Plot (Height by Type)" = "box2",
@@ -31,12 +32,14 @@ app_ui <- function(request) {
               "Treemap (Slice)" = "treemap3",
               "Treemap (Dice)" = "treemap4",
               "Treemap Style Example (Labels/Background/Font/No Download)" = "treemap_style",
+              "Two-level Treemap (Drillable)" = "treemap_twolevel",
+              "Two-level Treemap (Drillable, Custom Labels & Tooltip)" = "treemap_twolevel_custom",
               "Pie Chart" = "pie",
               "Donut Chart" = "donut",
               "Pie (Custom Labels & Tooltip)" = "pie_custom",
               "Line Chart" = "line",
               "Area Chart" = "area",
-              "Line/Area (Custom Labels & Tooltip)" = "line_area_custom",
+              "Line (same for Area, Custom Labels & Tooltip)" = "line_area_custom",
               "Scatter Plot" = "scatter1",
               "Scatter Plot (Log Scale)" = "scatter2",
               "Scatter Plot (Weighted)" = "scatter3",
@@ -52,7 +55,19 @@ app_ui <- function(request) {
             ),
             selected = "box1"
           ),
-          d3po::d3po_output("plot", width = "100%", height = "600px")
+          br(),
+          d3po::d3po_output("plot", width = "100%", height = "600px"),
+          # Code area: show the R code used to generate the selected plot
+          tags$div(
+            style = "margin-top: 1rem;",
+            tags$h4("Code used to generate the plot"),
+            markdown(
+              "For non-modular / non-Golem Shiny apps:
+               * You only need the `d3po(data) %>% po_*()` parts.
+               * You do not need `function(data)`, `.data$variable` and  `!!sym(\"variable\")`.",
+            ),
+            verbatimTextOutput("plot_code")
+          )
         )
       ),
       footer = tablerFooter(left = "", right = "d3po demo")
@@ -76,6 +91,18 @@ golem_add_external_resources <- function() {
 
   tags$head(
     favicon(),
+    # Improve selection highlight for verbatim code outputs
+    tags$style(HTML(
+      ".verbatim, pre.shiny-text-output {
+        background-color: #f8f9fa;
+        color: black;
+        font-family: 'Hack', 'Fira Mono', 'Courier New', monospace;
+        padding: 0.75rem;
+        border-radius: 4px;
+        border: 1px solid #e9ecef;
+        overflow: auto;
+      }"
+    )),
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "d3podemo"

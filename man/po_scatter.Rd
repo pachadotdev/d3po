@@ -47,7 +47,7 @@ if (interactive()) {
   pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
   pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
   pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
-   pokemon$distance_from_mean_height) / 2
+    pokemon$distance_from_mean_height) / 2
   pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 
   d3po(pokemon) \%>\%

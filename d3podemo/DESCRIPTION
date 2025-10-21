@@ -12,6 +12,7 @@ Imports:
     config,
     d3po,
     golem,
+    htmlwidgets,
     magrittr,
     rlang,
     shiny,

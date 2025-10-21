@@ -3,6 +3,7 @@ import { resolve } from 'path';
 
 const buildType = process.env.BUILD_TYPE || 'minified';
 const isTest = buildType === 'test';
+const isMinifiedDebug = buildType === 'minified-debug';
 
 export default defineConfig({
   build: {
@@ -21,10 +22,19 @@ export default defineConfig({
         },
       },
     },
-    // for test builds: no minification and produce source maps
-    // for normal builds: minify with terser and skip source maps
+    // build modes:
+    // - test: no minification, produce source maps
+    // - minified-debug: minify but disable name mangling and include inline source maps for debugging
+    // - minified: fully minified (default)
     minify: isTest ? false : 'terser',
-    sourcemap: isTest,
+    sourcemap: isTest || isMinifiedDebug,
+    terserOptions: isMinifiedDebug
+      ? {
+          mangle: false,
+          keep_fnames: true,
+          keep_classnames: true,
+        }
+      : undefined,
   },
   server: {
     open: '/examples/index.html',

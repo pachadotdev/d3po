@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "BUILD_TYPE=minified vite build",
-    "build-test": "BUILD_TYPE=test vite build",
+    "build-debug": "BUILD_TYPE=minified-debug vite build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "lint": "eslint src/**/*.js",

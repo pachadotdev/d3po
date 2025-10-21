@@ -4,7 +4,14 @@
 \alias{po_labels}
 \title{Labels}
 \usage{
-po_labels(d3po, align = "left-top", x = NULL, y = NULL)
+po_labels(
+  d3po,
+  align = "left-top",
+  x = NULL,
+  y = NULL,
+  title = NULL,
+  subtitle = NULL
+)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
@@ -14,6 +21,10 @@ po_labels(d3po, align = "left-top", x = NULL, y = NULL)
 \item{x}{Optional x-axis label.}
 
 \item{y}{Optional y-axis label.}
+
+\item{title}{Optional title for the chart.}
+
+\item{subtitle}{Optional subtitle for the chart.}
 }
 \value{
 Appends custom labels to an 'htmlwidgets' object

@@ -11,6 +11,7 @@
 #'
 #' - `x`, `y`: cartesian coordinates.
 #' - `group`: grouping data.
+#' - `subgroup`: subgrouping data (for treemaps).
 #' - `name`: name data.
 #' - `color`: color of geom.
 #' - `size`: size of geom.

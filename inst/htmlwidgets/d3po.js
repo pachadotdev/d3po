@@ -66,6 +66,9 @@ HTMLWidgets.widget({
         // Add group for grouping/color
         if (x.group) options.group = x.group;
         
+        // Add subgroup for hierarchical treemaps
+        if (x.subgroup) options.subgroup = x.subgroup;
+        
         // Add color
         if (x.color) options.color = x.color;
         
@@ -304,6 +307,27 @@ if (HTMLWidgets.shinyMode) {
           chart.options.axisFormatters = chart.options.axisFormatters || {};
           chart.options.axisFormatters.y = fy || null;
         }
+        if (typeof chart.render === 'function') {
+          try { chart.render(); } catch (e) { /* ignore render errors */ }
+        }
+      }
+  });
+
+  // Labels proxy: update labels (align/valign), subtitle or title at runtime
+  Shiny.addCustomMessageHandler('d3po-labels',
+    function(msg) {
+      var chart = get_chart(msg.id);
+      if (typeof chart != 'undefined') {
+        if (msg.msg.align !== undefined) {
+          // update labels layout options
+          chart.options.labels = chart.options.labels || {};
+          chart.options.labels.align = msg.msg.align;
+        }
+        if (msg.msg.valign !== undefined) chart.options.labels = chart.options.labels || {}, chart.options.labels.valign = msg.msg.valign;
+        if (msg.msg.subtitle !== undefined) chart.options.labels = chart.options.labels || {}, chart.options.labels.subtitle = msg.msg.subtitle;
+        if (msg.msg.title !== undefined) chart.options.title = msg.msg.title;
+
+        // trigger re-render if possible
         if (typeof chart.render === 'function') {
           try { chart.render(); } catch (e) { /* ignore render errors */ }
         }

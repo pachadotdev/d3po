@@ -639,7 +639,7 @@ export default class Treemap extends D3po {
         const lineHeight = self.options.fontSize * 1.4;
         const totalTextHeight = totalLines * lineHeight;
 
-        const checkTextFits = (text, lineNumber) => {
+  const checkTextFits = (text, lineNumber) => {
           if (!labels) return false;
           const x = getLabelX(d, labels.align, scaleX);
           const y = getLabelY(d, labels.valign, lineNumber, totalLines, scaleY);
@@ -679,6 +679,39 @@ export default class Treemap extends D3po {
           return left >= margin && right <= (cellWidth - margin);
         };
 
+        // Helper to truncate text to fit in the available width and append '...'
+        const truncateToFit = (text, lineNumber) => {
+          if (!text) return '';
+          // quick accept if it already fits
+          if (checkTextFits(text, lineNumber)) return text;
+
+          // binary truncate approach: progressively shorten until it fits
+          let low = 0;
+          let high = text.length;
+          let best = '';
+          while (low < high) {
+            const mid = Math.ceil((low + high) / 2);
+            const candidate = text.slice(0, mid).trim() + '...';
+            if (checkTextFits(candidate, lineNumber)) {
+              best = candidate;
+              low = mid;
+            } else {
+              high = mid - 1;
+            }
+          }
+          // final fallback: try progressively shorter tails if binary search missed
+          if (!best) {
+            for (let i = Math.min(text.length, 20); i > 0; i--) {
+              const candidate = text.slice(0, i).trim() + '...';
+              if (checkTextFits(candidate, lineNumber)) {
+                best = candidate;
+                break;
+              }
+            }
+          }
+          return best || '';
+        };
+
         // Build a clean row object similar to tooltip handlers so user
         // label formatters can inspect original fields.
         let rowObj = (d.data && d.data.__row) ? d.data.__row : (d.data && d.data.__rows ? d.data.__rows[0] : null);
@@ -703,6 +736,8 @@ export default class Treemap extends D3po {
         
         const percentage = ((d.value / total) * 100).toFixed(1) + '%';
         const countText = d.data.value != null ? d.data.value.toLocaleString() : '';
+
+  // ...existing code...
 
         // If a labels formatter was provided (JS(...) from R), call it and
         // render the returned text lines. Accept string (with <br/>), array,
@@ -741,6 +776,24 @@ export default class Treemap extends D3po {
                       .attr('stroke-width', 0)
                       .attr('paint-order', 'stroke')
                       .attr('pointer-events', 'none');
+                  } else {
+                    // If it doesn't fit, try truncating (especially useful for the first line)
+                    const t = truncateToFit(text, i);
+                    if (t) {
+                      group.append('text')
+                        .attr('x', getLabelX(d, labels.align, scaleX))
+                        .attr('y', getLabelY(d, labels.valign, i, localTotalLines, scaleY))
+                        .text(t)
+                        .attr('font-size', `${self.options.fontSize}px`)
+                        .attr('font-family', self.options.fontFamily)
+                        .attr('font-weight', 'bold')
+                        .attr('text-anchor', getTextAnchor(labels.align))
+                        .attr('fill', getTextColor(d.data.color || '#999'))
+                        .attr('stroke', getTextStroke(d.data.color || '#999'))
+                        .attr('stroke-width', 0)
+                        .attr('paint-order', 'stroke')
+                        .attr('pointer-events', 'none');
+                    }
                   }
                 }
                 return; // rendered custom labels; skip fallback
@@ -756,11 +809,31 @@ export default class Treemap extends D3po {
         // Preference order: full text -> text before first ',' or ';' + '...' -> first two words + '...'
         const tryAndAppendLabel = (text) => {
           if (!text) return false;
+          // If the full text fits, append it. Otherwise try truncated version for the first line.
           if (checkTextFits(text, 0)) {
             group.append('text')
               .attr('x', getLabelX(d, labels.align, scaleX))
               .attr('y', getLabelY(d, labels.valign, 0, totalLines, scaleY))
               .text(text)
+              .attr('font-size', `${self.options.fontSize}px`)
+              .attr('font-family', self.options.fontFamily)
+              .attr('font-weight', 'bold')
+              .attr('text-anchor', getTextAnchor(labels.align))
+              .attr('fill', getTextColor(d.data.color || '#999'))
+              .attr('stroke', getTextStroke(d.data.color || '#999'))
+              .attr('stroke-width', 0)
+              .attr('paint-order', 'stroke')
+              .attr('pointer-events', 'none');
+            return true;
+          }
+
+          // For the first (top) line, attempt to truncate and append '...'
+          const truncated = truncateToFit(text, 0);
+          if (truncated) {
+            group.append('text')
+              .attr('x', getLabelX(d, labels.align, scaleX))
+              .attr('y', getLabelY(d, labels.valign, 0, totalLines, scaleY))
+              .text(truncated)
               .attr('font-size', `${self.options.fontSize}px`)
               .attr('font-family', self.options.fontFamily)
               .attr('font-weight', 'bold')

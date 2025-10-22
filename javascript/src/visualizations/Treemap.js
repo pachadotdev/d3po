@@ -490,32 +490,43 @@ export default class Treemap extends D3po {
         return;
       }
 
-      // Otherwise drill into a node inside fullRoot: show its children scaled
-      treemap(fullRoot);
-      const scaleX = this.getInnerWidth() / (newRoot.x1 - newRoot.x0);
-      const scaleY = this.getInnerHeight() / (newRoot.y1 - newRoot.y0);
-      const leaves = fullRoot.leaves().filter(l => {
-        let p = l;
-        while (p && p !== newRoot) p = p.parent;
-        return p === newRoot;
-      });
-      
-      // Store original colors
+      // Otherwise drill into a node inside fullRoot: create a subtree rooted
+      // at newRoot and compute a fresh treemap over the full available area
+      // so the children are renormalized to fill the chart (no extra blank space).
+      // Build a new hierarchy from the drilled node's data and preserve children.
+      const subtreeData = JSON.parse(JSON.stringify(newRoot.data));
+      // If the drilled node carries children as d.children (already in hierarchy),
+      // make sure subtreeData has the same nested structure. For nodes coming from
+      // fullRoot, newRoot.data should already contain children arrays for leaves.
+      const subtreeRoot = d3.hierarchy(subtreeData).sum(d => d.value || 0);
+
+      // Compute treemap on subtreeRoot sized to full inner dimensions so it fills
+      // the available area (renormalized).
+      treemap.size([this.getInnerWidth(), this.getInnerHeight()]);
+      treemap(subtreeRoot);
+
+      // use the leaves of the subtree as the visible cells
+      const leaves = subtreeRoot.leaves();
+
+      // Store original colors on the subtree leaves. Try to map back to original
+      // nodes by name where possible to reuse original _originalColor if present.
       leaves.forEach(d => {
         if (!d._originalColor) {
-          d._originalColor = d.data.color || d3.interpolateViridis(Math.random());
+          // try find matching leaf in fullRoot by name and value
+          const match = fullRoot.leaves().find(f => f.data && d.data && f.data.name === d.data.name && f.value === d.value);
+          d._originalColor = (match && match._originalColor) ? match._originalColor : (d.data && d.data.color) || d3.interpolateViridis(Math.random());
         }
       });
-      
+
       const newCells = this.chart.selectAll('.cell').data(leaves).enter().append('g').attr('class', 'cell')
-        .attr('transform', d => `translate(${(d.x0 - newRoot.x0) * scaleX},${(d.y0 - newRoot.y0) * scaleY})`);
+        .attr('transform', d => `translate(${d.x0},${d.y0})`);
       newCells.append('rect')
-        .attr('width', d => (d.x1 - d.x0) * scaleX)
-        .attr('height', d => (d.y1 - d.y0) * scaleY)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
         .attr('fill', d => d._originalColor)
         .attr('stroke', 'white')
         .attr('stroke-width', 2);
-      addLabelsToCells(newCells, scaleX, scaleY);
+      addLabelsToCells(newCells, 1, 1);
       newCells.selectAll('rect')
         .on('mouseover', (event, d) => {
           const highlightColor = getHighlightColor(d._originalColor);

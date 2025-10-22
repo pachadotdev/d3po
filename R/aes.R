@@ -213,12 +213,12 @@ daes_to_opts <- function(daes, var) {
   if (grepl("^\\.data\\$", label)) {
     return(sub("^\\.data\\$", "", label))
   }
-  # Try to evaluate as an expression (for numeric values like -pi/2)
-  # If it succeeds and returns a number, use that; otherwise return the label
+  # Try to evaluate as an expression (for numeric values like -pi/2, or logical like TRUE/FALSE)
+  # If it succeeds and returns a scalar, use that; otherwise return the label
   tryCatch(
     {
       result <- eval(parse(text = label))
-      if (is.numeric(result) && length(result) == 1) {
+      if ((is.numeric(result) || is.logical(result)) && length(result) == 1) {
         return(result)
       }
       return(label)

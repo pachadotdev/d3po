@@ -96,8 +96,21 @@ export default class BarChart extends D3po {
     let xScale, yScale, innerBand = null;
     const colorScale = createColorScale(this.data, this.colorField, d3.interpolateViridis);
     let bars = null;
+    
+    // Build a map from group key to color (for stacked bars)
+    const groupToColor = new Map();
 
     if (stacked && groupField) {
+      // Populate the map from group key to color (from the first occurrence in the data)
+      if (this.colorField) {
+        this.data.forEach(d => {
+          const g = d[groupField] == null ? '' : String(d[groupField]);
+          if (!groupToColor.has(g) && d[this.colorField] != null) {
+            groupToColor.set(g, d[this.colorField]);
+          }
+        });
+      }
+      
       // pivot data: one object per category with group keys
       const stackRows = categories.map(cat => {
         const obj = { __cat: cat };
@@ -154,6 +167,12 @@ export default class BarChart extends D3po {
           // color by the series key (group key stored on parent datum)
           const parentDatum = d3.select(nodes[i].parentNode).datum();
           const grp = parentDatum && parentDatum.key ? parentDatum.key : null;
+          // If we have a color field and a mapping from group to color, use it
+          if (this.colorField && groupToColor.has(grp)) {
+            const colorValue = groupToColor.get(grp);
+            return colorScale({ [this.colorField]: colorValue });
+          }
+          // Otherwise fall back to coloring by group name
           return colorScale({ [this.colorField]: grp });
         });
       // reference created rects for event wiring
@@ -364,10 +383,14 @@ export default class BarChart extends D3po {
       // d may be a stack datum (array) with .data containing the original row
       let row = d;
       let seriesKey = null;
+      let stackValue = null; // The actual stacked value for this segment
+      
       if (Array.isArray(d) && d.data) {
         row = d.data;
         const parent = d3.select(this.parentNode).datum();
         seriesKey = parent && parent.key ? parent.key : null;
+        // For stacked bars, d[1] - d[0] gives the height/value of this segment
+        stackValue = d[1] - d[0];
       }
 
       const baseColor = d3.select(this).attr('fill');
@@ -387,9 +410,24 @@ export default class BarChart extends D3po {
             if (seriesKey) groupVal = seriesKey;
             else if (includeGroupInTooltip && groupField && row && (groupField in row)) groupVal = row[groupField];
             if (groupVal != null && String(groupVal).trim() === '') groupVal = null;
-            const categoryVal = row && row[isHorizontal ? yField : xField];
+            
+            // For stacked bars, get category from row.__cat
+            let categoryVal;
+            if (stacked && row && row.__cat != null) {
+              categoryVal = row.__cat;
+            } else {
+              categoryVal = row && row[isHorizontal ? yField : xField];
+            }
+            
             const measureField = isHorizontal ? xField : yField;
-            const measureVal = row && row[measureField];
+            // For stacked bars, use the segment value; otherwise use the row's measure field
+            let measureVal;
+            if (stacked && stackValue != null) {
+              measureVal = stackValue;
+            } else {
+              measureVal = row && row[measureField];
+            }
+            
             // Build explicit lines to avoid stray indexation appearing when group is absent
             const lines = [];
             if (groupVal) {
@@ -405,10 +443,23 @@ export default class BarChart extends D3po {
           sanitizeTooltipElement(tt, !includeGroupInTooltip);
         } else {
         // Non-formatter fallback: show category first, then optional group, then the value label.
-        const categoryField = isHorizontal ? yField : xField;
+        // For stacked bars, get category from row.__cat
+        let categoryVal;
+        if (stacked && row && row.__cat != null) {
+          categoryVal = row.__cat;
+        } else {
+          categoryVal = row && row[isHorizontal ? yField : xField];
+        }
+        
         const measureField = isHorizontal ? xField : yField;
-        const categoryVal = row && row[categoryField];
-        const measureVal = row && row[measureField];
+        // For stacked bars, use the segment value; otherwise use the row's measure field
+        let measureVal;
+        if (stacked && stackValue != null) {
+          measureVal = stackValue;
+        } else {
+          measureVal = row && row[measureField];
+        }
+        
         let groupVal = null;
         if (seriesKey) groupVal = seriesKey;
         else if (includeGroupInTooltip && groupField && row && (groupField in row)) groupVal = row[groupField];
@@ -430,9 +481,17 @@ export default class BarChart extends D3po {
       if (Array.isArray(bound) && bound.data) {
         const parent = d3.select(this.parentNode).datum();
         const seriesKey = parent && parent.key ? parent.key : null;
-        const restoreObj = {};
-        restoreObj[colorFieldName] = seriesKey;
-        d3.select(this).attr('fill', colorScale(restoreObj));
+        // For stacked bars, restore the original color
+        if (stacked && groupField && colorFieldName && groupToColor && groupToColor.has(seriesKey)) {
+          const colorValue = groupToColor.get(seriesKey);
+          const restoreObj = {};
+          restoreObj[colorFieldName] = colorValue;
+          d3.select(this).attr('fill', colorScale(restoreObj));
+        } else {
+          const restoreObj = {};
+          restoreObj[colorFieldName] = seriesKey;
+          d3.select(this).attr('fill', colorScale(restoreObj));
+        }
       } else {
         d3.select(this).attr('fill', colorScale(bound));
       }

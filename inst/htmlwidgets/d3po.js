@@ -129,6 +129,10 @@ HTMLWidgets.widget({
             break;
           case 'bar':
             ChartClass = d3po.BarChart;
+            // Pass stack option from R to JavaScript
+            if (x.stack !== undefined) options.stack = x.stack;
+            // Pass sort option if present
+            if (x.sort) options.sort = x.sort;
             break;
           case 'box':
             ChartClass = d3po.BoxPlot;

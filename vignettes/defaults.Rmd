@@ -127,6 +127,8 @@ d3po(dout, width = 800, height = 600) %>%
 
 # same in base R
 
+load_all()
+
 dout <- aggregate(cbind(mean_attack = attack, mean_defense = defense) ~ type_1 + color_1,
                    data = pokemon, FUN = mean)
 
@@ -149,9 +151,10 @@ d3po(dout, width = 800, height = 600) %>%
 # represent attach/defense as att = att / (att + def), def = def / (att + def)
 # group by pokemon type for the value proportions
 dout$mean <- with(dout, ave(mean, type, FUN = function(x) x / sum(x)))
+dout$color <- ifelse(dout$feature == "attack", "#d04e66", "#165976")
 
 d3po(dout, width = 800, height = 600) %>%
-  po_bar(daes(x = type, y = mean, group = feature, color = color, stack = F)) %>%
+  po_bar(daes(x = type, y = mean, group = feature, color = color, stack = T)) %>%
   po_labels(title = "Vertical Bars")
 ```
 

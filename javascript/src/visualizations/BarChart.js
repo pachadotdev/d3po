@@ -130,10 +130,17 @@ export default class BarChart extends D3po {
         }
       });
 
-      // x is categories (band), y is linear up to max total
-      xScale = d3.scaleBand().domain(categories).range([0, effectiveInnerWidth]).padding(0.2);
-      const yMax = d3.max(stackRows, r => r.__total) || 0;
-      yScale = d3.scaleLinear().domain([0, yMax]).nice().range([effectiveInnerHeight, 0]);
+      const maxTotal = d3.max(stackRows, r => r.__total) || 0;
+      
+      if (isHorizontal) {
+        // horizontal stacked bars: categorical on y, numeric on x
+        yScale = d3.scaleBand().domain(categories).range([0, effectiveInnerHeight]).padding(0.2);
+        xScale = d3.scaleLinear().domain([0, maxTotal]).nice().range([0, effectiveInnerWidth]);
+      } else {
+        // vertical stacked bars: categorical on x, numeric on y
+        xScale = d3.scaleBand().domain(categories).range([0, effectiveInnerWidth]).padding(0.2);
+        yScale = d3.scaleLinear().domain([0, maxTotal]).nice().range([effectiveInnerHeight, 0]);
+      }
 
       // allow sorting stacks by total value
       if (sortSpec) {
@@ -148,7 +155,11 @@ export default class BarChart extends D3po {
           } else {
             applyCategorySort(sortedCats);
           }
-          xScale.domain(categories);
+          if (isHorizontal) {
+            yScale.domain(categories);
+          } else {
+            xScale.domain(categories);
+          }
         }
       }
 
@@ -158,23 +169,46 @@ export default class BarChart extends D3po {
 
       // draw stacked bars: one g per series (group)
       const seriesG = this.chart.selectAll('.series').data(series).enter().append('g').attr('class', 'series');
-      seriesG.selectAll('rect').data(d => d).enter().append('rect')
-        .attr('x', (d, i) => xScale(stackRows[i].__cat))
-        .attr('y', d => yScale(d[1]))
-        .attr('height', d => Math.max(0, yScale(d[0]) - yScale(d[1])))
-        .attr('width', xScale.bandwidth())
-        .attr('fill', (d, i, nodes) => {
-          // color by the series key (group key stored on parent datum)
-          const parentDatum = d3.select(nodes[i].parentNode).datum();
-          const grp = parentDatum && parentDatum.key ? parentDatum.key : null;
-          // If we have a color field and a mapping from group to color, use it
-          if (this.colorField && groupToColor.has(grp)) {
-            const colorValue = groupToColor.get(grp);
-            return colorScale({ [this.colorField]: colorValue });
-          }
-          // Otherwise fall back to coloring by group name
-          return colorScale({ [this.colorField]: grp });
-        });
+      
+      if (isHorizontal) {
+        // horizontal stacked bars
+        seriesG.selectAll('rect').data(d => d).enter().append('rect')
+          .attr('y', (d, i) => yScale(stackRows[i].__cat))
+          .attr('x', d => xScale(d[0]))
+          .attr('width', d => Math.max(0, xScale(d[1]) - xScale(d[0])))
+          .attr('height', yScale.bandwidth())
+          .attr('fill', (d, i, nodes) => {
+            // color by the series key (group key stored on parent datum)
+            const parentDatum = d3.select(nodes[i].parentNode).datum();
+            const grp = parentDatum && parentDatum.key ? parentDatum.key : null;
+            // If we have a color field and a mapping from group to color, use it
+            if (this.colorField && groupToColor.has(grp)) {
+              const colorValue = groupToColor.get(grp);
+              return colorScale({ [this.colorField]: colorValue });
+            }
+            // Otherwise fall back to coloring by group name
+            return colorScale({ [this.colorField]: grp });
+          });
+      } else {
+        // vertical stacked bars
+        seriesG.selectAll('rect').data(d => d).enter().append('rect')
+          .attr('x', (d, i) => xScale(stackRows[i].__cat))
+          .attr('y', d => yScale(d[1]))
+          .attr('height', d => Math.max(0, yScale(d[0]) - yScale(d[1])))
+          .attr('width', xScale.bandwidth())
+          .attr('fill', (d, i, nodes) => {
+            // color by the series key (group key stored on parent datum)
+            const parentDatum = d3.select(nodes[i].parentNode).datum();
+            const grp = parentDatum && parentDatum.key ? parentDatum.key : null;
+            // If we have a color field and a mapping from group to color, use it
+            if (this.colorField && groupToColor.has(grp)) {
+              const colorValue = groupToColor.get(grp);
+              return colorScale({ [this.colorField]: colorValue });
+            }
+            // Otherwise fall back to coloring by group name
+            return colorScale({ [this.colorField]: grp });
+          });
+      }
       // reference created rects for event wiring
       bars = this.chart.selectAll('.series').selectAll('rect');
 

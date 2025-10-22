@@ -143,11 +143,6 @@ dout <- reshape(dout,
 rownames(dout) <- NULL
 colnames(dout) <- c("type", "color", "feature", "mean")
 
-# no stack
-d3po(dout, width = 800, height = 600) %>%
-  po_bar(daes(x = type, y = mean, group = feature, color = color)) %>%
-  po_labels(title = "Vertical Bars")
-
 # represent attach/defense as att = att / (att + def), def = def / (att + def)
 # group by pokemon type for the value proportions
 dout$mean <- with(dout, ave(mean, type, FUN = function(x) x / sum(x)))
@@ -193,14 +188,17 @@ dout <- reshape(dout,
 rownames(dout) <- NULL
 colnames(dout) <- c("type", "color", "feature", "mean")
 
-# non-stacked
-d3po(dout, width = 800, height = 600) %>%
-  po_bar(daes(y = type, x = mean, group = feature, color = color)) %>%
-  po_labels(title = "Vertical Bars")
+# represent attach/defense as att = att / (att + def), def = def / (att + def)
+# group by pokemon type for the value proportions
+dout$mean <- with(dout, ave(mean, type, FUN = function(x) x / sum(x)))
+dout$color <- ifelse(dout$feature == "attack", "#d04e66", "#165976")
 
-# stacked
 d3po(dout, width = 800, height = 600) %>%
   po_bar(daes(y = type, x = mean, group = feature, color = color, stack = T)) %>%
+  po_labels(title = "Vertical Bars")
+
+d3po(dout, width = 800, height = 600) %>%
+  po_bar(daes(x = type, y = mean, group = feature, color = color, stack = T)) %>%
   po_labels(title = "Vertical Bars")
 ```
 

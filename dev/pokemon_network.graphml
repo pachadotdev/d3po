@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="g_layout" for="graph" attr.name="layout" attr.type="double"/>
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_color" for="node" attr.name="color" attr.type="string"/>
+  <key id="v_node_size" for="node" attr.name="node_size" attr.type="double"/>
+  <key id="e_edge_size" for="edge" attr.name="edge_size" attr.type="double"/>
+  <graph id="G" edgedefault="undirected">
+    <data key="g_layout">-1.09032137932766</data>
+    <node id="n0">
+      <data key="v_name">Bug</data>
+      <data key="v_color">#A8B820</data>
+      <data key="v_node_size">12</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">Dragon</data>
+      <data key="v_color">#7038F8</data>
+      <data key="v_node_size">3</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">Electric</data>
+      <data key="v_color">#F8D030</data>
+      <data key="v_node_size">9</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">Fairy</data>
+      <data key="v_color">#EE99AC</data>
+      <data key="v_node_size">5</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">Fighting</data>
+      <data key="v_color">#C03028</data>
+      <data key="v_node_size">8</data>
+    </node>
+    <node id="n5">
+      <data key="v_name">Fire</data>
+      <data key="v_color">#F08030</data>
+      <data key="v_node_size">12</data>
+    </node>
+    <node id="n6">
+      <data key="v_name">Ghost</data>
+      <data key="v_color">#705898</data>
+      <data key="v_node_size">3</data>
+    </node>
+    <node id="n7">
+      <data key="v_name">Grass</data>
+      <data key="v_color">#78C850</data>
+      <data key="v_node_size">14</data>
+    </node>
+    <node id="n8">
+      <data key="v_name">Ground</data>
+      <data key="v_color">#E0C068</data>
+      <data key="v_node_size">14</data>
+    </node>
+    <node id="n9">
+      <data key="v_name">Ice</data>
+      <data key="v_color">#98D8D8</data>
+      <data key="v_node_size">5</data>
+    </node>
+    <node id="n10">
+      <data key="v_name">Normal</data>
+      <data key="v_color">#A8A878</data>
+      <data key="v_node_size">22</data>
+    </node>
+    <node id="n11">
+      <data key="v_name">Poison</data>
+      <data key="v_color">#A040A0</data>
+      <data key="v_node_size">33</data>
+    </node>
+    <node id="n12">
+      <data key="v_name">Psychic</data>
+      <data key="v_color">#F85888</data>
+      <data key="v_node_size">14</data>
+    </node>
+    <node id="n13">
+      <data key="v_name">Rock</data>
+      <data key="v_color">#B8A038</data>
+      <data key="v_node_size">11</data>
+    </node>
+    <node id="n14">
+      <data key="v_name">Water</data>
+      <data key="v_color">#6890F0</data>
+      <data key="v_node_size">32</data>
+    </node>
+    <node id="n15">
+      <data key="v_name">Flying</data>
+      <data key="v_color">#A890F0</data>
+      <data key="v_node_size">19</data>
+    </node>
+    <node id="n16">
+      <data key="v_name">Steel</data>
+      <data key="v_color">#B8B8D0</data>
+      <data key="v_node_size">2</data>
+    </node>
+    <edge source="n0" target="n15">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n0" target="n7">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n0" target="n11">
+      <data key="e_edge_size">5</data>
+    </edge>
+    <edge source="n1" target="n15">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n2" target="n15">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n2" target="n16">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n5" target="n15">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n6" target="n11">
+      <data key="e_edge_size">3</data>
+    </edge>
+    <edge source="n7" target="n11">
+      <data key="e_edge_size">9</data>
+    </edge>
+    <edge source="n7" target="n12">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n8" target="n13">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n9" target="n15">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n9" target="n12">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n3" target="n10">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n10" target="n15">
+      <data key="e_edge_size">8</data>
+    </edge>
+    <edge source="n11" target="n15">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n8" target="n11">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n3" target="n12">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n13" target="n15">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n8" target="n13">
+      <data key="e_edge_size">4</data>
+    </edge>
+    <edge source="n13" target="n14">
+      <data key="e_edge_size">4</data>
+    </edge>
+    <edge source="n4" target="n14">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n14" target="n15">
+      <data key="e_edge_size">1</data>
+    </edge>
+    <edge source="n9" target="n14">
+      <data key="e_edge_size">3</data>
+    </edge>
+    <edge source="n11" target="n14">
+      <data key="e_edge_size">2</data>
+    </edge>
+    <edge source="n12" target="n14">
+      <data key="e_edge_size">3</data>
+    </edge>
+  </graph>
+</graphml>

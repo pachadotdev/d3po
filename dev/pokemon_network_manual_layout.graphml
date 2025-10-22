@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+    <key attr.name="SUID" attr.type="long" for="node" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="node" id="shared name"/>
+    <key attr.name="name" attr.type="string" for="node" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="node" id="selected"/>
+    <key attr.name="color" attr.type="string" for="node" id="color"/>
+    <key attr.name="node_size" attr.type="double" for="node" id="node_size"/>
+    <key attr.name="SUID" attr.type="long" for="edge" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="edge" id="shared name"/>
+    <key attr.name="shared interaction" attr.type="string" for="edge" id="shared interaction"/>
+    <key attr.name="name" attr.type="string" for="edge" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="edge" id="selected"/>
+    <key attr.name="interaction" attr.type="string" for="edge" id="interaction"/>
+    <key attr.name="edge_size" attr.type="double" for="edge" id="edge_size"/>
+    <key attr.name="SUID" attr.type="long" for="graph" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="graph" id="shared name"/>
+    <key attr.name="name" attr.type="string" for="graph" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="graph" id="selected"/>
+    <key attr.name="layout" attr.type="double" for="graph" id="layout"/>
+    <key attr.name="__Annotations" attr.type="string" for="graph" id="__Annotations"/>
+    <graph edgedefault="directed" id="G">
+        <node id="214">
+            <data key="SUID">214</data>
+            <data key="shared name">Steel</data>
+            <data key="name">Steel</data>
+            <data key="selected">false</data>
+            <data key="color">#B8B8D0</data>
+            <data key="node_size">2.0</data>
+        </node>
+        <node id="211">
+            <data key="SUID">211</data>
+            <data key="shared name">Flying</data>
+            <data key="name">Flying</data>
+            <data key="selected">false</data>
+            <data key="color">#A890F0</data>
+            <data key="node_size">19.0</data>
+        </node>
+        <node id="208">
+            <data key="SUID">208</data>
+            <data key="shared name">Water</data>
+            <data key="name">Water</data>
+            <data key="selected">false</data>
+            <data key="color">#6890F0</data>
+            <data key="node_size">32.0</data>
+        </node>
+        <node id="205">
+            <data key="SUID">205</data>
+            <data key="shared name">Rock</data>
+            <data key="name">Rock</data>
+            <data key="selected">false</data>
+            <data key="color">#B8A038</data>
+            <data key="node_size">11.0</data>
+        </node>
+        <node id="202">
+            <data key="SUID">202</data>
+            <data key="shared name">Psychic</data>
+            <data key="name">Psychic</data>
+            <data key="selected">false</data>
+            <data key="color">#F85888</data>
+            <data key="node_size">14.0</data>
+        </node>
+        <node id="199">
+            <data key="SUID">199</data>
+            <data key="shared name">Poison</data>
+            <data key="name">Poison</data>
+            <data key="selected">false</data>
+            <data key="color">#A040A0</data>
+            <data key="node_size">33.0</data>
+        </node>
+        <node id="196">
+            <data key="SUID">196</data>
+            <data key="shared name">Normal</data>
+            <data key="name">Normal</data>
+            <data key="selected">false</data>
+            <data key="color">#A8A878</data>
+            <data key="node_size">22.0</data>
+        </node>
+        <node id="193">
+            <data key="SUID">193</data>
+            <data key="shared name">Ice</data>
+            <data key="name">Ice</data>
+            <data key="selected">false</data>
+            <data key="color">#98D8D8</data>
+            <data key="node_size">5.0</data>
+        </node>
+        <node id="190">
+            <data key="SUID">190</data>
+            <data key="shared name">Ground</data>
+            <data key="name">Ground</data>
+            <data key="selected">false</data>
+            <data key="color">#E0C068</data>
+            <data key="node_size">14.0</data>
+        </node>
+        <node id="187">
+            <data key="SUID">187</data>
+            <data key="shared name">Grass</data>
+            <data key="name">Grass</data>
+            <data key="selected">false</data>
+            <data key="color">#78C850</data>
+            <data key="node_size">14.0</data>
+        </node>
+        <node id="184">
+            <data key="SUID">184</data>
+            <data key="shared name">Ghost</data>
+            <data key="name">Ghost</data>
+            <data key="selected">false</data>
+            <data key="color">#705898</data>
+            <data key="node_size">3.0</data>
+        </node>
+        <node id="181">
+            <data key="SUID">181</data>
+            <data key="shared name">Fire</data>
+            <data key="name">Fire</data>
+            <data key="selected">false</data>
+            <data key="color">#F08030</data>
+            <data key="node_size">12.0</data>
+        </node>
+        <node id="178">
+            <data key="SUID">178</data>
+            <data key="shared name">Fighting</data>
+            <data key="name">Fighting</data>
+            <data key="selected">false</data>
+            <data key="color">#C03028</data>
+            <data key="node_size">8.0</data>
+        </node>
+        <node id="175">
+            <data key="SUID">175</data>
+            <data key="shared name">Fairy</data>
+            <data key="name">Fairy</data>
+            <data key="selected">false</data>
+            <data key="color">#EE99AC</data>
+            <data key="node_size">5.0</data>
+        </node>
+        <node id="172">
+            <data key="SUID">172</data>
+            <data key="shared name">Electric</data>
+            <data key="name">Electric</data>
+            <data key="selected">false</data>
+            <data key="color">#F8D030</data>
+            <data key="node_size">9.0</data>
+        </node>
+        <node id="169">
+            <data key="SUID">169</data>
+            <data key="shared name">Dragon</data>
+            <data key="name">Dragon</data>
+            <data key="selected">false</data>
+            <data key="color">#7038F8</data>
+            <data key="node_size">3.0</data>
+        </node>
+        <node id="160">
+            <data key="SUID">160</data>
+            <data key="shared name">Bug</data>
+            <data key="name">Bug</data>
+            <data key="selected">false</data>
+            <data key="color">#A8B820</data>
+            <data key="node_size">12.0</data>
+        </node>
+        <edge source="208" target="211">
+            <data key="SUID">286</data>
+            <data key="shared name">n14 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n14 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="205" target="208">
+            <data key="SUID">280</data>
+            <data key="shared name">n13 (-) n14</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n13 (-) n14</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">4.0</data>
+        </edge>
+        <edge source="205" target="211">
+            <data key="SUID">274</data>
+            <data key="shared name">n13 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n13 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="202" target="208">
+            <data key="SUID">295</data>
+            <data key="shared name">n12 (-) n14</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n12 (-) n14</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">3.0</data>
+        </edge>
+        <edge source="199" target="208">
+            <data key="SUID">292</data>
+            <data key="shared name">n11 (-) n14</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n11 (-) n14</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="199" target="211">
+            <data key="SUID">265</data>
+            <data key="shared name">n11 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n11 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="196" target="211">
+            <data key="SUID">262</data>
+            <data key="shared name">n10 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n10 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">8.0</data>
+        </edge>
+        <edge source="193" target="208">
+            <data key="SUID">289</data>
+            <data key="shared name">n9 (-) n14</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n9 (-) n14</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">3.0</data>
+        </edge>
+        <edge source="193" target="202">
+            <data key="SUID">256</data>
+            <data key="shared name">n9 (-) n12</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n9 (-) n12</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="193" target="211">
+            <data key="SUID">253</data>
+            <data key="shared name">n9 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n9 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="190" target="205">
+            <data key="SUID">277</data>
+            <data key="shared name">n8 (-) n13</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n8 (-) n13</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">4.0</data>
+        </edge>
+        <edge source="190" target="199">
+            <data key="SUID">268</data>
+            <data key="shared name">n8 (-) n11</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n8 (-) n11</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="187" target="202">
+            <data key="SUID">247</data>
+            <data key="shared name">n7 (-) n12</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n7 (-) n12</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="187" target="199">
+            <data key="SUID">244</data>
+            <data key="shared name">n7 (-) n11</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n7 (-) n11</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">9.0</data>
+        </edge>
+        <edge source="184" target="199">
+            <data key="SUID">241</data>
+            <data key="shared name">n6 (-) n11</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n6 (-) n11</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">3.0</data>
+        </edge>
+        <edge source="181" target="211">
+            <data key="SUID">238</data>
+            <data key="shared name">n5 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n5 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="178" target="208">
+            <data key="SUID">283</data>
+            <data key="shared name">n4 (-) n14</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n4 (-) n14</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="175" target="202">
+            <data key="SUID">271</data>
+            <data key="shared name">n3 (-) n12</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n3 (-) n12</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="175" target="196">
+            <data key="SUID">259</data>
+            <data key="shared name">n3 (-) n10</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n3 (-) n10</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="172" target="214">
+            <data key="SUID">235</data>
+            <data key="shared name">n2 (-) n16</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n2 (-) n16</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="172" target="211">
+            <data key="SUID">232</data>
+            <data key="shared name">n2 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n2 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="169" target="211">
+            <data key="SUID">229</data>
+            <data key="shared name">n1 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n1 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">1.0</data>
+        </edge>
+        <edge source="160" target="199">
+            <data key="SUID">226</data>
+            <data key="shared name">n0 (-) n11</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n0 (-) n11</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">5.0</data>
+        </edge>
+        <edge source="160" target="187">
+            <data key="SUID">223</data>
+            <data key="shared name">n0 (-) n7</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n0 (-) n7</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+        <edge source="160" target="211">
+            <data key="SUID">217</data>
+            <data key="shared name">n0 (-) n15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">n0 (-) n15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="edge_size">2.0</data>
+        </edge>
+    </graph>
+</graphml>

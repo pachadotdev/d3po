@@ -11,7 +11,7 @@ maps <- list()
 
 # Experiment with country ----
 
-# country <- topojson_read("dev/ca-all.topojson")
+# country <- topojson_read("dev/maps/ca-all.topojson")
 
 # # merge polygons by hc.a2
 # country <- country %>%
@@ -21,7 +21,7 @@ maps <- list()
 # # convert to geojson
 # country_id <- country$hc.a2
 
-# ftemp <- "dev/temp.geojson"
+# ftemp <- "dev/maps/temp.geojson"
 # try(file.remove(ftemp))
 # geojson_write(country$geometry, file = ftemp)
 # country <- suppressWarnings(readLines(ftemp))
@@ -41,7 +41,7 @@ maps <- list()
 download_and_simplify_topojson <- function(url) {
   print(url)
 
-  topojson <- paste0("dev/", gsub("topo\\.json", "topojson", gsub(".*/", "", url)))
+  topojson <- paste0("dev/maps/", gsub("topo\\.json", "topojson", gsub(".*/", "", url)))
 
   if (!file.exists(topojson)) {
     download.file(url, topojson)
@@ -79,7 +79,7 @@ download_and_simplify_topojson <- function(url) {
   country_id <- country$hc.a2
   country_name <- country$name
 
-  ftemp <- "dev/temp.geojson"
+  ftemp <- "dev/maps/temp.geojson"
   suppressWarnings(try(file.remove(ftemp)))
   geojson_write(country$geometry, file = ftemp)
   country <- suppressWarnings(readLines(ftemp))
@@ -116,7 +116,7 @@ names(maps$africa)[j] <- "continent"
 
 ## Countries ----
 
-countries <- topojson_read("dev/africa.topojson")
+countries <- topojson_read("dev/maps/africa.topojson")
 
 countries <- data.frame(
   id = tolower(countries$hc.a2),
@@ -142,7 +142,7 @@ for (i in seq_along(urls)) {
 ## Continent ----
 
 url <- "https://code.highcharts.com/mapdata/custom/asia.topo.json"
-topojson <- paste0("dev/", gsub("topo\\.json", "topojson", gsub(".*/", "", url)))
+topojson <- paste0("dev/maps/", gsub("topo\\.json", "topojson", gsub(".*/", "", url)))
 
 i <- length(maps) + 1
 maps[[i]] <- list()
@@ -154,7 +154,7 @@ names(maps$asia)[j] <- "continent"
 
 ## Countries ----
 
-countries <- topojson_read("dev/asia.topojson")
+countries <- topojson_read("dev/maps/asia.topojson")
 
 countries <- data.frame(
   id = tolower(countries$hc.a2),
@@ -195,7 +195,7 @@ names(maps$europe)[j] <- "continent"
 
 ## Countries ----
 
-countries <- topojson_read("dev/europe.topojson")
+countries <- topojson_read("dev/maps/europe.topojson")
 
 countries <- data.frame(
   id = tolower(countries$hc.a2),
@@ -236,7 +236,7 @@ names(maps$north_america)[j] <- "continent"
 
 ## Countries ----
 
-countries <- topojson_read("dev/north-america.topojson")
+countries <- topojson_read("dev/maps/north-america.topojson")
 
 countries <- data.frame(
   id = tolower(countries$hc.a2),
@@ -277,7 +277,7 @@ names(maps$oceania)[j] <- "continent"
 
 ## Countries ----
 
-countries <- topojson_read("dev/oceania.topojson")
+countries <- topojson_read("dev/maps/oceania.topojson")
 
 countries <- data.frame(
   id = tolower(countries$hc.a2),
@@ -318,7 +318,7 @@ names(maps$south_america)[j] <- "continent"
 
 ## Countries ----
 
-countries <- topojson_read("dev/south-america.topojson")
+countries <- topojson_read("dev/maps/south-america.topojson")
 
 countries <- data.frame(
   id = tolower(countries$hc.a2),

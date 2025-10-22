@@ -691,20 +691,21 @@ po_format.d3proxy <- function(d3po, ...) {
 #' Edit labels positioning in a treemap.
 #'
 #' @inheritParams po_box
-#' @param align Label alignment for treemaps. Must be one of "left-top", "center-middle", or "right-top".
 #' @param x Optional x-axis label.
 #' @param y Optional y-axis label.
 #' @param title Optional title for the chart.
 #' @param subtitle Optional subtitle for the chart.
+#' @param labels Optional character vector or JavaScript function for custom label fields for treemaps.
+#' @param align Label alignment for treemaps. Must be one of "left-top", "center-middle", or "right-top".
 #' @export
 #' @return Appends custom labels to an 'htmlwidgets' object
-po_labels <- function(d3po, align = "left-top", x = NULL, y = NULL, title = NULL, subtitle = NULL) {
+po_labels <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle = NULL, labels = NULL, align = "left-top") {
   UseMethod("po_labels")
 }
 
 #' @export
 #' @method po_labels d3po
-po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL, title = NULL, subtitle = NULL) {
+po_labels.d3po <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle = NULL, labels = NULL, align = NULL) {
   # ---- Treemaps only ----
   # treemaps only
   # If align is not provided, default to left-top
@@ -723,6 +724,14 @@ po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL, title = NULL,
   d3po$x$labels <- NULL
   d3po$x$labels$align <- parts[1]
   d3po$x$labels$valign <- parts[2]
+  # Optional custom label fields (character vector or named list) that the
+  # JS treemap/tooltip renderer can use to decide what to display at each
+  # hierarchy level. Store raw value for the client-side to interpret.
+  if (!is.null(labels)) {
+    # Basic validation: allow character vector or list; otherwise error
+    assertthat::assert_that(is.character(labels) || is.list(labels), msg = "`labels` must be a character vector or a list")
+    d3po$x$labels$fields <- labels
+  }
   # -----------------------
 
   # Accept subtitle passed via po_labels
@@ -747,7 +756,7 @@ po_labels.d3po <- function(d3po, align = NULL, x = NULL, y = NULL, title = NULL,
 
 #' @export
 #' @method po_labels d3proxy
-po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL, title = NULL, subtitle = NULL) {
+po_labels.d3proxy <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle = NULL, labels = NULL, align = NULL) {
   if (is.null(align)) align <- "left-top"
 
   # Note: For Shiny proxies, we can't easily check the type,
@@ -765,6 +774,11 @@ po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL, title = NU
 
   msg_payload <- list(align = parts[1], valign = parts[2])
 
+  if (!is.null(labels)) {
+    assertthat::assert_that(is.character(labels) || is.list(labels), msg = "`labels` must be a character vector or a list")
+    msg_payload$labels <- labels
+  }
+
   if (!is.null(x)) {
     assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
     msg_payload$x <- x
@@ -779,129 +793,6 @@ po_labels.d3proxy <- function(d3po, align = NULL, x = NULL, y = NULL, title = NU
   msg <- list(id = d3po$id, msg = msg_payload)
 
   d3po$session$sendCustomMessage("d3po-labels", msg)
-
-  return(d3po)
-}
-
-#' Subtitle
-#'
-#' Set a subtitle (or subtitle formatter) for a chart. Accepts a character
-#' string or a JS(...) expression passed through to the client. For
-#' treemaps, a JS function can inspect `row.mode` which will be one of
-#' 'aggregated', 'flat', or 'drilled'.
-#'
-#' @inheritParams po_box
-#' @param subtitle Character string or JS(...) formatter.
-#' @export
-#' @return Appends subtitle settings to an 'htmlwidgets' object
-po_subtitle <- function(d3po, subtitle) UseMethod("po_subtitle")
-
-#' @export
-#' @method po_subtitle d3po
-po_subtitle.d3po <- function(d3po, subtitle) {
-  assertthat::assert_that(!missing(subtitle), msg = "Missing `subtitle`")
-
-  if (is.null(d3po$x$labels)) d3po$x$labels <- list()
-  d3po$x$labels$subtitle <- subtitle
-  return(d3po)
-}
-
-#' @export
-#' @method po_subtitle d3proxy
-po_subtitle.d3proxy <- function(d3po, subtitle) {
-  assertthat::assert_that(!missing(subtitle), msg = "Missing `subtitle`")
-
-  msg <- list(id = d3po$id, msg = list(subtitle = subtitle))
-  d3po$session$sendCustomMessage("d3po-subtitle", msg)
-
-  return(d3po)
-}
-
-
-# Axis formatters ---------------------------------------------------------
-#' Axis formatters
-#'
-#' Provide JS formatter expressions for axis tick labels. Accepts strings
-#' starting with `JS.` or simple formatter names that will be wrapped for
-#' evaluation on the client-side. Examples:
-#'   po_axis_format(p, y = "JS(format-as-billion(value,2))")
-#'   po_axis_format(p, y = "format-as-percentage(0)")
-#'
-#' @param d3po A d3po widget
-#' @param x,y Optional formatter expressions for x and y axes
-#' @export
-po_axis_format <- function(d3po, x = NULL, y = NULL) UseMethod("po_axis_format")
-
-#' @export
-#' @method po_axis_format d3po
-po_axis_format.d3po <- function(d3po, x = NULL, y = NULL) {
-  if (!is.null(x)) {
-    assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
-    # Store the raw string; the JS side will compile JS(...) expressions
-    d3po$x$axis_x <- x
-  }
-  if (!is.null(y)) {
-    assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
-    d3po$x$axis_y <- y
-  }
-
-  return(d3po)
-}
-
-#' @export
-#' @method po_axis_format d3proxy
-po_axis_format.d3proxy <- function(d3po, x = NULL, y = NULL) {
-  msg_payload <- list()
-  if (!is.null(x)) msg_payload$x <- x
-  if (!is.null(y)) msg_payload$y <- y
-
-  msg <- list(id = d3po$id, msg = msg_payload)
-  d3po$session$sendCustomMessage("d3po-axis-format", msg)
-
-  return(d3po)
-}
-
-# Legend ----
-
-#' Legend
-#'
-#' Add a legend to a chart.
-#'
-#' @inheritParams po_box
-#' @param legend legend to add.
-#' @export
-#' @return Appends custom legend to an 'htmlwidgets' object
-po_legend <- function(d3po, legend) UseMethod("po_legend")
-
-#' @export
-#' @method po_legend d3po
-po_legend.d3po <- function(d3po, legend) {
-  assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
-
-  d3po$x$legend <- legend
-  return(d3po)
-}
-
-#' @export
-#' @method po_legend d3proxy
-po_legend.d3proxy <- function(d3po, legend) {
-  assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
-
-  msg <- list(id = d3po$id, msg = list(legend = legend))
-
-  d3po$session$sendCustomMessage("d3po-legend", msg)
-
-  return(d3po)
-}
-
-#' @export
-#' @method po_legend d3proxy
-po_legend.d3proxy <- function(d3po, legend) {
-  assertthat::assert_that(!missing(legend), msg = "Missing `legend`")
-
-  msg <- list(id = d3po$id, msg = list(legend = legend))
-
-  d3po$session$sendCustomMessage("d3po-legend", msg)
 
   return(d3po)
 }

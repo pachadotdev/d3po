@@ -2,7 +2,6 @@
 <url><loc>/404.html</loc></url>
 <url><loc>/LICENSE-text.html</loc></url>
 <url><loc>/articles/customizations.html</loc></url>
-<url><loc>/articles/d3po.html</loc></url>
 <url><loc>/articles/defaults.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
 <url><loc>/authors.html</loc></url>
@@ -16,7 +15,6 @@
 <url><loc>/reference/map_ids.html</loc></url>
 <url><loc>/reference/maps.html</loc></url>
 <url><loc>/reference/po_area.html</loc></url>
-<url><loc>/reference/po_axis_format.html</loc></url>
 <url><loc>/reference/po_background.html</loc></url>
 <url><loc>/reference/po_bar.html</loc></url>
 <url><loc>/reference/po_box.html</loc></url>
@@ -26,12 +24,10 @@
 <url><loc>/reference/po_format.html</loc></url>
 <url><loc>/reference/po_geomap.html</loc></url>
 <url><loc>/reference/po_labels.html</loc></url>
-<url><loc>/reference/po_legend.html</loc></url>
 <url><loc>/reference/po_line.html</loc></url>
 <url><loc>/reference/po_network.html</loc></url>
 <url><loc>/reference/po_pie.html</loc></url>
 <url><loc>/reference/po_scatter.html</loc></url>
-<url><loc>/reference/po_title.html</loc></url>
 <url><loc>/reference/po_tooltip.html</loc></url>
 <url><loc>/reference/po_treemap.html</loc></url>
 <url><loc>/reference/pokemon.html</loc></url>

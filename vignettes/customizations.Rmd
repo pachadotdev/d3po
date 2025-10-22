@@ -123,6 +123,33 @@ d3po(dout, width = 800, height = 600) %>%
   po_tooltip("<i>Type: {type}</i><br/>Count: {count}")
 ```
 
+# Treemap with custom labels and tooltip (more changes to the displayed labels)
+
+```{r treemap-custom-2}
+dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
+names(dout) <- c("type", "color", "count")
+
+d3po(dout, width = 800, height = 600) %>%
+  po_treemap(
+    daes(
+      size = count, group = type, color = color, tiling = "squarify"
+    )
+  ) %>%
+  po_labels(
+    align = "center-middle",
+    title = "Share of Pokemon by main type",
+    labels = JS(
+      "function(percentage, row) {
+        var pct = (percentage).toFixed(1) + '%';
+        var name = (row && (row.type || row.name)) ? (row.type || row.name) : '';
+        var count = row && (row.count != null ? row.count : (row.value != null ? row.value : ''));
+        return '<i>' + name + '</i><br/>Count: ' + (count || '') + '<br/>Share: ' + pct;
+      }"
+    )
+  ) %>%
+  po_tooltip("<i>Type: {type}</i><br/>Count: {count}")
+```
+
 # Two-level Treemap with custom labels and tooltip
 
 ```{r treemap2}

@@ -15,3 +15,4 @@
 ^d3podemo$
 ^debug-with-shiny\.R$
 ^Makefile$
+^_pkgdown\.yml$

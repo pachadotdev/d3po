@@ -32,6 +32,8 @@ app_ui <- function(request) {
               "Treemap (Slice)" = "treemap3",
               "Treemap (Dice)" = "treemap4",
               "Treemap Style Example (Labels/Background/Font/No Download)" = "treemap_style",
+              "Treemap with custom labels and tooltip" = "treemap_custom",
+              "Treemap with custom labels and tooltip (more changes to the displayed labels)" = "treemap_custom2",
               "Two-level Treemap (Drillable)" = "treemap_twolevel",
               "Two-level Treemap (Drillable, Custom Labels & Tooltip)" = "treemap_twolevel_custom",
               "Pie Chart" = "pie",

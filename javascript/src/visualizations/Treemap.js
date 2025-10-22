@@ -34,7 +34,19 @@ export default class Treemap extends D3po {
     } else {
       this.tile = options.tile || d3.treemapSquarify;
     }
-  this.labels = options.labels || { align: 'left', valign: 'top' };
+  // labels may be an object with positioning (align/valign) and a
+  // `fields` entry that can be a JS(...) formatter string/function.
+  // Ensure `this.labels` is an object used for positioning while keeping
+  // the raw formatter option separate so we can compile it.
+  this.labels = (options.labels && typeof options.labels === 'object') ? options.labels : { align: 'left', valign: 'top' };
+  // compile a labels formatter if provided. The R side stores the
+  // formatter under options.labels.fields; support `.formatter` or the
+  // direct `options.labels` entry as well for flexibility.
+  this.labelsOption = null;
+  if (options.labels) {
+    this.labelsOption = options.labels.fields || options.labels.formatter || options.labels;
+  }
+  this.labelsFormatter = maybeEvalJSFormatter(this.labelsOption);
   // labelMode: 'percent' (default) or 'count'
   this.labelMode = options.labelMode || 'percent';
   // subtitle can be provided in labels as a string or JS(...) formatter
@@ -616,14 +628,14 @@ export default class Treemap extends D3po {
     const labels = this.labels;
 
     // Helper to add labels to a selection of cell groups. Accepts scaling used during drill.
-    const addLabelsToCells = (selection, scaleX = 1, scaleY = 1) => {
+  const addLabelsToCells = (selection, scaleX = 1, scaleY = 1) => {
       const self = this;
       selection.each(function(d) {
         const group = d3.select(this);
         const cellWidth = (d.x1 - d.x0) * scaleX;
         const cellHeight = (d.y1 - d.y0) * scaleY;
 
-        const totalLines = 2;
+  const totalLines = 2;
         const lineHeight = self.options.fontSize * 1.4;
         const totalTextHeight = totalLines * lineHeight;
 
@@ -667,7 +679,23 @@ export default class Treemap extends D3po {
           return left >= margin && right <= (cellWidth - margin);
         };
 
-        // For drilled views in a two-level treemap, show "Parent Child" label
+        // Build a clean row object similar to tooltip handlers so user
+        // label formatters can inspect original fields.
+        let rowObj = (d.data && d.data.__row) ? d.data.__row : (d.data && d.data.__rows ? d.data.__rows[0] : null);
+        const isAggregated = !!(groupRoot && (d.parent === groupRoot || d.data && d.data.isAggregated));
+        if (!rowObj) {
+          rowObj = {};
+          rowObj[self.groupField] = d.data && d.data.name ? d.data.name : null;
+          if (self.subgroupField && !isAggregated) {
+            rowObj[self.subgroupField] = d.data && d.data.name ? d.data.name : null;
+          }
+          rowObj.count = d.value;
+          rowObj.color = d.data && d.data.color ? d.data.color : null;
+          rowObj.name = d.data && d.data.name ? d.data.name : null;
+        }
+        if (rowObj.count == null) rowObj.count = rowObj.value != null ? rowObj.value : d.value;
+
+        // For drilled views in a two-level treemap, default categoryName is "Parent Child"
         let categoryName = d.data.name;
         if (self.subgroupField && d.parent && d.parent.data && d.parent.data.name) {
           categoryName = `${d.parent.data.name} ${d.data.name}`;
@@ -676,20 +704,90 @@ export default class Treemap extends D3po {
         const percentage = ((d.value / total) * 100).toFixed(1) + '%';
         const countText = d.data.value != null ? d.data.value.toLocaleString() : '';
 
-        if (checkTextFits(categoryName, 0)) {
-          group.append('text')
-            .attr('x', getLabelX(d, labels.align, scaleX))
-            .attr('y', getLabelY(d, labels.valign, 0, totalLines, scaleY))
-            .text(categoryName)
-            .attr('font-size', `${self.options.fontSize}px`)
-            .attr('font-family', self.options.fontFamily)
-            .attr('font-weight', 'bold')
-            .attr('text-anchor', getTextAnchor(labels.align))
-            .attr('fill', getTextColor(d.data.color || '#999'))
-            .attr('stroke', getTextStroke(d.data.color || '#999'))
-            .attr('stroke-width', 0)
-            .attr('paint-order', 'stroke')
-            .attr('pointer-events', 'none');
+        // If a labels formatter was provided (JS(...) from R), call it and
+        // render the returned text lines. Accept string (with <br/>), array,
+        // or single value. If successful, skip the fallback label logic.
+        if (self.labelsFormatter) {
+          try {
+            const labOut = self.labelsFormatter((d.value / total) * 100, rowObj);
+            if (labOut != null) {
+              let lines = [];
+              if (Array.isArray(labOut)) {
+                lines = labOut.map(String);
+              } else if (typeof labOut === 'string') {
+                // split on HTML line breaks and strip tags
+                // match <br>, <br/> or <br /> so the trailing '>' is consumed
+                lines = labOut.split(/<br\s*\/?\s*>/i).map(s => s.replace(/<[^>]*>/g, '').trim()).filter(Boolean);
+              } else {
+                lines = [String(labOut)];
+              }
+
+              if (lines.length > 0) {
+                const localTotalLines = Math.max(1, lines.length);
+                for (let i = 0; i < lines.length; i++) {
+                  const text = lines[i];
+                  if (!text) continue;
+                  if (checkTextFits(text, i)) {
+                    group.append('text')
+                      .attr('x', getLabelX(d, labels.align, scaleX))
+                      .attr('y', getLabelY(d, labels.valign, i, localTotalLines, scaleY))
+                      .text(text)
+                      .attr('font-size', `${self.options.fontSize}px`)
+                      .attr('font-family', self.options.fontFamily)
+                      .attr('font-weight', 'bold')
+                      .attr('text-anchor', getTextAnchor(labels.align))
+                      .attr('fill', getTextColor(d.data.color || '#999'))
+                      .attr('stroke', getTextStroke(d.data.color || '#999'))
+                      .attr('stroke-width', 0)
+                      .attr('paint-order', 'stroke')
+                      .attr('pointer-events', 'none');
+                  }
+                }
+                return; // rendered custom labels; skip fallback
+              }
+            }
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error('Labels formatter error', err);
+          }
+        }
+
+        // Try full label, then smart truncation variants before giving up.
+        // Preference order: full text -> text before first ',' or ';' + '...' -> first two words + '...'
+        const tryAndAppendLabel = (text) => {
+          if (!text) return false;
+          if (checkTextFits(text, 0)) {
+            group.append('text')
+              .attr('x', getLabelX(d, labels.align, scaleX))
+              .attr('y', getLabelY(d, labels.valign, 0, totalLines, scaleY))
+              .text(text)
+              .attr('font-size', `${self.options.fontSize}px`)
+              .attr('font-family', self.options.fontFamily)
+              .attr('font-weight', 'bold')
+              .attr('text-anchor', getTextAnchor(labels.align))
+              .attr('fill', getTextColor(d.data.color || '#999'))
+              .attr('stroke', getTextStroke(d.data.color || '#999'))
+              .attr('stroke-width', 0)
+              .attr('paint-order', 'stroke')
+              .attr('pointer-events', 'none');
+            return true;
+          }
+          return false;
+        };
+
+        // 1) full label
+        if (!tryAndAppendLabel(categoryName)) {
+          // 2) text before first comma or semicolon
+          const punctMatch = categoryName && categoryName.split(/[,;]+/)[0];
+          const punctLabel = punctMatch && punctMatch.trim() && punctMatch.trim().length < categoryName.length ? `${punctMatch.trim()}...` : null;
+          if (!tryAndAppendLabel(punctLabel)) {
+            // 3) first two words
+            const words = categoryName ? categoryName.trim().split(/\s+/) : [];
+            if (words.length > 1) {
+              const twoWord = `${words.slice(0,2).join(' ')}...`;
+              tryAndAppendLabel(twoWord);
+            }
+          }
         }
 
   const secondLine = self.labelMode === 'count' ? countText : percentage;

@@ -6,17 +6,16 @@
 \usage{
 po_labels(
   d3po,
-  align = "left-top",
   x = NULL,
   y = NULL,
   title = NULL,
-  subtitle = NULL
+  subtitle = NULL,
+  labels = NULL,
+  align = "left-top"
 )
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
-
-\item{align}{Label alignment for treemaps. Must be one of "left-top", "center-middle", or "right-top".}
 
 \item{x}{Optional x-axis label.}
 
@@ -25,6 +24,10 @@ po_labels(
 \item{title}{Optional title for the chart.}
 
 \item{subtitle}{Optional subtitle for the chart.}
+
+\item{labels}{Optional character vector or JavaScript function for custom label fields for treemaps.}
+
+\item{align}{Label alignment for treemaps. Must be one of "left-top", "center-middle", or "right-top".}
 }
 \value{
 Appends custom labels to an 'htmlwidgets' object

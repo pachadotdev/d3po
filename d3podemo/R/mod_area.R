@@ -9,7 +9,6 @@ mod_area_plot <- function(data) {
 
   d3po(dout) %>%
     po_area(daes(x = .data$height, y = .data$weight, group = .data$type, color = .data$color),
-      stack = FALSE
     ) %>%
     po_labels(title = "Pokemon Evolution: Weight vs Height by Type (Area)")
 }

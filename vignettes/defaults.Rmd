@@ -106,6 +106,101 @@ d3po(dout, width = 800, height = 600) %>%
   po_labels(title = "Horizontal Bars")
 ```
 
+## Stacked Vertical Bars 
+
+```{r bar3}
+# library(dplyr)
+# library(tidyr)
+
+# pokemon %>%
+#   group_by(type_1, color_1) %>%
+#   summarise(
+#     attack = mean(attack, na.rm = TRUE),
+#     defense = mean(defense, na.rm = TRUE),
+#     .groups = "drop"
+#   ) %>%
+#   pivot_longer(
+#     cols = c(attack, defense),
+#     names_to = "attribute",
+#     values_to = "variable"
+#   )
+
+# same in base R
+
+dout <- aggregate(cbind(mean_attack = attack, mean_defense = defense) ~ type_1 + color_1,
+                   data = pokemon, FUN = mean)
+
+dout <- reshape(dout,
+                 varying = c("mean_attack", "mean_defense"),
+                 v.names = "mean",
+                 timevar = "feature",
+                 times = c("attack", "defense"),
+                 direction = "long",
+                 idvar = c("type_1", "color_1"))
+
+rownames(dout) <- NULL
+colnames(dout) <- c("type", "color", "feature", "mean")
+
+# no stack
+d3po(dout, width = 800, height = 600) %>%
+  po_bar(daes(x = type, y = mean, group = feature, color = color)) %>%
+  po_labels(title = "Vertical Bars")
+
+# represent attach/defense as att = att / (att + def), def = def / (att + def)
+# group by pokemon type for the value proportions
+dout$mean <- with(dout, ave(mean, type, FUN = function(x) x / sum(x)))
+
+d3po(dout, width = 800, height = 600) %>%
+  po_bar(daes(x = type, y = mean, group = feature, color = color, stack = F)) %>%
+  po_labels(title = "Vertical Bars")
+```
+
+## Stacked Horizontal Bars 
+
+```{r bar4}
+# library(dplyr)
+# library(tidyr)
+
+# pokemon %>%
+#   group_by(type_1, color_1) %>%
+#   summarise(
+#     attack = mean(attack, na.rm = TRUE),
+#     defense = mean(defense, na.rm = TRUE),
+#     .groups = "drop"
+#   ) %>%
+#   pivot_longer(
+#     cols = c(attack, defense),
+#     names_to = "attribute",
+#     values_to = "variable"
+#   )
+
+# same in base R
+
+dout <- aggregate(cbind(mean_attack = attack, mean_defense = defense) ~ type_1 + color_1,
+                   data = pokemon, FUN = mean)
+
+dout <- reshape(dout,
+                 varying = c("mean_attack", "mean_defense"),
+                 v.names = "mean",
+                 timevar = "feature",
+                 times = c("attack", "defense"),
+                 direction = "long",
+                 idvar = c("type_1", "color_1"))
+
+rownames(dout) <- NULL
+colnames(dout) <- c("type", "color", "feature", "mean")
+
+# non-stacked
+d3po(dout, width = 800, height = 600) %>%
+  po_bar(daes(y = type, x = mean, group = feature, color = color)) %>%
+  po_labels(title = "Vertical Bars")
+
+# stacked
+d3po(dout, width = 800, height = 600) %>%
+  po_bar(daes(y = type, x = mean, group = feature, color = color, stack = T)) %>%
+  po_labels(title = "Vertical Bars")
+```
+
 # Treemap
 
 To plot the share of Pokemon by type, we need to indicate the variables for the
@@ -246,7 +341,6 @@ d3po(dout, width = 800, height = 600) %>%
     daes(
       x = height, y = weight, group = type, color = color
     ),
-    stack = FALSE
   ) %>%
   po_labels(title = "Pokemon Evolution: Weight vs Height by Type (Area)")
 ```

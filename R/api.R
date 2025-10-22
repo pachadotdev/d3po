@@ -357,11 +357,11 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes, stack) {
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
-po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_bar")
+po_bar <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) UseMethod("po_bar")
 
 #' @export
 #' @method po_bar d3po
-po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE) {
   # defaults
   d3po$x$type <- "bar"
 
@@ -378,17 +378,28 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
+  # optional: sorting hint passed via daes, e.g. "desc-x" or "asc-y"
+  d3po$x$sort <- daes_to_opts(daes, "sort")
+  # stacking option: when TRUE the renderer may stack grouped series
+  # Check if stack was passed via daes(), if so use that; otherwise use the parameter
+  stack_from_daes <- daes_to_opts(daes, "stack")
+  if (!is.null(stack_from_daes)) {
+    d3po$x$stack <- stack_from_daes
+  } else {
+    d3po$x$stack <- stack
+  }
 
   return(d3po)
 }
 
 #' @export
 #' @method po_bar d3proxy
-po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
+po_bar.d3proxy <- function(d3po, ..., data, inherit_daes, stack) {
   assertthat::assert_that(!missing(data), msg = "Missing `data`")
   assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  assertthat::assert_that(!missing(stack), msg = "Missing `stack`")
 
-  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes, stack = stack))
 
   d3po$session$sendCustomMessage("d3po-bar", msg)
 

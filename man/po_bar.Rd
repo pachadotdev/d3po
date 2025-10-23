@@ -4,7 +4,7 @@
 \alias{po_bar}
 \title{Bar}
 \usage{
-po_bar(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE)
+po_bar(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}

@@ -4,7 +4,7 @@
 \alias{po_area}
 \title{Area}
 \usage{
-po_area(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE)
+po_area(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
@@ -15,8 +15,6 @@ po_area(d3po, ..., data = NULL, inherit_daes = TRUE, stack = FALSE)
 to \code{\link[=d3po]{d3po()}}.}
 
 \item{inherit_daes}{Whether to inherit aesthetics previous specified.}
-
-\item{stack}{Whether to stack the series.}
 }
 \value{
 an 'htmlwidgets' object with the desired interactive plot

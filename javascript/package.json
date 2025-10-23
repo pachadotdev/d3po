@@ -7,14 +7,15 @@
   "browser": "dist/d3po.min.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "BUILD_TYPE=minified vite build",
-    "build-debug": "BUILD_TYPE=minified-debug vite build",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
-    "lint": "eslint src/**/*.js",
-    "lint:fix": "eslint src/**/*.js --fix",
-    "format": "prettier --write \"src/**/*.js\""
+  "dev": "vite",
+  "prebuild": "npm run format && npm run lint:fix",
+  "build": "BUILD_TYPE=minified vite build",
+  "build-debug": "BUILD_TYPE=minified-debug vite build",
+  "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+  "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+  "lint": "eslint src/**/*.js",
+  "lint:fix": "eslint src/**/*.js --fix",
+  "format": "prettier --write \"src/**/*.js\""
   },
   "keywords": [
     "d3",

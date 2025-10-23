@@ -1,6 +1,13 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, getHighlightColor, resolveTooltipFormatter, showTooltipWithFormatter } from '../utils.js';
+import {
+  validateData,
+  showTooltip,
+  hideTooltip,
+  getHighlightColor,
+  resolveTooltipFormatter,
+  showTooltipWithFormatter,
+} from '../utils.js';
 
 /**
  * Line chart visualization
@@ -52,7 +59,10 @@ export default class LineChart extends D3po {
     }
 
     // Create provisional yScale (inner height unaffected by left margin)
-    const innerHeight = this.options.height - this.options.margin.top - this.options.margin.bottom;
+    const innerHeight =
+      this.options.height -
+      this.options.margin.top -
+      this.options.margin.bottom;
     const yScale = d3
       .scaleLinear()
       .domain([0, d3.max(this.data, d => d[this.yField])])
@@ -88,7 +98,7 @@ export default class LineChart extends D3po {
     // Compute required left margin to accommodate tick labels + desired gap.
     // Also measure the y-axis label size (height) because when rotated the
     // label's vertical size contributes to how far left it reaches.
-    const gap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+    const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
 
     // Create a temporary label to measure its bbox (place it off-canvas)
     let labelBBoxHeight = 0;
@@ -98,7 +108,13 @@ export default class LineChart extends D3po {
         .attr('x', -9999)
         .attr('y', -9999)
         .style('font-size', '14px')
-        .text((this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : ''));
+        .text(
+          this.options && this.options.yLabel
+            ? this.options.yLabel
+            : this.yField
+              ? String(this.yField)
+              : ''
+        );
       const lb = probeLabel.node().getBBox();
       labelBBoxHeight = lb.height || 0;
       probeLabel.remove();
@@ -108,7 +124,8 @@ export default class LineChart extends D3po {
     }
 
     const requiredLeft = Math.ceil(maxTickWidth + gap + labelBBoxHeight + 8); // extra safety padding
-    const currentLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+    const currentLeft =
+      (this.options && this.options.margin && this.options.margin.left) || 60;
     let usedLeft = Math.max(currentLeft, requiredLeft);
 
     // If we need to expand left margin, update options so getInnerWidth() uses it
@@ -168,8 +185,18 @@ export default class LineChart extends D3po {
     }
 
     const xLabelPadding = Math.max(8, maxTickHeight + 8);
-    const xLabelText = (this.options && this.options.xLabel) ? this.options.xLabel : (this.xField ? String(this.xField) : '');
-    const yLabelText = (this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : '');
+    const xLabelText =
+      this.options && this.options.xLabel
+        ? this.options.xLabel
+        : this.xField
+          ? String(this.xField)
+          : '';
+    const yLabelText =
+      this.options && this.options.yLabel
+        ? this.options.yLabel
+        : this.yField
+          ? String(this.yField)
+          : '';
 
     xg.append('text')
       .attr('x', this.getInnerWidth() / 2)
@@ -181,21 +208,25 @@ export default class LineChart extends D3po {
 
     const yg = this.chart.append('g').call(yAxis);
 
-  // (y-axis tick widths were measured earlier via probeGroup)
+    // (y-axis tick widths were measured earlier via probeGroup)
 
-  // Compute target offset: label should sit left of tick labels by `gap` pixels
-  const labelGap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
-  let labelOffset = maxTickWidth + labelGap;
-  // clamp so label does not move outside the left margin (leave 4px padding)
-  const marginLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
-  const maxAllowed = Math.max(10, marginLeft - 4);
-  if (labelOffset > maxAllowed) labelOffset = maxAllowed;
+    // Compute target offset: label should sit left of tick labels by `gap` pixels
+    const labelGap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+    let labelOffset = maxTickWidth + labelGap;
+    // clamp so label does not move outside the left margin (leave 4px padding)
+    const marginLeft =
+      (this.options && this.options.margin && this.options.margin.left) || 60;
+    const maxAllowed = Math.max(10, marginLeft - 4);
+    if (labelOffset > maxAllowed) labelOffset = maxAllowed;
 
     // Place the y label so it sits to the left of tick labels by `labelOffset`.
     // Use translate before rotate so the offset is applied in the unrotated
     // coordinate system and the label reliably appears left of the ticks.
     yg.append('text')
-      .attr('transform', `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`) 
+      .attr(
+        'transform',
+        `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`
+      )
       .attr('x', 0)
       .attr('y', 0)
       .attr('fill', '#000')
@@ -207,7 +238,13 @@ export default class LineChart extends D3po {
     this.chart
       .append('g')
       .attr('class', 'grid')
-      .call(d3.axisLeft(yScale).ticks(6).tickSize(-this.getInnerWidth()).tickFormat(''))
+      .call(
+        d3
+          .axisLeft(yScale)
+          .ticks(6)
+          .tickSize(-this.getInnerWidth())
+          .tickFormat('')
+      )
       .attr('opacity', 0.08);
 
     // Line generator
@@ -254,10 +291,13 @@ export default class LineChart extends D3po {
         .attr('stroke', color)
         .attr('stroke-width', 2);
 
-  // Tooltip formatter
-  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
+      // Tooltip formatter
+      var tooltipFormatter = resolveTooltipFormatter(
+        this.tooltip,
+        this.options && this.options.tooltip
+      );
 
-  // Add points
+      // Add points
       this.chart
         .selectAll(`.point-${i}`)
         .data(data)
@@ -270,25 +310,42 @@ export default class LineChart extends D3po {
         .attr('fill', color)
         .attr('stroke', '#fff')
         .attr('stroke-width', 1.2)
-  .on('mouseover', (event, d) => {
+        .on('mouseover', (event, d) => {
           const circle = d3.select(event.currentTarget);
           const highlightColor = getHighlightColor(color);
-          circle
-            .raise()
-            .attr('r', 8)
-            .attr('fill', highlightColor);
+          circle.raise().attr('r', 8).attr('fill', highlightColor);
 
           if (tooltipFormatter) {
-            const fallback = () => (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') + `${this.xField}: ${d[this.xField]}<br/>` + `${this.yField}: ${d[this.yField]}`;
-            showTooltipWithFormatter(event, tooltipFormatter, null, d, this.options.fontFamily, this.options.fontSize, fallback);
+            const fallback = () =>
+              (this.groupField && groupValue
+                ? `<strong>${groupValue}</strong>`
+                : '') +
+              `${this.xField}: ${d[this.xField]}<br/>` +
+              `${this.yField}: ${d[this.yField]}`;
+            showTooltipWithFormatter(
+              event,
+              tooltipFormatter,
+              null,
+              d,
+              this.options.fontFamily,
+              this.options.fontSize,
+              fallback
+            );
           } else {
-            showTooltip(event, (this.groupField && groupValue ? `<strong>${groupValue}</strong>` : '') + `${this.xField}: ${d[this.xField]}<br/>` + `${this.yField}: ${d[this.yField]}`, this.options.fontFamily, this.options.fontSize);
+            showTooltip(
+              event,
+              (this.groupField && groupValue
+                ? `<strong>${groupValue}</strong>`
+                : '') +
+                `${this.xField}: ${d[this.xField]}<br/>` +
+                `${this.yField}: ${d[this.yField]}`,
+              this.options.fontFamily,
+              this.options.fontSize
+            );
           }
         })
-        .on('mouseout', (event) => {
-          d3.select(event.currentTarget)
-            .attr('r', 4)
-            .attr('fill', color);
+        .on('mouseout', event => {
+          d3.select(event.currentTarget).attr('r', 4).attr('fill', color);
           hideTooltip();
         });
     });

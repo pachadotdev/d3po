@@ -27,7 +27,8 @@ Valid aesthetics (depending on the geom)
 \item \code{name}: name data.
 \item \code{color}: color of geom.
 \item \code{size}: size of geom.
-\item \code{layout}: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds, sugiyama), in quotes.
+\item \code{stack}: \code{TRUE} or \code{FALSE} to indicate if the geom should be stacked (for bar charts).
+\item \code{layout}: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
 }
 }
 

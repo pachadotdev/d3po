@@ -1,6 +1,12 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { showTooltip, hideTooltip, getHighlightColor, escapeHtml, resolveTooltipFormatter } from '../utils.js';
+import {
+  showTooltip,
+  hideTooltip,
+  getHighlightColor,
+  escapeHtml,
+  resolveTooltipFormatter,
+} from '../utils.js';
 
 /**
  * Network/Graph visualization
@@ -65,32 +71,34 @@ export default class Network extends D3po {
 
     // Check if this is a manual layout (coordinates provided from R)
     const isManualLayout = this.options.layout === 'manual';
-    
+
     if (isManualLayout) {
       // For manual layout, scale coordinates from R to fit the viewport
       const xExtent = d3.extent(this.nodes, d => d.x);
       const yExtent = d3.extent(this.nodes, d => d.y);
       const xRange = xExtent[1] - xExtent[0];
       const yRange = yExtent[1] - yExtent[0];
-      
+
       // Check if coordinates are already in pixel space (roughly 0-width, 0-height)
       // vs. layout algorithm space (typically small values like -5 to +5)
       const needsScaling = xRange < width * 0.5 || yRange < height * 0.5;
-      
+
       if (needsScaling) {
         // Use a fixed domain based on the actual extent with some padding
         // This ensures consistent scaling even when individual nodes are moved
         const xPadding = Math.max(xRange * 0.15, 0.5); // At least 0.5 units of padding
         const yPadding = Math.max(yRange * 0.15, 0.5);
-        
-        const xScale = d3.scaleLinear()
+
+        const xScale = d3
+          .scaleLinear()
           .domain([xExtent[0] - xPadding, xExtent[1] + xPadding])
           .range([80, width - 80]); // More margin for labels
-        
-        const yScale = d3.scaleLinear()
+
+        const yScale = d3
+          .scaleLinear()
           .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
           .range([80, height - 80]);
-        
+
         // Scale and fix nodes at their positions
         this.nodes.forEach(d => {
           if (d.x === undefined || d.y === undefined) {
@@ -105,7 +113,6 @@ export default class Network extends D3po {
           d.fx = d.x;
           d.fy = d.y;
         });
-        
       } else {
         // Coordinates are already in pixel space, use them directly
         this.nodes.forEach(d => {
@@ -117,13 +124,12 @@ export default class Network extends D3po {
           d.fx = d.x;
           d.fy = d.y;
         });
-        
       }
     }
-    
+
     // Create simulation
     const simulation = d3.forceSimulation(this.nodes);
-    
+
     if (isManualLayout) {
       // For manual layouts, add minimal link force just to connect nodes
       // Use strength 0 so it doesn't move nodes
@@ -135,7 +141,7 @@ export default class Network extends D3po {
           .distance(0)
           .strength(0)
       );
-      
+
       // Run simulation once to initialize link references, then stop
       simulation.tick();
       simulation.stop();
@@ -221,12 +227,15 @@ export default class Network extends D3po {
     const fontSize = this.options.fontSize;
 
     // resolve tooltip formatter: prefer this.tooltip (from D3po base) then options.tooltip
-  let tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
+    let tooltipFormatter = resolveTooltipFormatter(
+      this.tooltip,
+      this.options && this.options.tooltip
+    );
 
     node
       .on('mouseover', function (event, d) {
-  const highlightColor = getHighlightColor(d._originalColor);
-  d3.select(this).attr('fill', highlightColor);
+        const highlightColor = getHighlightColor(d._originalColor);
+        d3.select(this).attr('fill', highlightColor);
 
         // If a formatter is provided, use it: (value, row)
         if (tooltipFormatter) {
@@ -241,28 +250,28 @@ export default class Network extends D3po {
           }
         }
 
-  // Default tooltip: match Treemap style but show the actual numeric field name (e.g., 'size: 10' or 'value: 20')
-  const typeLabel = escapeHtml(d.id || 'Node');
-  // Determine which numeric field to show: prefer explicit sizeField, then common names 'value' or 'size', then 'count'
-  const numericFieldCandidates = [];
-  if (sizeField) numericFieldCandidates.push(sizeField);
-  numericFieldCandidates.push('value', 'size', 'count');
+        // Default tooltip: match Treemap style but show the actual numeric field name (e.g., 'size: 10' or 'value: 20')
+        const typeLabel = escapeHtml(d.id || 'Node');
+        // Determine which numeric field to show: prefer explicit sizeField, then common names 'value' or 'size', then 'count'
+        const numericFieldCandidates = [];
+        if (sizeField) numericFieldCandidates.push(sizeField);
+        numericFieldCandidates.push('value', 'size', 'count');
 
-  let chosenField = null;
-  let chosenValue = null;
-  for (const f of numericFieldCandidates) {
-    if (d[f] != null) {
-      chosenField = f;
-      chosenValue = d[f];
-      break;
-    }
-  }
+        let chosenField = null;
+        let chosenValue = null;
+        for (const f of numericFieldCandidates) {
+          if (d[f] != null) {
+            chosenField = f;
+            chosenValue = d[f];
+            break;
+          }
+        }
 
-  let tooltipContent = `<strong>${typeLabel}</strong>`;
-  if (chosenField != null) {
-    tooltipContent += `${escapeHtml(String(chosenField))}: ${escapeHtml(String(chosenValue))}`;
-  }
-  showTooltip(event, tooltipContent, fontFamily, fontSize);
+        let tooltipContent = `<strong>${typeLabel}</strong>`;
+        if (chosenField != null) {
+          tooltipContent += `${escapeHtml(String(chosenField))}: ${escapeHtml(String(chosenValue))}`;
+        }
+        showTooltip(event, tooltipContent, fontFamily, fontSize);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).attr('fill', d._originalColor);

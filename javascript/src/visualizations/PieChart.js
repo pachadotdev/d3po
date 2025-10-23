@@ -1,6 +1,14 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, getTextColor, getHighlightColor, resolveTooltipFormatter, showTooltipWithFormatter } from '../utils.js';
+import {
+  validateData,
+  showTooltip,
+  hideTooltip,
+  getTextColor,
+  getHighlightColor,
+  resolveTooltipFormatter,
+  showTooltipWithFormatter,
+} from '../utils.js';
 
 /**
  * Pie chart visualization
@@ -39,8 +47,8 @@ export default class PieChart extends D3po {
     this.startAngle = options.startAngle !== undefined ? options.startAngle : 0;
     this.endAngle =
       options.endAngle !== undefined ? options.endAngle : 2 * Math.PI;
-  // labelMode: 'percent' (default) or 'count' — controls inner labels
-  this.labelMode = options.labelMode || 'percent';
+    // labelMode: 'percent' (default) or 'count' — controls inner labels
+    this.labelMode = options.labelMode || 'percent';
   }
 
   /**
@@ -56,12 +64,12 @@ export default class PieChart extends D3po {
 
     const width = this.getInnerWidth();
     const height = this.getInnerHeight();
-    
+
     if (width <= 0 || height <= 0 || isNaN(width) || isNaN(height)) {
       console.error('Invalid chart dimensions:', { width, height });
       return this;
     }
-    
+
     const radius = Math.min(width, height) / 2;
 
     // Calculate the total angle range for percentage calculations
@@ -70,7 +78,7 @@ export default class PieChart extends D3po {
 
     // Calculate center position
     const centerX = this.options.margin.left + width / 2;
-    
+
     // Adjust vertical position for half charts to use space better
     // For half charts, position the center so the chart uses available space
     let centerY;
@@ -92,10 +100,7 @@ export default class PieChart extends D3po {
     }
 
     // Move chart to center
-    this.chart.attr(
-      'transform',
-      `translate(${centerX},${centerY})`
-    );
+    this.chart.attr('transform', `translate(${centerX},${centerY})`);
 
     // Create pie layout
     const pie = d3
@@ -116,7 +121,7 @@ export default class PieChart extends D3po {
       .innerRadius(radius * 0.7)
       .outerRadius(radius * 0.7);
 
-  // use shared getTextColor/getHighlightColor from utils
+    // use shared getTextColor/getHighlightColor from utils
 
     // Capture field names for tooltips and labels
     const groupField = this.groupField;
@@ -155,13 +160,16 @@ export default class PieChart extends D3po {
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
 
-  // Tooltip formatter: prefer compiled this.tooltip from base, otherwise evaluate options.tooltip
-  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
+    // Tooltip formatter: prefer compiled this.tooltip from base, otherwise evaluate options.tooltip
+    var tooltipFormatter = resolveTooltipFormatter(
+      this.tooltip,
+      this.options && this.options.tooltip
+    );
 
     arcs
       .on('mouseover', function (event, d) {
-  const highlightColor = getHighlightColor(d._originalColor);
-  d3.select(this).attr('fill', highlightColor);
+        const highlightColor = getHighlightColor(d._originalColor);
+        d3.select(this).attr('fill', highlightColor);
 
         if (tooltipFormatter) {
           try {
@@ -172,7 +180,10 @@ export default class PieChart extends D3po {
               var total = 0;
               // data may be in outer scope; if not, derive from current d3 selection
               if (Array.isArray(d.data.__pie_source__)) {
-                total = d.data.__pie_source__.reduce((s, x) => s + (x[sizeField] || 0), 0);
+                total = d.data.__pie_source__.reduce(
+                  (s, x) => s + (x[sizeField] || 0),
+                  0
+                );
               } else if (this && this.data) {
                 total = this.data.reduce((s, x) => s + (x[sizeField] || 0), 0);
               } else {
@@ -187,8 +198,19 @@ export default class PieChart extends D3po {
             }
 
             // For consistency with other charts, call formatter as (value, row)
-            const fallback = () => `<strong>${d.data[groupField]}</strong>` + `Value: ${d.data[sizeField]}<br/>` + `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`;
-            showTooltipWithFormatter(event, tooltipFormatter, pct, d.data, fontFamily, fontSize, fallback);
+            const fallback = () =>
+              `<strong>${d.data[groupField]}</strong>` +
+              `Value: ${d.data[sizeField]}<br/>` +
+              `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`;
+            showTooltipWithFormatter(
+              event,
+              tooltipFormatter,
+              pct,
+              d.data,
+              fontFamily,
+              fontSize,
+              fallback
+            );
             return;
           } catch (e) {
             console.warn('PieChart: tooltip formatter failed', e);
@@ -228,7 +250,7 @@ export default class PieChart extends D3po {
       })
       .style('font-weight', 'bold');
 
-    labelText.each(function(d) {
+    labelText.each(function (d) {
       const node = d3.select(this);
       const percent = ((d.endAngle - d.startAngle) / totalAngle) * 100;
       // clear any existing content
@@ -236,23 +258,27 @@ export default class PieChart extends D3po {
 
       if (self.labelMode === 'count') {
         // first line: category
-        node.append('tspan')
+        node
+          .append('tspan')
           .attr('x', 0)
           .attr('dy', '-6')
           .text(d.data[groupField] || '');
         // second line: count
-        node.append('tspan')
+        node
+          .append('tspan')
           .attr('x', 0)
           .attr('dy', '14')
           .text(d.data[sizeField] != null ? d.data[sizeField].toString() : '');
       } else {
         // default behavior: show category + percent (two lines) when percent > 5
         if (percent > 5) {
-          node.append('tspan')
+          node
+            .append('tspan')
             .attr('x', 0)
             .attr('dy', '-6')
             .text(d.data[groupField] || '');
-          node.append('tspan')
+          node
+            .append('tspan')
             .attr('x', 0)
             .attr('dy', '14')
             .text(`${percent.toFixed(1)}%`);

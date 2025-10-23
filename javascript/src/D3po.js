@@ -1,5 +1,10 @@
 import * as d3 from 'd3';
-import { validateData, triggerDownload, maybeEvalJSFormatter, escapeHtml } from './utils.js';
+import {
+  validateData,
+  triggerDownload,
+  maybeEvalJSFormatter,
+  escapeHtml,
+} from './utils.js';
 
 /**
  * Base D3po class for creating interactive visualizations
@@ -41,9 +46,9 @@ export default class D3po {
       ...options,
     };
 
-  this.data = null;
-  this.svg = null;
-  this.chart = null;
+    this.data = null;
+    this.svg = null;
+    this.chart = null;
 
     // Optional formatters/templates provided by the R or JS layer
     // tooltip: string/function
@@ -77,11 +82,14 @@ export default class D3po {
       const tf = maybeEvalJSFormatter(options.tooltip);
       if (tf) {
         this.tooltip = tf;
-      } else if (typeof options.tooltip === 'string' && options.tooltip.indexOf('{') >= 0) {
+      } else if (
+        typeof options.tooltip === 'string' &&
+        options.tooltip.indexOf('{') >= 0
+      ) {
         const template = options.tooltip;
-        this.tooltip = function(_v, row) {
+        this.tooltip = function (_v, row) {
           if (!row) return '';
-          return template.replace(/\{([^}]+)\}/g, function(_, key) {
+          return template.replace(/\{([^}]+)\}/g, function (_, key) {
             var val = row[key];
             if (val === null || val === undefined) return '';
             return escapeHtml(String(val));
@@ -100,8 +108,10 @@ export default class D3po {
     // axisLabels: { x: 'label text', y: 'label text' }
     if (options.axisLabels !== undefined) {
       // mirror into options.xLabel / options.yLabel for backward compatibility
-      if (!this.options.xLabel && options.axisLabels.x !== undefined) this.options.xLabel = options.axisLabels.x;
-      if (!this.options.yLabel && options.axisLabels.y !== undefined) this.options.yLabel = options.axisLabels.y;
+      if (!this.options.xLabel && options.axisLabels.x !== undefined)
+        this.options.xLabel = options.axisLabels.x;
+      if (!this.options.yLabel && options.axisLabels.y !== undefined)
+        this.options.yLabel = options.axisLabels.y;
       this.options.axisLabels = options.axisLabels;
     }
 
@@ -162,7 +172,7 @@ export default class D3po {
   _addDownloadButtons() {
     // Store reference to this for use in event handlers
     const self = this;
-    
+
     const buttonGroup = this.svg
       .append('g')
       .attr('class', 'd3po-download-buttons')
@@ -245,15 +255,15 @@ export default class D3po {
       .text('📥 SVG');
 
     svgItem
-      .on('click', function(event) {
+      .on('click', function (event) {
         event.stopPropagation();
         self.downloadSVG();
         self._hideMenu();
       })
-      .on('mouseover', function() {
+      .on('mouseover', function () {
         d3.select(this).select('rect').style('fill', '#f0f0f0');
       })
-      .on('mouseout', function() {
+      .on('mouseout', function () {
         d3.select(this).select('rect').style('fill', 'transparent');
       });
 
@@ -282,32 +292,30 @@ export default class D3po {
       .text('📥 PNG');
 
     pngItem
-      .on('click', function(event) {
+      .on('click', function (event) {
         event.stopPropagation();
         self.downloadPNG();
         self._hideMenu();
       })
-      .on('mouseover', function() {
+      .on('mouseover', function () {
         d3.select(this).select('rect').style('fill', '#f0f0f0');
       })
-      .on('mouseout', function() {
+      .on('mouseout', function () {
         d3.select(this).select('rect').style('fill', 'transparent');
       });
 
     // Show menu on hover instead of click
     hamburger
-      .on('mouseenter', function(event) {
+      .on('mouseenter', function (event) {
         event.stopPropagation();
         // Highlight the hamburger
-        d3.select(this).selectAll('line')
-          .style('stroke', '#333');
+        d3.select(this).selectAll('line').style('stroke', '#333');
         self._showMenu();
       })
-      .on('mouseleave', function() {
+      .on('mouseleave', function () {
         // Reset hamburger color
-        d3.select(this).selectAll('line')
-          .style('stroke', '#666');
-        
+        d3.select(this).selectAll('line').style('stroke', '#666');
+
         // Delay hiding to allow moving to menu
         setTimeout(() => {
           if (!self._isMouseOverMenu) {
@@ -318,10 +326,10 @@ export default class D3po {
 
     // Keep menu open when hovering over it
     menu
-      .on('mouseenter', function() {
+      .on('mouseenter', function () {
         self._isMouseOverMenu = true;
       })
-      .on('mouseleave', function() {
+      .on('mouseleave', function () {
         self._isMouseOverMenu = false;
         self._hideMenu();
       });
@@ -436,15 +444,15 @@ export default class D3po {
    */
   setDownload(show) {
     this.options.download = show;
-    
+
     // Remove existing download buttons if they exist
     this.svg.select('.d3po-download-buttons').remove();
-    
+
     // Add them back if show is true
     if (show) {
       this._addDownloadButtons();
     }
-    
+
     return this;
   }
 
@@ -473,7 +481,6 @@ export default class D3po {
 
       const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       triggerDownload(blob, 'd3po-chart.svg');
-      
     } catch (error) {
       console.error('Error in downloadSVG:', error);
       alert('Failed to download SVG: ' + error.message);
@@ -491,7 +498,7 @@ export default class D3po {
       const clonedSvg = svgNode.cloneNode(true);
       clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
       clonedSvg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-      
+
       const downloadButtons = clonedSvg.querySelector('.d3po-download-buttons');
       if (downloadButtons) {
         downloadButtons.remove();
@@ -510,7 +517,7 @@ export default class D3po {
           ctx.fillStyle = this.options.background || 'white';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0);
-          
+
           canvas.toBlob(blob => {
             if (blob) {
               triggerDownload(blob, 'd3po-chart.png');
@@ -531,11 +538,12 @@ export default class D3po {
       };
 
       // Convert SVG to base64 data URL
-      const base64 = btoa(encodeURIComponent(svgData).replace(/%([0-9A-F]{2})/g, (match, p1) => {
-        return String.fromCharCode('0x' + p1);
-      }));
+      const base64 = btoa(
+        encodeURIComponent(svgData).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+          return String.fromCharCode('0x' + p1);
+        })
+      );
       img.src = 'data:image/svg+xml;base64,' + base64;
-      
     } catch (error) {
       console.error('Error in downloadPNG:', error);
       alert('Failed to download PNG: ' + error.message);
@@ -565,18 +573,16 @@ export default class D3po {
     this.chart.selectAll('*').remove();
 
     // Update SVG dimensions
-    this.svg
-      .attr('width', width)
-      .attr('height', height);
+    this.svg.attr('width', width).attr('height', height);
 
     // Update title position
     if (this.options.title) {
-      this.svg.select('text')
-        .attr('x', width / 2);
+      this.svg.select('text').attr('x', width / 2);
     }
 
     // Update download buttons position
-    this.svg.select('.d3po-download-buttons')
+    this.svg
+      .select('.d3po-download-buttons')
       .attr('transform', `translate(${width - 40}, 20)`);
 
     // Re-render the chart with new dimensions

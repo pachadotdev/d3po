@@ -13,7 +13,7 @@ function injectTooltipStyles(fontFamily, fontSize) {
   // If font changed, remove old styles
   const newFont = `${fontFamily}-${fontSize}`;
   if (tooltipStylesInjected && currentTooltipFont === newFont) return;
-  
+
   // Remove old style if exists
   const oldStyle = document.getElementById('d3po-tooltip-styles');
   if (oldStyle) {
@@ -123,7 +123,8 @@ export function hideTooltip() {
 export function resolveTooltipFormatter(instanceTooltip, optionsTooltip) {
   if (typeof instanceTooltip === 'function') return instanceTooltip;
   if (typeof optionsTooltip === 'function') return optionsTooltip;
-  if (typeof optionsTooltip === 'string') return maybeEvalJSFormatter(optionsTooltip);
+  if (typeof optionsTooltip === 'string')
+    return maybeEvalJSFormatter(optionsTooltip);
   return null;
 }
 
@@ -138,7 +139,15 @@ export function resolveTooltipFormatter(instanceTooltip, optionsTooltip) {
  * @param {number} fontSize
  * @param {Function|string} fallback - either a string or function(value,row) -> string
  */
-export function showTooltipWithFormatter(event, formatter, value, row, fontFamily, fontSize, fallback) {
+export function showTooltipWithFormatter(
+  event,
+  formatter,
+  value,
+  row,
+  fontFamily,
+  fontSize,
+  fallback
+) {
   try {
     if (typeof formatter === 'function') {
       const out = formatter(value, row);
@@ -149,7 +158,10 @@ export function showTooltipWithFormatter(event, formatter, value, row, fontFamil
     console.error('Tooltip formatter error', err);
   }
 
-  const content = (typeof fallback === 'function') ? fallback(value, row) : String(fallback || '');
+  const content =
+    typeof fallback === 'function'
+      ? fallback(value, row)
+      : String(fallback || '');
   return showTooltip(event, content, fontFamily, fontSize);
 }
 
@@ -348,9 +360,9 @@ export function triggerDownload(blob, filename) {
   link.href = url;
   link.download = filename;
   link.style.display = 'none';
-  
+
   document.body.appendChild(link);
-  
+
   setTimeout(() => {
     link.click();
     setTimeout(() => {
@@ -405,7 +417,11 @@ export function maybeEvalJSFormatter(opt) {
     var name = m[1];
     var args = m[2] || '';
     try {
-      return new Function('value', 'row', 'return window.d3po.format["' + name + '"](' + args + ');');
+      return new Function(
+        'value',
+        'row',
+        'return window.d3po.format["' + name + '"](' + args + ');'
+      );
     } catch (e) {
       console.warn('d3po: failed compiling simple formatter', opt, e);
       return null;
@@ -414,7 +430,11 @@ export function maybeEvalJSFormatter(opt) {
 
   // Fallback: evaluate expression with window.d3po available in scope
   try {
-    return new Function('value', 'row', 'with (window.d3po) { return (' + expr + '); }');
+    return new Function(
+      'value',
+      'row',
+      'with (window.d3po) { return (' + expr + '); }'
+    );
   } catch (e) {
     console.warn('d3po: failed compiling JS formatter expression:', opt, e);
     return null;
@@ -427,18 +447,19 @@ export function maybeEvalJSFormatter(opt) {
 window.d3po = window.d3po || {};
 window.d3po.format = window.d3po.format || {};
 
-window.d3po.format['format-as-billion'] = function(value, decimals) {
+window.d3po.format['format-as-billion'] = function (value, decimals) {
   if (value == null || isNaN(value)) return '';
-  decimals = (typeof decimals === 'number') ? decimals : 2;
+  decimals = typeof decimals === 'number' ? decimals : 2;
   return (value / 1e9).toFixed(decimals) + 'B';
 };
 
-window.d3po.format['format-as-percentage'] = function(value, decimals) {
+window.d3po.format['format-as-percentage'] = function (value, decimals) {
   if (value == null || isNaN(value)) return '';
-  decimals = (typeof decimals === 'number') ? decimals : 0;
+  decimals = typeof decimals === 'number' ? decimals : 0;
   return (value * 100).toFixed(decimals) + '%';
 };
 
 // Also provide camelCase helpers for convenience
 window.d3po.format.formatAsBillion = window.d3po.format['format-as-billion'];
-window.d3po.format.formatAsPercentage = window.d3po.format['format-as-percentage'];
+window.d3po.format.formatAsPercentage =
+  window.d3po.format['format-as-percentage'];

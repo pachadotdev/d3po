@@ -1,7 +1,14 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, getHighlightColor, escapeHtml, resolveTooltipFormatter } from '../utils.js';
+import {
+  validateData,
+  showTooltip,
+  hideTooltip,
+  getHighlightColor,
+  escapeHtml,
+  resolveTooltipFormatter,
+} from '../utils.js';
 
 /**
  * Geographic map visualization
@@ -89,8 +96,8 @@ export default class GeoMap extends D3po {
     } else if (typeof tooltipField === 'function') {
       tooltipFormatter = tooltipField;
     } else if (typeof tooltipField === 'string') {
-  const tf = resolveTooltipFormatter(null, tooltipField);
-  if (tf) tooltipFormatter = tf;
+      const tf = resolveTooltipFormatter(null, tooltipField);
+      if (tf) tooltipFormatter = tf;
     }
 
     const paths = this.chart
@@ -121,8 +128,8 @@ export default class GeoMap extends D3po {
 
     paths
       .on('mouseover', function (event, d) {
-  const highlightColor = getHighlightColor(d._originalColor);
-  d3.select(this).attr('fill', highlightColor);
+        const highlightColor = getHighlightColor(d._originalColor);
+        d3.select(this).attr('fill', highlightColor);
 
         const data = dataMap.get(d.id);
         if (!data) return;
@@ -139,8 +146,15 @@ export default class GeoMap extends D3po {
           }
         }
 
-  const fieldValue = (tooltipField && typeof tooltipField === 'string') ? (data[tooltipField] != null ? escapeHtml(data[tooltipField]) : escapeHtml(d.id)) : escapeHtml(d.id);
-  const tooltipContent = `<strong>Region: ${fieldValue}</strong>` + (sizeField ? ` Value: ${escapeHtml(String(data[sizeField]))}` : '');
+        const fieldValue =
+          tooltipField && typeof tooltipField === 'string'
+            ? data[tooltipField] != null
+              ? escapeHtml(data[tooltipField])
+              : escapeHtml(d.id)
+            : escapeHtml(d.id);
+        const tooltipContent =
+          `<strong>Region: ${fieldValue}</strong>` +
+          (sizeField ? ` Value: ${escapeHtml(String(data[sizeField]))}` : '');
 
         showTooltip(event, tooltipContent, fontFamily, fontSize);
       })

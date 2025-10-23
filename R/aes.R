@@ -15,7 +15,8 @@
 #' - `name`: name data.
 #' - `color`: color of geom.
 #' - `size`: size of geom.
-#' - `layout`: layout of geom (nicely, fr, kk, graphopt, drl, lgl, mds, sugiyama), in quotes.
+#' - `stack`: `TRUE` or `FALSE` to indicate if the geom should be stacked (for bar charts).
+#' - `layout`: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
 #'
 #' @export
 #' @return Aesthetics for the plots such as axis (x,y), group, color and/or size

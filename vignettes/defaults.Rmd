@@ -26,6 +26,9 @@ pipe, `%>%`, both to filter/summarise data and create the charts.
 
 These examples are the same as in the documentation but with some extended comments.
 
+All the data transformations are done using base R to keep the package dependencies minimal. The `dplyr` code
+is shown commented out for reference.
+
 # Setup
 
 Let's start by loading packages.
@@ -68,17 +71,35 @@ d3po(pokemon, width = 800, height = 600) %>%
 For data with large ranges, log transformations can be useful:
 
 ```{r box3}
-# Add log-transformed columns
-pokemon$log_weight <- log10(pokemon$weight)
-pokemon$log_height <- log10(pokemon$height)
+dout <- pokemon
+dout$log_weight <- log10(dout$weight)
+dout$log_height <- log10(dout$height)
 
-d3po(pokemon, width = 800, height = 600) %>%
+# With dplyr
+# dout <- pokemon %>%
+#   mutate(
+#     log_weight = log10(weight),
+#     log_height = log10(height)
+#   )
+
+d3po(dout, width = 800, height = 600) %>%
   po_box(daes(x = type_1, y = log_weight, color = color_1)) %>%
   po_labels(title = "Log(Weight) Distribution by Type")
 ```
 
 ```{r box4}
-d3po(pokemon, width = 800, height = 600) %>%
+dout <- pokemon
+dout$log_weight <- log10(dout$weight)
+dout$log_height <- log10(dout$height)
+
+# With dplyr
+# dout <- pokemon %>%
+#   mutate(
+#     log_weight = log10(weight),
+#     log_height = log10(height)
+#   )
+
+d3po(dout, width = 800, height = 600) %>%
   po_box(daes(x = log_height, y = type_1, color = color_1)) %>%
   po_labels(title = "Log(Height) Distribution by Type")
 ```
@@ -93,6 +114,11 @@ Bar charts can be oriented vertically or horizontally by switching the x and y a
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
+
 d3po(dout, width = 800, height = 600) %>%
   po_bar(daes(x = type, y = count, color = color)) %>%
   po_labels(title = "Vertical Bars")
@@ -101,6 +127,14 @@ d3po(dout, width = 800, height = 600) %>%
 ## Horizontal Bars
 
 ```{r bar2}
+dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
+names(dout) <- c("type", "color", "count")
+
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
+
 d3po(dout, width = 800, height = 600) %>%
   po_bar(daes(x = count, y = type, color = color)) %>%
   po_labels(title = "Horizontal Bars")
@@ -109,44 +143,44 @@ d3po(dout, width = 800, height = 600) %>%
 ## Stacked Vertical Bars 
 
 ```{r bar3}
-# library(dplyr)
-# library(tidyr)
-
-# pokemon %>%
-#   group_by(type_1, color_1) %>%
-#   summarise(
-#     attack = mean(attack, na.rm = TRUE),
-#     defense = mean(defense, na.rm = TRUE),
-#     .groups = "drop"
-#   ) %>%
-#   pivot_longer(
-#     cols = c(attack, defense),
-#     names_to = "attribute",
-#     values_to = "variable"
-#   )
-
-# same in base R
-
-load_all()
-
 dout <- aggregate(cbind(mean_attack = attack, mean_defense = defense) ~ type_1 + color_1,
-                   data = pokemon, FUN = mean)
+  data = pokemon, FUN = mean
+)
 
 dout <- reshape(dout,
-                 varying = c("mean_attack", "mean_defense"),
-                 v.names = "mean",
-                 timevar = "feature",
-                 times = c("attack", "defense"),
-                 direction = "long",
-                 idvar = c("type_1", "color_1"))
+  varying = c("mean_attack", "mean_defense"),
+  v.names = "mean",
+  timevar = "feature",
+  times = c("attack", "defense"),
+  direction = "long",
+  idvar = c("type_1", "color_1")
+)
 
 rownames(dout) <- NULL
 colnames(dout) <- c("type", "color", "feature", "mean")
 
-# represent attach/defense as att = att / (att + def), def = def / (att + def)
-# group by pokemon type for the value proportions
+# Represent attach/defense as att = att / (att + def), def = def / (att + def)
+# Group by pokemon type for the value proportions
 dout$mean <- with(dout, ave(mean, type, FUN = function(x) x / sum(x)))
 dout$color <- ifelse(dout$feature == "attack", "#d04e66", "#165976")
+
+# With dplyr and tidyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(
+#     mean_attack = mean(attack, na.rm = TRUE),
+#     mean_defense = mean(defense, na.rm = TRUE),
+#     .groups = "drop"
+#   ) %>%
+#   pivot_longer(
+#     cols = c(mean_attack, mean_defense),
+#     names_to = "feature",
+#     values_to = "mean"
+#   ) %>%
+#   mutate(
+#     mean = mean / sum(mean),
+#     color = ifelse(feature == "mean_attack", "#d04e66", "#165976")
+#   )
 
 d3po(dout, width = 800, height = 600) %>%
   po_bar(daes(x = type, y = mean, group = feature, color = color, stack = T)) %>%
@@ -156,49 +190,47 @@ d3po(dout, width = 800, height = 600) %>%
 ## Stacked Horizontal Bars 
 
 ```{r bar4}
-# library(dplyr)
-# library(tidyr)
-
-# pokemon %>%
-#   group_by(type_1, color_1) %>%
-#   summarise(
-#     attack = mean(attack, na.rm = TRUE),
-#     defense = mean(defense, na.rm = TRUE),
-#     .groups = "drop"
-#   ) %>%
-#   pivot_longer(
-#     cols = c(attack, defense),
-#     names_to = "attribute",
-#     values_to = "variable"
-#   )
-
-# same in base R
-
 dout <- aggregate(cbind(mean_attack = attack, mean_defense = defense) ~ type_1 + color_1,
-                   data = pokemon, FUN = mean)
+  data = pokemon, FUN = mean
+)
 
 dout <- reshape(dout,
-                 varying = c("mean_attack", "mean_defense"),
-                 v.names = "mean",
-                 timevar = "feature",
-                 times = c("attack", "defense"),
-                 direction = "long",
-                 idvar = c("type_1", "color_1"))
+  varying = c("mean_attack", "mean_defense"),
+  v.names = "mean",
+  timevar = "feature",
+  times = c("attack", "defense"),
+  direction = "long",
+  idvar = c("type_1", "color_1")
+)
 
 rownames(dout) <- NULL
 colnames(dout) <- c("type", "color", "feature", "mean")
 
-# represent attach/defense as att = att / (att + def), def = def / (att + def)
-# group by pokemon type for the value proportions
+# Represent attach/defense as att = att / (att + def), def = def / (att + def)
+# Group by pokemon type for the value proportions
 dout$mean <- with(dout, ave(mean, type, FUN = function(x) x / sum(x)))
 dout$color <- ifelse(dout$feature == "attack", "#d04e66", "#165976")
 
-d3po(dout, width = 800, height = 600) %>%
-  po_bar(daes(y = type, x = mean, group = feature, color = color, stack = T)) %>%
-  po_labels(title = "Vertical Bars")
+# With dplyr and tidyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(
+#     mean_attack = mean(attack, na.rm = TRUE),
+#     mean_defense = mean(defense, na.rm = TRUE),
+#     .groups = "drop"
+#   ) %>%
+#   pivot_longer(
+#     cols = c(mean_attack, mean_defense),
+#     names_to = "feature",
+#     values_to = "mean"
+#   ) %>%
+#   mutate(
+#     mean = mean / sum(mean),
+#     color = ifelse(feature == "mean_attack", "#d04e66", "#165976")
+#   )
 
 d3po(dout, width = 800, height = 600) %>%
-  po_bar(daes(x = type, y = mean, group = feature, color = color, stack = T)) %>%
+  po_bar(daes(y = type, x = mean, group = feature, color = color, stack = T)) %>%
   po_labels(title = "Vertical Bars")
 ```
 
@@ -211,6 +243,11 @@ size, group, and (optionally) color. You can also specify the tiling method
 ```{r treemap1}
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
+
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
 
 d3po(dout, width = 800, height = 600) %>%
   po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) %>%
@@ -226,10 +263,19 @@ background to go back:
 ```{r treemap2}
 type2tmp <- as.character(pokemon$type_2)
 type2tmp[is.na(type2tmp)] <- "only"
+
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + type2tmp + color_1,
   data = pokemon, FUN = length
 )
 names(dout) <- c("type1", "type2", "color", "count")
+
+# With dplyr
+# dout <- pokemon %>%
+#   mutate(
+#     type2 = ifelse(is.na(type_2), "only", as.character(type_2))
+#   ) %>%
+#   group_by(type1 = type_1, type2 = type2, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
 
 d3po(dout, width = 800, height = 600) %>%
   po_treemap(
@@ -256,6 +302,11 @@ A complete pie chart with no inner radius:
 dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
 names(dout) <- c("type", "color", "count")
 
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
+
 d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(size = count, group = type, color = color)) %>%
   po_labels(title = "Full Pie")
@@ -266,6 +317,14 @@ d3po(dout, width = 800, height = 600) %>%
 A pie with an inner radius creating a "donut hole":
 
 ```{r pie2}
+dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
+names(dout) <- c("type", "color", "count")
+
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
+
 d3po(dout, width = 800, height = 600) %>%
   po_pie(daes(size = count, group = type, color = color, innerRadius = 0.4)) %>%
   po_labels(title = "Donut")
@@ -276,6 +335,14 @@ d3po(dout, width = 800, height = 600) %>%
 A semicircular pie chart:
 
 ```{r pie3}
+dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
+names(dout) <- c("type", "color", "count")
+
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
+
 d3po(dout, width = 800, height = 600) %>%
   po_pie(
     daes(
@@ -290,6 +357,14 @@ d3po(dout, width = 800, height = 600) %>%
 A semicircular donut chart:
 
 ```{r pie4}
+dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1, data = pokemon, FUN = length)
+names(dout) <- c("type", "color", "count")
+
+# With dplyr
+# dout <- pokemon %>%
+#   group_by(type = type_1, color = color_1) %>%
+#   summarise(count = n(), .groups = "drop")
+
 d3po(dout, width = 800, height = 600) %>%
   po_pie(
     daes(
@@ -313,6 +388,15 @@ dout <- pokemon[pokemon$name %in% c(
 
 colnames(dout) <- c("height", "weight", "type", "color")
 
+# With dplyt
+# dout <- pokemon %>%
+#   filter(name %in% c(
+#     "Squirtle", "Wartortle", "Blastoise",
+#     "Charmander", "Charmeleon", "Charizard",
+#     "Pikachu", "Raichu"
+#   )) %>%
+#   select(height, weight, type = type_1, color = color_1)
+
 d3po(dout, width = 800, height = 600) %>%
   po_line(
     daes(
@@ -324,26 +408,89 @@ d3po(dout, width = 800, height = 600) %>%
 
 # Area
 
+## Non-stacked
+
 Area charts are similar to line charts but with filled areas. You can also
 stack multiple series:
 
 ```{r area1}
 dout <- pokemon[pokemon$name %in% c(
-  "Squirtle", "Wartortle", "Blastoise",
-  "Charmander", "Charmeleon", "Charizard",
-  "Pikachu", "Raichu"
+  "Squirtle", "Wartortle", "Blastoise"
 ), c("height", "weight", "type_1", "color_1")]
 
 colnames(dout) <- c("height", "weight", "type", "color")
 
+# With dplyr
+# dout <- pokemon %>%
+#   filter(name %in% c(
+#     "Squirtle", "Wartortle", "Blastoise",
+#     "Charmander", "Charmeleon", "Charizard",
+#     "Pikachu", "Raichu"
+#   )) %>%
+#   select(height, weight, type = type_1, color = color_1)
 
 d3po(dout, width = 800, height = 600) %>%
   po_area(
     daes(
       x = height, y = weight, group = type, color = color
-    ),
+    )
   ) %>%
-  po_labels(title = "Pokemon Evolution: Weight vs Height by Type (Area)")
+  po_labels(title = "Pokemon Evolution (Squirtle): Weight vs Height by Evolution Stage (Non-Stacked Area)")
+```
+
+## Stacked
+
+```{r area2}
+load_all()
+
+dout <- pokemon[pokemon$name %in% c(
+  "Squirtle", "Wartortle", "Blastoise"
+), c("name", "attack", "defense", "hp")]
+
+colnames(dout) <- c("name", "attack", "defense")
+
+dout$stage <- 1:3
+
+# Prepare data in long format for attack and defense
+dout <- reshape(
+  dout,
+  varying = c("attack", "defense"),
+  v.names = "value",
+  timevar = "feature",
+  times = c("attack", "defense"),
+  direction = "long",
+  idvar = c("name", "stage")
+)
+
+dout$color <- ifelse(dout$feature == "attack", "#d04e66", "#165976")
+
+# Group by name and express the value as a proportion of the total (attack + defense)
+dout$value <- with(dout, ave(value, name, FUN = function(x) x / sum(x)))
+
+# With dplyr
+# dout <- pokemon %>%
+#   filter(name %in% c(
+#     "Squirtle", "Wartortle", "Blastoise"
+#   )) %>%
+#   select(name, attack, defense, type = type_1) %>%
+#   mutate(stage = 1:3) %>%
+#   pivot_longer(
+#     cols = c(attack, defense),
+#     names_to = "feature"
+#     values_to = "value"
+#   ) %>%
+#   mutate(color = ifelse(feature == "attack", "#d04e66", "#165976")) %>%
+#   group_by(name) %>%
+#   mutate(value = value / sum(value)) %>%
+#   ungroup()
+
+d3po(dout, width = 800, height = 600) %>%
+  po_area(
+    daes(
+      x = stage, y = value, group = feature, color = color, stack = T
+    )
+  ) %>%
+  po_labels(title = "Pokemon Evolution (Squirtle): Defense/Attack Proportion by Evolution Stage (Stacked Area)")
 ```
 
 # Scatterplot
@@ -366,13 +513,18 @@ d3po(pokemon, width = 800, height = 600) %>%
 ## Log(Height) vs Log(Weight)
 
 ```{r scatter2}
-# Add log-transformed columns if not already present
-if (!"log_height" %in% names(pokemon)) {
-  pokemon$log_height <- log10(pokemon$height)
-  pokemon$log_weight <- log10(pokemon$weight)
-}
+dout <- pokemon
+dout$log_height <- log10(pokemon$height)
+dout$log_weight <- log10(pokemon$weight)
 
-d3po(pokemon, width = 800, height = 600) %>%
+# With dplyr
+# dout <- pokemon %>%
+#   mutate(
+#     log_height = log10(height),
+#     log_weight = log10(weight)
+#   )
+
+d3po(dout, width = 800, height = 600) %>%
   po_scatter(
     daes(
       x = log_height, y = log_weight, group = name, color = color_1
@@ -387,15 +539,25 @@ You can use point size to show how close each Pokemon is to the mean:
 
 ```{r scatter3}
 # Calculate inverse distance from mean (closer = larger circles)
-mean_weight <- mean(pokemon$weight, na.rm = TRUE)
-mean_height <- mean(pokemon$height, na.rm = TRUE)
+dout <- pokemon
+mean_weight <- mean(dout$weight, na.rm = TRUE)
+mean_height <- mean(dout$height, na.rm = TRUE)
 
-pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
-pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
-pokemon$avg_distance <- (pokemon$distance_from_mean_weight + pokemon$distance_from_mean_height) / 2
-pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
+dout$distance_from_mean_weight <- abs(dout$weight - mean_weight)
+dout$distance_from_mean_height <- abs(dout$height - mean_height)
+dout$avg_distance <- (dout$distance_from_mean_weight + dout$distance_from_mean_height) / 2
+dout$inverse_distance_from_mean <- 1 / (dout$avg_distance + 0.01)
 
-d3po(pokemon, width = 800, height = 600) %>%
+# With dplyr
+# dout <- pokemon %>%
+#   mutate(
+#     distance_from_mean_weight = abs(weight - mean(weight, na.rm = TRUE)),
+#     distance_from_mean_height = abs(height - mean(height, na.rm = TRUE)),
+#     avg_distance = (distance_from_mean_weight + distance_from_mean_height) / 2,
+#     inverse_distance_from_mean = 1 / (avg_distance + 0.01)
+#   )
+
+d3po(dout, width = 800, height = 600) %>%
   po_scatter(
     daes(
       x = height, y = weight, size = inverse_distance_from_mean,
@@ -406,7 +568,32 @@ d3po(pokemon, width = 800, height = 600) %>%
 ```
 
 ```{r scatter4}
-d3po(pokemon, width = 800, height = 600) %>%
+# Calculate inverse distance from mean (closer = larger circles)
+dout <- pokemon
+dout$log_height <- log10(pokemon$height)
+dout$log_weight <- log10(pokemon$weight)
+mean_log_weight <- mean(dout$log_weight, na.rm = TRUE)
+mean_log_height <- mean(dout$log_height, na.rm = TRUE)
+
+dout$distance_from_mean_log_weight <- abs(dout$log_weight - mean_log_weight)
+dout$distance_from_mean_log_height <- abs(dout$log_height - mean_log_height)
+dout$avg_distance <- (dout$distance_from_mean_log_weight + dout$distance_from_mean_log_height) / 2
+dout$inverse_distance_from_mean <- 1 / (dout$avg_distance + 0.01)
+
+# With dplyr
+# dout <- pokemon %>%
+#   mutate(
+#     log_height = log10(height),
+#     log_weight = log10(weight)
+#   ) %>%
+#   mutate(
+#     distance_from_mean_log_weight = abs(log_weight - mean(log_weight, na.rm = TRUE)),
+#     distance_from_mean_log_height = abs(log_height - mean(log_height, na.rm = TRUE)),
+#     avg_distance = (distance_from_mean_log_weight + distance_from_mean_log_height) / 2,
+#     inverse_distance_from_mean = 1 / (avg_distance + 0.01)
+#   )
+
+d3po(dout, width = 800, height = 600) %>%
   po_scatter(
     daes(
       x = log_height, y = log_weight, size = inverse_distance_from_mean,
@@ -430,6 +617,17 @@ dout$pokemon_count <- ifelse(dout$id == "CL", 1L, 0L)
 dout$pokemon_count <- ifelse(dout$id == "GY", 1L, dout$pokemon_count)
 dout$color <- ifelse(dout$id %in% c("CL", "GY"), "#F85888", "#e0e0e0")
 
+# With dplyr
+# dout <- map_ids(d3po::maps$south_america$continent) %>%
+#   mutate(
+#     pokemon_count = case_when(
+#       id == "CL" ~ 1L,
+#       id == "GY" ~ 1L,
+#       TRUE ~ 0L
+#     ),
+#     color = ifelse(id %in% c("CL", "GY"), "#F85888", "#e0e0e0")
+#   )
+
 d3po(dout, width = 800, height = 600) %>%
   po_geomap(
     daes(
@@ -448,6 +646,13 @@ dout <- map_ids(d3po::maps$south_america$chile)
 # Only Magallanes has Pokemon (Mewtwo lives there!)
 dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
 dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
+
+# With dplyr
+# dout <- map_ids(d3po::maps$south_america$chile) %>%
+#   mutate(
+#     pokemon_count = ifelse(id == "MA", 1L, 0L),
+#     color = ifelse(id == "MA", "#F85888", "#e0e0e0")
+#   )
 
 d3po(dout, width = 800, height = 600) %>%
   po_geomap(
@@ -492,9 +697,10 @@ d3po(pokemon_network, width = 800, height = 600) %>%
 Here is how I created the `pokemon_network` dataset:
 
 ```{r network-create, eval = FALSE}
-load_all()
 library(dplyr)
 library(igraph)
+library(jsonlite)
+library(purrr)
 
 pokemon_network_1 <- pokemon %>%
   filter(!is.na(type_2)) %>%
@@ -525,42 +731,30 @@ pokemon_network <- igraph::graph_from_data_frame(
   directed = FALSE
 )
 
+# remove loops
+pokemon_network <- igraph::simplify(pokemon_network, remove.multiple = FALSE, remove.loops = TRUE)
+
 pokemon_network$layout <- igraph::layout_with_kk(pokemon_network)
 rownames(pokemon_network$layout) <- V(pokemon_network)$name
 colnames(pokemon_network$layout) <- c("x", "y")
 
-# Manually optimize layout to minimize edge crossings
-# Place Flying at center since it's the biggest hub
-pokemon_network$layout["Flying", ] <- c(0, 0)
+pokemon_manual <- fromJSON("dev/pokemon_network_manual_layout.cyjs")
+pokemon_manual <- pokemon_manual$elements$nodes
+rownames(pokemon_manual$position) <- pokemon_manual$data$name
+pokemon_manual <- pokemon_manual$position
 
-# Place types that connect to Flying in a circle around it
-# Top: Dragon, Electric, Fire
-pokemon_network$layout["Dragon", ] <- c(2, 1.5)
-pokemon_network$layout["Electric", ] <- c(1, 2)
-pokemon_network$layout["Fire", ] <- c(-1, 2)
+# normalize on the range [-5,5]
+pokemon_manual <- pokemon_manual %>%
+  mutate(
+    x = scales::rescale(x, to = c(-5, 5)),
+    y = scales::rescale(y, to = c(-5, 5))
+  )
 
-# Right side: Steel (connects to Electric), Rock, Ground cluster
-pokemon_network$layout["Steel", ] <- c(2, 2.2)
-pokemon_network$layout["Rock", ] <- c(1.5, -1)
-pokemon_network$layout["Ground", ] <- c(0.5, -2)
+# reorder by rowname to match pokemon_network$layout
+pokemon_manual <- pokemon_manual[rownames(pokemon_network$layout), ]
 
-# Bottom: Ice (connects to Flying, Water, Psychic)
-pokemon_network$layout["Ice", ] <- c(-1, -2)
-pokemon_network$layout["Water", ] <- c(-2, -1)
+# Pass the layout coordinates back to the original graph
+pokemon_network$layout <- as.matrix(pokemon_manual)
 
-# Left side: Poison cluster (connects to Bug, Ghost, Grass, Flying, Ground, Water)
-pokemon_network$layout["Poison", ] <- c(-2, 0)
-pokemon_network$layout["Bug", ] <- c(-2.4, 1)
-pokemon_network$layout["Grass", ] <- c(-3, 0)
-pokemon_network$layout["Ghost", ] <- c(-2.5, -0.9)
-
-# Top left: Normal, Fairy (Normal connects to Flying and Fairy)
-pokemon_network$layout["Normal", ] <- c(-1.5, 1.5)
-pokemon_network$layout["Fairy", ] <- c(-2.5, 2)
-
-# Left side: Psychic (connects to Grass, Ice, Water, Fairy)
-pokemon_network$layout["Psychic", ] <- c(-3, -1.5)
-
-# Near Water: Fighting (only connects to Water)
-pokemon_network$layout["Fighting", ] <- c(-1.5, -1.5)
+use_data(pokemon_network, overwrite = TRUE)
 ```

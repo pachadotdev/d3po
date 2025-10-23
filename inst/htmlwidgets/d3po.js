@@ -126,6 +126,8 @@ HTMLWidgets.widget({
           case 'stacked':
             ChartClass = d3po.AreaChart;
             if (x.type === 'stacked') options.stacked = true;
+            // Pass stack option from R to JavaScript
+            if (x.stack !== undefined) options.stack = x.stack;
             break;
           case 'bar':
             ChartClass = d3po.BarChart;

@@ -1,6 +1,14 @@
 import * as d3 from 'd3';
 import D3po from '../D3po.js';
-import { validateData, showTooltip, hideTooltip, escapeHtml, getHighlightColor, resolveTooltipFormatter, showTooltipWithFormatter } from '../utils.js';
+import {
+  validateData,
+  showTooltip,
+  hideTooltip,
+  escapeHtml,
+  getHighlightColor,
+  resolveTooltipFormatter,
+  showTooltipWithFormatter,
+} from '../utils.js';
 
 /**
  * Scatter plot visualization
@@ -43,7 +51,10 @@ export default class ScatterPlot extends D3po {
     validateData(this.data, [this.xField, this.yField]);
 
     // Create provisional yScale (inner height unaffected by left margin)
-    const innerHeight = this.options.height - this.options.margin.top - this.options.margin.bottom;
+    const innerHeight =
+      this.options.height -
+      this.options.margin.top -
+      this.options.margin.bottom;
     const yScale = d3
       .scaleLinear()
       .domain(d3.extent(this.data, d => d[this.yField]))
@@ -93,9 +104,10 @@ export default class ScatterPlot extends D3po {
       labelBBoxHeight = 14;
     }
 
-    const gap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
+    const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
     const requiredLeft = Math.ceil(maxTickWidth + gap + labelBBoxHeight + 8); // extra safety padding
-    const currentLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+    const currentLeft =
+      (this.options && this.options.margin && this.options.margin.left) || 60;
     let usedLeft = Math.max(currentLeft, requiredLeft);
 
     // If we need to expand left margin, update options so getInnerWidth() uses it
@@ -146,7 +158,7 @@ export default class ScatterPlot extends D3po {
       yAxis.tickFormat(this.options.axisFormatters.y);
     }
 
-  // axes will be appended below with measurement-aware placement
+    // axes will be appended below with measurement-aware placement
 
     // Place axes groups and labels — measure tick sizes to avoid overlaps (follow AreaChart/BarChart logic)
     const xg = this.chart
@@ -166,10 +178,21 @@ export default class ScatterPlot extends D3po {
     }
     const xLabelPadding = Math.max(8, maxTickHeight + 8);
     // Resolve axis label text: allow options.xLabel / options.yLabel overrides
-  const xLabelText = (this.options && this.options.xLabel) ? this.options.xLabel : (this.xField ? String(this.xField) : '');
-  const yLabelText = (this.options && this.options.yLabel) ? this.options.yLabel : (this.yField ? String(this.yField) : '');
+    const xLabelText =
+      this.options && this.options.xLabel
+        ? this.options.xLabel
+        : this.xField
+          ? String(this.xField)
+          : '';
+    const yLabelText =
+      this.options && this.options.yLabel
+        ? this.options.yLabel
+        : this.yField
+          ? String(this.yField)
+          : '';
 
-    this.chart.append('text')
+    this.chart
+      .append('text')
       .attr('class', 'x-axis-label')
       .attr('x', this.getInnerWidth() / 2)
       .attr('y', this.getInnerHeight() + xLabelPadding + 24)
@@ -183,31 +206,52 @@ export default class ScatterPlot extends D3po {
     // Measure y-axis tick width and label bbox to place rotated y label without overlap
     try {
       const yTicks = yg.selectAll('.tick text').nodes();
-      const yMaxTickWidth = (yTicks && yTicks.length) ? d3.max(yTicks, n => n.getBBox().width) : 0;
+      const yMaxTickWidth =
+        yTicks && yTicks.length ? d3.max(yTicks, n => n.getBBox().width) : 0;
 
       // measure label bbox height (off-canvas)
       let measuredLabelBBoxHeight = 14;
       try {
-        const lab = this.svg.append('text').attr('x', -9999).attr('y', -9999).style('font-size', '14px').text(this.yField);
+        const lab = this.svg
+          .append('text')
+          .attr('x', -9999)
+          .attr('y', -9999)
+          .style('font-size', '14px')
+          .text(this.yField);
         measuredLabelBBoxHeight = lab.node().getBBox().height || 14;
         lab.remove();
       } catch (e) {
         measuredLabelBBoxHeight = 14;
       }
 
-      const labelGap = (this.yLabelGap !== undefined) ? this.yLabelGap : 12;
-      const labelBaseline = Math.max(yMaxTickWidth + labelGap, measuredLabelBBoxHeight + labelGap);
-      const adaptivePadding = Math.min(36, Math.max(4, Math.round(yMaxTickWidth * 0.08)));
+      const labelGap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+      const labelBaseline = Math.max(
+        yMaxTickWidth + labelGap,
+        measuredLabelBBoxHeight + labelGap
+      );
+      const adaptivePadding = Math.min(
+        36,
+        Math.max(4, Math.round(yMaxTickWidth * 0.08))
+      );
       let labelOffset = labelBaseline + adaptivePadding + 10;
 
-      const measuredRequiredLeft = (yMaxTickWidth > 0) ? Math.ceil(yMaxTickWidth + labelGap + measuredLabelBBoxHeight + 8) : null;
-      const marginLeft = (this.options && this.options.margin && this.options.margin.left) || 60;
+      const measuredRequiredLeft =
+        yMaxTickWidth > 0
+          ? Math.ceil(yMaxTickWidth + labelGap + measuredLabelBBoxHeight + 8)
+          : null;
+      const marginLeft =
+        (this.options && this.options.margin && this.options.margin.left) || 60;
       let maxAllowed = marginLeft - 4;
-      if (measuredRequiredLeft != null) maxAllowed = Math.max(10, Math.min(maxAllowed, measuredRequiredLeft)); else maxAllowed = Math.max(10, maxAllowed);
+      if (measuredRequiredLeft != null)
+        maxAllowed = Math.max(10, Math.min(maxAllowed, measuredRequiredLeft));
+      else maxAllowed = Math.max(10, maxAllowed);
       if (labelOffset > maxAllowed) labelOffset = maxAllowed;
 
       yg.append('text')
-        .attr('transform', `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`) 
+        .attr(
+          'transform',
+          `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`
+        )
         .attr('x', 0)
         .attr('y', 0)
         .attr('fill', 'black')
@@ -265,10 +309,14 @@ export default class ScatterPlot extends D3po {
     // Save font settings for tooltip handlers
     const fontFamily = this.options.fontFamily;
     const fontSize = this.options.fontSize;
-  // Determine tooltip formatter/template: prefer compiled this.tooltip from base class
-  var tooltipFormatter = resolveTooltipFormatter(this.tooltip, this.options && this.options.tooltip);
+    // Determine tooltip formatter/template: prefer compiled this.tooltip from base class
+    var tooltipFormatter = resolveTooltipFormatter(
+      this.tooltip,
+      this.options && this.options.tooltip
+    );
 
-  const maybeFormat = (v) => (typeof v === 'number' && Number.isFinite(v)) ? v.toFixed(2) : v;
+    const maybeFormat = v =>
+      typeof v === 'number' && Number.isFinite(v) ? v.toFixed(2) : v;
 
     circles
       .on('mouseover', function (event, d) {
@@ -281,13 +329,40 @@ export default class ScatterPlot extends D3po {
         // If user provided a tooltip formatter, call it (AreaChart uses tooltipFormatter(null, row))
         if (tooltipFormatter) {
           const fallback = () => {
-            const prefix = groupField && d && d[groupField] ? `<strong>${escapeHtml(String(d[groupField]))}</strong>` : '';
-            return prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` + (sizeField ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])) )}` : '');
+            const prefix =
+              groupField && d && d[groupField]
+                ? `<strong>${escapeHtml(String(d[groupField]))}</strong>`
+                : '';
+            return (
+              prefix +
+              `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` +
+              `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` +
+              (sizeField
+                ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])))}`
+                : '')
+            );
           };
-          showTooltipWithFormatter(event, tooltipFormatter, null, d, fontFamily, fontSize, fallback);
+          showTooltipWithFormatter(
+            event,
+            tooltipFormatter,
+            null,
+            d,
+            fontFamily,
+            fontSize,
+            fallback
+          );
         } else {
-          const prefix = groupField && d && d[groupField] ? `<strong>${escapeHtml(String(d[groupField]))}</strong>` : '';
-          const content = prefix + `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` + `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` + (sizeField ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])) )}` : '');
+          const prefix =
+            groupField && d && d[groupField]
+              ? `<strong>${escapeHtml(String(d[groupField]))}</strong>`
+              : '';
+          const content =
+            prefix +
+            `${escapeHtml(String(xField))}: ${escapeHtml(String(maybeFormat(d[xField])))}<br/>` +
+            `${escapeHtml(String(yField))}: ${escapeHtml(String(maybeFormat(d[yField])))}` +
+            (sizeField
+              ? `<br/>size: ${escapeHtml(String(maybeFormat(d[sizeField])))}`
+              : '');
           showTooltip(event, content, fontFamily, fontSize);
         }
       })

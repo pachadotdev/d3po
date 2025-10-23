@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_bar1.R
 \name{mod_bar1_plot}
 \alias{mod_bar1_plot}
-\title{Bar1 plot module}
+\title{Bar chart: Vertical Bars}
 \usage{
-mod_bar1_plot(data)
+mod_bar1_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame for bar aggregation (expects pre-aggregated if passed)}
 }
 \value{
 d3po widget
 }
 \description{
-Bar1 plot module
+Bar chart: Vertical Bars
 }

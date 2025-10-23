@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_bar4.R
 \name{mod_bar4_plot}
 \alias{mod_bar4_plot}
-\title{Bar4 plot module (stacked horizontal)}
+\title{Bar chart: Stacked Horizontal Bars}
 \usage{
-mod_bar4_plot(data)
+mod_bar4_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Bar4 plot module (stacked horizontal)
+Bar chart: Stacked Horizontal Bars
 }

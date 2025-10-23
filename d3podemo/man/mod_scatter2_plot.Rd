@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_scatter2.R
 \name{mod_scatter2_plot}
 \alias{mod_scatter2_plot}
-\title{Scatter2 plot module}
+\title{Scatter: Log(Height) vs Log(Weight)}
 \usage{
-mod_scatter2_plot(data)
+mod_scatter2_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Scatter2 plot module
+Scatter: Log(Height) vs Log(Weight)
 }

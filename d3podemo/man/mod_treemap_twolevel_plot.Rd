@@ -2,9 +2,9 @@
 % Please edit documentation in R/mod_treemap_twolevel.R
 \name{mod_treemap_twolevel_plot}
 \alias{mod_treemap_twolevel_plot}
-\title{Treemap two-level (drillable) module}
+\title{Two-level Treemap (drillable)}
 \usage{
-mod_treemap_twolevel_plot(data)
+mod_treemap_twolevel_plot(data = d3po::pokemon)
 }
 \arguments{
 \item{data}{data.frame}
@@ -13,5 +13,5 @@ mod_treemap_twolevel_plot(data)
 d3po widget
 }
 \description{
-Treemap two-level (drillable) module
+Two-level Treemap (drillable)
 }

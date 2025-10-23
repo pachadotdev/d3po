@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_line.R
 \name{mod_line_plot}
 \alias{mod_line_plot}
-\title{Line plot module}
+\title{Line chart example}
 \usage{
-mod_line_plot(data)
+mod_line_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Line plot module
+Line chart example
 }

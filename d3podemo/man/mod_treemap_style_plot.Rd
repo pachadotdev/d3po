@@ -2,9 +2,9 @@
 % Please edit documentation in R/mod_treemap_style.R
 \name{mod_treemap_style_plot}
 \alias{mod_treemap_style_plot}
-\title{Treemap style example module}
+\title{Treemap: Share of Pokemon by main type (styled)}
 \usage{
-mod_treemap_style_plot(data)
+mod_treemap_style_plot(data = d3po::pokemon)
 }
 \arguments{
 \item{data}{data.frame}
@@ -13,5 +13,5 @@ mod_treemap_style_plot(data)
 d3po widget
 }
 \description{
-Treemap style example module
+Treemap: Share of Pokemon by main type (styled)
 }

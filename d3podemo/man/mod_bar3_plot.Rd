@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_bar3.R
 \name{mod_bar3_plot}
 \alias{mod_bar3_plot}
-\title{Bar3 plot module (stacked vertical)}
+\title{Bar chart: Stacked Vertical Bars (attack/defense proportions)}
 \usage{
-mod_bar3_plot(data)
+mod_bar3_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Bar3 plot module (stacked vertical)
+Bar chart: Stacked Vertical Bars (attack/defense proportions)
 }

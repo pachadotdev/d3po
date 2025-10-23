@@ -2,9 +2,9 @@
 % Please edit documentation in R/mod_box2.R
 \name{mod_box2_plot}
 \alias{mod_box2_plot}
-\title{Box2 plot module}
+\title{Box plot: Height Distribution by Type (horizontal)}
 \usage{
-mod_box2_plot(data)
+mod_box2_plot(data = d3po::pokemon)
 }
 \arguments{
 \item{data}{data.frame of pokemon}
@@ -13,5 +13,5 @@ mod_box2_plot(data)
 d3po widget
 }
 \description{
-Box2 plot module
+Box plot: Height Distribution by Type (horizontal)
 }

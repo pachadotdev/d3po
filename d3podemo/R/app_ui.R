@@ -14,82 +14,96 @@ app_ui <- function(request) {
       title = "d3po Visualization Examples",
       layout = "horizontal",
       body = tablerBody(
-        tablerCard(
-          title = "D3po demo",
-          selectInput("plot_type", "Select Visualization Type:",
-            width = "50%",
-            choices = c(
-              # Box plots
-              "Box Plot (Weight by Type)" = "box1",
-              "Box Plot (Height by Type)" = "box2",
-              "Box Plot (Weight) - Custom Labels/Units" = "box_custom1",
-              "Box Plot (Height) - Custom Labels/Units" = "box_custom2",
-
-              # Bar charts
-              "Bar Chart (Vertical)" = "bar1",
-              "Bar Chart (Horizontal)" = "bar2",
-              "Stacked Vertical Bars" = "bar3",
-              "Stacked Horizontal Bars" = "bar4",
-              "Bar Chart (Custom Labels/Units) - Vertical" = "bar_custom1",
-              "Bar Chart (Custom Labels/Units) - Horizontal" = "bar_custom2",
-
-              # Treemaps
-              "Treemap (Squarify)" = "treemap1",
-              "Treemap with custom labels and tooltip" = "treemap_custom",
-              "Treemap with custom labels and tooltip (more labels)" = "treemap_custom2",
-              "Two-level Treemap (Drillable)" = "treemap_twolevel",
-              "Two-level Treemap (Drillable, Custom Labels & Tooltip)" = "treemap_twolevel_custom",
-              "Treemap Style Example (Labels/Background/Font/No Download)" = "treemap_style",
-
-              # Pie/Donut
-              "Pie Chart" = "pie1",
-              "Donut Chart" = "pie2",
-              "Pie (Custom Labels & Tooltip)" = "pie_custom",
-              "Half Pie" = "pie3",
-              "Half Donut" = "pie4",
-
-              # Line / Area
-              "Line Chart" = "line",
-              "Area Chart (Non-stacked)" = "area1",
-              "Area Chart (Stacked)" = "area2",
-              "Line (Custom Labels & Tooltip, Same for Area)" = "line_area_custom",
-
-              # Scatter
-              "Scatter Plot" = "scatter1",
-              "Scatter Plot (Log Scale)" = "scatter2",
-              "Scatter Plot (Weighted)" = "scatter3",
-              "Scatter Plot (Weighted, Log Scale)" = "scatter4",
-              "Scatter Plot (Custom Tooltip)" = "scatter_custom",
-
-              # Geomaps
-              "Geomap (South America)" = "geomap1",
-              "Geomap (Chile)" = "geomap2",
-              "Geomap (Custom Tooltip) - South America" = "geomap_custom",
-
-              # Network
-              "Network Graph (KK Layout)" = "network_kk",
-              "Network Graph (FR Layout)" = "network_fr",
-              "Network Graph (Manual Layout)" = "network_manual",
-              "Network Graph (Custom Tooltip)" = "network_custom"
-            ),
-            selected = "box1"
+        fluidRow(
+          column(
+            7,
+            tablerCard(
+              title = "D3po demo",
+              selectInput("plot_type", "Select Visualization Type:",
+                width = "100%",
+                choices = list(
+                  "Box Plots" = list(
+                    "Vertical" = "box1",
+                    "Horizontal" = "box2",
+                    "Vertical (log scale)" = "box3",
+                    "Horizontal (log scale)" = "box4",
+                    "Custom labels" = "box_custom"
+                  ),
+                  "Bar Charts" = list(
+                    "Vertical" = "bar1",
+                    "Horizontal" = "bar2",
+                    "Stacked vertical" = "bar3",
+                    "Stacked horizontal" = "bar4",
+                    "Custom labels" = "bar_custom"
+                  ),
+                  "Treemaps" = list(
+                    "One-level" = "treemap_onelevel",
+                    "Two-level" = "treemap_twolevel",
+                    "One-level with custom labels and tooltip" = "treemap_onelevel_custom",
+                    "One-level with custom labels and tooltip (extra labels' work)" = "treemap_onelevel_custom2",
+                    "Two-level with custom labels and tooltip" = "treemap_twolevel_custom",
+                    "Custom fonts and colors" = "treemap_style"
+                  ),
+                  "Pie" = list(
+                    "Full pie" = "pie1",
+                    "Donut" = "pie2",
+                    "Half pie" = "pie3",
+                    "Half donut" = "pie4",
+                    "Custom tooltip" = "pie_custom"
+                  ),
+                  "Line" = list(
+                    "Grouped" = "line",
+                    "Custom labels and tooltip (identical for area plots)" = "line_area_custom"
+                  ),
+                  "Area" = list(
+                    "Non-stacked" = "area1",
+                    "Stacked" = "area2"
+                  ),
+                  "Scatter" = list(
+                    "Unweighted" = "scatter1",
+                    "Unweighted, log scale" = "scatter2",
+                    "Weighted" = "scatter3",
+                    "Weighted, log scale" = "scatter4",
+                    "Custom tooltip" = "scatter_custom"
+                  ),
+                  "Geomaps" = list(
+                    "Country-level with custom tooltip" = "geomap1",
+                    "Region-level  with custom tooltip" = "geomap2"
+                  ),
+                  "Network" = list(
+                    "KK layout" = "network_kk",
+                    "FR layout" = "network_fr",
+                    "Manual Layout" = "network_manual",
+                    "Custom tooltip" = "network_custom"
+                  )
+                ),
+                selected = "box1"
+              ),
+              br(),
+              d3po::d3po_output("plot", width = "100%", height = "600px")
+            )
           ),
-          br(),
-          d3po::d3po_output("plot", width = "100%", height = "600px"),
-          # Code area: show the R code used to generate the selected plot
-          tags$div(
-            style = "margin-top: 1rem;",
-            tags$h4("Code used to generate the plot"),
-            markdown(
-              "For non-modular / non-Golem Shiny apps:
+          column(
+            5,
+            tablerCard(
+              tags$div(
+                style = "margin-top: 1rem;",
+                tags$h4("Code used to generate the plot"),
+                markdown(
+                  "For non-modular / non-Golem Shiny apps:
                * You only need the `d3po(data) %>% po_*()` parts.
                * You do not need `function(data)`, `.data$variable` and  `!!sym(\"variable\")`.",
-            ),
-            verbatimTextOutput("plot_code")
+                ),
+                verbatimTextOutput("plot_code")
+              )
+            )
           )
         )
       ),
-      footer = tablerFooter(left = "", right = "d3po demo")
+      footer = tablerFooter(
+        left = "Created by Mauricio 'Pacha' Vargas Sepulveda",
+        right = paste("Last updated:", format(Sys.time(), "%a %b %d %X %Y"))
+      )
     )
   )
 }

@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_scatter_custom.R
 \name{mod_scatter_custom_plot}
 \alias{mod_scatter_custom_plot}
-\title{Scatter custom plot module}
+\title{Scatter custom tooltip}
 \usage{
-mod_scatter_custom_plot(data)
+mod_scatter_custom_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Scatter custom plot module
+Scatter custom tooltip
 }

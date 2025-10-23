@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_network_custom.R
 \name{mod_network_custom_plot}
 \alias{mod_network_custom_plot}
-\title{Network custom tooltip module}
+\title{Network: custom tooltip example}
 \usage{
-mod_network_custom_plot(data)
+mod_network_custom_plot(data = d3po::pokemon_network)
 }
 \arguments{
-\item{data}{graph}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Network custom tooltip module
+Network: custom tooltip example
 }

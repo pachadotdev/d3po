@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_geomap2.R
 \name{mod_geomap2_plot}
 \alias{mod_geomap2_plot}
-\title{Geomap2 plot module}
+\title{Geomap: Chile}
 \usage{
-mod_geomap2_plot(data)
+mod_geomap2_plot(data = NULL)
 }
 \arguments{
-\item{data}{data.frame of region ids}
+\item{data}{data.frame (optional)}
 }
 \value{
 d3po widget
 }
 \description{
-Geomap2 plot module
+Geomap: Chile
 }

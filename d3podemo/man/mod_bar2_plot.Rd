@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_bar2.R
 \name{mod_bar2_plot}
 \alias{mod_bar2_plot}
-\title{Bar2 plot module}
+\title{Bar chart: Horizontal Bars}
 \usage{
-mod_bar2_plot(data)
+mod_bar2_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Bar2 plot module
+Bar chart: Horizontal Bars
 }

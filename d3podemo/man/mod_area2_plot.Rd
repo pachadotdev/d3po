@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_area2.R
 \name{mod_area2_plot}
 \alias{mod_area2_plot}
-\title{Area2 (stacked) plot module}
+\title{Area chart: stacked example}
 \usage{
-mod_area2_plot(data)
+mod_area2_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Area2 (stacked) plot module
+Area chart: stacked example
 }

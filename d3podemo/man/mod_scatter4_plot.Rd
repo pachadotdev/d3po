@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_scatter4.R
 \name{mod_scatter4_plot}
 \alias{mod_scatter4_plot}
-\title{Scatter4 plot module}
+\title{Scatter: Log scales with size encoding}
 \usage{
-mod_scatter4_plot(data)
+mod_scatter4_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Scatter4 plot module
+Scatter: Log scales with size encoding
 }

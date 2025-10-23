@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_pie3.R
 \name{mod_pie3_plot}
 \alias{mod_pie3_plot}
-\title{Pie3 plot module}
+\title{Half Pie chart}
 \usage{
-mod_pie3_plot(data)
+mod_pie3_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Pie3 plot module
+Half Pie chart
 }

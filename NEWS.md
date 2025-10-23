@@ -4,7 +4,7 @@
 * Allows to customize background color and font.
 * Fully responsive to window size changes.
 * Zoomable maps and networks.
-* All the examples use base R.
+* The examples use base R.
 * Added full Shiny and Golem example app in the `d3podemo` folder.
 * Added minimal Shiny example for debugging without Golem in `debug-with-shiny.R`.
 * Migrated to D3 7.9.0.

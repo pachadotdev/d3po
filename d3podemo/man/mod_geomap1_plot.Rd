@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_geomap1.R
 \name{mod_geomap1_plot}
 \alias{mod_geomap1_plot}
-\title{Geomap1 plot module}
+\title{Geomap: South America}
 \usage{
-mod_geomap1_plot(data)
+mod_geomap1_plot(data = NULL)
 }
 \arguments{
-\item{data}{data.frame of region ids}
+\item{data}{data.frame (optional)}
 }
 \value{
 d3po widget
 }
 \description{
-Geomap1 plot module
+Geomap: South America
 }

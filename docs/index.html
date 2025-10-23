@@ -32,13 +32,6 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/customizations.html">Using D3po with Customizations</a></li>
-    <li><a class="dropdown-item" href="articles/defaults.html">Using D3po with Default Settings</a></li>
-  </ul>
-</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -68,49 +61,79 @@
 <p>If this project is useful for you, please consider supporting its development by buying me a coffee at <a href="https://buymeacoffee.com/pacha" class="external-link uri">https://buymeacoffee.com/pacha</a>.</p>
 </div>
 <div class="section level2">
+<h2 id="frequently-asked-questions-faqs">Frequently Asked Questions (FAQs)<a class="anchor" aria-label="anchor" href="#frequently-asked-questions-faqs"></a>
+</h2>
+<p><strong>Q: Why D3po?</strong></p>
+<p>A: “po” is an idiom used in Chile and people from other Spanish speaking countries find it curious that we add it to the end of sentences. The package functions have names like <code><a href="reference/po_box.html">po_box()</a></code>, <code><a href="reference/po_line.html">po_line()</a></code>, etc to reflect this idiom.</p>
+<p><strong>Q: Can I use D3po if I do not use R or Shiny?</strong></p>
+<p>A: Yes, the D3po JavaScript library can be used independently of R and Shiny. Check the <code>javascript/</code> folder. You can build the JavaScript library using <code>cd javascript &amp;&amp; npm run build</code> and then include the resulting <code>dist/d3po.min.js</code> file in your web project.</p>
+<p><strong>Q: Is D3po limited to Shiny applications?</strong></p>
+<p>A: No, D3po can be used in any R Markdown or Quarto document that renders to HTML output or in R scripts.</p>
+<p><strong>Q: Can I change the charts colours, fonts, tooltips, labels, etc?</strong></p>
+<p>A: Yes, D3po provides a variety of options to customize the appearance and behavior of the charts. You can use simple HTML tags like <code>po_tooltip("&lt;b&gt;{pokemon} ({type})")</code> or use JavaScript for more flexibility as in this example</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pokemon</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="va">type_1</span> <span class="op">+</span> <span class="va">color_1</span>, data <span class="op">=</span> <span class="va">pokemon</span>, FUN <span class="op">=</span> <span class="va">length</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dout</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"type"</span>, <span class="st">"color"</span>, <span class="st">"count"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/d3po.html">d3po</a></span><span class="op">(</span><span class="va">dout</span>, width <span class="op">=</span> <span class="fl">800</span>, height <span class="op">=</span> <span class="fl">600</span><span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/po_treemap.html">po_treemap</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/daes.html">daes</a></span><span class="op">(</span></span>
+<span>      size <span class="op">=</span> <span class="va">count</span>, group <span class="op">=</span> <span class="va">type</span>, color <span class="op">=</span> <span class="va">color</span>, tiling <span class="op">=</span> <span class="st">"squarify"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/po_labels.html">po_labels</a></span><span class="op">(</span></span>
+<span>    align <span class="op">=</span> <span class="st">"center-middle"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Share of Pokemon by main type"</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="reference/d3po-exports.html">JS</a></span><span class="op">(</span></span>
+<span>      <span class="st">"function(percentage, row) {</span></span>
+<span><span class="st">        var pct = (percentage).toFixed(1) + '%';</span></span>
+<span><span class="st">        var name = (row &amp;&amp; (row.type || row.name)) ? (row.type || row.name) : '';</span></span>
+<span><span class="st">        var count = row &amp;&amp; (row.count != null ? row.count : (row.value != null ? row.value : ''));</span></span>
+<span><span class="st">        return '&lt;i&gt;' + name + '&lt;/i&gt;&lt;br/&gt;Count: ' + (count || '') + '&lt;br/&gt;Share: ' + pct;</span></span>
+<span><span class="st">      }"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/po_tooltip.html">po_tooltip</a></span><span class="op">(</span><span class="st">"&lt;i&gt;Type: {type}&lt;/i&gt;&lt;br/&gt;Count: {count}"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
 <p>Visualization methods:</p>
-<ul class="task-list">
-<li><label><input type="checkbox" checked>Area (or distribution) chart</label></li>
-<li><label><input type="checkbox" checked>Box and whiskers</label></li>
-<li><label><input type="checkbox" checked>Column charts (horizontal and vertical)</label></li>
-<li><label><input type="checkbox" checked>Donut chart</label></li>
-<li><label><input type="checkbox" checked>Geographical maps</label></li>
-<li><label><input type="checkbox" checked>Line charts</label></li>
-<li><label><input type="checkbox" checked>Networks</label></li>
-<li><label><input type="checkbox" checked>Pie chart</label></li>
-<li><label><input type="checkbox" checked>Scatterplots</label></li>
-<li><label><input type="checkbox" checked>Treemaps</label></li>
+<ul>
+<li>Area</li>
+<li>Box and whiskers (or Boxplot)</li>
+<li>Column</li>
+<li>Donut</li>
+<li>Geographical maps</li>
+<li>Line</li>
+<li>Networks</li>
+<li>Pie / Donut</li>
+<li>Scatterplots</li>
+<li>Treemaps</li>
 </ul>
 <p>Enhancements:</p>
-<ul class="task-list">
-<li><label><input type="checkbox" checked>Automatic content resizing</label></li>
-<li><label><input type="checkbox" checked>Downloading the charts in SVG format</label></li>
-<li><label><input type="checkbox" checked>Downloading the charts in PNG format</label></li>
+<ul>
+<li>Automatic content resizing</li>
+<li>Downloading the charts in SVG format</li>
+<li>Downloading the charts in PNG format</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the most recent version from the R-Universe:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"d3po"</span>, repos <span class="op">=</span> <span class="st">"https://pachadotdev.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
 <p>Or from GitHub using remotes:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pachadotdev/d3po"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<p>Here is a video of all the current features of D3po:</p>
+<p>Here is a video showcasing D3po:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6pIq2rJONFQ?si=Ai6NUk-BSyG0MTFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
 </iframe>
-<p>This is an example consisting in the creation of a box and whiskers plot:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/d3po.html">d3po</a></span><span class="op">(</span><span class="va">pokemon</span><span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="reference/po_box.html">po_box</a></span><span class="op">(</span><span class="fu"><a href="reference/daes.html">daes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">type_1</span>, y <span class="op">=</span> <span class="va">speed</span>, color <span class="op">=</span> <span class="va">color_1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/d3po-exports.html">%&gt;%</a></span></span>
-<span>  <span class="fu">po_title</span><span class="op">(</span><span class="st">"Distribution of Pokemon speed by main type"</span><span class="op">)</span></span></code></pre></div>
 <p>Please check the vignettes and this comprehensive example Shiny app using Golem: <a href="https://github.com/pachadotdev/d3po/tree/main/d3podemo" class="external-link uri">https://github.com/pachadotdev/d3po/tree/main/d3podemo</a>.</p>
 <p>I have a minimal Shiny app without Golem that I use to debug here: <a href="https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R" class="external-link uri">https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R</a>.</p>
 </div>
@@ -153,7 +176,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://buymeacoffee.com/pacha" class="external-link"><img src="https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg" alt="BuyMeACoffee"></a></li>
+<li><a href="https://buymeacoffee.com/pacha" class="external-link"><img src="https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-blue.svg" alt="BuyMeACoffee"></a></li>
 </ul>
 </div>
 

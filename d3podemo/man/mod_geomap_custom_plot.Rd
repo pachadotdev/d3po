@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_geomap_custom.R
 \name{mod_geomap_custom_plot}
 \alias{mod_geomap_custom_plot}
-\title{Geomap custom tooltip module}
+\title{Geomap custom tooltip example}
 \usage{
-mod_geomap_custom_plot(data)
+mod_geomap_custom_plot(data = NULL)
 }
 \arguments{
-\item{data}{data.frame}
+\item{data}{data.frame (optional)}
 }
 \value{
 d3po widget
 }
 \description{
-Geomap custom tooltip module
+Geomap custom tooltip example
 }

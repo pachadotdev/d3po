@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_line_area_custom.R
 \name{mod_line_area_custom_plot}
 \alias{mod_line_area_custom_plot}
-\title{Line/Area custom plot module}
+\title{Line area custom example (shared with area_custom)}
 \usage{
-mod_line_area_custom_plot(data)
+mod_line_area_custom_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Line/Area custom plot module
+Line area custom example (shared with area_custom)
 }

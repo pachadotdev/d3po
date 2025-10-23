@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_scatter3.R
 \name{mod_scatter3_plot}
 \alias{mod_scatter3_plot}
-\title{Scatter3 plot module}
+\title{Scatter: With size encoding (inverse distance from mean)}
 \usage{
-mod_scatter3_plot(data)
+mod_scatter3_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Scatter3 plot module
+Scatter: With size encoding (inverse distance from mean)
 }

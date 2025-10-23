@@ -2,9 +2,9 @@
 % Please edit documentation in R/mod_box4.R
 \name{mod_box4_plot}
 \alias{mod_box4_plot}
-\title{Box4 plot module (log height)}
+\title{Box plot: Log(Height) Distribution by Type}
 \usage{
-mod_box4_plot(data)
+mod_box4_plot(data = d3po::pokemon)
 }
 \arguments{
 \item{data}{data.frame of pokemon}
@@ -13,5 +13,5 @@ mod_box4_plot(data)
 d3po widget
 }
 \description{
-Box4 plot module (log height)
+Box plot: Log(Height) Distribution by Type
 }

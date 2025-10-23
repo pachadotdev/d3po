@@ -2,9 +2,9 @@
 % Please edit documentation in R/mod_pie_custom.R
 \name{mod_pie_custom_plot}
 \alias{mod_pie_custom_plot}
-\title{Pie custom module}
+\title{Pie with custom labels and tooltip}
 \usage{
-mod_pie_custom_plot(data)
+mod_pie_custom_plot(data = d3po::pokemon)
 }
 \arguments{
 \item{data}{data.frame}
@@ -13,5 +13,5 @@ mod_pie_custom_plot(data)
 d3po widget
 }
 \description{
-Pie custom module
+Pie with custom labels and tooltip
 }

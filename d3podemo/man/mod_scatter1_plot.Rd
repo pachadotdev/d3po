@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_scatter1.R
 \name{mod_scatter1_plot}
 \alias{mod_scatter1_plot}
-\title{Scatter1 plot module}
+\title{Scatter: Height vs Weight}
 \usage{
-mod_scatter1_plot(data)
+mod_scatter1_plot(data = d3po::pokemon)
 }
 \arguments{
-\item{data}{data.frame of pokemon}
+\item{data}{data.frame}
 }
 \value{
 d3po widget
 }
 \description{
-Scatter1 plot module
+Scatter: Height vs Weight
 }

@@ -1,8 +1,8 @@
-# Module: area2
-#' Area2 (stacked) plot module
-#' @param data data.frame of pokemon
+# Module: area2 (stacked)
+#' Area chart: stacked example
+#' @param data data.frame
 #' @return d3po widget
-mod_area2_plot <- function(data) {
+mod_area2_plot <- function(data = d3po::pokemon) {
   dout <- data[data$name %in% c(
     "Squirtle", "Wartortle", "Blastoise"
   ), c("name", "attack", "defense", "hp")]
@@ -34,4 +34,17 @@ mod_area2_plot <- function(data) {
       )
     ) %>%
     po_labels(title = "Pokemon Evolution (Squirtle): Defense/Attack Proportion by Evolution Stage (Stacked Area)")
+}
+
+mod_area2_ui <- function(id) {
+  ns <- NS(id)
+  tagList(d3po::d3po_output(ns("plot"), width = "100%", height = "600px"))
+}
+
+mod_area2_server <- function(id, data = d3po::pokemon) {
+  moduleServer(id, function(input, output, session) {
+    output$plot <- d3po::render_d3po({
+      mod_area2_plot(data)
+    })
+  })
 }

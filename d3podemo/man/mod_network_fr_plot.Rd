@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_network_fr.R
 \name{mod_network_fr_plot}
 \alias{mod_network_fr_plot}
-\title{Network FR layout plot module}
+\title{Network: FR layout}
 \usage{
-mod_network_fr_plot(data)
+mod_network_fr_plot(data = d3po::pokemon_network)
 }
 \arguments{
-\item{data}{graph or nodes/edges}
+\item{data}{data.frame (pokemon_network expected)}
 }
 \value{
 d3po widget
 }
 \description{
-Network FR layout plot module
+Network: FR layout
 }

@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_network_manual.R
 \name{mod_network_manual_plot}
 \alias{mod_network_manual_plot}
-\title{Network manual layout plot module}
+\title{Network: manual layout (uses precomputed layout)}
 \usage{
-mod_network_manual_plot(data)
+mod_network_manual_plot(data = d3po::pokemon_network)
 }
 \arguments{
-\item{data}{graph with layout}
+\item{data}{data.frame (pokemon_network expected)}
 }
 \value{
 d3po widget
 }
 \description{
-Network manual layout plot module
+Network: manual layout (uses precomputed layout)
 }

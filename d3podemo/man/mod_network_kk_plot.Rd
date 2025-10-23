@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_network_kk.R
 \name{mod_network_kk_plot}
 \alias{mod_network_kk_plot}
-\title{Network KK layout plot module}
+\title{Network: KK layout}
 \usage{
-mod_network_kk_plot(data)
+mod_network_kk_plot(data = d3po::pokemon_network)
 }
 \arguments{
-\item{data}{graph or nodes/edges}
+\item{data}{data.frame (pokemon_network expected)}
 }
 \value{
 d3po widget
 }
 \description{
-Network KK layout plot module
+Network: KK layout
 }

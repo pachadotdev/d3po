@@ -2,9 +2,9 @@
 % Please edit documentation in R/mod_box1.R
 \name{mod_box1_plot}
 \alias{mod_box1_plot}
-\title{Box1 plot module}
+\title{Box plot: Weight Distribution by Type}
 \usage{
-mod_box1_plot(data)
+mod_box1_plot(data = d3po::pokemon)
 }
 \arguments{
 \item{data}{data.frame of pokemon}
@@ -13,5 +13,5 @@ mod_box1_plot(data)
 d3po widget
 }
 \description{
-Box1 plot module
+Box plot: Weight Distribution by Type
 }

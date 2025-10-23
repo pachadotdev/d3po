@@ -17,6 +17,10 @@
 #' - `size`: size of geom.
 #' - `stack`: `TRUE` or `FALSE` to indicate if the geom should be stacked (for bar charts).
 #' - `layout`: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
+#' - `sort`: ordering hint for discrete categories. Accepts one of
+#'   `"asc-x"`, `"desc-x"` (sort by the numeric x/value), or
+#'   `"asc-y"`, `"desc-y"` (sort by the category/label). Use `"none"` to
+#'   keep input order.
 #'
 #' @export
 #' @return Aesthetics for the plots such as axis (x,y), group, color and/or size

@@ -378,7 +378,11 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
-  # optional: sorting hint passed via daes, e.g. "desc-x" or "asc-y"
+  # optional: sorting hint passed via daes, e.g. "desc-x" or "asc-y".
+  # Supported values:
+  # - "asc-x" / "desc-x": sort categories by the numeric x/value (ascending/descending)
+  # - "asc-y" / "desc-y": sort categories by label/name (ascending/descending)
+  # - "none": keep the input order (default)
   d3po$x$sort <- daes_to_opts(daes, "sort")
   # stacking option: read directly from daes() if provided; otherwise leave NULL
   d3po$x$stack <- daes_to_opts(daes, "stack")

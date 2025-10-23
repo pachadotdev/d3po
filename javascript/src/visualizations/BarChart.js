@@ -76,24 +76,19 @@ export default class BarChart extends D3po {
     };
 
     // apply simple sorting when requested (non-stacked).
+    // Sorting must reorder the categories array AND ensure the data rows
+    // used to draw bars remain correctly associated with their categories.
+    // Important: do NOT mutate `this.data` in place. Instead compute an
+    // `orderedData` array (below) that is always derived from `categories`
+    // so axis ticks, bars and tooltips stay aligned regardless of input order
+    // or Set iteration differences.
+    let requestedSort = null;
     if (sortSpec && !stacked) {
       const m = sortSpec.match(/^(asc|desc)-([xy])$/);
-      if (m) {
-        const dir = m[1];
-        const orderEntries = aggregateByCategory().sort((a, b) =>
-          dir === 'desc' ? b[1] - a[1] : a[1] - b[1]
-        );
-        let sortedCats = orderEntries.map(e => e[0]);
-        if (sortedCats.indexOf(preserveOtherLabel) !== -1) {
-          sortedCats = sortedCats
-            .filter(x => x !== preserveOtherLabel)
-            .concat([preserveOtherLabel]);
-        }
-        applyCategorySort(sortedCats);
-      }
+      if (m) requestedSort = { dir: m[1], axis: m[2] };
     }
 
-    // candidate groups
+  // candidate groups
     const groups = groupField
       ? Array.from(
           new Set(
@@ -359,6 +354,50 @@ export default class BarChart extends D3po {
       }
     } else {
       // simple single bar per category
+      // Build an ordered data array matching `categories` so axis labels and
+      // bars are always aligned even if input order or Set iteration differs.
+      const rowsByCat = new Map();
+      this.data.forEach(d => {
+        const cat = d[categoryField] == null ? '' : String(d[categoryField]);
+        if (!rowsByCat.has(cat)) rowsByCat.set(cat, []);
+        rowsByCat.get(cat).push(d);
+      });
+      // If a sort was requested, compute a sorted categories array derived
+      // from the requestedSort and apply it without mutating this.data.
+      if (requestedSort) {
+        const dir = requestedSort.dir;
+        const axis = requestedSort.axis;
+        if (axis === 'x') {
+          const entries = aggregateByCategory();
+          entries.sort((a, b) => (dir === 'desc' ? b[1] - a[1] : a[1] - b[1]));
+          let sortedCats = entries.map(e => e[0]);
+          if (sortedCats.indexOf(preserveOtherLabel) !== -1) {
+            sortedCats = sortedCats
+              .filter(x => x !== preserveOtherLabel)
+              .concat([preserveOtherLabel]);
+          }
+          applyCategorySort(sortedCats);
+        } else if (axis === 'y') {
+          const sortedCats = Array.from(categories).sort((a, b) => {
+            if (a == null) a = '';
+            if (b == null) b = '';
+            if (a < b) return dir === 'asc' ? -1 : 1;
+            if (a > b) return dir === 'asc' ? 1 : -1;
+            return 0;
+          });
+          if (sortedCats.indexOf(preserveOtherLabel) !== -1) {
+            const s = sortedCats.filter(x => x !== preserveOtherLabel).concat([preserveOtherLabel]);
+            applyCategorySort(s);
+          } else {
+            applyCategorySort(sortedCats);
+          }
+        }
+      }
+
+      // Draw one rect per category (category-order -> axis ticks). For each
+      // category we look up the first matching row (expected single row per
+      // category in the simple case) and attach that row as the element's
+      // datum so tooltip code continues to receive the original row object.
       if (isHorizontal) {
         xScale = d3
           .scaleLinear()
@@ -370,19 +409,34 @@ export default class BarChart extends D3po {
           .domain(categories)
           .range([0, effectiveInnerHeight])
           .padding(0.2);
+
         bars = this.chart
           .selectAll('.bar')
-          .data(this.data)
+          .data(categories)
           .enter()
           .append('rect')
           .attr('class', 'bar')
           .style('opacity', 1)
-          .attr('fill', d => colorScale(d));
-        bars
+          .attr('fill', cat => {
+            const rows = rowsByCat.get(cat) || [];
+            const row = rows[0] || {};
+            return colorScale(row);
+          })
           .attr('x', 0)
-          .attr('y', d => yScale(d[this.yField]))
-          .attr('width', d => xScale(d[this.xField]))
-          .attr('height', yScale.bandwidth());
+          .attr('y', cat => yScale(cat))
+          .attr('width', cat => {
+            const rows = rowsByCat.get(cat) || [];
+            const row = rows[0] || {};
+            return xScale(Number(row[this.xField]) || 0);
+          })
+          .attr('height', () => yScale.bandwidth());
+
+        // Attach the actual row object as the element datum for tooltips/event handlers
+        bars.each(function (cat, i, nodes) {
+          const rows = rowsByCat.get(cat) || [];
+          const row = rows[0] || { [categoryField]: cat };
+          d3.select(nodes[i]).datum(row);
+        });
       } else {
         xScale = d3
           .scaleBand()
@@ -394,19 +448,38 @@ export default class BarChart extends D3po {
           .domain([0, d3.max(this.data, d => Number(d[this.yField]) || 0)])
           .nice()
           .range([effectiveInnerHeight, 0]);
+
         bars = this.chart
           .selectAll('.bar')
-          .data(this.data)
+          .data(categories)
           .enter()
           .append('rect')
           .attr('class', 'bar')
           .style('opacity', 1)
-          .attr('fill', d => colorScale(d));
-        bars
-          .attr('x', d => xScale(d[this.xField]))
-          .attr('y', d => yScale(d[this.yField]))
-          .attr('width', xScale.bandwidth())
-          .attr('height', d => effectiveInnerHeight - yScale(d[this.yField]));
+          .attr('fill', cat => {
+            const rows = rowsByCat.get(cat) || [];
+            const row = rows[0] || {};
+            return colorScale(row);
+          })
+          .attr('x', cat => xScale(cat))
+          .attr('y', cat => {
+            const rows = rowsByCat.get(cat) || [];
+            const row = rows[0] || {};
+            return yScale(Number(row[this.yField]) || 0);
+          })
+          .attr('width', () => xScale.bandwidth())
+          .attr('height', cat => {
+            const rows = rowsByCat.get(cat) || [];
+            const row = rows[0] || {};
+            return Math.max(0, effectiveInnerHeight - yScale(Number(row[this.yField]) || 0));
+          });
+
+        // Attach the actual row object as the element datum for tooltips/event handlers
+        bars.each(function (cat, i, nodes) {
+          const rows = rowsByCat.get(cat) || [];
+          const row = rows[0] || { [categoryField]: cat };
+          d3.select(nodes[i]).datum(row);
+        });
       }
     }
 
@@ -452,8 +525,16 @@ export default class BarChart extends D3po {
         this.options.margin.left = requiredLeft;
         effectiveInnerWidth = this.getInnerWidth();
         effectiveInnerHeight = this.getInnerHeight();
-        if (xScale && xScale.range) xScale.range([0, effectiveInnerWidth]);
-        if (yScale && yScale.range) yScale.range([effectiveInnerHeight, 0]);
+        if (xScale && xScale.range) {
+          // preserve band orientation (0..width)
+          if (xScale.bandwidth) xScale.range([0, effectiveInnerWidth]);
+          else xScale.range([0, effectiveInnerWidth]);
+        }
+        if (yScale && yScale.range) {
+          // For band scales (categorical on y) use [0, height]; for linear use [height, 0]
+          if (yScale.bandwidth) yScale.range([0, effectiveInnerHeight]);
+          else yScale.range([effectiveInnerHeight, 0]);
+        }
         if (this.chart && this.chart.attr)
           this.chart.attr(
             'transform',
@@ -483,8 +564,14 @@ export default class BarChart extends D3po {
       const baseInner = this.getInnerWidth();
       const newInner = Math.max(20, Math.round(baseInner + Math.max(0, delta)));
       effectiveInnerWidth = newInner;
-      if (xScale && xScale.range) xScale.range([0, effectiveInnerWidth]);
-      if (yScale && yScale.range) yScale.range([effectiveInnerHeight, 0]);
+      if (xScale && xScale.range) {
+        if (xScale.bandwidth) xScale.range([0, effectiveInnerWidth]);
+        else xScale.range([0, effectiveInnerWidth]);
+      }
+      if (yScale && yScale.range) {
+        if (yScale.bandwidth) yScale.range([0, effectiveInnerHeight]);
+        else yScale.range([effectiveInnerHeight, 0]);
+      }
       const translateX = targetLeft;
       if (this.chart && this.chart.attr)
         this.chart.attr(

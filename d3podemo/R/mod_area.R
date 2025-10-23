@@ -1,16 +1,21 @@
 # Module: area
+#' Area plot module
+#' @param data data.frame of pokemon
+#' @return d3po widget
 mod_area_plot <- function(data) {
-  dout <- data[data$name %in% c(
-    "Squirtle", "Wartortle", "Blastoise",
-    "Charmander", "Charmeleon", "Charizard",
-    "Pikachu", "Raichu"
+  dout <- d3po::pokemon[d3po::pokemon$name %in% c(
+    "Squirtle", "Wartortle", "Blastoise"
   ), c("height", "weight", "type_1", "color_1")]
+
   colnames(dout) <- c("height", "weight", "type", "color")
 
-  d3po(dout) %>%
-    po_area(daes(x = .data$height, y = .data$weight, group = .data$type, color = .data$color),
+  d3po(dout, width = 800, height = 600) %>%
+    po_area(
+      daes(
+        x = .data$height, y = .data$weight, group = .data$type, color = .data$color
+      )
     ) %>%
-    po_labels(title = "Pokemon Evolution: Weight vs Height by Type (Area)")
+    po_labels(title = "Pokemon Evolution (Squirtle): Weight vs Height by Evolution Stage (Non-Stacked Area)")
 }
 
 mod_area_ui <- function(id) {

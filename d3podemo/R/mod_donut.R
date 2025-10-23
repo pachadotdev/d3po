@@ -1,4 +1,7 @@
 # Module: donut
+#' Donut plot module
+#' @param data data.frame of pokemon
+#' @return d3po widget
 mod_donut_plot <- function(data) {
   dout <- stats::aggregate(cbind(count = rep(1, nrow(data))) ~ type_1 + color_1,
     data = data, FUN = length
@@ -6,8 +9,8 @@ mod_donut_plot <- function(data) {
   names(dout) <- c("type", "color", "count")
 
   d3po(dout) %>%
-    po_pie(daes(size = .data$count, group = .data$type, color = .data$color, innerRadius = 0.5)) %>%
-    po_labels(title = "Pokemon Distribution by Type (Donut)")
+    po_pie(daes(size = .data$count, group = .data$type, color = .data$color, innerRadius = 0.4)) %>%
+    po_labels(title = "Donut")
 }
 
 mod_donut_ui <- function(id) {

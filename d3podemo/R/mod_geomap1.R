@@ -1,17 +1,15 @@
 # Module: geomap1
-mod_geomap1_plot <- function() {
-  maps <- d3po::maps
-  dout <- map_ids(maps$south_america$continent)
-
+#' Geomap1 plot module
+#' @param data data.frame of region ids
+#' @return d3po widget
+mod_geomap1_plot <- function(data) {
+  dout <- map_ids(d3po::maps$south_america$continent)
   dout$pokemon_count <- ifelse(dout$id == "CL", 1L, 0L)
   dout$pokemon_count <- ifelse(dout$id == "GY", 1L, dout$pokemon_count)
   dout$color <- ifelse(dout$id %in% c("CL", "GY"), "#F85888", "#e0e0e0")
 
-  d3po(dout) %>%
-    po_geomap(
-      daes(group = .data$id, color = .data$color, size = .data$pokemon_count, tooltip = .data$name),
-      map = maps$south_america$continent
-    ) %>%
+  d3po(dout, width = 800, height = 600) %>%
+    po_geomap(daes(id = .data$id, value = .data$pokemon_count, color = .data$color), map = d3po::maps$south_america$continent) %>%
     po_labels(title = "Pokemon Distribution in South America")
 }
 

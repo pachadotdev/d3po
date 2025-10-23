@@ -1,4 +1,7 @@
 # Module: scatter3
+#' Scatter3 plot module
+#' @param data data.frame of pokemon
+#' @return d3po widget
 mod_scatter3_plot <- function(data) {
   d3po(data) %>%
     po_scatter(daes(

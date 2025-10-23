@@ -1,4 +1,7 @@
 # Module: box_custom1
+#' Box custom1 plot module
+#' @param data data.frame of pokemon
+#' @return d3po widget
 mod_box_custom1_plot <- function(data = d3po::pokemon) {
   pokemon_custom <- data
   pokemon_custom$weight_g <- pokemon_custom$weight * 1000

@@ -1,8 +1,9 @@
 # Module: network_custom
-mod_network_custom_plot <- function() {
-  pokemon_network <- d3po::pokemon_network
-  d3po(pokemon_network, width = 800, height = 600) %>%
-    po_network(daes(size = .data$node_size, color = .data$color, layout = "kk")) %>%
-    po_tooltip("{name} node size: {node_size}") %>%
-    po_labels(title = "Pokemon Type Network (Custom Tooltip)")
+#' Network custom tooltip module
+#' @param data graph
+#' @return d3po widget
+mod_network_custom_plot <- function(data) {
+  d3po(data, width = 800, height = 600) %>%
+    po_network(layout = "kk") %>%
+    po_labels(title = "Network (Custom Tooltip)")
 }

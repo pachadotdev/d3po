@@ -1,15 +1,14 @@
 # Module: geomap2
-mod_geomap2_plot <- function() {
-  maps <- d3po::maps
-  dout <- map_ids(maps$south_america$chile)
+#' Geomap2 plot module
+#' @param data data.frame of region ids
+#' @return d3po widget
+mod_geomap2_plot <- function(data) {
+  dout <- map_ids(d3po::maps$south_america$chile)
   dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
   dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
 
-  d3po(dout) %>%
-    po_geomap(
-      daes(group = .data$id, color = .data$color, size = .data$pokemon_count, tooltip = .data$name),
-      map = maps$south_america$chile
-    ) %>%
+  d3po(dout, width = 800, height = 600) %>%
+    po_geomap(daes(id = .data$id, value = .data$pokemon_count, color = .data$color), map = d3po::maps$south_america$chile) %>%
     po_labels(title = "Pokemon Distribution in Chile")
 }
 

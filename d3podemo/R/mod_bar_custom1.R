@@ -1,4 +1,7 @@
 # Module: bar_custom1
+#' Bar custom1 plot module
+#' @param data data.frame of pokemon
+#' @return d3po widget
 mod_bar_custom1_plot <- function(data) {
   dout <- stats::aggregate(weight ~ type_1 + color_1, data = data, FUN = mean)
   names(dout) <- c("type", "color", "avg_weight")

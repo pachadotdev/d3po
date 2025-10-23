@@ -1,4 +1,7 @@
 # Module: treemap_twolevel
+#' Treemap two-level (drillable) module
+#' @param data data.frame
+#' @return d3po widget
 mod_treemap_twolevel_plot <- function(data) {
   type2tmp <- as.character(data$type_2)
   type2tmp[is.na(type2tmp)] <- "only"

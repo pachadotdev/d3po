@@ -1,11 +1,10 @@
 # Module: treemap3
+#' Treemap3 plot module
+#' @param data data.frame
+#' @return d3po widget
 mod_treemap3_plot <- function(data) {
-  dout <- stats::aggregate(cbind(count = rep(1, nrow(data))) ~ type_1 + color_1,
-    data = data, FUN = length
-  )
-  names(dout) <- c("type", "color", "count")
-
-  d3po(dout) %>%
+  # placeholder for alternative tiling
+  d3po(data, width = 800, height = 600) %>%
     po_treemap(daes(size = .data$count, group = .data$type, color = .data$color, tiling = "slice")) %>%
-    po_labels(title = "Share of Pokemon by Main Type (Slice)")
+    po_labels(title = "Treemap (Slice)")
 }

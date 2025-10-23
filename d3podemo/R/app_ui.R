@@ -19,37 +19,54 @@ app_ui <- function(request) {
           selectInput("plot_type", "Select Visualization Type:",
             width = "50%",
             choices = c(
+              # Box plots
               "Box Plot (Weight by Type)" = "box1",
               "Box Plot (Height by Type)" = "box2",
-              "Box Plot (Weight by Type) - Custom Labels/Units" = "box_custom1",
-              "Box Plot (Height by Type) - Custom Labels/Units" = "box_custom2",
+              "Box Plot (Weight) - Custom Labels/Units" = "box_custom1",
+              "Box Plot (Height) - Custom Labels/Units" = "box_custom2",
+
+              # Bar charts
               "Bar Chart (Vertical)" = "bar1",
               "Bar Chart (Horizontal)" = "bar2",
+              "Stacked Vertical Bars" = "bar3",
+              "Stacked Horizontal Bars" = "bar4",
               "Bar Chart (Custom Labels/Units) - Vertical" = "bar_custom1",
               "Bar Chart (Custom Labels/Units) - Horizontal" = "bar_custom2",
+
+              # Treemaps
               "Treemap (Squarify)" = "treemap1",
-              "Treemap (Binary)" = "treemap2",
-              "Treemap (Slice)" = "treemap3",
-              "Treemap (Dice)" = "treemap4",
-              "Treemap Style Example (Labels/Background/Font/No Download)" = "treemap_style",
               "Treemap with custom labels and tooltip" = "treemap_custom",
-              "Treemap with custom labels and tooltip (more changes to the displayed labels)" = "treemap_custom2",
+              "Treemap with custom labels and tooltip (more labels)" = "treemap_custom2",
               "Two-level Treemap (Drillable)" = "treemap_twolevel",
               "Two-level Treemap (Drillable, Custom Labels & Tooltip)" = "treemap_twolevel_custom",
-              "Pie Chart" = "pie",
-              "Donut Chart" = "donut",
+              "Treemap Style Example (Labels/Background/Font/No Download)" = "treemap_style",
+
+              # Pie/Donut
+              "Pie Chart" = "pie1",
+              "Donut Chart" = "pie2",
               "Pie (Custom Labels & Tooltip)" = "pie_custom",
+              "Half Pie" = "pie3",
+              "Half Donut" = "pie4",
+
+              # Line / Area
               "Line Chart" = "line",
-              "Area Chart" = "area",
-              "Line (same for Area, Custom Labels & Tooltip)" = "line_area_custom",
+              "Area Chart (Non-stacked)" = "area1",
+              "Area Chart (Stacked)" = "area2",
+              "Line (Custom Labels & Tooltip, Same for Area)" = "line_area_custom",
+
+              # Scatter
               "Scatter Plot" = "scatter1",
               "Scatter Plot (Log Scale)" = "scatter2",
               "Scatter Plot (Weighted)" = "scatter3",
               "Scatter Plot (Weighted, Log Scale)" = "scatter4",
               "Scatter Plot (Custom Tooltip)" = "scatter_custom",
+
+              # Geomaps
               "Geomap (South America)" = "geomap1",
               "Geomap (Chile)" = "geomap2",
               "Geomap (Custom Tooltip) - South America" = "geomap_custom",
+
+              # Network
               "Network Graph (KK Layout)" = "network_kk",
               "Network Graph (FR Layout)" = "network_fr",
               "Network Graph (Manual Layout)" = "network_manual",

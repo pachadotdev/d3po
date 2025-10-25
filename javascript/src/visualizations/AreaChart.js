@@ -8,6 +8,7 @@ import {
   showTooltipWithFormatter,
   hideTooltip,
   getHighlightColor,
+  tintColor,
 } from '../utils.js';
 
 export default class AreaChart extends D3po {
@@ -200,17 +201,26 @@ export default class AreaChart extends D3po {
             ]
           : colorScale(key);
 
-        // draw band (default opaque for stacked areas; override with options.stackFillOpacity)
+        // draw band: prefer a tinted fill (blend with white) instead of using transparency.
+        // Backwards compatible: if user explicitly provided stackFillOpacity, respect it.
+        const stackFillOpacityExplicit =
+          this.options && this.options.stackFillOpacity != null;
+        const stackTint =
+          this.options && this.options.stackTint != null
+            ? Number(this.options.stackTint)
+            : 0.3; // default tint fraction
+        const computedFill = stackFillOpacityExplicit
+          ? fill || colorScale(key)
+          : tintColor(fill || colorScale(key), stackTint);
+
         this.chart
           .append('path')
           .datum(s)
           .attr('d', stackArea)
-          .attr('fill', fill || colorScale(key))
+          .attr('fill', computedFill)
           .attr(
             'fill-opacity',
-            this.options && this.options.stackFillOpacity != null
-              ? this.options.stackFillOpacity
-              : 1
+            stackFillOpacityExplicit ? this.options.stackFillOpacity : 1
           );
 
         // draw top edge line
@@ -310,19 +320,25 @@ export default class AreaChart extends D3po {
         const col =
           this.colorField && s[0] ? s[0][this.colorField] : colorScale(i);
         // Render area but make it non-interactive so points can receive pointer events
-        // For non-stacked charts we prefer opaque fills so later (smaller) areas
-        // fully cover earlier ones and avoid visual colour mixing. Users can
-        // override with `options.areaFillOpacity` if they want translucency.
+        // Prefer a tinted fill (blend with white) instead of lowering opacity.
+        const areaFillOpacityExplicit =
+          this.options && this.options.areaFillOpacity != null;
+        const areaTint =
+          this.options && this.options.areaTint != null
+            ? Number(this.options.areaTint)
+            : 0.12;
+        const computedAreaFill = areaFillOpacityExplicit
+          ? col
+          : tintColor(col, areaTint);
+
         this.chart
           .append('path')
           .datum(s)
           .attr('d', area)
-          .attr('fill', col)
+          .attr('fill', computedAreaFill)
           .attr(
             'fill-opacity',
-            this.options && this.options.areaFillOpacity != null
-              ? this.options.areaFillOpacity
-              : 1
+            areaFillOpacityExplicit ? this.options.areaFillOpacity : 1
           )
           .attr('stroke', col)
           .attr('stroke-width', 1)

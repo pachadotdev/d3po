@@ -139,14 +139,12 @@ export default class Treemap extends D3po {
       for (const entry of map.values()) {
         if (!groups.has(entry.group))
           groups.set(entry.group, { name: entry.group, children: [] });
-        groups
-          .get(entry.group)
-          .children.push({
-            name: entry.subgroup,
-            value: entry.value,
-            color: entry.color,
-            __rows: entry.rows,
-          });
+        groups.get(entry.group).children.push({
+          name: entry.subgroup,
+          value: entry.value,
+          color: entry.color,
+          __rows: entry.rows,
+        });
       }
 
       hierarchyData = { children: Array.from(groups.values()) };

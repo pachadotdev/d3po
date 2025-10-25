@@ -71,79 +71,11 @@ d3po(d) %>%
     daes(
       y = .data$country_name,
       x = .data$trade,
-      color = .data$color
-    )
-  ) %>%
-  po_labels(title = "Test sorting", y = "Country", x = "Trade Value (USD Billion)") %>%
-  po_format(x = format(.data$trade, big.mark = " ", scientific = FALSE)) %>%
-  po_tooltip("{country_name}: {trade} B") %>%
-  po_background("transparent")
-
-d3po(d) %>%
-  po_bar(
-    daes(
-      y = .data$country_name,
-      x = .data$trade,
       color = .data$color,
       sort = "asc-y"
     )
   ) %>%
   po_labels(title = "Test sorting", y = "Country", x = "Trade Value (USD Billion)") %>%
   po_format(x = format(.data$trade, big.mark = " ", scientific = FALSE)) %>%
-  po_tooltip("{country_name}: {trade} B") %>%
-  po_background("transparent")
-
-d3po(d) %>%
-  po_bar(
-    daes(
-      y = .data$country_name,
-      x = .data$trade,
-      color = .data$color,
-      sort = "desc-y"
-    )
-  ) %>%
-  po_labels(title = "Test sorting", y = "Country", x = "Trade Value (USD Billion)") %>%
-  po_format(x = format(.data$trade, big.mark = " ", scientific = FALSE)) %>%
-  po_tooltip("{country_name}: {trade} B") %>%
-  po_background("transparent")
-
-d3po(d) %>%
-  po_bar(
-    daes(
-      x = .data$country_name,
-      y = .data$trade,
-      color = .data$color
-    )
-  ) %>%
-  po_labels(title = "Test sorting", x = "Country", y = "Trade Value (USD Billion)") %>%
-  po_format(y = format(.data$trade, big.mark = " ", scientific = FALSE)) %>%
-  po_tooltip("{country_name}: {trade} B") %>%
-  po_background("transparent")
-
-d3po(d) %>%
-  po_bar(
-    daes(
-      x = .data$country_name,
-      y = .data$trade,
-      color = .data$color,
-      sort = "asc-x"
-    )
-  ) %>%
-  po_labels(title = "Test sorting", x = "Country", y = "Trade Value (USD Billion)") %>%
-  po_format(y = format(.data$trade, big.mark = " ", scientific = FALSE)) %>%
-  po_tooltip("{country_name}: {trade} B") %>%
-  po_background("transparent")
-
-d3po(d) %>%
-  po_bar(
-    daes(
-      x = .data$country_name,
-      y = .data$trade,
-      color = .data$color,
-      sort = "desc-x"
-    )
-  ) %>%
-  po_labels(title = "Test sorting", x = "Country", y = "Trade Value (USD Billion)") %>%
-  po_format(y = format(.data$trade, big.mark = " ", scientific = FALSE)) %>%
   po_tooltip("{country_name}: {trade} B") %>%
   po_background("transparent")

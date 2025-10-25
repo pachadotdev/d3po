@@ -88,7 +88,7 @@ export default class BarChart extends D3po {
       if (m) requestedSort = { dir: m[1], axis: m[2] };
     }
 
-  // candidate groups
+    // candidate groups
     const groups = groupField
       ? Array.from(
           new Set(
@@ -386,7 +386,9 @@ export default class BarChart extends D3po {
             return 0;
           });
           if (sortedCats.indexOf(preserveOtherLabel) !== -1) {
-            const s = sortedCats.filter(x => x !== preserveOtherLabel).concat([preserveOtherLabel]);
+            const s = sortedCats
+              .filter(x => x !== preserveOtherLabel)
+              .concat([preserveOtherLabel]);
             applyCategorySort(s);
           } else {
             applyCategorySort(sortedCats);
@@ -471,7 +473,10 @@ export default class BarChart extends D3po {
           .attr('height', cat => {
             const rows = rowsByCat.get(cat) || [];
             const row = rows[0] || {};
-            return Math.max(0, effectiveInnerHeight - yScale(Number(row[this.yField]) || 0));
+            return Math.max(
+              0,
+              effectiveInnerHeight - yScale(Number(row[this.yField]) || 0)
+            );
           });
 
         // Attach the actual row object as the element datum for tooltips/event handlers

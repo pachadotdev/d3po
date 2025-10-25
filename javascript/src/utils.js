@@ -384,6 +384,32 @@ export function getHighlightColor(baseColor) {
   return luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
 }
 
+/**
+ * Return a tinted version of a color blended with white.
+ * factor: 0 -> original color, 1 -> white. Typical small values like 0.1..0.3
+ * produce a subtle whitening/tint effect without changing the original stroke color.
+ * @param {string} baseColor - color parsable by d3.color
+ * @param {number} factor - blend factor in [0,1]
+ * @returns {string} CSS rgb(...) string
+ */
+export function tintColor(baseColor, factor = 0.15) {
+  try {
+    const c = d3.color(baseColor);
+    if (!c) return baseColor;
+    // ensure RGB
+    const r = c.r;
+    const g = c.g;
+    const b = c.b;
+    const f = Math.max(0, Math.min(1, Number(factor) || 0));
+    const nr = Math.round(r + (255 - r) * f);
+    const ng = Math.round(g + (255 - g) * f);
+    const nb = Math.round(b + (255 - b) * f);
+    return `rgb(${nr}, ${ng}, ${nb})`;
+  } catch (e) {
+    return baseColor;
+  }
+}
+
 // --- Formatter helpers -----------------------------------------------------
 // Try to convert an option into a callable formatter(value, row).
 // - If opt is a function, return as-is.

@@ -10,14 +10,14 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic using tabler layout
-    tablerPage(
+    tabler_page(
       title = "d3po Visualization Examples",
       layout = "horizontal",
-      body = tablerBody(
+      body = tabler_body(
         fluidRow(
           column(
             7,
-            tablerCard(
+            tabler_card(
               title = "D3po demo",
               selectInput("plot_type", "Select Visualization Type:",
                 width = "100%",
@@ -34,6 +34,10 @@ app_ui <- function(request) {
                     "Horizontal" = "bar2",
                     "Stacked vertical" = "bar3",
                     "Stacked horizontal" = "bar4",
+                    "Vertical sorted ascending by y-axis values" = "bar5",
+                    "Vertical sorted descending by y-axis values" = "bar6",
+                    "Horizontal sorted ascending by x-axis values" = "bar7",
+                    "Horizontal sorted descending by x-axis values" = "bar8",
                     "Custom labels" = "bar_custom"
                   ),
                   "Treemaps" = list(
@@ -85,7 +89,7 @@ app_ui <- function(request) {
           ),
           column(
             5,
-            tablerCard(
+            tabler_card(
               tags$div(
                 style = "margin-top: 1rem;",
                 tags$h4("Code used to generate the plot"),
@@ -100,7 +104,7 @@ app_ui <- function(request) {
           )
         )
       ),
-      footer = tablerFooter(
+      footer = tabler_footer(
         left = "Created by Mauricio 'Pacha' Vargas Sepulveda",
         right = paste("Last updated:", format(Sys.time(), "%a %b %d %X %Y"))
       )

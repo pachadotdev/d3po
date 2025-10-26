@@ -143,6 +143,7 @@ export default class D3po {
     if (this.options.title) {
       this.svg
         .append('text')
+        .attr('class', 'title')
         .attr('x', this.options.width / 2)
         .attr('y', this.options.margin.top / 2)
         .attr('text-anchor', 'middle')
@@ -407,7 +408,7 @@ export default class D3po {
    */
   setTitle(title) {
     this.options.title = title;
-    this.svg.select('text').text(title);
+    this.svg.select('.title').text(title);
     return this;
   }
 
@@ -577,7 +578,7 @@ export default class D3po {
 
     // Update title position
     if (this.options.title) {
-      this.svg.select('text').attr('x', width / 2);
+      this.svg.select('.title').attr('x', width / 2);
     }
 
     // Update download buttons position

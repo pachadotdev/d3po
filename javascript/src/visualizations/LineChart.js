@@ -199,6 +199,7 @@ export default class LineChart extends D3po {
           : '';
 
     xg.append('text')
+      .attr('class', 'x-axis-label')
       .attr('x', this.getInnerWidth() / 2)
       .attr('y', xLabelPadding + 24) // baseline offset plus measured padding
       .attr('fill', '#000')
@@ -223,6 +224,7 @@ export default class LineChart extends D3po {
     // Use translate before rotate so the offset is applied in the unrotated
     // coordinate system and the label reliably appears left of the ticks.
     yg.append('text')
+      .attr('class', 'y-axis-label')
       .attr(
         'transform',
         `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`

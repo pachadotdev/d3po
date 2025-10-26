@@ -945,6 +945,7 @@ export default class BarChart extends D3po {
       else maxAllowed = Math.max(10, maxAllowed);
       if (labelOffset > maxAllowed) labelOffset = maxAllowed;
       yg.append('text')
+        .attr('class', 'y-axis-label')
         .attr(
           'transform',
           `translate(${-labelOffset},${effectiveInnerHeight / 2}) rotate(-90)`

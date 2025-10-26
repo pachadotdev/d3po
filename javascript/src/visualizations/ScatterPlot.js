@@ -248,6 +248,7 @@ export default class ScatterPlot extends D3po {
       if (labelOffset > maxAllowed) labelOffset = maxAllowed;
 
       yg.append('text')
+        .attr('class', 'y-axis-label')
         .attr(
           'transform',
           `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`

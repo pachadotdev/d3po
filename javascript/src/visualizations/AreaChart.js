@@ -121,7 +121,7 @@ export default class AreaChart extends D3po {
     if (xLabelText) {
       this.chart
         .append('text')
-        .attr('class', 'axis-label axis-label-x')
+        .attr('class', 'x-axis-label')
         .attr('text-anchor', 'middle')
         .attr('x', this.getInnerWidth() / 2)
         .attr(
@@ -148,7 +148,7 @@ export default class AreaChart extends D3po {
     if (yLabelText) {
       this.chart
         .append('text')
-        .attr('class', 'axis-label axis-label-y')
+        .attr('class', 'y-axis-label')
         .attr('text-anchor', 'middle')
         .attr(
           'transform',

@@ -7,7 +7,7 @@
 * The examples use base R.
 * Added full Shiny and Golem example app in the `d3podemo` folder.
 * Added minimal Shiny example for debugging without Golem in `debug-with-shiny.R`.
-* Added `d3po::po_theme()` to customize colors of axes, titles and tooltips.
+* Added `po_theme()` to customize colors of axes, titles and tooltips.
 * Migrated to D3 7.9.0.
 * Minimal codebase.
 

@@ -22,6 +22,51 @@ imposing a commercial license for NGOs and government use.
 If this project is useful for you, please consider supporting its development by buying me a coffee at
 <https://buymeacoffee.com/pacha>.
 
+## Installation
+
+You can install the most recent version from the R-Universe:
+
+``` r
+install.packages("d3po", repos = "https://pachadotdev.r-universe.dev")
+```
+
+Or from GitHub using remotes:
+
+``` r
+remotes::install_github("pachadotdev/d3po")
+```
+
+## Features
+
+Visualization methods:
+
+- Area
+- Box and whiskers (or Boxplot)
+- Column
+- Donut
+- Geographical maps
+- Line
+- Networks
+- Pie / Donut
+- Scatterplots
+- Treemaps
+
+Enhancements:
+
+- Automatic content resizing
+- Downloading the charts in SVG format
+- Downloading the charts in PNG format
+
+## Examples
+
+Here is a video showcasing D3po:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6pIq2rJONFQ?si=Ai6NUk-BSyG0MTFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Please check the vignettes and this comprehensive example Shiny app using Golem: <https://github.com/pachadotdev/d3po/tree/main/d3podemo>.
+
+I have a minimal Shiny app without Golem that I use to debug here: <https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R>.
+
 ## Frequently Asked Questions (FAQs)
 
 **Q: Why D3po?**
@@ -68,48 +113,3 @@ d3po(dout, width = 800, height = 600) %>%
   ) %>%
   po_tooltip("<i>Type: {type}</i><br/>Count: {count}")
 ```
-
-## Features
-
-Visualization methods:
-
-- Area
-- Box and whiskers (or Boxplot)
-- Column
-- Donut
-- Geographical maps
-- Line
-- Networks
-- Pie / Donut
-- Scatterplots
-- Treemaps
-
-Enhancements:
-
-- Automatic content resizing
-- Downloading the charts in SVG format
-- Downloading the charts in PNG format
-
-## Installation
-
-You can install the most recent version from the R-Universe:
-
-``` r
-install.packages("d3po", repos = "https://pachadotdev.r-universe.dev")
-```
-
-Or from GitHub using remotes:
-
-``` r
-remotes::install_github("pachadotdev/d3po")
-```
-
-## Examples
-
-Here is a video showcasing D3po:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/6pIq2rJONFQ?si=Ai6NUk-BSyG0MTFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-Please check the vignettes and this comprehensive example Shiny app using Golem: <https://github.com/pachadotdev/d3po/tree/main/d3podemo>.
-
-I have a minimal Shiny app without Golem that I use to debug here: <https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R>.

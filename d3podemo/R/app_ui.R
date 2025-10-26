@@ -27,7 +27,8 @@ app_ui <- function(request) {
                     "Horizontal" = "box2",
                     "Vertical (log scale)" = "box3",
                     "Horizontal (log scale)" = "box4",
-                    "Custom labels" = "box_custom"
+                    "Custom labels" = "box_custom",
+                    "Custom colors" = "box_custom2"
                   ),
                   "Bar Charts" = list(
                     "Vertical" = "bar1",

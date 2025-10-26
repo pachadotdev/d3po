@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_box • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_theme • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)'], ['$', '$']],
@@ -69,17 +69,19 @@
 <div class="content-wrapper">
         <div class="content-main">
 
-<table style="width: 100%;"><tr><td>po_box {d3po}</td><td style="text-align: right;">R Documentation</td></tr></table><h2>Boxplot</h2>
+<table style="width: 100%;"><tr><td>po_theme {d3po}</td><td style="text-align: right;">R Documentation</td></tr></table><h2>Theme</h2>
 
 <h3>Description</h3>
 
-<p>Draw a boxplot.
+<p>Manually set colors used by D3po for axis/axis-labels/title and for
+tooltips/download menu background. This allows you to override page
+themes (Tabler/Shiny) and force D3po to render with readable contrast.
 </p>
 
 
 <h3>Usage</h3>
 
-<pre><code class="language-R">po_box(d3po, ..., data = NULL, inherit_daes = TRUE)
+<pre><code class="language-R">po_theme(d3po, axis = NULL, tooltips = NULL)
 </code></pre>
 
 
@@ -88,42 +90,16 @@
 <table role="presentation"><tr><td><code id="d3po">d3po</code></td>
 <td>
 Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.
-</td></tr><tr><td><code id="...">...</code></td>
+</td></tr><tr><td><code id="axis">axis</code></td>
 <td>
-Aesthetics, see <code>daes()</code>.
-</td></tr><tr><td><code id="data">data</code></td>
+Hex color string for axis lines and axis/label/title fill (e.g. "#fff").
+</td></tr><tr><td><code id="tooltips">tooltips</code></td>
 <td>
-Any dataset to use for plot, overrides data passed
-to <code>d3po()</code>.
-</td></tr><tr><td><code id="inherit_daes">inherit_daes</code></td>
-<td>
-Whether to inherit aesthetics previous specified.
+Hex color string for tooltip / download menu background (e.g. "#000").
 </td></tr></table><h3>Value</h3>
 
-<p>an 'htmlwidgets' object with the desired interactive plot
+<p>Appends theme settings to an 'htmlwidgets' object
 </p>
-
-
-<h3>Examples</h3>
-
-<pre><code class="language-R">if (interactive()) {
-  # Vertical box plot
-  d3po(pokemon) %&gt;%
-    po_box(daes(x = type_1, y = weight, color = color_1)) %&gt;%
-    po_title("Weight Distribution by Type")
-
-  # Horizontal box plot
-  d3po(pokemon) %&gt;%
-    po_box(daes(x = height, y = type_1, color = color_1)) %&gt;%
-    po_title("Height Distribution by Type")
-
-  # Log-transformed distribution
-  pokemon$log_weight &lt;- log10(pokemon$weight)
-  d3po(pokemon) %&gt;%
-    po_box(daes(x = type_1, y = log_weight, color = color_1)) %&gt;%
-    po_title("Log(Weight) Distribution by Type")
-}
-</code></pre>
 
 
 </div>

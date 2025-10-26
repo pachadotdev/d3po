@@ -4,6 +4,7 @@ import {
   triggerDownload,
   maybeEvalJSFormatter,
   escapeHtml,
+  getTextColor,
 } from './utils.js';
 
 /**
@@ -139,9 +140,109 @@ export default class D3po {
       .style('font-family', this.options.fontFamily)
       .style('font-size', `${this.options.fontSize}px`);
 
+    // Determine theme (dark vs light) by sampling the container background color.
+    let bg = this.options.background;
+    if (!bg) {
+      try {
+        bg = window.getComputedStyle(this.container).backgroundColor || bg;
+      } catch (e) {
+        bg = bg || '#ffffff';
+      }
+    }
+    try {
+      const rgb = d3.color(bg) || d3.rgb('#ffffff');
+      const luminance =
+        (0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b) / 255;
+      this.isDark = luminance <= 0.5;
+    } catch (e) {
+      this.isDark = false;
+    }
+
+    // Honor explicit theme overrides passed via options.theme = { axis: '#fff', tooltips: '#000' }
+    if (this.options && this.options.theme) {
+      this.explicitTheme = this.options.theme;
+      try {
+        if (this.explicitTheme.axis) {
+          const c = d3.color(this.explicitTheme.axis);
+          if (c) {
+            const luminanceA =
+              (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255;
+            // If explicit axis color suggests light background, prefer light mode for text defaults
+            this.isDark = luminanceA <= 0.5 ? true : false;
+          }
+        }
+      } catch (e) {
+        void 0;
+      }
+    }
+
+    // Set data attributes so utilities can detect theme and explicit overrides
+    try {
+      const theme = this.isDark ? 'dark' : 'light';
+      this.svg.attr('data-d3po-theme', theme);
+      if (this.container && this.container.setAttribute)
+        this.container.setAttribute('data-d3po-theme', theme);
+      if (this.explicitTheme) {
+        try {
+          if (this.explicitTheme.axis) {
+            this.svg.attr('data-d3po-axis', this.explicitTheme.axis);
+            if (this.container && this.container.setAttribute)
+              this.container.setAttribute(
+                'data-d3po-axis',
+                this.explicitTheme.axis
+              );
+          }
+          if (this.explicitTheme.tooltips) {
+            this.svg.attr('data-d3po-tooltips', this.explicitTheme.tooltips);
+            if (this.container && this.container.setAttribute)
+              this.container.setAttribute(
+                'data-d3po-tooltips',
+                this.explicitTheme.tooltips
+              );
+          }
+        } catch (e) {
+          void 0;
+        }
+      }
+    } catch (e) {
+      void 0;
+    }
+
+    // Inject strong theme CSS to resist external overrides
+    try {
+      this._injectThemeStyles();
+    } catch (e) {
+      void 0;
+    }
+
+    // If explicit axis color is provided, install a MutationObserver to
+    // enforce inline styles for axis lines and labels when they're added
+    try {
+      if (
+        this.explicitTheme &&
+        this.explicitTheme.axis &&
+        this.svg &&
+        this.svg.node
+      ) {
+        // apply immediately in case axes are created synchronously later
+        this._applyExplicitAxisColors(this.explicitTheme.axis);
+
+        const svgNode = this.svg.node();
+        const mo = new MutationObserver(muts => {
+          // On DOM changes under the SVG, re-apply explicit colors
+          this._applyExplicitAxisColors(this.explicitTheme.axis);
+        });
+        mo.observe(svgNode, { childList: true, subtree: true });
+        // store observer so it can be disconnected on destroy
+        this._axisMutationObserver = mo;
+      }
+    } catch (e) {
+      void 0;
+    }
+
     // Add title if provided
     if (this.options.title) {
-      this.svg
+      const t = this.svg
         .append('text')
         .attr('class', 'title')
         .attr('x', this.options.width / 2)
@@ -150,6 +251,16 @@ export default class D3po {
         .style('font-size', `${this.options.fontSize * 1.5}px`)
         .style('font-weight', 'bold')
         .text(this.options.title);
+      // If explicit axis color provided, enforce title color inline
+      try {
+        if (this.explicitTheme && this.explicitTheme.axis) {
+          t.style('fill', this.explicitTheme.axis);
+        } else {
+          t.style('fill', this.isDark ? '#eee' : '#111');
+        }
+      } catch (e) {
+        void 0;
+      }
     }
 
     // Create main chart group
@@ -163,6 +274,121 @@ export default class D3po {
     // Add download functionality if enabled
     if (this.options.download) {
       this._addDownloadButtons();
+    }
+  }
+
+  /**
+   * Inject CSS rules that enforce axis/label/title colors and menu styles.
+   * Uses data attributes (data-d3po-theme and data-d3po-axis) and !important
+   * to make rules robust against global page themes.
+   * @private
+   */
+  _injectThemeStyles() {
+    const id = 'd3po-explicit-theme-styles';
+    const existing = document.getElementById(id);
+    if (existing) existing.remove();
+
+    const style = document.createElement('style');
+    style.id = id;
+
+    const explicitAxis =
+      (this.explicitTheme && this.explicitTheme.axis) || null;
+    const explicitTooltips =
+      (this.explicitTheme && this.explicitTheme.tooltips) || null;
+
+    const lightAxis = explicitAxis || '#333';
+    const darkAxis = explicitAxis || 'rgba(255,255,255,0.85)';
+    const lightText = explicitAxis || '#111';
+    const darkText = explicitAxis || '#eee';
+
+    const tooltipBg = explicitTooltips || (this.isDark ? '#252543' : 'white');
+    const tooltipText = explicitTooltips
+      ? getTextColor(tooltipBg) === 'white'
+        ? '#eee'
+        : '#111'
+      : this.isDark
+        ? '#eee'
+        : '#333';
+
+    style.textContent = `
+      /* Axis and ticks */
+      [data-d3po-theme="light"] .axis path,
+      [data-d3po-theme="light"] .axis line,
+      [data-d3po-theme="light"] g.tick line,
+      [data-d3po-theme="light"] path.domain {
+        stroke: ${lightAxis} !important;
+      }
+      [data-d3po-theme="light"] g.tick text,
+      [data-d3po-theme="light"] .x-axis-label,
+      [data-d3po-theme="light"] .y-axis-label,
+  [data-d3po-theme="light"] .title,
+  [data-d3po-theme="light"] .treemap-subtitle,
+  [data-d3po-theme="light"] .treemap-back {
+        fill: ${lightText} !important;
+      }
+
+      [data-d3po-theme="dark"] .axis path,
+      [data-d3po-theme="dark"] .axis line,
+      [data-d3po-theme="dark"] g.tick line,
+      [data-d3po-theme="dark"] path.domain {
+        stroke: ${darkAxis} !important;
+      }
+      [data-d3po-theme="dark"] g.tick text,
+      [data-d3po-theme="dark"] .x-axis-label,
+      [data-d3po-theme="dark"] .y-axis-label,
+  [data-d3po-theme="dark"] .title,
+  [data-d3po-theme="dark"] .treemap-subtitle,
+  [data-d3po-theme="dark"] .treemap-back {
+        fill: ${darkText} !important;
+      }
+
+      /* Force menu/tooltip text color for SVG-attached menus */
+      .d3po-menu text { fill: ${tooltipText} !important; }
+      .d3po-menu rect { fill: ${tooltipBg} !important; }
+    `;
+
+    document.head.appendChild(style);
+  }
+
+  /**
+   * Apply inline axis/label colors directly to SVG elements. This is the
+   * strongest way to resist external CSS overrides.
+   * @private
+   */
+  _applyExplicitAxisColors(color) {
+    try {
+      if (!color || !this.svg) return;
+      const svgNode = this.svg.node();
+      if (!svgNode) return;
+
+      // Axis paths and lines
+      const axisPaths = svgNode.querySelectorAll(
+        '.axis path, .axis line, g.tick line, path.domain'
+      );
+      axisPaths.forEach(el => {
+        try {
+          el.setAttribute('stroke', color);
+          // also set style attribute to be extra-robust
+          el.style.stroke = color;
+        } catch (e) {
+          void 0;
+        }
+      });
+
+      // Tick text and axis labels
+      const texts = svgNode.querySelectorAll(
+        'g.tick text, .x-axis-label, .y-axis-label, .title'
+      );
+      texts.forEach(el => {
+        try {
+          el.setAttribute('fill', color);
+          el.style.fill = color;
+        } catch (e) {
+          void 0;
+        }
+      });
+    } catch (e) {
+      // ignore failures
     }
   }
 
@@ -218,7 +444,30 @@ export default class D3po {
       .style('opacity', 0)
       .style('pointer-events', 'none');
 
-    // Menu background
+    // Menu background - prefer explicit tooltip bg if provided
+    const tooltipBg =
+      (this.explicitTheme && this.explicitTheme.tooltips) ||
+      (this.isDark ? '#252543' : 'white');
+    let tooltipStroke;
+    try {
+      tooltipStroke =
+        this.explicitTheme && this.explicitTheme.tooltips
+          ? d3.color(tooltipBg).darker(0.8).toString()
+          : this.isDark
+            ? 'rgba(255,255,255,0.08)'
+            : '#999';
+    } catch (e) {
+      tooltipStroke = this.isDark ? 'rgba(255,255,255,0.08)' : '#999';
+    }
+    const tooltipTextColor =
+      this.explicitTheme && this.explicitTheme.tooltips
+        ? getTextColor(tooltipBg) === 'white'
+          ? '#eee'
+          : '#111'
+        : this.isDark
+          ? '#eee'
+          : '#333';
+
     menu
       .append('rect')
       .attr('x', 0)
@@ -226,8 +475,8 @@ export default class D3po {
       .attr('width', 90)
       .attr('height', 60)
       .attr('rx', 4)
-      .style('fill', 'white')
-      .style('stroke', '#999')
+      .style('fill', tooltipBg)
+      .style('stroke', tooltipStroke)
       .style('stroke-width', '1px')
       .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))');
 
@@ -251,7 +500,7 @@ export default class D3po {
       .attr('x', 10)
       .attr('y', 20)
       .style('font-size', '12px')
-      .style('fill', '#333')
+      .style('fill', tooltipTextColor)
       .style('user-select', 'none')
       .text('📥 SVG');
 
@@ -262,7 +511,17 @@ export default class D3po {
         self._hideMenu();
       })
       .on('mouseover', function () {
-        d3.select(this).select('rect').style('fill', '#f0f0f0');
+        try {
+          const hoverFill =
+            self.explicitTheme && self.explicitTheme.tooltips
+              ? d3.color(tooltipBg).brighter(0.5).toString()
+              : self.isDark
+                ? '#3a3a5a'
+                : '#f0f0f0';
+          d3.select(this).select('rect').style('fill', hoverFill);
+        } catch (e) {
+          d3.select(this).select('rect').style('fill', '#f0f0f0');
+        }
       })
       .on('mouseout', function () {
         d3.select(this).select('rect').style('fill', 'transparent');
@@ -288,7 +547,7 @@ export default class D3po {
       .attr('x', 10)
       .attr('y', 20)
       .style('font-size', '12px')
-      .style('fill', '#333')
+      .style('fill', tooltipTextColor)
       .style('user-select', 'none')
       .text('📥 PNG');
 
@@ -299,7 +558,17 @@ export default class D3po {
         self._hideMenu();
       })
       .on('mouseover', function () {
-        d3.select(this).select('rect').style('fill', '#f0f0f0');
+        try {
+          const hoverFill =
+            self.explicitTheme && self.explicitTheme.tooltips
+              ? d3.color(tooltipBg).brighter(0.5).toString()
+              : self.isDark
+                ? '#3a3a5a'
+                : '#f0f0f0';
+          d3.select(this).select('rect').style('fill', hoverFill);
+        } catch (e) {
+          d3.select(this).select('rect').style('fill', '#f0f0f0');
+        }
       })
       .on('mouseout', function () {
         d3.select(this).select('rect').style('fill', 'transparent');

@@ -899,6 +899,46 @@ po_background.d3proxy <- function(d3po, background) {
   return(d3po)
 }
 
+# Theme ----
+
+#' Theme
+#'
+#' Manually set colors used by D3po for axis/axis-labels/title and for
+#' tooltips/download menu background. This allows you to override page
+#' themes (Tabler/Shiny) and force D3po to render with readable contrast.
+#'
+#' @inheritParams po_box
+#' @param axis Hex color string for axis lines and axis/label/title fill (e.g. "#fff").
+#' @param tooltips Hex color string for tooltip / download menu background (e.g. "#000").
+#' @export
+#' @return Appends theme settings to an 'htmlwidgets' object
+po_theme <- function(d3po, axis = NULL, tooltips = NULL) UseMethod("po_theme")
+
+#' @export
+#' @method po_theme d3po
+po_theme.d3po <- function(d3po, axis = NULL, tooltips = NULL) {
+  if (!is.null(axis)) assertthat::assert_that(is.character(axis) && nzchar(axis), msg = "axis must be a hex color string")
+  if (!is.null(tooltips)) assertthat::assert_that(is.character(tooltips) && nzchar(tooltips), msg = "tooltips must be a hex color string")
+
+  d3po$x$theme <- list()
+  if (!is.null(axis)) d3po$x$theme$axis <- as.character(axis)
+  if (!is.null(tooltips)) d3po$x$theme$tooltips <- as.character(tooltips)
+
+  return(d3po)
+}
+
+#' @export
+#' @method po_theme d3proxy
+po_theme.d3proxy <- function(d3po, axis = NULL, tooltips = NULL) {
+  msg <- list(id = d3po$id, msg = list())
+  if (!is.null(axis)) msg$msg$axis <- as.character(axis)
+  if (!is.null(tooltips)) msg$msg$tooltips <- as.character(tooltips)
+
+  d3po$session$sendCustomMessage("d3po-theme", msg)
+
+  return(d3po)
+}
+
 # Download ----
 
 #' Download

@@ -202,7 +202,7 @@ export default class LineChart extends D3po {
       .attr('class', 'x-axis-label')
       .attr('x', this.getInnerWidth() / 2)
       .attr('y', xLabelPadding + 24) // baseline offset plus measured padding
-      .attr('fill', '#000')
+      // color intentionally left to theme/CSS so po_theme can override
       .attr('text-anchor', 'middle')
       .style('font-size', '14px')
       .text(xLabelText);
@@ -231,7 +231,7 @@ export default class LineChart extends D3po {
       )
       .attr('x', 0)
       .attr('y', 0)
-      .attr('fill', '#000')
+      // color intentionally left to theme/CSS so po_theme can override
       .attr('text-anchor', 'middle')
       .style('font-size', '14px')
       .text(yLabelText);

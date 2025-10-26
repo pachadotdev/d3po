@@ -64,6 +64,29 @@ export default class GeoMap extends D3po {
 
     this.chart.attr('clip-path', `url(#${clipId})`);
 
+    // optional chart title (class `title`) placed above the plotting area
+    if (this.options && this.options.title) {
+      this.svg
+        .append('text')
+        .attr('class', 'title')
+        .attr('text-anchor', 'middle')
+        .attr('x', this.options.margin.left + this.getInnerWidth() / 2)
+        .attr('y', this.options.titleOffsetY ? this.options.titleOffsetY : 18)
+        .style(
+          'font-family',
+          this.options && this.options.fontFamily
+            ? this.options.fontFamily
+            : null
+        )
+        .style(
+          'font-size',
+          this.options && this.options.titleFontSize
+            ? `${this.options.titleFontSize}px`
+            : '16px'
+        )
+        .text(String(this.options.title));
+    }
+
     // Create data lookup
     const dataMap = new Map(this.data.map(d => [d[this.groupField], d]));
 

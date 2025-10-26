@@ -169,6 +169,32 @@ export default class AreaChart extends D3po {
         .text(String(yLabelText));
     }
 
+    // optional chart title (class `title`) placed above the plotting area
+    if (this.options && this.options.title) {
+      this.chart
+        .append('text')
+        .attr('class', 'title')
+        .attr('text-anchor', 'middle')
+        .attr('x', this.getInnerWidth() / 2)
+        // place title above the plotting area; allow override with titleOffsetY
+        .attr('y', this.options.titleOffsetY ? this.options.titleOffsetY : -10)
+        .style(
+          'font-family',
+          this.options && this.options.fontFamily
+            ? this.options.fontFamily
+            : null
+        )
+        .style(
+          'font-size',
+          this.options && this.options.titleFontSize
+            ? `${this.options.titleFontSize}px`
+            : this.options && this.options.fontSize
+              ? `${Number(this.options.fontSize) + 2}px`
+              : null
+        )
+        .text(String(this.options.title));
+    }
+
     const tooltipFormatter = resolveTooltipFormatter(
       this.tooltip,
       this.options && this.options.tooltip

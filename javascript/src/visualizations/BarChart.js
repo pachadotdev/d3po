@@ -902,7 +902,7 @@ export default class BarChart extends D3po {
         .attr('text-anchor', 'middle')
         .attr('x', effectiveInnerWidth / 2)
         .attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24))
-        .attr('fill', 'black')
+        // color intentionally left to theme/CSS so po_theme can override
         .style('font-size', '14px')
         .text(
           this.options && this.options.xLabel
@@ -952,7 +952,7 @@ export default class BarChart extends D3po {
         )
         .attr('x', 0)
         .attr('y', 0)
-        .attr('fill', 'black')
+        // color intentionally left to theme/CSS so po_theme can override
         .attr('text-anchor', 'middle')
         .style('font-size', '14px')
         .text(

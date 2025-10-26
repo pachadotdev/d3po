@@ -196,7 +196,7 @@ export default class ScatterPlot extends D3po {
       .attr('class', 'x-axis-label')
       .attr('x', this.getInnerWidth() / 2)
       .attr('y', this.getInnerHeight() + xLabelPadding + 24)
-      .attr('fill', 'black')
+      // color intentionally left to theme/CSS so po_theme can override
       .attr('text-anchor', 'middle')
       .style('font-size', '14px')
       .text(xLabelText);
@@ -255,7 +255,7 @@ export default class ScatterPlot extends D3po {
         )
         .attr('x', 0)
         .attr('y', 0)
-        .attr('fill', 'black')
+        // color intentionally left to theme/CSS so po_theme can override
         .attr('text-anchor', 'middle')
         .style('font-size', '14px')
         .text(yLabelText);

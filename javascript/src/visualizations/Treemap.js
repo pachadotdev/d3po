@@ -261,7 +261,7 @@ export default class Treemap extends D3po {
       .attr('y', -10)
       .attr('font-size', `${this.options.fontSize * 0.9}px`)
       .attr('font-family', this.options.fontFamily)
-      .attr('fill', 'blue')
+      .attr('fill', 'currentColor') // color intentionally left to theme/CSS so po_theme can override
       .attr('cursor', 'pointer')
       .style('display', 'none')
       .text('← Back')

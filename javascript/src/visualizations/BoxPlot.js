@@ -330,7 +330,6 @@ export default class BoxPlot extends D3po {
         .attr('text-anchor', 'middle')
         .attr('x', effectiveInnerWidth / 2)
         .attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24))
-        .attr('fill', 'black')
         .style('font-size', '14px')
         .text(xLabelText);
     } catch (e) {
@@ -340,7 +339,6 @@ export default class BoxPlot extends D3po {
         .attr('text-anchor', 'middle')
         .attr('x', effectiveInnerWidth / 2)
         .attr('y', effectiveInnerHeight + (isHorizontal ? 45 : 65))
-        .attr('fill', 'black')
         .style('font-size', '14px')
         .text(xLabelText);
     }
@@ -384,7 +382,6 @@ export default class BoxPlot extends D3po {
         )
         .attr('x', 0)
         .attr('y', 0)
-        .attr('fill', 'black')
         .attr('text-anchor', 'middle')
         .style('font-size', '14px')
         .text(yLabelText);
@@ -397,9 +394,34 @@ export default class BoxPlot extends D3po {
         .attr('transform', 'rotate(-90)')
         .attr('x', -effectiveInnerHeight / 2)
         .attr('y', isHorizontal ? -70 : -40)
-        .attr('fill', 'black')
         .style('font-size', '14px')
         .text(yLabelText);
+
+      // optional chart title (class `title`) placed above the plotting area
+      if (this.options && this.options.title) {
+        this.chart
+          .append('text')
+          .attr('class', 'title')
+          .attr('text-anchor', 'middle')
+          .attr('x', effectiveInnerWidth / 2)
+          .attr(
+            'y',
+            this.options.titleOffsetY ? this.options.titleOffsetY : -10
+          )
+          .style(
+            'font-family',
+            this.options && this.options.fontFamily
+              ? this.options.fontFamily
+              : null
+          )
+          .style(
+            'font-size',
+            this.options && this.options.titleFontSize
+              ? `${this.options.titleFontSize}px`
+              : '16px'
+          )
+          .text(String(this.options.title));
+      }
     }
 
     // Draw box plots

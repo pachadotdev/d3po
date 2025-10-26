@@ -291,6 +291,29 @@ export default class Network extends D3po {
       .attr('pointer-events', 'none')
       .text(d => d.id || '');
 
+    // optional chart title (class `title`) placed above the plotting area
+    if (this.options && this.options.title) {
+      this.svg
+        .append('text')
+        .attr('class', 'title')
+        .attr('text-anchor', 'middle')
+        .attr('x', this.getInnerWidth() / 2)
+        .attr('y', this.options.titleOffsetY ? this.options.titleOffsetY : 18)
+        .style(
+          'font-family',
+          this.options && this.options.fontFamily
+            ? this.options.fontFamily
+            : null
+        )
+        .style(
+          'font-size',
+          this.options && this.options.titleFontSize
+            ? `${this.options.titleFontSize}px`
+            : '16px'
+        )
+        .text(String(this.options.title));
+    }
+
     // Update positions on tick
     simulation.on('tick', () => {
       link

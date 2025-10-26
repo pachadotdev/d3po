@@ -9,9 +9,10 @@ import * as d3 from 'd3';
 let tooltipStylesInjected = false;
 let currentTooltipFont = null;
 
-function injectTooltipStyles(fontFamily, fontSize) {
-  // If font changed, remove old styles
-  const newFont = `${fontFamily}-${fontSize}`;
+function injectTooltipStyles(fontFamily, fontSize, explicitTooltipBg) {
+  // If font/theme changed, remove old styles
+  const theme = explicitTooltipBg ? `explicit-${explicitTooltipBg}` : 'auto';
+  const newFont = `${fontFamily}-${fontSize}-${theme}`;
   if (tooltipStylesInjected && currentTooltipFont === newFont) return;
 
   // Remove old style if exists
@@ -20,13 +21,25 @@ function injectTooltipStyles(fontFamily, fontSize) {
     oldStyle.remove();
   }
 
+  // determine colors
+  const bg = explicitTooltipBg || 'white';
+  const border = explicitTooltipBg ? d3.color(bg).darker(1).toString() : '#999';
+  const text = explicitTooltipBg
+    ? getTextColor(bg) === 'white'
+      ? '#eee'
+      : '#111'
+    : '#333';
+  const arrowInner = bg;
+  const arrowBorder = border;
+
   const style = document.createElement('style');
   style.id = 'd3po-tooltip-styles';
   style.textContent = `
     .d3po-tooltip {
       position: absolute;
-      background: white;
-      border: 1px solid #999;
+      background: ${bg};
+      border: 1px solid ${border};
+      color: ${text};
       padding: 8px 10px;
       border-radius: 4px;
       pointer-events: none;
@@ -48,7 +61,7 @@ function injectTooltipStyles(fontFamily, fontSize) {
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 6px solid white;
+      border-top: 6px solid ${arrowInner};
     }
     
     .d3po-tooltip::before {
@@ -61,13 +74,13 @@ function injectTooltipStyles(fontFamily, fontSize) {
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-top: 7px solid #999;
+      border-top: 7px solid ${arrowBorder};
     }
     
     .d3po-tooltip strong {
       display: block;
       margin-bottom: 4px;
-      color: #333;
+      color: ${text};
     }
   `;
   document.head.appendChild(style);
@@ -83,7 +96,21 @@ function injectTooltipStyles(fontFamily, fontSize) {
  * @returns {Object} D3 selection of tooltip
  */
 export function showTooltip(event, content, fontFamily, fontSize) {
-  injectTooltipStyles(fontFamily, fontSize);
+  // detect explicit tooltip bg from nearest d3po container
+  let explicitTooltipBg = null;
+  try {
+    const target =
+      event && event.target
+        ? event.target
+        : document.elementFromPoint(event.clientX, event.clientY);
+    const ttEl =
+      target && target.closest ? target.closest('[data-d3po-tooltips]') : null;
+    if (ttEl) explicitTooltipBg = ttEl.getAttribute('data-d3po-tooltips');
+  } catch (e) {
+    explicitTooltipBg = null;
+  }
+
+  injectTooltipStyles(fontFamily, fontSize, explicitTooltipBg);
 
   // Remove any existing tooltips
   d3.selectAll('.d3po-tooltip').remove();

@@ -100,6 +100,9 @@ HTMLWidgets.widget({
         
         // Add background
         if (x.background) options.background = x.background;
+
+  // Add theme overrides from R (po_theme)
+  if (x.theme) options.theme = x.theme;
         
         // Add download option (default true if not specified)
         if (x.download !== undefined) options.download = x.download;
@@ -345,6 +348,34 @@ if (HTMLWidgets.shinyMode) {
       var chart = get_chart(msg.id);
       if (typeof chart != 'undefined') {
         chart.setDownload(msg.msg.show);
+      }
+  });
+
+  // Theme proxy: update explicit theme colors at runtime (po_theme proxy)
+  Shiny.addCustomMessageHandler('d3po-theme',
+    function(msg) {
+      var chart = get_chart(msg.id);
+      if (typeof chart != 'undefined') {
+        // ensure options.theme exists
+        chart.options.theme = chart.options.theme || {};
+        if (msg.msg.axis !== undefined) chart.options.theme.axis = msg.msg.axis;
+        if (msg.msg.tooltips !== undefined) chart.options.theme.tooltips = msg.msg.tooltips;
+
+        // Try to apply theme immediately using the instance helpers if available
+        try {
+          if (typeof chart._injectThemeStyles === 'function') chart._injectThemeStyles();
+          if (chart.options.theme && chart.options.theme.axis && typeof chart._applyExplicitAxisColors === 'function') chart._applyExplicitAxisColors(chart.options.theme.axis);
+          // also set DOM data attributes when possible
+          try {
+            if (chart.svg && chart.svg.attr) chart.svg.attr('data-d3po-axis', chart.options.theme.axis || null).attr('data-d3po-tooltips', chart.options.theme.tooltips || null);
+            if (chart.container && chart.container.setAttribute) {
+              chart.container.setAttribute('data-d3po-axis', chart.options.theme.axis || '');
+              chart.container.setAttribute('data-d3po-tooltips', chart.options.theme.tooltips || '');
+            }
+          } catch (e) { /* ignore DOM attribute failures */ }
+        } catch (e) {
+          // non-fatal
+        }
       }
   });
 

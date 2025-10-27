@@ -12,7 +12,5 @@
 ^README\.Rmd$
 ^docs$
 ^images$
-^d3podemo$
-^debug-with-shiny\.R$
+^examples$
 ^Makefile$
-^_pkgdown\.yml$

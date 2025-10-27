@@ -2,22 +2,20 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @import shiny
-#' @import tabler
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic using tabler layout
-    tabler_page(
+    page(
       title = "d3po Visualization Examples",
       layout = "horizontal",
-      body = tabler_body(
+      body = body(
         fluidRow(
           column(
             7,
-            tabler_card(
+            card(
               title = "D3po demo",
               selectInput("plot_type", "Select Visualization Type:",
                 width = "100%",
@@ -90,7 +88,7 @@ app_ui <- function(request) {
           ),
           column(
             5,
-            tabler_card(
+            card(
               tags$div(
                 style = "margin-top: 1rem;",
                 tags$h4("Code used to generate the plot"),
@@ -105,7 +103,7 @@ app_ui <- function(request) {
           )
         )
       ),
-      footer = tabler_footer(
+      footer = footer(
         left = "Created by Mauricio 'Pacha' Vargas Sepulveda",
         right = paste("Last updated:", format(Sys.time(), "%a %b %d %X %Y"))
       )
@@ -118,7 +116,6 @@ app_ui <- function(request) {
 #' This function is internally used to add external
 #' resources inside the Shiny application.
 #'
-#' @import shiny
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 golem_add_external_resources <- function() {

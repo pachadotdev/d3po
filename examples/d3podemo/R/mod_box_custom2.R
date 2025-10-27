@@ -7,7 +7,7 @@ mod_box_custom2_plot <- function(data = d3po::pokemon) {
     po_box(daes(x = .data$type_1, y = .data$weight, color = .data$color_1)) %>%
     po_labels(title = "Weight Distribution by Type") %>%
     po_background("#f8f9fa") %>%
-    po_theme(axis = "#001b69", tooltip = "#001b69")
+    po_theme(axis = "#001b69", tooltips = "#001b69")
 }
 
 mod_box_custom2_ui <- function(id) {

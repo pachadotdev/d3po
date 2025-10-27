@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>run_app • d3podemo</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {'[+]': ['ams', 'newcommand', 'configmacros']}
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script><script id="MathJax-script" async src="../js/tex-svg.js"></script></head><body>
+<div class="main-container">
+<div id="menu">
+  <div>
+    <h1 style="text-align:center;">d3podemo Documentation</h1>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="search-box" placeholder="Search..."></div>
+
+  <div class="search-container">
+    <button id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">Toggle theme</button>
+    <button id="font-decrease" title="Decrease font size" aria-label="Decrease font size">A-</button>
+    <button id="font-increase" title="Increase font size" aria-label="Increase font size">A+</button>
+  </div>
+
+  <div class="submenu">
+    <label style="border-bottom: 0;"><a style="padding-left: 0;" href="../index.html">Home 🏠</a></label>
+  </div>
+
+  <div class="submenu">
+    <label>Functions</label>
+    <a href="../reference/run_app.html">run_app</a>
+  </div>
+
+
+</div>
+<div id="content">
+<div class="content-wrapper">
+        <div class="content-main">
+
+<table style="width: 100%;"><tr><td>run_app {d3podemo}</td><td style="text-align: right;">R Documentation</td></tr></table><h2>Run the Shiny Application</h2>
+
+<h3>Description</h3>
+
+<p>Run the Shiny Application
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">run_app(
+  onStart = NULL,
+  options = list(),
+  enableBookmarking = NULL,
+  uiPattern = "/",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role="presentation"><tr><td><code id="onStart">onStart</code></td>
+<td>
+A function that will be called before the app is actually run.
+This is only needed for <code>shinyAppObj</code>, since in the <code>shinyAppDir</code>
+case, a <code>global.R</code> file can be used for this purpose.
+</td></tr><tr><td><code id="options">options</code></td>
+<td>
+Named options that should be passed to the <code>runApp</code> call
+(these can be any of the following: "port", "launch.browser", "host", "quiet",
+"display.mode" and "test.mode"). You can also specify <code>width</code> and
+<code>height</code> parameters which provide a hint to the embedding environment
+about the ideal height/width for the app.
+</td></tr><tr><td><code id="enableBookmarking">enableBookmarking</code></td>
+<td>
+Can be one of <code>"url"</code>, <code>"server"</code>, or
+<code>"disable"</code>. The default value, <code>NULL</code>, will respect the setting from
+any previous calls to  <code>enableBookmarking()</code>. See <code>enableBookmarking()</code>
+for more information on bookmarking your app.
+</td></tr><tr><td><code id="uiPattern">uiPattern</code></td>
+<td>
+A regular expression that will be applied to each <code>GET</code>
+request to determine whether the <code>ui</code> should be used to handle the
+request. Note that the entire request path must match the regular
+expression in order for the match to be considered successful.
+</td></tr><tr><td><code id="...">...</code></td>
+<td>
+arguments to pass to golem_opts.
+See '?golem::get_golem_options' for more details.
+</td></tr></table></div>
+        </div>
+        <footer><p id="last-updated">Loading...</p>
+</footer><script src="../js/footer.js"></script><script src="../js/theme.js"></script><script src="../js/search.js"></script><script src="../js/fontsize.js"></script></div>
+</div>
+
+</body></html>
+

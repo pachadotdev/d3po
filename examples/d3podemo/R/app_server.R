@@ -2,11 +2,6 @@
 #'
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
-#' @import shiny
-#' @import d3po
-#' @importFrom stats aggregate
-#' @importFrom rlang .data
-#' @importFrom htmlwidgets JS
 #' @noRd
 app_server <- function(input, output, session) {
   # Prepare data

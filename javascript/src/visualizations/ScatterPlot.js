@@ -278,6 +278,7 @@ export default class ScatterPlot extends D3po {
     const yField = this.yField;
     const sizeField = this.sizeField;
     const groupField = this.groupField;
+    const self = this;
 
     // Draw points
     const circles = this.chart
@@ -289,15 +290,14 @@ export default class ScatterPlot extends D3po {
       .attr('cx', d => xScale(d[xField]))
       .attr('cy', d => yScale(d[yField]))
       .attr('r', d => (sizeField ? sizeScale(d[sizeField]) : 5))
-      .each(
-        function (d) {
-          // Store original radius and color on the element
-          d._originalRadius = sizeField ? sizeScale(d[sizeField]) : 5;
-          d._originalColor = this.colorField
-            ? d[this.colorField]
-            : d3.interpolateViridis(Math.random());
-        }.bind(this)
-      )
+      .each(function (d) {
+        // Store original radius and color on the element. Use `self` for
+        // class properties, while `this` inside here is the DOM element.
+        d._originalRadius = sizeField ? sizeScale(d[sizeField]) : 5;
+        d._originalColor = self.colorField
+          ? d[self.colorField]
+          : d3.interpolateViridis(Math.random());
+      })
       .attr('fill', d =>
         this.colorField
           ? d[this.colorField]

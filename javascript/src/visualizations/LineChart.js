@@ -5,6 +5,7 @@ import {
   showTooltip,
   hideTooltip,
   getHighlightColor,
+  normalizeColorString,
   resolveTooltipFormatter,
   showTooltipWithFormatter,
 } from '../utils.js';
@@ -269,10 +270,36 @@ export default class LineChart extends D3po {
       .scaleOrdinal(d3.schemeCategory10)
       .domain(series.map((_, i) => i));
 
+    // If R passed a palette array (or named vector serialized as object), build a paletteMap
+    let paletteMap = null;
+    if (
+      Array.isArray(this.colorField) ||
+      (this.colorField && typeof this.colorField === 'object')
+    ) {
+      const paletteArr = Array.isArray(this.colorField)
+        ? this.colorField
+        : Object.values(this.colorField || {});
+      const palette = paletteArr.length ? paletteArr : null;
+      if (palette) {
+        paletteMap = {};
+        // series corresponds to grouped data arrays; map each group's value to a palette entry
+        series.forEach((s, idx) => {
+          const groupVal = this.groupField ? s[0][this.groupField] : idx;
+          paletteMap[groupVal] = normalizeColorString(
+            palette[idx % palette.length]
+          );
+        });
+      }
+    }
+
     // Draw lines/areas
     series.forEach((data, i) => {
-      const color = this.colorField ? data[0][this.colorField] : colorScale(i);
-      const groupValue = this.groupField ? data[0][this.groupField] : '';
+      const groupValue = this.groupField ? data[0][this.groupField] : i;
+      const color = paletteMap
+        ? paletteMap[groupValue]
+        : this.colorField
+          ? normalizeColorString(data[0][this.colorField])
+          : colorScale(i);
 
       if (this.area) {
         this.chart

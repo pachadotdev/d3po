@@ -8,6 +8,7 @@ import {
   hideTooltip,
   escapeHtml,
   getHighlightColor,
+  normalizeColorString,
   resolveTooltipFormatter,
   showTooltipWithFormatter,
 } from '../utils.js';
@@ -77,6 +78,62 @@ export default class BoxPlot extends D3po {
     let grouped;
     // Group by the raw categoryField values (preserve data grouping)
     grouped = groupBy(this.data, categoryField);
+
+    // Prepare palette mapping when the caller provided an explicit palette
+    // (array) or when color was omitted (NULL) - fall back to DEFAULT_PALETTE.
+    const DEFAULT_PALETTE = [
+      '#74c0e2',
+      '#406662',
+      '#549e95',
+      '#8abdb6',
+      '#bcd8af',
+      '#a8c380',
+      '#ede788',
+      '#d6c650',
+      '#dc8e7a',
+      '#d05555',
+      '#bf3251',
+      '#872a41',
+      '#993f7b',
+      '#7454a6',
+      '#a17cb0',
+      '#d1a1bc',
+      '#a1aafb',
+      '#5c57d9',
+      '#1c26b3',
+      '#4d6fd0',
+      '#7485aa',
+      '#d3d3d3',
+    ];
+
+    const groupKeys = Object.keys(grouped);
+    let paletteMap = null;
+    // Accept three modes for `colorField`:
+    // - Array (unnamed R character vector -> JS array)
+    // - Plain object (named R character vector -> JS object)
+    // - Falsy (NULL in R) -> use DEFAULT_PALETTE
+    if (
+      Array.isArray(this.colorField) ||
+      (this.colorField && typeof this.colorField === 'object')
+    ) {
+      // Coerce object -> array when R passed a named character vector
+      const paletteArr = Array.isArray(this.colorField)
+        ? this.colorField
+        : Object.values(this.colorField || {});
+      const palette = paletteArr.length ? paletteArr : DEFAULT_PALETTE;
+      paletteMap = {};
+      groupKeys.forEach((g, i) => {
+        paletteMap[g] = normalizeColorString(palette[i % palette.length]);
+      });
+    } else if (!this.colorField) {
+      // Use default palette when color not provided (NULL on R side)
+      const palette = DEFAULT_PALETTE;
+      paletteMap = {};
+      groupKeys.forEach((g, i) => {
+        paletteMap[g] = normalizeColorString(palette[i % palette.length]);
+      });
+    }
+
     const boxData = Object.entries(grouped).map(([key, values]) => ({
       // `group` holds the raw category key used for positioning. We'll
       // compute a separate `label` field for display using formattedCols
@@ -89,9 +146,11 @@ export default class BoxPlot extends D3po {
         return ff && values[0][ff] !== undefined ? values[0][ff] : key;
       })(),
       stats: calculateBoxStats(values.map(d => d[valueField])),
-      color: this.colorField
-        ? values[0][this.colorField]
-        : d3.schemeCategory10[0],
+      color: paletteMap
+        ? paletteMap[key]
+        : this.colorField
+          ? values[0][this.colorField]
+          : d3.schemeCategory10[0],
     }));
 
     // Create scales based on orientation

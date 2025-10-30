@@ -134,6 +134,25 @@ export function showTooltip(event, content, fontFamily, fontSize) {
 }
 
 /**
+ * Normalize color strings so d3.color can parse them.
+ * Supports 8-digit hex with alpha (#RRGGBBAA) by converting to rgba(r,g,b,a).
+ * Returns input unchanged when no conversion needed.
+ * @param {string} s
+ * @returns {string}
+ */
+export function normalizeColorString(s) {
+  if (typeof s !== 'string') return s;
+  const m = s.match(/^#([0-9a-fA-F]{8})$/);
+  if (!m) return s;
+  const hex = m[1];
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  const a = parseInt(hex.slice(6, 8), 16) / 255;
+  return `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(3))})`;
+}
+
+/**
  * Hides all tooltips
  */
 export function hideTooltip() {
@@ -219,14 +238,122 @@ export function validateData(data, requiredFields) {
  * @returns {Function} Color accessor function
  */
 export function createColorScale(data, colorField, colorScale) {
-  if (!colorField) return () => colorScale(0);
+  // Default palette used when R-side color argument is NULL
+  const DEFAULT_PALETTE = [
+    '#74c0e2',
+    '#406662',
+    '#549e95',
+    '#8abdb6',
+    '#bcd8af',
+    '#a8c380',
+    '#ede788',
+    '#d6c650',
+    '#dc8e7a',
+    '#d05555',
+    '#bf3251',
+    '#872a41',
+    '#993f7b',
+    '#7454a6',
+    '#a17cb0',
+    '#d1a1bc',
+    '#a1aafb',
+    '#5c57d9',
+    '#1c26b3',
+    '#4d6fd0',
+    '#7485aa',
+    '#d3d3d3',
+  ];
 
+  // Coerce palette-like objects (R may serialize named vectors as objects)
+  const coercePalette = input => {
+    if (!input) return null;
+    if (Array.isArray(input)) return input.length ? input : null;
+    if (typeof input === 'object') {
+      const vals = Object.values(input);
+      return vals.length ? vals : null;
+    }
+    return null;
+  };
+
+  const providedPalette = coercePalette(colorField);
+
+  // If the caller provided an explicit palette (array of color strings)
+  if (providedPalette) {
+    const palette = providedPalette.length ? providedPalette : DEFAULT_PALETTE;
+
+    // Build deterministic mapping from row identity to a palette color.
+    // We prefer common fields like 'group' or a single string/number column if present.
+    const keyForRow = row => {
+      if (!row || typeof row !== 'object') return String(row);
+      if (row.group !== undefined) return String(row.group);
+      // prefer first string/number property
+      for (const k of Object.keys(row)) {
+        if (typeof row[k] === 'string' || typeof row[k] === 'number')
+          return String(row[k]);
+      }
+      // fallback to JSON
+      try {
+        return JSON.stringify(row);
+      } catch (e) {
+        return String(row);
+      }
+    };
+
+    const mapping = {};
+    let idx = 0;
+    data.forEach(r => {
+      const k = keyForRow(r);
+      if (!(k in mapping)) {
+        mapping[k] = normalizeColorString(palette[idx % palette.length]);
+        idx += 1;
+      }
+    });
+
+    return d => {
+      const k = keyForRow(d);
+      return mapping[k] || palette[0];
+    };
+  }
+
+  // When colorField is null/undefined explicitly, use the DEFAULT_PALETTE
+  if (!colorField) {
+    const palette = DEFAULT_PALETTE;
+    const keyForRow = row => {
+      if (!row || typeof row !== 'object') return String(row);
+      if (row.group !== undefined) return String(row.group);
+      for (const k of Object.keys(row)) {
+        if (typeof row[k] === 'string' || typeof row[k] === 'number')
+          return String(row[k]);
+      }
+      try {
+        return JSON.stringify(row);
+      } catch (e) {
+        return String(row);
+      }
+    };
+    const mapping = {};
+    let idx = 0;
+    data.forEach(r => {
+      const k = keyForRow(r);
+      if (!(k in mapping)) {
+        mapping[k] = normalizeColorString(palette[idx % palette.length]);
+        idx += 1;
+      }
+    });
+
+    return d => {
+      const k = keyForRow(d);
+      return mapping[k] || palette[0];
+    };
+  }
+
+  // colorField is assumed to be a string: map unique values of that field to colors
   const uniqueValues = [...new Set(data.map(d => d[colorField]))];
   const colors = {};
 
   uniqueValues.forEach((value, i) => {
     colors[value] =
-      data.find(d => d[colorField] === value)?.color ||
+      (data.find(d => d[colorField] === value) || {}).color ||
       colorScale(i / uniqueValues.length);
   });
 
@@ -405,10 +532,26 @@ export function triggerDownload(blob, filename) {
  * @returns {string} Highlighted color
  */
 export function getHighlightColor(baseColor) {
-  const color = d3.color(baseColor);
+  let color = null;
+  try {
+    color = d3.color(baseColor);
+  } catch (e) {
+    color = null;
+  }
+  if (!color) {
+    // fallback to a neutral grey if input color is invalid
+    color = d3.color('#999');
+  }
   // For light colors, darken instead of brighten
-  const luminance = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-  return luminance > 180 ? color.darker(0.3) : color.brighter(0.5);
+  const luminance =
+    0.2126 * (color.r || 0) + 0.7152 * (color.g || 0) + 0.0722 * (color.b || 0);
+  try {
+    return luminance > 180
+      ? color.darker(0.3).toString()
+      : color.brighter(0.5).toString();
+  } catch (e) {
+    return color.toString();
+  }
 }
 
 /**

@@ -220,10 +220,31 @@ daes_to_opts <- function(daes, var) {
   }
   # Try to evaluate as an expression (for numeric values like -pi/2, or logical like TRUE/FALSE)
   # If it succeeds and returns a scalar, use that; otherwise return the label
+  # If the original aesthetic was provided as a quosure (captured expression),
+  # evaluate it in its captured environment using rlang::eval_tidy(). This
+  # ensures that user variables like `my_pal` defined in the calling frame
+  # are resolved and returned as atomic vectors (so they can be serialized
+  # to JavaScript as palettes).
+  if (rlang::is_quosure(daes[[var]])) {
+    tryCatch(
+      {
+        result <- rlang::eval_tidy(daes[[var]])
+        if (is.atomic(result)) return(result)
+        return(label)
+      },
+      error = function(e) {
+        return(label)
+      }
+    )
+  }
+
+  # Fallback: try evaluating the label as an expression in the current
+  # environment. This mirrors the previous behaviour for simple literal
+  # expressions like -pi/2 or TRUE.
   tryCatch(
     {
       result <- eval(parse(text = label))
-      if ((is.numeric(result) || is.logical(result)) && length(result) == 1) {
+      if (is.atomic(result)) {
         return(result)
       }
       return(label)

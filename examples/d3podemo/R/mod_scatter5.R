@@ -1,8 +1,8 @@
-# Module: scatter4
+# Module: scatter5
 #' Scatter: Log scales with size encoding
 #' @param data data.frame
 #' @return d3po widget
-mod_scatter4_plot <- function(data = d3po::pokemon) {
+mod_scatter5_plot <- function(data = d3po::pokemon) {
   dout <- data
   dout$log_height <- log10(dout$height)
   dout$log_weight <- log10(dout$weight)
@@ -15,20 +15,20 @@ mod_scatter4_plot <- function(data = d3po::pokemon) {
   dout$inverse_distance_from_mean <- 1 / (dout$avg_distance + 0.01)
 
   d3po(dout, width = 800, height = 600) %>%
-    po_scatter(daes(x = .data$log_height, y = .data$log_weight, size = .data$inverse_distance_from_mean,
-      group = .data$name, color = .data$color_1)) %>%
+    po_scatter(daes(x = .data$log_height, y = .data$log_weight,
+      group = .data$name, size = .data$inverse_distance_from_mean)) %>%
     po_labels(title = "Log(Height) vs Log(Weight) (Size = 1 / Distance from the Mean)")
 }
 
-mod_scatter4_ui <- function(id) {
+mod_scatter5_ui <- function(id) {
   ns <- NS(id)
   tagList(d3po::d3po_output(ns("plot"), width = "100%", height = "600px"))
 }
 
-mod_scatter4_server <- function(id, data = d3po::pokemon) {
+mod_scatter5_server <- function(id, data = d3po::pokemon) {
   moduleServer(id, function(input, output, session) {
     output$plot <- d3po::render_d3po({
-      mod_scatter4_plot(data)
+      mod_scatter5_plot(data)
     })
   })
 }

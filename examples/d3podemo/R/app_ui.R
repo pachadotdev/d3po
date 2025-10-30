@@ -25,8 +25,10 @@ app_ui <- function(request) {
                     "Horizontal" = "box2",
                     "Vertical (log scale)" = "box3",
                     "Horizontal (log scale)" = "box4",
+                    "No colors specified" = "box5",
+                    "Vector of colors" = "box6",
                     "Custom labels" = "box_custom",
-                    "Custom colors" = "box_custom2"
+                    "Custom theme" = "box_custom2"
                   ),
                   "Bar Charts" = list(
                     "Vertical" = "bar1",
@@ -37,11 +39,15 @@ app_ui <- function(request) {
                     "Vertical sorted descending by y-axis values" = "bar6",
                     "Horizontal sorted ascending by x-axis values" = "bar7",
                     "Horizontal sorted descending by x-axis values" = "bar8",
+                    "No colors specified" = "bar9",
+                    "Vector of colors" = "bar10",
                     "Custom labels" = "bar_custom"
                   ),
                   "Treemaps" = list(
                     "One-level" = "treemap_onelevel",
                     "Two-level" = "treemap_twolevel",
+                    "No colors specified" = "treemap_onelevel_nocolors",
+                    "Vector of colors" = "treemap_onelevel_colorsvector",
                     "One-level with custom labels and tooltip" = "treemap_onelevel_custom",
                     "One-level with custom labels and tooltip (extra labels' work)" = "treemap_onelevel_custom2",
                     "Two-level with custom labels and tooltip" = "treemap_twolevel_custom",
@@ -52,26 +58,35 @@ app_ui <- function(request) {
                     "Donut" = "pie2",
                     "Half pie" = "pie3",
                     "Half donut" = "pie4",
+                    "No colors specified" = "pie5",
+                    "Vector of colors" = "pie6",
                     "Custom tooltip" = "pie_custom"
                   ),
                   "Line" = list(
                     "Grouped" = "line",
-                    "Custom labels and tooltip (identical for area plots)" = "line_area_custom"
+                    "No colors specified" = "line2",
+                    "Vector of colors" = "line3",
+                    "Custom labels and tooltip" = "line_area_custom"
                   ),
                   "Area" = list(
                     "Non-stacked" = "area1",
-                    "Stacked" = "area2"
+                    "Stacked" = "area2",
+                    "Stacked, no colors specified" = "area3",
+                    "Stacked, vector of colors" = "area4"
                   ),
                   "Scatter" = list(
                     "Unweighted" = "scatter1",
                     "Unweighted, log scale" = "scatter2",
                     "Weighted" = "scatter3",
                     "Weighted, log scale" = "scatter4",
+                    "Weighted, log scale, no colors specified" = "scatter5",
                     "Custom tooltip" = "scatter_custom"
                   ),
                   "Geomaps" = list(
                     "Country-level with custom tooltip" = "geomap1",
-                    "Region-level  with custom tooltip" = "geomap2"
+                    "Region-level with custom tooltip" = "geomap2",
+                    "Region-level with custom tooltip, no colors specified" = "geomap3",
+                    "Region-level with custom tooltip, vector of colors" = "geomap4"
                   ),
                   "Network" = list(
                     "KK layout" = "network_kk",

@@ -12,7 +12,8 @@ mod_scatter3_plot <- function(data = d3po::pokemon) {
   dout$inverse_distance_from_mean <- 1 / (dout$avg_distance + 0.01)
 
   d3po(dout, width = 800, height = 600) %>%
-    po_scatter(daes(x = .data$height, y = .data$weight, size = .data$inverse_distance_from_mean, color = .data$color_1)) %>%
+    po_scatter(daes(x = .data$height, y = .data$weight, size = .data$inverse_distance_from_mean,
+      group = .data$name, color = .data$color_1)) %>%
     po_labels(title = "Height vs Weight (Size = 1 / Distance from the Mean)")
 }
 

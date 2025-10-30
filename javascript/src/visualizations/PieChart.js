@@ -6,6 +6,7 @@ import {
   hideTooltip,
   getTextColor,
   getHighlightColor,
+  normalizeColorString,
   resolveTooltipFormatter,
   showTooltipWithFormatter,
 } from '../utils.js';
@@ -155,6 +156,28 @@ export default class PieChart extends D3po {
     const groupField = this.groupField;
     const sizeField = this.sizeField;
     const colorField = this.colorField;
+    // preserve class instance for inner DOM callbacks
+    const self = this;
+
+    // Build palette map when user provides an explicit palette (array or named vector/object)
+    let paletteMap = null;
+    if (
+      Array.isArray(this.colorField) ||
+      (this.colorField && typeof this.colorField === 'object')
+    ) {
+      const paletteArr = Array.isArray(this.colorField)
+        ? this.colorField
+        : Object.values(this.colorField || {});
+      const palette = paletteArr.length ? paletteArr : null;
+      if (palette) {
+        paletteMap = {};
+        // unique group keys in data order
+        const grpKeys = [...new Set(this.data.map(d => d[groupField]))];
+        grpKeys.forEach((g, i) => {
+          paletteMap[g] = normalizeColorString(palette[i % palette.length]);
+        });
+      }
+    }
 
     // Draw slices
     const slices = this.chart
@@ -167,19 +190,20 @@ export default class PieChart extends D3po {
     const arcs = slices
       .append('path')
       .attr('d', arc)
-      .attr('fill', d =>
-        this.colorField
-          ? d.data[this.colorField]
-          : d3.interpolateViridis(Math.random())
-      )
-      .each(
-        function (d) {
-          // Store original color on the data
-          d._originalColor = this.colorField
-            ? d.data[this.colorField]
-            : d3.select(this).attr('fill'); // Get the actual rendered color
-        }.bind(this)
-      )
+      .attr('fill', d => {
+        if (paletteMap)
+          return paletteMap[d.data[groupField]] || Object.values(paletteMap)[0];
+        if (colorField && typeof colorField === 'string')
+          return normalizeColorString(d.data[colorField]);
+        return d3.interpolateViridis(Math.random());
+      })
+      .each(function (d) {
+        // Store original color on the data. Keep `this` as DOM element.
+        if (paletteMap) d._originalColor = paletteMap[d.data[groupField]];
+        else if (colorField && typeof colorField === 'string')
+          d._originalColor = normalizeColorString(d.data[colorField]);
+        else d._originalColor = d3.select(this).attr('fill'); // Get the actual rendered color
+      })
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
       .style('opacity', 1);
@@ -263,7 +287,6 @@ export default class PieChart extends D3po {
     // Add labels inside slices. If labelMode === 'count' render two lines:
     // line 1 = category, line 2 = count. Otherwise fall back to previous
     // single-line behavior (category when percent > 5).
-    const self = this;
     const labelText = slices
       .append('text')
       .attr('transform', d => {

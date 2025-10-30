@@ -6,6 +6,7 @@ import {
   getHighlightColor,
   escapeHtml,
   resolveTooltipFormatter,
+  normalizeColorString,
 } from '../utils.js';
 
 /**
@@ -178,6 +179,27 @@ export default class Network extends D3po {
     const sizeField = this.sizeField;
     const colorField = this.colorField;
 
+    // If R provided a literal palette (array or named vector/object), build a palette map
+    let paletteMap = null;
+    if (
+      Array.isArray(colorField) ||
+      (colorField && typeof colorField === 'object')
+    ) {
+      const paletteArr = Array.isArray(colorField)
+        ? colorField
+        : Object.values(colorField || {});
+      const palette = paletteArr.length ? paletteArr : null;
+      if (palette) {
+        paletteMap = {};
+        // Use node index order to assign palette entries deterministically
+        this.nodes.forEach((node, i) => {
+          paletteMap[node.id] = normalizeColorString(
+            palette[i % palette.length]
+          );
+        });
+      }
+    }
+
     const node = this.chart
       .selectAll('.node')
       .data(this.nodes)
@@ -185,16 +207,18 @@ export default class Network extends D3po {
       .append('circle')
       .attr('class', 'node')
       .attr('r', d => sizeScale(d[this.sizeField] || 8))
-      .attr('fill', d =>
-        this.colorField
-          ? d[this.colorField]
-          : d3.interpolateViridis(Math.random())
-      )
+      .attr('fill', d => {
+        if (paletteMap) return paletteMap[d.id] || '#69b3a2';
+        if (typeof colorField === 'string') return d[colorField] || '#69b3a2';
+        return d3.interpolateViridis(Math.random());
+      })
       .each(function (d) {
         // Store original color on the element's data
-        d._originalColor = colorField
-          ? d[colorField]
-          : d3.interpolateViridis(Math.random());
+        d._originalColor = paletteMap
+          ? paletteMap[d.id]
+          : typeof colorField === 'string'
+            ? d[colorField]
+            : d3.interpolateViridis(Math.random());
       })
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
@@ -292,26 +316,58 @@ export default class Network extends D3po {
       .text(d => d.id || '');
 
     // optional chart title (class `title`) placed above the plotting area
+    // Match other visualizations by adding/updating the title on `this.chart`
     if (this.options && this.options.title) {
-      this.svg
-        .append('text')
-        .attr('class', 'title')
-        .attr('text-anchor', 'middle')
-        .attr('x', this.getInnerWidth() / 2)
-        .attr('y', this.options.titleOffsetY ? this.options.titleOffsetY : 18)
-        .style(
-          'font-family',
-          this.options && this.options.fontFamily
-            ? this.options.fontFamily
-            : null
-        )
-        .style(
-          'font-size',
-          this.options && this.options.titleFontSize
-            ? `${this.options.titleFontSize}px`
-            : '16px'
-        )
-        .text(String(this.options.title));
+      const existingChartTitle = this.chart.select('text.title');
+      if (!existingChartTitle.empty()) {
+        existingChartTitle
+          .attr('text-anchor', 'middle')
+          .attr('x', this.getInnerWidth() / 2)
+          .attr(
+            'y',
+            this.options.titleOffsetY ? this.options.titleOffsetY : -10
+          )
+          .style(
+            'font-family',
+            this.options && this.options.fontFamily
+              ? this.options.fontFamily
+              : null
+          )
+          .style(
+            'font-size',
+            this.options && this.options.titleFontSize
+              ? `${this.options.titleFontSize}px`
+              : this.options && this.options.fontSize
+                ? `${Number(this.options.fontSize) + 2}px`
+                : '16px'
+          )
+          .text(String(this.options.title));
+      } else {
+        this.chart
+          .append('text')
+          .attr('class', 'title')
+          .attr('text-anchor', 'middle')
+          .attr('x', this.getInnerWidth() / 2)
+          .attr(
+            'y',
+            this.options.titleOffsetY ? this.options.titleOffsetY : -10
+          )
+          .style(
+            'font-family',
+            this.options && this.options.fontFamily
+              ? this.options.fontFamily
+              : null
+          )
+          .style(
+            'font-size',
+            this.options && this.options.titleFontSize
+              ? `${this.options.titleFontSize}px`
+              : this.options && this.options.fontSize
+                ? `${Number(this.options.fontSize) + 2}px`
+                : '16px'
+          )
+          .text(String(this.options.title));
+      }
     }
 
     // Update positions on tick

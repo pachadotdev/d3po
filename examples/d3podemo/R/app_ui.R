@@ -91,6 +91,8 @@ app_ui <- function(request) {
                   "Network" = list(
                     "KK layout" = "network_kk",
                     "FR layout" = "network_fr",
+                    "KK layout, no colors specified" = "network_kk_nocolors",
+                    "KK layout, vector of colors" = "network_kk_colorsvector",
                     "Manual Layout" = "network_manual",
                     "Custom tooltip" = "network_custom"
                   )

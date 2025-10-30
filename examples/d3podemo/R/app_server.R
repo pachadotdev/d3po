@@ -78,6 +78,8 @@ app_server <- function(input, output, session) {
       geomap4 = "mod_geomap4_plot",
       network_kk = "mod_network_kk_plot",
       network_fr = "mod_network_fr_plot",
+      network_kk_nocolors = "mod_network_kk_nocolors_plot",
+      network_kk_colorsvector = "mod_network_kk_colorsvector_plot",
       network_manual = "mod_network_manual_plot",
       network_custom = "mod_network_custom_plot",
       NULL
@@ -90,7 +92,7 @@ app_server <- function(input, output, session) {
     plot_fun <- get(plot_fun_name, mode = "function", inherits = TRUE)
     # Select proper data to pass: network examples require the package's
     # pokemon_network graph object, not the `pokemon` data.frame.
-    network_types <- c("network_kk", "network_fr", "network_manual", "network_custom")
+    network_types <- c("network_kk", "network_fr", "network_kk_nocolors", "network_kk_colorsvector", "network_manual", "network_custom")
     data_to_pass <- if (input$plot_type %in% network_types) d3po::pokemon_network else pokemon
 
     # Safe call: only pass data_to_pass if the function signature accepts it (data or ...),
@@ -169,6 +171,8 @@ app_server <- function(input, output, session) {
       geomap4 = "mod_geomap4_plot",
       network_kk = "mod_network_kk_plot",
       network_fr = "mod_network_fr_plot",
+      network_kk_nocolors = "mod_network_kk_nocolors_plot",
+      network_kk_colorsvector = "mod_network_kk_colorsvector_plot",
       network_manual = "mod_network_manual_plot",
       network_custom = "mod_network_custom_plot",
       NULL

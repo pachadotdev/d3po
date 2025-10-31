@@ -17,6 +17,7 @@
 #' - `size`: size of geom.
 #' - `stack`: `TRUE` or `FALSE` to indicate if the geom should be stacked (for bar charts).
 #' - `layout`: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
+#' - `gradient`: `TRUE` or `FALSE` to indicate if color should be treated as a gradient palette (for geomaps).
 #' - `sort`: ordering hint for discrete categories. Accepts one of
 #'   `"asc-x"`, `"desc-x"` (sort by the numeric x/value), or
 #'   `"asc-y"`, `"desc-y"` (sort by the category/label). Use `"none"` to

@@ -75,6 +75,9 @@ HTMLWidgets.widget({
         // Add size
         if (x.size) options.size = x.size;
         
+        // Add gradient option
+        if (x.gradient !== undefined) options.gradient = x.gradient;
+        
         // Add title
         if (x.title) options.title = x.title;
         

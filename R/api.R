@@ -1160,6 +1160,7 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TR
   d3po$x$color <- daes_to_opts(daes, "color")
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
+  d3po$x$gradient <- daes_to_opts(daes, "gradient")
 
   return(d3po)
 }

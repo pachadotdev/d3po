@@ -86,7 +86,8 @@ app_ui <- function(request) {
                     "Country-level with custom tooltip" = "geomap1",
                     "Region-level with custom tooltip" = "geomap2",
                     "Region-level with custom tooltip, no colors specified" = "geomap3",
-                    "Region-level with custom tooltip, vector of colors" = "geomap4"
+                    "Region-level with custom tooltip, vector of colors" = "geomap4",
+                    "Region-level with custom tooltip, gradient of colors" = "geomap5"
                   ),
                   "Network" = list(
                     "KK layout" = "network_kk",

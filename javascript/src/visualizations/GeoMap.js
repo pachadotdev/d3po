@@ -38,6 +38,7 @@ export default class GeoMap extends D3po {
     this.colorField = options.color;
     this.sizeField = options.size;
     this.tooltipField = options.tooltip;
+    this.gradient = options.gradient;
   }
 
   /**
@@ -145,8 +146,10 @@ export default class GeoMap extends D3po {
     const tooltipField = this.tooltipField;
     const sizeField = this.sizeField;
 
-    // If R provided a literal palette (array or named vector/object), build a palette map
+    // If R provided a literal palette (array or named vector/object), handle it
     let paletteMap = null;
+    let customGradientScale = null;
+
     if (
       Array.isArray(colorField) ||
       (colorField && typeof colorField === 'object')
@@ -155,12 +158,43 @@ export default class GeoMap extends D3po {
         ? colorField
         : Object.values(colorField || {});
       const palette = paletteArr.length ? paletteArr : null;
+
       if (palette) {
-        paletteMap = {};
-        // Use map feature ids order to assign palette entries deterministically
-        features.forEach((f, i) => {
-          paletteMap[f.id] = normalizeColorString(palette[i % palette.length]);
-        });
+        if (this.gradient && sizeField) {
+          // Create custom gradient scale using the provided palette colors
+          const vals = Array.from(dataMap.values())
+            .map(d => d && d[sizeField])
+            .filter(v => typeof v === 'number' && !isNaN(v));
+
+          if (vals.length > 0) {
+            const min = d3.min(vals);
+            const max = d3.max(vals);
+            if (min !== undefined && max !== undefined && min !== max) {
+              // Create interpolator from custom palette
+              const normalizedPalette = palette.map(c =>
+                normalizeColorString(c)
+              );
+              const customInterpolator =
+                d3.interpolateRgbBasis(normalizedPalette);
+              customGradientScale = d3
+                .scaleSequential(customInterpolator)
+                .domain([min, max]);
+            } else if (min !== undefined && max !== undefined) {
+              // degenerate domain: use middle color from palette
+              const midIndex = Math.floor(palette.length / 2);
+              customGradientScale = () =>
+                normalizeColorString(palette[midIndex]);
+            }
+          }
+        } else {
+          // Discrete palette mapping (existing behavior)
+          paletteMap = {};
+          features.forEach((f, i) => {
+            paletteMap[f.id] = normalizeColorString(
+              palette[i % palette.length]
+            );
+          });
+        }
       }
     }
 
@@ -206,6 +240,7 @@ export default class GeoMap extends D3po {
       .attr('fill', d => {
         const data = dataMap.get(d.id);
         if (!data) return '#e0e0e0';
+        if (customGradientScale) return customGradientScale(data[sizeField]);
         if (paletteMap) return paletteMap[d.id] || '#e0e0e0';
         if (typeof colorField === 'string') return data[colorField];
         if (choroplethScale) return choroplethScale(data[sizeField]);
@@ -215,13 +250,15 @@ export default class GeoMap extends D3po {
         // Store original color on the element's data
         const data = dataMap.get(d.id);
         d._originalColor = data
-          ? paletteMap
-            ? paletteMap[d.id]
-            : typeof colorField === 'string'
-              ? data[colorField]
-              : choroplethScale
-                ? choroplethScale(data[sizeField])
-                : '#69b3a2'
+          ? customGradientScale
+            ? customGradientScale(data[sizeField])
+            : paletteMap
+              ? paletteMap[d.id]
+              : typeof colorField === 'string'
+                ? data[colorField]
+                : choroplethScale
+                  ? choroplethScale(data[sizeField])
+                  : '#69b3a2'
           : '#e0e0e0';
       })
       .attr('stroke', 'white')
@@ -280,7 +317,7 @@ export default class GeoMap extends D3po {
     this.svg.call(zoom);
 
     // Add legend for choropleth on the right side when applicable
-    if (choroplethScale) {
+    if (choroplethScale || customGradientScale) {
       try {
         // Legend sizing and placement: moved slightly left, taller for longer gradient
         const legendWidth = 12;
@@ -303,15 +340,14 @@ export default class GeoMap extends D3po {
 
         // create more stops for a smoother gradient
         const stops = 40;
-        const domain = choroplethScale.domain
-          ? choroplethScale.domain()
-          : [0, 1];
+        const activeScale = customGradientScale || choroplethScale;
+        const domain = activeScale.domain ? activeScale.domain() : [0, 1];
         for (let i = 0; i <= stops; i++) {
           const t = i / stops;
           const v = domain[0] + t * (domain[1] - domain[0]);
           lg.append('stop')
             .attr('offset', `${t * 100}%`)
-            .attr('stop-color', choroplethScale(v));
+            .attr('stop-color', activeScale(v));
         }
 
         // draw legend group

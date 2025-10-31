@@ -29,6 +29,7 @@ Valid aesthetics (depending on the geom)
 \item \code{size}: size of geom.
 \item \code{stack}: \code{TRUE} or \code{FALSE} to indicate if the geom should be stacked (for bar charts).
 \item \code{layout}: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
+\item \code{gradient}: \code{TRUE} or \code{FALSE} to indicate if color should be treated as a gradient palette (for geomaps).
 \item \code{sort}: ordering hint for discrete categories. Accepts one of
 \code{"asc-x"}, \code{"desc-x"} (sort by the numeric x/value), or
 \code{"asc-y"}, \code{"desc-y"} (sort by the category/label). Use \code{"none"} to

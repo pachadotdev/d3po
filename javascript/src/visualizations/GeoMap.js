@@ -2,387 +2,333 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import D3po from '../D3po.js';
 import {
-  validateData,
   showTooltip,
   hideTooltip,
   getHighlightColor,
   escapeHtml,
-  resolveTooltipFormatter,
 } from '../utils.js';
-import { normalizeColorString } from '../utils.js';
 
 /**
  * Geographic map visualization
  * @augments D3po
  */
 export default class GeoMap extends D3po {
-  /**
-   * Creates a geographic map
-   * @param {string|HTMLElement} container - Container selector or element
-   * @param {object} options - Configuration options
-   * @param {string} options.group - Group/ID field name
-   * @param {object} options.map - TopoJSON map data
-   * @param {string} [options.color] - Color field name
-   * @param {string} [options.size] - Size/value field name
-   * @param {string} [options.tooltip] - Tooltip field name
-   */
   constructor(container, options) {
     super(container, options);
-
-    if (!options.group || !options.map) {
-      throw new Error('GeoMap requires group and map fields');
-    }
-
+    // expect geo data in options.geomap_data or this.data.geomap_data
+    this.geom = options && options.geomap_data ? options.geomap_data : null;
+    
+    // Store field mappings from options
     this.groupField = options.group;
-    this.mapData = options.map;
-    this.colorField = options.color;
     this.sizeField = options.size;
     this.tooltipField = options.tooltip;
-    this.gradient = options.gradient;
+    this.colorField = options.color;
   }
 
-  /**
-   * Renders the geographic map
-   * @returns {GeoMap} This instance for chaining
-   */
   render() {
-    if (!this.data) {
-      throw new Error('No data provided');
+    const width = this.getInnerWidth();
+    const height = this.getInnerHeight();
+
+    // Prefer geomap_data passed via options then fallback to this.options.geomap_data
+    const geo = this.options.geomap_data || this.geom || this.data && this.data.geomap_data || null;
+    if (!geo) {
+      // nothing to draw
+      console.warn('[GeoMap] No geo data found');
+      return this;
     }
 
-    validateData(this.data, [this.groupField]);
+    console.log('[GeoMap] Geo data received:', geo);
+    console.log('[GeoMap] Type:', geo.type);
+    console.log('[GeoMap] Has features?', !!geo.features);
+    console.log('[GeoMap] Has objects?', !!geo.objects);
 
-    // Add clipping path to prevent overflow into title area
-    const clipId = `clip-${Math.random().toString(36).substr(2, 9)}`;
-    this.svg
-      .append('defs')
-      .append('clipPath')
-      .attr('id', clipId)
-      .append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', this.getInnerWidth())
-      .attr('height', this.getInnerHeight());
+    // Clear previous content
+    this.chart.selectAll('*').remove();
 
-    this.chart.attr('clip-path', `url(#${clipId})`);
-
-    // optional chart title (class `title`) placed above the plotting area
-    // Match other visualizations by adding/updating the title on `this.chart`
-    if (this.options && this.options.title) {
-      const existingChartTitle = this.chart.select('text.title');
-      if (!existingChartTitle.empty()) {
-        existingChartTitle
-          .attr('text-anchor', 'middle')
-          .attr('x', this.getInnerWidth() / 2)
-          .attr(
-            'y',
-            this.options.titleOffsetY ? this.options.titleOffsetY : -10
-          )
-          .style(
-            'font-family',
-            this.options && this.options.fontFamily
-              ? this.options.fontFamily
-              : null
-          )
-          .style(
-            'font-size',
-            this.options && this.options.titleFontSize
-              ? `${this.options.titleFontSize}px`
-              : this.options && this.options.fontSize
-                ? `${Number(this.options.fontSize) + 2}px`
-                : '16px'
-          )
-          .text(String(this.options.title));
-      } else {
-        this.chart
-          .append('text')
-          .attr('class', 'title')
-          .attr('text-anchor', 'middle')
-          .attr('x', this.getInnerWidth() / 2)
-          .attr(
-            'y',
-            this.options.titleOffsetY ? this.options.titleOffsetY : -10
-          )
-          .style(
-            'font-family',
-            this.options && this.options.fontFamily
-              ? this.options.fontFamily
-              : null
-          )
-          .style(
-            'font-size',
-            this.options && this.options.titleFontSize
-              ? `${this.options.titleFontSize}px`
-              : this.options && this.options.fontSize
-                ? `${Number(this.options.fontSize) + 2}px`
-                : '16px'
-          )
-          .text(String(this.options.title));
+    // If topology (TopoJSON) was provided convert to GeoJSON features
+    let features = geo.features;
+    if (!features && geo.objects) {
+      // topojson -> geojson
+      const keys = Object.keys(geo.objects);
+      console.log('[GeoMap] TopoJSON objects keys:', keys);
+      if (keys.length > 0) {
+        features = topojson.feature(geo, geo.objects[keys[0]]).features;
       }
     }
 
-    // Create data lookup
-    const dataMap = new Map(this.data.map(d => [d[this.groupField], d]));
+    if (!features) {
+      console.warn('[GeoMap] No features found after processing');
+      return this;
+    }
 
-    // Extract features from TopoJSON
-    const key = Object.keys(this.mapData.objects)[0];
-    const features = topojson.feature(
-      this.mapData,
-      this.mapData.objects[key]
-    ).features;
-
-    // Create projection
-    const projection = d3
-      .geoMercator()
-      .fitSize([this.getInnerWidth(), this.getInnerHeight()], {
-        type: 'FeatureCollection',
-        features: features,
+    console.log('[GeoMap] Number of features:', features.length);
+    if (features.length > 0) {
+      console.log('[GeoMap] First feature:', features[0]);
+      console.log('[GeoMap] First feature geometry type:', features[0].geometry?.type);
+      console.log('[GeoMap] First feature properties:', features[0].properties);
+      
+      // Log ALL feature names to see what we actually have
+      console.log('[GeoMap] All feature names:');
+      features.forEach((f, i) => {
+        const name = f.properties?.region || f.properties?.name || f.properties?.region_iso || 'unknown';
+        const geomType = f.geometry?.type;
+        const coordsLength = f.geometry?.coordinates?.length;
+        console.log(`  [${i}] ${name} (${geomType}, ${coordsLength} coord arrays)`);
       });
-
-    const path = d3.geoPath().projection(projection);
-
-    // Draw map
-    const colorField = this.colorField;
-    const tooltipField = this.tooltipField;
-    const sizeField = this.sizeField;
-
-    // If R provided a literal palette (array or named vector/object), handle it
-    let paletteMap = null;
-    let customGradientScale = null;
-
-    if (
-      Array.isArray(colorField) ||
-      (colorField && typeof colorField === 'object')
-    ) {
-      const paletteArr = Array.isArray(colorField)
-        ? colorField
-        : Object.values(colorField || {});
-      const palette = paletteArr.length ? paletteArr : null;
-
-      if (palette) {
-        if (this.gradient && sizeField) {
-          // Create custom gradient scale using the provided palette colors
-          const vals = Array.from(dataMap.values())
-            .map(d => d && d[sizeField])
-            .filter(v => typeof v === 'number' && !isNaN(v));
-
-          if (vals.length > 0) {
-            const min = d3.min(vals);
-            const max = d3.max(vals);
-            if (min !== undefined && max !== undefined && min !== max) {
-              // Create interpolator from custom palette
-              const normalizedPalette = palette.map(c =>
-                normalizeColorString(c)
-              );
-              const customInterpolator =
-                d3.interpolateRgbBasis(normalizedPalette);
-              customGradientScale = d3
-                .scaleSequential(customInterpolator)
-                .domain([min, max]);
-            } else if (min !== undefined && max !== undefined) {
-              // degenerate domain: use middle color from palette
-              const midIndex = Math.floor(palette.length / 2);
-              customGradientScale = () =>
-                normalizeColorString(palette[midIndex]);
-            }
-          }
-        } else {
-          // Discrete palette mapping (existing behavior)
-          paletteMap = {};
-          features.forEach((f, i) => {
-            paletteMap[f.id] = normalizeColorString(
-              palette[i % palette.length]
-            );
-          });
+      
+      if (features[0].geometry?.coordinates) {
+        console.log('[GeoMap] First feature coords structure:', 
+          Array.isArray(features[0].geometry.coordinates) ? 
+          `Array length: ${features[0].geometry.coordinates.length}` : 
+          'Not an array');
+        if (Array.isArray(features[0].geometry.coordinates) && features[0].geometry.coordinates.length > 0) {
+          console.log('[GeoMap] First coordinate element type:', 
+            Array.isArray(features[0].geometry.coordinates[0]) ? 
+            `Array length: ${features[0].geometry.coordinates[0].length}` : 
+            typeof features[0].geometry.coordinates[0]);
         }
       }
     }
 
-    // If color is not provided but sizeField is numeric, build a choropleth scale
-    let choroplethScale = null;
-    if (!colorField && sizeField) {
-      // collect numeric values from dataMap
-      const vals = Array.from(dataMap.values())
-        .map(d => d && d[sizeField])
-        .filter(v => typeof v === 'number' && !isNaN(v));
-      if (vals.length > 0) {
-        const min = d3.min(vals);
-        const max = d3.max(vals);
-        if (min !== undefined && max !== undefined && min !== max) {
-          choroplethScale = d3
-            .scaleSequential(d3.interpolateViridis)
-            .domain([min, max]);
-        } else if (min !== undefined && max !== undefined) {
-          // degenerate domain: use constant scale
-          choroplethScale = () => d3.interpolateViridis(0.5);
+    // Calculate bounds manually and scale to fit
+    const featureCollection = {
+      type: 'FeatureCollection',
+      features: features
+    };
+    
+    console.log('[GeoMap] Creating projection with manual bounds calculation');
+    console.log('[GeoMap] Inner width:', width, 'Inner height:', height);
+    console.log('[GeoMap] Number of features to render:', features.length);
+    
+    // Use null projection first to get raw bounds
+    const rawPath = d3.geoPath().projection(null);
+    const bounds = rawPath.bounds(featureCollection);
+    
+    // Calculate scale and translate to fit in available space
+    const dx = bounds[1][0] - bounds[0][0];
+    const dy = bounds[1][1] - bounds[0][1];
+    const x = (bounds[0][0] + bounds[1][0]) / 2;
+    const y = (bounds[0][1] + bounds[1][1]) / 2;
+    
+    const scale = 0.9 / Math.max(dx / width, dy / height);
+    const translate = [width / 2 - scale * x, height / 2 - scale * y];
+    
+    console.log('[GeoMap] Bounds:', bounds);
+    console.log('[GeoMap] Scale:', scale, 'Translate:', translate);
+    
+    // Create projection with calculated parameters
+    const projection = d3.geoIdentity()
+      .scale(scale)
+      .translate(translate);
+    
+    const pathGen = d3.geoPath().projection(projection);
+
+    // Debug: Test path generation for first feature
+    if (features.length > 0) {
+      const testPath1 = pathGen(features[0]);
+      console.log('[GeoMap] Test path for first feature (first 400 chars):', testPath1?.substring(0, 400));
+      console.log('[GeoMap] Test path for first feature (FULL LENGTH):', testPath1?.length);
+      
+      // Check if the path has multiple disconnected regions (look for 'M' commands)
+      const mCount = (testPath1?.match(/M/g) || []).length;
+      console.log('[GeoMap] Number of M commands in first feature path:', mCount);
+    }
+
+    // Build a lookup map from group field to data rows for tooltip information
+    const dataMap = new Map();
+    if (this.data && this.groupField) {
+      this.data.forEach(row => {
+        const key = row[this.groupField];
+        if (key != null) {
+          dataMap.set(String(key), row);
         }
-      }
+      });
+      console.log('[GeoMap] Data map created with', dataMap.size, 'entries');
     }
 
-    // resolve tooltip formatter: prefer compiled this.tooltip from base, then tooltipField/options
-    let tooltipFormatter = null;
-    if (typeof this.tooltip === 'function') {
-      tooltipFormatter = this.tooltip;
-    } else if (typeof tooltipField === 'function') {
-      tooltipFormatter = tooltipField;
-    } else if (typeof tooltipField === 'string') {
-      const tf = resolveTooltipFormatter(null, tooltipField);
-      if (tf) tooltipFormatter = tf;
+    // Set up color scale
+    let colorScale;
+    if (this.options.gradient && this.sizeField && this.data) {
+      // Gradient mode: use sequential color scale based on size field
+      const values = this.data.map(d => d[this.sizeField]).filter(v => v != null);
+      const extent = d3.extent(values);
+      colorScale = d3.scaleSequential(d3.interpolateViridis)
+        .domain(extent);
+      console.log('[GeoMap] Using gradient scale, domain:', extent);
+    } else if (this.colorField && this.data) {
+      // Explicit color field provided
+      const uniqueValues = [...new Set(this.data.map(d => d[this.colorField]))];
+      colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+        .domain(uniqueValues);
+      console.log('[GeoMap] Using color field scale');
+    } else if (this.groupField && this.data) {
+      // Default: color by group field
+      const uniqueGroups = [...new Set(this.data.map(d => d[this.groupField]))];
+      colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+        .domain(uniqueGroups);
+      console.log('[GeoMap] Using default group-based coloring');
     }
 
-    const paths = this.chart
-      .selectAll('.region')
+    // Draw map group
+    const g = this.chart.append('g').attr('class', 'map');
+
+    // Add zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8])  // Allow zooming from 1x to 8x
+      .on('zoom', (event) => {
+        g.attr('transform', event.transform);
+      });
+    
+    // Apply zoom to the SVG
+    this.svg.call(zoom);
+
+    const regions = g
+      .selectAll('path')
       .data(features)
       .enter()
       .append('path')
-      .attr('class', 'region')
-      .attr('d', path)
-      .attr('fill', d => {
-        const data = dataMap.get(d.id);
-        if (!data) return '#e0e0e0';
-        if (customGradientScale) return customGradientScale(data[sizeField]);
-        if (paletteMap) return paletteMap[d.id] || '#e0e0e0';
-        if (typeof colorField === 'string') return data[colorField];
-        if (choroplethScale) return choroplethScale(data[sizeField]);
-        return '#69b3a2';
+      .attr('d', (d, i) => {
+        const path = pathGen(d);
+        if (i < 3) {  // Log first 3 paths
+          const name = d.properties?.region || d.properties?.name || 'unknown';
+          console.log(`[GeoMap] Path ${i} (${name}):`);
+          console.log(`  Length: ${path?.length || 0}`);
+          console.log(`  First 300 chars: ${path?.substring(0, 300)}`);
+          console.log(`  Last 300 chars: ${path?.substring(Math.max(0, (path?.length || 0) - 300))}`);
+          const mCount = (path?.match(/M/g) || []).length;
+          console.log(`  M commands (polygons): ${mCount}`);
+        }
+        return path;
       })
-      .each(function (d) {
-        // Store original color on the element's data
-        const data = dataMap.get(d.id);
-        d._originalColor = data
-          ? customGradientScale
-            ? customGradientScale(data[sizeField])
-            : paletteMap
-              ? paletteMap[d.id]
-              : typeof colorField === 'string'
-                ? data[colorField]
-                : choroplethScale
-                  ? choroplethScale(data[sizeField])
-                  : '#69b3a2'
-          : '#e0e0e0';
-      })
-      .attr('stroke', 'white')
-      .attr('stroke-width', 1)
-      .style('opacity', 1);
-
-    // Save font settings for tooltip handlers
-    const fontFamily = this.options.fontFamily;
-    const fontSize = this.options.fontSize;
-
-    paths
-      .on('mouseover', function (event, d) {
-        const highlightColor = getHighlightColor(d._originalColor);
-        d3.select(this).attr('fill', highlightColor);
-
-        const data = dataMap.get(d.id);
-        if (!data) return;
-
-        // If we have a tooltip formatter (function), prefer it. Call with (value, row)
-        if (tooltipFormatter) {
-          try {
-            const content = tooltipFormatter(null, data);
-            showTooltip(event, content, fontFamily, fontSize);
-            return;
-          } catch (e) {
-            // fall through to default rendering
-            void 0;
+      .attr('fill', (d) => {
+        // Get the identifier for this feature
+        const identifier = d.properties?.[this.groupField] ||
+          d.properties?.region_iso ||
+          d.properties?.name ||
+          d.properties?.NAME;
+        
+        const dataRow = dataMap.get(String(identifier));
+        
+        if (colorScale) {
+          if (this.options.gradient && this.sizeField && dataRow) {
+            // Gradient: color by size value
+            return colorScale(dataRow[this.sizeField]);
+          } else if (this.colorField && dataRow) {
+            // Color by explicit color field
+            return colorScale(dataRow[this.colorField]);
+          } else if (identifier) {
+            // Default: color by group
+            return colorScale(identifier);
           }
         }
-
-        const fieldValue =
-          tooltipField && typeof tooltipField === 'string'
-            ? data[tooltipField] != null
-              ? escapeHtml(data[tooltipField])
-              : escapeHtml(d.id)
-            : escapeHtml(d.id);
-        const tooltipContent =
-          `<strong>Region: ${fieldValue}</strong>` +
-          (sizeField ? ` Value: ${escapeHtml(String(data[sizeField]))}` : '');
-
-        showTooltip(event, tooltipContent, fontFamily, fontSize);
+        
+        // Fallback to default fill
+        return this.options.fill || '#cce5df';
       })
-      .on('mouseout', function (event, d) {
-        d3.select(this).attr('fill', d._originalColor);
+      .attr('stroke', this.options.stroke || '#333')
+      .attr('stroke-width', 1)
+      .style('cursor', 'pointer');
+
+    console.log('[GeoMap] Number of path elements created:', regions.size());
+    console.log('[GeoMap] Total paths in chart after render:', this.chart.selectAll('path').size());
+
+    // Add gradient legend if in gradient mode
+    if (this.options.gradient && colorScale && this.sizeField) {
+      const legendWidth = 20;
+      const legendHeight = 200;
+      const legendX = width - legendWidth - 10;
+      const legendY = 20;
+      
+      const legend = this.chart.append('g')
+        .attr('class', 'legend')
+        .attr('transform', `translate(${legendX}, ${legendY})`);
+      
+      // Create gradient definition
+      const defs = this.svg.append('defs');
+      const linearGradient = defs.append('linearGradient')
+        .attr('id', `gradient-${this.container.id}`)
+        .attr('x1', '0%')
+        .attr('y1', '100%')
+        .attr('x2', '0%')
+        .attr('y2', '0%');
+      
+      // Add color stops
+      const stops = 10;
+      for (let i = 0; i <= stops; i++) {
+        const t = i / stops;
+        linearGradient.append('stop')
+          .attr('offset', `${t * 100}%`)
+          .attr('stop-color', colorScale(colorScale.domain()[0] + t * (colorScale.domain()[1] - colorScale.domain()[0])));
+      }
+      
+      // Draw legend rectangle
+      legend.append('rect')
+        .attr('width', legendWidth)
+        .attr('height', legendHeight)
+        .style('fill', `url(#gradient-${this.container.id})`)
+        .style('stroke', '#333')
+        .style('stroke-width', 1);
+      
+      // Add scale labels
+      const legendScale = d3.scaleLinear()
+        .domain(colorScale.domain())
+        .range([legendHeight, 0]);
+      
+      const legendAxis = d3.axisRight(legendScale)
+        .ticks(5)
+        .tickFormat(d3.format('.0f'));
+      
+      legend.append('g')
+        .attr('transform', `translate(${legendWidth}, 0)`)
+        .call(legendAxis)
+        .style('font-size', this.options.fontSize || '12px')
+        .style('font-family', this.options.fontFamily || 'sans-serif');
+    }
+
+    const fontFamily = this.options.fontFamily;
+    const fontSize = this.options.fontSize;
+    const self = this;
+
+    regions
+      .on('mouseover', function (event, d) {
+        const el = d3.select(this);
+        const orig = el.attr('fill');
+        const highlight = getHighlightColor(orig);
+        el.attr('fill', highlight);
+
+        // Try to get the identifier from properties - check multiple possible fields
+        const identifier = (d.properties && (
+          d.properties[self.groupField] ||  // Try the group field first (e.g., region_iso)
+          d.properties.region_iso ||
+          d.properties.name || 
+          d.properties.NAME || 
+          d.properties.id
+        )) || 'Region';
+        
+        // Look up corresponding data row for this feature using the group field value
+        const dataRow = dataMap.get(String(identifier));
+        
+        // Build tooltip content - use the tooltip field if available, otherwise the identifier
+        const displayName = dataRow && self.tooltipField && dataRow[self.tooltipField] 
+          ? dataRow[self.tooltipField] 
+          : identifier;
+        
+        let content = `<strong>${escapeHtml(String(displayName))}</strong>`;
+        
+        if (dataRow) {
+          // Add size field if available
+          if (self.sizeField && dataRow[self.sizeField] != null) {
+            content += `<br/>Value: ${escapeHtml(String(dataRow[self.sizeField]))}`;
+          }
+        }
+        
+        showTooltip(event, content, fontFamily, fontSize);
+      })
+      .on('mouseout', function () {
+        const el = d3.select(this);
+        el.attr('fill', self.options.fill || '#cce5df');
         hideTooltip();
       });
-
-    // Add zoom behavior
-    const zoom = d3
-      .zoom()
-      .scaleExtent([1, 8])
-      .on('zoom', event => {
-        this.chart.selectAll('path').attr('transform', event.transform);
-      });
-
-    this.svg.call(zoom);
-
-    // Add legend for choropleth on the right side when applicable
-    if (choroplethScale || customGradientScale) {
-      try {
-        // Legend sizing and placement: moved slightly left, taller for longer gradient
-        const legendWidth = 12;
-        const legendHeight = Math.min(280, this.getInnerHeight() * 0.8); // increased length
-        const svgLeft = this.options.margin.left || 0;
-        // position the legend a bit inside the chart area (left of the previous right-edge placement)
-        const legendX = svgLeft + this.getInnerWidth() - 36; // moved left by ~48px from right edge
-        const legendY = this.options.margin.top + 40;
-
-        const legendId = `legend-${Math.random().toString(36).substr(2, 9)}`;
-
-        const defs = this.svg.select('defs') || this.svg.append('defs');
-        const lg = defs
-          .append('linearGradient')
-          .attr('id', legendId)
-          .attr('x1', '0%')
-          .attr('y1', '100%')
-          .attr('x2', '0%')
-          .attr('y2', '0%');
-
-        // create more stops for a smoother gradient
-        const stops = 40;
-        const activeScale = customGradientScale || choroplethScale;
-        const domain = activeScale.domain ? activeScale.domain() : [0, 1];
-        for (let i = 0; i <= stops; i++) {
-          const t = i / stops;
-          const v = domain[0] + t * (domain[1] - domain[0]);
-          lg.append('stop')
-            .attr('offset', `${t * 100}%`)
-            .attr('stop-color', activeScale(v));
-        }
-
-        // draw legend group
-        const legendGroup = this.svg
-          .append('g')
-          .attr('class', 'd3po-choropleth-legend')
-          .attr('transform', `translate(${legendX},${legendY})`);
-
-        // legend rect
-        legendGroup
-          .append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('width', legendWidth)
-          .attr('height', legendHeight)
-          .attr('fill', `url(#${legendId})`)
-          .attr('stroke', '#999');
-
-        // legend axis scale
-        const scaleVals = d3
-          .scaleLinear()
-          .domain(domain)
-          .range([legendHeight, 0]);
-        const axis = d3.axisRight(scaleVals).ticks(5);
-        legendGroup
-          .append('g')
-          .attr('transform', `translate(${legendWidth + 8},0)`) // slightly larger gap
-          .call(axis)
-          .selectAll('text')
-          .style('font-size', '12px'); // larger tick text
-      } catch (e) {
-        // ignore legend errors
-        void 0;
-      }
-    }
 
     return this;
   }

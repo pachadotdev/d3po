@@ -38,15 +38,28 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "box"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  # Prefer attributes already present on the widget under `x$data`.
+  # For SF objects `d3po.sf` is expected to populate `x$data` (attributes)
+  # and `x$map` (topojson). If caller passed `data` explicitly, use it to
+  # override `x$data`.
+  if (!is.null(data)) {
+    attrs <- data
+  } else {
+    attrs <- d3po$x$data
+  }
 
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
+  if (is.null(attrs)) {
+    stop('po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().')
+  }
 
-  d3po$x$data <- dplyr::select(data, columns)
+  # Select only requested columns from attribute table; ensure result is a
+  # plain data.frame (not a tibble with sfc etc.).
+  d3po$x$data <- as.data.frame(dplyr::select(attrs, columns))
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
@@ -100,7 +113,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "treemap"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -165,7 +178,7 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "pie"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -231,7 +244,7 @@ po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "donut"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -297,7 +310,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "area"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -365,7 +378,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "bar"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -438,7 +451,7 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "line"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -521,7 +534,7 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # defaults
   d3po$x$type <- "scatter"
 
-  data <- .get_data(d3po$x$tempdata, data)
+  data <- .get_data(d3po$x$data, data)
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -613,10 +626,10 @@ po_format.d3po <- function(d3po, ...) {
   formats <- rlang::quos(...)
   assertthat::assert_that(length(formats) > 0, msg = "No formatters provided to po_format()")
 
-  # Work on the already-selected data if present, otherwise fallback to tempdata
+  # Work on the already-selected data present in `x$data` (preferred)
   data <- d3po$x$data
-  if (is.null(data) || ncol(data) == 0) {
-    data <- .get_data(d3po$x$tempdata, NULL)
+  if (is.null(data) || ncol(as.data.frame(data)) == 0) {
+    stop('po_format requires data to be present in d3po$x$data or passed explicitly to po_format()')
   }
 
   # Ensure data is a data.frame
@@ -999,8 +1012,13 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 
   d3po$x$type <- "network"
 
-  # For network, data comes from igraph vertices
-  vertices_data <- igraph::as_data_frame(d3po$x$tempdata, what = "vertices")
+  # For network, data comes from igraph vertices stored in d3po$x$network_data$graph
+  if (is.null(d3po$x$network_data) || is.null(d3po$x$network_data$graph)) {
+    stop("po_network requires an igraph object to be passed to d3po()")
+  }
+  
+  graph_obj <- d3po$x$network_data$graph
+  vertices_data <- igraph::as_data_frame(graph_obj, what = "vertices")
 
   # extract & process coordinates
   daes <- get_daes(...)
@@ -1025,7 +1043,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   has_manual_coords <- all(c("x", "y") %in% names(vertices_data))
 
   # Check if graph object has a $layout attribute
-  has_layout_attr <- !is.null(d3po$x$tempdata$layout) && is.matrix(d3po$x$tempdata$layout)
+  has_layout_attr <- !is.null(graph_obj$layout) && is.matrix(graph_obj$layout)
 
   # Decide whether to use manual coordinates or calculate layout
   # Priority:
@@ -1047,14 +1065,14 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
       stop("Unknown layout: ", layout)
     )
 
-    layout_coords <- round(as.data.frame(layout_func(d3po$x$tempdata)), 3)
+  layout_coords <- round(as.data.frame(layout_func(graph_obj)), 3)
     names(layout_coords) <- c("x", "y")
     d3po$x$layout <- layout
   } else if (has_layout_attr) {
     # No layout specified, but graph has $layout attribute - use it
     # Both the layout matrix and vertices_data are in the same igraph vertex order
     # So we can use the layout directly without reordering
-    layout_matrix <- d3po$x$tempdata$layout
+  layout_matrix <- graph_obj$layout
 
     layout_coords <- round(as.data.frame(layout_matrix), 3)
     names(layout_coords) <- c("x", "y")
@@ -1065,7 +1083,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
     d3po$x$layout <- "manual"
   } else {
     # No layout specified and no manual coordinates - default to 'kk'
-    layout_coords <- round(as.data.frame(igraph::layout_with_kk(d3po$x$tempdata)), 3)
+  layout_coords <- round(as.data.frame(igraph::layout_with_kk(graph_obj)), 3)
     names(layout_coords) <- c("x", "y")
     d3po$x$layout <- "kk"
   }
@@ -1082,13 +1100,16 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$nodes <- nodes
 
   # Extract edges from igraph object
-  edges <- igraph::as_data_frame(d3po$x$tempdata, what = "edges")
+  edges <- igraph::as_data_frame(graph_obj, what = "edges")
   # Use node names as source/target (not numeric indices)
   edges$source <- edges$from
   edges$target <- edges$to
   # Keep all edge attributes (including edge_size, weight, etc.)
   edges <- edges[, !names(edges) %in% c("from", "to"), drop = FALSE]
   d3po$x$edges <- edges
+
+  # Remove network_data as it's no longer needed and can't be serialized to JSON
+  d3po$x$network_data <- NULL
 
   return(d3po)
 }
@@ -1110,69 +1131,127 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 #' Geomap
 #'
-#' Plot a geomap
+#' Plot a geomap using sf spatial objects
 #'
 #' @inheritParams po_box
-#' @param map map to use (i.e., any valid list or topojson file such as `maps$south_america$chile` or `jsonlite::fromJSON("chile.topojson", simplifyVector = F)`)
 #'
 #' @examples
 #' if (interactive()) {
-#'   # Get region IDs and names from the Chile map
-#'   dout <- map_ids(d3po::maps$south_america$chile)
-#'
-#'   # Only Magallanes has Pokemon (Mewtwo lives there!)
-#'   dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
-#'   dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
-#'
-#'   d3po(dout) %>%
-#'     po_geomap(
-#'       daes(
-#'         group = id, color = color, size = pokemon_count,
-#'         tooltip = name
-#'       ),
-#'       map = d3po::maps$south_america$chile
-#'     ) %>%
-#'     po_title("Pokemon Distribution in Chile")
+#'   # Using sf objects (requires 'sf' and 'geojsonio' packages)
+#'   library(sf)
+#'   
+#'   # Example 1: North Carolina counties
+#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+#'   nc$random <- runif(nrow(nc), min = 10, max = 100)
+#'   
+#'   d3po(nc) %>%
+#'     po_geomap(daes(group = FIPS, size = random, tooltip = NAME)) %>%
+#'     po_title("Random Values by County")
+#'   
+#'   # Example 2: With custom colors
+#'   nc$my_color <- sample(c("#69b3a2", "#F85888", "#A890F0"), 
+#'                         nrow(nc), replace = TRUE)
+#'   
+#'   d3po(nc) %>%
+#'     po_geomap(daes(group = FIPS, size = random, 
+#'                    tooltip = NAME, color = my_color)) %>%
+#'     po_title("Counties with Custom Colors")
+#'   
+#'   # Example 3: Gradient coloring based on values
+#'   d3po(nc) %>%
+#'     po_geomap(daes(group = FIPS, size = random, 
+#'                    tooltip = NAME, gradient = TRUE)) %>%
+#'     po_title("Counties with Gradient")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
-po_geomap <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) UseMethod("po_geomap")
+po_geomap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_geomap")
 
 #' @export
 #' @method po_geomap d3po
-po_geomap.d3po <- function(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE) {
-  # defaults
+po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+  # Set chart type
   d3po$x$type <- "geomap"
+  message("[po_geomap] === STARTING GEOMAP SETUP ===")
+  message("[po_geomap] Setting chart type to 'geomap'")
 
-  data <- .get_data(d3po$x$tempdata, data)
+  # Get attribute data
+  # For SF objects, d3po.sf should have populated x$data (attributes) and x$geomap_data (GeoJSON)
+  if (!is.null(data)) {
+    attrs <- data
+    message("[po_geomap] Using provided data parameter")
+  } else {
+    attrs <- d3po$x$data
+    message("[po_geomap] Using d3po$x$data")
+  }
+  
+  if (!is.null(attrs)) {
+    message("[po_geomap] Attribute data dimensions: ", nrow(attrs), " rows, ", ncol(attrs), " columns")
+    message("[po_geomap] Attribute data columns: ", paste(names(attrs), collapse = ", "))
+  }
 
-  # extract & process coordinates
+  # Extract and process aesthetics
   daes <- get_daes(...)
+  message("[po_geomap] Aesthetics passed: ", paste(names(daes), collapse = ", "))
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
+  message("[po_geomap] Combined aesthetics: ", paste(names(daes), collapse = ", "))
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
+  message("[po_geomap] Columns to select: ", paste(columns, collapse = ", "))
+  
+  if (is.null(attrs)) {
+    stop('po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().')
+  }
 
-  d3po$x$data <- dplyr::select(data, columns)
-  d3po$x$map <- map
+  # Select only requested columns from attribute table
+  # Ensure result is a plain data.frame
+  d3po$x$data <- as.data.frame(dplyr::select(attrs, dplyr::all_of(columns)))
+  message("[po_geomap] Data frame created with ", nrow(d3po$x$data), " rows and ", ncol(d3po$x$data), " columns")
+  message("[po_geomap] Final data column names: ", paste(names(d3po$x$data), collapse = ", "))
+  
+  # Verify that geomap data exists (should have been created by d3po.sf)
+  if (is.null(d3po$x$geomap_data)) {
+    stop(
+      "po_geomap requires an sf object to be passed to d3po().\n",
+      "Please ensure you're using an sf spatial object, e.g.:\n",
+      "  library(sf)\n",
+      "  my_map <- st_read('path/to/shapefile.shp')\n",
+      "  d3po(my_map) %>% po_geomap(...)"
+    )
+  }
+  
+  message("[po_geomap] Geomap data present: ", !is.null(d3po$x$geomap_data))
+  if (!is.null(d3po$x$geomap_data)) {
+    message("[po_geomap] Geomap features count: ", length(d3po$x$geomap_data$features))
+  }
 
+  # Set aesthetic mappings
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$text <- daes_to_opts(daes, "text")
   d3po$x$color <- daes_to_opts(daes, "color")
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
   d3po$x$gradient <- daes_to_opts(daes, "gradient")
+  
+  message("[po_geomap] Final mappings:")
+  message("  group: ", ifelse(is.null(d3po$x$group), "NULL", d3po$x$group))
+  message("  size: ", ifelse(is.null(d3po$x$size), "NULL", d3po$x$size))
+  message("  tooltip: ", ifelse(is.null(d3po$x$tooltip), "NULL", d3po$x$tooltip))
+  message("  color: ", ifelse(is.null(d3po$x$color), "NULL", d3po$x$color))
+  message("  gradient: ", ifelse(is.null(d3po$x$gradient), "NULL", d3po$x$gradient))
+  message("[po_geomap] === COMPLETED GEOMAP SETUP ===")
+  message("")
 
   return(d3po)
 }
 
 #' @export
 #' @method po_geomap d3proxy
-po_geomap.d3proxy <- function(d3po, ..., data, map, inherit_daes) {
+po_geomap.d3proxy <- function(d3po, ..., data, inherit_daes) {
   assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(map), msg = "Missing `map`")
   assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
 
-  msg <- list(id = d3po$id, msg = list(data = data, map = map, inherit_daes = inherit_daes))
+  msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
   d3po$session$sendCustomMessage("d3po-geomap", msg)
 

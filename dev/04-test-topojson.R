@@ -26,13 +26,13 @@ south_america_countries <- c(
   "French Guiana"
 )
 
-world <- world %>%
+south_america <- world %>%
   filter(name %in% south_america_countries)
 
-vis <- d3po(world, width = 800, height = 600) %>%
+vis <- d3po(south_america, width = 800, height = 600) %>%
     po_geomap(daes(group = id, size = random, tooltip = name)) %>%
     po_labels(title = "Random Values by Country")
 
-vis
+htmlwidgets::saveWidget(vis, "dev/test-topojson.html", selfcontained = F)
 
-# htmlwidgets::saveWidget(vis, "dev/test-topojson.html", selfcontained = F)
+vis

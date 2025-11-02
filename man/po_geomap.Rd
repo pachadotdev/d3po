@@ -4,7 +4,7 @@
 \alias{po_geomap}
 \title{Geomap}
 \usage{
-po_geomap(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE)
+po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
@@ -14,33 +14,40 @@ po_geomap(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE)
 \item{data}{Any dataset to use for plot, overrides data passed
 to \code{\link[=d3po]{d3po()}}.}
 
-\item{map}{map to use (i.e., any valid list or topojson file such as \code{maps$south_america$chile} or \code{jsonlite::fromJSON("chile.topojson", simplifyVector = F)})}
-
 \item{inherit_daes}{Whether to inherit aesthetics previous specified.}
 }
 \value{
 an 'htmlwidgets' object with the desired interactive plot
 }
 \description{
-Plot a geomap
+Plot a geomap using sf spatial objects
 }
 \examples{
 if (interactive()) {
-  # Get region IDs and names from the Chile map
-  dout <- map_ids(d3po::maps$south_america$chile)
-
-  # Only Magallanes has Pokemon (Mewtwo lives there!)
-  dout$pokemon_count <- ifelse(dout$id == "MA", 1L, 0L)
-  dout$color <- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
-
-  d3po(dout) \%>\%
-    po_geomap(
-      daes(
-        group = id, color = color, size = pokemon_count,
-        tooltip = name
-      ),
-      map = d3po::maps$south_america$chile
-    ) \%>\%
-    po_title("Pokemon Distribution in Chile")
+  # Using sf objects (requires 'sf' and 'geojsonio' packages)
+  library(sf)
+  
+  # Example 1: North Carolina counties
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+  nc$random <- runif(nrow(nc), min = 10, max = 100)
+  
+  d3po(nc) \%>\%
+    po_geomap(daes(group = FIPS, size = random, tooltip = NAME)) \%>\%
+    po_title("Random Values by County")
+  
+  # Example 2: With custom colors
+  nc$my_color <- sample(c("#69b3a2", "#F85888", "#A890F0"), 
+                        nrow(nc), replace = TRUE)
+  
+  d3po(nc) \%>\%
+    po_geomap(daes(group = FIPS, size = random, 
+                   tooltip = NAME, color = my_color)) \%>\%
+    po_title("Counties with Custom Colors")
+  
+  # Example 3: Gradient coloring based on values
+  d3po(nc) \%>\%
+    po_geomap(daes(group = FIPS, size = random, 
+                   tooltip = NAME, gradient = TRUE)) \%>\%
+    po_title("Counties with Gradient")
 }
 }

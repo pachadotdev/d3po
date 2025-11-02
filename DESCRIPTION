@@ -36,4 +36,7 @@ Suggests:
   knitr,
   igraph,
   shiny,
-  golem
+  golem,
+  geojsonio,
+  sf,
+  jsonlite

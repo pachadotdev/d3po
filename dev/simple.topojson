@@ -1,0 +1,51 @@
+{
+  "type": "Topology",
+  "objects": {
+    "regions": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Polygon",
+          "properties": {
+            "name": "Rectangle Island",
+            "id": "rect1"
+          },
+          "arcs": [[0]]
+        },
+        {
+          "type": "Polygon",
+          "properties": {
+            "name": "Circle Island",
+            "id": "circle1"
+          },
+          "arcs": [[1]]
+        }
+      ]
+    }
+  },
+  "arcs": [
+    [
+      [-80, 10],
+      [-40, 10],
+      [-40, -10],
+      [-80, -10],
+      [-80, 10]
+    ],
+    [
+      [-20, 0],
+      [-18, 5],
+      [-14, 8],
+      [-8, 9],
+      [-2, 8],
+      [2, 5],
+      [4, 0],
+      [2, -5],
+      [-2, -8],
+      [-8, -9],
+      [-14, -8],
+      [-18, -5],
+      [-20, 0]
+    ]
+  ],
+  "bbox": [-80, -10, 4, 10]
+}

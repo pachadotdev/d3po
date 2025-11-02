@@ -39,29 +39,3 @@
 #' @format A \code{igraph} object with 17 vertices (nodes) and 26 edges (arcs).
 #' @source Adapted from the \code{highcharter} package.
 "pokemon_network"
-
-#' maps
-#'
-#' World, continent and country maps. These maps are provided as R lists
-#' structured by following the 'topojson' standard. The maps are organized in
-#' sub-lists by continent and here I provide maps for both the continents and
-#' the countries. There are missing states or regions because those could not be
-#' found in the original maps.
-#'
-#' Missing in Asia: 'Siachen Glacier (JK)', 'Scarborough Reef (SH)', and
-#' 'Spratly Islands (SP)'. Missing in Europe: 'Vatican City (VA)'.
-#'
-#' Missing in North America: 'Bajo Nuevo Bank (BU)', 'Serranilla Bank (SW)', and
-#' 'United States Minor Outlying Islands (UM)'.
-#'
-#' Missing in Oceania: 'Federated States of Micronesia (FM)',
-#' 'Marshall Islands (MH)', and 'Tuvalu (TV)'.
-#'
-#' Consider all these maps as referential and unofficial.
-#'
-#' @docType data
-#' @name maps
-#' @usage maps
-#' @format A \code{list} object with 6 elements (one per continent). The Americas are separated in North America and South America.
-#' @source Adapted from Natural Earth.
-"maps"

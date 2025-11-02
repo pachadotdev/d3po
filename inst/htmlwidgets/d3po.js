@@ -192,41 +192,6 @@ HTMLWidgets.widget({
             ChartClass = d3po.GeoMap;
             if (x.geomap_data) {
               options.geomap_data = x.geomap_data;
-              console.log('[d3po.js] === GEOMAP DATA RECEIVED ===');
-              console.log('[d3po.js] Type:', x.geomap_data.type);
-              console.log('[d3po.js] Features count:', x.geomap_data.features ? x.geomap_data.features.length : 0);
-              if (x.geomap_data.features && x.geomap_data.features.length > 0) {
-                var firstFeature = x.geomap_data.features[0];
-                console.log('[d3po.js] First feature:');
-                console.log('  ID:', firstFeature.id);
-                console.log('  Properties:', firstFeature.properties);
-                console.log('  Geometry type:', firstFeature.geometry ? firstFeature.geometry.type : 'undefined');
-                if (firstFeature.geometry && firstFeature.geometry.coordinates) {
-                  var coords = firstFeature.geometry.coordinates;
-                  console.log('  Coordinates type:', typeof coords);
-                  console.log('  Coordinates length:', coords.length);
-                  console.log('  First coordinate sample (stringified):', JSON.stringify(coords[0]).substring(0, 200));
-                  
-                  // Check coordinate nesting level
-                  if (coords.length > 0) {
-                    console.log('  Level 1 type:', typeof coords[0], 'length:', Array.isArray(coords[0]) ? coords[0].length : 'N/A');
-                    if (Array.isArray(coords[0]) && coords[0].length > 0) {
-                      console.log('  Level 2 type:', typeof coords[0][0], 'length:', Array.isArray(coords[0][0]) ? coords[0][0].length : 'N/A');
-                      if (Array.isArray(coords[0][0]) && coords[0][0].length > 0) {
-                        console.log('  Level 3 (first coord point):', coords[0][0][0]);
-                      }
-                    }
-                  }
-                }
-              }
-              console.log('[d3po.js] Data rows:', x.data ? x.data.length : 0);
-              if (x.data && x.data.length > 0) {
-                console.log('[d3po.js] First data row:', x.data[0]);
-                console.log('[d3po.js] Data column names:', Object.keys(x.data[0]));
-              }
-              console.log('[d3po.js] Group field:', options.group);
-              console.log('[d3po.js] Size field:', options.size);
-              console.log('[d3po.js] === END GEOMAP DATA ===');
             }
             break;
           default:

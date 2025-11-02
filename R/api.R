@@ -1172,32 +1172,20 @@ po_geomap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po
 po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # Set chart type
   d3po$x$type <- "geomap"
-  message("[po_geomap] === STARTING GEOMAP SETUP ===")
-  message("[po_geomap] Setting chart type to 'geomap'")
 
   # Get attribute data
   # For SF objects, d3po.sf should have populated x$data (attributes) and x$geomap_data (GeoJSON)
   if (!is.null(data)) {
     attrs <- data
-    message("[po_geomap] Using provided data parameter")
   } else {
     attrs <- d3po$x$data
-    message("[po_geomap] Using d3po$x$data")
-  }
-  
-  if (!is.null(attrs)) {
-    message("[po_geomap] Attribute data dimensions: ", nrow(attrs), " rows, ", ncol(attrs), " columns")
-    message("[po_geomap] Attribute data columns: ", paste(names(attrs), collapse = ", "))
   }
 
   # Extract and process aesthetics
   daes <- get_daes(...)
-  message("[po_geomap] Aesthetics passed: ", paste(names(daes), collapse = ", "))
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  message("[po_geomap] Combined aesthetics: ", paste(names(daes), collapse = ", "))
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  message("[po_geomap] Columns to select: ", paste(columns, collapse = ", "))
   
   if (is.null(attrs)) {
     stop('po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().')
@@ -1206,8 +1194,6 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # Select only requested columns from attribute table
   # Ensure result is a plain data.frame
   d3po$x$data <- as.data.frame(dplyr::select(attrs, dplyr::all_of(columns)))
-  message("[po_geomap] Data frame created with ", nrow(d3po$x$data), " rows and ", ncol(d3po$x$data), " columns")
-  message("[po_geomap] Final data column names: ", paste(names(d3po$x$data), collapse = ", "))
   
   # Verify that geomap data exists (should have been created by d3po.sf)
   if (is.null(d3po$x$geomap_data)) {
@@ -1219,11 +1205,6 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
       "  d3po(my_map) %>% po_geomap(...)"
     )
   }
-  
-  message("[po_geomap] Geomap data present: ", !is.null(d3po$x$geomap_data))
-  if (!is.null(d3po$x$geomap_data)) {
-    message("[po_geomap] Geomap features count: ", length(d3po$x$geomap_data$features))
-  }
 
   # Set aesthetic mappings
   d3po$x$group <- daes_to_opts(daes, "group")
@@ -1232,15 +1213,6 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
   d3po$x$gradient <- daes_to_opts(daes, "gradient")
-  
-  message("[po_geomap] Final mappings:")
-  message("  group: ", ifelse(is.null(d3po$x$group), "NULL", d3po$x$group))
-  message("  size: ", ifelse(is.null(d3po$x$size), "NULL", d3po$x$size))
-  message("  tooltip: ", ifelse(is.null(d3po$x$tooltip), "NULL", d3po$x$tooltip))
-  message("  color: ", ifelse(is.null(d3po$x$color), "NULL", d3po$x$color))
-  message("  gradient: ", ifelse(is.null(d3po$x$gradient), "NULL", d3po$x$gradient))
-  message("[po_geomap] === COMPLETED GEOMAP SETUP ===")
-  message("")
 
   return(d3po)
 }

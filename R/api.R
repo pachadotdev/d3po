@@ -1,8 +1,8 @@
 # Box ----
 
-#' Boxplot
+#' @title Boxplot
 #'
-#' Draw a boxplot.
+#' @description Draw a boxplot.
 #'
 #' @param d3po Either the output of [d3po()] or [d3po_proxy()].
 #' @param ... Aesthetics, see [daes()].
@@ -15,18 +15,18 @@
 #'   # Vertical box plot
 #'   d3po(pokemon) %>%
 #'     po_box(daes(x = type_1, y = weight, color = color_1)) %>%
-#'     po_title("Weight Distribution by Type")
+#'     po_labels(title = "Weight Distribution by Type")
 #'
 #'   # Horizontal box plot
 #'   d3po(pokemon) %>%
 #'     po_box(daes(x = height, y = type_1, color = color_1)) %>%
-#'     po_title("Height Distribution by Type")
+#'     po_labels(title = "Height Distribution by Type")
 #'
 #'   # Log-transformed distribution
 #'   pokemon$log_weight <- log10(pokemon$weight)
 #'   d3po(pokemon) %>%
 #'     po_box(daes(x = type_1, y = log_weight, color = color_1)) %>%
-#'     po_title("Log(Weight) Distribution by Type")
+#'     po_labels(title = "Log(Weight) Distribution by Type")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -54,7 +54,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
   if (is.null(attrs)) {
-    stop('po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().')
+    stop("po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().")
   }
 
   # Select only requested columns from attribute table; ensure result is a
@@ -84,9 +84,9 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Treemap ----
 
-#' Treemap
+#' @title Treemap
 #'
-#' Plot a treemap
+#' @description Plot a treemap
 #'
 #' @inheritParams po_box
 #'
@@ -101,7 +101,7 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #'   d3po(dout) %>%
 #'     po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) %>%
-#'     po_title("Share of Pokemon by main type")
+#'     po_labels(title = "Share of Pokemon by main type")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -146,9 +146,9 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Pie ----
 
-#' Pie
+#' @title Pie
 #'
-#' Plot a pie
+#' @description Plot a pie
 #'
 #' @inheritParams po_box
 #'
@@ -166,7 +166,7 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'       size = count, group = type, color = color,
 #'       innerRadius = 0, startAngle = 0, endAngle = 2 * pi
 #'     )) %>%
-#'     po_title("Share of Pokemon by main type")
+#'     po_labels(title = "Share of Pokemon by main type")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -212,9 +212,9 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Donut ----
 
-#' Donut
+#' @title Donut
 #'
-#' Plot a donut
+#' @description Plot a donut
 #'
 #' @inheritParams po_box
 #'
@@ -232,7 +232,7 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'       size = count, group = type, color = color,
 #'       innerRadius = 0.4, startAngle = 0, endAngle = 2 * pi
 #'     )) %>%
-#'     po_title("Share of Pokemon by main type")
+#'     po_labels(title = "Share of Pokemon by main type")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -278,9 +278,9 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Area ----
 
-#' Area
+#' @title Area
 #'
-#' Plot an area chart.
+#' @description Plot an area chart.
 #'
 #' @inheritParams po_box
 #'
@@ -298,7 +298,7 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     po_area(daes(
 #'       x = height, y = weight, group = type, color = color
 #'     )) %>%
-#'     po_title("Pokemon Evolution: Weight vs Height by Type")
+#'     po_labels(title = "Pokemon Evolution: Weight vs Height by Type")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -343,9 +343,9 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Bar ----
 
-#' Bar
+#' @title Bar
 #'
-#' Draw a bar chart.
+#' @description Draw a bar chart.
 #'
 #' @inheritParams po_box
 #'
@@ -361,12 +361,12 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'   # Vertical bars
 #'   d3po(dout) %>%
 #'     po_bar(daes(x = type, y = count, color = color)) %>%
-#'     po_title("Vertical Bars")
+#'     po_labels(title = "Vertical Bars")
 #'
 #'   # Horizontal bars (flipped axes)
 #'   d3po(dout) %>%
 #'     po_bar(daes(x = count, y = type, color = color)) %>%
-#'     po_title("Horizontal Bars")
+#'     po_labels(title = "Horizontal Bars")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -419,9 +419,9 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Line ----
 
-#' Line
+#' @title Line
 #'
-#' Plot an line chart.
+#' @description Plot an line chart.
 #'
 #' @inheritParams po_box
 #'
@@ -439,7 +439,7 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     po_line(daes(
 #'       x = height, y = weight, group = type, color = color
 #'     )) %>%
-#'     po_title("Pokemon Evolution: Weight vs Height by Type")
+#'     po_labels(title = "Pokemon Evolution: Weight vs Height by Type")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -483,9 +483,9 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Scatter ----
 
-#' scatter
+#' @title Scatter
 #'
-#' Plot an scatter chart.
+#' @description Plot an scatter chart.
 #'
 #' @inheritParams po_box
 #'
@@ -496,7 +496,7 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     po_scatter(daes(
 #'       x = height, y = weight, group = name, color = color_1
 #'     )) %>%
-#'     po_title("Height vs Weight")
+#'     po_labels(title = "Height vs Weight")
 #'
 #'   # Log-transformed scatter plot
 #'   pokemon$log_height <- log10(pokemon$height)
@@ -506,15 +506,18 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     po_scatter(daes(
 #'       x = log_height, y = log_weight, group = name, color = color_1
 #'     )) %>%
-#'     po_title("Log(Height) vs Log(Weight)")
+#'     po_labels(title = "Log(Height) vs Log(Weight)")
 #'
 #'   # Weighted scatterplot by inverse distance from mean
 #'   mean_weight <- mean(pokemon$weight, na.rm = TRUE)
 #'   mean_height <- mean(pokemon$height, na.rm = TRUE)
+#'
 #'   pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
 #'   pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
+#'
 #'   pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
 #'     pokemon$distance_from_mean_height) / 2
+#'
 #'   pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 #'
 #'   d3po(pokemon) %>%
@@ -522,7 +525,7 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'       x = height, y = weight, size = inverse_distance_from_mean,
 #'       group = name, color = color_1
 #'     )) %>%
-#'     po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+#'     po_labels(title = "Height vs Weight (Size = 1 / Distance from the Mean)")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -570,9 +573,9 @@ po_scatter.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Tooltip ----
 
-#' Tooltip
+#' @title Tooltip
 #'
-#' Set a custom tooltip template for a chart. The template can be a literal
+#' @description Set a custom tooltip template for a chart. The template can be a literal
 #' string (e.g. `<b>{name}</b><br>Value: {value}`) which will be evaluated
 #' server-side by substituting column values.
 #'
@@ -606,9 +609,10 @@ po_tooltip.d3proxy <- function(d3po, template) {
 
 
 # Format ----
-#' Format
+
+#' @title Format
 #'
-#' Precompute formatted label columns from expressions and attach them to the
+#' @description Precompute formatted label columns from expressions and attach them to the
 #' widget data. Accepts named expressions like `x = round(varx, 2)` or
 #' `y = format(varY, big.mark = ",")`. The formatted columns are added to
 #' `d3po$x$data` with names `__label_<name>` and registered in
@@ -629,7 +633,7 @@ po_format.d3po <- function(d3po, ...) {
   # Work on the already-selected data present in `x$data` (preferred)
   data <- d3po$x$data
   if (is.null(data) || ncol(as.data.frame(data)) == 0) {
-    stop('po_format requires data to be present in d3po$x$data or passed explicitly to po_format()')
+    stop("po_format requires data to be present in d3po$x$data or passed explicitly to po_format()")
   }
 
   # Ensure data is a data.frame
@@ -708,9 +712,9 @@ po_format.d3proxy <- function(d3po, ...) {
 
 # Labels ----
 
-#' Labels
+#' @title Labels
 #'
-#' Edit labels positioning in a treemap.
+#' @description Edit labels positioning in a treemap.
 #'
 #' @inheritParams po_box
 #' @param x Optional x-axis label.
@@ -821,9 +825,9 @@ po_labels.d3proxy <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle =
 
 # Font ----
 
-#' Font
+#' @title Font
 #'
-#' Edit the font used in a chart.
+#' @description Edit the font used in a chart.
 #'
 #' @inheritParams po_box
 #' @param family family font to use ("Roboto", "Merriweather", etc.).
@@ -881,9 +885,9 @@ po_font.d3proxy <- function(d3po, family, size, transform) {
 
 # Background ----
 
-#' Background
+#' @title Background
 #'
-#' Add a background to a chart.
+#' @description Add a background to a chart.
 #'
 #' @inheritParams po_box
 #' @param background background to add (hex code).
@@ -914,9 +918,9 @@ po_background.d3proxy <- function(d3po, background) {
 
 # Theme ----
 
-#' Theme
+#' @title Theme
 #'
-#' Manually set colors used by D3po for axis/axis-labels/title and for
+#' @description Manually set colors used by D3po for axis/axis-labels/title and for
 #' tooltips/download menu background. This allows you to override page
 #' themes (Tabler/Shiny) and force D3po to render with readable contrast.
 #'
@@ -954,9 +958,9 @@ po_theme.d3proxy <- function(d3po, axis = NULL, tooltips = NULL) {
 
 # Download ----
 
-#' Download
+#' @title Download
 #'
-#' Show/hide the download button.
+#' @description Show/hide the download button.
 #'
 #' @param d3po A 'd3po' or 'd3proxy' object.
 #' @param show Logical indicating whether to show (TRUE) or hide (FALSE) the download button.
@@ -987,18 +991,19 @@ po_download.d3proxy <- function(d3po, show = TRUE) {
 
 # Network ----
 
-#' Network
+#' @title Network
 #'
-#' Draw a network graph showing relationships between entities.
+#' @description Draw a network graph showing relationships between entities.
 #' Requires an igraph object with nodes (vertices) and links (edges).
 #' Node size can represent counts or other metrics.
 #'
 #' @inheritParams po_box
+#'
 #' @examples
 #' if (interactive()) {
 #'   d3po(pokemon_network) %>%
 #'     po_network(daes(size = size, color = color, layout = "kk")) %>%
-#'     po_title("Pokemon Type Network")
+#'     po_labels(title = "Pokemon Type Network")
 #' }
 #'
 #' @export
@@ -1016,7 +1021,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   if (is.null(d3po$x$network_data) || is.null(d3po$x$network_data$graph)) {
     stop("po_network requires an igraph object to be passed to d3po()")
   }
-  
+
   graph_obj <- d3po$x$network_data$graph
   vertices_data <- igraph::as_data_frame(graph_obj, what = "vertices")
 
@@ -1065,14 +1070,14 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
       stop("Unknown layout: ", layout)
     )
 
-  layout_coords <- round(as.data.frame(layout_func(graph_obj)), 3)
+    layout_coords <- round(as.data.frame(layout_func(graph_obj)), 3)
     names(layout_coords) <- c("x", "y")
     d3po$x$layout <- layout
   } else if (has_layout_attr) {
     # No layout specified, but graph has $layout attribute - use it
     # Both the layout matrix and vertices_data are in the same igraph vertex order
     # So we can use the layout directly without reordering
-  layout_matrix <- graph_obj$layout
+    layout_matrix <- graph_obj$layout
 
     layout_coords <- round(as.data.frame(layout_matrix), 3)
     names(layout_coords) <- c("x", "y")
@@ -1083,7 +1088,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
     d3po$x$layout <- "manual"
   } else {
     # No layout specified and no manual coordinates - default to 'kk'
-  layout_coords <- round(as.data.frame(igraph::layout_with_kk(graph_obj)), 3)
+    layout_coords <- round(as.data.frame(igraph::layout_with_kk(graph_obj)), 3)
     names(layout_coords) <- c("x", "y")
     d3po$x$layout <- "kk"
   }
@@ -1129,39 +1134,45 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 
 # Geomap ----
 
-#' Geomap
+#' @title Geomap
 #'
-#' Plot a geomap using sf spatial objects
+#' @description Plot a geomap using sf spatial objects
 #'
 #' @inheritParams po_box
 #'
 #' @examples
 #' if (interactive()) {
-#'   # Using sf objects (requires 'sf' and 'geojsonio' packages)
+#'   # Using sf objects
 #'   library(sf)
-#'   
+#'
 #'   # Example 1: North Carolina counties
 #'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 #'   nc$random <- runif(nrow(nc), min = 10, max = 100)
-#'   
+#'
 #'   d3po(nc) %>%
 #'     po_geomap(daes(group = FIPS, size = random, tooltip = NAME)) %>%
-#'     po_title("Random Values by County")
-#'   
+#'     po_labels(title = "Random Values by County")
+#'
 #'   # Example 2: With custom colors
-#'   nc$my_color <- sample(c("#69b3a2", "#F85888", "#A890F0"), 
-#'                         nrow(nc), replace = TRUE)
-#'   
+#'   nc$my_color <- sample(c("#69b3a2", "#F85888", "#A890F0"),
+#'     nrow(nc),
+#'     replace = TRUE
+#'   )
+#'
 #'   d3po(nc) %>%
-#'     po_geomap(daes(group = FIPS, size = random, 
-#'                    tooltip = NAME, color = my_color)) %>%
-#'     po_title("Counties with Custom Colors")
-#'   
+#'     po_geomap(daes(
+#'       group = FIPS, size = random,
+#'       tooltip = NAME, color = my_color
+#'     )) %>%
+#'     po_labels(title = "Counties with Custom Colors")
+#'
 #'   # Example 3: Gradient coloring based on values
 #'   d3po(nc) %>%
-#'     po_geomap(daes(group = FIPS, size = random, 
-#'                    tooltip = NAME, gradient = TRUE)) %>%
-#'     po_title("Counties with Gradient")
+#'     po_geomap(daes(
+#'       group = FIPS, size = random,
+#'       tooltip = NAME, gradient = TRUE
+#'     )) %>%
+#'     po_labels(title = "Counties with Gradient")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -1186,15 +1197,15 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
-  
+
   if (is.null(attrs)) {
-    stop('po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().')
+    stop("po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().")
   }
 
   # Select only requested columns from attribute table
   # Ensure result is a plain data.frame
   d3po$x$data <- as.data.frame(dplyr::select(attrs, dplyr::all_of(columns)))
-  
+
   # Verify that geomap data exists (should have been created by d3po.sf)
   if (is.null(d3po$x$geomap_data)) {
     stop(

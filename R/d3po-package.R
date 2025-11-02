@@ -1,9 +1,9 @@
-#' An `htmlwidget` interface to the d3po javascript chart library
+#' @title An `htmlwidget` interface to the d3po javascript chart library
 #' @name d3po
 #' @keywords internal
 "_PACKAGE"
 
-#' D3po (re)exported methods
+#' @title D3po (re)exported methods
 #' @name d3po-exports
 NULL
 

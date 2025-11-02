@@ -1,8 +1,6 @@
-#' Shiny bindings for 'd3po'
-#'
-#' Output and render functions for using d3po within Shiny
-#' applications and interactive Rmd documents.
-#'
+#' @title Shiny bindings for 'd3po'
+#' @description Output and render functions for using d3po within Shiny
+#'  applications and interactive Rmd documents.
 #' @param output_id output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
@@ -13,9 +11,7 @@
 #'   is useful if you want to save an expression in a variable.
 #' @param id Id of plot to create a proxy of.
 #' @param session A valid shiny session.
-#
 #' @name d3po-shiny
-#'
 #' @export
 #' @return Creates a basic 'htmlwidget' object for 'Shiny' and interactive documents
 d3po_output <- function(output_id, width = "100%", height = "400px") {

@@ -1,7 +1,5 @@
-#' d3po
-#'
-#' This function provides 'd3po' methods from R console
-#'
+#' @title d3po
+#' @description Provides 'd3po' methods from R console
 #' @param data d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.
 #' @param elementId Dummy string parameter. Useful when you have two or more charts on the same page.
 #' @param width Must be a valid CSS unit (like \code{'100\%'},
@@ -9,7 +7,6 @@
 #'   string and have \code{'px'} appended.
 #' @param height Same as width parameter.
 #' @param ... Aesthetics to pass, see [daes()]
-#'
 #' @export
 #' @return Creates a basic 'htmlwidget' object for simple visualization
 d3po <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) UseMethod("d3po")
@@ -68,14 +65,12 @@ d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, elementId
 d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) {
   if (is.null(data)) stop("d3po.sf requires an 'sf' object as data")
 
-  # Ensure sf package is available
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required for d3po.sf")
   }
 
-  # Ensure geojsonio is available for conversion
-  if (!requireNamespace("geojsonio", quietly = TRUE)) {
-    stop("Package 'geojsonio' is required for d3po.sf")
+  if (!requireNamespace("geojsonsf", quietly = TRUE)) {
+    stop("Package 'geojsonsf' is required for GeoJSON conversion")
   }
 
   # Force coordinate reference system to WGS84 (EPSG:4326) which GeoJSON expects
@@ -87,12 +82,11 @@ d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, elementId = N
     data <- sf::st_transform(data, 4326)
   }
 
-  # Handle GEOMETRYCOLLECTION by casting to MULTIPOLYGON or simpler types
   # GEOMETRYCOLLECTION often causes issues with D3/GeoJSON rendering
   geom_types <- unique(sf::st_geometry_type(data))
   if ("GEOMETRYCOLLECTION" %in% geom_types) {
-    message("Converting GEOMETRYCOLLECTION to MULTIPOLYGON for better compatibility")
-    data <- sf::st_collection_extract(data, type = "POLYGON")
+    # message("Converting GEOMETRYCOLLECTION to MULTIPOLYGON for better compatibility")
+    data <- sf::st_collection_extract(data, type = "MULTIPOLYGON")
   }
 
   # Extract attribute table (drop geometry column)
@@ -100,12 +94,8 @@ d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, elementId = N
 
   # Convert geometry to GeoJSON FeatureCollection
   # Use geojsonsf which produces cleaner output than sf::st_write
-  if (!requireNamespace("geojsonsf", quietly = TRUE)) {
-    stop("Package 'geojsonsf' is required for GeoJSON conversion")
-  }
-  
   geojson_text <- geojsonsf::sf_geojson(data, atomise = FALSE, simplify = FALSE)
-  
+
   # Parse to R object
   geomap_data <- jsonlite::fromJSON(geojson_text, simplifyVector = FALSE)
 
@@ -122,4 +112,3 @@ d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, elementId = N
 
   widget_this(x, width, height, elementId)
 }
-

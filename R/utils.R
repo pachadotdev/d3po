@@ -1,11 +1,7 @@
-#' Get Data
-#'
-#' Returns the appropriate data.
-#'
+#' @title Get Data
+#' @description Returns the appropriate data.
 #' @param x,y Dataframes to choose from.
-#'
 #' @return Either `x` or `y` is not `NULL`.
-#'
 #' @noRd
 #' @keywords internal
 .get_data <- function(x, y) {
@@ -15,12 +11,9 @@
   return(x)
 }
 
-#' Build Widget
-#'
-#' Builds the widget.
-#'
+#' @title Build Widget
+#' @description Builds the widget.
 #' @inheritParams d3po
-#'
 #' @noRd
 #' @keywords internal
 widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
@@ -55,7 +48,8 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
   }
 
   d3po$x$daes <- NULL
-  d3po$x$is_sf <- NULL  # Remove sf flag, not needed in JavaScript
+  d3po$x$is_sf <- NULL # Remove sf flag, not needed in JavaScript
+
   # Note: we intentionally keep d3po$x$graph (if present) and d3po$x$data.
 
   return(d3po)
@@ -106,15 +100,12 @@ get_edges <- function(edges) {
   return(edges)
 }
 
-#' Fix GeoJSON Coordinate Structure
-#'
-#' Recursively fixes coordinate arrays from jsonlite nested list format
+#' @title Fix GeoJSON Coordinate Structure
+#' @description Recursively fixes coordinate arrays from jsonlite nested list format
 #' to proper numeric vectors. This handles MultiPolygon structures where
 #' coordinates are nested multiple levels deep.
-#'
 #' @param coords Coordinate structure from jsonlite::fromJSON with simplifyVector=FALSE
 #' @return Fixed coordinate structure with proper numeric vector pairs
-#'
 #' @noRd
 #' @keywords internal
 fix_coordinates <- function(coords) {
@@ -122,17 +113,17 @@ fix_coordinates <- function(coords) {
   if (is.list(coords) && length(coords) == 2) {
     # Check if both elements are single numeric values
     if (is.numeric(coords[[1]]) && length(coords[[1]]) == 1 &&
-        is.numeric(coords[[2]]) && length(coords[[2]]) == 1) {
+      is.numeric(coords[[2]]) && length(coords[[2]]) == 1) {
       # This is a [x, y] point - convert from [[x], [y]] to c(x, y)
       return(c(coords[[1]], coords[[2]]))
     }
   }
-  
+
   # Recursive case: if this is a list of coordinates, fix each one
   if (is.list(coords)) {
     return(lapply(coords, fix_coordinates))
   }
-  
+
   # If it's already a numeric vector, return as-is
   return(coords)
 }

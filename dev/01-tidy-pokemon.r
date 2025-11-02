@@ -1,19 +1,25 @@
-# I lost the original script :(
-
-load_all()
-
+library(tradestatistics)
 library(dplyr)
 
-pokemon <- pokemon %>%
-    mutate_if(is.character, stringr::str_to_title) %>%
-    mutate_if(is.factor, stringr::str_to_title)
-    
-pokemon <- pokemon %>%
-    mutate(
-        type_1 = as.factor(type_1),
-        type_2 = as.factor(type_2),
-        color_1 = as.factor(color_1),
-        color_2 = as.factor(color_2)
-    )
+trade <- ots_create_tidy_data(years = 2023, table = "yrp")
 
-use_data(pokemon, overwrite = TRUE, compress = "xz")
+trade <- as_tibble(trade)
+
+trade <- trade %>%
+  select(reporter_iso, partner_iso, trade_value_usd_imp, trade_value_usd_exp)
+
+trade <- trade %>%
+  group_by(reporter_iso, partner_iso) %>%
+  summarise(
+    trade = sum(trade_value_usd_imp, na.rm = TRUE) / 1e9,
+    .groups = "drop"
+  ) %>%
+  filter(trade > 0)
+
+trade <- trade %>%
+  filter(trade >= 1)
+
+trade %>%
+    filter(partner_iso == "CHL")
+
+use_data(trade, overwrite = TRUE)

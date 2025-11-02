@@ -1,7 +1,5 @@
-#' Checks that aesthetics exist
-#'
+#' @title Checks that aesthetics exist
 #' @param x Object to check for aesthetics.
-#'
 #' @noRd
 #' @keywords internal
 has_daes <- function(x) {

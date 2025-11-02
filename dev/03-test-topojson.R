@@ -33,6 +33,6 @@ vis <- d3po(south_america, width = 800, height = 600) %>%
     po_geomap(daes(group = id, size = random, tooltip = name)) %>%
     po_labels(title = "Random Values by Country")
 
-htmlwidgets::saveWidget(vis, "dev/test-topojson.html", selfcontained = F)
+# htmlwidgets::saveWidget(vis, "dev/test-topojson.html", selfcontained = F)
 
 vis

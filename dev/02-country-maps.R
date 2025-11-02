@@ -39,16 +39,6 @@ strong_simplify_sfc <- function(sfc, keep = 0.05) {
 
 subnational <- admin1_all
 
-# add subnational name and continent
-subnational <- subnational %>%
-  mutate(
-    country = countrycode(country_iso, origin = 'iso3c', destination = 'country.name'),
-    continent = countrycode(country_iso, origin = 'iso3c', destination = 'continent')
-  )
-
-subnational <- subnational %>%
-  filter(!is.na(country))
-
 subnational <- tryCatch({
   subnational$geometry <- strong_simplify_sfc(subnational$geometry, keep = 0.05)
   subnational
@@ -57,7 +47,58 @@ subnational <- tryCatch({
   subnational
 })
 
+# add subnational name and continent
+subnational <- subnational %>%
+  mutate(
+    country = countrycode(country_iso, origin = 'iso3c', destination = 'country.name'),
+    continent = countrycode(country_iso, origin = 'iso3c', destination = 'continent')
+  )
+
+subnational %>%
+  as.data.frame() %>%
+  filter(is.na(country)) %>%
+  distinct(country_iso, country)
+
+# see https://raw.githubusercontent.com/nvkelso/natural-earth-vector/refs/heads/master/housekeeping/ne_admin_0_details.ods
+# US1 -> USA
+# GB1 -> GBR
+# CH1 -> CHN
+# FR1 -> FRA
+# NL1 -> NLD
+# FI1 -> FIN
+# DN1 -> DNK
+# NZ1 -> NZL
+# AU1 -> AUS
+
+subnational <- subnational %>%
+  mutate(
+    country_iso = case_when(
+      country_iso == 'US1' ~ 'USA',
+      country_iso == 'GB1' ~ 'GBR',
+      country_iso == 'CH1' ~ 'CHN',
+      country_iso == 'FR1' ~ 'FRA',
+      country_iso == 'NL1' ~ 'NLD',
+      country_iso == 'FI1' ~ 'FIN',
+      country_iso == 'DN1' ~ 'DNK',
+      country_iso == 'NZ1' ~ 'NZL',
+      country_iso == 'AU1' ~ 'AUS',
+      TRUE ~ as.character(country_iso)
+    )
+  ) %>%
+  mutate(
+    country = countrycode(country_iso, origin = 'iso3c', destination = 'country.name'),
+    continent = countrycode(country_iso, origin = 'iso3c', destination = 'continent')
+  )
+
+subnational %>%
+  as.data.frame() %>%
+  filter(is.na(country)) %>%
+  distinct(country_iso, country)
+
 sort(unique(subnational$country))
+
+subnational <- subnational %>%
+  filter(!is.na(country_iso))
 
 subnational %>%
   filter(country_iso == 'CHL')
@@ -91,7 +132,6 @@ subnational <- subnational %>%
     country_iso = as.factor(country_iso),
     continent = as.factor(continent)
   )
-
 
 subnational <- subnational %>%
   arrange(continent, country, region)
@@ -133,41 +173,3 @@ national <- tryCatch({
 })
 
 use_data(national, overwrite = TRUE, compress = "xz")
-
-# Test ----
-
-chile <- subnational %>%
-  filter(country_iso == 'CHL')
-
-chile$random <- sample(seq_len(nrow(chile)), size = nrow(chile), replace = TRUE)
-
-d3po(chile, width = 800, height = 600) %>%
-  po_geomap(daes(group = region_iso, size = random, tooltip = region)) %>%
-  po_labels(title = "Random Values by Region in Chile")
-
-south_america <- national %>%
-  filter(continent == "South America")
-
-south_america$random <- sample(seq_len(nrow(south_america)), size = nrow(south_america), replace = TRUE)
-
-d3po(south_america, width = 800, height = 600) %>%
-  po_geomap(daes(group = country_iso, size = random, tooltip = country)) %>%
-  po_labels(title = "Random Values by Country in South America")
-
-south_america <- south_america %>%
-  rename(
-    id = country_iso,
-    name = country
-  ) %>%
-  mutate(
-    id = as.character(id),
-    name = as.character(name)
-  )
-
-dim(south_america)
-
-length(unique(south_america$id))
-
-d3po(south_america, width = 800, height = 600) %>%
-  po_geomap(daes(group = id, size = random, tooltip = name)) %>%
-  po_labels(title = "Random Values by Country in South America")

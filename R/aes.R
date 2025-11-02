@@ -1,6 +1,6 @@
-#' Aesthetics
+#' @title Aesthetics
 #'
-#' Aesthetics of the chart.
+#' @description Aesthetics of the chart.
 #'
 #' @param x,y,... List of name value pairs giving aesthetics to map to
 #'  variables. The names for x and y aesthetics are typically omitted because
@@ -31,7 +31,7 @@ daes <- function(x, y, ...) {
   .construct_aesthetics(aes)
 }
 
-#' Construct aesthetics for re-use
+#' @title Construct aesthetics for re-use
 #'
 #' @param aes Aesthetic object
 #' @param cl Class to assign to output
@@ -161,7 +161,7 @@ combine_daes <- function(main_daes, daes, inherit_daes = TRUE) {
   return(main_daes)
 }
 
-#' Convert daes to names
+#' @title Convert daes to names
 #'
 #' @param daes Output of [daes()].
 #'
@@ -200,7 +200,7 @@ daes_to_columns <- function(daes) {
     unlist()
 }
 
-#' Coordinate to JSON options
+#' @title Coordinate to JSON options
 #'
 #' @param daes Output of [daes()].
 #' @param var Variable to retrieve.
@@ -230,7 +230,9 @@ daes_to_opts <- function(daes, var) {
     tryCatch(
       {
         result <- rlang::eval_tidy(daes[[var]])
-        if (is.atomic(result)) return(result)
+        if (is.atomic(result)) {
+          return(result)
+        }
         return(label)
       },
       error = function(e) {

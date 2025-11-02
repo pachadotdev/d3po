@@ -37,6 +37,6 @@ Suggests:
   igraph,
   shiny,
   golem,
-  geojsonio,
+  geojsonsf,
   sf,
   jsonlite

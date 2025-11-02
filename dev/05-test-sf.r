@@ -12,6 +12,6 @@ vis <- d3po(south_america, width = 800, height = 600) %>%
   po_geomap(daes(group = country_iso, size = random, tooltip = country)) %>%
   po_labels(title = "Random Values by Country in South America")
 
-htmlwidgets::saveWidget(vis, "dev/test-sf.html", selfcontained = F)
+# htmlwidgets::saveWidget(vis, "dev/test-sf.html", selfcontained = F)
 
 vis

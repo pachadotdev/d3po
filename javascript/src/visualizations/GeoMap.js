@@ -299,6 +299,8 @@ export default class GeoMap extends D3po {
       .on('mouseover', function (event, d) {
         const el = d3.select(this);
         const orig = el.attr('fill');
+        // Store original color on the element
+        el.attr('data-original-fill', orig);
         const highlight = getHighlightColor(orig);
         el.attr('fill', highlight);
 
@@ -324,7 +326,7 @@ export default class GeoMap extends D3po {
         if (dataRow) {
           // Add size field if available
           if (self.sizeField && dataRow[self.sizeField] != null) {
-            content += `<br/>Value: ${escapeHtml(String(dataRow[self.sizeField]))}`;
+            content += `Value: ${escapeHtml(String(dataRow[self.sizeField]))}`;
           }
         }
         
@@ -332,7 +334,11 @@ export default class GeoMap extends D3po {
       })
       .on('mouseout', function () {
         const el = d3.select(this);
-        el.attr('fill', self.options.fill || '#cce5df');
+        // Restore the original color
+        const originalFill = el.attr('data-original-fill');
+        if (originalFill) {
+          el.attr('fill', originalFill);
+        }
         hideTooltip();
       });
 

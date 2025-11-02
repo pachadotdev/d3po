@@ -111,13 +111,19 @@ export default class GeoMap extends D3po {
     const y = (bounds[0][1] + bounds[1][1]) / 2;
     
     const scale = 0.9 / Math.max(dx / width, dy / height);
-    const translate = [width / 2 - scale * x, height / 2 - scale * y];
+    
+    // When reflecting Y, we need to adjust the Y translation
+    const translate = [
+      width / 2 - scale * x, 
+      height / 2 + scale * y  // Changed from minus to plus for reflectY
+    ];
     
     console.log('[GeoMap] Bounds:', bounds);
     console.log('[GeoMap] Scale:', scale, 'Translate:', translate);
     
-    // Create projection with calculated parameters
+    // Create projection with calculated parameters and flip Y-axis
     const projection = d3.geoIdentity()
+      .reflectY(true)  // Flip Y-axis so north is up
       .scale(scale)
       .translate(translate);
     

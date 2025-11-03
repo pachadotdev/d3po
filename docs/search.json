@@ -84,12 +84,6 @@
     "type": "function"
   },
   {
-    "title": "po_background",
-    "url": "reference/po_background.html",
-    "content": "po_background Background (Deprecated) po_background(d3po, background = \"#fff\") d3poEither the output of d3po() or d3po_proxy(). background background to add (hex code). Appends custom background to an 'htmlwidgets' object This function is deprecated. Use po_theme(background = ...) instead. ",
-    "type": "function"
-  },
-  {
     "title": "po_download",
     "url": "reference/po_download.html",
     "content": "po_download Download po_download(d3po, show = TRUE) d3poA 'd3po' or 'd3proxy' object. show Logical indicating whether to show (TRUE) or hide (FALSE) the download button. Appends download button settings to an 'htmlwidgets' object Show/hide the download button.",

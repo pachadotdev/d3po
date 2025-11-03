@@ -964,36 +964,6 @@ po_theme.d3proxy <- function(d3po, axis = NULL, tooltips = NULL, background = NU
   return(d3po)
 }
 
-# Background (deprecated) ----
-
-#' @title Background (Deprecated)
-#'
-#' @description This function is deprecated. Use `po_theme(background = ...)` instead.
-#'
-#' @inheritParams po_box
-#' @param background background to add (hex code).
-#' @export
-#' @return Appends custom background to an 'htmlwidgets' object
-po_background <- function(d3po, background = "#fff") {
-  .Deprecated("po_theme",
-    package = "d3po",
-    msg = "po_background() is deprecated. Use po_theme(background = ...) instead."
-  )
-  UseMethod("po_background")
-}
-
-#' @export
-#' @method po_background d3po
-po_background.d3po <- function(d3po, background = "#fff") {
-  po_theme.d3po(d3po, background = background)
-}
-
-#' @export
-#' @method po_background d3proxy
-po_background.d3proxy <- function(d3po, background = "#fff") {
-  po_theme.d3proxy(d3po, background = background)
-}
-
 # Download ----
 
 #' @title Download

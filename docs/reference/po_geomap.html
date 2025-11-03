@@ -138,11 +138,8 @@ Whether to inherit aesthetics previous specified.
     "Europe", "North America", "Oceania", "South America"
   )
 
-  # Add color column based on continent
-  world$color &lt;- my_pal[world$continent]
-
   d3po(world, width = 800, height = 600) %&gt;%
-    po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) %&gt;%
+    po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) %&gt;%
     po_labels(title = "Trade Volume by Country in 2023")
 }
 </code></pre>

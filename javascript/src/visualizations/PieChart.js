@@ -25,8 +25,6 @@ export default class PieChart extends D3po {
    * @param {string} [options.color] - Color field name
    * @param {boolean} [options.donut] - Whether to render as donut
    * @param {number} [options.innerRadius] - Inner radius ratio (0-1) for donut charts
-   * @param {number} [options.startAngle] - Start angle in radians (default: 0)
-   * @param {number} [options.endAngle] - End angle in radians (default: 2*PI)
    */
   constructor(container, options) {
     super(container, options);
@@ -45,9 +43,6 @@ export default class PieChart extends D3po {
         : this.donut
           ? 0.5
           : 0;
-    this.startAngle = options.startAngle !== undefined ? options.startAngle : 0;
-    this.endAngle =
-      options.endAngle !== undefined ? options.endAngle : 2 * Math.PI;
     // labelMode: 'percent' (default) or 'count' — controls inner labels
     this.labelMode = options.labelMode || 'percent';
   }
@@ -73,32 +68,9 @@ export default class PieChart extends D3po {
 
     const radius = Math.min(width, height) / 2;
 
-    // Calculate the total angle range for percentage calculations
-    const totalAngle = this.endAngle - this.startAngle;
-    const isHalfChart = totalAngle <= Math.PI;
-
     // Calculate center position
     const centerX = this.options.margin.left + width / 2;
-
-    // Adjust vertical position for half charts to use space better
-    // For half charts, position the center so the chart uses available space
-    let centerY;
-    if (isHalfChart) {
-      // For half charts, position based on whether it's top or bottom half
-      if (this.startAngle < 0 && this.endAngle > 0) {
-        // Bottom half (e.g., -π/2 to π/2)
-        centerY = this.options.margin.top + radius;
-      } else if (this.startAngle >= 0 && this.endAngle <= Math.PI) {
-        // Top half
-        centerY = this.options.margin.top + height - radius;
-      } else {
-        // Other half configurations
-        centerY = this.options.margin.top + height / 2;
-      }
-    } else {
-      // Full circle - center it vertically
-      centerY = this.options.margin.top + height / 2;
-    }
+    const centerY = this.options.margin.top + height / 2;
 
     // Move chart to center
     this.chart.attr('transform', `translate(${centerX},${centerY})`);
@@ -107,9 +79,7 @@ export default class PieChart extends D3po {
     const pie = d3
       .pie()
       .value(d => d[this.sizeField])
-      .sort(null)
-      .startAngle(this.startAngle)
-      .endAngle(this.endAngle);
+      .sort(null);
 
     // Create arc generator
     const arc = d3
@@ -211,21 +181,21 @@ export default class PieChart extends D3po {
               } else if (this && this.data) {
                 total = this.data.reduce((s, x) => s + (x[sizeField] || 0), 0);
               } else {
-                // Fallback: derive from arc angles and totalAngle
-                pct = ((d.endAngle - d.startAngle) / totalAngle) * 100;
+                // Fallback: derive from arc angles (full circle)
+                pct = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100;
               }
               if (total > 0) {
                 pct = (d.data[sizeField] / total) * 100;
               }
             } catch (e) {
-              pct = ((d.endAngle - d.startAngle) / totalAngle) * 100;
+              pct = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100;
             }
 
             // For consistency with other charts, call formatter as (value, row)
             const fallback = () =>
               `<strong>${d.data[groupField]}</strong>` +
               `Value: ${d.data[sizeField]}<br/>` +
-              `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`;
+              `Percentage: ${(((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100).toFixed(1)}%`;
             showTooltipWithFormatter(
               event,
               tooltipFormatter,
@@ -246,7 +216,7 @@ export default class PieChart extends D3po {
           event,
           `<strong>${d.data[groupField]}</strong>` +
             `Value: ${d.data[sizeField]}<br/>` +
-            `Percentage: ${(((d.endAngle - d.startAngle) / totalAngle) * 100).toFixed(1)}%`,
+            `Percentage: ${(((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100).toFixed(1)}%`,
           fontFamily,
           fontSize
         );
@@ -275,7 +245,7 @@ export default class PieChart extends D3po {
 
     labelText.each(function (d) {
       const node = d3.select(this);
-      const percent = ((d.endAngle - d.startAngle) / totalAngle) * 100;
+      const percent = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100;
       // clear any existing content
       node.selectAll('*').remove();
 

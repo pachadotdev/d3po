@@ -152,26 +152,7 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(title = "Trade Share by Reporter Continent in 2023")
 ```
 
-## Pie 2: Half-Pie Chart
-
-```{r halfpie}
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_pie(daes(size = trade, group = reporter_continent, color = my_pal, start_angle = -pi / 2, end_angle = pi / 2)) %>%
-  po_labels(title = "Trade Share by Reporter Continent in 2023")
-```
-
-## Donut 2: Half-Donut Chart
-
-```{r halfdonut}
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_donut(daes(
-    size = trade, group = reporter_continent, inner_radius = 0.3, color = my_pal, start_angle = -pi / 2,
-    end_angle = pi / 2
-  )) %>%
-  po_labels(title = "Trade Share by Reporter Continent in 2023")
-```
-
-## Pie 3: Pie 1 with Customised Theme
+## Pie 2: Pie 1 with Customised Theme
 
 ```{r pie2}
 d3po(trade_by_continent, width = 800, height = 600) %>%

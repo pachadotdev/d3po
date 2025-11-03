@@ -155,8 +155,6 @@ HTMLWidgets.widget({
           case 'donut':
             ChartClass = d3po.PieChart;
             if (x.innerRadius !== undefined) options.innerRadius = x.innerRadius;
-            if (x.startAngle !== undefined) options.startAngle = x.startAngle;
-            if (x.endAngle !== undefined) options.endAngle = x.endAngle;
             break;
           case 'treemap':
             ChartClass = d3po.Treemap;

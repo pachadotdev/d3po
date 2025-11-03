@@ -211,8 +211,6 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   d3po$x$innerRadius <- daes_to_opts(daes, "inner_radius")
-  d3po$x$startAngle <- daes_to_opts(daes, "start_angle")
-  d3po$x$endAngle <- daes_to_opts(daes, "end_angle")
 
   return(d3po)
 }
@@ -284,8 +282,6 @@ po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
   d3po$x$innerRadius <- daes_to_opts(daes, "inner_radius")
-  d3po$x$startAngle <- daes_to_opts(daes, "start_angle")
-  d3po$x$endAngle <- daes_to_opts(daes, "end_angle")
 
   return(d3po)
 }
@@ -1269,11 +1265,8 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   # Add color column based on continent
-#'   world$color <- my_pal[world$continent]
-#'
 #'   d3po(world, width = 800, height = 600) %>%
-#'     po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) %>%
+#'     po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) %>%
 #'     po_labels(title = "Trade Volume by Country in 2023")
 #' }
 #' @export

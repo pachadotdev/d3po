@@ -9,6 +9,7 @@ import {
   resolveTooltipFormatter,
   showTooltipWithFormatter,
   createColorScale,
+  renderAxes,
 } from '../utils.js';
 
 /**
@@ -147,132 +148,20 @@ export default class ScatterPlot extends D3po {
           .range([3, 20])
       : () => 5;
 
-    // Add axes
-    // Apply axis formatters if available
-    var xAxis = d3.axisBottom(xScale);
-    if (this.options.axisFormatters && this.options.axisFormatters.x) {
-      xAxis.tickFormat(this.options.axisFormatters.x);
-    }
-
-    var yAxis = d3.axisLeft(yScale);
-    if (this.options.axisFormatters && this.options.axisFormatters.y) {
-      yAxis.tickFormat(this.options.axisFormatters.y);
-    }
-
-    // axes will be appended below with measurement-aware placement
-
-    // Place axes groups and labels — measure tick sizes to avoid overlaps (follow AreaChart/BarChart logic)
-    const xg = this.chart
-      .append('g')
-      .attr('transform', `translate(0,${this.getInnerHeight()})`)
-      .call(xAxis);
-
-    // Measure max tick label height for the x axis to position the label
-    let maxTickHeight = 0;
-    try {
-      const xTicks = xg.selectAll('.tick text').nodes();
-      if (xTicks && xTicks.length) {
-        maxTickHeight = d3.max(xTicks, n => n.getBBox().height) || 0;
-      }
-    } catch (e) {
-      /* ignore measurement errors */
-    }
-    const xLabelPadding = Math.max(8, maxTickHeight + 8);
-    // Resolve axis label text: allow options.xLabel / options.yLabel overrides
-    const xLabelText =
-      this.options && this.options.xLabel
-        ? this.options.xLabel
-        : this.xField
-          ? String(this.xField)
-          : '';
-    const yLabelText =
-      this.options && this.options.yLabel
-        ? this.options.yLabel
-        : this.yField
-          ? String(this.yField)
-          : '';
-
-    this.chart
-      .append('text')
-      .attr('class', 'x-axis-label')
-      .attr('x', this.getInnerWidth() / 2)
-      .attr('y', this.getInnerHeight() + xLabelPadding + 24)
-      // color intentionally left to theme/CSS so po_theme can override
-      .attr('text-anchor', 'middle')
-      .style('font-size', '14px')
-      .text(xLabelText);
-
-    const yg = this.chart.append('g').call(yAxis);
-
-    // Measure y-axis tick width and label bbox to place rotated y label without overlap
-    try {
-      const yTicks = yg.selectAll('.tick text').nodes();
-      const yMaxTickWidth =
-        yTicks && yTicks.length ? d3.max(yTicks, n => n.getBBox().width) : 0;
-
-      // measure label bbox height (off-canvas)
-      let measuredLabelBBoxHeight = 14;
-      try {
-        const lab = this.svg
-          .append('text')
-          .attr('x', -9999)
-          .attr('y', -9999)
-          .style('font-size', '14px')
-          .text(this.yField);
-        measuredLabelBBoxHeight = lab.node().getBBox().height || 14;
-        lab.remove();
-      } catch (e) {
-        measuredLabelBBoxHeight = 14;
-      }
-
-      const labelGap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
-      const labelBaseline = Math.max(
-        yMaxTickWidth + labelGap,
-        measuredLabelBBoxHeight + labelGap
-      );
-      const adaptivePadding = Math.min(
-        36,
-        Math.max(4, Math.round(yMaxTickWidth * 0.08))
-      );
-      let labelOffset = labelBaseline + adaptivePadding + 10;
-
-      const measuredRequiredLeft =
-        yMaxTickWidth > 0
-          ? Math.ceil(yMaxTickWidth + labelGap + measuredLabelBBoxHeight + 8)
-          : null;
-      const marginLeft =
-        (this.options && this.options.margin && this.options.margin.left) || 60;
-      let maxAllowed = marginLeft - 4;
-      if (measuredRequiredLeft != null)
-        maxAllowed = Math.max(10, Math.min(maxAllowed, measuredRequiredLeft));
-      else maxAllowed = Math.max(10, maxAllowed);
-      if (labelOffset > maxAllowed) labelOffset = maxAllowed;
-
-      yg.append('text')
-        .attr('class', 'y-axis-label')
-        .attr(
-          'transform',
-          `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`
-        )
-        .attr('x', 0)
-        .attr('y', 0)
-        // color intentionally left to theme/CSS so po_theme can override
-        .attr('text-anchor', 'middle')
-        .style('font-size', '14px')
-        .text(yLabelText);
-    } catch (e) {
-      // fallback placement
-      this.chart
-        .append('text')
-        .attr('class', 'y-axis-label')
-        .attr('text-anchor', 'middle')
-        .attr('transform', 'rotate(-90)')
-        .attr('x', -this.getInnerHeight() / 2)
-        .attr('y', -40)
-        .attr('fill', 'black')
-        .style('font-size', '14px')
-        .text(this.yField);
-    }
+    // Render axes with consistent font application and spacing
+    renderAxes(
+      this.chart,
+      xScale,
+      yScale,
+      this.getInnerWidth(),
+      this.getInnerHeight(),
+      this.options,
+      this.xField,
+      this.yField,
+      this.yLabelGap !== undefined ? this.yLabelGap : 12,
+      maxTickWidth,
+      labelBBoxHeight
+    );
 
     // Capture field names for use in event handlers
     const xField = this.xField;

@@ -326,6 +326,55 @@ d3po(trade_wide, width = 800, height = 600) %>%
   po_font("Liberation Serif", 12, "uppercase") %>%
   po_download(FALSE)
 
+# BOX PLOTS ----
+
+# Box 1: Trade Distribution by Continent with Color Vector
+trade_continent <- d3po::trade
+trade_continent <- aggregate(
+  trade ~ reporter_continent + reporter,
+  data = trade_continent,
+  FUN = sum
+)
+
+my_pal <- tintin::tintin_pal(option = "Destination Moon")(7)
+
+names(my_pal) <- c(
+  "Africa", "Antarctica", "Asia",
+  "Europe", "North America", "Oceania", "South America"
+)
+
+d3po(trade_continent, width = 800, height = 600) %>%
+  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) %>%
+  po_labels(
+    x = "Continent",
+    y = "Trade (USD billion)",
+    title = "Trade Distribution by Reporter Continent"
+)
+
+# Box 2: Trade Distribution by Continent with Color Column (Horizontal)
+trade_continent$color <- my_pal[trade_continent$reporter_continent]
+
+d3po(trade_continent, width = 800, height = 600) %>%
+  po_box(daes(y = reporter_continent, x = trade, color = color, tooltip = reporter_continent)) %>%
+  po_labels(
+    y = "Continent",
+    x = "Trade (USD billion)",
+    title = "Trade Distribution by Continents with Custom Colors"
+  )
+
+# Box 3: Box 1 with Customised Theme
+
+d3po(trade_continent, width = 800, height = 600) %>%
+  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) %>%
+  po_labels(
+    x = "Continent",
+    y = "Trade (USD billion)",
+    title = "Trade Distribution by Reporter Continent"
+  ) %>%
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
+  po_font("Liberation Serif", 12, "uppercase") %>%
+  po_download(FALSE)
+
 # TREEMAP CHARTS ----
 
 # Treemap 1: Trade by Continent with Color Vector (Single Level, Squarify)
@@ -409,56 +458,7 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
         '</i><br/>Trade: ' + count + '<br/>Percentage: ' + pct;
       }"
     ))
-
-# BOX PLOTS ----
-
-# Box 1: Trade Distribution by Continent with Color Vector
-trade_continent <- d3po::trade
-trade_continent <- aggregate(
-  trade ~ reporter_continent + reporter,
-  data = trade_continent,
-  FUN = sum
-)
-
-my_pal <- tintin::tintin_pal(option = "Destination Moon")(7)
-
-names(my_pal) <- c(
-  "Africa", "Antarctica", "Asia",
-  "Europe", "North America", "Oceania", "South America"
-)
-
-d3po(trade_continent, width = 800, height = 600) %>%
-  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) %>%
-  po_labels(
-    x = "Continent",
-    y = "Trade (USD billion)",
-    title = "Trade Distribution by Reporter Continent"
-)
-
-# Box 2: Trade Distribution by Continent with Color Column (Horizontal)
-trade_continent$color <- my_pal[trade_continent$reporter_continent]
-
-d3po(trade_continent, width = 800, height = 600) %>%
-  po_box(daes(y = reporter_continent, x = trade, color = color, tooltip = reporter_continent)) %>%
-  po_labels(
-    y = "Continent",
-    x = "Trade (USD billion)",
-    title = "Trade Distribution by Continents with Custom Colors"
-  )
-
-# Box 3: Box 1 with Customised Theme
-
-d3po(trade_continent, width = 800, height = 600) %>%
-  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) %>%
-  po_labels(
-    x = "Continent",
-    y = "Trade (USD billion)",
-    title = "Trade Distribution by Reporter Continent"
-  ) %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
-  po_download(FALSE)
-
+    
 # GEOMAP ----
 
 # Geomap 1: Trade Volume by Country with Color Vector

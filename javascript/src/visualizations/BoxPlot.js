@@ -361,6 +361,15 @@ export default class BoxPlot extends D3po {
       .append('g')
       .attr('transform', `translate(0,${effectiveInnerHeight})`)
       .call(bottomAxis);
+
+    // Apply font settings to x-axis ticks
+    xg.selectAll('text')
+      .style('font-family', this.options.fontFamily)
+      .style('font-size', `${this.options.fontSize}px`);
+    if (this.options.textTransform) {
+      xg.selectAll('text').style('text-transform', this.options.textTransform);
+    }
+
     try {
       // rotate x tick labels when necessary (similar heuristics to BarChart)
       const xTicks = xg.selectAll('.tick text').nodes();
@@ -389,7 +398,9 @@ export default class BoxPlot extends D3po {
         .attr('text-anchor', 'middle')
         .attr('x', effectiveInnerWidth / 2)
         .attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24))
+        .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
+        .style('text-transform', this.options.textTransform || 'none')
         .text(xLabelText);
     } catch (e) {
       this.chart
@@ -398,12 +409,23 @@ export default class BoxPlot extends D3po {
         .attr('text-anchor', 'middle')
         .attr('x', effectiveInnerWidth / 2)
         .attr('y', effectiveInnerHeight + (isHorizontal ? 45 : 65))
+        .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
+        .style('text-transform', this.options.textTransform || 'none')
         .text(xLabelText);
     }
 
     // Append left axis to its own group so we can append the rotated label on the axis group
     const yg = this.chart.append('g').call(leftAxis);
+
+    // Apply font settings to y-axis ticks
+    yg.selectAll('text')
+      .style('font-family', this.options.fontFamily)
+      .style('font-size', `${this.options.fontSize}px`);
+    if (this.options.textTransform) {
+      yg.selectAll('text').style('text-transform', this.options.textTransform);
+    }
+
     try {
       const yTicks = yg.selectAll('.tick text').nodes();
       const yMaxTickWidth =
@@ -442,7 +464,9 @@ export default class BoxPlot extends D3po {
         .attr('x', 0)
         .attr('y', 0)
         .attr('text-anchor', 'middle')
+        .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
+        .style('text-transform', this.options.textTransform || 'none')
         .text(yLabelText);
     } catch (e) {
       // fallback
@@ -453,7 +477,9 @@ export default class BoxPlot extends D3po {
         .attr('transform', 'rotate(-90)')
         .attr('x', -effectiveInnerHeight / 2)
         .attr('y', isHorizontal ? -70 : -40)
+        .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
+        .style('text-transform', this.options.textTransform || 'none')
         .text(yLabelText);
     }
 

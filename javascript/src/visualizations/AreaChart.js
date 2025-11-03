@@ -10,6 +10,7 @@ import {
   getHighlightColor,
   tintColor,
   createColorScale,
+  renderAxes,
 } from '../utils.js';
 
 export default class AreaChart extends D3po {
@@ -84,91 +85,17 @@ export default class AreaChart extends D3po {
       .nice()
       .range([this.getInnerHeight(), 0]);
 
-    // axes
-    const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale);
-    if (this.options && this.options.axisFormatters) {
-      if (this.options.axisFormatters.x)
-        xAxis.tickFormat(this.options.axisFormatters.x);
-      if (this.options.axisFormatters.y)
-        yAxis.tickFormat(this.options.axisFormatters.y);
-    }
-
-    // axis label text values (declare before use to avoid TDZ)
-    const xLabelText =
-      this.options &&
-      (this.options.xLabel ||
-        (this.options.axisLabels && this.options.axisLabels.x))
-        ? this.options.xLabel || this.options.axisLabels.x
-        : this.xField
-          ? String(this.xField)
-          : '';
-    const yLabelText =
-      this.options &&
-      (this.options.yLabel ||
-        (this.options.axisLabels && this.options.axisLabels.y))
-        ? this.options.yLabel || this.options.axisLabels.y
-        : this.yField
-          ? String(this.yField)
-          : '';
-
-    this.chart
-      .append('g')
-      .attr('transform', `translate(0,${this.getInnerHeight()})`)
-      .call(xAxis);
-    this.chart.append('g').call(yAxis);
-
-    // simple axis labels if provided
-    if (xLabelText) {
-      this.chart
-        .append('text')
-        .attr('class', 'x-axis-label')
-        .attr('text-anchor', 'middle')
-        .attr('x', this.getInnerWidth() / 2)
-        .attr(
-          'y',
-          this.getInnerHeight() +
-            (this.options && this.options.axisLabelOffsetY
-              ? this.options.axisLabelOffsetY
-              : 30)
-        )
-        .style(
-          'font-family',
-          this.options && this.options.fontFamily
-            ? this.options.fontFamily
-            : null
-        )
-        .style(
-          'font-size',
-          this.options && this.options.fontSize
-            ? `${this.options.fontSize}px`
-            : null
-        )
-        .text(String(xLabelText));
-    }
-    if (yLabelText) {
-      this.chart
-        .append('text')
-        .attr('class', 'y-axis-label')
-        .attr('text-anchor', 'middle')
-        .attr(
-          'transform',
-          `translate(${-40},${this.getInnerHeight() / 2}) rotate(-90)`
-        )
-        .style(
-          'font-family',
-          this.options && this.options.fontFamily
-            ? this.options.fontFamily
-            : null
-        )
-        .style(
-          'font-size',
-          this.options && this.options.fontSize
-            ? `${this.options.fontSize}px`
-            : null
-        )
-        .text(String(yLabelText));
-    }
+    // Render axes with consistent font application and spacing
+    renderAxes(
+      this.chart,
+      xScale,
+      yScale,
+      this.getInnerWidth(),
+      this.getInnerHeight(),
+      this.options,
+      this.xField,
+      this.yField
+    );
 
     const tooltipFormatter = resolveTooltipFormatter(
       this.tooltip,

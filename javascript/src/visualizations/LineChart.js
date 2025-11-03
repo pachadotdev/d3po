@@ -8,6 +8,7 @@ import {
   normalizeColorString,
   resolveTooltipFormatter,
   showTooltipWithFormatter,
+  renderAxes,
 } from '../utils.js';
 
 /**
@@ -157,85 +158,20 @@ export default class LineChart extends D3po {
     // consistent with previously used innerHeight
     yScale.range([this.getInnerHeight(), 0]);
 
-    // Add axes
-    var xAxis = d3.axisBottom(xScale);
-    if (this.options.axisFormatters && this.options.axisFormatters.x) {
-      xAxis.tickFormat(this.options.axisFormatters.x);
-    }
-
-    var yAxis = d3.axisLeft(yScale);
-    if (this.options.axisFormatters && this.options.axisFormatters.y) {
-      yAxis.tickFormat(this.options.axisFormatters.y);
-    }
-
-    // Append axes groups so we can measure tick labels and position axis labels
-    const xg = this.chart
-      .append('g')
-      .attr('transform', `translate(0,${this.getInnerHeight()})`)
-      .call(xAxis);
-
-    // Measure max tick label height for the x axis
-    let maxTickHeight = 0;
-    try {
-      const xTicks = xg.selectAll('.tick text').nodes();
-      if (xTicks && xTicks.length) {
-        maxTickHeight = d3.max(xTicks, n => n.getBBox().height) || 0;
-      }
-    } catch (e) {
-      // ignore measurement errors
-    }
-
-    const xLabelPadding = Math.max(8, maxTickHeight + 8);
-    const xLabelText =
-      this.options && this.options.xLabel
-        ? this.options.xLabel
-        : this.xField
-          ? String(this.xField)
-          : '';
-    const yLabelText =
-      this.options && this.options.yLabel
-        ? this.options.yLabel
-        : this.yField
-          ? String(this.yField)
-          : '';
-
-    xg.append('text')
-      .attr('class', 'x-axis-label')
-      .attr('x', this.getInnerWidth() / 2)
-      .attr('y', xLabelPadding + 24) // baseline offset plus measured padding
-      // color intentionally left to theme/CSS so po_theme can override
-      .attr('text-anchor', 'middle')
-      .style('font-size', '14px')
-      .text(xLabelText);
-
-    const yg = this.chart.append('g').call(yAxis);
-
-    // (y-axis tick widths were measured earlier via probeGroup)
-
-    // Compute target offset: label should sit left of tick labels by `gap` pixels
-    const labelGap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
-    let labelOffset = maxTickWidth + labelGap;
-    // clamp so label does not move outside the left margin (leave 4px padding)
-    const marginLeft =
-      (this.options && this.options.margin && this.options.margin.left) || 60;
-    const maxAllowed = Math.max(10, marginLeft - 4);
-    if (labelOffset > maxAllowed) labelOffset = maxAllowed;
-
-    // Place the y label so it sits to the left of tick labels by `labelOffset`.
-    // Use translate before rotate so the offset is applied in the unrotated
-    // coordinate system and the label reliably appears left of the ticks.
-    yg.append('text')
-      .attr('class', 'y-axis-label')
-      .attr(
-        'transform',
-        `translate(${-labelOffset},${this.getInnerHeight() / 2}) rotate(-90)`
-      )
-      .attr('x', 0)
-      .attr('y', 0)
-      // color intentionally left to theme/CSS so po_theme can override
-      .attr('text-anchor', 'middle')
-      .style('font-size', '14px')
-      .text(yLabelText);
+    // Render axes with consistent font application and spacing
+    renderAxes(
+      this.chart,
+      xScale,
+      yScale,
+      this.getInnerWidth(),
+      this.getInnerHeight(),
+      this.options,
+      this.xField,
+      this.yField,
+      this.yLabelGap !== undefined ? this.yLabelGap : 12,
+      maxTickWidth,
+      labelBBoxHeight
+    );
 
     // Add grid lines
     this.chart

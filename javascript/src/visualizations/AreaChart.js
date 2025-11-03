@@ -85,6 +85,59 @@ export default class AreaChart extends D3po {
       .nice()
       .range([this.getInnerHeight(), 0]);
 
+    // Measure y-axis tick widths to ensure adequate left margin
+    let measuredMaxTickWidth = 0;
+    let measuredLabelBBoxHeight = 0;
+    try {
+      const probe = this.svg.append('g').attr('class', 'd3po-probe');
+      const axis = d3.axisLeft(yScale);
+      if (this.options.axisFormatters && this.options.axisFormatters.y)
+        axis.tickFormat(this.options.axisFormatters.y);
+      probe.call(axis);
+      try {
+        const ticks = probe.selectAll('.tick text').nodes();
+        if (ticks && ticks.length)
+          measuredMaxTickWidth = d3.max(ticks, n => n.getBBox().width) || 0;
+      } catch (e) {
+        void 0; // some environments may not allow getBBox on detached nodes
+      }
+      probe.remove();
+      try {
+        const lab = this.svg
+          .append('text')
+          .attr('x', -9999)
+          .attr('y', -9999)
+          .style('font-size', '14px')
+          .text(this.yField);
+        measuredLabelBBoxHeight = lab.node().getBBox().height || 0;
+        lab.remove();
+      } catch (e) {
+        /* fallback to a reasonable default if measurement fails */
+        measuredLabelBBoxHeight = 14;
+      }
+
+      const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+      const requiredLeft = Math.ceil(
+        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8
+      );
+      const currentLeft =
+        (this.options && this.options.margin && this.options.margin.left) || 60;
+      if (requiredLeft > currentLeft) {
+        this.options.margin.left = requiredLeft;
+        // Recalculate scales with new margins
+        xScale.range([0, this.getInnerWidth()]);
+        yScale.range([this.getInnerHeight(), 0]);
+        // Reposition chart group
+        if (this.chart && this.chart.attr)
+          this.chart.attr(
+            'transform',
+            `translate(${this.options.margin.left},${this.options.margin.top})`
+          );
+      }
+    } catch (e) {
+      void 0;
+    }
+
     // Render axes with consistent font application and spacing
     renderAxes(
       this.chart,

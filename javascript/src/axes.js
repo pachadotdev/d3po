@@ -142,7 +142,13 @@ export function renderAxes(
   // Calculate y-axis label position with proper spacing
   // Gap between tick labels and axis label, plus room for the label itself
   const gap = 8;
-  const labelOffset = yMaxTickWidth + gap + 10; // +10 for label height when rotated
+  let labelOffset = yMaxTickWidth + gap + 10; // +10 for label height when rotated
+
+  // Ensure label offset doesn't exceed safe threshold (leave 5px margin from edge)
+  // Default left margin is 60px, so max safe offset is 55px
+  const maxSafeOffset =
+    options.margin && options.margin.left ? options.margin.left - 5 : 55;
+  labelOffset = Math.min(labelOffset, maxSafeOffset);
 
   // Add y-axis label
   const yLabelText = options.yLabel || (yField ? String(yField) : '');

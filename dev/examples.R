@@ -119,20 +119,20 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 
 # AREA CHARTS ----
 
-# Assign colors to continents
-my_pal <- tintin::tintin_pal(option = "Cigars of the Pharaoh")(7)
-
-names(my_pal) <- c(
-  "Africa", "Antarctica", "Asia",
-  "Europe", "North America", "Oceania", "South America"
-)
-
 # Area 1: Trade by Continent and Year with Color Vector
 trade_by_continent <- d3po::trade
 trade_by_continent <- aggregate(
   trade ~ year + reporter_continent,
   data = trade_by_continent,
   FUN = sum
+)
+
+# Assign colors to continents
+my_pal <- tintin::tintin_pal(option = "Cigars of the Pharaoh")(7)
+
+names(my_pal) <- c(
+  "Africa", "Antarctica", "Asia",
+  "Europe", "North America", "Oceania", "South America"
 )
 
 d3po(trade_by_continent, width = 800, height = 600) %>%
@@ -458,7 +458,7 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
         '</i><br/>Trade: ' + count + '<br/>Percentage: ' + pct;
       }"
     ))
-    
+
 # GEOMAP ----
 
 # Geomap 1: Trade Volume by Country with Color Vector

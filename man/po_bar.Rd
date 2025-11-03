@@ -24,21 +24,27 @@ Draw a bar chart.
 }
 \examples{
 if (interactive()) {
-  dout <- aggregate(pokemon$name, by = list(
-    type = pokemon$type_1,
-    color = pokemon$color_1
-  ), FUN = length)
+  trade_by_continent <- d3po::trade
+  trade_by_continent <- aggregate(
+    trade ~ reporter_continent,
+    data = d3po::trade,
+    FUN = sum
+  )
 
-  colnames(dout)[3] <- "count"
+  # Assign colors to continents
+  my_pal <- tintin::tintin_pal()(7)
 
-  # Vertical bars
-  d3po(dout) \%>\%
-    po_bar(daes(x = type, y = count, color = color)) \%>\%
-    po_labels(title = "Vertical Bars")
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
 
-  # Horizontal bars (flipped axes)
-  d3po(dout) \%>\%
-    po_bar(daes(x = count, y = type, color = color)) \%>\%
-    po_labels(title = "Horizontal Bars")
+  d3po(trade_by_continent, width = 800, height = 600) \%>\%
+    po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) \%>\%
+    po_labels(
+      x = "Continent",
+      y = "Trade (USD billion)",
+      title = "Total Trade by Reporter Continent in 2023"
+    )
 }
 }

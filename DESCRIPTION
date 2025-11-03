@@ -33,10 +33,13 @@ Imports:
   purrr,
   rlang
 Suggests: 
-  knitr,
-  igraph,
-  shiny,
-  golem,
-  geojsonsf,
-  sf,
-  jsonlite
+    knitr,
+    igraph,
+    shiny,
+    golem,
+    geojsonsf,
+    sf,
+    jsonlite,
+    rmarkdown,
+    tintin
+VignetteBuilder: knitr

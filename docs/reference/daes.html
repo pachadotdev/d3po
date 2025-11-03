@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -84,11 +88,15 @@
 
 <h3>Arguments</h3>
 
-<table role="presentation"><tr><td><code id="x">x</code>, <code id="y">y</code>, <code id="...">...</code></td>
+<table role="presentation"><tr><td><code id="x">x</code></td>
 <td>
-List of name value pairs giving aesthetics to map to
-variables. The names for x and y aesthetics are typically omitted because
-they are so common; all other aspects must be named.
+x-axis mapping.
+</td></tr><tr><td><code id="y">y</code></td>
+<td>
+y-axis mapping.
+</td></tr><tr><td><code id="...">...</code></td>
+<td>
+Other aesthetic mappings. See the 'Aesthetics' section.
 </td></tr></table><h3>Value</h3>
 
 <p>Aesthetics for the plots such as axis (x,y), group, color and/or size
@@ -121,7 +129,13 @@ they are so common; all other aspects must be named.
 <li> <p><code>stack</code>: <code>TRUE</code> or <code>FALSE</code> to indicate if the geom should be stacked (for bar charts).
 </p>
 </li>
+<li> <p><code>tiling</code>: "squarify" (default), "dice", "slice", "slice-dice" (for treemaps).
+</p>
+</li>
 <li> <p><code>layout</code>: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
+</p>
+</li>
+<li> <p><code>gradient</code>: <code>TRUE</code> or <code>FALSE</code> to indicate if color should be treated as a gradient palette (for geomaps).
 </p>
 </li>
 <li> <p><code>sort</code>: ordering hint for discrete categories. Accepts one of

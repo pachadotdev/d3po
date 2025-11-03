@@ -24,18 +24,25 @@ Plot a donut
 }
 \examples{
 if (interactive()) {
-  dout <- aggregate(pokemon$name, by = list(
-    type = pokemon$type_1,
-    color = pokemon$color_1
-  ), FUN = length)
+  trade_by_continent <- d3po::trade[d3po::trade$year == 2023L, ]
+  trade_by_continent <- aggregate(
+    trade ~ reporter_continent,
+    data = d3po::trade,
+    FUN = sum
+  )
 
-  colnames(dout)[3] <- "count"
+  # Assign colors to continents
+  my_pal <- tintin::tintin_pal(option = "The Black Island")(7)
 
-  d3po(dout) \%>\%
-    po_donut(daes(
-      size = count, group = type, color = color,
-      innerRadius = 0.4, startAngle = 0, endAngle = 2 * pi
-    )) \%>\%
-    po_labels(title = "Share of Pokemon by main type")
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
+
+  d3po(trade_by_continent, width = 800, height = 600) \%>\%
+    po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) \%>\%
+    po_labels(title = "Trade Share by Reporter Continent in 2023")
 }
 }

@@ -61,9 +61,9 @@ Here is a video showcasing D3po:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6pIq2rJONFQ?si=Ai6NUk-BSyG0MTFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-Please check the vignettes and this comprehensive example Shiny app using Golem: <https://github.com/pachadotdev/d3po/tree/main/examples/d3podemo>.
+Please check the vignettes for detailed examples.
 
-I have a minimal Shiny app without Golem that I use to debug here: <https://github.com/pachadotdev/d3po/blob/main/examples/simple-shiny-app.R>.
+I have a minimal Shiny app without Golem that I use to debug here: <https://github.com/pachadotdev/d3po/blob/main/dev/simple-shiny-app.R>.
 
 Here is a simple example of a boxplot using the Pokemon dataset included in the package:
 

@@ -24,40 +24,39 @@ Plot a geomap using sf spatial objects
 }
 \examples{
 if (interactive()) {
- uk <- d3po::subnational
- uk <- uk[uk$country == "United Kingdom", ]
- uk$latitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 2]
- uk$longitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 1]
- uk <- uk[uk$latitude >= 49 & uk$latitude <= 61 & uk$longitude >= -8 & uk$longitude <= 2, ]
- uk$random <- sample(seq_len(nrow(uk)), size = nrow(uk), replace = TRUE)
+  world <- d3po::national
 
- # Example 1:
- d3po(uk, width = 800, height = 600) \%>\%
-  po_geomap(daes(group = region, size = random, tooltip = region)) \%>\%
-  po_labels(title = "Map of UK Regions with Random Values")
+  # Fix geometries that cross the antimeridian (date line) to avoid horizontal lines
+  # This affects Russia, Fiji, and other countries spanning the 180° meridian
+  world$geometry <- sf::st_wrap_dateline(world$geometry, options = c("WRAPDATELINE=YES"))
 
- # Example 2: With custom color column
- uk$my_pal <- sample(tintin::tintin_clrs()[1:3], nrow(uk), replace = TRUE)
+  total_trade <- d3po::trade[
+    d3po::trade$year == 2023L,
+    c("reporter", "reporter_continent", "trade")
+  ]
+  total_trade <- aggregate(trade ~ reporter, data = total_trade, FUN = sum)
+  colnames(total_trade) <- c("country", "trade")
 
- d3po(uk, width = 800, height = 600) \%>\%
-  po_geomap(daes(group = region, size = random, tooltip = region, color = my_pal)) \%>\%
-  po_labels(title = "UK Regions with Custom Colors")
+  world <- merge(
+    world,
+    total_trade,
+    by = "country",
+    all.x = TRUE,
+    all.y = FALSE
+  )
 
- # Example 3: With custom color vector
- my_color <- tintin::tintin_clrs()[1:3]
+  my_pal <- tintin::tintin_pal(option = "The Calculus Affair")(7)
 
- d3po(uk, width = 800, height = 600) \%>\%
-  po_geomap(daes(group = region, size = random, tooltip = region, color = my_color)) \%>\%
-  po_labels(title = "UK Regions with Custom Colors")
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
 
- # Example 4: Gradient coloring based on values
- d3po(uk, width = 800, height = 600) \%>\%
-  po_geomap(daes(group = region, size = random, tooltip = region, gradient = TRUE)) \%>\%
-  po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
+  # Add color column based on continent
+  world$color <- my_pal[world$continent]
 
- # Example 5: Gradient coloring based on values (custom palette)
- d3po(uk, width = 800, height = 600) \%>\%
-  po_geomap(daes(group = region, size = random, tooltip = region, color = my_color, gradient = TRUE)) \%>\%
-  po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
+  d3po(world, width = 800, height = 600) \%>\%
+    po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) \%>\%
+    po_labels(title = "Trade Volume by Country in 2023")
 }
 }

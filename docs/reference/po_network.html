@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -108,9 +112,66 @@ Whether to inherit aesthetics previous specified.
 <h3>Examples</h3>
 
 <pre><code class="language-R">if (interactive()) {
-  d3po(pokemon_network) %&gt;%
-    po_network(daes(size = size, color = color, layout = "kk")) %&gt;%
-    po_title("Pokemon Type Network")
+  trade_network &lt;- d3po::trade[d3po::trade$year == 2023L, ]
+  trade_network &lt;- aggregate(
+    trade ~
+      reporter_iso + partner_iso + reporter_continent + partner_continent,
+    data = trade_network, FUN = sum
+  )
+
+  # subset to 10 largest connection per reporter country
+  trade_network &lt;- do.call(
+    rbind,
+    lapply(
+      split(trade_network, trade_network$reporter_iso),
+      function(df) head(df[order(-df$trade), ], 10)
+    )
+  )
+
+  # Create vertex (node) attributes for coloring and sizing
+  # Get unique countries with their continents and trade volumes
+  vertices &lt;- unique(rbind(
+    data.frame(
+      name = trade_network$reporter_iso,
+      continent = trade_network$reporter_continent,
+      stringsAsFactors = FALSE
+    ),
+    data.frame(
+      name = trade_network$partner_iso,
+      continent = trade_network$partner_continent,
+      stringsAsFactors = FALSE
+    )
+  ))
+
+  # Remove duplicates
+  vertices &lt;- vertices[!duplicated(vertices$name), ]
+
+  # Calculate total trade volume per country (as reporter)
+  trade_volume &lt;- aggregate(trade ~ reporter_iso, data = trade_network, FUN = sum)
+  colnames(trade_volume) &lt;- c("name", "trade_volume")
+
+  # Merge trade volume with vertices
+  vertices &lt;- merge(vertices, trade_volume, by = "name", all.x = TRUE)
+  vertices$trade_volume[is.na(vertices$trade_volume)] &lt;- 0
+
+  # Assign colors to continents
+  my_pal &lt;- tintin::tintin_pal(option = "The Blue Lotus")(7)
+
+  names(my_pal) &lt;- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  # Add color column based on continent
+  vertices$color &lt;- my_pal[vertices$continent]
+
+  # Create igraph object with vertex attributes
+  g &lt;- graph_from_data_frame(trade_network, directed = TRUE, vertices = vertices)
+
+  # Create the network visualization
+  d3po(g, width = 800, height = 600) %&gt;%
+    po_network(daes(size = trade_volume, color = color, layout = "fr")) %&gt;%
+    po_labels(title = "Trade Network by Country in 2023")
 }
 
 </code></pre>

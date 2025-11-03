@@ -24,15 +24,21 @@ Plot a treemap
 }
 \examples{
 if (interactive()) {
-  dout <- aggregate(pokemon$name, by = list(
-    type = pokemon$type_1,
-    color = pokemon$color_1
-  ), FUN = length)
+  trade_by_continent <- d3po::trade[d3po::trade$year == 2023L, ]
+  trade_by_continent <- aggregate(trade ~ reporter_continent, data = trade_by_continent, FUN = sum)
 
-  colnames(dout)[3] <- "count"
+  my_pal <- tintin::tintin_pal(option = "The Secret of the Unicorn")(7)
 
-  d3po(dout) \%>\%
-    po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) \%>\%
-    po_labels(title = "Share of Pokemon by main type")
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  d3po(trade_by_continent, width = 800, height = 600) \%>\%
+    po_treemap(daes(
+      size = trade, group = reporter_continent,
+      color = my_pal, tiling = "Squarify"
+    )) \%>\%
+    po_labels(title = "Trade Share by Continent in 2023")
 }
 }

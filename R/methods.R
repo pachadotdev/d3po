@@ -1,7 +1,7 @@
 #' @title d3po
 #' @description Provides 'd3po' methods from R console
 #' @param data d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.
-#' @param elementId Dummy string parameter. Useful when you have two or more charts on the same page.
+#' @param element_id Dummy string parameter. Useful when you have two or more charts on the same page.
 #' @param width Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
@@ -9,10 +9,10 @@
 #' @param ... Aesthetics to pass, see [daes()]
 #' @export
 #' @return Creates a basic 'htmlwidget' object for simple visualization
-d3po <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) UseMethod("d3po")
+d3po <- function(data = NULL, ..., width = NULL, height = NULL, element_id = NULL) UseMethod("d3po")
 
 #' @export
-d3po.default <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) {
+d3po.default <- function(data = NULL, ..., width = NULL, height = NULL, element_id = NULL) {
   # Default widgets expose attribute tables under `data`.
   x <- list(data = data)
 
@@ -22,12 +22,12 @@ d3po.default <- function(data = NULL, ..., width = NULL, height = NULL, elementI
   attr(x, "TOJSON_ARGS") <- list(dataframe = "rows")
 
   # create widget
-  widget_this(x, width, height, elementId)
+  widget_this(x, width, height, element_id)
 }
 
 #' @method d3po igraph
 #' @export
-d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) {
+d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, element_id = NULL) {
   # extract data from igraph object
   graph_df <- igraph::as_data_frame(data, "both")
 
@@ -57,12 +57,12 @@ d3po.igraph <- function(data = NULL, ..., width = NULL, height = NULL, elementId
   attr(x, "TOJSON_ARGS") <- list(dataframe = "rows")
 
   # create widget
-  widget_this(x, width, height, elementId)
+  widget_this(x, width, height, element_id)
 }
 
 #' @method d3po sf
 #' @export
-d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, elementId = NULL) {
+d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, element_id = NULL) {
   if (is.null(data)) stop("d3po.sf requires an 'sf' object as data")
 
   if (!requireNamespace("sf", quietly = TRUE)) {
@@ -110,5 +110,5 @@ d3po.sf <- function(data = NULL, ..., width = NULL, height = NULL, elementId = N
   # serialise rowwise
   attr(x, "TOJSON_ARGS") <- list(dataframe = "rows")
 
-  widget_this(x, width, height, elementId)
+  widget_this(x, width, height, element_id)
 }

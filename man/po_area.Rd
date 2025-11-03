@@ -24,18 +24,29 @@ Plot an area chart.
 }
 \examples{
 if (interactive()) {
-  dout <- pokemon[pokemon$name \%in\% c(
-    "Squirtle", "Wartortle", "Blastoise",
-    "Charmander", "Charmeleon", "Charizard",
-    "Pikachu", "Raichu"
-  ), c("height", "weight", "type_1", "color_1")]
+  trade_by_continent <- d3po::trade
+  trade_by_continent <- aggregate(
+    trade ~ year + reporter_continent,
+    data = trade_by_continent,
+    FUN = sum
+  )
 
-  colnames(dout) <- c("height", "weight", "type", "color")
+  # Assign colors to continents
+  my_pal <- tintin::tintin_pal(option = "Cigars of the Pharaoh")(7)
 
-  d3po(dout) \%>\%
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  d3po(trade_by_continent, width = 800, height = 600) \%>\%
     po_area(daes(
-      x = height, y = weight, group = type, color = color
+      x = year, y = trade, group = reporter_continent, color = my_pal
     )) \%>\%
-    po_labels(title = "Pokemon Evolution: Weight vs Height by Type")
+    po_labels(
+      x = "Year",
+      y = "Trade (USD billion)",
+      title = "Trade Distribution by Reporter Continent in 2019 and 2023"
+    )
 }
 }

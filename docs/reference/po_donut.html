@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -106,19 +110,26 @@ Whether to inherit aesthetics previous specified.
 <h3>Examples</h3>
 
 <pre><code class="language-R">if (interactive()) {
-  dout &lt;- aggregate(pokemon$name, by = list(
-    type = pokemon$type_1,
-    color = pokemon$color_1
-  ), FUN = length)
+  trade_by_continent &lt;- d3po::trade[d3po::trade$year == 2023L, ]
+  trade_by_continent &lt;- aggregate(
+    trade ~ reporter_continent,
+    data = d3po::trade,
+    FUN = sum
+  )
 
-  colnames(dout)[3] &lt;- "count"
+  # Assign colors to continents
+  my_pal &lt;- tintin::tintin_pal(option = "The Black Island")(7)
 
-  d3po(dout) %&gt;%
-    po_donut(daes(
-      size = count, group = type, color = color,
-      innerRadius = 0.4, startAngle = 0, endAngle = 2 * pi
-    )) %&gt;%
-    po_title("Share of Pokemon by main type")
+  names(my_pal) &lt;- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  trade_by_continent$color &lt;- my_pal[trade_by_continent$reporter_continent]
+
+  d3po(trade_by_continent, width = 800, height = 600) %&gt;%
+    po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) %&gt;%
+    po_labels(title = "Trade Share by Reporter Continent in 2023")
 }
 </code></pre>
 

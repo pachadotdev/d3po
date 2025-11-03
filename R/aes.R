@@ -232,6 +232,10 @@ daes_to_opts <- function(daes, var) {
       {
         result <- rlang::eval_tidy(daes[[var]])
         if (is.atomic(result)) {
+          # Convert named vectors to named lists to avoid jsonlite warning
+          if (!is.null(names(result))) {
+            return(as.list(result))
+          }
           return(result)
         }
         return(label)
@@ -249,6 +253,10 @@ daes_to_opts <- function(daes, var) {
     {
       result <- eval(parse(text = label))
       if (is.atomic(result)) {
+        # Convert named vectors to named lists to avoid jsonlite warning
+        if (!is.null(names(result))) {
+          return(as.list(result))
+        }
         return(result)
       }
       return(label)

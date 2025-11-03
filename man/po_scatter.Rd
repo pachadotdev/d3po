@@ -24,40 +24,28 @@ Plot an scatter chart.
 }
 \examples{
 if (interactive()) {
-  # Unweighted scatter plot
-  d3po(pokemon) \%>\%
-    po_scatter(daes(
-      x = height, y = weight, group = name, color = color_1
-    )) \%>\%
-    po_labels(title = "Height vs Weight")
+  # Create a wide dataset with x = 2019 and y = 2023 trade values
+  trade_wide_2019 <- d3po::trade[d3po::trade$year == 2019L, c("reporter", "trade")]
+  trade_wide_2019 <- aggregate(trade ~ reporter, data = trade_wide_2019, FUN = sum)
 
-  # Log-transformed scatter plot
-  pokemon$log_height <- log10(pokemon$height)
-  pokemon$log_weight <- log10(pokemon$weight)
+  trade_wide_2023 <- d3po::trade[d3po::trade$year == 2023L, c("reporter", "trade")]
+  trade_wide_2023 <- aggregate(trade ~ reporter, data = trade_wide_2023, FUN = sum)
 
-  d3po(pokemon) \%>\%
-    po_scatter(daes(
-      x = log_height, y = log_weight, group = name, color = color_1
-    )) \%>\%
-    po_labels(title = "Log(Height) vs Log(Weight)")
+  trade_wide <- merge(
+    trade_wide_2019,
+    trade_wide_2023,
+    by = "reporter",
+    suffixes = c("_2019", "_2023")
+  )
 
-  # Weighted scatterplot by inverse distance from mean
-  mean_weight <- mean(pokemon$weight, na.rm = TRUE)
-  mean_height <- mean(pokemon$height, na.rm = TRUE)
+  my_pal <- tintin::tintin_pal(option = "red_rackhams_treasure")(7)
 
-  pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
-  pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
-
-  pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
-    pokemon$distance_from_mean_height) / 2
-
-  pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
-
-  d3po(pokemon) \%>\%
-    po_scatter(daes(
-      x = height, y = weight, size = inverse_distance_from_mean,
-      group = name, color = color_1
-    )) \%>\%
-    po_labels(title = "Height vs Weight (Size = 1 / Distance from the Mean)")
+  d3po(trade_wide, width = 800, height = 600) \%>\%
+    po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) \%>\%
+    po_labels(
+      x = "Trade in 2019 (USD billion)",
+      y = "Trade in 2023 (USD billion)",
+      title = "Trade Volume by Country in 2019 and 2023"
+    )
 }
 }

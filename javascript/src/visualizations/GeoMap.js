@@ -7,6 +7,7 @@ import {
   getHighlightColor,
   escapeHtml,
 } from '../utils.js';
+import { createColorScale } from '../colors.js';
 
 /**
  * Geographic map visualization
@@ -67,6 +68,22 @@ export default class GeoMap extends D3po {
     const rawPath = d3.geoPath().projection(null);
     const bounds = rawPath.bounds(featureCollection);
 
+    // Reserve space for legend if gradient mode will be used
+    // We need to check this early to adjust the map positioning
+    const willShowLegend =
+      (this.options.gradient ||
+        (this.options.discrete_palette &&
+          Array.isArray(this.options.discrete_palette) &&
+          this.options.discrete_palette.length > 0)) &&
+      this.sizeField &&
+      this.data;
+
+    // Allocate significant space for legend "column" - about 15% of width or minimum 100px
+    const legendColumnWidth = willShowLegend ? Math.max(100, width * 0.15) : 0;
+
+    // Adjust available width for map to leave space for legend column
+    const mapWidth = width - legendColumnWidth;
+
     // Calculate scale and translate to fit in available space
     const dx = bounds[1][0] - bounds[0][0];
     const dy = bounds[1][1] - bounds[0][1];
@@ -76,11 +93,12 @@ export default class GeoMap extends D3po {
     // Use a factor to make the map more elongated vertically (taller)
     // This allows the map to stretch more vertically relative to horizontally
     const verticalFactor = 0.85; // Adjust this value: lower = more elongated vertically
-    const scale = 1.0 / Math.max((dx / width) * verticalFactor, dy / height);
+    const scale = 1.0 / Math.max((dx / mapWidth) * verticalFactor, dy / height);
 
     // When reflecting Y, we need to adjust the Y translation
+    // Center the map in the available space (left of legend)
     const translate = [
-      width / 2 - scale * x,
+      mapWidth / 2 - scale * x,
       height / 2 + scale * y, // Changed from minus to plus for reflectY
     ];
 
@@ -107,6 +125,28 @@ export default class GeoMap extends D3po {
     // Set up color scale
     let colorScale;
     let useDiscreteGradient = false;
+    let isNamedVector = false;
+
+    // Helper to check if colorField is a named vector (object with string keys/color values)
+    const checkIsNamedVector = input => {
+      if (!input || typeof input !== 'object' || Array.isArray(input))
+        return false;
+      const keys = Object.keys(input);
+      return keys.length > 0 && keys.every(k => typeof input[k] === 'string');
+    };
+
+    // Check if colorField is a named vector for continent-based coloring
+    if (checkIsNamedVector(this.colorField)) {
+      isNamedVector = true;
+      // Use createColorScale to handle named vector mapping
+      // Pass the feature properties data so it can find continent field
+      const mockData = features.map(f => f.properties).filter(p => p);
+      colorScale = createColorScale(
+        mockData,
+        this.colorField,
+        d3.scaleOrdinal(d3.schemeCategory10)
+      );
+    }
 
     // Check if a discrete palette is provided
     const hasDiscretePalette =
@@ -209,7 +249,11 @@ export default class GeoMap extends D3po {
         const dataRow = dataMap.get(String(identifier));
 
         if (colorScale) {
-          if (useDiscreteGradient && this.sizeField && dataRow) {
+          if (isNamedVector) {
+            // Named vector: pass the feature properties directly to colorScale
+            // which will look up the continent field
+            return colorScale(d.properties);
+          } else if (useDiscreteGradient && this.sizeField && dataRow) {
             // Discrete gradient: color by size value using quantile-based palette
             return colorScale(dataRow[this.sizeField]);
           } else if (this.options.gradient && this.sizeField && dataRow) {

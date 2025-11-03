@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -72,13 +76,13 @@
 
 <h3>Description</h3>
 
-<p>Plot a geomap
+<p>Plot a geomap using sf spatial objects
 </p>
 
 
 <h3>Usage</h3>
 
-<pre><code class="language-R">po_geomap(d3po, ..., data = NULL, map = NULL, inherit_daes = TRUE)
+<pre><code class="language-R">po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE)
 </code></pre>
 
 
@@ -94,9 +98,6 @@ Aesthetics, see <code>daes()</code>.
 <td>
 Any dataset to use for plot, overrides data passed
 to <code>d3po()</code>.
-</td></tr><tr><td><code id="map">map</code></td>
-<td>
-map to use (i.e., any valid list or topojson file such as <code>maps$south_america$chile</code> or <code>jsonlite::fromJSON("chile.topojson", simplifyVector = F)</code>)
 </td></tr><tr><td><code id="inherit_daes">inherit_daes</code></td>
 <td>
 Whether to inherit aesthetics previous specified.
@@ -109,22 +110,40 @@ Whether to inherit aesthetics previous specified.
 <h3>Examples</h3>
 
 <pre><code class="language-R">if (interactive()) {
-  # Get region IDs and names from the Chile map
-  dout &lt;- map_ids(d3po::maps$south_america$chile)
+  world &lt;- d3po::national
 
-  # Only Magallanes has Pokemon (Mewtwo lives there!)
-  dout$pokemon_count &lt;- ifelse(dout$id == "MA", 1L, 0L)
-  dout$color &lt;- ifelse(dout$id == "MA", "#F85888", "#e0e0e0")
+  # Fix geometries that cross the antimeridian (date line) to avoid horizontal lines
+  # This affects Russia, Fiji, and other countries spanning the 180° meridian
+  world$geometry &lt;- sf::st_wrap_dateline(world$geometry, options = c("WRAPDATELINE=YES"))
 
-  d3po(dout) %&gt;%
-    po_geomap(
-      daes(
-        group = id, color = color, size = pokemon_count,
-        tooltip = name
-      ),
-      map = d3po::maps$south_america$chile
-    ) %&gt;%
-    po_title("Pokemon Distribution in Chile")
+  total_trade &lt;- d3po::trade[
+    d3po::trade$year == 2023L,
+    c("reporter", "reporter_continent", "trade")
+  ]
+  total_trade &lt;- aggregate(trade ~ reporter, data = total_trade, FUN = sum)
+  colnames(total_trade) &lt;- c("country", "trade")
+
+  world &lt;- merge(
+    world,
+    total_trade,
+    by = "country",
+    all.x = TRUE,
+    all.y = FALSE
+  )
+
+  my_pal &lt;- tintin::tintin_pal(option = "The Calculus Affair")(7)
+
+  names(my_pal) &lt;- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  # Add color column based on continent
+  world$color &lt;- my_pal[world$continent]
+
+  d3po(world, width = 800, height = 600) %&gt;%
+    po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) %&gt;%
+    po_labels(title = "Trade Volume by Country in 2023")
 }
 </code></pre>
 

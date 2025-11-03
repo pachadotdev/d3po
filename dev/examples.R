@@ -29,8 +29,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Continent",
     y = "Trade (USD billion)",
-    title = "Total Trade by Reporter Continent in 2023 (Vertical Bars)"
-)
+    title = "Total Trade by Reporter Continent in 2023"
+  )
 
 # Bar 2: Trade by Continent with Color Column (Horizontal Bars)
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
@@ -40,20 +40,20 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Trade (USD billion)",
     y = "Continent",
-    title = "Total Trade by Reporter Continent in 2023 (Horizontal Bars)"
- )
+    title = "Total Trade by Reporter Continent in 2023"
+  )
 
 # Bar 3: Trade by Reporter and Partner Continent (Stacked Bars)
 trade_stacked <- d3po::trade
 trade_stacked <- aggregate(trade ~ reporter_continent + partner_continent, data = trade_stacked, FUN = sum)
 
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Africa" , my_pal["Africa"], NA)
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Antarctica" , my_pal["Antarctica"], trade_stacked$color)
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Asia" , my_pal["Asia"], trade_stacked$color)
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Europe" , my_pal["Europe"], trade_stacked$color)
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "North America" , my_pal["North America"], trade_stacked$color)
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Oceania" , my_pal["Oceania"], trade_stacked$color)
-trade_stacked$color <- ifelse(trade_stacked$partner_continent == "South America" , my_pal["South America"], trade_stacked$color)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Africa", my_pal["Africa"], NA)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Antarctica", my_pal["Antarctica"], trade_stacked$color)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Asia", my_pal["Asia"], trade_stacked$color)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Europe", my_pal["Europe"], trade_stacked$color)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "North America", my_pal["North America"], trade_stacked$color)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Oceania", my_pal["Oceania"], trade_stacked$color)
+trade_stacked$color <- ifelse(trade_stacked$partner_continent == "South America", my_pal["South America"], trade_stacked$color)
 
 d3po(trade_stacked, width = 800, height = 600) %>%
   po_bar(daes(
@@ -63,7 +63,7 @@ d3po(trade_stacked, width = 800, height = 600) %>%
   po_labels(
     x = "Reporter Continent",
     y = "Trade (USD billion)",
-    title = "Trade Distribution by Reporter and Partner Continent in 2023 (Stacked)"
+    title = "Trade Distribution by Reporter and Partner Continent in 2023"
   )
 
 # Bar 4: Bar 1 with Customised Theme
@@ -73,7 +73,7 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Reporter Continent",
     y = "Trade (USD billion)",
-    title = "Total Trade by Reporter Continent in 2023 (Vertical Bars)"
+    title = "Total Trade by Reporter Continent in 2023"
   ) %>%
   po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
   po_font("Liberation Serif", 12, "uppercase") %>%
@@ -99,20 +99,20 @@ names(my_pal) <- c(
 
 d3po(trade_by_continent, width = 800, height = 600) %>%
   po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) %>%
-  po_labels(title = "Trade Share by Reporter Continent in 2023 (Pie)")
+  po_labels(title = "Trade Share by Reporter Continent in 2023")
 
 # Donut 1: Donut Chart with Color Column
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
 d3po(trade_by_continent, width = 800, height = 600) %>%
   po_donut(daes(size = trade, group = reporter_continent, innerRadius = 0.3, color = color)) %>%
-  po_labels(title = "Trade Share by Reporter Continent in 2023 (Donut)")
+  po_labels(title = "Trade Share by Reporter Continent in 2023")
 
 # Pie 2: Pie 1 with Customised Theme
 
 d3po(trade_by_continent, width = 800, height = 600) %>%
   po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) %>%
-  po_labels(title = "Trade Share by Reporter Continent in 2023 (Pie)") %>%
+  po_labels(title = "Trade Share by Reporter Continent in 2023") %>%
   po_theme(tooltip = "#101418", background = "#cccccc") %>%
   po_font("Liberation Serif", 12, "uppercase") %>%
   po_download(FALSE)
@@ -142,8 +142,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
-    title = "Trade Distribution by Reporter Continent in 2019 and 2023 (Area)"
-)
+    title = "Trade Distribution by Reporter Continent in 2019 and 2023"
+  )
 
 # Area 2: Trade by Continent and Year with Color Column
 
@@ -156,8 +156,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
-    title = "Trade Distribution by Reporter Continent in 2019 and 2023 (Area)"
-)
+    title = "Trade Distribution by Reporter Continent in 2019 and 2023"
+  )
 
 # Area 3: Trade Proportions by Continent and Year with Color Vector (Stacked)
 
@@ -174,8 +174,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Year",
     y = "Proportion of Trade",
-    title = "Trade Proportions by Reporter Continent in 2019 and 2023 (Stacked Area)"
-)
+    title = "Trade Proportions by Reporter Continent in 2019 and 2023"
+  )
 
 # Area 4: Trade Proportions by Continent and Year with Color Column (Stacked)
 
@@ -186,8 +186,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Year",
     y = "Proportion of Trade",
-    title = "Trade Proportions by Reporter Continent in 2019 and 2023 (Stacked Area)"
-)
+    title = "Trade Proportions by Reporter Continent in 2019 and 2023"
+  )
 
 # Area 5: Area 1 with Customised Theme
 
@@ -198,7 +198,7 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
-    title = "Trade Distribution by Reporter Continent in 2019 and 2023 (Area)"
+    title = "Trade Distribution by Reporter Continent in 2019 and 2023"
   ) %>%
   po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
   po_font("Liberation Serif", 12, "uppercase") %>%
@@ -231,7 +231,7 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
     x = "Year",
     y = "Trade (USD billion)",
     title = "Trade Distribution by Reporter Continent in 2019 and 2023"
-)
+  )
 
 # Line 2: Trade by Continent and Year with Color Column
 
@@ -243,7 +243,7 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
     x = "Year",
     y = "Trade (USD billion)",
     title = "Trade Distribution by Reporter Continent in 2019 and 2023"
-)
+  )
 
 # Line 3: Line 1 with Customised Theme
 
@@ -310,7 +310,7 @@ d3po(trade_wide, width = 800, height = 600) %>%
   po_labels(
     x = "Trade in 2019 (USD billion)",
     y = "Trade in 2023 (USD billion)",
-    title = "Trade Volume by Country in 2019 and 2023 (Weighted Scatter)"
+    title = "Trade Volume by Country in 2019 and 2023"
   )
 
 # Scatter 4: Scatter 1 with Customised Theme
@@ -349,7 +349,7 @@ d3po(trade_continent, width = 800, height = 600) %>%
     x = "Continent",
     y = "Trade (USD billion)",
     title = "Trade Distribution by Reporter Continent"
-)
+  )
 
 # Box 2: Trade Distribution by Continent with Color Column (Horizontal)
 trade_continent$color <- my_pal[trade_continent$reporter_continent]
@@ -390,14 +390,14 @@ names(my_pal) <- c(
 
 d3po(trade_by_continent, width = 800, height = 600) %>%
   po_treemap(daes(size = trade, group = reporter_continent, color = my_pal, tiling = "Squarify")) %>%
-  po_labels(title = "Trade Share by Continent in 2023 (Squarify Treemap)")
+  po_labels(title = "Trade Share by Continent in 2023")
 
 # Treemap 2: Trade by Continent with Color Column (Single Level, Slice-Dice)
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
 d3po(trade_by_continent, width = 800, height = 600) %>%
   po_treemap(daes(size = trade, group = reporter_continent, color = color, tiling = "slice-dice")) %>%
-  po_labels(title = "Trade Share by Continent (Slice-Dice Treemap)")
+  po_labels(title = "Trade Share by Continent in 2023")
 
 # Treemap 3: Two-Level (Continent and Top Countries)
 trade_twolevel <- d3po::trade[d3po::trade$year == 2023L, ]
@@ -409,7 +409,7 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
     size = trade, group = reporter_continent, subgroup = reporter,
     color = color, tiling = "squarify"
   )) %>%
-  po_labels(title = "Trade Share by Continent in 2023 (Two Levels, click to drill)")
+  po_labels(title = "Trade Share by Continent in 2023 (click to see the countries)")
 
 # Treemap 4: Treemap 3 with Customised Theme and Tooltip
 
@@ -424,18 +424,18 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
   po_labels(
     align = "center-middle",
     labels = JS(
-        "function(percentage, row) {
+      "function(percentage, row) {
           var pct = (percentage).toFixed(2) + '%';
           // Show reporter (country) if available, otherwise show reporter_continent
           var name = (row && row.reporter) ? row.reporter : (row && row.reporter_continent ? row.reporter_continent : '');
           var count = row && (row.trade != null ? row.trade : (row.value != null ? row.value : ''));
           count = (count).toFixed(2) + 'B';
-          return '<i>' + name + '</i><br/>Trade: ' + (count || '') + '<br/>Percentage: ' + pct;\n      
+          return '<i>' + name + '</i><br/>Trade: ' + (count || '') + '<br/>Percentage: ' + pct;\n
         }"
     ),
-    title = "Trade Share by Continent in 2023 (Two Levels, click to drill)",
+    title = "Trade Share by Continent in 2023 (click to see the countries)",
     subtitle = JS(
-        "function(_v, row) {
+      "function(_v, row) {
           // row.mode is 'aggregated' | 'flat' | 'drilled'
           if (row && row.mode === 'drilled') return 'Displaying Countries';
           return 'Displaying Continents';\
@@ -443,7 +443,7 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
     )
   ) %>%
   po_tooltip(JS(
-      "function(percentage, row) {
+    "function(percentage, row) {
         var pct = (percentage).toFixed(2) + '%';
 
         var count = row && row.count != null ? row.count : '';
@@ -457,7 +457,7 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
         return '<i>Continent: ' + (row.reporter_continent || '') + '<br/>Country: ' + (row.reporter || '') +
         '</i><br/>Trade: ' + count + '<br/>Percentage: ' + pct;
       }"
-    ))
+  ))
 
 # GEOMAP ----
 

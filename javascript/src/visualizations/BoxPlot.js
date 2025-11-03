@@ -387,17 +387,67 @@ export default class BoxPlot extends D3po {
         const avgSpace = Math.max(10, effectiveInnerWidth / xTicks.length);
         if (maxTickWidth > avgSpace * 0.9) rotateX = true;
       }
-      if (rotateX)
+      if (rotateX) {
         xg.selectAll('text')
           .attr('transform', 'rotate(-45)')
           .style('text-anchor', 'end');
-      const xLabelPadding = Math.max(8, maxTickHeight + 8);
+
+        // When labels are rotated, we need more bottom margin
+        // Calculate required space: rotated label extent + gap + axis label + safety
+        const effectiveTickExtent = Math.max(25, maxTickWidth * 0.85);
+        const requiredBottom = effectiveTickExtent + 10 + 20 + 14 + 10; // extent + gap + basePadding + labelSize + safety
+        const currentBottom =
+          (this.options && this.options.margin && this.options.margin.bottom) ||
+          80;
+
+        if (requiredBottom > currentBottom) {
+          // Increase bottom margin and recalculate layout
+          this.options.margin.bottom = requiredBottom;
+          effectiveInnerHeight = this.getInnerHeight();
+
+          // Update scales with new inner height
+          if (categoryScale && categoryScale.range) {
+            if (isHorizontal) {
+              categoryScale.range([0, effectiveInnerHeight]);
+            } else {
+              // categoryScale is on x-axis, so it doesn't change
+            }
+          }
+          if (valueScale && valueScale.range) {
+            if (isHorizontal) {
+              valueScale.range([0, effectiveInnerWidth]);
+            } else {
+              valueScale.range([effectiveInnerHeight, 0]);
+            }
+          }
+
+          // Reposition x-axis
+          xg.attr('transform', `translate(0,${effectiveInnerHeight})`);
+        }
+      }
+
+      // For rotated labels, we need to account for the full diagonal extent of the rotated text
+      // For non-rotated labels, just use the height
+      const effectiveTickExtent = rotateX
+        ? Math.max(25, maxTickWidth * 0.85) // Use most of the width since labels are rotated
+        : Math.max(8, maxTickHeight);
+
+      // Calculate label position with proper spacing
+      const tickToLabelGap = 10; // Gap between tick labels and axis label
+      const baseTickLabelPadding = rotateX ? 20 : 16; // Base padding for tick labels
+
+      const xLabelY =
+        effectiveInnerHeight +
+        effectiveTickExtent +
+        tickToLabelGap +
+        baseTickLabelPadding;
+
       this.chart
         .append('text')
         .attr('class', 'x-axis-label')
         .attr('text-anchor', 'middle')
         .attr('x', effectiveInnerWidth / 2)
-        .attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24))
+        .attr('y', xLabelY)
         .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
         .style('text-transform', this.options.textTransform || 'none')
@@ -432,28 +482,18 @@ export default class BoxPlot extends D3po {
         yTicks && yTicks.length
           ? d3.max(yTicks, n => n.getBBox().width)
           : measuredMaxTickWidth;
-      const labelGap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
-      const measuredLabelH = measuredLabelBBoxHeight || 14;
-      const labelBaseline = Math.max(
-        yMaxTickWidth + labelGap,
-        measuredLabelH + labelGap
-      );
-      const adaptivePadding = Math.min(
-        36,
-        Math.max(4, Math.round(yMaxTickWidth * 0.08))
-      );
-      let labelOffset = labelBaseline + adaptivePadding + 10;
-      const measuredRequiredLeft =
-        yMaxTickWidth > 0
-          ? Math.ceil(yMaxTickWidth + labelGap + measuredLabelH + 8)
-          : null;
-      const marginLeft =
-        (this.options && this.options.margin && this.options.margin.left) || 60;
-      let maxAllowed = marginLeft - 4;
-      if (measuredRequiredLeft != null)
-        maxAllowed = Math.max(10, Math.min(maxAllowed, measuredRequiredLeft));
-      else maxAllowed = Math.max(10, maxAllowed);
-      if (labelOffset > maxAllowed) labelOffset = maxAllowed;
+      // Gap between tick labels and axis label
+      const gap = 8;
+      // Position label with gap + room for the label itself (since it's rotated, add ~10px for label height)
+      let labelOffset = yMaxTickWidth + gap + 10;
+
+      // Ensure label offset doesn't exceed safe threshold (leave 5px margin from edge)
+      const maxSafeOffset =
+        this.options.margin && this.options.margin.left
+          ? this.options.margin.left - 5
+          : 55;
+      labelOffset = Math.min(labelOffset, maxSafeOffset);
+
       // Append rotated y label to the left axis group so it sits next to ticks and moves with the axis
       yg.append('text')
         .attr('class', 'y-axis-label')

@@ -26,9 +26,66 @@ Node size can represent counts or other metrics.
 }
 \examples{
 if (interactive()) {
-  d3po(pokemon_network) \%>\%
-    po_network(daes(size = size, color = color, layout = "kk")) \%>\%
-    po_labels(title = "Pokemon Type Network")
+  trade_network <- d3po::trade[d3po::trade$year == 2023L, ]
+  trade_network <- aggregate(
+    trade ~
+      reporter_iso + partner_iso + reporter_continent + partner_continent,
+    data = trade_network, FUN = sum
+  )
+
+  # subset to 10 largest connection per reporter country
+  trade_network <- do.call(
+    rbind,
+    lapply(
+      split(trade_network, trade_network$reporter_iso),
+      function(df) head(df[order(-df$trade), ], 10)
+    )
+  )
+
+  # Create vertex (node) attributes for coloring and sizing
+  # Get unique countries with their continents and trade volumes
+  vertices <- unique(rbind(
+    data.frame(
+      name = trade_network$reporter_iso,
+      continent = trade_network$reporter_continent,
+      stringsAsFactors = FALSE
+    ),
+    data.frame(
+      name = trade_network$partner_iso,
+      continent = trade_network$partner_continent,
+      stringsAsFactors = FALSE
+    )
+  ))
+
+  # Remove duplicates
+  vertices <- vertices[!duplicated(vertices$name), ]
+
+  # Calculate total trade volume per country (as reporter)
+  trade_volume <- aggregate(trade ~ reporter_iso, data = trade_network, FUN = sum)
+  colnames(trade_volume) <- c("name", "trade_volume")
+
+  # Merge trade volume with vertices
+  vertices <- merge(vertices, trade_volume, by = "name", all.x = TRUE)
+  vertices$trade_volume[is.na(vertices$trade_volume)] <- 0
+
+  # Assign colors to continents
+  my_pal <- tintin::tintin_pal(option = "The Blue Lotus")(7)
+
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  # Add color column based on continent
+  vertices$color <- my_pal[vertices$continent]
+
+  # Create igraph object with vertex attributes
+  g <- graph_from_data_frame(trade_network, directed = TRUE, vertices = vertices)
+
+  # Create the network visualization
+  d3po(g, width = 800, height = 600) \%>\%
+    po_network(daes(size = trade_volume, color = color, layout = "fr")) \%>\%
+    po_labels(title = "Trade Network by Country in 2023")
 }
 
 }

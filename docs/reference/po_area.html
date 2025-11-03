@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -106,19 +110,30 @@ Whether to inherit aesthetics previous specified.
 <h3>Examples</h3>
 
 <pre><code class="language-R">if (interactive()) {
-  dout &lt;- pokemon[pokemon$name %in% c(
-    "Squirtle", "Wartortle", "Blastoise",
-    "Charmander", "Charmeleon", "Charizard",
-    "Pikachu", "Raichu"
-  ), c("height", "weight", "type_1", "color_1")]
+  trade_by_continent &lt;- d3po::trade
+  trade_by_continent &lt;- aggregate(
+    trade ~ year + reporter_continent,
+    data = trade_by_continent,
+    FUN = sum
+  )
 
-  colnames(dout) &lt;- c("height", "weight", "type", "color")
+  # Assign colors to continents
+  my_pal &lt;- tintin::tintin_pal(option = "Cigars of the Pharaoh")(7)
 
-  d3po(dout) %&gt;%
+  names(my_pal) &lt;- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  d3po(trade_by_continent, width = 800, height = 600) %&gt;%
     po_area(daes(
-      x = height, y = weight, group = type, color = color
+      x = year, y = trade, group = reporter_continent, color = my_pal
     )) %&gt;%
-    po_title("Pokemon Evolution: Weight vs Height by Type")
+    po_labels(
+      x = "Year",
+      y = "Trade (USD billion)",
+      title = "Trade Distribution by Reporter Continent in 2019 and 2023"
+    )
 }
 </code></pre>
 

@@ -47,8 +47,8 @@
     <a href="reference/po_format.html">po_format</a>
     <a href="reference/po_labels.html">po_labels</a>
     <a href="reference/po_font.html">po_font</a>
-    <a href="reference/po_background.html">po_background</a>
     <a href="reference/po_theme.html">po_theme</a>
+    <a href="reference/po_background.html">po_background</a>
     <a href="reference/po_download.html">po_download</a>
     <a href="reference/po_network.html">po_network</a>
     <a href="reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -74,8 +78,8 @@
 <h1>D3po</h1>
 <!-- badges: start -->
 <p><a href="https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/pachadotdev/d3po/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a>
-<a href="https://buymeacoffee.com/pacha"><img src="https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-blue.svg" alt="BuyMeACoffee"></a></p>
-<!-- badges: end -->
+<a href="https://buymeacoffee.com/pacha"><img src="https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-blue.svg" alt="BuyMeACoffee"></a>
+<!-- badges: end --></p>
 <div id="about" class="section level2">
 <h2>About</h2>
 <p>D3po’s goal is to provide out-of-the-box beautiful visualizations with minimum time and coding effort from the final
@@ -118,8 +122,14 @@ imposing a commercial license for NGOs and government use.</p>
 <p>Here is a video showcasing D3po:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6pIq2rJONFQ?si=Ai6NUk-BSyG0MTFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
 </iframe>
-<p>Please check the vignettes and this comprehensive example Shiny app using Golem: <a href="https://github.com/pachadotdev/d3po/tree/main/d3podemo" class="uri">https://github.com/pachadotdev/d3po/tree/main/d3podemo</a>.</p>
-<p>I have a minimal Shiny app without Golem that I use to debug here: <a href="https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R" class="uri">https://github.com/pachadotdev/d3po/blob/main/debug-with-shiny.R</a>.</p>
+<p>Please check the vignettes for detailed examples.</p>
+<p>I have a minimal Shiny app without Golem that I use to debug here: <a href="https://github.com/pachadotdev/d3po/blob/main/dev/simple-shiny-app.R" class="uri">https://github.com/pachadotdev/d3po/blob/main/dev/simple-shiny-app.R</a>.</p>
+<p>Here is a simple example of a boxplot using the Pokemon dataset included in the package:</p>
+<pre class="r"><code>library(d3po)
+
+d3po(pokemon, width = 800, height = 600) %&gt;%
+  po_box(daes(x = type_1, y = weight, color = color_1)) %&gt;%
+  po_labels(title = "Weight Distribution by Type")</code></pre>
 </div>
 <div id="frequently-asked-questions-faqs" class="section level2">
 <h2>Frequently Asked Questions (FAQs)</h2>

@@ -16,7 +16,7 @@
 #' @inheritParams d3po
 #' @noRd
 #' @keywords internal
-widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
+widget_this <- function(x, width = NULL, height = NULL, element_id = NULL) {
   htmlwidgets::createWidget(
     name = "d3po",
     x,
@@ -29,7 +29,7 @@ widget_this <- function(x, width = NULL, height = NULL, elementId = NULL) {
       defaultWidth = "100%",
       defaultHeight = 400L
     ),
-    elementId = elementId
+    elementId = element_id
   )
 }
 

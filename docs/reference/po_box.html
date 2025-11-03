@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -106,21 +110,30 @@ Whether to inherit aesthetics previous specified.
 <h3>Examples</h3>
 
 <pre><code class="language-R">if (interactive()) {
-  # Vertical box plot
-  d3po(pokemon) %&gt;%
-    po_box(daes(x = type_1, y = weight, color = color_1)) %&gt;%
-    po_title("Weight Distribution by Type")
+  trade_continent &lt;- d3po::trade
+  trade_continent &lt;- aggregate(
+    trade ~ reporter_continent + reporter,
+    data = trade_continent,
+    FUN = sum
+  )
 
-  # Horizontal box plot
-  d3po(pokemon) %&gt;%
-    po_box(daes(x = height, y = type_1, color = color_1)) %&gt;%
-    po_title("Height Distribution by Type")
+  my_pal &lt;- tintin::tintin_pal(option = "Destination Moon")(7)
 
-  # Log-transformed distribution
-  pokemon$log_weight &lt;- log10(pokemon$weight)
-  d3po(pokemon) %&gt;%
-    po_box(daes(x = type_1, y = log_weight, color = color_1)) %&gt;%
-    po_title("Log(Weight) Distribution by Type")
+  names(my_pal) &lt;- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  d3po(trade_continent, width = 800, height = 600) %&gt;%
+    po_box(daes(
+      x = reporter_continent, y = trade, color = my_pal,
+      tooltip = reporter_continent
+    )) %&gt;%
+    po_labels(
+      x = "Continent",
+      y = "Trade (USD billion)",
+      title = "Trade Distribution by Reporter Continent"
+    )
 }
 </code></pre>
 

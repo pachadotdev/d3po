@@ -12,21 +12,30 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'   # Vertical box plot
-#'   d3po(pokemon) %>%
-#'     po_box(daes(x = type_1, y = weight, color = color_1)) %>%
-#'     po_labels(title = "Weight Distribution by Type")
+#'   trade_continent <- d3po::trade
+#'   trade_continent <- aggregate(
+#'     trade ~ reporter_continent + reporter,
+#'     data = trade_continent,
+#'     FUN = sum
+#'   )
 #'
-#'   # Horizontal box plot
-#'   d3po(pokemon) %>%
-#'     po_box(daes(x = height, y = type_1, color = color_1)) %>%
-#'     po_labels(title = "Height Distribution by Type")
+#'   my_pal <- tintin::tintin_pal(option = "Destination Moon")(7)
 #'
-#'   # Log-transformed distribution
-#'   pokemon$log_weight <- log10(pokemon$weight)
-#'   d3po(pokemon) %>%
-#'     po_box(daes(x = type_1, y = log_weight, color = color_1)) %>%
-#'     po_labels(title = "Log(Weight) Distribution by Type")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   d3po(trade_continent, width = 800, height = 600) %>%
+#'     po_box(daes(
+#'       x = reporter_continent, y = trade, color = my_pal,
+#'       tooltip = reporter_continent
+#'     )) %>%
+#'     po_labels(
+#'       x = "Continent",
+#'       y = "Trade (USD billion)",
+#'       title = "Trade Distribution by Reporter Continent"
+#'     )
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -92,16 +101,22 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   dout <- aggregate(pokemon$name, by = list(
-#'     type = pokemon$type_1,
-#'     color = pokemon$color_1
-#'   ), FUN = length)
+#'   trade_by_continent <- d3po::trade[d3po::trade$year == 2023L, ]
+#'   trade_by_continent <- aggregate(trade ~ reporter_continent, data = trade_by_continent, FUN = sum)
 #'
-#'   colnames(dout)[3] <- "count"
+#'   my_pal <- tintin::tintin_pal(option = "The Secret of the Unicorn")(7)
 #'
-#'   d3po(dout) %>%
-#'     po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) %>%
-#'     po_labels(title = "Share of Pokemon by main type")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'     po_treemap(daes(
+#'       size = trade, group = reporter_continent,
+#'       color = my_pal, tiling = "Squarify"
+#'     )) %>%
+#'     po_labels(title = "Trade Share by Continent in 2023")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -154,19 +169,24 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   dout <- aggregate(pokemon$name, by = list(
-#'     type = pokemon$type_1,
-#'     color = pokemon$color_1
-#'   ), FUN = length)
+#'   trade_by_continent <- d3po::trade[d3po::trade$year == 2023L, ]
+#'   trade_by_continent <- aggregate(
+#'     trade ~ reporter_continent,
+#'     data = d3po::trade,
+#'     FUN = sum
+#'   )
 #'
-#'   colnames(dout)[3] <- "count"
+#'   # Assign colors to continents
+#'   my_pal <- tintin::tintin_pal(option = "The Black Island")(7)
 #'
-#'   d3po(dout) %>%
-#'     po_pie(daes(
-#'       size = count, group = type, color = color,
-#'       innerRadius = 0, startAngle = 0, endAngle = 2 * pi
-#'     )) %>%
-#'     po_labels(title = "Share of Pokemon by main type")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'     po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) %>%
+#'     po_labels(title = "Trade Share by Reporter Continent in 2023")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -190,9 +210,9 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
-  d3po$x$innerRadius <- daes_to_opts(daes, "innerRadius")
-  d3po$x$startAngle <- daes_to_opts(daes, "startAngle")
-  d3po$x$endAngle <- daes_to_opts(daes, "endAngle")
+  d3po$x$innerRadius <- daes_to_opts(daes, "inner_radius")
+  d3po$x$startAngle <- daes_to_opts(daes, "start_angle")
+  d3po$x$endAngle <- daes_to_opts(daes, "end_angle")
 
   return(d3po)
 }
@@ -220,19 +240,26 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   dout <- aggregate(pokemon$name, by = list(
-#'     type = pokemon$type_1,
-#'     color = pokemon$color_1
-#'   ), FUN = length)
+#'   trade_by_continent <- d3po::trade[d3po::trade$year == 2023L, ]
+#'   trade_by_continent <- aggregate(
+#'     trade ~ reporter_continent,
+#'     data = d3po::trade,
+#'     FUN = sum
+#'   )
 #'
-#'   colnames(dout)[3] <- "count"
+#'   # Assign colors to continents
+#'   my_pal <- tintin::tintin_pal(option = "The Black Island")(7)
 #'
-#'   d3po(dout) %>%
-#'     po_donut(daes(
-#'       size = count, group = type, color = color,
-#'       innerRadius = 0.4, startAngle = 0, endAngle = 2 * pi
-#'     )) %>%
-#'     po_labels(title = "Share of Pokemon by main type")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
+#'
+#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'     po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) %>%
+#'     po_labels(title = "Trade Share by Reporter Continent in 2023")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -256,9 +283,9 @@ po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
-  d3po$x$innerRadius <- daes_to_opts(daes, "innerRadius")
-  d3po$x$startAngle <- daes_to_opts(daes, "startAngle")
-  d3po$x$endAngle <- daes_to_opts(daes, "endAngle")
+  d3po$x$innerRadius <- daes_to_opts(daes, "inner_radius")
+  d3po$x$startAngle <- daes_to_opts(daes, "start_angle")
+  d3po$x$endAngle <- daes_to_opts(daes, "end_angle")
 
   return(d3po)
 }
@@ -286,19 +313,30 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   dout <- pokemon[pokemon$name %in% c(
-#'     "Squirtle", "Wartortle", "Blastoise",
-#'     "Charmander", "Charmeleon", "Charizard",
-#'     "Pikachu", "Raichu"
-#'   ), c("height", "weight", "type_1", "color_1")]
+#'   trade_by_continent <- d3po::trade
+#'   trade_by_continent <- aggregate(
+#'     trade ~ year + reporter_continent,
+#'     data = trade_by_continent,
+#'     FUN = sum
+#'   )
 #'
-#'   colnames(dout) <- c("height", "weight", "type", "color")
+#'   # Assign colors to continents
+#'   my_pal <- tintin::tintin_pal(option = "Cigars of the Pharaoh")(7)
 #'
-#'   d3po(dout) %>%
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   d3po(trade_by_continent, width = 800, height = 600) %>%
 #'     po_area(daes(
-#'       x = height, y = weight, group = type, color = color
+#'       x = year, y = trade, group = reporter_continent, color = my_pal
 #'     )) %>%
-#'     po_labels(title = "Pokemon Evolution: Weight vs Height by Type")
+#'     po_labels(
+#'       x = "Year",
+#'       y = "Trade (USD billion)",
+#'       title = "Trade Distribution by Reporter Continent in 2019 and 2023"
+#'     )
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -351,22 +389,28 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   dout <- aggregate(pokemon$name, by = list(
-#'     type = pokemon$type_1,
-#'     color = pokemon$color_1
-#'   ), FUN = length)
+#'   trade_by_continent <- d3po::trade
+#'   trade_by_continent <- aggregate(
+#'     trade ~ reporter_continent,
+#'     data = d3po::trade,
+#'     FUN = sum
+#'   )
 #'
-#'   colnames(dout)[3] <- "count"
+#'   # Assign colors to continents
+#'   my_pal <- tintin::tintin_pal()(7)
 #'
-#'   # Vertical bars
-#'   d3po(dout) %>%
-#'     po_bar(daes(x = type, y = count, color = color)) %>%
-#'     po_labels(title = "Vertical Bars")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
 #'
-#'   # Horizontal bars (flipped axes)
-#'   d3po(dout) %>%
-#'     po_bar(daes(x = count, y = type, color = color)) %>%
-#'     po_labels(title = "Horizontal Bars")
+#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'     po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) %>%
+#'     po_labels(
+#'       x = "Continent",
+#'       y = "Trade (USD billion)",
+#'       title = "Total Trade by Reporter Continent in 2023"
+#'     )
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -427,19 +471,28 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   dout <- pokemon[pokemon$name %in% c(
-#'     "Squirtle", "Wartortle", "Blastoise",
-#'     "Charmander", "Charmeleon", "Charizard",
-#'     "Pikachu", "Raichu"
-#'   ), c("height", "weight", "type_1", "color_1")]
+#'   trade_by_continent <- d3po::trade
+#'   trade_by_continent <- aggregate(
+#'     trade ~ year + reporter_continent,
+#'     data = trade_by_continent,
+#'     FUN = sum
+#'   )
 #'
-#'   colnames(dout) <- c("height", "weight", "type", "color")
+#'   # Assign colors to continents
+#'   my_pal <- tintin::tintin_pal(option = "The Broken Ear")(7)
 #'
-#'   d3po(dout) %>%
-#'     po_line(daes(
-#'       x = height, y = weight, group = type, color = color
-#'     )) %>%
-#'     po_labels(title = "Pokemon Evolution: Weight vs Height by Type")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'     po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) %>%
+#'     po_labels(
+#'       x = "Year",
+#'       y = "Trade (USD billion)",
+#'       title = "Trade Distribution by Reporter Continent in 2019 and 2023"
+#'     )
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -491,41 +544,29 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   # Unweighted scatter plot
-#'   d3po(pokemon) %>%
-#'     po_scatter(daes(
-#'       x = height, y = weight, group = name, color = color_1
-#'     )) %>%
-#'     po_labels(title = "Height vs Weight")
+#'   # Create a wide dataset with x = 2019 and y = 2023 trade values
+#'   trade_wide_2019 <- d3po::trade[d3po::trade$year == 2019L, c("reporter", "trade")]
+#'   trade_wide_2019 <- aggregate(trade ~ reporter, data = trade_wide_2019, FUN = sum)
 #'
-#'   # Log-transformed scatter plot
-#'   pokemon$log_height <- log10(pokemon$height)
-#'   pokemon$log_weight <- log10(pokemon$weight)
+#'   trade_wide_2023 <- d3po::trade[d3po::trade$year == 2023L, c("reporter", "trade")]
+#'   trade_wide_2023 <- aggregate(trade ~ reporter, data = trade_wide_2023, FUN = sum)
 #'
-#'   d3po(pokemon) %>%
-#'     po_scatter(daes(
-#'       x = log_height, y = log_weight, group = name, color = color_1
-#'     )) %>%
-#'     po_labels(title = "Log(Height) vs Log(Weight)")
+#'   trade_wide <- merge(
+#'     trade_wide_2019,
+#'     trade_wide_2023,
+#'     by = "reporter",
+#'     suffixes = c("_2019", "_2023")
+#'   )
 #'
-#'   # Weighted scatterplot by inverse distance from mean
-#'   mean_weight <- mean(pokemon$weight, na.rm = TRUE)
-#'   mean_height <- mean(pokemon$height, na.rm = TRUE)
+#'   my_pal <- tintin::tintin_pal(option = "red_rackhams_treasure")(7)
 #'
-#'   pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
-#'   pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
-#'
-#'   pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
-#'     pokemon$distance_from_mean_height) / 2
-#'
-#'   pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
-#'
-#'   d3po(pokemon) %>%
-#'     po_scatter(daes(
-#'       x = height, y = weight, size = inverse_distance_from_mean,
-#'       group = name, color = color_1
-#'     )) %>%
-#'     po_labels(title = "Height vs Weight (Size = 1 / Distance from the Mean)")
+#'   d3po(trade_wide, width = 800, height = 600) %>%
+#'     po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) %>%
+#'     po_labels(
+#'       x = "Trade in 2019 (USD billion)",
+#'       y = "Trade in 2023 (USD billion)",
+#'       title = "Trade Volume by Country in 2019 and 2023"
+#'     )
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -888,7 +929,7 @@ po_font.d3proxy <- function(d3po, family, size, transform) {
 #' @title Theme
 #'
 #' @description Manually set colors used by D3po for axis/axis-labels/title,
-#' tooltips/download menu background, and chart background. This allows you to 
+#' tooltips/download menu background, and chart background. This allows you to
 #' override page themes (Tabler/Shiny) and force D3po to render with readable contrast.
 #'
 #' @inheritParams po_box
@@ -938,8 +979,10 @@ po_theme.d3proxy <- function(d3po, axis = NULL, tooltips = NULL, background = NU
 #' @export
 #' @return Appends custom background to an 'htmlwidgets' object
 po_background <- function(d3po, background = "#fff") {
-  .Deprecated("po_theme", package = "d3po", 
-              msg = "po_background() is deprecated. Use po_theme(background = ...) instead.")
+  .Deprecated("po_theme",
+    package = "d3po",
+    msg = "po_background() is deprecated. Use po_theme(background = ...) instead."
+  )
   UseMethod("po_background")
 }
 
@@ -1000,9 +1043,66 @@ po_download.d3proxy <- function(d3po, show = TRUE) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   d3po(pokemon_network) %>%
-#'     po_network(daes(size = size, color = color, layout = "kk")) %>%
-#'     po_labels(title = "Pokemon Type Network")
+#'   trade_network <- d3po::trade[d3po::trade$year == 2023L, ]
+#'   trade_network <- aggregate(
+#'     trade ~
+#'       reporter_iso + partner_iso + reporter_continent + partner_continent,
+#'     data = trade_network, FUN = sum
+#'   )
+#'
+#'   # subset to 10 largest connection per reporter country
+#'   trade_network <- do.call(
+#'     rbind,
+#'     lapply(
+#'       split(trade_network, trade_network$reporter_iso),
+#'       function(df) head(df[order(-df$trade), ], 10)
+#'     )
+#'   )
+#'
+#'   # Create vertex (node) attributes for coloring and sizing
+#'   # Get unique countries with their continents and trade volumes
+#'   vertices <- unique(rbind(
+#'     data.frame(
+#'       name = trade_network$reporter_iso,
+#'       continent = trade_network$reporter_continent,
+#'       stringsAsFactors = FALSE
+#'     ),
+#'     data.frame(
+#'       name = trade_network$partner_iso,
+#'       continent = trade_network$partner_continent,
+#'       stringsAsFactors = FALSE
+#'     )
+#'   ))
+#'
+#'   # Remove duplicates
+#'   vertices <- vertices[!duplicated(vertices$name), ]
+#'
+#'   # Calculate total trade volume per country (as reporter)
+#'   trade_volume <- aggregate(trade ~ reporter_iso, data = trade_network, FUN = sum)
+#'   colnames(trade_volume) <- c("name", "trade_volume")
+#'
+#'   # Merge trade volume with vertices
+#'   vertices <- merge(vertices, trade_volume, by = "name", all.x = TRUE)
+#'   vertices$trade_volume[is.na(vertices$trade_volume)] <- 0
+#'
+#'   # Assign colors to continents
+#'   my_pal <- tintin::tintin_pal(option = "The Blue Lotus")(7)
+#'
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
+#'
+#'   # Add color column based on continent
+#'   vertices$color <- my_pal[vertices$continent]
+#'
+#'   # Create igraph object with vertex attributes
+#'   g <- graph_from_data_frame(trade_network, directed = TRUE, vertices = vertices)
+#'
+#'   # Create the network visualization
+#'   d3po(g, width = 800, height = 600) %>%
+#'     po_network(daes(size = trade_volume, color = color, layout = "fr")) %>%
+#'     po_labels(title = "Trade Network by Country in 2023")
 #' }
 #'
 #' @export
@@ -1141,41 +1241,40 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'  uk <- d3po::subnational
-#'  uk <- uk[uk$country == "United Kingdom", ]
-#'  uk$latitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 2]
-#'  uk$longitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 1]
-#'  uk <- uk[uk$latitude >= 49 & uk$latitude <= 61 & uk$longitude >= -8 & uk$longitude <= 2, ]
-#'  uk$random <- sample(seq_len(nrow(uk)), size = nrow(uk), replace = TRUE)
+#'   world <- d3po::national
 #'
-#'  # Example 1:
-#'  d3po(uk, width = 800, height = 600) %>%
-#'   po_geomap(daes(group = region, size = random, tooltip = region)) %>%
-#'   po_labels(title = "Map of UK Regions with Random Values")
+#'   # Fix geometries that cross the antimeridian (date line) to avoid horizontal lines
+#'   # This affects Russia, Fiji, and other countries spanning the 180° meridian
+#'   world$geometry <- sf::st_wrap_dateline(world$geometry, options = c("WRAPDATELINE=YES"))
 #'
-#'  # Example 2: With custom color column
-#'  uk$my_pal <- sample(tintin::tintin_clrs()[1:3], nrow(uk), replace = TRUE)
+#'   total_trade <- d3po::trade[
+#'     d3po::trade$year == 2023L,
+#'     c("reporter", "reporter_continent", "trade")
+#'   ]
+#'   total_trade <- aggregate(trade ~ reporter, data = total_trade, FUN = sum)
+#'   colnames(total_trade) <- c("country", "trade")
 #'
-#'  d3po(uk, width = 800, height = 600) %>%
-#'   po_geomap(daes(group = region, size = random, tooltip = region, color = my_pal)) %>%
-#'   po_labels(title = "UK Regions with Custom Colors")
+#'   world <- merge(
+#'     world,
+#'     total_trade,
+#'     by = "country",
+#'     all.x = TRUE,
+#'     all.y = FALSE
+#'   )
 #'
-#'  # Example 3: With custom color vector
-#'  my_color <- tintin::tintin_clrs()[1:3]
+#'   my_pal <- tintin::tintin_pal(option = "The Calculus Affair")(7)
 #'
-#'  d3po(uk, width = 800, height = 600) %>%
-#'   po_geomap(daes(group = region, size = random, tooltip = region, color = my_color)) %>%
-#'   po_labels(title = "UK Regions with Custom Colors")
+#'   names(my_pal) <- c(
+#'     "Africa", "Antarctica", "Asia",
+#'     "Europe", "North America", "Oceania", "South America"
+#'   )
 #'
-#'  # Example 4: Gradient coloring based on values
-#'  d3po(uk, width = 800, height = 600) %>%
-#'   po_geomap(daes(group = region, size = random, tooltip = region, gradient = TRUE)) %>%
-#'   po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
+#'   # Add color column based on continent
+#'   world$color <- my_pal[world$continent]
 #'
-#'  # Example 5: Gradient coloring based on values (custom palette)
-#'  d3po(uk, width = 800, height = 600) %>%
-#'   po_geomap(daes(group = region, size = random, tooltip = region, color = my_color, gradient = TRUE)) %>%
-#'   po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
+#'   d3po(world, width = 800, height = 600) %>%
+#'     po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) %>%
+#'     po_labels(title = "Trade Volume by Country in 2023")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -1220,29 +1319,37 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   color_value <- daes_to_opts(daes, "color")
   color_col_name <- NULL
   discrete_palette <- NULL
-  
+
   # Helper to check if a string looks like a color value (hex color or known R color name)
   is_color_value <- function(x) {
-    if (!is.character(x)) return(FALSE)
+    if (!is.character(x)) {
+      return(FALSE)
+    }
     # Check for hex colors (#RGB or #RRGGBB or #RRGGBBAA)
-    if (grepl("^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$", x)) return(TRUE)
-    if (grepl("^#[0-9A-Fa-f]{3}$", x)) return(TRUE)
+    if (grepl("^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$", x)) {
+      return(TRUE)
+    }
+    if (grepl("^#[0-9A-Fa-f]{3}$", x)) {
+      return(TRUE)
+    }
     # Check if it's a known R color name
-    if (x %in% grDevices::colors()) return(TRUE)
+    if (x %in% grDevices::colors()) {
+      return(TRUE)
+    }
     return(FALSE)
   }
-  
+
   if (!is.null(color_value) && is.character(color_value)) {
     # Check if all values look like colors
     all_colors <- length(color_value) > 0 && all(sapply(color_value, is_color_value))
-    
+
     if (all_colors && length(color_value) == nrow(attrs)) {
       # It's a per-row color vector (evaluated from data column)
       # Add it as a new column and reference by name
       color_col_name <- ".color_values"
       attrs[[color_col_name]] <- color_value
       columns <- c(columns, color_col_name)
-      color_value <- color_col_name  # Use the column name
+      color_value <- color_col_name # Use the column name
     } else if (all_colors && length(color_value) > 1 && length(color_value) < nrow(attrs)) {
       # It's a color palette (small number of colors)
       # Will be used for:

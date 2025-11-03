@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>d3po_output • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {'[+]': ['ams', 'newcommand', 'configmacros']}
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script><script id="MathJax-script" async src="../js/tex-svg.js"></script></head><body>
+<div class="main-container">
+<div id="menu">
+  <div>
+    <img src="../man/figures/logo.svg" align="center" height="139" alt="d3po logo"></div>
+
+  <div class="search-container">
+    <input type="text" id="search-box" placeholder="Search..."></div>
+
+  <div class="search-container">
+    <button id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">Toggle theme</button>
+    <button id="font-decrease" title="Decrease font size" aria-label="Decrease font size">A-</button>
+    <button id="font-increase" title="Increase font size" aria-label="Increase font size">A+</button>
+  </div>
+
+  <div class="submenu">
+    <label style="border-bottom: 0;"><a style="padding-left: 0;" href="../index.html">Home 🏠</a></label>
+  </div>
+
+  <div class="submenu">
+    <label>Functions</label>
+    <a href="../reference/daes.html">daes</a>
+    <a href="../reference/po_box.html">po_box</a>
+    <a href="../reference/po_treemap.html">po_treemap</a>
+    <a href="../reference/po_pie.html">po_pie</a>
+    <a href="../reference/po_donut.html">po_donut</a>
+    <a href="../reference/po_area.html">po_area</a>
+    <a href="../reference/po_bar.html">po_bar</a>
+    <a href="../reference/po_line.html">po_line</a>
+    <a href="../reference/po_scatter.html">po_scatter</a>
+    <a href="../reference/po_tooltip.html">po_tooltip</a>
+    <a href="../reference/po_format.html">po_format</a>
+    <a href="../reference/po_labels.html">po_labels</a>
+    <a href="../reference/po_font.html">po_font</a>
+    <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
+    <a href="../reference/po_download.html">po_download</a>
+    <a href="../reference/po_network.html">po_network</a>
+    <a href="../reference/po_geomap.html">po_geomap</a>
+    <a href="../reference/d3po.html">d3po</a>
+    <a href="../reference/d3po_output.html">d3po_output</a>
+    <a href="../reference/render_d3po.html">render_d3po</a>
+    <a href="../reference/d3po_proxy.html">d3po_proxy</a>
+  </div>
+
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
+
+  <div class="submenu">
+    <label>News</label>
+    <a href="../news/index.html">Changelog</a>
+  </div>
+</div>
+<div id="content">
+<div class="content-wrapper">
+        <div class="content-main">
+
+<table style="width: 100%;"><tr><td>d3po-shiny {d3po}</td><td style="text-align: right;">R Documentation</td></tr></table><h2>Shiny bindings for 'd3po'</h2>
+
+<h3>Description</h3>
+
+<p>Output and render functions for using d3po within Shiny
+applications and interactive Rmd documents.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">d3po_output(output_id, width = "100%", height = "400px")
+
+render_d3po(expr, env = parent.frame(), quoted = FALSE)
+
+d3po_proxy(id, session = shiny::getDefaultReactiveDomain())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role="presentation"><tr><td><code id="output_id">output_id</code></td>
+<td>
+output variable to read from
+</td></tr><tr><td><code id="width">width</code>, <code id="height">height</code></td>
+<td>
+Must be a valid CSS unit (like <code>'100%'</code>,
+<code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a
+string and have <code>'px'</code> appended.
+</td></tr><tr><td><code id="expr">expr</code></td>
+<td>
+An expression that generates a d3po object
+</td></tr><tr><td><code id="env">env</code></td>
+<td>
+The environment in which to evaluate <code>expr</code>.
+</td></tr><tr><td><code id="quoted">quoted</code></td>
+<td>
+Is <code>expr</code> a quoted expression (with <code>quote()</code>)? This
+is useful if you want to save an expression in a variable.
+</td></tr><tr><td><code id="id">id</code></td>
+<td>
+Id of plot to create a proxy of.
+</td></tr><tr><td><code id="session">session</code></td>
+<td>
+A valid shiny session.
+</td></tr></table><h3>Value</h3>
+
+<p>Creates a basic 'htmlwidget' object for 'Shiny' and interactive documents
+</p>
+
+
+</div>
+        </div>
+        <footer><p id="last-updated">Loading...</p>
+</footer><script src="../js/footer.js"></script><script src="../js/theme.js"></script><script src="../js/search.js"></script><script src="../js/fontsize.js"></script></div>
+</div>
+
+</body></html>
+

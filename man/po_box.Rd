@@ -24,20 +24,29 @@ Draw a boxplot.
 }
 \examples{
 if (interactive()) {
-  # Vertical box plot
-  d3po(pokemon) \%>\%
-    po_box(daes(x = type_1, y = weight, color = color_1)) \%>\%
-    po_labels(title = "Weight Distribution by Type")
+  trade_continent <- d3po::trade
+  trade_continent <- aggregate(
+    trade ~ reporter_continent + reporter,
+    data = trade_continent,
+    FUN = sum
+  )
 
-  # Horizontal box plot
-  d3po(pokemon) \%>\%
-    po_box(daes(x = height, y = type_1, color = color_1)) \%>\%
-    po_labels(title = "Height Distribution by Type")
+  my_pal <- tintin::tintin_pal(option = "Destination Moon")(7)
 
-  # Log-transformed distribution
-  pokemon$log_weight <- log10(pokemon$weight)
-  d3po(pokemon) \%>\%
-    po_box(daes(x = type_1, y = log_weight, color = color_1)) \%>\%
-    po_labels(title = "Log(Weight) Distribution by Type")
+  names(my_pal) <- c(
+    "Africa", "Antarctica", "Asia",
+    "Europe", "North America", "Oceania", "South America"
+  )
+
+  d3po(trade_continent, width = 800, height = 600) \%>\%
+    po_box(daes(
+      x = reporter_continent, y = trade, color = my_pal,
+      tooltip = reporter_continent
+    )) \%>\%
+    po_labels(
+      x = "Continent",
+      y = "Trade (USD billion)",
+      title = "Trade Distribution by Reporter Continent"
+    )
 }
 }

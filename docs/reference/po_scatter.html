@@ -47,8 +47,8 @@
     <a href="../reference/po_format.html">po_format</a>
     <a href="../reference/po_labels.html">po_labels</a>
     <a href="../reference/po_font.html">po_font</a>
-    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_theme.html">po_theme</a>
+    <a href="../reference/po_background.html">po_background</a>
     <a href="../reference/po_download.html">po_download</a>
     <a href="../reference/po_network.html">po_network</a>
     <a href="../reference/po_geomap.html">po_geomap</a>
@@ -58,6 +58,10 @@
     <a href="../reference/d3po_proxy.html">d3po_proxy</a>
   </div>
 
+  <div class="submenu">
+    <label>Vignettes</label>
+    <a href="../vignettes/examples.html">'d3po' worked examples</a>
+  </div>
 
   <div class="submenu">
     <label>News</label>
@@ -68,7 +72,7 @@
 <div class="content-wrapper">
         <div class="content-main">
 
-<table style="width: 100%;"><tr><td>po_scatter {d3po}</td><td style="text-align: right;">R Documentation</td></tr></table><h2>scatter</h2>
+<table style="width: 100%;"><tr><td>po_scatter {d3po}</td><td style="text-align: right;">R Documentation</td></tr></table><h2>Scatter</h2>
 
 <h3>Description</h3>
 
@@ -106,38 +110,29 @@ Whether to inherit aesthetics previous specified.
 <h3>Examples</h3>
 
 <pre><code class="language-R">if (interactive()) {
-  # Unweighted scatter plot
-  d3po(pokemon) %&gt;%
-    po_scatter(daes(
-      x = height, y = weight, group = name, color = color_1
-    )) %&gt;%
-    po_title("Height vs Weight")
+  # Create a wide dataset with x = 2019 and y = 2023 trade values
+  trade_wide_2019 &lt;- d3po::trade[d3po::trade$year == 2019L, c("reporter", "trade")]
+  trade_wide_2019 &lt;- aggregate(trade ~ reporter, data = trade_wide_2019, FUN = sum)
 
-  # Log-transformed scatter plot
-  pokemon$log_height &lt;- log10(pokemon$height)
-  pokemon$log_weight &lt;- log10(pokemon$weight)
+  trade_wide_2023 &lt;- d3po::trade[d3po::trade$year == 2023L, c("reporter", "trade")]
+  trade_wide_2023 &lt;- aggregate(trade ~ reporter, data = trade_wide_2023, FUN = sum)
 
-  d3po(pokemon) %&gt;%
-    po_scatter(daes(
-      x = log_height, y = log_weight, group = name, color = color_1
-    )) %&gt;%
-    po_title("Log(Height) vs Log(Weight)")
+  trade_wide &lt;- merge(
+    trade_wide_2019,
+    trade_wide_2023,
+    by = "reporter",
+    suffixes = c("_2019", "_2023")
+  )
 
-  # Weighted scatterplot by inverse distance from mean
-  mean_weight &lt;- mean(pokemon$weight, na.rm = TRUE)
-  mean_height &lt;- mean(pokemon$height, na.rm = TRUE)
-  pokemon$distance_from_mean_weight &lt;- abs(pokemon$weight - mean_weight)
-  pokemon$distance_from_mean_height &lt;- abs(pokemon$height - mean_height)
-  pokemon$avg_distance &lt;- (pokemon$distance_from_mean_weight +
-    pokemon$distance_from_mean_height) / 2
-  pokemon$inverse_distance_from_mean &lt;- 1 / (pokemon$avg_distance + 0.01)
+  my_pal &lt;- tintin::tintin_pal(option = "red_rackhams_treasure")(7)
 
-  d3po(pokemon) %&gt;%
-    po_scatter(daes(
-      x = height, y = weight, size = inverse_distance_from_mean,
-      group = name, color = color_1
-    )) %&gt;%
-    po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+  d3po(trade_wide, width = 800, height = 600) %&gt;%
+    po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) %&gt;%
+    po_labels(
+      x = "Trade in 2019 (USD billion)",
+      y = "Trade in 2023 (USD billion)",
+      title = "Trade Volume by Country in 2019 and 2023"
+    )
 }
 </code></pre>
 

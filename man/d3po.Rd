@@ -6,7 +6,7 @@
 \alias{d3po}
 \title{An \code{htmlwidget} interface to the d3po javascript chart library}
 \usage{
-d3po(data = NULL, ..., width = NULL, height = NULL, elementId = NULL)
+d3po(data = NULL, ..., width = NULL, height = NULL, element_id = NULL)
 }
 \arguments{
 \item{data}{d3po need explicit specified data objects formatted as JSON, and this parameter passed it from R.}
@@ -19,7 +19,7 @@ string and have \code{'px'} appended.}
 
 \item{height}{Same as width parameter.}
 
-\item{elementId}{Dummy string parameter. Useful when you have two or more charts on the same page.}
+\item{element_id}{Dummy string parameter. Useful when you have two or more charts on the same page.}
 }
 \value{
 Creates a basic 'htmlwidget' object for simple visualization

@@ -455,32 +455,6 @@ export default class BoxPlot extends D3po {
         .attr('y', isHorizontal ? -70 : -40)
         .style('font-size', '14px')
         .text(yLabelText);
-
-      // optional chart title (class `title`) placed above the plotting area
-      if (this.options && this.options.title) {
-        this.chart
-          .append('text')
-          .attr('class', 'title')
-          .attr('text-anchor', 'middle')
-          .attr('x', effectiveInnerWidth / 2)
-          .attr(
-            'y',
-            this.options.titleOffsetY ? this.options.titleOffsetY : -10
-          )
-          .style(
-            'font-family',
-            this.options && this.options.fontFamily
-              ? this.options.fontFamily
-              : null
-          )
-          .style(
-            'font-size',
-            this.options && this.options.titleFontSize
-              ? `${this.options.titleFontSize}px`
-              : '16px'
-          )
-          .text(String(this.options.title));
-      }
     }
 
     // Draw box plots

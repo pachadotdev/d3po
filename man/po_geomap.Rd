@@ -24,30 +24,40 @@ Plot a geomap using sf spatial objects
 }
 \examples{
 if (interactive()) {
-  # Using sf objects (requires 'sf' and 'geojsonio' packages)
-  library(sf)
-  
-  # Example 1: North Carolina counties
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
-  nc$random <- runif(nrow(nc), min = 10, max = 100)
-  
-  d3po(nc) \%>\%
-    po_geomap(daes(group = FIPS, size = random, tooltip = NAME)) \%>\%
-    po_title("Random Values by County")
-  
-  # Example 2: With custom colors
-  nc$my_color <- sample(c("#69b3a2", "#F85888", "#A890F0"), 
-                        nrow(nc), replace = TRUE)
-  
-  d3po(nc) \%>\%
-    po_geomap(daes(group = FIPS, size = random, 
-                   tooltip = NAME, color = my_color)) \%>\%
-    po_title("Counties with Custom Colors")
-  
-  # Example 3: Gradient coloring based on values
-  d3po(nc) \%>\%
-    po_geomap(daes(group = FIPS, size = random, 
-                   tooltip = NAME, gradient = TRUE)) \%>\%
-    po_title("Counties with Gradient")
+ uk <- d3po::subnational
+ uk <- uk[uk$country == "United Kingdom", ]
+ uk$latitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 2]
+ uk$longitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 1]
+ uk <- uk[uk$latitude >= 49 & uk$latitude <= 61 & uk$longitude >= -8 & uk$longitude <= 2, ]
+ uk$random <- sample(seq_len(nrow(uk)), size = nrow(uk), replace = TRUE)
+
+ # Example 1:
+ d3po(uk, width = 800, height = 600) \%>\%
+  po_geomap(daes(group = region, size = random, tooltip = region)) \%>\%
+  po_labels(title = "Map of UK Regions with Random Values")
+
+ # Example 2: With custom color column
+ uk$my_pal <- sample(tintin::tintin_clrs()[1:3], nrow(uk), replace = TRUE)
+
+ d3po(uk, width = 800, height = 600) \%>\%
+  po_geomap(daes(group = region, size = random, tooltip = region, color = my_pal)) \%>\%
+  po_labels(title = "UK Regions with Custom Colors")
+
+ # Example 3: With custom color vector
+ my_color <- tintin::tintin_clrs()[1:3]
+
+ d3po(uk, width = 800, height = 600) \%>\%
+  po_geomap(daes(group = region, size = random, tooltip = region, color = my_color)) \%>\%
+  po_labels(title = "UK Regions with Custom Colors")
+
+ # Example 4: Gradient coloring based on values
+ d3po(uk, width = 800, height = 600) \%>\%
+  po_geomap(daes(group = region, size = random, tooltip = region, gradient = TRUE)) \%>\%
+  po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
+
+ # Example 5: Gradient coloring based on values (custom palette)
+ d3po(uk, width = 800, height = 600) \%>\%
+  po_geomap(daes(group = region, size = random, tooltip = region, color = my_color, gradient = TRUE)) \%>\%
+  po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
 }
 }

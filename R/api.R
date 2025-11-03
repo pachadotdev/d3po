@@ -883,77 +883,76 @@ po_font.d3proxy <- function(d3po, family, size, transform) {
   return(d3po)
 }
 
-# Background ----
-
-#' @title Background
-#'
-#' @description Add a background to a chart.
-#'
-#' @inheritParams po_box
-#' @param background background to add (hex code).
-#' @export
-#' @return Appends custom background to an 'htmlwidgets' object
-po_background <- function(d3po, background = "#fff") UseMethod("po_background")
-
-#' @export
-#' @method po_background d3po
-po_background.d3po <- function(d3po, background) {
-  assertthat::assert_that(!missing(background), msg = "Missing `background`")
-
-  d3po$x$background <- background
-  return(d3po)
-}
-
-#' @export
-#' @method po_background d3proxy
-po_background.d3proxy <- function(d3po, background) {
-  assertthat::assert_that(!missing(background), msg = "Missing `background`")
-
-  msg <- list(id = d3po$id, msg = list(background = background))
-
-  d3po$session$sendCustomMessage("d3po-background", msg)
-
-  return(d3po)
-}
-
 # Theme ----
 
 #' @title Theme
 #'
-#' @description Manually set colors used by D3po for axis/axis-labels/title and for
-#' tooltips/download menu background. This allows you to override page
-#' themes (Tabler/Shiny) and force D3po to render with readable contrast.
+#' @description Manually set colors used by D3po for axis/axis-labels/title,
+#' tooltips/download menu background, and chart background. This allows you to 
+#' override page themes (Tabler/Shiny) and force D3po to render with readable contrast.
 #'
 #' @inheritParams po_box
 #' @param axis Hex color string for axis lines and axis/label/title fill (e.g. "#fff").
 #' @param tooltips Hex color string for tooltip / download menu background (e.g. "#000").
+#' @param background Hex color string for chart background (e.g. "#fff").
 #' @export
 #' @return Appends theme settings to an 'htmlwidgets' object
-po_theme <- function(d3po, axis = NULL, tooltips = NULL) UseMethod("po_theme")
+po_theme <- function(d3po, axis = NULL, tooltips = NULL, background = NULL) UseMethod("po_theme")
 
 #' @export
 #' @method po_theme d3po
-po_theme.d3po <- function(d3po, axis = NULL, tooltips = NULL) {
+po_theme.d3po <- function(d3po, axis = NULL, tooltips = NULL, background = NULL) {
   if (!is.null(axis)) assertthat::assert_that(is.character(axis) && nzchar(axis), msg = "axis must be a hex color string")
   if (!is.null(tooltips)) assertthat::assert_that(is.character(tooltips) && nzchar(tooltips), msg = "tooltips must be a hex color string")
+  if (!is.null(background)) assertthat::assert_that(is.character(background) && nzchar(background), msg = "background must be a hex color string")
 
   d3po$x$theme <- list()
   if (!is.null(axis)) d3po$x$theme$axis <- as.character(axis)
   if (!is.null(tooltips)) d3po$x$theme$tooltips <- as.character(tooltips)
+  if (!is.null(background)) d3po$x$background <- as.character(background)
 
   return(d3po)
 }
 
 #' @export
 #' @method po_theme d3proxy
-po_theme.d3proxy <- function(d3po, axis = NULL, tooltips = NULL) {
+po_theme.d3proxy <- function(d3po, axis = NULL, tooltips = NULL, background = NULL) {
   msg <- list(id = d3po$id, msg = list())
   if (!is.null(axis)) msg$msg$axis <- as.character(axis)
   if (!is.null(tooltips)) msg$msg$tooltips <- as.character(tooltips)
+  if (!is.null(background)) msg$msg$background <- as.character(background)
 
   d3po$session$sendCustomMessage("d3po-theme", msg)
 
   return(d3po)
+}
+
+# Background (deprecated) ----
+
+#' @title Background (Deprecated)
+#'
+#' @description This function is deprecated. Use `po_theme(background = ...)` instead.
+#'
+#' @inheritParams po_box
+#' @param background background to add (hex code).
+#' @export
+#' @return Appends custom background to an 'htmlwidgets' object
+po_background <- function(d3po, background = "#fff") {
+  .Deprecated("po_theme", package = "d3po", 
+              msg = "po_background() is deprecated. Use po_theme(background = ...) instead.")
+  UseMethod("po_background")
+}
+
+#' @export
+#' @method po_background d3po
+po_background.d3po <- function(d3po, background = "#fff") {
+  po_theme.d3po(d3po, background = background)
+}
+
+#' @export
+#' @method po_background d3proxy
+po_background.d3proxy <- function(d3po, background = "#fff") {
+  po_theme.d3proxy(d3po, background = background)
 }
 
 # Download ----
@@ -1142,37 +1141,41 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #' @examples
 #' if (interactive()) {
-#'   # Using sf objects
-#'   library(sf)
+#'  uk <- d3po::subnational
+#'  uk <- uk[uk$country == "United Kingdom", ]
+#'  uk$latitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 2]
+#'  uk$longitude <- sf::st_coordinates(sf::st_centroid(uk$geometry))[, 1]
+#'  uk <- uk[uk$latitude >= 49 & uk$latitude <= 61 & uk$longitude >= -8 & uk$longitude <= 2, ]
+#'  uk$random <- sample(seq_len(nrow(uk)), size = nrow(uk), replace = TRUE)
 #'
-#'   # Example 1: North Carolina counties
-#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
-#'   nc$random <- runif(nrow(nc), min = 10, max = 100)
+#'  # Example 1:
+#'  d3po(uk, width = 800, height = 600) %>%
+#'   po_geomap(daes(group = region, size = random, tooltip = region)) %>%
+#'   po_labels(title = "Map of UK Regions with Random Values")
 #'
-#'   d3po(nc) %>%
-#'     po_geomap(daes(group = FIPS, size = random, tooltip = NAME)) %>%
-#'     po_labels(title = "Random Values by County")
+#'  # Example 2: With custom color column
+#'  uk$my_pal <- sample(tintin::tintin_clrs()[1:3], nrow(uk), replace = TRUE)
 #'
-#'   # Example 2: With custom colors
-#'   nc$my_color <- sample(c("#69b3a2", "#F85888", "#A890F0"),
-#'     nrow(nc),
-#'     replace = TRUE
-#'   )
+#'  d3po(uk, width = 800, height = 600) %>%
+#'   po_geomap(daes(group = region, size = random, tooltip = region, color = my_pal)) %>%
+#'   po_labels(title = "UK Regions with Custom Colors")
 #'
-#'   d3po(nc) %>%
-#'     po_geomap(daes(
-#'       group = FIPS, size = random,
-#'       tooltip = NAME, color = my_color
-#'     )) %>%
-#'     po_labels(title = "Counties with Custom Colors")
+#'  # Example 3: With custom color vector
+#'  my_color <- tintin::tintin_clrs()[1:3]
 #'
-#'   # Example 3: Gradient coloring based on values
-#'   d3po(nc) %>%
-#'     po_geomap(daes(
-#'       group = FIPS, size = random,
-#'       tooltip = NAME, gradient = TRUE
-#'     )) %>%
-#'     po_labels(title = "Counties with Gradient")
+#'  d3po(uk, width = 800, height = 600) %>%
+#'   po_geomap(daes(group = region, size = random, tooltip = region, color = my_color)) %>%
+#'   po_labels(title = "UK Regions with Custom Colors")
+#'
+#'  # Example 4: Gradient coloring based on values
+#'  d3po(uk, width = 800, height = 600) %>%
+#'   po_geomap(daes(group = region, size = random, tooltip = region, gradient = TRUE)) %>%
+#'   po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
+#'
+#'  # Example 5: Gradient coloring based on values (custom palette)
+#'  d3po(uk, width = 800, height = 600) %>%
+#'   po_geomap(daes(group = region, size = random, tooltip = region, color = my_color, gradient = TRUE)) %>%
+#'   po_labels(title = "UK Regions with Gradient Coloring Based on Random Values")
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
@@ -1202,10 +1205,6 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
     stop("po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().")
   }
 
-  # Select only requested columns from attribute table
-  # Ensure result is a plain data.frame
-  d3po$x$data <- as.data.frame(dplyr::select(attrs, dplyr::all_of(columns)))
-
   # Verify that geomap data exists (should have been created by d3po.sf)
   if (is.null(d3po$x$geomap_data)) {
     stop(
@@ -1217,13 +1216,56 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
     )
   }
 
+  # Handle color specially: distinguish between column name, per-row colors, or discrete palette
+  color_value <- daes_to_opts(daes, "color")
+  color_col_name <- NULL
+  discrete_palette <- NULL
+  
+  # Helper to check if a string looks like a color value (hex color or known R color name)
+  is_color_value <- function(x) {
+    if (!is.character(x)) return(FALSE)
+    # Check for hex colors (#RGB or #RRGGBB or #RRGGBBAA)
+    if (grepl("^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$", x)) return(TRUE)
+    if (grepl("^#[0-9A-Fa-f]{3}$", x)) return(TRUE)
+    # Check if it's a known R color name
+    if (x %in% grDevices::colors()) return(TRUE)
+    return(FALSE)
+  }
+  
+  if (!is.null(color_value) && is.character(color_value)) {
+    # Check if all values look like colors
+    all_colors <- length(color_value) > 0 && all(sapply(color_value, is_color_value))
+    
+    if (all_colors && length(color_value) == nrow(attrs)) {
+      # It's a per-row color vector (evaluated from data column)
+      # Add it as a new column and reference by name
+      color_col_name <- ".color_values"
+      attrs[[color_col_name]] <- color_value
+      columns <- c(columns, color_col_name)
+      color_value <- color_col_name  # Use the column name
+    } else if (all_colors && length(color_value) > 1 && length(color_value) < nrow(attrs)) {
+      # It's a color palette (small number of colors)
+      # Will be used for:
+      # - Discrete gradient (quantiles) if gradient = FALSE
+      # - Continuous interpolated gradient if gradient = TRUE
+      discrete_palette <- color_value
+      color_value <- NULL
+    }
+    # else: column name (string that doesn't look like color) or single color - keep as is
+  }
+
+  # Select only requested columns from attribute table (now includes color column if added)
+  # Ensure result is a plain data.frame
+  d3po$x$data <- as.data.frame(dplyr::select(attrs, dplyr::all_of(columns)))
+
   # Set aesthetic mappings
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$text <- daes_to_opts(daes, "text")
-  d3po$x$color <- daes_to_opts(daes, "color")
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$tooltip <- daes_to_opts(daes, "tooltip")
   d3po$x$gradient <- daes_to_opts(daes, "gradient")
+  d3po$x$color <- color_value
+  d3po$x$discrete_palette <- discrete_palette
 
   return(d3po)
 }

@@ -103,34 +103,6 @@ export default class PieChart extends D3po {
     // Move chart to center
     this.chart.attr('transform', `translate(${centerX},${centerY})`);
 
-    // optional chart title (class `title`) placed above the plotting area
-    if (this.options && this.options.title) {
-      this.chart
-        .append('text')
-        .attr('class', 'title')
-        .attr('text-anchor', 'middle')
-        .attr('x', 0)
-        .attr(
-          'y',
-          this.options.titleOffsetY ? this.options.titleOffsetY : -radius - 10
-        )
-        .style(
-          'font-family',
-          this.options && this.options.fontFamily
-            ? this.options.fontFamily
-            : null
-        )
-        .style(
-          'font-size',
-          this.options && this.options.titleFontSize
-            ? `${this.options.titleFontSize}px`
-            : this.options && this.options.fontSize
-              ? `${Number(this.options.fontSize) + 2}px`
-              : '16px'
-        )
-        .text(String(this.options.title));
-    }
-
     // Create pie layout
     const pie = d3
       .pie()

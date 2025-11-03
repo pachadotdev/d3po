@@ -264,6 +264,53 @@ export function createColorScale(data, colorField, colorScale) {
     '#d3d3d3',
   ];
 
+  // Check if colorField is a named vector (object with string keys)
+  // R named vectors serialize as objects like {"Africa": "#123", "Asia": "#456"}
+  const isNamedVector = input => {
+    if (!input || typeof input !== 'object' || Array.isArray(input))
+      return false;
+    // Check if it has string keys and all values are strings (colors)
+    const keys = Object.keys(input);
+    return keys.length > 0 && keys.every(k => typeof input[k] === 'string');
+  };
+
+  // If colorField is a named vector, create a lookup function
+  if (isNamedVector(colorField)) {
+    const colorMap = colorField; // It's already the {name: color} object
+
+    // Helper to extract group value from a row
+    const getGroupValue = row => {
+      if (!row || typeof row !== 'object') return String(row);
+      if (row.group !== undefined) return String(row.group);
+      // Try common group field names
+      for (const field of [
+        'reporter_continent',
+        'partner_continent',
+        'continent',
+        'type',
+        'category',
+      ]) {
+        if (row[field] !== undefined) return String(row[field]);
+      }
+      // Use first string/number property
+      for (const k of Object.keys(row)) {
+        if (typeof row[k] === 'string' || typeof row[k] === 'number')
+          return String(row[k]);
+      }
+      return '';
+    };
+
+    return d => {
+      const groupVal = getGroupValue(d);
+      // Look up the group value in the named vector
+      if (colorMap[groupVal]) {
+        return normalizeColorString(colorMap[groupVal]);
+      }
+      // Fallback to first color if not found
+      return normalizeColorString(Object.values(colorMap)[0]);
+    };
+  }
+
   // Coerce palette-like objects (R may serialize named vectors as objects)
   const coercePalette = input => {
     if (!input) return null;

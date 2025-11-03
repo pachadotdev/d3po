@@ -140,6 +140,11 @@ export default class D3po {
       .style('font-family', this.options.fontFamily)
       .style('font-size', `${this.options.fontSize}px`);
 
+    // Apply text-transform if specified
+    if (this.options.textTransform) {
+      this.svg.style('text-transform', this.options.textTransform);
+    }
+
     // Determine theme (dark vs light) by sampling the container background color.
     let bg = this.options.background;
     if (!bg) {
@@ -696,14 +701,21 @@ export default class D3po {
    * Updates font settings
    * @param {string} fontFamily - Font family
    * @param {number} fontSize - Font size
+   * @param {string} [textTransform] - CSS text-transform value
    * @returns {D3po} This instance for chaining
    */
-  setFont(fontFamily, fontSize) {
+  setFont(fontFamily, fontSize, textTransform) {
     this.options.fontFamily = fontFamily;
     this.options.fontSize = fontSize;
+    if (textTransform) {
+      this.options.textTransform = textTransform;
+    }
     this.svg
       .style('font-family', fontFamily)
       .style('font-size', `${fontSize}px`);
+    if (textTransform) {
+      this.svg.style('text-transform', textTransform);
+    }
     return this;
   }
 

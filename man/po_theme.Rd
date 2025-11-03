@@ -4,7 +4,7 @@
 \alias{po_theme}
 \title{Theme}
 \usage{
-po_theme(d3po, axis = NULL, tooltips = NULL)
+po_theme(d3po, axis = NULL, tooltips = NULL, background = NULL)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
@@ -12,12 +12,14 @@ po_theme(d3po, axis = NULL, tooltips = NULL)
 \item{axis}{Hex color string for axis lines and axis/label/title fill (e.g. "#fff").}
 
 \item{tooltips}{Hex color string for tooltip / download menu background (e.g. "#000").}
+
+\item{background}{Hex color string for chart background (e.g. "#fff").}
 }
 \value{
 Appends theme settings to an 'htmlwidgets' object
 }
 \description{
-Manually set colors used by D3po for axis/axis-labels/title and for
-tooltips/download menu background. This allows you to override page
-themes (Tabler/Shiny) and force D3po to render with readable contrast.
+Manually set colors used by D3po for axis/axis-labels/title,
+tooltips/download menu background, and chart background. This allows you to
+override page themes (Tabler/Shiny) and force D3po to render with readable contrast.
 }

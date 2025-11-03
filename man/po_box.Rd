@@ -27,17 +27,17 @@ if (interactive()) {
   # Vertical box plot
   d3po(pokemon) \%>\%
     po_box(daes(x = type_1, y = weight, color = color_1)) \%>\%
-    po_title("Weight Distribution by Type")
+    po_labels(title = "Weight Distribution by Type")
 
   # Horizontal box plot
   d3po(pokemon) \%>\%
     po_box(daes(x = height, y = type_1, color = color_1)) \%>\%
-    po_title("Height Distribution by Type")
+    po_labels(title = "Height Distribution by Type")
 
   # Log-transformed distribution
   pokemon$log_weight <- log10(pokemon$weight)
   d3po(pokemon) \%>\%
     po_box(daes(x = type_1, y = log_weight, color = color_1)) \%>\%
-    po_title("Log(Weight) Distribution by Type")
+    po_labels(title = "Log(Weight) Distribution by Type")
 }
 }

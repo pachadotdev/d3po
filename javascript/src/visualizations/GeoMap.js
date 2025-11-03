@@ -73,7 +73,10 @@ export default class GeoMap extends D3po {
     const x = (bounds[0][0] + bounds[1][0]) / 2;
     const y = (bounds[0][1] + bounds[1][1]) / 2;
 
-    const scale = 1.0 / Math.max(dx / width, dy / height);
+    // Use a factor to make the map more elongated vertically (taller)
+    // This allows the map to stretch more vertically relative to horizontally
+    const verticalFactor = 0.85; // Adjust this value: lower = more elongated vertically
+    const scale = 1.0 / Math.max((dx / width) * verticalFactor, dy / height);
 
     // When reflecting Y, we need to adjust the Y translation
     const translate = [
@@ -103,7 +106,47 @@ export default class GeoMap extends D3po {
 
     // Set up color scale
     let colorScale;
-    if (this.options.gradient && this.sizeField && this.data) {
+    let useDiscreteGradient = false;
+
+    // Check if a discrete palette is provided
+    const hasDiscretePalette =
+      this.options.discrete_palette &&
+      Array.isArray(this.options.discrete_palette) &&
+      this.options.discrete_palette.length > 0;
+
+    if (
+      hasDiscretePalette &&
+      this.options.gradient &&
+      this.sizeField &&
+      this.data
+    ) {
+      // Continuous gradient with custom palette: interpolate between provided colors
+      const colorPalette = this.options.discrete_palette;
+      const values = this.data
+        .map(d => d[this.sizeField])
+        .filter(v => v != null && !isNaN(v));
+
+      if (values.length > 0) {
+        const extent = d3.extent(values);
+        // Create interpolator from the custom palette
+        const interpolator = d3.interpolateRgbBasis(colorPalette);
+        colorScale = d3.scaleSequential(interpolator).domain(extent);
+      }
+    } else if (hasDiscretePalette && this.sizeField && this.data) {
+      // Discrete gradient mode (no gradient flag): map custom palette to quantiles of size field
+      const colorPalette = this.options.discrete_palette;
+      const values = this.data
+        .map(d => d[this.sizeField])
+        .filter(v => v != null && !isNaN(v));
+
+      if (values.length > 0) {
+        // Use d3.scaleQuantile for automatic quantile-based binning
+        // This will divide the data into N equal-sized groups where N = colorPalette.length
+        colorScale = d3.scaleQuantile().domain(values).range(colorPalette);
+
+        useDiscreteGradient = true;
+      }
+    } else if (this.options.gradient && this.sizeField && this.data) {
       // Gradient mode: use sequential color scale based on size field
       const values = this.data
         .map(d => d[this.sizeField])
@@ -112,8 +155,23 @@ export default class GeoMap extends D3po {
       colorScale = d3.scaleSequential(d3.interpolateViridis).domain(extent);
     } else if (this.colorField && this.data) {
       // Explicit color field provided
+      // Check if values look like colors (hex codes or color names)
       const uniqueValues = [...new Set(this.data.map(d => d[this.colorField]))];
-      colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(uniqueValues);
+      const looksLikeColors =
+        uniqueValues.length > 0 &&
+        uniqueValues.every(v => {
+          if (typeof v !== 'string') return false;
+          // Check for hex color
+          return /^#[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?([0-9A-Fa-f]{2})?$/.test(v);
+        });
+
+      if (looksLikeColors) {
+        // Color field contains actual color values - use identity scale (no mapping)
+        colorScale = null; // Will use values directly in the fill function
+      } else {
+        // Color field contains categories - map to color scheme
+        colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(uniqueValues);
+      }
     } else if (this.groupField && this.data) {
       // Default: color by group field
       const uniqueGroups = [...new Set(this.data.map(d => d[this.groupField]))];
@@ -151,16 +209,22 @@ export default class GeoMap extends D3po {
         const dataRow = dataMap.get(String(identifier));
 
         if (colorScale) {
-          if (this.options.gradient && this.sizeField && dataRow) {
+          if (useDiscreteGradient && this.sizeField && dataRow) {
+            // Discrete gradient: color by size value using quantile-based palette
+            return colorScale(dataRow[this.sizeField]);
+          } else if (this.options.gradient && this.sizeField && dataRow) {
             // Gradient: color by size value
             return colorScale(dataRow[this.sizeField]);
           } else if (this.colorField && dataRow) {
-            // Color by explicit color field
+            // Color by explicit color field using scale
             return colorScale(dataRow[this.colorField]);
           } else if (identifier) {
             // Default: color by group
             return colorScale(identifier);
           }
+        } else if (this.colorField && dataRow && dataRow[this.colorField]) {
+          // Color field with no scale means direct color values
+          return dataRow[this.colorField];
         }
 
         // Fallback to default fill
@@ -170,8 +234,12 @@ export default class GeoMap extends D3po {
       .attr('stroke-width', 1)
       .style('cursor', 'pointer');
 
-    // Add gradient legend if in gradient mode
-    if (this.options.gradient && colorScale && this.sizeField) {
+    // Add legend if in gradient or discrete gradient mode
+    if (
+      (this.options.gradient || useDiscreteGradient) &&
+      colorScale &&
+      this.sizeField
+    ) {
       const legendWidth = 20;
       const legendHeight = 200;
       const legendX = width - legendWidth - 10;
@@ -182,58 +250,103 @@ export default class GeoMap extends D3po {
         .attr('class', 'legend')
         .attr('transform', `translate(${legendX}, ${legendY})`);
 
-      // Create gradient definition
-      const defs = this.svg.append('defs');
-      const linearGradient = defs
-        .append('linearGradient')
-        .attr('id', `gradient-${this.container.id}`)
-        .attr('x1', '0%')
-        .attr('y1', '100%')
-        .attr('x2', '0%')
-        .attr('y2', '0%');
+      if (useDiscreteGradient) {
+        // Discrete gradient legend: show color blocks for each quantile
+        const colorPalette = this.options.discrete_palette;
+        const blockHeight = legendHeight / colorPalette.length;
 
-      // Add color stops
-      const stops = 10;
-      for (let i = 0; i <= stops; i++) {
-        const t = i / stops;
-        linearGradient
-          .append('stop')
-          .attr('offset', `${t * 100}%`)
-          .attr(
-            'stop-color',
-            colorScale(
-              colorScale.domain()[0] +
-                t * (colorScale.domain()[1] - colorScale.domain()[0])
-            )
-          );
+        // Get quantiles from the scale
+        const quantiles = colorScale.quantiles();
+
+        // Get min and max values
+        const values = this.data
+          .map(d => d[this.sizeField])
+          .filter(v => v != null && !isNaN(v));
+        const minVal = d3.min(values);
+        const maxVal = d3.max(values);
+
+        // Draw color blocks
+        colorPalette.forEach((color, i) => {
+          legend
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', legendHeight - (i + 1) * blockHeight)
+            .attr('width', legendWidth)
+            .attr('height', blockHeight)
+            .style('fill', color)
+            .style('stroke', '#333')
+            .style('stroke-width', 0.5);
+        });
+
+        // Add labels for quantile boundaries
+        // For N colors, we have N-1 quantile boundaries, plus min and max
+        const boundaries = [minVal, ...quantiles, maxVal];
+        boundaries.forEach((val, i) => {
+          const y = legendHeight - i * blockHeight;
+          legend
+            .append('text')
+            .attr('x', legendWidth + 5)
+            .attr('y', y)
+            .attr('dy', '0.3em')
+            .style('font-size', this.options.fontSize || '10px')
+            .style('font-family', this.options.fontFamily || 'sans-serif')
+            .text(d3.format('.1f')(val));
+        });
+      } else {
+        // Continuous gradient legend
+        // Create gradient definition
+        const defs = this.svg.append('defs');
+        const linearGradient = defs
+          .append('linearGradient')
+          .attr('id', `gradient-${this.container.id}`)
+          .attr('x1', '0%')
+          .attr('y1', '100%')
+          .attr('x2', '0%')
+          .attr('y2', '0%');
+
+        // Add color stops
+        const stops = 10;
+        for (let i = 0; i <= stops; i++) {
+          const t = i / stops;
+          linearGradient
+            .append('stop')
+            .attr('offset', `${t * 100}%`)
+            .attr(
+              'stop-color',
+              colorScale(
+                colorScale.domain()[0] +
+                  t * (colorScale.domain()[1] - colorScale.domain()[0])
+              )
+            );
+        }
+
+        // Draw legend rectangle
+        legend
+          .append('rect')
+          .attr('width', legendWidth)
+          .attr('height', legendHeight)
+          .style('fill', `url(#gradient-${this.container.id})`)
+          .style('stroke', '#333')
+          .style('stroke-width', 1);
+
+        // Add scale labels
+        const legendScale = d3
+          .scaleLinear()
+          .domain(colorScale.domain())
+          .range([legendHeight, 0]);
+
+        const legendAxis = d3
+          .axisRight(legendScale)
+          .ticks(5)
+          .tickFormat(d3.format('.0f'));
+
+        legend
+          .append('g')
+          .attr('transform', `translate(${legendWidth}, 0)`)
+          .call(legendAxis)
+          .style('font-size', this.options.fontSize || '12px')
+          .style('font-family', this.options.fontFamily || 'sans-serif');
       }
-
-      // Draw legend rectangle
-      legend
-        .append('rect')
-        .attr('width', legendWidth)
-        .attr('height', legendHeight)
-        .style('fill', `url(#gradient-${this.container.id})`)
-        .style('stroke', '#333')
-        .style('stroke-width', 1);
-
-      // Add scale labels
-      const legendScale = d3
-        .scaleLinear()
-        .domain(colorScale.domain())
-        .range([legendHeight, 0]);
-
-      const legendAxis = d3
-        .axisRight(legendScale)
-        .ticks(5)
-        .tickFormat(d3.format('.0f'));
-
-      legend
-        .append('g')
-        .attr('transform', `translate(${legendWidth}, 0)`)
-        .call(legendAxis)
-        .style('font-size', this.options.fontSize || '12px')
-        .style('font-family', this.options.fontFamily || 'sans-serif');
     }
 
     const fontFamily = this.options.fontFamily;

@@ -1,12 +1,13 @@
 library(shiny)
 library(d3po)
+library(dplyr)
 
 ui <- fluidPage(
   titlePanel("Debug d3po App"),
   sidebarLayout(
     sidebarPanel(
       selectInput("plot_type", "Select Plot:", 
-                  choices = c("Box" = "box", "Bar" = "bar")),
+                  choices = c("Bar" = "bar", "Treemap" = "treemap")),
       hr(),
       verbatimTextOutput("debug_info")
     ),
@@ -21,25 +22,33 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  pokemon <- d3po::pokemon
+  trade <- d3po::trade
   
   plot_obj <- reactive({
     req(input$plot_type)
     
     cat("Creating plot of type:", input$plot_type, "\n")
     
-    if (input$plot_type == "box") {
-      result <- d3po(pokemon) %>%
-        po_box(daes(x = type_1, y = weight, color = color_1)) %>%
-        po_labels(title = "Weight Distribution by Type")
+    trade2 <- trade %>%
+        filter(reporter_iso == "GBR") %>%
+        arrange(desc(trade)) %>%
+        mutate(
+          partner = case_when(
+            row_number() > 4 ~ "Rest of the World",
+            TRUE ~ partner
+          )
+        ) %>%
+        group_by(reporter, partner) %>%
+        summarise(trade = sum(trade), .groups = "drop")
+
+    if (input$plot_type == "bar") {
+      result <- d3po(trade2) %>%
+        po_bar(daes(x = partner, y = trade)) %>%
+        po_labels(title = "United Kingdom Trade Partners (2023)")
     } else {
-      dout <- aggregate(cbind(count = rep(1, nrow(pokemon))) ~ type_1 + color_1,
-                        data = pokemon, FUN = length)
-      names(dout) <- c("type", "color", "count")
-      
-      result <- d3po(dout) %>%
-        po_bar(daes(x = type, y = count, color = color)) %>%
-        po_labels(title = "Pokemon Count by Type")
+      result <- d3po(trade2) %>%
+        po_treemap(daes(group = partner, size = trade)) %>%
+        po_labels(title = "United Kingdom Trade Partners (2023)")
     }
     
     cat("Plot created successfully\n")

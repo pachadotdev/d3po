@@ -32,7 +32,7 @@ strong_simplify_sfc <- function(sfc, keep = 0.05) {
   # fallback: aggressive sf simplify without preserveTopology
   bbox <- sf::st_bbox(sfc)
   diag <- sqrt((bbox$xmax - bbox$xmin)^2 + (bbox$ymax - bbox$ymin)^2)
-  tol <- max(1e-6, diag * 0.02)
+  tol <- max(1e-5, diag * 0.05)
   sfc2 <- tryCatch(sf::st_simplify(sfc, dTolerance = tol, preserveTopology = FALSE), error = function(e) sfc)
   sf::st_sfc(sfc2, crs = crs)
 }
@@ -40,7 +40,7 @@ strong_simplify_sfc <- function(sfc, keep = 0.05) {
 subnational <- admin1_all
 
 subnational <- tryCatch({
-  subnational$geometry <- strong_simplify_sfc(subnational$geometry, keep = 0.05)
+  subnational$geometry <- strong_simplify_sfc(subnational$geometry, keep = 0.1)
   subnational
 }, error = function(e) {
   message('Strong simplification pipeline failed overall: ', e$message, ' — keeping original geometries')
@@ -165,7 +165,7 @@ national <- tryCatch({
   national <- sf::st_cast(national, 'MULTIPOLYGON')
   national <- sf::st_make_valid(national)
   # Simplify slightly to remove potential artifacts from st_union
-  national$geometry <- sf::st_simplify(sf::st_geometry(national), dTolerance = 0.001, preserveTopology = TRUE)
+  national$geometry <- sf::st_simplify(sf::st_geometry(national), dTolerance = 0.1, preserveTopology = TRUE)
   national
 }, error = function(e) {
   message('National geometry cleanup failed: ', e$message)

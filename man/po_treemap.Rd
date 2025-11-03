@@ -33,6 +33,6 @@ if (interactive()) {
 
   d3po(dout) \%>\%
     po_treemap(daes(size = count, group = type, color = color, tiling = "squarify")) \%>\%
-    po_title("Share of Pokemon by main type")
+    po_labels(title = "Share of Pokemon by main type")
 }
 }

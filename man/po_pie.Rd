@@ -36,6 +36,6 @@ if (interactive()) {
       size = count, group = type, color = color,
       innerRadius = 0, startAngle = 0, endAngle = 2 * pi
     )) \%>\%
-    po_title("Share of Pokemon by main type")
+    po_labels(title = "Share of Pokemon by main type")
 }
 }

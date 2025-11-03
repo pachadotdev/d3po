@@ -874,6 +874,15 @@ export default class BarChart extends D3po {
       .append('g')
       .attr('transform', `translate(0,${effectiveInnerHeight})`)
       .call(xAxis);
+
+    // Apply font settings to x-axis ticks
+    xg.selectAll('text')
+      .style('font-family', this.options.fontFamily)
+      .style('font-size', `${this.options.fontSize}px`);
+    if (this.options.textTransform) {
+      xg.selectAll('text').style('text-transform', this.options.textTransform);
+    }
+
     try {
       const xTicks = xg.selectAll('.tick text').nodes();
       let maxTickWidth = 0,
@@ -903,7 +912,9 @@ export default class BarChart extends D3po {
         .attr('x', effectiveInnerWidth / 2)
         .attr('y', effectiveInnerHeight + xLabelPadding + (rotateX ? 36 : 24))
         // color intentionally left to theme/CSS so po_theme can override
+        .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
+        .style('text-transform', this.options.textTransform || 'none')
         .text(
           this.options && this.options.xLabel
             ? this.options.xLabel
@@ -916,6 +927,15 @@ export default class BarChart extends D3po {
     }
 
     const yg = this.chart.append('g').call(yAxis);
+
+    // Apply font settings to y-axis ticks
+    yg.selectAll('text')
+      .style('font-family', this.options.fontFamily)
+      .style('font-size', `${this.options.fontSize}px`);
+    if (this.options.textTransform) {
+      yg.selectAll('text').style('text-transform', this.options.textTransform);
+    }
+
     try {
       const yTicks = yg.selectAll('.tick text').nodes();
       const yMaxTickWidth =
@@ -954,7 +974,9 @@ export default class BarChart extends D3po {
         .attr('y', 0)
         // color intentionally left to theme/CSS so po_theme can override
         .attr('text-anchor', 'middle')
+        .style('font-family', this.options.fontFamily)
         .style('font-size', '14px')
+        .style('text-transform', this.options.textTransform || 'none')
         .text(
           this.options && this.options.yLabel
             ? this.options.yLabel

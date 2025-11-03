@@ -9,6 +9,7 @@ import {
   getHighlightColor,
   escapeHtml,
   resolveTooltipFormatter,
+  createColorScale,
 } from '../utils.js';
 
 /**
@@ -23,7 +24,7 @@ export default class Treemap extends D3po {
    * @param {string} options.size - Size field name
    * @param {string} options.group - Group field name
    * @param {string} [options.color] - Color field name
-   * @param {Function} [options.tile] - Tiling method (e.g., d3.treemapSquarify, d3.treemapBinary)
+   * @param {Function} [options.tile] - Tiling method (e.g., 'squarify', 'dice', 'slice', 'slice-dice')
    * @param {object} [options.labels] - Label positioning options
    */
   constructor(container, options) {
@@ -37,10 +38,15 @@ export default class Treemap extends D3po {
     this.groupField = options.group;
     this.colorField = options.color;
     this.subgroupField = options.subgroup; // NEW: optional subgroup
-    // accept string name for tiling (e.g., 'squarify' or 'binary') or a function
+    // accept string name for tiling (e.g., 'squarify', 'dice', 'slice', 'slice-dice') or a function
     if (typeof options.tile === 'string') {
-      this.tile =
-        options.tile === 'binary' ? d3.treemapBinary : d3.treemapSquarify;
+      const tilingMethods = {
+        squarify: d3.treemapSquarify,
+        dice: d3.treemapDice,
+        slice: d3.treemapSlice,
+        'slice-dice': d3.treemapSliceDice,
+      };
+      this.tile = tilingMethods[options.tile] || d3.treemapSquarify;
     } else {
       this.tile = options.tile || d3.treemapSquarify;
     }
@@ -115,6 +121,13 @@ export default class Treemap extends D3po {
 
     validateData(this.data, [this.sizeField, this.groupField]);
 
+    // Create color scale
+    const colorScale = createColorScale(
+      this.data,
+      this.colorField,
+      d3.interpolateViridis
+    );
+
     // Prepare hierarchical data. If a subgroup is provided, build a two-level
     // hierarchy: root -> groups -> subgroups (leaves). Otherwise build a
     // single-level hierarchy (one leaf per group).
@@ -125,7 +138,7 @@ export default class Treemap extends D3po {
       this.data.forEach(d => {
         const g = d[this.groupField];
         const sg = d[this.subgroupField] || 'None';
-        const color = this.colorField ? d[this.colorField] : null;
+        const color = colorScale(d);
         const key = `${g}|||${sg}`;
         // accumulate counts for subgroup leaves (sizeField assumed numeric count)
         if (!map.has(key))
@@ -153,7 +166,7 @@ export default class Treemap extends D3po {
         children: this.data.map(d => ({
           name: d[this.groupField],
           value: d[this.sizeField],
-          color: this.colorField ? d[this.colorField] : null,
+          color: colorScale(d),
           __row: d,
         })),
       };

@@ -2,7 +2,7 @@
 % Please edit documentation in R/api.R
 \name{po_background}
 \alias{po_background}
-\title{Background}
+\title{Background (Deprecated)}
 \usage{
 po_background(d3po, background = "#fff")
 }
@@ -15,5 +15,5 @@ po_background(d3po, background = "#fff")
 Appends custom background to an 'htmlwidgets' object
 }
 \description{
-Add a background to a chart.
+This function is deprecated. Use \code{po_theme(background = ...)} instead.
 }

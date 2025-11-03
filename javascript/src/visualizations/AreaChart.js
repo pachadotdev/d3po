@@ -9,6 +9,7 @@ import {
   hideTooltip,
   getHighlightColor,
   tintColor,
+  createColorScale,
 } from '../utils.js';
 
 export default class AreaChart extends D3po {
@@ -169,37 +170,15 @@ export default class AreaChart extends D3po {
         .text(String(yLabelText));
     }
 
-    // optional chart title (class `title`) placed above the plotting area
-    if (this.options && this.options.title) {
-      this.chart
-        .append('text')
-        .attr('class', 'title')
-        .attr('text-anchor', 'middle')
-        .attr('x', this.getInnerWidth() / 2)
-        // place title above the plotting area; allow override with titleOffsetY
-        .attr('y', this.options.titleOffsetY ? this.options.titleOffsetY : -10)
-        .style(
-          'font-family',
-          this.options && this.options.fontFamily
-            ? this.options.fontFamily
-            : null
-        )
-        .style(
-          'font-size',
-          this.options && this.options.titleFontSize
-            ? `${this.options.titleFontSize}px`
-            : this.options && this.options.fontSize
-              ? `${Number(this.options.fontSize) + 2}px`
-              : null
-        )
-        .text(String(this.options.title));
-    }
-
     const tooltipFormatter = resolveTooltipFormatter(
       this.tooltip,
       this.options && this.options.tooltip
     );
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorScale = createColorScale(
+      this.data,
+      this.colorField,
+      d3.interpolateViridis
+    );
     // Helper: Title Case conversion for tooltip display
     const toTitleCase = s => {
       if (s == null) return s;
@@ -221,11 +200,12 @@ export default class AreaChart extends D3po {
 
       seriesStack.forEach((s, i) => {
         const key = groups[i];
-        const fill = this.colorField
-          ? (this.data.find(r => String(r[this.groupField]) === key) || {})[
-              this.colorField
-            ]
-          : colorScale(key);
+        const sampleRow = this.data.find(
+          r => String(r[this.groupField]) === key
+        );
+        const fill = sampleRow
+          ? colorScale(sampleRow)
+          : colorScale({ group: key });
 
         // draw band: prefer a tinted fill (blend with white) instead of using transparency.
         // Backwards compatible: if user explicitly provided stackFillOpacity, respect it.
@@ -270,11 +250,12 @@ export default class AreaChart extends D3po {
       const pointsLayer = this.chart.append('g').attr('class', 'points-layer');
       seriesStack.forEach((s, i) => {
         const key = groups[i];
-        const fill = this.colorField
-          ? (this.data.find(r => String(r[this.groupField]) === key) || {})[
-              this.colorField
-            ]
-          : colorScale(key);
+        const sampleRow = this.data.find(
+          r => String(r[this.groupField]) === key
+        );
+        const fill = sampleRow
+          ? colorScale(sampleRow)
+          : colorScale({ group: key });
         pointsLayer
           .selectAll(`.point-stack-${i}`)
           .data(s)
@@ -343,8 +324,7 @@ export default class AreaChart extends D3po {
         .curve(d3.curveLinear);
 
       series.forEach((s, i) => {
-        const col =
-          this.colorField && s[0] ? s[0][this.colorField] : colorScale(i);
+        const col = s[0] ? colorScale(s[0]) : colorScale({ group: i });
         // Render area but make it non-interactive so points can receive pointer events
         // Prefer a tinted fill (blend with white) instead of lowering opacity.
         const areaFillOpacityExplicit =
@@ -387,8 +367,7 @@ export default class AreaChart extends D3po {
       // after drawing all non-stacked areas/lines, append points in a top layer
       const pointsLayer = this.chart.append('g').attr('class', 'points-layer');
       series.forEach((s, i) => {
-        const col =
-          this.colorField && s[0] ? s[0][this.colorField] : colorScale(i);
+        const col = s[0] ? colorScale(s[0]) : colorScale({ group: i });
         pointsLayer
           .selectAll(`.point-${i}`)
           .data(s)

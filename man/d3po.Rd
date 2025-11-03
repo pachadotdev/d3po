@@ -27,7 +27,7 @@ Creates a basic 'htmlwidget' object for simple visualization
 \description{
 Apache licensed alternative to 'Highcharter' which provides functions for both fast and beautiful interactive visualization for 'Markdown' and 'Shiny'.
 
-This function provides 'd3po' methods from R console
+Provides 'd3po' methods from R console
 }
 \seealso{
 Useful links:

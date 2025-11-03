@@ -28,7 +28,7 @@ Node size can represent counts or other metrics.
 if (interactive()) {
   d3po(pokemon_network) \%>\%
     po_network(daes(size = size, color = color, layout = "kk")) \%>\%
-    po_title("Pokemon Type Network")
+    po_labels(title = "Pokemon Type Network")
 }
 
 }

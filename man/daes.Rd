@@ -7,9 +7,11 @@
 daes(x, y, ...)
 }
 \arguments{
-\item{x, y, ...}{List of name value pairs giving aesthetics to map to
-variables. The names for x and y aesthetics are typically omitted because
-they are so common; all other aspects must be named.}
+\item{x}{x-axis mapping.}
+
+\item{y}{y-axis mapping.}
+
+\item{...}{Other aesthetic mappings. See the 'Aesthetics' section.}
 }
 \value{
 Aesthetics for the plots such as axis (x,y), group, color and/or size
@@ -28,6 +30,7 @@ Valid aesthetics (depending on the geom)
 \item \code{color}: color of geom.
 \item \code{size}: size of geom.
 \item \code{stack}: \code{TRUE} or \code{FALSE} to indicate if the geom should be stacked (for bar charts).
+\item \code{tiling}: "squarify" (default), "dice", "slice", "slice-dice" (for treemaps).
 \item \code{layout}: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
 \item \code{gradient}: \code{TRUE} or \code{FALSE} to indicate if color should be treated as a gradient palette (for geomaps).
 \item \code{sort}: ordering hint for discrete categories. Accepts one of

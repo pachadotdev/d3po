@@ -36,6 +36,6 @@ if (interactive()) {
     po_line(daes(
       x = height, y = weight, group = type, color = color
     )) \%>\%
-    po_title("Pokemon Evolution: Weight vs Height by Type")
+    po_labels(title = "Pokemon Evolution: Weight vs Height by Type")
 }
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/api.R
 \name{po_scatter}
 \alias{po_scatter}
-\title{scatter}
+\title{Scatter}
 \usage{
 po_scatter(d3po, ..., data = NULL, inherit_daes = TRUE)
 }
@@ -29,7 +29,7 @@ if (interactive()) {
     po_scatter(daes(
       x = height, y = weight, group = name, color = color_1
     )) \%>\%
-    po_title("Height vs Weight")
+    po_labels(title = "Height vs Weight")
 
   # Log-transformed scatter plot
   pokemon$log_height <- log10(pokemon$height)
@@ -39,15 +39,18 @@ if (interactive()) {
     po_scatter(daes(
       x = log_height, y = log_weight, group = name, color = color_1
     )) \%>\%
-    po_title("Log(Height) vs Log(Weight)")
+    po_labels(title = "Log(Height) vs Log(Weight)")
 
   # Weighted scatterplot by inverse distance from mean
   mean_weight <- mean(pokemon$weight, na.rm = TRUE)
   mean_height <- mean(pokemon$height, na.rm = TRUE)
+
   pokemon$distance_from_mean_weight <- abs(pokemon$weight - mean_weight)
   pokemon$distance_from_mean_height <- abs(pokemon$height - mean_height)
+
   pokemon$avg_distance <- (pokemon$distance_from_mean_weight +
     pokemon$distance_from_mean_height) / 2
+
   pokemon$inverse_distance_from_mean <- 1 / (pokemon$avg_distance + 0.01)
 
   d3po(pokemon) \%>\%
@@ -55,6 +58,6 @@ if (interactive()) {
       x = height, y = weight, size = inverse_distance_from_mean,
       group = name, color = color_1
     )) \%>\%
-    po_title("Height vs Weight (Size = 1 / Distance from the Mean)")
+    po_labels(title = "Height vs Weight (Size = 1 / Distance from the Mean)")
 }
 }

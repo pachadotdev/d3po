@@ -2,9 +2,9 @@
 #'
 #' @description Aesthetics of the chart.
 #'
-#' @param x,y,... List of name value pairs giving aesthetics to map to
-#'  variables. The names for x and y aesthetics are typically omitted because
-#'  they are so common; all other aspects must be named.
+#' @param x x-axis mapping.
+#' @param y y-axis mapping.
+#' @param ... Other aesthetic mappings. See the 'Aesthetics' section.
 #'
 #' @section Aesthetics:
 #' Valid aesthetics (depending on the geom)
@@ -16,6 +16,7 @@
 #' - `color`: color of geom.
 #' - `size`: size of geom.
 #' - `stack`: `TRUE` or `FALSE` to indicate if the geom should be stacked (for bar charts).
+#' - `tiling`: "squarify" (default), "dice", "slice", "slice-dice" (for treemaps).
 #' - `layout`: "fr", "kk", or any other supported in igraph to set the geom layout (for network charts).
 #' - `gradient`: `TRUE` or `FALSE` to indicate if color should be treated as a gradient palette (for geomaps).
 #' - `sort`: ordering hint for discrete categories. Accepts one of

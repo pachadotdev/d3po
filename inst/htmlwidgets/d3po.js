@@ -78,6 +78,9 @@ HTMLWidgets.widget({
         // Add gradient option
         if (x.gradient !== undefined) options.gradient = x.gradient;
         
+        // Add discrete_palette for discrete gradient coloring
+        if (x.discrete_palette) options.discrete_palette = x.discrete_palette;
+        
         // Add title
         if (x.title) options.title = x.title;
         
@@ -114,7 +117,7 @@ HTMLWidgets.widget({
         if (x.font) {
           if (x.font.family) options.fontFamily = x.font.family;
           if (x.font.size) options.fontSize = x.font.size;
-          // Note: font.transform is handled in CSS/text-transform, not in D3po options
+          if (x.font.transform) options.textTransform = x.font.transform;
         }
         
         // Add labels settings

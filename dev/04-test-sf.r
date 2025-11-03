@@ -15,3 +15,20 @@ vis <- d3po(south_america, width = 800, height = 600) %>%
 # htmlwidgets::saveWidget(vis, "dev/test-sf.html", selfcontained = F)
 
 vis
+
+load_all()
+
+library(dplyr)
+library(sf)
+
+uk <- d3po::subnational %>%
+  filter(country == "United Kingdom") %>%
+  # filter England, Scotland, Wales and Northern Ireland by latitude/longitude
+  mutate(
+    latitude = sf::st_coordinates(sf::st_centroid(geometry))[, 2],
+    longitude = sf::st_coordinates(sf::st_centroid(geometry))[, 1]
+  ) %>%
+  filter(
+    latitude >= 49 & latitude <= 61,
+    longitude >= -8 & longitude <= 2
+  )

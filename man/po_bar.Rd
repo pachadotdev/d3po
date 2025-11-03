@@ -34,11 +34,11 @@ if (interactive()) {
   # Vertical bars
   d3po(dout) \%>\%
     po_bar(daes(x = type, y = count, color = color)) \%>\%
-    po_title("Vertical Bars")
+    po_labels(title = "Vertical Bars")
 
   # Horizontal bars (flipped axes)
   d3po(dout) \%>\%
     po_bar(daes(x = count, y = type, color = color)) \%>\%
-    po_title("Horizontal Bars")
+    po_labels(title = "Horizontal Bars")
 }
 }

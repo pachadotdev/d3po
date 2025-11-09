@@ -248,25 +248,45 @@ export default class GeoMap extends D3po {
 
         const dataRow = dataMap.get(String(identifier));
 
+        // If no data row found, use gray for NA
+        if (!dataRow) {
+          return '#cccccc'; // Gray for NA regions
+        }
+
         if (colorScale) {
           if (isNamedVector) {
             // Named vector: pass the feature properties directly to colorScale
             // which will look up the continent field
             return colorScale(d.properties);
-          } else if (useDiscreteGradient && this.sizeField && dataRow) {
+          } else if (useDiscreteGradient && this.sizeField) {
             // Discrete gradient: color by size value using quantile-based palette
-            return colorScale(dataRow[this.sizeField]);
-          } else if (this.options.gradient && this.sizeField && dataRow) {
+            const value = dataRow[this.sizeField];
+            // Check for NA/null values
+            if (value == null || isNaN(value)) {
+              return '#cccccc'; // Gray for NA values
+            }
+            return colorScale(value);
+          } else if (this.options.gradient && this.sizeField) {
             // Gradient: color by size value
-            return colorScale(dataRow[this.sizeField]);
-          } else if (this.colorField && dataRow) {
+            const value = dataRow[this.sizeField];
+            // Check for NA/null values
+            if (value == null || isNaN(value)) {
+              return '#cccccc'; // Gray for NA values
+            }
+            return colorScale(value);
+          } else if (this.colorField) {
             // Color by explicit color field using scale
-            return colorScale(dataRow[this.colorField]);
+            const colorValue = dataRow[this.colorField];
+            // Check for NA/null values
+            if (colorValue == null) {
+              return '#cccccc'; // Gray for NA values
+            }
+            return colorScale(colorValue);
           } else if (identifier) {
             // Default: color by group
             return colorScale(identifier);
           }
-        } else if (this.colorField && dataRow && dataRow[this.colorField]) {
+        } else if (this.colorField && dataRow[this.colorField]) {
           // Color field with no scale means direct color values
           return dataRow[this.colorField];
         }
@@ -276,7 +296,12 @@ export default class GeoMap extends D3po {
       })
       .attr('stroke', this.options.stroke || '#333')
       .attr('stroke-width', 1)
-      .style('cursor', 'pointer');
+      .style('cursor', 'pointer')
+      .each(function (_d) {
+        // Store the original fill color on the element for hover restoration
+        const el = d3.select(this);
+        el.attr('data-original-fill', el.attr('fill'));
+      });
 
     // Add legend if in gradient or discrete gradient mode
     if (
@@ -400,9 +425,7 @@ export default class GeoMap extends D3po {
     regions
       .on('mouseover', function (event, d) {
         const el = d3.select(this);
-        const orig = el.attr('fill');
-        // Store original color on the element
-        el.attr('data-original-fill', orig);
+        const orig = el.attr('data-original-fill');
         const highlight = getHighlightColor(orig);
         el.attr('fill', highlight);
 

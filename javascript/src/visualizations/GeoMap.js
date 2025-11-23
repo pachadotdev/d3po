@@ -167,10 +167,13 @@ export default class GeoMap extends D3po {
         .filter(v => v != null && !isNaN(v));
 
       if (values.length > 0) {
-        const extent = d3.extent(values);
+        const extent = this.options.limits || d3.extent(values);
         // Create interpolator from the custom palette
         const interpolator = d3.interpolateRgbBasis(colorPalette);
-        colorScale = d3.scaleSequential(interpolator).domain(extent);
+        colorScale = d3
+          .scaleSequential(interpolator)
+          .domain(extent)
+          .clamp(true);
       }
     } else if (hasDiscretePalette && this.sizeField && this.data) {
       // Discrete gradient mode (no gradient flag): map custom palette to quantiles of size field
@@ -180,9 +183,17 @@ export default class GeoMap extends D3po {
         .filter(v => v != null && !isNaN(v));
 
       if (values.length > 0) {
-        // Use d3.scaleQuantile for automatic quantile-based binning
-        // This will divide the data into N equal-sized groups where N = colorPalette.length
-        colorScale = d3.scaleQuantile().domain(values).range(colorPalette);
+        if (this.options.limits) {
+          // If limits provided, use scaleQuantize for linear binning over the fixed range
+          colorScale = d3
+            .scaleQuantize()
+            .domain(this.options.limits)
+            .range(colorPalette);
+        } else {
+          // Use d3.scaleQuantile for automatic quantile-based binning
+          // This will divide the data into N equal-sized groups where N = colorPalette.length
+          colorScale = d3.scaleQuantile().domain(values).range(colorPalette);
+        }
 
         useDiscreteGradient = true;
       }
@@ -191,8 +202,11 @@ export default class GeoMap extends D3po {
       const values = this.data
         .map(d => d[this.sizeField])
         .filter(v => v != null);
-      const extent = d3.extent(values);
-      colorScale = d3.scaleSequential(d3.interpolateViridis).domain(extent);
+      const extent = this.options.limits || d3.extent(values);
+      colorScale = d3
+        .scaleSequential(d3.interpolateViridis)
+        .domain(extent)
+        .clamp(true);
     } else if (this.colorField && this.data) {
       // Explicit color field provided
       // Check if values look like colors (hex codes or color names)
@@ -324,15 +338,26 @@ export default class GeoMap extends D3po {
         const colorPalette = this.options.discrete_palette;
         const blockHeight = legendHeight / colorPalette.length;
 
-        // Get quantiles from the scale
-        const quantiles = colorScale.quantiles();
-
-        // Get min and max values
-        const values = this.data
-          .map(d => d[this.sizeField])
-          .filter(v => v != null && !isNaN(v));
-        const minVal = d3.min(values);
-        const maxVal = d3.max(values);
+        // Get quantiles/thresholds from the scale
+        let boundaries;
+        if (this.options.limits) {
+          // For quantize scale (linear bins), we can calculate boundaries
+          // scaleQuantize doesn't have quantiles(), but has thresholds() which returns internal boundaries
+          // We need min, thresholds, max
+          const domain = colorScale.domain();
+          // thresholds() returns the values that separate the bands
+          const thresholds = colorScale.thresholds();
+          boundaries = [domain[0], ...thresholds, domain[1]];
+        } else {
+          // For quantile scale
+          const quantiles = colorScale.quantiles();
+          const values = this.data
+            .map(d => d[this.sizeField])
+            .filter(v => v != null && !isNaN(v));
+          const minVal = d3.min(values);
+          const maxVal = d3.max(values);
+          boundaries = [minVal, ...quantiles, maxVal];
+        }
 
         // Draw color blocks
         colorPalette.forEach((color, i) => {
@@ -347,9 +372,7 @@ export default class GeoMap extends D3po {
             .style('stroke-width', 0.5);
         });
 
-        // Add labels for quantile boundaries
-        // For N colors, we have N-1 quantile boundaries, plus min and max
-        const boundaries = [minVal, ...quantiles, maxVal];
+        // Add labels for boundaries
         boundaries.forEach((val, i) => {
           const y = legendHeight - i * blockHeight;
           legend
@@ -404,10 +427,32 @@ export default class GeoMap extends D3po {
           .domain(colorScale.domain())
           .range([legendHeight, 0]);
 
+        // Determine a tick formatter with sensible decimal precision based on the
+        // domain span. For small ranges (like 0..1) we show one or two decimals.
+        const domain = legendScale.domain();
+        let tickFormatFn = d3.format('.2f');
+        if (domain && domain.length === 2) {
+          const span = Math.abs(domain[1] - domain[0]);
+          // Choose precision: if span >= 10 -> integer, if >= 1 -> 1 decimal, else 2 decimals
+          if (span >= 10) {
+            tickFormatFn = d3.format('.0f');
+          } else if (span >= 1) {
+            tickFormatFn = d3.format('.1f');
+          } else {
+            // For very small spans, attempt to infer decimals from span magnitude
+            // e.g., span 0.01 -> show 3 decimals
+            const decimals = Math.min(
+              6,
+              Math.max(2, Math.ceil(-Math.log10(span)) + 1)
+            );
+            tickFormatFn = d3.format(`.${decimals}f`);
+          }
+        }
+
         const legendAxis = d3
           .axisRight(legendScale)
           .ticks(5)
-          .tickFormat(d3.format('.0f'));
+          .tickFormat(tickFormatFn);
 
         legend
           .append('g')

@@ -81,6 +81,9 @@ HTMLWidgets.widget({
         // Add discrete_palette for discrete gradient coloring
         if (x.discrete_palette) options.discrete_palette = x.discrete_palette;
         
+        // Add limits for color scale range
+        if (x.limits) options.limits = x.limits;
+        
         // Add title
         if (x.title) options.title = x.title;
         

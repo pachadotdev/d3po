@@ -1204,6 +1204,7 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' @description Plot a geomap using sf spatial objects
 #'
 #' @inheritParams po_box
+#' @param limits A numeric vector of length 2 specifying the minimum and maximum values for the color scale.
 #'
 #' @examples
 #' if (interactive()) {
@@ -1241,11 +1242,11 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #' }
 #' @export
 #' @return an 'htmlwidgets' object with the desired interactive plot
-po_geomap <- function(d3po, ..., data = NULL, inherit_daes = TRUE) UseMethod("po_geomap")
+po_geomap <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL) UseMethod("po_geomap")
 
 #' @export
 #' @method po_geomap d3po
-po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
+po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL) {
   # Set chart type
   d3po$x$type <- "geomap"
 
@@ -1337,16 +1338,25 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   d3po$x$color <- color_value
   d3po$x$discrete_palette <- discrete_palette
 
+  if (is.null(limits)) {
+    limits <- daes_to_opts(daes, "limits")
+  }
+  d3po$x$limits <- limits
+
   return(d3po)
 }
 
 #' @export
 #' @method po_geomap d3proxy
-po_geomap.d3proxy <- function(d3po, ..., data, inherit_daes) {
+po_geomap.d3proxy <- function(d3po, ..., data, inherit_daes, limits = NULL) {
   assertthat::assert_that(!missing(data), msg = "Missing `data`")
   assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
+  
+  if (!is.null(limits)) {
+    msg$msg$limits <- limits
+  }
 
   d3po$session$sendCustomMessage("d3po-geomap", msg)
 

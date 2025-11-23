@@ -1,3 +1,7 @@
+# d3po 1.0.1
+
+* Adds an optional `limits = c(min, max)` argument to `po_geomap()` to set gradient limits.
+
 # d3po 1.0.0
 
 * Option to show/hide the download buttons.

@@ -4,7 +4,7 @@
 \alias{po_geomap}
 \title{Geomap}
 \usage{
-po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE)
+po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL)
 }
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
@@ -15,6 +15,8 @@ po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE)
 to \code{\link[=d3po]{d3po()}}.}
 
 \item{inherit_daes}{Whether to inherit aesthetics previous specified.}
+
+\item{limits}{A numeric vector of length 2 specifying the minimum and maximum values for the color scale.}
 }
 \value{
 an 'htmlwidgets' object with the desired interactive plot

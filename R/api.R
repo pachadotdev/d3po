@@ -1247,6 +1247,13 @@ po_geomap <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL
 #' @export
 #' @method po_geomap d3po
 po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL) {
+  if (!requireNamespace("sf", quietly = TRUE) || !requireNamespace("geojsonsf", quietly = TRUE)) {
+    if (interactive()) {
+      message("The 'sf' and 'geojsonsf' packages are required for po_geomap(). Please install them via install.packages(c('sf', 'geojsonsf')).")
+      return(FALSE)
+    }
+  }
+
   # Set chart type
   d3po$x$type <- "geomap"
 

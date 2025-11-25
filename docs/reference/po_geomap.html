@@ -81,7 +81,7 @@
 
 <h3>Usage</h3>
 
-<pre><code class="language-R">po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE)
+<pre><code class="language-R">po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL)
 </code></pre>
 
 
@@ -100,6 +100,9 @@ to <code>d3po()</code>.
 </td></tr><tr><td><code id="inherit_daes">inherit_daes</code></td>
 <td>
 Whether to inherit aesthetics previous specified.
+</td></tr><tr><td><code id="limits">limits</code></td>
+<td>
+A numeric vector of length 2 specifying the minimum and maximum values for the color scale.
 </td></tr></table><h3>Value</h3>
 
 <p>an 'htmlwidgets' object with the desired interactive plot

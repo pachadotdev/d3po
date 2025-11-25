@@ -1,3 +1,7 @@
+# d3po 1.0.2
+
+* Small patch to conditionally use 'sf'/'geojsonsf' in `po_geomap()`, per CRAN request.
+
 # d3po 1.0.1
 
 * Adds an optional `limits = c(min, max)` argument to `po_geomap()` to set gradient limits.

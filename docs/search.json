@@ -98,7 +98,7 @@
   {
     "title": "po_geomap",
     "url": "reference/po_geomap.html",
-    "content": "po_geomap Geomap po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE) d3poEither the output of d3po() or d3po_proxy(). ... Aesthetics, see daes(). data Any dataset to use for plot, overrides data passed to d3po(). inherit_daes Whether to inherit aesthetics previous specified. an 'htmlwidgets' object with the desired interactive plot Plot a geomap using sf spatial objects if (interactive()) world \\% po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) \\%>\\% po_labels(title = \"Trade Volume by Country in 2023\")",
+    "content": "po_geomap Geomap po_geomap(d3po, ..., data = NULL, inherit_daes = TRUE, limits = NULL) d3poEither the output of d3po() or d3po_proxy(). ... Aesthetics, see daes(). data Any dataset to use for plot, overrides data passed to d3po(). inherit_daes Whether to inherit aesthetics previous specified. limits A numeric vector of length 2 specifying the minimum and maximum values for the color scale. an 'htmlwidgets' object with the desired interactive plot Plot a geomap using sf spatial objects if (interactive()) world \\% po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) \\%>\\% po_labels(title = \"Trade Volume by Country in 2023\")",
     "type": "function"
   },
   {

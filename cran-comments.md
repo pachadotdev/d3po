@@ -1,10 +1,8 @@
-## Test environments
-* local R installation, R 4.1.1
-* ubuntu 16.04 (on travis-ci), R 4.1.1
-* win-builder (devel)
+Dear CRAN Team:
 
-## R CMD check results
+I hope you are doing well.
 
-0 errors | 0 warnings | 1 note
+Per Prof. Dr. Ripley's indication, I have added a fallback for the geomap examples, which require 'sf' and 'geojsonsf' packages, which will not run on every platform (but they do with "standard" Linux-Mac-Windows setups).
 
-* This is a new release.
+Best,
+MVS

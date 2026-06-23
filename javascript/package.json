@@ -40,7 +40,7 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.0",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.23.0",
     "@rollup/plugin-node-resolve": "^15.2.0",
     "@rollup/plugin-terser": "^1.0.0",

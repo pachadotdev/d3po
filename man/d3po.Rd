@@ -25,6 +25,8 @@ string and have \code{'px'} appended.}
 Creates a basic 'htmlwidget' object for simple visualization
 }
 \description{
+\if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
+
 Apache licensed alternative to 'Highcharter' which provides functions for both fast and beautiful interactive visualization for 'Markdown' and 'Shiny'.
 
 Provides 'd3po' methods from R console
@@ -42,6 +44,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Mauricio Vargas Sepulveda \email{m.vargas.sepulveda@gmail.com} (\href{https://orcid.org/0000-0003-1017-7574}{ORCID}) [copyright holder]
   \item John Coene
 }
 

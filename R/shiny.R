@@ -24,12 +24,7 @@ render_d3po <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) {
     expr <- substitute(expr)
   } # force quoted
-  fn <- htmlwidgets::shinyRenderWidget(expr, d3po_output, env, quoted = TRUE)
-  # Store the raw expression and environment so tablerApp can evaluate the
-  # widget directly without requiring a Shiny session context.
-  attr(fn, "tabler_expr") <- expr
-  attr(fn, "tabler_env")  <- env
-  fn
+  htmlwidgets::shinyRenderWidget(expr, d3po_output, env, quoted = TRUE)
 }
 
 #' @rdname d3po-shiny

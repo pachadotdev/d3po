@@ -41,8 +41,8 @@ if (interactive()) {
 
   trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
-  d3po(trade_by_continent, width = 800, height = 600) \%>\%
-    po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) \%>\%
+  d3po(trade_by_continent, width = 800, height = 600) |>
+    po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) |>
     po_labels(title = "Trade Share by Reporter Continent in 2023")
 }
 }

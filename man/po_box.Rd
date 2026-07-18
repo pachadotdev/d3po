@@ -38,11 +38,11 @@ if (interactive()) {
     "Europe", "North America", "Oceania", "South America"
   )
 
-  d3po(trade_continent, width = 800, height = 600) \%>\%
+  d3po(trade_continent, width = 800, height = 600) |>
     po_box(daes(
       x = reporter_continent, y = trade, color = my_pal,
       tooltip = reporter_continent
-    )) \%>\%
+    )) |>
     po_labels(
       x = "Continent",
       y = "Trade (USD billion)",

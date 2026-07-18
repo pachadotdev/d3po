@@ -54,8 +54,8 @@ if (interactive()) {
     "Europe", "North America", "Oceania", "South America"
   )
 
-  d3po(world, width = 800, height = 600) \%>\%
-    po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) \%>\%
+  d3po(world, width = 800, height = 600) |>
+    po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) |>
     po_labels(title = "Trade Volume by Country in 2023")
 }
 }

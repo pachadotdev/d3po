@@ -40,8 +40,8 @@ if (interactive()) {
 
   my_pal <- tintin::tintin_pal(option = "red_rackhams_treasure")(7)
 
-  d3po(trade_wide, width = 800, height = 600) \%>\%
-    po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) \%>\%
+  d3po(trade_wide, width = 800, height = 600) |>
+    po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) |>
     po_labels(
       x = "Trade in 2019 (USD billion)",
       y = "Trade in 2023 (USD billion)",

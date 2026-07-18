@@ -2,6 +2,7 @@ library(tradestatistics)
 library(dplyr)
 library(sf)
 
+# NOTE TO MYSELF: THIS IS COMTRADE DATA, JUST KEEP IT
 trade <- ots_create_tidy_data(years = c(2019,2023), table = "yrp")
 
 trade <- as_tibble(trade)

@@ -39,10 +39,10 @@ if (interactive()) {
     "Europe", "North America", "Oceania", "South America"
   )
 
-  d3po(trade_by_continent, width = 800, height = 600) \%>\%
+  d3po(trade_by_continent, width = 800, height = 600) |>
     po_area(daes(
       x = year, y = trade, group = reporter_continent, color = my_pal
-    )) \%>\%
+    )) |>
     po_labels(
       x = "Year",
       y = "Trade (USD billion)",

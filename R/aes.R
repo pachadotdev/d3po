@@ -27,8 +27,10 @@
 #' @export
 #' @return Aesthetics for the plots such as axis (x,y), group, color and/or size
 daes <- function(x, y, ...) {
-  exprs <- rlang::enquos(x = x, y = y, ..., .ignore_empty = "all")
-  aes <- new_aes(exprs, env = parent.frame())
+  env <- parent.frame()
+  exprs <- as.list(match.call())[-1]
+  exprs <- lapply(exprs, .new_quosure, env = env)
+  aes <- new_aes(exprs, env = env)
   .construct_aesthetics(aes)
 }
 
@@ -47,18 +49,60 @@ daes <- function(x, y, ...) {
   structure(aes, class = c(class, class(aes)))
 }
 
+# Minimal base R emulation of rlang quosures: a one-sided formula already
+# stores an unevaluated expression together with the environment it should
+# be evaluated in (`x[[2]]` and `environment(x)`), so no external package is
+# needed to capture and later evaluate user-supplied aesthetic expressions.
+.new_quosure <- function(expr, env = parent.frame()) {
+  q <- call("~", expr)
+  class(q) <- "formula"
+  environment(q) <- env
+  q
+}
+
+.is_quosure <- function(x) {
+  inherits(x, "formula") && length(x) == 2
+}
+
+.quo_get_expr <- function(x) {
+  x[[2]]
+}
+
+.is_symbolic <- function(x) {
+  is.symbol(x) || is.call(x)
+}
+
+.quo_is_symbolic <- function(x) {
+  .is_symbolic(.quo_get_expr(x))
+}
+
+.eval_quo <- function(x) {
+  eval(.quo_get_expr(x), envir = environment(x))
+}
+
+.is_bare_atomic <- function(x) {
+  !is.null(x) && is.atomic(x) && !is.object(x)
+}
+
+.as_label <- function(x) {
+  if (.is_quosure(x)) {
+    x <- .quo_get_expr(x)
+  }
+  deparse1(x)
+}
+
 # Wrap symbolic objects in quosures but pull out constants out of
 # quosures for backward-compatibility
 new_aesthetic <- function(x, env = globalenv()) {
-  if (rlang::is_quosure(x)) {
-    if (!rlang::quo_is_symbolic(x)) {
-      x <- rlang::quo_get_expr(x)
+  if (.is_quosure(x)) {
+    if (!.quo_is_symbolic(x)) {
+      x <- .quo_get_expr(x)
     }
     return(x)
   }
 
-  if (rlang::is_symbolic(x)) {
-    x <- rlang::new_quosure(x, env = env)
+  if (.is_symbolic(x)) {
+    x <- .new_quosure(x, env = env)
     return(x)
   }
 
@@ -78,7 +122,7 @@ print.uneval <- function(x, ...) {
   if (length(x) == 0) {
     cat("<empty>\n")
   } else {
-    values <- vapply(x, rlang::quo_label, character(1))
+    values <- vapply(x, .as_label, character(1))
     bullets <- paste0("* ", format(paste0("`", names(x), "`")), " -> ", values, "\n")
 
     cat(bullets, sep = "")
@@ -170,15 +214,15 @@ combine_daes <- function(main_daes, daes, inherit_daes = TRUE) {
 daes_to_columns <- function(daes) {
   Filter(function(x) {
     # Check if it's a bare atomic (scalar value)
-    if (rlang::is_bare_atomic(x)) {
+    if (.is_bare_atomic(x)) {
       return(FALSE)
     }
     # Check if it's a quosure that evaluates to a scalar
-    if (rlang::is_quosure(x)) {
+    if (.is_quosure(x)) {
       tryCatch(
         {
-          val <- rlang::eval_tidy(x)
-          return(!rlang::is_bare_atomic(val))
+          val <- .eval_quo(x)
+          return(!.is_bare_atomic(val))
         },
         error = function(e) {
           # If evaluation fails, assume it's a column reference
@@ -189,7 +233,7 @@ daes_to_columns <- function(daes) {
     return(TRUE)
   }, daes) |>
     lapply(function(x) {
-      label <- rlang::as_label(x)
+      label <- .as_label(x)
       # Handle .data$column_name syntax
       if (grepl("^\\.data\\$", label)) {
         return(sub("^\\.data\\$", "", label))
@@ -208,13 +252,13 @@ daes_to_columns <- function(daes) {
 #' @noRd
 #' @keywords internal
 daes_to_opts <- function(daes, var) {
-  if (rlang::is_null(daes[[var]])) {
+  if (is.null(daes[[var]])) {
     return(NULL)
   }
-  if (rlang::is_bare_atomic(daes[[var]])) {
+  if (.is_bare_atomic(daes[[var]])) {
     return(daes[[var]])
   }
-  label <- rlang::as_label(daes[[var]])
+  label <- .as_label(daes[[var]])
   # Handle .data$column_name syntax
   if (grepl("^\\.data\\$", label)) {
     return(sub("^\\.data\\$", "", label))
@@ -222,14 +266,14 @@ daes_to_opts <- function(daes, var) {
   # Try to evaluate as an expression (for numeric values like -pi/2, or logical like TRUE/FALSE)
   # If it succeeds and returns a scalar, use that; otherwise return the label
   # If the original aesthetic was provided as a quosure (captured expression),
-  # evaluate it in its captured environment using rlang::eval_tidy(). This
+  # evaluate it in its captured environment using .eval_quo(). This
   # ensures that user variables like `my_pal` defined in the calling frame
   # are resolved and returned as atomic vectors (so they can be serialized
   # to JavaScript as palettes).
-  if (rlang::is_quosure(daes[[var]])) {
+  if (.is_quosure(daes[[var]])) {
     tryCatch(
       {
-        result <- rlang::eval_tidy(daes[[var]])
+        result <- .eval_quo(daes[[var]])
         if (is.atomic(result)) {
           # Convert named vectors to named lists to avoid jsonlite warning
           if (!is.null(names(result))) {

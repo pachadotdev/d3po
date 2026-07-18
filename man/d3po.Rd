@@ -27,7 +27,7 @@ Creates a basic 'htmlwidget' object for simple visualization
 \description{
 \if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
 
-Apache licensed alternative to 'Highcharter' which provides functions for both fast and beautiful interactive visualization for 'Markdown' and 'Shiny'.
+Apache licensed alternative to 'Highcharter' which provides functions for both fast and beautiful interactive visualization for 'Markdown' 'Shiny', and 'Tabler'.
 
 Provides 'd3po' methods from R console
 }

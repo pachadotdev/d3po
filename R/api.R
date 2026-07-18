@@ -26,11 +26,11 @@
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(trade_continent, width = 800, height = 600) %>%
+#'   d3po(trade_continent, width = 800, height = 600) |>
 #'     po_box(daes(
 #'       x = reporter_continent, y = trade, color = my_pal,
 #'       tooltip = reporter_continent
-#'     )) %>%
+#'     )) |>
 #'     po_labels(
 #'       x = "Continent",
 #'       y = "Trade (USD billion)",
@@ -111,11 +111,11 @@ po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'   d3po(trade_by_continent, width = 800, height = 600) |>
 #'     po_treemap(daes(
 #'       size = trade, group = reporter_continent,
 #'       color = my_pal, tiling = "Squarify"
-#'     )) %>%
+#'     )) |>
 #'     po_labels(title = "Trade Share by Continent in 2023")
 #' }
 #' @export
@@ -184,8 +184,8 @@ po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(trade_by_continent, width = 800, height = 600) %>%
-#'     po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) %>%
+#'   d3po(trade_by_continent, width = 800, height = 600) |>
+#'     po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) |>
 #'     po_labels(title = "Trade Share by Reporter Continent in 2023")
 #' }
 #' @export
@@ -255,8 +255,8 @@ po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #'   trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 #'
-#'   d3po(trade_by_continent, width = 800, height = 600) %>%
-#'     po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) %>%
+#'   d3po(trade_by_continent, width = 800, height = 600) |>
+#'     po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) |>
 #'     po_labels(title = "Trade Share by Reporter Continent in 2023")
 #' }
 #' @export
@@ -324,10 +324,10 @@ po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(trade_by_continent, width = 800, height = 600) %>%
+#'   d3po(trade_by_continent, width = 800, height = 600) |>
 #'     po_area(daes(
 #'       x = year, y = trade, group = reporter_continent, color = my_pal
-#'     )) %>%
+#'     )) |>
 #'     po_labels(
 #'       x = "Year",
 #'       y = "Trade (USD billion)",
@@ -400,8 +400,8 @@ po_area.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(trade_by_continent, width = 800, height = 600) %>%
-#'     po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) %>%
+#'   d3po(trade_by_continent, width = 800, height = 600) |>
+#'     po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) |>
 #'     po_labels(
 #'       x = "Continent",
 #'       y = "Trade (USD billion)",
@@ -482,8 +482,8 @@ po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(trade_by_continent, width = 800, height = 600) %>%
-#'     po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) %>%
+#'   d3po(trade_by_continent, width = 800, height = 600) |>
+#'     po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) |>
 #'     po_labels(
 #'       x = "Year",
 #'       y = "Trade (USD billion)",
@@ -556,8 +556,8 @@ po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'
 #'   my_pal <- tintin::tintin_pal(option = "red_rackhams_treasure")(7)
 #'
-#'   d3po(trade_wide, width = 800, height = 600) %>%
-#'     po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) %>%
+#'   d3po(trade_wide, width = 800, height = 600) |>
+#'     po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) |>
 #'     po_labels(
 #'       x = "Trade in 2019 (USD billion)",
 #'       y = "Trade in 2023 (USD billion)",
@@ -1066,8 +1066,8 @@ po_download.d3proxy <- function(d3po, show = TRUE) {
 #'   g <- graph_from_data_frame(trade_network, directed = TRUE, vertices = vertices)
 #'
 #'   # Create the network visualization
-#'   d3po(g, width = 800, height = 600) %>%
-#'     po_network(daes(size = trade_volume, color = color, layout = "fr")) %>%
+#'   d3po(g, width = 800, height = 600) |>
+#'     po_network(daes(size = trade_volume, color = color, layout = "fr")) |>
 #'     po_labels(title = "Trade Network by Country in 2023")
 #' }
 #'
@@ -1236,8 +1236,8 @@ po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
 #'     "Europe", "North America", "Oceania", "South America"
 #'   )
 #'
-#'   d3po(world, width = 800, height = 600) %>%
-#'     po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) %>%
+#'   d3po(world, width = 800, height = 600) |>
+#'     po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) |>
 #'     po_labels(title = "Trade Volume by Country in 2023")
 #' }
 #' @export
@@ -1282,7 +1282,7 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits =
       "Please ensure you're using an sf spatial object, e.g.:\n",
       "  library(sf)\n",
       "  my_map <- st_read('path/to/shapefile.shp')\n",
-      "  d3po(my_map) %>% po_geomap(...)"
+      "  d3po(my_map) |> po_geomap(...)"
     )
   }
 

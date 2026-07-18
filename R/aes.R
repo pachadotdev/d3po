@@ -120,8 +120,7 @@ is_daes <- function(x, cl = "daes") {
 
 # retrieve aesthetics
 get_daes <- function(...) {
-  aes <- list(...) %>%
-    purrr::keep(is_daes)
+  aes <- Filter(is_daes, list(...))
 
   if (length(aes)) {
     aes[[1]]
@@ -169,7 +168,7 @@ combine_daes <- function(main_daes, daes, inherit_daes = TRUE) {
 #' @noRd
 #' @keywords internal
 daes_to_columns <- function(daes) {
-  purrr::keep(daes, function(x) {
+  Filter(function(x) {
     # Check if it's a bare atomic (scalar value)
     if (rlang::is_bare_atomic(x)) {
       return(FALSE)
@@ -188,16 +187,16 @@ daes_to_columns <- function(daes) {
       )
     }
     return(TRUE)
-  }) %>%
-    purrr::map(function(x) {
+  }, daes) |>
+    lapply(function(x) {
       label <- rlang::as_label(x)
       # Handle .data$column_name syntax
       if (grepl("^\\.data\\$", label)) {
         return(sub("^\\.data\\$", "", label))
       }
       return(label)
-    }) %>%
-    unname() %>%
+    }) |>
+    unname() |>
     unlist()
 }
 

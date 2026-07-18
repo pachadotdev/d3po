@@ -1,3 +1,8 @@
+# d3po 1.1.0
+
+* Uses the native pipe `|>` and now depends on R >= 4.0.
+* Replace `purrr::keep()` with base `Filter()`.
+
 # d3po 1.0.2
 
 * Small patch to conditionally use 'sf'/'geojsonsf' in `po_geomap()`, per CRAN request.

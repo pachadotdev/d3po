@@ -656,7 +656,7 @@ po_tooltip.d3proxy <- function(d3po, template) {
 #' `d3po$x$formatted_cols` for the renderer to use.
 #'
 #' @inheritParams po_box
-#' @param ... Named formatting expressions (as quosures). Each name should
+#' @param ... Named formatting expressions (as unevaluated calls). Each name should
 #' correspond to an aesthetic (e.g. `x`, `y`, `tooltip`, etc.).
 #' @export
 po_format <- function(d3po, ...) UseMethod("po_format")
@@ -664,7 +664,7 @@ po_format <- function(d3po, ...) UseMethod("po_format")
 #' @export
 #' @method po_format d3po
 po_format.d3po <- function(d3po, ...) {
-  formats <- rlang::quos(...)
+  formats <- as.list(match.call(expand.dots = FALSE)[["..."]])
   stopifnot("No formatters provided to po_format()" = length(formats) > 0)
 
   # Work on the already-selected data present in `x$data` (preferred)
@@ -687,7 +687,7 @@ po_format.d3po <- function(d3po, ...) {
 
     # Evaluate the expression in the data frame context. The result should be
     # a vector with length 1 or nrow(data).
-    vals <- rlang::eval_tidy(q, data = data)
+    vals <- eval(q, envir = data, enclos = parent.frame())
 
     if (length(vals) == 1 && nrow(data) > 1) {
       vals <- rep(vals, nrow(data))
@@ -733,12 +733,12 @@ po_format.d3po <- function(d3po, ...) {
 #' @export
 #' @method po_format d3proxy
 po_format.d3proxy <- function(d3po, ...) {
-  formats <- rlang::quos(...)
+  formats <- as.list(match.call(expand.dots = FALSE)[["..."]])
   stopifnot("No formatters provided to po_format()" = length(formats) > 0)
 
-  # Convert quosures to text so they can be handled client-side or by the
-  # server receiver. We use rlang::as_label to get a readable representation.
-  txt <- vapply(formats, function(q) rlang::as_label(q), character(1))
+  # Convert expressions to text so they can be handled client-side or by the
+  # server receiver.
+  txt <- vapply(formats, function(q) paste(deparse(q), collapse = " "), character(1))
 
   msg <- list(id = d3po$id, msg = list(formatters = as.list(txt)))
 

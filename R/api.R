@@ -68,7 +68,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 
   # Select only requested columns from attribute table; ensure result is a
   # plain data.frame (not a tibble with sfc etc.).
-  d3po$x$data <- as.data.frame(dplyr::select(attrs, columns))
+  d3po$x$data <- as.data.frame(attrs[, columns, drop = FALSE])
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
@@ -136,7 +136,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$subgroup <- daes_to_opts(daes, "subgroup")
@@ -206,7 +206,7 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
@@ -277,7 +277,7 @@ po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$size <- daes_to_opts(daes, "size")
   d3po$x$group <- daes_to_opts(daes, "group")
   d3po$x$color <- daes_to_opts(daes, "color")
@@ -352,7 +352,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
@@ -426,7 +426,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
@@ -508,7 +508,7 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$group <- daes_to_opts(daes, "group")
@@ -582,7 +582,7 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   assertthat::assert_that(has_daes(daes))
   columns <- daes_to_columns(daes)
 
-  d3po$x$data <- dplyr::select(data, columns)
+  d3po$x$data <- data[, columns, drop = FALSE]
   d3po$x$x <- daes_to_opts(daes, "x")
   d3po$x$y <- daes_to_opts(daes, "y")
   d3po$x$size <- daes_to_opts(daes, "size")
@@ -1165,7 +1165,7 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # Remove x and y from vertices_data if they exist to avoid duplication
   vertices_data <- vertices_data[, !names(vertices_data) %in% c("x", "y"), drop = FALSE]
 
-  nodes <- dplyr::bind_cols(vertices_data, layout_coords)
+  nodes <- cbind(vertices_data, layout_coords)
 
   d3po$x$nodes <- nodes
 
@@ -1334,7 +1334,7 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits =
 
   # Select only requested columns from attribute table (now includes color column if added)
   # Ensure result is a plain data.frame
-  d3po$x$data <- as.data.frame(dplyr::select(attrs, dplyr::all_of(columns)))
+  d3po$x$data <- as.data.frame(attrs[, columns, drop = FALSE])
 
   # Set aesthetic mappings
   d3po$x$group <- daes_to_opts(daes, "group")

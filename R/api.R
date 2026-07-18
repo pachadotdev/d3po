@@ -60,7 +60,7 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
   if (is.null(attrs)) {
     stop("po_geomap requires attribute data (x$data) to be present. Please call d3po() with an sf object or supply `data` to po_geomap().")
@@ -81,8 +81,8 @@ po_box.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_box d3proxy
 po_box.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -133,7 +133,7 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -149,8 +149,8 @@ po_treemap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_treemap d3proxy
 po_treemap.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -203,7 +203,7 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -218,8 +218,8 @@ po_pie.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_pie d3proxy
 po_pie.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -274,7 +274,7 @@ po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -289,8 +289,8 @@ po_donut.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_donut d3proxy
 po_donut.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -349,7 +349,7 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -365,8 +365,8 @@ po_area.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_area d3proxy
 po_area.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -423,7 +423,7 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -446,8 +446,8 @@ po_bar.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_bar d3proxy
 po_bar.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   # Do not accept explicit `stack` param for proxy; stack should be passed via daes() only
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
@@ -505,7 +505,7 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -520,8 +520,8 @@ po_line.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_line d3proxy
 po_line.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -579,7 +579,7 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
   # extract & process coordinates
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   d3po$x$data <- data[, columns, drop = FALSE]
@@ -595,8 +595,8 @@ po_scatter.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_scatter d3proxy
 po_scatter.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -625,7 +625,7 @@ po_tooltip <- function(d3po, template) UseMethod("po_tooltip")
 #' @export
 #' @method po_tooltip d3po
 po_tooltip.d3po <- function(d3po, template) {
-  assertthat::assert_that(!missing(template), msg = "Missing `template`")
+  stopifnot("Missing `template`" = !missing(template))
 
   # store template on the widget object for use by the javascript renderer
   d3po$x$tooltip_template <- template
@@ -635,7 +635,7 @@ po_tooltip.d3po <- function(d3po, template) {
 #' @export
 #' @method po_tooltip d3proxy
 po_tooltip.d3proxy <- function(d3po, template) {
-  assertthat::assert_that(!missing(template), msg = "Missing `template`")
+  stopifnot("Missing `template`" = !missing(template))
 
   msg <- list(id = d3po$id, msg = list(template = template))
 
@@ -665,7 +665,7 @@ po_format <- function(d3po, ...) UseMethod("po_format")
 #' @method po_format d3po
 po_format.d3po <- function(d3po, ...) {
   formats <- rlang::quos(...)
-  assertthat::assert_that(length(formats) > 0, msg = "No formatters provided to po_format()")
+  stopifnot("No formatters provided to po_format()" = length(formats) > 0)
 
   # Work on the already-selected data present in `x$data` (preferred)
   data <- d3po$x$data
@@ -734,7 +734,7 @@ po_format.d3po <- function(d3po, ...) {
 #' @method po_format d3proxy
 po_format.d3proxy <- function(d3po, ...) {
   formats <- rlang::quos(...)
-  assertthat::assert_that(length(formats) > 0, msg = "No formatters provided to po_format()")
+  stopifnot("No formatters provided to po_format()" = length(formats) > 0)
 
   # Convert quosures to text so they can be handled client-side or by the
   # server receiver. We use rlang::as_label to get a readable representation.
@@ -776,10 +776,9 @@ po_labels.d3po <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle = NU
 
   # Validate align value
   valid_values <- c("left-top", "center-middle", "right-top")
-  assertthat::assert_that(
-    align %in% valid_values,
-    msg = paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'")
-  )
+  if (!(align %in% valid_values)) {
+    stop(paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'"))
+  }
 
   # Split align into horizontal and vertical components
   parts <- strsplit(align, "-")[[1]]
@@ -792,7 +791,7 @@ po_labels.d3po <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle = NU
   # hierarchy level. Store raw value for the client-side to interpret.
   if (!is.null(labels)) {
     # Basic validation: allow character vector or list; otherwise error
-    assertthat::assert_that(is.character(labels) || is.list(labels), msg = "`labels` must be a character vector or a list")
+    stopifnot("`labels` must be a character vector or a list" = is.character(labels) || is.list(labels))
     d3po$x$labels$fields <- labels
   }
   # -----------------------
@@ -806,10 +805,10 @@ po_labels.d3po <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle = NU
   # the renderer can use them for axes or legends. They must be character
   # or NULL.
   if (!is.null(x)) {
-    assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
+    stopifnot("`x` must be a character string or NULL" = is.character(x) || is.null(x))
   }
   if (!is.null(y)) {
-    assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
+    stopifnot("`y` must be a character string or NULL" = is.character(y) || is.null(y))
   }
 
   d3po$x$axis_labels <- list(x = x, y = y)
@@ -827,10 +826,9 @@ po_labels.d3proxy <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle =
 
   # Validate align value
   valid_values <- c("left-top", "center-middle", "right-top")
-  assertthat::assert_that(
-    align %in% valid_values,
-    msg = paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'")
-  )
+  if (!(align %in% valid_values)) {
+    stop(paste0("align must be one of 'left-top', 'center-middle', or 'right-top', got: '", align, "'"))
+  }
 
   # Split align into horizontal and vertical components
   parts <- strsplit(align, "-")[[1]]
@@ -838,16 +836,16 @@ po_labels.d3proxy <- function(d3po, x = NULL, y = NULL, title = NULL, subtitle =
   msg_payload <- list(align = parts[1], valign = parts[2])
 
   if (!is.null(labels)) {
-    assertthat::assert_that(is.character(labels) || is.list(labels), msg = "`labels` must be a character vector or a list")
+    stopifnot("`labels` must be a character vector or a list" = is.character(labels) || is.list(labels))
     msg_payload$labels <- labels
   }
 
   if (!is.null(x)) {
-    assertthat::assert_that(is.character(x) || is.null(x), msg = "`x` must be a character string or NULL")
+    stopifnot("`x` must be a character string or NULL" = is.character(x) || is.null(x))
     msg_payload$x <- x
   }
   if (!is.null(y)) {
-    assertthat::assert_that(is.character(y) || is.null(y), msg = "`y` must be a character string or NULL")
+    stopifnot("`y` must be a character string or NULL" = is.character(y) || is.null(y))
     msg_payload$y <- y
   }
   if (!is.null(subtitle)) msg_payload$subtitle <- subtitle
@@ -881,9 +879,9 @@ po_font <- function(d3po, family = "Fira Sans",
 #' @export
 #' @method po_font d3po
 po_font.d3po <- function(d3po, family, size, transform) {
-  assertthat::assert_that(!missing(family), msg = "Missing `family`")
-  assertthat::assert_that(!missing(size), msg = "Missing `size`")
-  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
+  stopifnot("Missing `family`" = !missing(family))
+  stopifnot("Missing `size`" = !missing(size))
+  stopifnot("Missing `transform`" = !missing(transform))
 
   d3po$x$font <- NULL
   d3po$x$font$family <- family
@@ -895,9 +893,9 @@ po_font.d3po <- function(d3po, family, size, transform) {
 #' @export
 #' @method po_font d3proxy
 po_font.d3proxy <- function(d3po, family, size, transform) {
-  assertthat::assert_that(!missing(family), msg = "Missing `family`")
-  assertthat::assert_that(!missing(size), msg = "Missing `size`")
-  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
+  stopifnot("Missing `family`" = !missing(family))
+  stopifnot("Missing `size`" = !missing(size))
+  stopifnot("Missing `transform`" = !missing(transform))
 
   msg <- list(id = d3po$id, msg = list(family = family, size = size, transform = transform))
 
@@ -909,9 +907,9 @@ po_font.d3proxy <- function(d3po, family, size, transform) {
 #' @export
 #' @method po_font d3proxy
 po_font.d3proxy <- function(d3po, family, size, transform) {
-  assertthat::assert_that(!missing(family), msg = "Missing `family`")
-  assertthat::assert_that(!missing(size), msg = "Missing `size`")
-  assertthat::assert_that(!missing(transform), msg = "Missing `transform`")
+  stopifnot("Missing `family`" = !missing(family))
+  stopifnot("Missing `size`" = !missing(size))
+  stopifnot("Missing `transform`" = !missing(transform))
 
   msg <- list(id = d3po$id, msg = list(family = family, size = size, transform = transform))
 
@@ -939,9 +937,9 @@ po_theme <- function(d3po, axis = NULL, tooltips = NULL, background = NULL) UseM
 #' @export
 #' @method po_theme d3po
 po_theme.d3po <- function(d3po, axis = NULL, tooltips = NULL, background = NULL) {
-  if (!is.null(axis)) assertthat::assert_that(is.character(axis) && nzchar(axis), msg = "axis must be a hex color string")
-  if (!is.null(tooltips)) assertthat::assert_that(is.character(tooltips) && nzchar(tooltips), msg = "tooltips must be a hex color string")
-  if (!is.null(background)) assertthat::assert_that(is.character(background) && nzchar(background), msg = "background must be a hex color string")
+  if (!is.null(axis)) stopifnot("axis must be a hex color string" = is.character(axis) && nzchar(axis))
+  if (!is.null(tooltips)) stopifnot("tooltips must be a hex color string" = is.character(tooltips) && nzchar(tooltips))
+  if (!is.null(background)) stopifnot("background must be a hex color string" = is.character(background) && nzchar(background))
 
   d3po$x$theme <- list()
   if (!is.null(axis)) d3po$x$theme$axis <- as.character(axis)
@@ -979,7 +977,7 @@ po_download <- function(d3po, show = TRUE) UseMethod("po_download")
 #' @export
 #' @method po_download d3po
 po_download.d3po <- function(d3po, show = TRUE) {
-  assertthat::assert_that(is.logical(show), msg = "`show` must be TRUE or FALSE")
+  stopifnot("`show` must be TRUE or FALSE" = is.logical(show))
 
   d3po$x$download <- show
   return(d3po)
@@ -988,7 +986,7 @@ po_download.d3po <- function(d3po, show = TRUE) {
 #' @export
 #' @method po_download d3proxy
 po_download.d3proxy <- function(d3po, show = TRUE) {
-  assertthat::assert_that(is.logical(show), msg = "`show` must be TRUE or FALSE")
+  stopifnot("`show` must be TRUE or FALSE" = is.logical(show))
 
   msg <- list(id = d3po$id, msg = list(show = show))
 
@@ -1187,8 +1185,8 @@ po_network.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE) {
 #' @export
 #' @method po_network d3proxy
 po_network.d3proxy <- function(d3po, ..., data, inherit_daes) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
 
@@ -1268,7 +1266,7 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits =
   # Extract and process aesthetics
   daes <- get_daes(...)
   daes <- combine_daes(d3po$x$daes, daes, inherit_daes)
-  assertthat::assert_that(has_daes(daes))
+  stopifnot("No coordinates found, see `daes`." = has_daes(daes))
   columns <- daes_to_columns(daes)
 
   if (is.null(attrs)) {
@@ -1356,8 +1354,8 @@ po_geomap.d3po <- function(d3po, ..., data = NULL, inherit_daes = TRUE, limits =
 #' @export
 #' @method po_geomap d3proxy
 po_geomap.d3proxy <- function(d3po, ..., data, inherit_daes, limits = NULL) {
-  assertthat::assert_that(!missing(data), msg = "Missing `data`")
-  assertthat::assert_that(!missing(inherit_daes), msg = "Missing `inherit_daes`")
+  stopifnot("Missing `data`" = !missing(data))
+  stopifnot("Missing `inherit_daes`" = !missing(inherit_daes))
 
   msg <- list(id = d3po$id, msg = list(data = data, inherit_daes = inherit_daes))
   

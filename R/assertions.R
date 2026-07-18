@@ -11,9 +11,3 @@ has_daes <- function(x) {
   }
   return(TRUE)
 }
-
-#' @noRd
-#' @keywords internal
-assertthat::on_failure(has_daes) <- function(call, env) {
-  "No coordinates found, see `daes`."
-}

@@ -26,8 +26,6 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 NeedsCompilation: no
 Imports: 
-  assertthat,
-  dplyr,
   rlang
 Suggests: 
   knitr,

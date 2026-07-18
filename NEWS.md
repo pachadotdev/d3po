@@ -2,6 +2,7 @@
 
 * Uses the native pipe `|>` and now depends on R >= 4.0.
 * Replace `purrr::keep()` with base `Filter()`.
+* Replace `dplyr` with base R operations.
 
 # d3po 1.0.2
 

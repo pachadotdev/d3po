@@ -1,22 +1,53 @@
-library(shiny)
+library(tabler)
 library(d3po)
 
-ui <- fluidPage(
-  titlePanel("Debug d3po App"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("plot_type", "Select Plot:", 
-                  choices = c("Bar" = "bar", "Treemap" = "treemap")),
-      hr(),
-      verbatimTextOutput("debug_info")
+ui <- page(
+  theme = "light",
+  color = "teal",
+  title = "Debug d3po App",
+  layout = "combo",
+  show_theme_button = FALSE,
+  body = list(
+    # Page header
+    header(
+      title = "Debug d3po App",
+      subtitle = "Overview"
     ),
-    mainPanel(
-      h3("Plot Output:"),
-      d3po_output("plot", width = "100%", height = "600px"),
-      hr(),
-      h3("Raw HTML Widget:"),
-      verbatimTextOutput("widget_info")
+    # Page body content
+    body(
+      div(
+        class = "row",
+        # Left column: controls ----
+        column(
+          4,
+          card(
+            title = "Controls",
+            selectInput(
+              "plot_type", "Select Plot:",
+              choices = c("Bar" = "bar", "Treemap" = "treemap")
+            ),
+            tags$hr(),
+            verbatimTextOutput("debug_info")
+          )
+        ),
+        # Right column: outputs ----
+        column(
+          8,
+          card(
+            title = "Plot Output",
+            d3po_output("plot", width = "100%", height = "600px")
+          ),
+          card(
+            title = "Raw HTML Widget",
+            verbatimTextOutput("widget_info")
+          )
+        )
+      )
     )
+  ),
+  footer = footer(
+    left = "Tabler",
+    right = tags$span("v1.4.0")
   )
 )
 
@@ -59,7 +90,7 @@ server <- function(input, output, session) {
     return(result)
   })
   
-  output$plot <- render_d3po({
+  output$plot <- renderWidget({
     plot_obj()
   })
   
@@ -80,4 +111,4 @@ server <- function(input, output, session) {
   })
 }
 
-shinyApp(ui, server)
+tablerApp(ui, server)

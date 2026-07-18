@@ -26,7 +26,6 @@ ui <- page(
               "plot_type", "Select Plot:",
               choices = c("Bar" = "bar", "Treemap" = "treemap")
             ),
-            tags$hr(),
             verbatimTextOutput("debug_info")
           )
         ),

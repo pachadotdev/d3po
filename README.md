@@ -28,10 +28,10 @@ You can install the most recent version from the R-Universe:
 install.packages("d3po", repos = "https://pachadotdev.r-universe.dev")
 ```
 
-Or from GitHub using remotes:
+Or from CRAN (outdated):
 
 ``` r
-remotes::install_github("pachadotdev/d3po")
+install.packages("d3po", repos = "https://cran.r-project.org")
 ```
 
 ## Features

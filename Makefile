@@ -14,7 +14,7 @@ build:
 	rm -f ./inst/htmlwidgets/lib/d3po.min.js && \
 	rm -f ./inst/htmlwidgets/lib/d3po.min.js.map && \
 	mv ./javascript/dist/d3po.min.js ./inst/htmlwidgets/lib/d3po.min.js && \
-	Rscript -e "devtools::document(); devtools::install()"
+	Rscript -e "tinydev::pkg_document(); tinydev::pkg_check(); tinydev::pkg_install()"
 
 build-debug:
 	cd ./javascript && \
@@ -26,4 +26,4 @@ build-debug:
 	rm -f ./inst/htmlwidgets/lib/d3po.min.js.map && \
 	mv ./javascript/dist/d3po.min.js ./inst/htmlwidgets/lib/d3po.min.js && \
 	mv ./javascript/dist/d3po.min.js.map ./inst/htmlwidgets/lib/d3po.min.js.map && \
-	Rscript -e "devtools::document(); devtools::install()"
+	Rscript -e "tinydev::pkg_document(); tinydev::pkg_install()"

@@ -6,7 +6,7 @@ library(purrr)
 library(rnaturalearth)
 library(countrycode)
 
-# Sub-national regions (states/provinces) by subnational ----
+# Sub-national regions (states/provinces) ----
 
 fout <- "dev/admin1_all.rds"
 

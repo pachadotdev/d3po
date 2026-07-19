@@ -18,8 +18,7 @@ ui <- page(
       div(
         class = "row",
         # Left column: controls ----
-        column(
-          4,
+        col4(
           card(
             title = "Controls",
             selectInput(
@@ -27,18 +26,17 @@ ui <- page(
               choices = c("Bar" = "bar", "Treemap" = "treemap")
             ),
             verbatimTextOutput("debug_info")
-          )
-        ),
-        # Right column: outputs ----
-        column(
-          8,
-          card(
-            title = "Plot Output",
-            d3po_output("plot", width = "100%", height = "600px")
           ),
           card(
             title = "Raw HTML Widget",
             verbatimTextOutput("widget_info")
+          )
+        ),
+        # Right column: outputs ----
+        col8(
+          card(
+            title = "Plot Output",
+            d3po_output("plot", width = "100%", height = "600px")
           )
         )
       )

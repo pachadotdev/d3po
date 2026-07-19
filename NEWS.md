@@ -2,12 +2,13 @@
 
 * Works with 'tabler' and the focus will be Tabler and Tabler Server.
 * Keeps 'shiny' widgets compatibility.
-* Uses the native pipe `|>` and now depends on R >= 4.0.
+* Uses the native pipe `|>` and now depends on R >= 4.1.
 * Using base R as much as possible:
   * `purrr::keep()` -> `Filter()`.
   * `dplyr` -> base R operations.
   * `assertthat` -> `stopifnot()`.
   * `rlang` -> some custom wrappers with base R.
+* Updated D3 version 7.8.0 -> 7.9.0
 
 # d3po 1.0.2
 

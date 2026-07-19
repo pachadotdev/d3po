@@ -8,7 +8,8 @@
   * `dplyr` -> base R operations.
   * `assertthat` -> `stopifnot()`.
   * `rlang` -> some custom wrappers with base R.
-* Updated D3 version 7.8.0 -> 7.9.0
+* Updated D3 version 7.8.0 -> 7.9.0.
+* Treemap uses the space better and now follows LineChart sizing.
 
 # d3po 1.0.2
 

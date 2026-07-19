@@ -108,6 +108,32 @@ export default class Treemap extends D3po {
       this.tooltip,
       options && options.tooltip
     );
+
+    // Unlike axis-based charts (e.g. LineChart), the treemap has no axes or
+    // tick labels, so it doesn't need the generous default margins from the
+    // base class (sized for axis ticks/labels). Use much tighter margins,
+    // just enough to fit the optional title and the subtitle/back-button
+    // row, unless the caller explicitly requested custom margins.
+    if (!options.margin) {
+      let top = 4;
+      if (this.options.title) {
+        top += this.options.fontSize * 1.5 + 8;
+      }
+      if (this.subgroupField) {
+        top += this.options.fontSize + 14;
+      }
+      this.options.margin = { top, right: 4, bottom: 4, left: 4 };
+
+      // The base class already positioned the title and chart group using
+      // the old (larger) margin, so reposition them now.
+      this.svg.select('text.title').attr('y', this.options.margin.top / 2);
+      if (this.chart && this.chart.attr) {
+        this.chart.attr(
+          'transform',
+          `translate(${this.options.margin.left},${this.options.margin.top})`
+        );
+      }
+    }
   }
 
   /**

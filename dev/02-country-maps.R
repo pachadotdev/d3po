@@ -1,4 +1,4 @@
-load_all()
+devtools::load_all()
 
 library(sf)
 library(dplyr)

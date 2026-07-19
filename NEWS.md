@@ -1,3 +1,14 @@
+# d3po 1.1.0
+
+* Works with 'tabler' and the focus will be Tabler and Tabler Server.
+* Keeps 'shiny' widgets compatibility.
+* Uses the native pipe `|>` and now depends on R >= 4.0.
+* Using base R as much as possible:
+  * `purrr::keep()` -> `Filter()`.
+  * `dplyr` -> base R operations.
+  * `assertthat` -> `stopifnot()`.
+  * `rlang` -> some custom wrappers with base R.
+
 # d3po 1.0.2
 
 * Small patch to conditionally use 'sf'/'geojsonsf' in `po_geomap()`, per CRAN request.

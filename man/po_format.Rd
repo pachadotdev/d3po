@@ -9,7 +9,7 @@ po_format(d3po, ...)
 \arguments{
 \item{d3po}{Either the output of \code{\link[=d3po]{d3po()}} or \code{\link[=d3po_proxy]{d3po_proxy()}}.}
 
-\item{...}{Named formatting expressions (as quosures). Each name should
+\item{...}{Named formatting expressions (as unevaluated calls). Each name should
 correspond to an aesthetic (e.g. \code{x}, \code{y}, \code{tooltip}, etc.).}
 }
 \description{

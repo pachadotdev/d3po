@@ -2,7 +2,7 @@
 # supported, and named vectors will be translated into arrays instead of objects. If you want JSON object output,
 # please use a named list instead. See ?toJSON.
 
-load_all()
+devtools::load_all()
 
 library(sf)
 
@@ -24,8 +24,8 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) |>
   po_labels(
     x = "Continent",
     y = "Trade (USD billion)",
@@ -35,8 +35,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 # Bar 2: Trade by Continent with Color Column (Horizontal Bars)
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_bar(daes(x = trade, y = reporter_continent, color = color)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_bar(daes(x = trade, y = reporter_continent, color = color)) |>
   po_labels(
     x = "Trade (USD billion)",
     y = "Continent",
@@ -55,11 +55,11 @@ trade_stacked$color <- ifelse(trade_stacked$partner_continent == "North America"
 trade_stacked$color <- ifelse(trade_stacked$partner_continent == "Oceania", my_pal["Oceania"], trade_stacked$color)
 trade_stacked$color <- ifelse(trade_stacked$partner_continent == "South America", my_pal["South America"], trade_stacked$color)
 
-d3po(trade_stacked, width = 800, height = 600) %>%
+d3po(trade_stacked, width = 800, height = 600) |>
   po_bar(daes(
     x = reporter_continent, y = trade, group = partner_continent,
     color = color, stack = TRUE
-  )) %>%
+  )) |>
   po_labels(
     x = "Reporter Continent",
     y = "Trade (USD billion)",
@@ -68,15 +68,15 @@ d3po(trade_stacked, width = 800, height = 600) %>%
 
 # Bar 4: Bar 1 with Customised Theme
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) |>
   po_labels(
     x = "Reporter Continent",
     y = "Trade (USD billion)",
     title = "Total Trade by Reporter Continent in 2023"
-  ) %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+  ) |>
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)
 
 # PIE/DONUT CHARTS ----
@@ -97,24 +97,24 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) |>
   po_labels(title = "Trade Share by Reporter Continent in 2023")
 
 # Donut 1: Donut Chart with Color Column
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_donut(daes(size = trade, group = reporter_continent, innerRadius = 0.3, color = color)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_donut(daes(size = trade, group = reporter_continent, innerRadius = 0.3, color = color)) |>
   po_labels(title = "Trade Share by Reporter Continent in 2023")
 
 # Pie 2: Pie 1 with Customised Theme
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) %>%
-  po_labels(title = "Trade Share by Reporter Continent in 2023") %>%
-  po_theme(tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_pie(daes(size = trade, group = reporter_continent, color = my_pal)) |>
+  po_labels(title = "Trade Share by Reporter Continent in 2023") |>
+  po_theme(tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)
 
 # AREA CHARTS ----
@@ -135,10 +135,10 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
   po_area(daes(
     x = year, y = trade, group = reporter_continent, color = my_pal
-  )) %>%
+  )) |>
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
@@ -149,10 +149,10 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
   po_area(daes(
     x = year, y = trade, group = reporter_continent, color = color
-  )) %>%
+  )) |>
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
@@ -167,10 +167,10 @@ trade_by_continent$proportion <- ave(
   FUN = function(x) x / sum(x)
 )
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
   po_area(daes(
     x = year, y = proportion, group = reporter_continent, color = my_pal, stack = TRUE
-  )) %>%
+  )) |>
   po_labels(
     x = "Year",
     y = "Proportion of Trade",
@@ -179,10 +179,10 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 
 # Area 4: Trade Proportions by Continent and Year with Color Column (Stacked)
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
   po_area(daes(
     x = year, y = proportion, group = reporter_continent, color = color, stack = TRUE
-  )) %>%
+  )) |>
   po_labels(
     x = "Year",
     y = "Proportion of Trade",
@@ -191,17 +191,17 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 
 # Area 5: Area 1 with Customised Theme
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
   po_area(daes(
     x = year, y = trade, group = reporter_continent, color = my_pal
-  )) %>%
+  )) |>
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
     title = "Trade Distribution by Reporter Continent in 2019 and 2023"
-  ) %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+  ) |>
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)
 
 # LINE CHARTS ----
@@ -225,8 +225,8 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) |>
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
@@ -237,8 +237,8 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_line(daes(x = year, y = trade, group = reporter_continent, color = color)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_line(daes(x = year, y = trade, group = reporter_continent, color = color)) |>
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
@@ -247,15 +247,15 @@ d3po(trade_by_continent, width = 800, height = 600) %>%
 
 # Line 3: Line 1 with Customised Theme
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_line(daes(x = year, y = trade, group = reporter_continent, color = my_pal)) |>
   po_labels(
     x = "Year",
     y = "Trade (USD billion)",
     title = "Trade Distribution by Reporter Continent in 2019 and 2023"
-  ) %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+  ) |>
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)
 
 # SCATTER CHARTS ----
@@ -278,8 +278,8 @@ trade_wide <- merge(
 
 my_pal <- tintin::tintin_pal(option = "red_rackhams_treasure")(7)
 
-d3po(trade_wide, width = 800, height = 600) %>%
-  po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) %>%
+d3po(trade_wide, width = 800, height = 600) |>
+  po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) |>
   po_labels(
     x = "Trade in 2019 (USD billion)",
     y = "Trade in 2023 (USD billion)",
@@ -290,8 +290,8 @@ d3po(trade_wide, width = 800, height = 600) %>%
 
 trade_wide$color <- sample(my_pal, nrow(trade_wide), replace = TRUE)
 
-d3po(trade_wide, width = 800, height = 600) %>%
-  po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = color)) %>%
+d3po(trade_wide, width = 800, height = 600) |>
+  po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = color)) |>
   po_labels(
     x = "Trade in 2019 (USD billion)",
     y = "Trade in 2023 (USD billion)",
@@ -302,11 +302,11 @@ d3po(trade_wide, width = 800, height = 600) %>%
 
 trade_wide$size <- (trade_wide$trade_2019 + trade_wide$trade_2023) / 2
 
-d3po(trade_wide, width = 800, height = 600) %>%
+d3po(trade_wide, width = 800, height = 600) |>
   po_scatter(daes(
     x = trade_2019, y = trade_2023,
     group = reporter, color = color, size = size
-  )) %>%
+  )) |>
   po_labels(
     x = "Trade in 2019 (USD billion)",
     y = "Trade in 2023 (USD billion)",
@@ -315,15 +315,15 @@ d3po(trade_wide, width = 800, height = 600) %>%
 
 # Scatter 4: Scatter 1 with Customised Theme
 
-d3po(trade_wide, width = 800, height = 600) %>%
-  po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) %>%
+d3po(trade_wide, width = 800, height = 600) |>
+  po_scatter(daes(x = trade_2019, y = trade_2023, group = reporter, color = my_pal)) |>
   po_labels(
     x = "Trade in 2019 (USD billion)",
     y = "Trade in 2023 (USD billion)",
     title = "Trade Volume by Country in 2019 and 2023"
-  ) %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+  ) |>
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)
 
 # BOX PLOTS ----
@@ -343,8 +343,8 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(trade_continent, width = 800, height = 600) %>%
-  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) %>%
+d3po(trade_continent, width = 800, height = 600) |>
+  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) |>
   po_labels(
     x = "Continent",
     y = "Trade (USD billion)",
@@ -354,8 +354,8 @@ d3po(trade_continent, width = 800, height = 600) %>%
 # Box 2: Trade Distribution by Continent with Color Column (Horizontal)
 trade_continent$color <- my_pal[trade_continent$reporter_continent]
 
-d3po(trade_continent, width = 800, height = 600) %>%
-  po_box(daes(y = reporter_continent, x = trade, color = color, tooltip = reporter_continent)) %>%
+d3po(trade_continent, width = 800, height = 600) |>
+  po_box(daes(y = reporter_continent, x = trade, color = color, tooltip = reporter_continent)) |>
   po_labels(
     y = "Continent",
     x = "Trade (USD billion)",
@@ -364,15 +364,15 @@ d3po(trade_continent, width = 800, height = 600) %>%
 
 # Box 3: Box 1 with Customised Theme
 
-d3po(trade_continent, width = 800, height = 600) %>%
-  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) %>%
+d3po(trade_continent, width = 800, height = 600) |>
+  po_box(daes(x = reporter_continent, y = trade, color = my_pal, tooltip = reporter_continent)) |>
   po_labels(
     x = "Continent",
     y = "Trade (USD billion)",
     title = "Trade Distribution by Reporter Continent"
-  ) %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+  ) |>
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)
 
 # TREEMAP CHARTS ----
@@ -388,15 +388,15 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_treemap(daes(size = trade, group = reporter_continent, color = my_pal, tiling = "Squarify")) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_treemap(daes(size = trade, group = reporter_continent, color = my_pal, tiling = "Squarify")) |>
   po_labels(title = "Trade Share by Continent in 2023")
 
 # Treemap 2: Trade by Continent with Color Column (Single Level, Slice-Dice)
 trade_by_continent$color <- my_pal[trade_by_continent$reporter_continent]
 
-d3po(trade_by_continent, width = 800, height = 600) %>%
-  po_treemap(daes(size = trade, group = reporter_continent, color = color, tiling = "slice-dice")) %>%
+d3po(trade_by_continent, width = 800, height = 600) |>
+  po_treemap(daes(size = trade, group = reporter_continent, color = color, tiling = "slice-dice")) |>
   po_labels(title = "Trade Share by Continent in 2023")
 
 # Treemap 3: Two-Level (Continent and Top Countries)
@@ -404,23 +404,23 @@ trade_twolevel <- d3po::trade[d3po::trade$year == 2023L, ]
 trade_twolevel <- aggregate(trade ~ reporter_continent + reporter, data = trade_twolevel, FUN = sum)
 trade_twolevel$color <- my_pal[trade_twolevel$reporter_continent]
 
-d3po(trade_twolevel, width = 800, height = 600) %>%
+d3po(trade_twolevel, width = 800, height = 600) |>
   po_treemap(daes(
     size = trade, group = reporter_continent, subgroup = reporter,
     color = color, tiling = "squarify"
-  )) %>%
+  )) |>
   po_labels(title = "Trade Share by Continent in 2023 (click to see the countries)")
 
 # Treemap 4: Treemap 3 with Customised Theme and Tooltip
 
-d3po(trade_twolevel, width = 800, height = 600) %>%
+d3po(trade_twolevel, width = 800, height = 600) |>
   po_treemap(daes(
     size = trade, group = reporter_continent, subgroup = reporter,
     color = color, tiling = "squarify"
-  )) %>%
-  po_theme(background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
-  po_download(FALSE) %>%
+  )) |>
+  po_theme(background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
+  po_download(FALSE) |>
   po_labels(
     align = "center-middle",
     labels = JS(
@@ -441,7 +441,7 @@ d3po(trade_twolevel, width = 800, height = 600) %>%
           return 'Displaying Continents';\
         }"
     )
-  ) %>%
+  ) |>
   po_tooltip(JS(
     "function(percentage, row) {
         var pct = (percentage).toFixed(2) + '%';
@@ -487,8 +487,8 @@ names(my_pal) <- c(
   "Europe", "North America", "Oceania", "South America"
 )
 
-d3po(world, width = 800, height = 600) %>%
-  po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) %>%
+d3po(world, width = 800, height = 600) |>
+  po_geomap(daes(group = country, size = trade, color = my_pal, tooltip = country)) |>
   po_labels(title = "Trade Volume by Country in 2023")
 
 # Geomap 2: Trade Volume by Country with Color Column (Europe)
@@ -499,34 +499,41 @@ europe <- world[world$continent == "Europe", ]
 bbox <- sf::st_bbox(c(xmin = -27, ymin = 30, xmax = 40, ymax = 72), crs = sf::st_crs(europe))
 europe <- sf::st_crop(europe, bbox)
 
-europe$color <- my_pal[europe$continent]
+# `europe$continent` is constant ("Europe") for every row in this subset, so
+# indexing `my_pal` by continent gives the same color to every country.
+# Assign a distinct color per country instead. `tintin_pal()` draws without
+# replacement from a fixed-size palette, so interpolate it to get enough
+# colors for every country.
+base_pal <- tintin::tintin_pal(option = "The Calculus Affair")(7)
+country_pal <- grDevices::colorRampPalette(base_pal)(nrow(europe))
+europe$color <- country_pal[as.integer(factor(europe$country))]
 
-d3po(europe, width = 800, height = 600) %>%
-  po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) %>%
+d3po(europe, width = 800, height = 600) |>
+  po_geomap(daes(group = country, size = trade, color = color, tooltip = country)) |>
   po_labels(title = "Trade Volume by Country in 2023")
 
 # Geomap 3: With custom color vector
 my_color <- c("#e74c3c", "#3498db", "#2ecc71")
 
-d3po(europe, width = 800, height = 600) %>%
-  po_geomap(daes(group = country, size = trade, color = my_color, tooltip = country)) %>%
+d3po(europe, width = 800, height = 600) |>
+  po_geomap(daes(group = country, size = trade, color = my_color, tooltip = country)) |>
   po_labels(title = "Trade Volume by Country in 2023")
 
 # Geomap 4: Gradient coloring based on values
-d3po(europe, width = 800, height = 600) %>%
-  po_geomap(daes(group = country, size = trade, gradient = TRUE, tooltip = country)) %>%
+d3po(europe, width = 800, height = 600) |>
+  po_geomap(daes(group = country, size = trade, gradient = TRUE, tooltip = country)) |>
   po_labels(title = "Trade Volume by Country in 2023")
 
 # Geomap 5: Gradient coloring with custom palette
-d3po(europe, width = 800, height = 600) %>%
-  po_geomap(daes(group = country, size = trade, color = my_color, gradient = TRUE, tooltip = country)) %>%
+d3po(europe, width = 800, height = 600) |>
+  po_geomap(daes(group = country, size = trade, color = my_color, gradient = TRUE, tooltip = country)) |>
   po_labels(title = "Trade Volume by Country in 2023")
 
 # Geomap 6: Geomap 5 with Customised Theme
 
-d3po(europe, width = 800, height = 600) %>%
-  po_geomap(daes(group = country, size = trade, color = my_color, gradient = TRUE, tooltip = country)) %>%
-  po_labels(title = "Trade Volume by Country in 2023") %>%
-  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") %>%
-  po_font("Liberation Serif", 12, "uppercase") %>%
+d3po(europe, width = 800, height = 600) |>
+  po_geomap(daes(group = country, size = trade, color = my_color, gradient = TRUE, tooltip = country)) |>
+  po_labels(title = "Trade Volume by Country in 2023") |>
+  po_theme(axis = "#012169", tooltip = "#101418", background = "#cccccc") |>
+  po_font("Liberation Serif", 12, "uppercase") |>
   po_download(FALSE)

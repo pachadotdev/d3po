@@ -27,7 +27,9 @@ widget_this <- function(x, width = NULL, height = NULL, element_id = NULL) {
     sizingPolicy = htmlwidgets::sizingPolicy(
       padding = 5,
       defaultWidth = "100%",
-      defaultHeight = 400L
+      defaultHeight = 400L,
+      browser.fill = TRUE,
+      viewer.fill = TRUE
     ),
     elementId = element_id
   )

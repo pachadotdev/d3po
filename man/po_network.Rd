@@ -83,8 +83,8 @@ if (interactive()) {
   g <- graph_from_data_frame(trade_network, directed = TRUE, vertices = vertices)
 
   # Create the network visualization
-  d3po(g, width = 800, height = 600) \%>\%
-    po_network(daes(size = trade_volume, color = color, layout = "fr")) \%>\%
+  d3po(g, width = 800, height = 600) |>
+    po_network(daes(size = trade_volume, color = color, layout = "fr")) |>
     po_labels(title = "Trade Network by Country in 2023")
 }
 

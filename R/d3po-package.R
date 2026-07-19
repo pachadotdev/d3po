@@ -7,11 +7,6 @@
 #' @name d3po-exports
 NULL
 
-#' @importFrom magrittr %>%
-#' @name %>%
-#' @rdname d3po-exports
-NULL
-
 #' @importFrom htmlwidgets JS
 #' @name JS
 #' @rdname d3po-exports

@@ -1,4 +1,4 @@
-load_all()
+devtools::load_all()
 
 library(dplyr)
 library(sf)
@@ -6,6 +6,7 @@ library(sf)
 south_america <- national %>%
   filter(continent == "South America")
 
+set.seed(123)
 south_america$random <- sample(seq_len(nrow(south_america)), size = nrow(south_america), replace = TRUE)
 
 vis <- d3po(south_america, width = 800, height = 600) %>%
@@ -15,11 +16,6 @@ vis <- d3po(south_america, width = 800, height = 600) %>%
 # htmlwidgets::saveWidget(vis, "dev/test-sf.html", selfcontained = F)
 
 vis
-
-load_all()
-
-library(dplyr)
-library(sf)
 
 uk <- d3po::subnational %>%
   filter(country == "United Kingdom") %>%
@@ -32,3 +28,14 @@ uk <- d3po::subnational %>%
     latitude >= 49 & latitude <= 61,
     longitude >= -8 & longitude <= 2
   )
+
+set.seed(123)
+uk$random <- sample(seq_len(nrow(uk)), size = nrow(uk), replace = TRUE)
+
+vis <- d3po(uk, width = 800, height = 600) %>%
+  po_geomap(daes(group = region_iso, size = random, gradient = T, tooltip = country)) %>%
+  po_labels(title = "Random Values by Region in the UK")
+
+# htmlwidgets::saveWidget(vis, "dev/test-sf.html", selfcontained = F)
+
+vis

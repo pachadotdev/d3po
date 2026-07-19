@@ -678,6 +678,13 @@ po_format.d3po <- function(d3po, ...) {
 
   if (is.null(d3po$x$formatted_cols)) d3po$x$formatted_cols <- list()
 
+  # Bind a `.data` pronoun (mirroring daes()'s support for `.data$col`) so
+  # expressions like `format(.data$trade, ...)` resolve even when `rlang` is
+  # not attached to the search path. `.data` is looked up via `enclos` only
+  # when it isn't found as a column of `data` itself.
+  eval_env <- new.env(parent = parent.frame())
+  eval_env$.data <- data
+
   for (nm in names(formats)) {
     if (is.null(nm) || nm == "") {
       stop("po_format requires named arguments like x = round(varx, 2)")
@@ -687,7 +694,7 @@ po_format.d3po <- function(d3po, ...) {
 
     # Evaluate the expression in the data frame context. The result should be
     # a vector with length 1 or nrow(data).
-    vals <- eval(q, envir = data, enclos = parent.frame())
+    vals <- eval(q, envir = data, enclos = eval_env)
 
     if (length(vals) == 1 && nrow(data) > 1) {
       vals <- rep(vals, nrow(data))

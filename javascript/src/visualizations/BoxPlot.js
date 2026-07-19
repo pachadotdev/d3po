@@ -153,6 +153,73 @@ export default class BoxPlot extends D3po {
           : d3.schemeCategory10[0],
     }));
 
+    // Measure how much bottom margin the x-axis (ticks + label) actually
+    // needs, using a temporary probe scale/axis, before any box shapes are
+    // drawn. This avoids wasting space with the base class's generous
+    // default bottom margin (sized for the worst case of rotated labels).
+    {
+      const probeDomain = isHorizontal
+        ? [d3.min(boxData, d => d.stats.min), d3.max(boxData, d => d.stats.max)]
+        : boxData.map(d => d.label);
+      const probeInnerWidth = this.getInnerWidth();
+      const probeScale = isHorizontal
+        ? d3
+            .scaleLinear()
+            .domain(probeDomain)
+            .nice()
+            .range([0, probeInnerWidth])
+        : d3
+            .scaleBand()
+            .domain(probeDomain)
+            .range([0, probeInnerWidth])
+            .padding(0.2);
+
+      const probeGroup = this.svg.append('g').attr('class', 'd3po-probe-group');
+      try {
+        const probeAxis = d3.axisBottom(probeScale);
+        if (
+          this.options &&
+          this.options.axisFormatters &&
+          this.options.axisFormatters.x
+        ) {
+          probeAxis.tickFormat(this.options.axisFormatters.x);
+        }
+        probeGroup.call(probeAxis);
+        probeGroup
+          .selectAll('text')
+          .style('font-family', this.options.fontFamily)
+          .style('font-size', `${this.options.fontSize}px`);
+
+        const probeTicks = probeGroup.selectAll('.tick text').nodes();
+        let maxTickWidth = 0;
+        let maxTickHeight = 0;
+        let rotateX = false;
+        if (probeTicks && probeTicks.length) {
+          maxTickWidth = d3.max(probeTicks, n => n.getBBox().width) || 0;
+          maxTickHeight = d3.max(probeTicks, n => n.getBBox().height) || 0;
+          if (probeScale.bandwidth) {
+            if (maxTickWidth > probeScale.bandwidth() * 0.9) rotateX = true;
+          } else {
+            const avgSpace = Math.max(10, probeInnerWidth / probeTicks.length);
+            if (maxTickWidth > avgSpace * 0.9) rotateX = true;
+          }
+        }
+
+        const effectiveTickExtent = rotateX
+          ? Math.max(25, maxTickWidth * 0.85)
+          : Math.max(8, maxTickHeight);
+        const tickToLabelGap = 10;
+        const baseTickLabelPadding = rotateX ? 20 : 16;
+
+        this.options.margin.bottom = Math.ceil(
+          effectiveTickExtent + tickToLabelGap + baseTickLabelPadding + 8
+        );
+      } catch (e) {
+        // ignore measurement errors, keep default bottom margin
+      }
+      probeGroup.remove();
+    }
+
     // Create scales based on orientation
     let categoryScale, valueScale;
 

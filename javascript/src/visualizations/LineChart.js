@@ -154,8 +154,56 @@ export default class LineChart extends D3po {
       .nice()
       .range([0, this.getInnerWidth()]);
 
-    // Update yScale range to reflect actual innerHeight (unchanged) and keep it
-    // consistent with previously used innerHeight
+    // Measure how much bottom margin the x-axis (ticks + label) actually
+    // needs, using a temporary off-DOM group, so we don't waste space with
+    // the base class's generous default bottom margin (mirrors the left
+    // margin measurement above).
+    const xAxisProbeGroup = this.svg
+      .append('g')
+      .attr('class', 'd3po-probe-group');
+    try {
+      const xAxisProbe = d3.axisBottom(xScale);
+      if (this.options.axisFormatters && this.options.axisFormatters.x) {
+        xAxisProbe.tickFormat(this.options.axisFormatters.x);
+      }
+      xAxisProbeGroup.call(xAxisProbe);
+      xAxisProbeGroup
+        .selectAll('text')
+        .style('font-family', this.options.fontFamily)
+        .style('font-size', `${this.options.fontSize}px`);
+
+      const xTicksProbe = xAxisProbeGroup.selectAll('.tick text').nodes();
+      let maxTickWidth = 0;
+      let maxTickHeight = 0;
+      let rotateX = false;
+      if (xTicksProbe && xTicksProbe.length) {
+        maxTickWidth = d3.max(xTicksProbe, n => n.getBBox().width) || 0;
+        maxTickHeight = d3.max(xTicksProbe, n => n.getBBox().height) || 0;
+        const avgSpace = Math.max(
+          10,
+          this.getInnerWidth() / xTicksProbe.length
+        );
+        if (maxTickWidth > avgSpace * 0.9) rotateX = true;
+      }
+
+      // Mirrors the spacing math used in renderAxes() when placing the
+      // x-axis label, so the measured requirement matches what's rendered.
+      const effectiveTickExtent = rotateX
+        ? Math.max(25, maxTickWidth * 0.85)
+        : Math.max(8, maxTickHeight);
+      const tickToLabelGap = 10;
+      const baseTickLabelPadding = rotateX ? 20 : 16;
+
+      const requiredBottom = Math.ceil(
+        effectiveTickExtent + tickToLabelGap + baseTickLabelPadding + 8
+      );
+      this.options.margin.bottom = requiredBottom;
+    } catch (e) {
+      // ignore measurement errors, keep default bottom margin
+    }
+    xAxisProbeGroup.remove();
+
+    // Update yScale range to reflect the (possibly adjusted) innerHeight
     yScale.range([this.getInnerHeight(), 0]);
 
     // Render axes with consistent font application and spacing

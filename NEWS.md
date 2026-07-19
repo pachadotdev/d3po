@@ -9,6 +9,8 @@
   * `assertthat` -> `stopifnot()`.
   * `rlang` -> some custom wrappers with base R.
 * Updated D3 version 7.8.0 -> 7.9.0.
+* LineChart/BarChart/BoxPlot/AreaChart/ScatterPlot use all the vertical space and adjust when the
+  axis labels have a rotation.
 * Treemap uses the space better and now follows LineChart sizing.
 
 # d3po 1.0.2

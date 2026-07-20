@@ -359,8 +359,11 @@ export default class BoxPlot extends D3po {
       }
 
       const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+      // Extra safety accounts for the rotated y-axis title's ascent/descent
+      // overshoot beyond its measured bbox, which can otherwise clip the
+      // title against the left edge (most noticeable with categorical y-axes).
       const requiredLeft = Math.ceil(
-        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8
+        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 16
       );
       const currentLeft =
         (this.options && this.options.margin && this.options.margin.left) || 60;
@@ -392,11 +395,11 @@ export default class BoxPlot extends D3po {
     if (useLeftMarginSpace && measuredMaxTickWidth > 0) {
       const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
       const measuredRequiredLeft = Math.ceil(
-        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8
+        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 16
       );
       const marginLeft =
         (this.options && this.options.margin && this.options.margin.left) || 60;
-      const safetyBuffer = 4; // px
+      const safetyBuffer = 10; // px
       const targetLeft = Math.max(
         0,
         (measuredRequiredLeft || 0) + safetyBuffer
@@ -549,16 +552,17 @@ export default class BoxPlot extends D3po {
         yTicks && yTicks.length
           ? d3.max(yTicks, n => n.getBBox().width)
           : measuredMaxTickWidth;
-      // Gap between tick labels and axis label
-      const gap = 8;
-      // Position label with gap + room for the label itself (since it's rotated, add ~10px for label height)
-      let labelOffset = yMaxTickWidth + gap + 10;
+      // Gap between tick labels and axis label (match the gap used to size margin.left above)
+      const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+      // Position label with gap + room for the label itself (since it's rotated, reserve
+      // extra space for its ascent/descent so it isn't clipped at the left edge)
+      let labelOffset = yMaxTickWidth + gap + 14;
 
-      // Ensure label offset doesn't exceed safe threshold (leave 5px margin from edge)
+      // Ensure label offset doesn't exceed safe threshold (leave margin from edge)
       const maxSafeOffset =
         this.options.margin && this.options.margin.left
-          ? this.options.margin.left - 5
-          : 55;
+          ? this.options.margin.left - 10
+          : 50;
       labelOffset = Math.min(labelOffset, maxSafeOffset);
 
       // Append rotated y label to the left axis group so it sits next to ticks and moves with the axis

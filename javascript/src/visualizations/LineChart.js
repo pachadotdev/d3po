@@ -125,7 +125,10 @@ export default class LineChart extends D3po {
       labelBBoxHeight = 14;
     }
 
-    const requiredLeft = Math.ceil(maxTickWidth + gap + labelBBoxHeight + 8); // extra safety padding
+    // Extra safety accounts for the rotated y-axis title's ascent/descent
+    // overshoot beyond its measured bbox, which can otherwise clip the title
+    // against the left edge (most noticeable with categorical y-axes).
+    const requiredLeft = Math.ceil(maxTickWidth + gap + labelBBoxHeight + 16);
     const currentLeft =
       (this.options && this.options.margin && this.options.margin.left) || 60;
     let usedLeft = Math.max(currentLeft, requiredLeft);

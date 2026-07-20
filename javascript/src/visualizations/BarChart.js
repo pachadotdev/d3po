@@ -185,6 +185,10 @@ export default class BarChart extends D3po {
     let xScale,
       yScale,
       innerBand = null;
+    // Hoisted so the redrawBarGeometry() helper (defined below, after bars are
+    // drawn) can recompute bar positions/sizes when scales are later resized.
+    let stackRows = null;
+    let rowsByCat = null;
     const colorScale = createColorScale(
       this.data,
       this.colorField,
@@ -207,7 +211,7 @@ export default class BarChart extends D3po {
       }
 
       // pivot data: one object per category with group keys
-      const stackRows = categories.map(cat => {
+      stackRows = categories.map(cat => {
         const obj = { __cat: cat };
         groups.forEach(g => {
           obj[g] = 0;
@@ -422,7 +426,7 @@ export default class BarChart extends D3po {
       // simple single bar per category
       // Build an ordered data array matching `categories` so axis labels and
       // bars are always aligned even if input order or Set iteration differs.
-      const rowsByCat = new Map();
+      rowsByCat = new Map();
       this.data.forEach(d => {
         const cat = d[categoryField] == null ? '' : String(d[categoryField]);
         if (!rowsByCat.has(cat)) rowsByCat.set(cat, []);
@@ -554,6 +558,85 @@ export default class BarChart extends D3po {
       }
     }
 
+    // Re-apply bar geometry (x/y/width/height) using the current xScale/yScale.
+    // This must be called whenever a scale's range changes after bars were
+    // drawn (e.g. margin adjustments to fit long axis labels), otherwise bars
+    // keep stale dimensions and can visually exceed the axis extent.
+    const redrawBarGeometry = () => {
+      if (!bars) return;
+      if (stacked && groupField) {
+        if (isHorizontal) {
+          bars
+            .attr('y', (d, i) => yScale(stackRows[i].__cat))
+            .attr('x', d => xScale(d[0]))
+            .attr('width', d => Math.max(0, xScale(d[1]) - xScale(d[0])))
+            .attr('height', yScale.bandwidth());
+        } else {
+          bars
+            .attr('x', (d, i) => xScale(stackRows[i].__cat))
+            .attr('y', d => yScale(d[1]))
+            .attr('height', d => Math.max(0, yScale(d[0]) - yScale(d[1])))
+            .attr('width', xScale.bandwidth());
+        }
+      } else if (groupingActive) {
+        if (isHorizontal) {
+          bars
+            .attr('x', 0)
+            .attr(
+              'y',
+              d =>
+                yScale(
+                  String(d[categoryField] == null ? '' : d[categoryField])
+                ) +
+                innerBand(String(d[groupField] == null ? '' : d[groupField]))
+            )
+            .attr('width', d => xScale(Number(d[valueField]) || 0))
+            .attr('height', () => innerBand.bandwidth());
+        } else {
+          bars
+            .attr(
+              'x',
+              d =>
+                xScale(
+                  String(d[categoryField] == null ? '' : d[categoryField])
+                ) +
+                innerBand(String(d[groupField] == null ? '' : d[groupField]))
+            )
+            .attr('y', d => yScale(Number(d[valueField]) || 0))
+            .attr('width', () => innerBand.bandwidth())
+            .attr('height', d =>
+              Math.max(
+                0,
+                effectiveInnerHeight - yScale(Number(d[valueField]) || 0)
+              )
+            );
+        }
+      } else if (isHorizontal) {
+        // simple horizontal bars (datum is the row object, see `.datum(row)` above)
+        bars
+          .attr('x', 0)
+          .attr('y', d =>
+            yScale(String(d[categoryField] == null ? '' : d[categoryField]))
+          )
+          .attr('width', d => xScale(Number(d[this.xField]) || 0))
+          .attr('height', () => yScale.bandwidth());
+      } else {
+        // simple vertical bars (datum is the row object, see `.datum(row)` above)
+        bars
+          .attr('x', d =>
+            xScale(String(d[categoryField] == null ? '' : d[categoryField]))
+          )
+          .attr('y', d => yScale(Number(d[this.yField]) || 0))
+          .attr('width', () => xScale.bandwidth())
+          .attr('height', d =>
+            Math.max(
+              0,
+              effectiveInnerHeight - yScale(Number(d[this.yField]) || 0)
+            )
+          );
+      }
+    };
+
     let measuredMaxTickWidth = 0;
     let measuredLabelBBoxHeight = 0;
     // Measure y-axis tick widths and label bbox for both orientations so reclaim logic
@@ -587,8 +670,11 @@ export default class BarChart extends D3po {
       }
 
       const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+      // Extra safety accounts for the rotated y-axis title's ascent/descent
+      // overshoot beyond its measured bbox, which can otherwise clip the
+      // title against the left edge (most noticeable with categorical y-axes).
       const requiredLeft = Math.ceil(
-        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8
+        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 16
       );
       const currentLeft =
         (this.options && this.options.margin && this.options.margin.left) || 60;
@@ -611,6 +697,7 @@ export default class BarChart extends D3po {
             'transform',
             `translate(${this.options.margin.left},${this.options.margin.top})`
           );
+        redrawBarGeometry();
       }
     } catch (e) {
       void 0;
@@ -619,12 +706,12 @@ export default class BarChart extends D3po {
     if (useLeftMarginSpace && measuredMaxTickWidth > 0) {
       const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
       const measuredRequiredLeft = Math.ceil(
-        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 8
+        measuredMaxTickWidth + gap + measuredLabelBBoxHeight + 16
       );
       const marginLeft =
         (this.options && this.options.margin && this.options.margin.left) || 60;
       // Force the chart translate X to measuredRequiredLeft + safety buffer when the option is enabled.
-      const safetyBuffer = 4; // px
+      const safetyBuffer = 10; // px
       const targetLeft = Math.max(
         0,
         (measuredRequiredLeft || 0) + safetyBuffer
@@ -649,6 +736,7 @@ export default class BarChart extends D3po {
           'transform',
           `translate(${translateX},${this.options.margin.top})`
         );
+      redrawBarGeometry();
     }
 
     const fontFamily = this.options.fontFamily;
@@ -995,37 +1083,10 @@ export default class BarChart extends D3po {
           // Reposition x-axis
           xg.attr('transform', `translate(0,${effectiveInnerHeight})`);
 
-          // Redraw bars with updated y-scale
-          if (!isHorizontal) {
-            // Vertical bars - update y position and height
-            bars
-              .attr('y', d => {
-                if (stacked && Array.isArray(d)) {
-                  return yScale(d[1]);
-                } else if (groupingActive) {
-                  return yScale(Number(d[valueField]) || 0);
-                } else {
-                  // Simple bars - d is the row object with datum attached
-                  return yScale(Number(d[this.yField]) || 0);
-                }
-              })
-              .attr('height', d => {
-                if (stacked && Array.isArray(d)) {
-                  return Math.max(0, yScale(d[0]) - yScale(d[1]));
-                } else if (groupingActive) {
-                  return Math.max(
-                    0,
-                    effectiveInnerHeight - yScale(Number(d[valueField]) || 0)
-                  );
-                } else {
-                  // Simple bars - d is the row object with datum attached
-                  return Math.max(
-                    0,
-                    effectiveInnerHeight - yScale(Number(d[this.yField]) || 0)
-                  );
-                }
-              });
-          }
+          // Redraw bars with the updated scale (handles both orientations,
+          // since a categorical y-axis also needs repositioning when the
+          // bottom margin grows).
+          redrawBarGeometry();
         }
       }
       // For rotated labels, we need to account for the full diagonal extent of the rotated text
@@ -1081,10 +1142,11 @@ export default class BarChart extends D3po {
         yTicks && yTicks.length
           ? d3.max(yTicks, n => n.getBBox().width)
           : measuredMaxTickWidth;
-      // Gap between tick labels and axis label
-      const gap = 8;
-      // Position label with gap + room for the label itself (since it's rotated, add ~10px for label height)
-      const labelOffset = yMaxTickWidth + gap + 10;
+      // Gap between tick labels and axis label (match the gap used to size margin.left above)
+      const gap = this.yLabelGap !== undefined ? this.yLabelGap : 12;
+      // Position label with gap + room for the label itself (since it's rotated, reserve
+      // extra space for its ascent/descent so it isn't clipped at the left edge)
+      const labelOffset = yMaxTickWidth + gap + 14;
       yg.append('text')
         .attr('class', 'y-axis-label')
         .attr(

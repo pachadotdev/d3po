@@ -298,7 +298,8 @@ pre code {
 .ref-usage {
   background-color: var(--code-bg);
   padding: 1em;
-  border-left: 4px solid var(--accent-color);
+  /* border-left: 4px solid var(--accent-color); */
+  border-left: 0;
   margin: 1em 0;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
@@ -306,7 +307,8 @@ pre code {
 /* Vignette code blocks - same styling as ref-usage */
 #content pre {
   background-color: var(--code-bg);
-  border-left: 4px solid var(--accent-color);
+  /* border-left: 4px solid var(--accent-color); */
+  border-left: 0;
   font-family: "Hack", "Fira Mono", "Courier New", Courier, monospace;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }

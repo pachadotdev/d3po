@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_format • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_format • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)'], ['$', '$']],
@@ -31,6 +31,7 @@
   <div class="submenu">
     <label style="border-bottom: 0;"><a style="padding-left: 0;" href="../index.html">Home 🏠</a></label>
   </div>
+
 
   <div class="submenu">
     <label>Functions</label>
@@ -96,7 +97,7 @@ widget data. Accepts named expressions like <code>x = round(varx, 2)</code> or
 Either the output of <code>d3po()</code> or <code>d3po_proxy()</code>.
 </td></tr><tr><td><code id="...">...</code></td>
 <td>
-Named formatting expressions (as quosures). Each name should
+Named formatting expressions (as unevaluated calls). Each name should
 correspond to an aesthetic (e.g. <code>x</code>, <code>y</code>, <code>tooltip</code>, etc.).
 </td></tr></table></div>
         </div>

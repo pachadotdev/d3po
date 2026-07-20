@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Changelog • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Changelog • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)'], ['$', '$']],
@@ -31,6 +31,7 @@
   <div class="submenu">
     <label style="border-bottom: 0;"><a style="padding-left: 0;" href="../index.html">Home 🏠</a></label>
   </div>
+
 
   <div class="submenu">
     <label>Functions</label>
@@ -74,6 +75,22 @@
 
 
 
+<div id="d3po-1.1.0" class="section level1">
+<h1>d3po 1.1.0</h1>
+<ul><li>Works with ‘tabler’ and the focus will be Tabler and Tabler Server.</li>
+<li>Keeps ‘shiny’ widgets compatibility.</li>
+<li>Uses the native pipe <code>|&gt;</code> and now depends on R &gt;= 4.1.</li>
+<li>Using base R as much as possible:
+<ul><li><code>purrr::keep()</code> -&gt; <code>Filter()</code>.</li>
+<li><code>dplyr</code> -&gt; base R operations.</li>
+<li><code>assertthat</code> -&gt; <code>stopifnot()</code>.</li>
+<li><code>rlang</code> -&gt; some custom wrappers with base R.</li>
+</ul></li>
+<li>Updated D3 version 7.8.0 -&gt; 7.9.0.</li>
+<li>LineChart/BarChart/BoxPlot/AreaChart/ScatterPlot use all the vertical space and adjust when the
+axis labels have a rotation.</li>
+<li>Treemap uses the space better and now follows LineChart sizing.</li>
+</ul></div>
 <div id="d3po-1.0.2" class="section level1">
 <h1>d3po 1.0.2</h1>
 <ul><li>Small patch to conditionally use ‘sf’/‘geojsonsf’ in <code>po_geomap()</code>, per CRAN request.</li>

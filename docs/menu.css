@@ -209,4 +209,23 @@
   color: var(--menu-link-color);
 }
 
+/* TOC indentation by heading level */
+#menu a.toc-level-1 {
+  padding-left: 0;
+  font-weight: 600;
+}
+
+#menu a.toc-level-2 {
+  padding-left: 0.8em;
+}
+
+#menu a.toc-level-3 {
+  padding-left: 1.8em;
+  font-size: 0.9em;
+}
+
+#menu a.toc-level-4 {
+  padding-left: 2.8em;
+  font-size: 0.85em;
+}
 

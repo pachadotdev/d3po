@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_bar • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_bar • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)'], ['$', '$']],
@@ -31,6 +31,7 @@
   <div class="submenu">
     <label style="border-bottom: 0;"><a style="padding-left: 0;" href="../index.html">Home 🏠</a></label>
   </div>
+
 
   <div class="submenu">
     <label>Functions</label>
@@ -124,8 +125,8 @@ Whether to inherit aesthetics previous specified.
     "Europe", "North America", "Oceania", "South America"
   )
 
-  d3po(trade_by_continent, width = 800, height = 600) %&gt;%
-    po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) %&gt;%
+  d3po(trade_by_continent, width = 800, height = 600) |&gt;
+    po_bar(daes(x = reporter_continent, y = trade, color = my_pal)) |&gt;
     po_labels(
       x = "Continent",
       y = "Trade (USD billion)",

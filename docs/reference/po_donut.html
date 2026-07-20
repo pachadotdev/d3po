@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_donut • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>po_donut • d3po</title><link rel="stylesheet" href="../menu.css"><link rel="stylesheet" href="../content.css"><!-- MathJax Configuration --><script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)'], ['$', '$']],
@@ -31,6 +31,7 @@
   <div class="submenu">
     <label style="border-bottom: 0;"><a style="padding-left: 0;" href="../index.html">Home 🏠</a></label>
   </div>
+
 
   <div class="submenu">
     <label>Functions</label>
@@ -126,8 +127,8 @@ Whether to inherit aesthetics previous specified.
 
   trade_by_continent$color &lt;- my_pal[trade_by_continent$reporter_continent]
 
-  d3po(trade_by_continent, width = 800, height = 600) %&gt;%
-    po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) %&gt;%
+  d3po(trade_by_continent, width = 800, height = 600) |&gt;
+    po_donut(daes(size = trade, group = reporter_continent, inner_radius = 0.3, color = color)) |&gt;
     po_labels(title = "Trade Share by Reporter Continent in 2023")
 }
 </code></pre>
